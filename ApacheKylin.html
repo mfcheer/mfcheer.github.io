@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Apache Kylin - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+</head>
+</html>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">Apache Kylin</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <h1 id="Apache-Kylin"><a href="#Apache-Kylin" class="headerlink" title="Apache Kylin"></a>Apache Kylin</h1><hr>
+<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/4.png" alt=""></p>
+<p>Kylin官方文档：<a href="http://kylin.apache.org/cn/" target="_blank" rel="noopener">http://kylin.apache.org/cn/</a></p>
+<p>Apache Kylin是一个开源的分布式分析引擎，提供Hadoop之上的SQL查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由eBay Inc. 开发并贡献至开源社区。它能在亚秒内查询巨大的Hive表。</p>
+<a id="more"></a>
+<h2 id="cube维度"><a href="#cube维度" class="headerlink" title="cube维度"></a>cube维度</h2><p>Kyliin是个预查询系统，将查询结果(Cube)存储在自己的存储系统(Hbase)中，但其中有很多结果是我们不需要的。这些不需要的我们可以做维度优化来去掉。</p>
+<p>Cube所占用的存储空间和维度数、维度值之间不同的组合数、度量，有关。</p>
+<p>Cube中有4种维度分别是：</p>
+<p>  1.普通维度(General dimension)，普通维度是不做任何优化的维度。n个普通的cuboid的数量为2^n</p>
+<p>  2.强制维度(Mandatory Dimensions)，强制维度是所有cuboid中必有的维度。强制维度可以使cuboid减少一半。</p>
+<p>  3.层级维度(Hierarchy Dimensions)，层级维度是有层次关系的维度，使得cuboid中低层次的维度总是伴随着高层次维度的出现。一个有n个层次的层次维度可以使cuboid的数量从2^n 降到n+1。</p>
+<p>  4.组合维度(Joint Dimensions)，组合维度是将几个维度组合成一个维度，使得这几个维度在cuboid中总是同时出现，适合总是出现在一起的维度。一个有n个维度的组合维度可以使cuboid数量从2^n 降到2</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>当我们的度量中有count distinct 类型的时候, 我们在构建cube的时候需要编辑配置，点击Edit(Json),然后在配置中加上:</p>
+<pre><code>&quot;dictionaries&quot;: [ 
+  { 
+    &quot;column&quot;: &quot;colname&quot;, 
+    &quot;reuse&quot;: &quot;colname&quot;, 
+    &quot;builder&quot;: &quot;org.apache.kylin.dict.GlobalDictionaryBuilder&quot;
+  } 
+],
+</code></pre><p>度量sum类型必选是数字类型，不能是字符串类型，如果是字符串类型需要先在hive中将其修改成数字类型</p>
+<p>Kylin将空字符串认为是null</p>
+<p>不同版本的Kylin对sql完善度不同，例如有些版本union all会出错。</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/大数据/">大数据</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2019
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div>
+  </body>
+</html>

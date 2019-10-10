@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>do{}while(false) - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+</head>
+</html>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">do{}while(false)</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>今天遇到了一段代码，类似下面<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span>&#123;</span><br><span class="line">    <span class="params">...</span></span><br><span class="line">&#125;<span class="keyword">while</span>(<span class="literal">false</span>)</span><br></pre></td></tr></table></figure></p>
+<p>开始很疑惑，为什么这样写，后来上网搜了一下才恍然大悟。这种语法是为了解决代码嵌套、实现goto的用途</p>
+<p>下面是同样功能的三段代码</p>
+<p>1、代码嵌套<br><a id="more"></a><br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>( <span class="attr">A==true</span> ) &#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="attr">B</span> == <span class="literal">true</span>) &#123;</span><br><span class="line">    	<span class="keyword">if</span>(<span class="attr">C</span> == <span class="literal">true</span>) &#123;</span><br><span class="line">    		<span class="keyword">if</span>(<span class="attr">D</span> == <span class="literal">true</span>)&#123;</span><br><span class="line">    			//doSomething</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样箭头形代码很丑，且可读性差</p>
+<p>2、goto代码<br><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span><span class="comment">( A==false )</span>  </span><br><span class="line">    <span class="keyword">goto</span> tag;  </span><br><span class="line"><span class="keyword">if</span><span class="comment">( B==false )</span>  </span><br><span class="line">    <span class="keyword">goto</span> tag;  </span><br><span class="line"><span class="keyword">if</span><span class="comment">( C==false )</span>  </span><br><span class="line">    <span class="keyword">goto</span> tag;  </span><br><span class="line"><span class="keyword">if</span><span class="comment">( D==false )</span>  </span><br><span class="line">    <span class="keyword">goto</span> tag; </span><br><span class="line"><span class="comment">//doSomething</span></span><br><span class="line">tag:</span><br></pre></td></tr></table></figure></p>
+<p>3、do{}while(false)</p>
+<p>这样的结构能够创造可读性良好的代码，又可以避免goto可能产生的问题<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span>  </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="keyword">if</span>( A==<span class="literal">false</span> )  </span><br><span class="line">        <span class="keyword">break</span>;  </span><br><span class="line">    <span class="keyword">if</span>( B==<span class="literal">false</span> )  </span><br><span class="line">        <span class="keyword">break</span>;  </span><br><span class="line">    <span class="keyword">if</span>( C==<span class="literal">false</span> )  </span><br><span class="line">        <span class="keyword">break</span>;  </span><br><span class="line">    <span class="keyword">if</span>( D==<span class="literal">false</span> )  </span><br><span class="line">        <span class="keyword">break</span>; </span><br><span class="line">    <span class="comment">//doSomething</span></span><br><span class="line">&#125;<span class="keyword">while</span>(<span class="literal">false</span>);</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/Java/">Java</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2019
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div>
+  </body>
+</html>

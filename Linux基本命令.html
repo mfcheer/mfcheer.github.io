@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Linux基本命令 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+</head>
+</html>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">Linux基本命令</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>查看端口占用情况：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsof -<span class="selector-tag">i</span>:端口号 用于查看某一端口的占用情况，比如查看<span class="number">8000</span>端口使用情况，lsof -<span class="selector-tag">i</span>:<span class="number">8000</span></span><br></pre></td></tr></table></figure></p>
+<p>压缩命令<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">单个文件压缩打包 tar czvf my<span class="selector-class">.tar</span> file1</span><br><span class="line">多个文件压缩打包 tar czvf my<span class="selector-class">.tar</span> file1 file2,...</span><br><span class="line">单个目录压缩打包 tar czvf my<span class="selector-class">.tar</span> dir1</span><br><span class="line">多个目录压缩打包 tar czvf my<span class="selector-class">.tar</span> dir1 dir2</span><br><span class="line">解包至当前目录：tar xzvf my.tar</span><br></pre></td></tr></table></figure></p>
+<p>解压war文件<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jar -xvf <span class="built_in">name</span>.war</span><br></pre></td></tr></table></figure></p>
+<p>Linux 统计某个字符串出现的次数</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat filename |<span class="type">grep</span> str |<span class="type">wc</span> -l</span><br></pre></td></tr></table></figure>
+<p>定时任务<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">crontab -e</span></span><br></pre></td></tr></table></figure></p>
+<p>查看文件内容 </p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">如果你只想看文件的前<span class="number">5</span>行，可以使用head命令，如： </span><br><span class="line">head <span class="number">-5</span> /etc/passwd </span><br><span class="line">如果你想查看文件的后<span class="number">10</span>行，可以使用<span class="keyword">tail</span>命令，如： </span><br><span class="line"><span class="keyword">tail</span> <span class="number">-10</span> /etc/passwd 或 <span class="keyword">tail</span> -n <span class="number">10</span> /etc/passwd </span><br><span class="line"><span class="keyword">tail</span> -f /var/log/messages </span><br><span class="line">参数-f使<span class="keyword">tail</span>不停地去读最新的内容，这样有实时监视的效果 用Ctrl＋<span class="keyword">c</span>来终止！</span><br></pre></td></tr></table></figure>
+<p>本地文件上传到主机<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">rz -be</span></span><br></pre></td></tr></table></figure></p>
+<p>主机文件下载到本地<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">sz</span> <span class="string">"filename"</span></span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>日志定期清理sh<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">log_path=/opt/web/mFangchanIndex <span class="comment">#日志路径</span></span><br><span class="line"><span class="built_in">export</span> log_path</span><br><span class="line">expried_time=7      <span class="comment">#此处定义你的日志过期时间，如7天</span></span><br><span class="line">find <span class="variable">$log_path</span> -<span class="built_in">type</span> f -mtime +7 -iname <span class="string">"log.*"</span> | xargs rm  1&gt;/dev/null 2&gt;&amp;1</span><br></pre></td></tr></table></figure></p>
+<p>查看进程和删除进程</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ps 命令用于查看当前正在运行的进程。</span><br><span class="line">grep 是搜索</span><br><span class="line">ps [选项]</span><br><span class="line">-<span class="ruby">e 显示所有进程,环境变量</span></span><br><span class="line"><span class="ruby">-f 全格式</span></span><br><span class="line"><span class="ruby">-h 不显示标题</span></span><br><span class="line"><span class="ruby">-l 长格式</span></span><br><span class="line"><span class="ruby">-w 宽输出</span></span><br><span class="line"><span class="ruby">kill 命令用于终止进程</span></span><br><span class="line"><span class="ruby">-<span class="number">9</span> 表示强迫进程立即停止</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">例子：</span></span><br><span class="line"><span class="ruby">ps -ef <span class="params">| grep java</span></span></span><br><span class="line"><span class="ruby">ps aux<span class="params">|grep tcp</span></span></span><br><span class="line"><span class="ruby">kill -<span class="number">9</span> [PID]</span></span><br></pre></td></tr></table></figure>
+<p>Linux间进行文件传送-scp命令<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">linux 的 scp 命令可以在 linux 之间复制文件和目录；  </span><br><span class="line">scp 可以在 <span class="number">2</span>个 linux 主机间复制文件； </span><br><span class="line">命令基本格式： </span><br><span class="line">scp [可选参数] file_source file_target </span><br><span class="line">从本地复制到远程： </span><br><span class="line">复制文件： </span><br><span class="line">scp local_file <span class="string">remote_ip:</span>remote_file </span><br><span class="line">scp <span class="regexp">/home/</span>space<span class="regexp">/music/</span><span class="number">1.</span>mp3 root<span class="meta">@www</span>.cumt.edu.<span class="string">cn:</span><span class="regexp">/home/</span>root<span class="regexp">/others/</span>music </span><br><span class="line">复制目录：  </span><br><span class="line">scp -r local_folder remote_username<span class="meta">@remote</span><span class="string">_ip:</span>remote_folder </span><br><span class="line">命令执行后需要输入密码； </span><br><span class="line">例子： </span><br><span class="line">scp -r <span class="regexp">/home/</span>space<span class="regexp">/music/</span> root<span class="meta">@www</span>.cumt.edu.<span class="string">cn:</span><span class="regexp">/home/</span>root<span class="regexp">/others/</span> </span><br><span class="line">从远程复制到本地 ，只要将从本地复制到远程的命令的后<span class="number">2</span>个参数调换顺序即可；</span><br></pre></td></tr></table></figure></p>
+<p>解压 .lzop压缩文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> lzop -v <span class="built_in">test</span> <span class="comment"># 创建test.lzo压缩文件，输出详细信息，保留test文件不变</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> lzop -Uv <span class="built_in">test</span> <span class="comment"># 创建test.lzo压缩文件，输出详细信息，删除test文件</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> lzop -t test.lzo <span class="comment"># 测试test.lzo压缩文件的完整性</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> lzop –info test.lzo <span class="comment"># 列出test.lzo中各个文件的文件头</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> lzop -l test.lzo <span class="comment"># 列出test.lzo中各个文件的压缩信息</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> lzop –ls test.lzo <span class="comment"># 列出test.lzo文件的内容，同ls -l功能</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> cat <span class="built_in">test</span> | lzop &gt; t.lzo <span class="comment"># 压缩标准输入并定向到标准输出</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> lzop -dv test.lzo <span class="comment"># 解压test.lzo得到test文件，输出详细信息，保留test.lzo不变</span></span></span><br></pre></td></tr></table></figure>
+<p>rsync命令<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kinit username</span><br><span class="line">例子：</span><br><span class="line">rsync -av rec/ work<span class="variable">@10</span>.<span class="number">12.90</span>.<span class="number">13</span><span class="symbol">:/opt/rec</span> --exclude=<span class="string">'logs'</span></span><br><span class="line">--exclude=<span class="string">'logs'</span>说明 ： 不拷贝logs文件夹</span><br></pre></td></tr></table></figure></p>
+<p>SSH基本的用法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SSH主要用于远程登录。假定你要以用户名user，登录远程主机host，只要一条简单命令就可以了。</span><br><span class="line"><span class="meta">$</span><span class="bash"> ssh user@host</span></span><br><span class="line">如果本地用户名与远程用户名一致，登录时可以省略用户名。</span><br><span class="line"><span class="meta">$</span><span class="bash"> ssh host</span></span><br><span class="line">SSH的默认端口是22，也就是说，你的登录请求会送进远程主机的22端口。使用p参数，可以修改这个端口。</span><br><span class="line"><span class="meta">$</span><span class="bash"> ssh -p 2222 user@host</span></span><br><span class="line">上面这条命令表示，ssh直接连接远程主机的2222端口。</span><br></pre></td></tr></table></figure></p>
+<p>搜索输入过的命令<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ctrl+r:搜索某个以前输入过的命令 或者!<span class="keyword">command</span></span><br></pre></td></tr></table></figure></p>
+<p>cat合并文件<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">使用cat合并文件，如cat <span class="number">1.</span>txt <span class="number">2.</span>txt <span class="number">3.</span>txt &gt; <span class="number">4.</span>txt；</span><br><span class="line">如果<span class="number">1</span>/<span class="number">2</span>/<span class="number">3.</span>txt中存在多个空行，最终保存到<span class="number">4.</span>txt时，连续的空行会被替换为<span class="number">1</span>行。</span><br><span class="line">如果我们希望去掉空行，可以使用如下：cat -s <span class="number">1.</span>txt <span class="number">2.</span>txt <span class="number">3.</span>txt &gt; <span class="number">4.</span>txt</span><br></pre></td></tr></table></figure></p>
+<p>diff命令<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在使用<span class="keyword">diff命令的时候有3种显示，但是如果我们仅仅需要查看2个文件所有不同的记录，</span></span><br><span class="line"><span class="keyword">去掉diff加上的123a124或者&gt;或者&lt;,可以先diff </span>a <span class="keyword">b </span>&gt; <span class="keyword">difflog，</span></span><br><span class="line"><span class="keyword">然后使用grep+sed：cat </span><span class="keyword">difflog</span></span><br></pre></td></tr></table></figure></p>
+<p>df -h 查看磁盘使用情况<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">df -h</span></span><br></pre></td></tr></table></figure></p>
+<p>nohup 后台运行<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup command <span class="number">1</span>&gt;output <span class="number">2</span>&gt;&amp;<span class="number">1</span> &amp;</span><br></pre></td></tr></table></figure></p>
+<p>split 将一个大文件分割成很多个小文件<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">每<span class="number">3</span>行（-l <span class="number">3</span>）拆分成一个文件，拆分后的文件名以name开头，以数字作为后缀（-d）后缀长度为<span class="number">1</span>（-a <span class="number">1</span>）</span><br><span class="line">split -l <span class="number">3</span> test -d -a <span class="number">1</span> name</span><br></pre></td></tr></table></figure></p>
+<p>自定义命令，例如mac不支持ll命令<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bash_profile</span><br><span class="line">输入以下内容</span><br><span class="line">alias ll=<span class="string">'ls -lF'</span></span><br><span class="line">保存完成之后</span><br><span class="line">source ~/.bash_profile</span><br><span class="line">可以使用ll等命令了</span><br></pre></td></tr></table></figure></p>
+<p>自动拉起后台程序脚本例子<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function monitorService()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attribute">cnt</span>=$( ps -ef | grep java | grep -v grep | grep<span class="built_in"> service </span>| wc -l )</span><br><span class="line">    echo <span class="variable">$cnt</span></span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$cnt</span> -eq 0 ]; then</span><br><span class="line">        <span class="attribute">msg</span>=<span class="string">"<span class="variable">$bin</span> service is not running, start it."</span></span><br><span class="line">        echo <span class="variable">$msg</span></span><br><span class="line">        #发送短信到负责人</span><br><span class="line">        sh /opt<span class="built_in">/server </span>server.sh</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        echo <span class="string">"<span class="variable">$bin</span> service is running."</span></span><br><span class="line">    fi</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/Unix-Linux/">Unix/Linux</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2019
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div>
+  </body>
+</html>

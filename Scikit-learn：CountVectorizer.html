@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Scikit-learn：CountVectorizer - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+</head>
+</html>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">Scikit-learn：CountVectorizer</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>CountVectorizer是用于产生文本统计类特征的工具。将分词后的多个文章作为输入，词频统计结果作为输出。</p>
+<p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer</a></p>
+<a id="more"></a>
+<p>假设通过jieba分词处理好的数据为  [‘hello’, ‘hello everyone’, ‘hello china’] </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line"></span><br><span class="line">vectorizer = CountVectorizer(min_df=<span class="number">1</span>, max_features=<span class="number">300</span>)</span><br><span class="line"></span><br><span class="line">words_lists = [<span class="string">'hello'</span>, <span class="string">'hello everyone'</span>, <span class="string">'hello china'</span>]</span><br><span class="line">X = vectorizer.fit_transform(words_lists)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 高频词</span></span><br><span class="line">feature_names = vectorizer.get_feature_names()</span><br><span class="line"><span class="keyword">print</span> feature_names</span><br><span class="line"></span><br><span class="line"><span class="comment"># 词频字典</span></span><br><span class="line">feature_name_count = vectorizer.vocabulary_</span><br><span class="line"><span class="keyword">print</span> feature_name_count</span><br><span class="line"></span><br><span class="line"><span class="comment"># 高频词汇的01特征矩阵</span></span><br><span class="line"><span class="keyword">print</span> X.A</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">[<span class="string">u'china'</span>, <span class="string">u'everyone'</span>, <span class="string">u'hello'</span>]</span><br><span class="line">&#123;<span class="string">u'everyone'</span>: <span class="number">1</span>, <span class="string">u'china'</span>: <span class="number">0</span>, <span class="string">u'hello'</span>: <span class="number">2</span>&#125;</span><br><span class="line">[[<span class="number">0</span> <span class="number">0</span> <span class="number">1</span>]</span><br><span class="line"> [<span class="number">0</span> <span class="number">1</span> <span class="number">1</span>]</span><br><span class="line"> [<span class="number">1</span> <span class="number">0</span> <span class="number">1</span>]]</span><br></pre></td></tr></table></figure>
+<p>可以看到具体的词频统计结果和01矩阵，01矩阵可以作为特征出入到其它模型中。</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/机器学习/">机器学习</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2019
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div>
+  </body>
+</html>

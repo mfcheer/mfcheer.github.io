@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>MySQL：基本命令 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+</head>
+</html>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">MySQL：基本命令</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>下面是网上找的资料：<a href="http://www.cnblogs.com/mr-wid/archive/2013/05/09/3068229.html" target="_blank" rel="noopener">http://www.cnblogs.com/mr-wid/archive/2013/05/09/3068229.html</a></p>
+<p>复制过来，用到的时候翻出来看看</p>
+<hr>
+<p>MySQL 为关系型数据库(Relational Database Management System), 这种所谓的”关系型”可以理解为”表格”的概念, 一个关系型数据库由一个或数个表格组成</p>
+<h1 id="登录到MySQL"><a href="#登录到MySQL" class="headerlink" title="登录到MySQL"></a>登录到MySQL</h1><p>当 MySQL 服务已经运行时, 我们可以通过MySQL自带的客户端工具登录到MySQL数据库中, 首先打开命令提示符, 输入以下格式的命名:</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql -h 主机名 -u 用户名 -p</span><br><span class="line">-<span class="ruby">h : 该命令用于指定客户端所要登录的MySQL主机名, 登录当前机器该参数可以省略;</span></span><br><span class="line"><span class="ruby">-u : 所要登录的用户名;</span></span><br><span class="line"><span class="ruby">-p : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。</span></span><br></pre></td></tr></table></figure>
+<p>以登录刚刚安装在本机的MySQL数据库为例, 在命令行下输入 mysql -u root -p 按回车确认</p>
+<p>然后命令提示符会一直以 mysql&gt; 加一个闪烁的光标等待命令的输入</p>
+<p>例子：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">mysql</span> <span class="selector-tag">-h10</span><span class="selector-class">.16</span><span class="selector-class">.44</span><span class="selector-class">.210</span> <span class="selector-tag">-P3350</span> <span class="selector-tag">-uuser</span> <span class="selector-tag">-ppassword</span></span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h1 id="创建一个数据库"><a href="#创建一个数据库" class="headerlink" title="创建一个数据库"></a>创建一个数据库</h1><p>使用 create database 语句可完成对数据库的创建, 创建命令的格式如下:</p>
+<p>create database 数据库名 [其他选项];</p>
+<p>例如我们需要创建一个名为 samp_db 的数据库, 在命令行下执行以下命令:</p>
+<p>create database samp_db character set gbk;</p>
+<p>为了便于在命令提示符下显示中文, 在创建时通过 character set gbk 将数据库字符编码指定为 gbk。创建成功时会得到 Query OK, 1 row affected(0.02 sec) 的响应。</p>
+<p>提示: 可以使用 show databases; 命令查看已经创建了哪些数据库。</p>
+<h1 id="选择所要操作的数据库"><a href="#选择所要操作的数据库" class="headerlink" title="选择所要操作的数据库"></a>选择所要操作的数据库</h1><p>要对一个数据库进行操作, 必须先选择该数据库</p>
+<p>登录后使用 use 语句指定, 命令: use 数据库名;</p>
+<p>use 语句可以不加分号, 执行 use samp_db 来选择刚刚创建的数据库, 选择成功后会提示: Database changed</p>
+<h1 id="创建数据库表"><a href="#创建数据库表" class="headerlink" title="创建数据库表"></a>创建数据库表</h1><p>使用 create table 语句可完成对表的创建, create table 的常见形式:</p>
+<p>create table 表名称(列声明);</p>
+<p>以创建 students 表为例, 表中将存放 学号(id)、姓名(name)、性别(sex)、年龄(age)、联系电话(tel) 这些内容:</p>
+<pre><code>create table students
+（
+    id int unsigned not null auto_increment primary key,
+    name char(8) not null,
+    sex char(4) not null,
+    age tinyint unsigned not null,
+    tel char(13) null default &quot;-&quot;
+);
+</code></pre><h1 id="向表中插入数据"><a href="#向表中插入数据" class="headerlink" title="向表中插入数据"></a>向表中插入数据</h1><p>insert 语句可以用来将一行或多行数据插到数据库表中, 使用的一般形式如下:</p>
+<p>insert [into] 表名 [(列名1, 列名2, 列名3, …)] values (值1, 值2, 值3, …);</p>
+<p>其中 [] 内的内容是可选的, 例如, 要给 samp_db 数据库中的 students 表插入一条记录, 执行语句:</p>
+<p>insert into students values(NULL, “王刚”, “男”, 20, “13811371377”);</p>
+<p>按回车键确认后若提示 Query Ok, 1 row affected (0.05 sec) 表示数据插入成功。<br>alter table 语句用于创建后对表的修改, 基础用法如下:</p>
+<h1 id="添加列"><a href="#添加列" class="headerlink" title="添加列"></a>添加列</h1><p>基本形式: alter table 表名 add 列名 列数据类型 [after 插入位置];</p>
+<p>示例:</p>
+<p>在表的最后追加列 address: alter table students add address char(60);</p>
+<p>在名为 age 的列后插入列 birthday: alter table students add birthday date after age;</p>
+<h1 id="修改列"><a href="#修改列" class="headerlink" title="修改列"></a>修改列</h1><p>基本形式: alter table 表名 change 列名称 列新名称 新数据类型;</p>
+<p>示例:</p>
+<p>将表 tel 列改名为 telphone: alter table students change tel telphone char(13) default “-“;</p>
+<p>将 name 列的数据类型改为 char(16): alter table students change name name char(16) not null;</p>
+<h1 id="删除列"><a href="#删除列" class="headerlink" title="删除列"></a>删除列</h1><p>基本形式: alter table 表名 drop 列名称;</p>
+<p>示例:</p>
+<p>删除 birthday 列: alter table students drop birthday;</p>
+<h1 id="重命名表"><a href="#重命名表" class="headerlink" title="重命名表"></a>重命名表</h1><p>基本形式: alter table 表名 rename 新表名;</p>
+<p>示例:</p>
+<p>重命名 students 表为 workmates: alter table students rename workmates;</p>
+<h1 id="删除整张表"><a href="#删除整张表" class="headerlink" title="删除整张表"></a>删除整张表</h1><p>基本形式: drop table 表名;</p>
+<p>示例: 删除 workmates 表: drop table workmates;</p>
+<h1 id="清空表"><a href="#清空表" class="headerlink" title="清空表"></a>清空表</h1><p>truncate table 表名;</p>
+<h1 id="删除整个数据库"><a href="#删除整个数据库" class="headerlink" title="删除整个数据库"></a>删除整个数据库</h1><p>基本形式: drop database 数据库名;</p>
+<p>示例: 删除 samp_db 数据库: drop database samp_db;</p>
+<h1 id="导出数据"><a href="#导出数据" class="headerlink" title="导出数据"></a>导出数据</h1><p>mysqldump -uusername -ppassword -hhost -Pport database table –skip-lock-tables &gt; table.sql</p>
+<h1 id="导入数据"><a href="#导入数据" class="headerlink" title="导入数据"></a>导入数据</h1><p>mysqldump -uusername -ppassword -hhost -Pport database &lt; table.sql</p>
+<h1 id="可视化管理工具"><a href="#可视化管理工具" class="headerlink" title="可视化管理工具"></a>可视化管理工具</h1><p>MySQL Workbench</p>
+<h1 id="查看端口"><a href="#查看端口" class="headerlink" title="查看端口"></a>查看端口</h1><p>启动，并进入mysql后，输入命令：show global variables like ‘port’</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/数据库/">数据库</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2019
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div>
+  </body>
+</html>

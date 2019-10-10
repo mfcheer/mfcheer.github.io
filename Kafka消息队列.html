@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Kafka消息队列 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+</head>
+</html>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">Kafka消息队列</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Kafka是Linkedin于2010年12月份开源的消息系统，它可以处理消费者规模的网站中的所有动作流数据。活跃的流式数据在web网站应用中非常常见，这些数据包括网站的pv、用户访问了什么内容，搜索了什么内容等。 这些数据通常以日志的形式记录下来，然后每隔一段时间进行一次统计处理。<br>传统的日志分析系统提供了一种离线处理日志信息的可扩展方案，但若要进行实时处理，通常会有较大延迟。而现有的消（队列）系统能够很好的处理实时或者近似实时的应用，但未处理的数据通常不会写到磁盘上，这对于Hadoop之类（一小时或者一天只处理一部分数据）的离线应用而言，可能存在问题。Kafka正是为了解决以上问题而设计的，它能够很好地离线和在线应用。<br>kafka对消息保存时根据Topic进行归类，发送消息者成为Producer,消息接受者成为Consumer,此外kafka集群有多个kafka实例组成，每个实例(server)成为broker。无论是kafka集群，还是producer和consumer都依赖于zookeeper来保证系统可用性集群保存一些meta信息。</p>
+<h1 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h1><a id="more"></a>
+<ul>
+<li>Broker<br>Kafka集群包含一个或多个服务器，这种服务器被称为broker</li>
+<li>Topic<br>每条发布到Kafka集群的消息都有一个类别，这个类别被称为Topic。（物理上不同Topic的消息分开存储，逻辑上一个Topic的消息虽然保存于一个或多个broker上但用户只需指定消息的Topic即可生产或消费数据而不必关心数据存于何处）</li>
+<li>Partition<br>Partition是物理上的概念，每个Topic包含一个或多个Partition.</li>
+<li>Producer<br>负责发布消息到Kafka broker</li>
+<li>Consumer<br>消息消费者，向Kafka broker读取消息的客户端。</li>
+<li>Consumer Group<br>每个Consumer属于一个特定的Consumer Group（可为每个Consumer指定group name，若不指定group name则属于默认的group）。</li>
+</ul>
+<h1 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h1><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/13.jpg" alt=""></p>
+<p>kafka是显式分布式架构，producer、broker（Kafka）和consumer都可以有多个。Kafka的作用类似于缓存，即活跃的数据和离线处理系统之间的缓存。几个基本概念：</p>
+<ul>
+<li><p>（1）message（消息）是通信的基本单位，每个producer可以向一个topic（主题）发布一些消息。如果consumer订阅了这个主题，那么新发布的消息就会广播给这些consumer。</p>
+</li>
+<li><p>（2）Kafka是显式分布式的，多个producer、consumer和broker可以运行在一个大的集群上，作为一个逻辑整体对外提供服务。对于consumer，多个consumer可以组成一个group，这个message只能传输给某个group中的某一个consumer.</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/14.png" alt=""></p>
+<ul>
+<li>（1）一个Topic可以认为是一类消息，每个topic将被分成多个partition(区),每个partition在存储层面是append log文件。任何发布到此partition的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为offset（偏移量），offset为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。kafka并没有提供其他额外的索引机制来存储offset，因为在kafka中几乎不允许对消息进行“随机读写”。</li>
+<li>（2）消息被消费,消息仍然不会被立即删除.日志文件将会根据broker中的配置要求,保留一定的时间之后删除;比如log文件保留2天,那么两天后,文件会被清除,无论其中的消息是否被消费.kafka通过这种简单的手段,来释放磁盘空间,以及减少消息消费之后对文件内容改动的磁盘IO开支.</li>
+<li>（3）分布式：一个Topic的多个partitions,被分布在kafka集群中的多个server上;每个server(kafka实例)负责partitions中消息的读写操作;此外kafka还可以配置partitions需要备份的个数(replicas),每个partition将会被备份到多台机器上,以提高可用性.基于replicated方案,那么就意味着需要对多个备份进行调度;每个partition都有一个server为”leader”;leader负责所有的读写操作,如果leader失效,那么将会有其他follower来接管(成为新的leader);follower只是单调的和leader跟进,同步消息即可..由此可见作为leader的server承载了全部的请求压力,因此从集群的整体考虑,有多少个partitions就意味着有多少个”leader”,kafka会将”leader”均衡的分散在每个实例上,来确保整体的性能稳定.</li>
+<li><p>（4）partitions的设计目的有多个.最根本原因是kafka基于文件存储.通过分区,可以将日志内容分散到多个server上,来避免文件尺寸达到单机磁盘的上限,每个partiton都会被当前server(kafka实例)保存;可以将一个topic切分多任意多个partitions,来消息保存/消费的效率.此外越多的partitions意味着可以容纳更多的consumer,有效提升并发消费的能力.</p>
+</li>
+<li><p>Distributed<br>日志的分区分布在kafka集群的多台服务器上，每台服务器保存数据以及对每个分区数据的请求。每个分区会在多台服务器上进行副本备份以便容错，副本的数量是可配置的。<br>每个分区分有一个“leader”的服务器，剩下的都是“follower”。leader处理对这个分区的所有读写请求，与此同时，follower会被动地去复制leader上的数据。如果leader发生故障，其中一个follower会自动成为新的leader。每台服务器可以作为一些分区的leader，同时也作为其他一些分区的follower，这样在集群内部就可以做到一个很好的负载均衡。</p>
+</li>
+<li><p>Producer<br>生产者（producer）可以根据具情况将消息发布（publish）到一个主题（topic）上。生产者可以选择将哪条消息发布到这个主题下的某一个分区（partition）。这可以用传统的轮询方式以保证负载均衡，也可以根据一些语义分区函数来做。更多的有关分区的内容后面会讲到。</p>
+</li>
+<li><p>Consumer<br>传统的消息系统有两种模型：队列和发布-订阅模式。在队列模型中，一堆消费者会从一台机子上读消息，每一条消息只会被一个消费者读到；在发布订阅模型中，消息会向所有的消费者广播。Kafka提供了一种单一的将这两种模型进行抽象的消费者模式——消费者组（consumer group）。</p>
+</li>
+<li><p>消费者会属于某一个组，发布到每个主题的消息会递送给订阅了这个主题的消费者组中的一个消费者。消费者实例可以是不同的进程或者在不同的机器上。如果所有的消费者从属于同一个组，这就跟传统的队列模式一样了。如果每个消费者自成一组，那么这就是发布订阅模式了，所有的消息会被广播给所有的消费者。但是通常情况下，我们发现，主题会有多个消费者组，每个组对应一个逻辑上的订阅者，每个组由多个消费者实例组成以保证扩展性和容错性。</p>
+</li>
+<li><p>Kafka处理定序问题上也去传统的消息系统不一样。传统的队列允许消息被任何一个消费者实例所消费。这意味着消息的顺序丢失了。也就是说，尽管在队列中消息是有顺序的，但这些消息会到达不同的消费者并且被无序地处理。在Kafka里，因为有并行的概念——分区，Kafka可以同时提供顺序保证和负载均衡。这可以通过将主题中的分区分配给消费者组中的消费者来实现，这样的话每个分区只被这个组中的一个消费者所消费。这样我们还可以保证这个消费者是这个分区的唯一消费者，并且是按原来的顺序来处理数据的。因为有许多分区，所以也就可以在多个消费者实例中实现负载均衡。需要注意的是，消费者实例的数量不可能比分区多。</p>
+</li>
+<li><p>Guarantees:<br>1) 发送到partitions中的消息将会按照它接收的顺序追加到日志中<br>2) 对于消费者而言,它们消费消息的顺序和日志中消息顺序一致.<br>3) 如果Topic的”replicationfactor”为N,那么允许N-1个kafka实例失效.</p>
+</li>
+</ul>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/大数据/">大数据</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2019
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div>
+  </body>
+</html>

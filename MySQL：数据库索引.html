@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>MySQL：数据库索引 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+</head>
+</html>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">MySQL：数据库索引</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>mysql中索引是对数据库表中一列或多列的值进行排序的一种结构。</p>
+<h1 id="MySQL数据库索引种类"><a href="#MySQL数据库索引种类" class="headerlink" title="MySQL数据库索引种类"></a>MySQL数据库索引种类</h1><ul>
+<li>主键索引。数据列不允许重复，不允许为NULL.一个表只能有一个主键</li>
+<li>唯一索引。数据列不允许重复，允许为NULL值，一个表允许多个列创建唯一索引。</li>
+<li>普通索引。基本的索引类型，没有唯一性的限制，允许为NULL值。</li>
+<li>全文索引。</li>
+</ul>
+<h1 id="索引使用的规则"><a href="#索引使用的规则" class="headerlink" title="索引使用的规则"></a>索引使用的规则</h1><ul>
+<li>索引的列是出现在where子句中的列，或者连接子句中指定的列</li>
+<li>数量较少的列，没有必要在此列建立索引。</li>
+<li>使用短索引。如果对长字符串列进行索引，指定一个前缀长度，能够节省大量索引空间。</li>
+<li>不要过度索引。索引需要额外的磁盘空间，并降低写操作的性能。在修改表内容的时候，索引会进行更新甚至重构。</li>
+<li>最左前缀<br>顾名思义，就是最左优先。在创建多列索引时，要根据业务需求，where子句中使用最频繁的一列放在最左边。 </li>
+</ul>
+<h1 id="索引实现算法"><a href="#索引实现算法" class="headerlink" title="索引实现算法"></a>索引实现算法</h1><ul>
+<li>B树<br>B树实现的索引可以被用在=,&gt;,&gt;=,&lt;,&lt;=和between这些比较操作符上，而且还可以用于like操作符，只要它的查询条件是一个不以通配符开头的常量.</li>
+<li>Hash<br>Hash索引只能用于对等比较，例如=,&lt;=&gt;（相当于=）操作符。</li>
+</ul>
+<h1 id="in-和exists"><a href="#in-和exists" class="headerlink" title="in 和exists"></a>in 和exists</h1><p>mysql中的in语句是把外表和内表作连接，而exists语句是对外表作循环，每次循环再对内表进行查询。</p>
+<ul>
+<li>如果查询两个表大小相当，那么用in和exists差别不大。</li>
+<li>如果两个表大小差距较大，则子查询表大的用exists，子查询表小的用in。</li>
+<li>not in 和not exists，查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；而not extsts的子查询依然能用到表上的索引。</li>
+</ul>
+<a id="more"></a>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/数据库/">数据库</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2019
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div>
+  </body>
+</html>

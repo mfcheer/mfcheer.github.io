@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>MySQL：单引号的性能问题 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+</head>
+</html>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">MySQL：单引号的性能问题</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>对于这样一张表<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+-------+----------+------+-----+---------+-------+</span><br><span class="line">| Field |<span class="built_in"> Type </span>    | <span class="literal">Null</span> | Key |<span class="built_in"> Default </span>| Extra |</span><br><span class="line">+-------+----------+------+-----+---------+-------+</span><br><span class="line">| id    | char(16) | <span class="literal">NO</span>   | PRI | <span class="literal">NULL</span>    |       |</span><br><span class="line">| name  | char(16) | <span class="literal">YES</span>  |     | <span class="literal">NULL</span>    |       |</span><br><span class="line">+-------+----------+------+-----+---------+-------+</span><br></pre></td></tr></table></figure></p>
+<p>两个查询语句<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">'1'</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
+<p>有什么区别吗？答案是有的</p>
+<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/22.png" alt=""></p>
+<p>关键在于type上<br><a id="more"></a><br><figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">使用字符串类型查找的<span class="keyword">type</span>是const，用的是索引</span><br><span class="line">使用数字查找的<span class="keyword">type</span>是<span class="type">ALL</span>，也就是全表扫描</span><br></pre></td></tr></table></figure></p>
+<p>使用数字的时候没有用到索引，使用单引号的时候用到了索引。所以数据量较大时，在效率上会有很大的差别！<br>mysql不会自动把数字转成字符串，而是把每个查询到的结果转成了数字去比较。<br>所以平时使用的时候要注意语法规则！</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/数据库/">数据库</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2019
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div>
+  </body>
+</html>

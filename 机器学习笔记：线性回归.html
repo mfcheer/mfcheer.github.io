@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>机器学习笔记：线性回归 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+</head>
+</html>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">机器学习笔记：线性回归</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <h2 id="线性回归（LinearRegreesion）"><a href="#线性回归（LinearRegreesion）" class="headerlink" title="线性回归（LinearRegreesion）"></a>线性回归（LinearRegreesion）</h2><p>线性回归主要用来解决连续值预测的问题.</p>
+<p>线性回归，是利用数理统计中回归分析，来确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法，运用十分广泛。其表达形式为y = w’x+e，e为误差服从均值为0的正态分布。中学就有接触线性回归，那么线性回归应用在什么地方呢？它适用于有监督学习的预测。 </p>
+<p>一元线性回归分析：y=ax+b，只包括一个自变量和一个因变量，且二者的关系可用一条直线近似表示。</p>
+<p>多元线性回归分析：包括两个或两个以上的自变量，并且因变量和自变量是线性关系。</p>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>损失函数：是指一种将一个事件（在一个样本空间中的一个元素）映射到一个表达与其事件相关的经济成本或机会成本的实数上的一种函数。更通俗地说，损失函数用来衡量参数选择的准确性。损失函数得到的值越小，损失也就越小。<br><a id="more"></a></p>
+<h2 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h2><p>怎样最小化损失函数?损失函数的定义是一个凸函数，就可以使用凸优化的一些方法：<br>１) 梯度下降：逐步最小化损失函数的过程。如同下山的过程，找准下山方向（梯度），每次迈进一步，直至山底。如果有多个特征，对应多个参数θ，需要对每一个参数做一次迭代，做完以后再求J函数。<br>　　学习率：上段公式中的α就是学习率。它决定了下降的节奏快慢，就像一个人下山时候步伐的快慢。α过小会导致收敛很慢，α太大有可能会导致震荡。如何选择学习率呢，目前也有好多关于学习率自适应算法的研究。工程上，一般会调用一些开源包，包含有一些自适应方法。自己做的话会选择相对较小的α，比如0.01。下图展示了梯度下降的过程。<br>2）牛顿法：速度快适用于小数据，大数据比较耗内存。</p>
+<h2 id="过拟合与正则化"><a href="#过拟合与正则化" class="headerlink" title="过拟合与正则化"></a>过拟合与正则化</h2><p>回归与欠/过拟合：<br>１) 欠拟合：函数假设太简单导致无法覆盖足够的原始数据，可能造成数据预测的不准确。 </p>
+<p>２) 拟合问题：比如我们有很多的特征，假设的函数曲线对原始数据拟合的非常好，从而丧失一般性，导致对新给的待预测样本，预测效果差。</p>
+<p>过拟合解决方法：<br>1) 减少特征个数：手工选择保留特征、模型选择的算法选择特征。<br>2) 正则化：在原来的损失函数中加入θ的平方项，来防止波动太大。即L2正则化。留下所有的特征，但是减少参数的大小。</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/机器学习/">机器学习</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2019
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>mfcheer</title>
+  
+  <subtitle>help change the world</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://mfcheer.github.io/"/>
+  <updated>2019-10-10T17:25:42.094Z</updated>
+  <id>https://mfcheer.github.io/</id>
+  
+  <author>
+    <name>mfcheer</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mlens-SuperLearner 模型集成</title>
+    <link href="https://mfcheer.github.io/mlens-SuperLearner-%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90.html"/>
+    <id>https://mfcheer.github.io/mlens-SuperLearner-模型集成.html</id>
+    <published>2019-03-06T15:17:49.000Z</published>
+    <updated>2019-10-10T17:25:42.094Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><p>SuperLearner所做的事情就是将多个模型的输出结果作为特征输入选择的基模型，弥补单个模型准召的不足。</p><p><a href="https://zhuanlan.zhihu.com/p/32949396" target="_blank" rel="noopener">每个Kaggle冠军的获胜法门：揭秘Python中的模型集成</a></p><p><a href="https://zhuanlan.zhihu.com/p/36161812" target="_blank" rel="noopener">集成学习三大法宝-bagging、boosting、stacking</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;SuperLearner所做的事情就是将多个模型的输出结果作为特征输入选择的基模型，弥补单个模型准召的不足。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/32949396&quot; target=&quot;_
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Pandas ABC</title>
+    <link href="https://mfcheer.github.io/Pandas-ABC.html"/>
+    <id>https://mfcheer.github.io/Pandas-ABC.html</id>
+    <published>2019-02-10T18:07:16.000Z</published>
+    <updated>2019-10-10T18:12:35.477Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><p><a href="https://towardsdatascience.com/learn-advanced-features-for-pythons-main-data-analysis-library-in-20-minutes-d0eedd90d086" target="_blank" rel="noopener">A Comprehensive Guide to Pandas’ Advanced Features in 20 Minutes</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;&lt;a href=&quot;https://towardsdatascience.com/learn-advanced-features-for-pythons-main-data-analysis-library-in-20-minutes-d0
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="https://mfcheer.github.io/categories/Python/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Scikit-learn：CountVectorizer</title>
+    <link href="https://mfcheer.github.io/Scikit-learn%EF%BC%9ACountVectorizer.html"/>
+    <id>https://mfcheer.github.io/Scikit-learn：CountVectorizer.html</id>
+    <published>2019-01-06T02:03:36.000Z</published>
+    <updated>2019-10-10T17:25:42.088Z</updated>
+    
+    <content type="html"><![CDATA[<p>CountVectorizer是用于产生文本统计类特征的工具。将分词后的多个文章作为输入，词频统计结果作为输出。</p><p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer</a></p><a id="more"></a><p>假设通过jieba分词处理好的数据为  [‘hello’, ‘hello everyone’, ‘hello china’] </p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line"></span><br><span class="line">vectorizer = CountVectorizer(min_df=<span class="number">1</span>, max_features=<span class="number">300</span>)</span><br><span class="line"></span><br><span class="line">words_lists = [<span class="string">'hello'</span>, <span class="string">'hello everyone'</span>, <span class="string">'hello china'</span>]</span><br><span class="line">X = vectorizer.fit_transform(words_lists)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 高频词</span></span><br><span class="line">feature_names = vectorizer.get_feature_names()</span><br><span class="line"><span class="keyword">print</span> feature_names</span><br><span class="line"></span><br><span class="line"><span class="comment"># 词频字典</span></span><br><span class="line">feature_name_count = vectorizer.vocabulary_</span><br><span class="line"><span class="keyword">print</span> feature_name_count</span><br><span class="line"></span><br><span class="line"><span class="comment"># 高频词汇的01特征矩阵</span></span><br><span class="line"><span class="keyword">print</span> X.A</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">[<span class="string">u'china'</span>, <span class="string">u'everyone'</span>, <span class="string">u'hello'</span>]</span><br><span class="line">&#123;<span class="string">u'everyone'</span>: <span class="number">1</span>, <span class="string">u'china'</span>: <span class="number">0</span>, <span class="string">u'hello'</span>: <span class="number">2</span>&#125;</span><br><span class="line">[[<span class="number">0</span> <span class="number">0</span> <span class="number">1</span>]</span><br><span class="line"> [<span class="number">0</span> <span class="number">1</span> <span class="number">1</span>]</span><br><span class="line"> [<span class="number">1</span> <span class="number">0</span> <span class="number">1</span>]]</span><br></pre></td></tr></table></figure><p>可以看到具体的词频统计结果和01矩阵，01矩阵可以作为特征出入到其它模型中。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;CountVectorizer是用于产生文本统计类特征的工具。将分词后的多个文章作为输入，词频统计结果作为输出。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习：L1/L2正则化</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-L1-L2%E6%AD%A3%E5%88%99%E5%8C%96.html"/>
+    <id>https://mfcheer.github.io/机器学习-L1-L2正则化.html</id>
+    <published>2018-10-17T23:49:46.000Z</published>
+    <updated>2019-10-10T17:25:42.097Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><h1 id="正则化概念"><a href="#正则化概念" class="headerlink" title="正则化概念"></a>正则化概念</h1><p>是机器学习中一种常用的技术，其主要目的是控制模型复杂度，减小过拟合。最基本的正则化方法是在原目标（代价）函数 中添加惩罚项，对复杂度高的模型进行“惩罚”。</p><p>下面图中黑色的折线就是过拟合的例子：<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos2/2.png" alt=""></p><p>常用的正则化函数有两种，L1正则化和L2正则化<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos2/3.png" alt=""></p><p>其中，<br>L1正则化表示某个向量中所有元素绝对值的和。<br>性质是能产生稀疏性，导致 W 中许多项变成零。会使原最优解的元素产生不同量的偏移，并使某些元素为0或趋近于0。</p><p>L2正则化表示某个向量中所有元素平方和再开根， 也就是欧几里得距离公式。<br>不具有产生稀疏解的能力，计算量上并没有得到提升。 L2正则化的效果是对原最优解的每个元素进行不同比例的放缩。</p><p>引用知乎上文章的解释：<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos2/6.png" alt=""></p><p>上图中，若不加正则项，最优解是靠近中心点的等高线，加入正则项之后，最优解对应的等高线不会离中心太近，避免了过拟合。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h1 id=&quot;正则化概念&quot;&gt;&lt;a href=&quot;#正则化概念&quot; class=&quot;headerlink&quot; title=&quot;正则化概念&quot;&gt;&lt;/a&gt;正则化概念&lt;/h1&gt;&lt;p&gt;是机器学习中一种常用的技术，其主要目的是控制模型复杂度，减小过拟合。最基本的正则
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习：决策树之ID3算法与C4.5算法</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%EF%BC%9A%E5%86%B3%E7%AD%96%E6%A0%91%E4%B9%8BID3%E7%AE%97%E6%B3%95%E4%B8%8EC4.5%E7%AE%97%E6%B3%95.html"/>
+    <id>https://mfcheer.github.io/机器学习：决策树之ID3算法与C4.5算法.html</id>
+    <published>2018-10-17T14:38:23.000Z</published>
+    <updated>2019-10-10T17:25:42.112Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><h1 id="ID3概念"><a href="#ID3概念" class="headerlink" title="ID3概念"></a>ID3概念</h1><p>即Iterative Dichotomiser 3，迭代二叉树3代。该算法是以信息论为基础，以信息熵和信息增益为衡量标准。</p><h2 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h2><p>描述信息的混乱程度，熵越大，表示信息越混乱。<br>信息熵的计算公式：其中P(Xi)表示类别Xi在样本出现的概率。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos2/1.png" alt=""></p><h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>用于度量属性A降低样本集合X熵的贡献大小。信息增益越大，越适于对X分类。<br>Gain(A, X) = H(X) - Sum(|Xv| / |X| * H(Xv))  {v: A的所有可能值}，Xv表示A中所有为v的值；|Xv|表示A中所有为v的值的数量；</p><h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><p>ID3算法就是在每次需要分裂时，计算每个属性的增益率，然后选择增益率最大的属性进行分裂。</p><h1 id="C4-5算法"><a href="#C4-5算法" class="headerlink" title="C4.5算法"></a>C4.5算法</h1><p>它是对ID3算法的改进，改进如下</p><ul><li>1）用信息增益率来选择属性</li><li>2）在决策树的构造过程中对树进行剪枝</li><li>3）对非离散数据也能处理</li><li>4）能够对不完整数据进行处理</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h1 id=&quot;ID3概念&quot;&gt;&lt;a href=&quot;#ID3概念&quot; class=&quot;headerlink&quot; title=&quot;ID3概念&quot;&gt;&lt;/a&gt;ID3概念&lt;/h1&gt;&lt;p&gt;即Iterative Dichotomiser 3，迭代二叉树3代。该算法是以信
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习：决策树之CART算法</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%EF%BC%9A%E5%86%B3%E7%AD%96%E6%A0%91%E4%B9%8BCART%E7%AE%97%E6%B3%95.html"/>
+    <id>https://mfcheer.github.io/机器学习：决策树之CART算法.html</id>
+    <published>2018-10-17T12:29:09.000Z</published>
+    <updated>2019-10-10T17:25:42.111Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><h1 id="CART算法概念"><a href="#CART算法概念" class="headerlink" title="CART算法概念"></a>CART算法概念</h1><p>Classification And Regression Tree，即分类回归树算法。它是决策树的一种实现。</p><p>CART是一种二分的分割技术，把当前的样本划分成两个子样本，每个非叶子节点都有两个分支，生成的决策树是二叉树。</p><h1 id="CART算法流程"><a href="#CART算法流程" class="headerlink" title="CART算法流程"></a>CART算法流程</h1><p>使用基尼系数判断样本集的“不纯度”，尽可能“纯”就是尽量让一个分裂子集中待分类项属于同一类别。基尼系数越低越好。</p><p>基尼系数的公式：<br>其中，C样本分类的数量。Pi表示属于i类的概率。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/90.png" alt=""></p><p>下面举例CART中基尼系数的计算，图片来自网络。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/86.png" alt=""><br>属性有3个，分别是有房情况，婚姻状况和年收入。房和婚姻是离散值，收入是连续值，是否贷款是分类结果。</p><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/87.png" alt=""></p><p>下面是婚姻状况属性，有三种情况。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/88.jpg" alt=""></p><p>最后是收入属性，它是连续值，连续值的计算使用分裂点的方法，选择基尼系数最小的点作为决策树的划分。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/89.png" alt=""></p><p>根据这样的分裂规则CART算法就能完成建树过程。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h1 id=&quot;CART算法概念&quot;&gt;&lt;a href=&quot;#CART算法概念&quot; class=&quot;headerlink&quot; title=&quot;CART算法概念&quot;&gt;&lt;/a&gt;CART算法概念&lt;/h1&gt;&lt;p&gt;Classification And Regressio
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Java BIO/NIO/AIO</title>
+    <link href="https://mfcheer.github.io/Java-BIO-NIO-AIO.html"/>
+    <id>https://mfcheer.github.io/Java-BIO-NIO-AIO.html</id>
+    <published>2018-10-10T16:23:03.000Z</published>
+    <updated>2019-10-10T17:25:42.056Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="三种IO"><a href="#三种IO" class="headerlink" title="三种IO"></a>三种IO</h1><h2 id="Java-BIO"><a href="#Java-BIO" class="headerlink" title="Java BIO"></a>Java BIO</h2><p>同步并阻塞，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程进行处理。</p><h2 id="Java-NIO：准备好了再通知我"><a href="#Java-NIO：准备好了再通知我" class="headerlink" title="Java NIO：准备好了再通知我"></a>Java NIO：准备好了再通知我</h2><p>同步非阻塞，服务器实现模式为一个请求一个线程，即客户端发送的请求都会注册到多路复用器上，多路复用器轮询到连接有I/O请求时才启动一个线程进行处理。JDK1.4开始支持。</p><h2 id="Java-AIO-NIO-2-：读完了再通知我"><a href="#Java-AIO-NIO-2-：读完了再通知我" class="headerlink" title="Java AIO(NIO.2)：读完了再通知我"></a>Java AIO(NIO.2)：读完了再通知我</h2><p>异步非阻塞，服务器实现模式为一个有效请求一个线程，客户端的I/O请求都是由OS先完成了再通知服务器应用去启动线程进行处理。JDK7开始支持。</p><h1 id="关于NIO"><a href="#关于NIO" class="headerlink" title="关于NIO"></a>关于NIO</h1><ul><li>缓冲区Buffer</li></ul><p>Buffer是一个对象，包含一些要写入或者读出的数据。在NIO库中，所有数据都是用缓冲区处理的。缓冲区实际上是一个数组，并提供了对数据结构化访问以及维护读写位置等信息。具体的缓存区有这些：ByteBuffe、CharBuffer、 ShortBuffer、IntBuffer、LongBuffer、FloatBuffer、DoubleBuffer。</p><ul><li>通道Channel</li></ul><p>我们对数据的读取和写入要通过Channel，它就像水管一样，是一个通道。通道不同于流的地方就是通道是双向的，可以用于读、写和同时读写操作。Channel主要分两大类，SelectableChannel用于网络读写，FileChannel用于文件操作。</p><ul><li>多路复用器Selector</li></ul><p>Selector可以不断轮询注册在其上的Channel，如果某个Channel上面发生读或者写事件，这个Channel就处于就绪状态，会被Selector轮询出来，然后通过SelectionKey可以获取就绪Channel的集合，进行后续的I/O操作。一个Selector可以同时轮询多个Channel，因为JDK使用了epoll()代替传统的select实现，所以没有最大连接句柄1024/2048的限制。所以，只需要一个线程负责Selector的轮询，就可以接入成千上万的客户端。</p><h1 id="适用场景分析"><a href="#适用场景分析" class="headerlink" title="适用场景分析"></a>适用场景分析</h1><p>BIO方式适用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，但程序直观简单易理解。</p><p>NIO方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂。</p><p>AIO方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用OS参与并发操作，编程比较复杂。<br><a id="more"></a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;三种IO&quot;&gt;&lt;a href=&quot;#三种IO&quot; class=&quot;headerlink&quot; title=&quot;三种IO&quot;&gt;&lt;/a&gt;三种IO&lt;/h1&gt;&lt;h2 id=&quot;Java-BIO&quot;&gt;&lt;a href=&quot;#Java-BIO&quot; class=&quot;headerlink&quot; title=&quot;Java BIO&quot;&gt;&lt;/a&gt;Java BIO&lt;/h2&gt;&lt;p&gt;同步并阻塞，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程进行处理。&lt;/p&gt;
+&lt;h2 id=&quot;Java-NIO：准备好了再通知我&quot;&gt;&lt;a href=&quot;#Java-NIO：准备好了再通知我&quot; class=&quot;headerlink&quot; title=&quot;Java NIO：准备好了再通知我&quot;&gt;&lt;/a&gt;Java NIO：准备好了再通知我&lt;/h2&gt;&lt;p&gt;同步非阻塞，服务器实现模式为一个请求一个线程，即客户端发送的请求都会注册到多路复用器上，多路复用器轮询到连接有I/O请求时才启动一个线程进行处理。JDK1.4开始支持。&lt;/p&gt;
+&lt;h2 id=&quot;Java-AIO-NIO-2-：读完了再通知我&quot;&gt;&lt;a href=&quot;#Java-AIO-NIO-2-：读完了再通知我&quot; class=&quot;headerlink&quot; title=&quot;Java AIO(NIO.2)：读完了再通知我&quot;&gt;&lt;/a&gt;Java AIO(NIO.2)：读完了再通知我&lt;/h2&gt;&lt;p&gt;异步非阻塞，服务器实现模式为一个有效请求一个线程，客户端的I/O请求都是由OS先完成了再通知服务器应用去启动线程进行处理。JDK7开始支持。&lt;/p&gt;
+&lt;h1 id=&quot;关于NIO&quot;&gt;&lt;a href=&quot;#关于NIO&quot; class=&quot;headerlink&quot; title=&quot;关于NIO&quot;&gt;&lt;/a&gt;关于NIO&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;缓冲区Buffer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Buffer是一个对象，包含一些要写入或者读出的数据。在NIO库中，所有数据都是用缓冲区处理的。缓冲区实际上是一个数组，并提供了对数据结构化访问以及维护读写位置等信息。具体的缓存区有这些：ByteBuffe、CharBuffer、 ShortBuffer、IntBuffer、LongBuffer、FloatBuffer、DoubleBuffer。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;通道Channel&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们对数据的读取和写入要通过Channel，它就像水管一样，是一个通道。通道不同于流的地方就是通道是双向的，可以用于读、写和同时读写操作。Channel主要分两大类，SelectableChannel用于网络读写，FileChannel用于文件操作。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;多路复用器Selector&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Selector可以不断轮询注册在其上的Channel，如果某个Channel上面发生读或者写事件，这个Channel就处于就绪状态，会被Selector轮询出来，然后通过SelectionKey可以获取就绪Channel的集合，进行后续的I/O操作。一个Selector可以同时轮询多个Channel，因为JDK使用了epoll()代替传统的select实现，所以没有最大连接句柄1024/2048的限制。所以，只需要一个线程负责Selector的轮询，就可以接入成千上万的客户端。&lt;/p&gt;
+&lt;h1 id=&quot;适用场景分析&quot;&gt;&lt;a href=&quot;#适用场景分析&quot; class=&quot;headerlink&quot; title=&quot;适用场景分析&quot;&gt;&lt;/a&gt;适用场景分析&lt;/h1&gt;&lt;p&gt;BIO方式适用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，但程序直观简单易理解。&lt;/p&gt;
+&lt;p&gt;NIO方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂。&lt;/p&gt;
+&lt;p&gt;AIO方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用OS参与并发操作，编程比较复杂。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="Java" scheme="https://mfcheer.github.io/categories/Java/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Java：JVM内存分配总结</title>
+    <link href="https://mfcheer.github.io/Java%EF%BC%9AJVM%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E6%80%BB%E7%BB%93.html"/>
+    <id>https://mfcheer.github.io/Java：JVM内存分配总结.html</id>
+    <published>2018-08-07T02:22:40.000Z</published>
+    <updated>2019-10-10T17:25:42.065Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><h1 id="Java虚拟机运行时数据区"><a href="#Java虚拟机运行时数据区" class="headerlink" title="Java虚拟机运行时数据区"></a>Java虚拟机运行时数据区</h1><p>包括如下几部分<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/83.png" alt=""></p><h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>线程私有内存。用于保存当前正常执行的程序的内存地址。Java虚拟机的多线程就是通过线程轮流切换并分配处理器时间来实现的，为了线程切换后能恢复到正确的位置，每条线程都需要一个独立的程序计数器，互不影响，该区域为“线程私有”。</p><h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p>线程私有内存，用于存储局部变量表，操作栈，方法返回值。局部变量表放着基本数据类型，还有对象的引用。 </p><h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>与虚拟机栈一样，只不过服务的是Native方法，也就是调用C、C++代码时。</p><h2 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h2><p>所有线程共享区域,对象实例几乎都在这分配内存。垃圾回收区域就在此。可细分为新生代和老年代，再可细分为Eden区，From Survivor<br>区，To Survivor区。用来存储程序中的一些对象，比如你用new关键字创建的对象，它就会被存储在堆内存中，但是这个对象在堆内存中的首地址会存储在栈中。</p><h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><p>所有线程共享区域。储存虚拟机加载的类信息，常量，静态变量，编译后的代码。</p><h3 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h3><p>属于方法区的一部分,代表运行时每个class文件中的常量表。包括几种常量：编译时的数字常量、方法或者域的引用。</p><h1 id="常用JVM参数"><a href="#常用JVM参数" class="headerlink" title="常用JVM参数"></a>常用JVM参数</h1><h2 id="栈设置"><a href="#栈设置" class="headerlink" title="栈设置"></a>栈设置</h2><ul><li>-Xss256K:每个线程的栈大小<h2 id="堆设置"><a href="#堆设置" class="headerlink" title="堆设置"></a>堆设置</h2></li><li>-Xms:初始堆大小</li><li>-Xmx:最大堆大小</li><li>-XX:NewSize=n:设置年轻代大小</li><li>-XX:NewRatio=n:设置年轻代和年老代的比值。如:为3，表示年轻代与年老代比值为1：3，年轻代占整个年轻代年老代和的1/4</li><li>-XX:SurvivorRatio=n:年轻代中Eden区与两个Survivor区的比值。注意Survivor区有两个。如：3，表示Eden：Survivor=3：2，一个Survivor区占整个年轻代的1/5</li><li>-XX:MaxPermSize=n:设置持久代大小</li></ul><h2 id="收集器设置"><a href="#收集器设置" class="headerlink" title="收集器设置"></a>收集器设置</h2><ul><li>-XX:+UseSerialGC:设置串行收集器</li><li>-XX:+UseParallelGC:设置并行收集器</li><li>-XX:+UseParalledlOldGC:设置并行年老代收集器</li><li>-XX:+UseConcMarkSweepGC:设置并发收集器</li></ul><h2 id="垃圾回收统计信息"><a href="#垃圾回收统计信息" class="headerlink" title="垃圾回收统计信息"></a>垃圾回收统计信息</h2><ul><li>-XX:+PrintGC</li><li>-XX:+PrintGCDetails</li><li>-XX:+PrintGCTimeStamps</li><li>-Xloggc:filename</li></ul><h2 id="并行收集器设置"><a href="#并行收集器设置" class="headerlink" title="并行收集器设置"></a>并行收集器设置</h2><ul><li>-XX:ParallelGCThreads=n:设置并行收集器收集时使用的CPU数。并行收集线程数。</li><li>-XX:MaxGCPauseMillis=n:设置并行收集最大暂停时间</li><li>-XX:GCTimeRatio=n:设置垃圾回收时间占程序运行时间的百分比。公式为1/(1+n)</li><li>-XX:+CMSIncrementalMode:设置为增量模式。适用于单CPU情况。</li><li>-XX:ParallelGCThreads=n:设置并发收集器年轻代收集方式为并行收集时，使用的CPU数。并行收集线程数。</li></ul><h1 id="Java-new一个对象的过程"><a href="#Java-new一个对象的过程" class="headerlink" title="Java new一个对象的过程"></a>Java new一个对象的过程</h1><ul><li>检测类是否被加载</li><li>为新生对象分配内存</li><li>将分配到的内存空间都初始化为零值（不包括对象头）</li><li>对对象进行必要的设置（例如这个对象是哪个类的实例、如何才能找到类的元数据信息、对象的哈希码、对象的GC分代年龄等信息。这些信息存放在对象的对象头之中）</li><li>执行init方法（构造方法）</li></ul><h1 id="Java-内存分配原则"><a href="#Java-内存分配原则" class="headerlink" title="Java 内存分配原则"></a>Java 内存分配原则</h1><ul><li>对象优先分配在Eden区</li><li>大对象直接进入年老带</li><li>长期存活对象进入年老带</li><li>动态对象年龄判断</li><li>空间分配担保</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h1 id=&quot;Java虚拟机运行时数据区&quot;&gt;&lt;a href=&quot;#Java虚拟机运行时数据区&quot; class=&quot;headerlink&quot; title=&quot;Java虚拟机运行时数据区&quot;&gt;&lt;/a&gt;Java虚拟机运行时数据区&lt;/h1&gt;&lt;p&gt;包括如下几部分&lt;
+      
+    
+    </summary>
+    
+      <category term="Java" scheme="https://mfcheer.github.io/categories/Java/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL：数据库索引</title>
+    <link href="https://mfcheer.github.io/MySQL%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95.html"/>
+    <id>https://mfcheer.github.io/MySQL：数据库索引.html</id>
+    <published>2018-05-07T11:53:31.000Z</published>
+    <updated>2019-10-10T17:25:42.081Z</updated>
+    
+    <content type="html"><![CDATA[<p>mysql中索引是对数据库表中一列或多列的值进行排序的一种结构。</p><h1 id="MySQL数据库索引种类"><a href="#MySQL数据库索引种类" class="headerlink" title="MySQL数据库索引种类"></a>MySQL数据库索引种类</h1><ul><li>主键索引。数据列不允许重复，不允许为NULL.一个表只能有一个主键</li><li>唯一索引。数据列不允许重复，允许为NULL值，一个表允许多个列创建唯一索引。</li><li>普通索引。基本的索引类型，没有唯一性的限制，允许为NULL值。</li><li>全文索引。</li></ul><h1 id="索引使用的规则"><a href="#索引使用的规则" class="headerlink" title="索引使用的规则"></a>索引使用的规则</h1><ul><li>索引的列是出现在where子句中的列，或者连接子句中指定的列</li><li>数量较少的列，没有必要在此列建立索引。</li><li>使用短索引。如果对长字符串列进行索引，指定一个前缀长度，能够节省大量索引空间。</li><li>不要过度索引。索引需要额外的磁盘空间，并降低写操作的性能。在修改表内容的时候，索引会进行更新甚至重构。</li><li>最左前缀<br>顾名思义，就是最左优先。在创建多列索引时，要根据业务需求，where子句中使用最频繁的一列放在最左边。 </li></ul><h1 id="索引实现算法"><a href="#索引实现算法" class="headerlink" title="索引实现算法"></a>索引实现算法</h1><ul><li>B树<br>B树实现的索引可以被用在=,&gt;,&gt;=,&lt;,&lt;=和between这些比较操作符上，而且还可以用于like操作符，只要它的查询条件是一个不以通配符开头的常量.</li><li>Hash<br>Hash索引只能用于对等比较，例如=,&lt;=&gt;（相当于=）操作符。</li></ul><h1 id="in-和exists"><a href="#in-和exists" class="headerlink" title="in 和exists"></a>in 和exists</h1><p>mysql中的in语句是把外表和内表作连接，而exists语句是对外表作循环，每次循环再对内表进行查询。</p><ul><li>如果查询两个表大小相当，那么用in和exists差别不大。</li><li>如果两个表大小差距较大，则子查询表大的用exists，子查询表小的用in。</li><li>not in 和not exists，查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；而not extsts的子查询依然能用到表上的索引。</li></ul><a id="more"></a>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;mysql中索引是对数据库表中一列或多列的值进行排序的一种结构。&lt;/p&gt;
+&lt;h1 id=&quot;MySQL数据库索引种类&quot;&gt;&lt;a href=&quot;#MySQL数据库索引种类&quot; class=&quot;headerlink&quot; title=&quot;MySQL数据库索引种类&quot;&gt;&lt;/a&gt;MySQL数据库索引种类&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;主键索引。数据列不允许重复，不允许为NULL.一个表只能有一个主键&lt;/li&gt;
+&lt;li&gt;唯一索引。数据列不允许重复，允许为NULL值，一个表允许多个列创建唯一索引。&lt;/li&gt;
+&lt;li&gt;普通索引。基本的索引类型，没有唯一性的限制，允许为NULL值。&lt;/li&gt;
+&lt;li&gt;全文索引。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;索引使用的规则&quot;&gt;&lt;a href=&quot;#索引使用的规则&quot; class=&quot;headerlink&quot; title=&quot;索引使用的规则&quot;&gt;&lt;/a&gt;索引使用的规则&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;索引的列是出现在where子句中的列，或者连接子句中指定的列&lt;/li&gt;
+&lt;li&gt;数量较少的列，没有必要在此列建立索引。&lt;/li&gt;
+&lt;li&gt;使用短索引。如果对长字符串列进行索引，指定一个前缀长度，能够节省大量索引空间。&lt;/li&gt;
+&lt;li&gt;不要过度索引。索引需要额外的磁盘空间，并降低写操作的性能。在修改表内容的时候，索引会进行更新甚至重构。&lt;/li&gt;
+&lt;li&gt;最左前缀&lt;br&gt;顾名思义，就是最左优先。在创建多列索引时，要根据业务需求，where子句中使用最频繁的一列放在最左边。 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;索引实现算法&quot;&gt;&lt;a href=&quot;#索引实现算法&quot; class=&quot;headerlink&quot; title=&quot;索引实现算法&quot;&gt;&lt;/a&gt;索引实现算法&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;B树&lt;br&gt;B树实现的索引可以被用在=,&amp;gt;,&amp;gt;=,&amp;lt;,&amp;lt;=和between这些比较操作符上，而且还可以用于like操作符，只要它的查询条件是一个不以通配符开头的常量.&lt;/li&gt;
+&lt;li&gt;Hash&lt;br&gt;Hash索引只能用于对等比较，例如=,&amp;lt;=&amp;gt;（相当于=）操作符。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;in-和exists&quot;&gt;&lt;a href=&quot;#in-和exists&quot; class=&quot;headerlink&quot; title=&quot;in 和exists&quot;&gt;&lt;/a&gt;in 和exists&lt;/h1&gt;&lt;p&gt;mysql中的in语句是把外表和内表作连接，而exists语句是对外表作循环，每次循环再对内表进行查询。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果查询两个表大小相当，那么用in和exists差别不大。&lt;/li&gt;
+&lt;li&gt;如果两个表大小差距较大，则子查询表大的用exists，子查询表小的用in。&lt;/li&gt;
+&lt;li&gt;not in 和not exists，查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；而not extsts的子查询依然能用到表上的索引。&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="数据库" scheme="https://mfcheer.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习：ROC曲线及AUC含义</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%EF%BC%9AROC%E6%9B%B2%E7%BA%BF%E5%8F%8AAUC%E5%90%AB%E4%B9%89.html"/>
+    <id>https://mfcheer.github.io/机器学习：ROC曲线及AUC含义.html</id>
+    <published>2018-05-01T11:10:48.000Z</published>
+    <updated>2019-10-10T17:25:42.108Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="ROC曲线"><a href="#ROC曲线" class="headerlink" title="ROC曲线"></a>ROC曲线</h1><p>Receiver Operating Characteristic curve（受试者工作特征曲线）</p><p>我们将二分类器的所有可能取值，做一个方格图如下：<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/81.png" alt=""></p><ul><li>TP —— True Positive （真正, TP）被模型预测为正的正样本（原来为正预测为正）</li><li>TN —— True Negative（真负 , TN）被模型预测为负的负样本（原来为负预测为负）</li><li>FP ——False Positive （假正, FP）被模型预测为正的负样本（原来为负预测为正）</li><li>FN—— False Negative（假负 , FN）被模型预测为负的正样本 （原来为正预测为负）</li></ul><p>TP + TN + FP + FN = 样本总数。<br>两个指标，准确率和召回率</p><ul><li>准确率 P = TP/(TP + FP)</li><li>召回率 R = TP/(TP + FN)</li></ul><p>下图为ROC曲线图：<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/82.png" alt=""><br>图像的横轴是False Positive rate值（不是FP值），也就是实际为负并且预测错误的个数占总的负值的比例；图像的纵轴是True Positive rate值（不是TP值），也就是实际为正值并且预测正确的个数占总的正值的比例。</p><h2 id="ROC曲线中的“四点一线”"><a href="#ROC曲线中的“四点一线”" class="headerlink" title="ROC曲线中的“四点一线”"></a>ROC曲线中的“四点一线”</h2><ul><li>第一个点，(0,1)，即FPR=0, TPR=1，这意味着FN（false negative）=0，并且FP（false positive）=0。这是一个完美的分类器，它将所有的样本都正确分类。</li><li>第二个点，(1,0)，即FPR=1，TPR=0，类似地分析可以发现这是一个最糟糕的分类器，因为它成功避开了所有的正确答案。</li><li>第三个点，(0,0)，即FPR=TPR=0，即FP（false positive）=TP（true positive）=0，可以发现该分类器预测所有的样本都为负样本（negative）。</li><li>第四个点（1,1），分类器实际上预测所有的样本都为正样本。</li></ul><p>对于ROC曲线，我们可以这样理解，对于二分类问题，曲线的每一个点都代表一个阈值，分类器给每个样本一个得分，得分大于阈值的我们认为是正样本，小于阈值的我们认为是负样本。</p><ul><li>若学习器A的ROC曲线将另外一个学习器B的曲线完全包住，则A的性能一定比B好</li><li>AUC值等于0.5时，我们可以认为分类器不起作用</li></ul><h1 id="AUC值"><a href="#AUC值" class="headerlink" title="AUC值"></a>AUC值</h1><p>Area Under Curve score (曲线下面积值)，也就是ROC曲线之下与坐标轴围成的面积。<br>AUC值是一个概率值，当你随机挑选一个正样本以及一个负样本，当前的分类算法根据计算得到的Score值将这个正样本排在负样本前面的概率就是AUC值。AUC值越大，当前的分类算法越有可能将正样本排在负样本前面，即能够更好的分类。</p><h1 id="下面是觉得不错的相关文章"><a href="#下面是觉得不错的相关文章" class="headerlink" title="下面是觉得不错的相关文章"></a>下面是觉得不错的相关文章</h1><p><a href="https://zhuanlan.zhihu.com/p/52930683" target="_blank" rel="noopener">乱弹机器学习评估指标AUC</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;ROC曲线&quot;&gt;&lt;a href=&quot;#ROC曲线&quot; class=&quot;headerlink&quot; title=&quot;ROC曲线&quot;&gt;&lt;/a&gt;ROC曲线&lt;/h1&gt;&lt;p&gt;Receiver Operating Characteristic curve（受试者工作特征曲线）&lt;/p&gt;
+&lt;p&gt;
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL：Limit分页优化</title>
+    <link href="https://mfcheer.github.io/MySQL%EF%BC%9ALimit%E5%88%86%E9%A1%B5%E4%BC%98%E5%8C%96.html"/>
+    <id>https://mfcheer.github.io/MySQL：Limit分页优化.html</id>
+    <published>2018-04-29T03:34:33.000Z</published>
+    <updated>2019-10-10T17:25:42.079Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="传统分页："><a href="#传统分页：" class="headerlink" title="传统分页："></a>传统分页：</h2><p>Select * from table limit 10000,10;</p><p>Limit 10000,10 偏移量越大则越慢，这句 SQL 的执行逻辑是:<br>1.从数据表中读取第N条数据添加到数据集中<br>2.重复第一步直到 N = 10000 + 10<br>3.根据 offset 抛弃前面 10000 条数<br>4.返回剩余的 10 条数据</p><h2 id="推荐分页："><a href="#推荐分页：" class="headerlink" title="推荐分页："></a>推荐分页：</h2><ul><li>分页方式一：<br>Select * from table WHERE id&gt;=23434 limit 11;</li><li>分页方式二：<br>Select * from table WHERE id &gt;= ( select id from table limit 10000,1 ) limit 10;</li><li>分页方式三：<br>Select * from table INNER JOIN (SELECT id from table limit 10000,10) USING(id)</li><li>分页方式四：<br>程序取ID: Select id from table limit 10000,10;<br>Select * from table WHERE ID in(123,456…);<a id="more"></a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;传统分页：&quot;&gt;&lt;a href=&quot;#传统分页：&quot; class=&quot;headerlink&quot; title=&quot;传统分页：&quot;&gt;&lt;/a&gt;传统分页：&lt;/h2&gt;&lt;p&gt;Select * from table limit 10000,10;&lt;/p&gt;
+&lt;p&gt;Limit 10000,10 偏移量越大则越慢，这句 SQL 的执行逻辑是:&lt;br&gt;1.从数据表中读取第N条数据添加到数据集中&lt;br&gt;2.重复第一步直到 N = 10000 + 10&lt;br&gt;3.根据 offset 抛弃前面 10000 条数&lt;br&gt;4.返回剩余的 10 条数据&lt;/p&gt;
+&lt;h2 id=&quot;推荐分页：&quot;&gt;&lt;a href=&quot;#推荐分页：&quot; class=&quot;headerlink&quot; title=&quot;推荐分页：&quot;&gt;&lt;/a&gt;推荐分页：&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;分页方式一：&lt;br&gt;Select * from table WHERE id&amp;gt;=23434 limit 11;&lt;/li&gt;
+&lt;li&gt;分页方式二：&lt;br&gt;Select * from table WHERE id &amp;gt;= ( select id from table limit 10000,1 ) limit 10;&lt;/li&gt;
+&lt;li&gt;分页方式三：&lt;br&gt;Select * from table INNER JOIN (SELECT id from table limit 10000,10) USING(id)&lt;/li&gt;
+&lt;li&gt;分页方式四：&lt;br&gt;程序取ID: Select id from table limit 10000,10;&lt;br&gt;Select * from table WHERE ID in(123,456…);
+    
+    </summary>
+    
+      <category term="数据库" scheme="https://mfcheer.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习：K-Means算法</title>
+    <link href="https://mfcheer.github.io/K-Means%E7%AE%97%E6%B3%95.html"/>
+    <id>https://mfcheer.github.io/K-Means算法.html</id>
+    <published>2018-04-22T17:06:24.000Z</published>
+    <updated>2019-10-10T17:25:42.068Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>K-Means算法属于基于划分的聚类算法，对N维欧氏空间中的点进行聚类，是一种最简单的无监督学习方法。它通过迭代来实现，其基本思想是：每次确定K个类别中心，然后将各个结点归属到与之距离最近的中心点所在的Cluster，然后将类别中心更新为属于各Cluster的所有样本的均值，反复迭代，直至类别中心不再发生变化或变化小于某阈值。</p><h1 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h1><p>（1）随机生成c个类的初始中心；<br>（2）在第k次迭代中，对任意一个样本，求其到c各中心的距离，将该样本归到距离最短的那个中心所在的类；<br>（3）利用均值等方法更新该类的中心值；<br>（4）对于所有的C个聚类中心，如果利用（2）（3）的迭代法更新后，值保持不变，则迭代结束；否则继续迭代。<br><a id="more"></a></p><p>不同的初始化k值和中心点的选择有可能引起不同的聚类结果</p><h1 id="聚类数k的选取评价方法"><a href="#聚类数k的选取评价方法" class="headerlink" title="聚类数k的选取评价方法"></a>聚类数k的选取评价方法</h1><h3 id="1、事前的数据分析，选取合适的k值"><a href="#1、事前的数据分析，选取合适的k值" class="headerlink" title="1、事前的数据分析，选取合适的k值"></a>1、事前的数据分析，选取合适的k值</h3><h3 id="2、手肘法"><a href="#2、手肘法" class="headerlink" title="2、手肘法"></a>2、手肘法</h3><p>手肘法的核心指标是SSE(误差平方和)。取名的原因是拟合曲线形状和手肘形状相似。</p><p>手肘法的核心思想是：随着聚类数k的增大，样本划分会更加精细，每个簇的聚合程度会逐渐提高，那么误差平方和SSE自然会逐渐变小。并且，当k小于真实聚类数时，由于k的增大会大幅增加每个簇的聚合程度，故SSE的下降幅度会很大，而当k到达真实聚类数时，再增加k所得到的聚合程度回报会迅速变小，所以SSE的下降幅度会骤减，然后随着k值的继续增大而趋于平缓，也就是说SSE和k的关系图是一个手肘的形状，而这个肘部对应的k值就是数据的真实聚类数。当然，这也是该方法被称为手肘法的原因。</p><h3 id="3、轮廓系数法"><a href="#3、轮廓系数法" class="headerlink" title="3、轮廓系数法"></a>3、轮廓系数法</h3><p>轮廓系数的公式为 s = (a-b)/max(a,b)。其中a为当前样本点x与同簇的其他样本的平均距离，称为凝聚度，b为x与最近簇中所有样本的平均距离，称为分离度。顾名思义，最近簇为除了同簇的最近的簇。</p><p>求出所有样本的轮廓系数后再求平均值就得到了平均轮廓系数。平均轮廓系数的取值范围为[-1,1]，且簇内样本的距离越近，簇间样本距离越远，平均轮廓系数越大，聚类效果越好。</p><h1 id="随机点的选取评价方法"><a href="#随机点的选取评价方法" class="headerlink" title="随机点的选取评价方法"></a>随机点的选取评价方法</h1><h3 id="1、事前的数据分析，选取合适中心点"><a href="#1、事前的数据分析，选取合适中心点" class="headerlink" title="1、事前的数据分析，选取合适中心点"></a>1、事前的数据分析，选取合适中心点</h3><h3 id="2、随机化选择"><a href="#2、随机化选择" class="headerlink" title="2、随机化选择"></a>2、随机化选择</h3><p>第一个簇心A随机找；第二个簇心B要找距离A最远的，是因为簇心之间要相距远一些，如果很近的话，很容易当作一类，影响聚类效果；第三个簇心C也是同样的，它得离A、B远一些；如此类推。</p><h1 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h1><p>k-means算法的时间复杂度为：<br>O(mnkd)，m为迭代次数。n为数据集中数据样本数量，k为聚类个数，d为数据的维数。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;原理&quot;&gt;&lt;a href=&quot;#原理&quot; class=&quot;headerlink&quot; title=&quot;原理&quot;&gt;&lt;/a&gt;原理&lt;/h1&gt;&lt;p&gt;K-Means算法属于基于划分的聚类算法，对N维欧氏空间中的点进行聚类，是一种最简单的无监督学习方法。它通过迭代来实现，其基本思想是：每次确定K个类别中心，然后将各个结点归属到与之距离最近的中心点所在的Cluster，然后将类别中心更新为属于各Cluster的所有样本的均值，反复迭代，直至类别中心不再发生变化或变化小于某阈值。&lt;/p&gt;
+&lt;h1 id=&quot;算法描述&quot;&gt;&lt;a href=&quot;#算法描述&quot; class=&quot;headerlink&quot; title=&quot;算法描述&quot;&gt;&lt;/a&gt;算法描述&lt;/h1&gt;&lt;p&gt;（1）随机生成c个类的初始中心；&lt;br&gt;（2）在第k次迭代中，对任意一个样本，求其到c各中心的距离，将该样本归到距离最短的那个中心所在的类；&lt;br&gt;（3）利用均值等方法更新该类的中心值；&lt;br&gt;（4）对于所有的C个聚类中心，如果利用（2）（3）的迭代法更新后，值保持不变，则迭代结束；否则继续迭代。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习：常用损失函数</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0.html"/>
+    <id>https://mfcheer.github.io/机器学习常用损失函数.html</id>
+    <published>2018-04-19T16:30:44.000Z</published>
+    <updated>2019-10-10T17:25:42.099Z</updated>
+    
+    <content type="html"><![CDATA[<ol><li>铰链损失（Hinge Loss）：主要用于支持向量机（SVM） 中； </li><li>互熵损失 （Cross Entropy Loss，Softmax Loss ）：用于Logistic 回归与Softmax 分类中； </li><li>平方损失（Square Loss）：主要是最小二乘法（OLS）中； </li><li>指数损失（Exponential Loss） ：主要用于Adaboost 集成学习算法中； </li><li>其他损失（如0-1损失，绝对值损失）<a id="more"></a></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;ol&gt;
+&lt;li&gt;铰链损失（Hinge Loss）：主要用于支持向量机（SVM） 中； &lt;/li&gt;
+&lt;li&gt;互熵损失 （Cross Entropy Loss，Softmax Loss ）：用于Logistic 回归与Softmax 分类中； &lt;/li&gt;
+&lt;li&gt;平方损失（Square Loss）：主要是最小二乘法（OLS）中； &lt;/li&gt;
+&lt;li&gt;指数损失（Exponential Loss） ：主要用于Adaboost 集成学习算法中； &lt;/li&gt;
+&lt;li&gt;其他损失（如0-1损失，绝对值损失）
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习：KNN算法</title>
+    <link href="https://mfcheer.github.io/KNN%E7%AE%97%E6%B3%95.html"/>
+    <id>https://mfcheer.github.io/KNN算法.html</id>
+    <published>2018-04-16T16:55:03.000Z</published>
+    <updated>2019-10-10T17:25:42.069Z</updated>
+    
+    <content type="html"><![CDATA[<p>KNN（K Nearest Neighbor）算法是机器学习里面常用的一种分类算法，假设一个样本空间被分为几类，然后给定一个待分类所有的特征数据，通过计算距离该数据的最近的K个样本来判断这个数据属于哪一类。如果距离待分类属性最近的K个类大多数都属于某一个特定的类，那么这个待分类的数据也就属于这个类。</p><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/78.jpg" alt=""></p><p>如图所示，假设现在需要对中间绿色的圆进行分类，假设我们寻找距离这个绿色圆最近的3个样本，即K=3，那么可以看出这个绿色圆属于红色三角形所在的类；如果K=5，因为蓝色方框最多，所以此时绿色圆属于蓝色方框所在的类。从而得到当K值取值不同时，得到的分类结果也可能不一样，所以很多时候K值得选取很关键，这就是KNN的核心思想。如果类别个数为偶数，那么K通常会设置为一个奇数；如果类别个数为奇数，K通常设置为偶数，这样就能保证不会有平局的发生。</p><p>每预测一个新样本的所属类别时，都会对整体样本进行遍历，可以看出KNN的效率实际上是十分低下的。<br><a id="more"></a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;KNN（K Nearest Neighbor）算法是机器学习里面常用的一种分类算法，假设一个样本空间被分为几类，然后给定一个待分类所有的特征数据，通过计算距离该数据的最近的K个样本来判断这个数据属于哪一类。如果距离待分类属性最近的K个类大多数都属于某一个特定的类，那么这个待分类的数据也就属于这个类。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/78.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;如图所示，假设现在需要对中间绿色的圆进行分类，假设我们寻找距离这个绿色圆最近的3个样本，即K=3，那么可以看出这个绿色圆属于红色三角形所在的类；如果K=5，因为蓝色方框最多，所以此时绿色圆属于蓝色方框所在的类。从而得到当K值取值不同时，得到的分类结果也可能不一样，所以很多时候K值得选取很关键，这就是KNN的核心思想。如果类别个数为偶数，那么K通常会设置为一个奇数；如果类别个数为奇数，K通常设置为偶数，这样就能保证不会有平局的发生。&lt;/p&gt;
+&lt;p&gt;每预测一个新样本的所属类别时，都会对整体样本进行遍历，可以看出KNN的效率实际上是十分低下的。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习：集成学习方法</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%EF%BC%9A%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95.html"/>
+    <id>https://mfcheer.github.io/机器学习：集成学习方法.html</id>
+    <published>2018-04-02T15:24:28.000Z</published>
+    <updated>2019-10-10T17:25:42.115Z</updated>
+    
+    <content type="html"><![CDATA[<p>集成学习是通过构建并结合多个学习器来完成学习任务。</p><h1 id="bagging-和-boosting"><a href="#bagging-和-boosting" class="headerlink" title="bagging 和 boosting"></a>bagging 和 boosting</h1><ul><li>bagging 是一种与 boosting 很类似的技术, 所使用的多个分类器的类型（数据量和特征量）都是一致的。</li><li>bagging 是由不同的分类器（1.数据随机化 2.特征随机化）经过训练，综合得出的出现最多分类结果；boosting 是通过调整已有分类器错分的那些数据来获得新的分类器，得出目前最优的结果。</li><li>bagging 中的分类器权重是相等的；而 boosting 中的分类器加权求和，所以权重并不相等，每个权重代表的是其对应分类器在上一轮迭代中的成功度。</li></ul><a id="more"></a><h1 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h1><p>Bagging + 决策树 = 随机森林<br>构建n个决策树进行投票</p><h1 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h1><p>boosting的adaboost每次训练的时候用的是同一个数据集，但是前一棵决策树分错的样本在后面的权重会升高，相当于说，后面的决策树利用了前面决策树学习的结果，不断的优化这个结果，也就是说，后面的决策树恰恰擅长的是前面决策树不擅长（分错）的样本.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;集成学习是通过构建并结合多个学习器来完成学习任务。&lt;/p&gt;
+&lt;h1 id=&quot;bagging-和-boosting&quot;&gt;&lt;a href=&quot;#bagging-和-boosting&quot; class=&quot;headerlink&quot; title=&quot;bagging 和 boosting&quot;&gt;&lt;/a&gt;bagging 和 boosting&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;bagging 是一种与 boosting 很类似的技术, 所使用的多个分类器的类型（数据量和特征量）都是一致的。&lt;/li&gt;
+&lt;li&gt;bagging 是由不同的分类器（1.数据随机化 2.特征随机化）经过训练，综合得出的出现最多分类结果；boosting 是通过调整已有分类器错分的那些数据来获得新的分类器，得出目前最优的结果。&lt;/li&gt;
+&lt;li&gt;bagging 中的分类器权重是相等的；而 boosting 中的分类器加权求和，所以权重并不相等，每个权重代表的是其对应分类器在上一轮迭代中的成功度。&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习笔记：XGBoost</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AXGBoost.html"/>
+    <id>https://mfcheer.github.io/机器学习笔记：XGBoost.html</id>
+    <published>2018-03-24T15:22:32.000Z</published>
+    <updated>2019-10-10T17:25:42.100Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="XGBoost"><a href="#XGBoost" class="headerlink" title="XGBoost"></a>XGBoost</h1><p>XGBoost可以看做是GBDT的一种实现方式，目前在竞赛和工业界都被大量应用，并取得了很好的效果。</p><h2 id="BoostedTree"><a href="#BoostedTree" class="headerlink" title="BoostedTree"></a>BoostedTree</h2><h3 id="回归树"><a href="#回归树" class="headerlink" title="回归树"></a>回归树</h3><p>BoostedTree的基本组成部分是回归树（Classification And Regression Tree），称作CART。<br>回归树会把输入的数据，分配到叶子节点上去，每个叶子节点都对应一个实数，非叶子节点都是一个二叉树。属于决策树的一种。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/52.png" alt=""></p><a id="more"></a><p>决策树自上而下建立，根据属性值大小分裂为左右两个节点。</p><h3 id="TreeEnsemble"><a href="#TreeEnsemble" class="headerlink" title="TreeEnsemble"></a>TreeEnsemble</h3><p>一颗回归树往往无法正确的做出预测，所以可以将多棵树的预测进行一个组合，得到最终的结果。<br>预测结果就是各个回归树的和。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/53.png" alt=""></p><h2 id="模型组成"><a href="#模型组成" class="headerlink" title="模型组成"></a>模型组成</h2><h3 id="模型和参数"><a href="#模型和参数" class="headerlink" title="模型和参数"></a>模型和参数</h3><p>简单来说，模型是指给定xi如何去预测yi.<br>比较常见的模型如线性模型，yi=w*xi+z,其中w和z就是我们需要预测的值。</p><h3 id="目标函数-误差函数-正则项"><a href="#目标函数-误差函数-正则项" class="headerlink" title="目标函数=误差函数+正则项"></a>目标函数=误差函数+正则项</h3><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/54.png" alt=""></p><p>误差函数又称损失函数，是为了尽可能的提高模型预测正确性。一般代表误差，如平方误差等。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/84.png" alt=""></p><p>正则项是为了防止过拟合样本数据。常见线性模型有L1、L2正则。</p><h2 id="模型原理"><a href="#模型原理" class="headerlink" title="模型原理"></a>模型原理</h2><p>boosting的过程中，每次保留前面的模型不变，加入一个新的函数到模型中，目标函数如下：<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/55.png" alt=""></p><p>每次加入怎样的函数呢？当然是使得目标函数尽量小的函数<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/56.png" alt=""></p><p>如果为平方误差的情形下，目前函数可以写成<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/57.png" alt=""></p><p>对于不是平方误差的情况，我们会采用如下的泰勒展开近似来定义一个近似的目标函数，方便我们进行这一步的计算。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/58.png" alt=""></p><p>当我们把常数项移除之后，我们会发现如下一个比较统一的目标函数。这一个目标函数有一个非常明显的特点，它只依赖于每个数据点的在误差函数上的一阶导数和二阶导数. 误差函数为<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/59.png" alt=""></p><p>一阶导数、二阶导数为</p><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/60.png" alt=""></p><h2 id="模型参数"><a href="#模型参数" class="headerlink" title="模型参数"></a>模型参数</h2><h3 id="增加随机性"><a href="#增加随机性" class="headerlink" title="增加随机性"></a>增加随机性</h3><ul><li>eta 为了防止过拟合，更新过程中用到的收缩步长。</li><li>subsample 这个就是随机森林的方式，每次不是取出全部样本，而是有放回地取出部分样本。有人把这个称为行抽取，subsample就表示抽取比例</li><li>colsample_bytree和colsample_bylevel 这个是模仿随机森林的方式，这是列抽取。colsample_bytree是每次准备构造一棵新树时，选取部分特征来构造，colsample_bytree就是抽取比例。colsample_bylevel表示的是每次分割节点时，抽取特征的比例。</li><li>max_delta_step 这个是构造树时，允许得到ft(x)的最大值。如果为0，表示无限制。也是为了后续构造树留出空间，和eta相似</li></ul><h3 id="控制模型复杂度"><a href="#控制模型复杂度" class="headerlink" title="控制模型复杂度"></a>控制模型复杂度</h3><ul><li>max_depth 树的最大深度</li><li>min_child_weight 叶节点最小样本数</li><li>gamma 每次分开一个节点后，造成的最小下降的分数。类似于上面的Gain</li><li>alpha和lambda就是目标函数里的表示模型复杂度中的L1范数和L2范数前面的系数</li></ul><h3 id="其他参数"><a href="#其他参数" class="headerlink" title="其他参数"></a>其他参数</h3><ul><li>num_class 分类数</li><li>booster 表示用哪种模型，一共有gbtree, gbline, dart三种选择。一般用gbtree。</li><li>nthread 并行线成数。如果不设置就是能采用的最大线程。</li><li>sketch_eps 这个就是近似算法里的ϵ。</li><li>scale_pos_weight 这个是针对二分类问题时，正负样例的数量差距过大。</li></ul><h2 id="控制过拟合"><a href="#控制过拟合" class="headerlink" title="控制过拟合"></a>控制过拟合</h2><p>通常可以通过两种方式来控制xgboost中的过拟合</p><ul><li>第一种方式是直接控制模型的复杂性<br>包括参数：max_depth，min_child_weight 和 gamma</li><li>第二种方法是增加随机性<br>包括参数：subsample，colsample_bytree，eta</li></ul><h2 id="与GBDT的差别"><a href="#与GBDT的差别" class="headerlink" title="与GBDT的差别"></a>与GBDT的差别</h2><ul><li>传统GBDT以CART作为基分类器，xgboost还支持线性分类器。</li><li>传统GBDT在优化时只用到一阶导数信息，xgboost则对代价函数进行了二阶泰勒展开，同时用到了一阶和二阶导数。</li><li>xgboost在代价函数里加入了正则项，用于控制模型的复杂度。</li><li>xgboost的权重衰减。</li><li>xgboost支持更好的并行。</li></ul><h1 id="如何画XGBoost里面的决策树"><a href="#如何画XGBoost里面的决策树" class="headerlink" title="如何画XGBoost里面的决策树"></a>如何画XGBoost里面的决策树</h1><p><a href="https://zhuanlan.zhihu.com/p/32943164" target="_blank" rel="noopener">如何画XGBoost里面的决策树</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;XGBoost&quot;&gt;&lt;a href=&quot;#XGBoost&quot; class=&quot;headerlink&quot; title=&quot;XGBoost&quot;&gt;&lt;/a&gt;XGBoost&lt;/h1&gt;&lt;p&gt;XGBoost可以看做是GBDT的一种实现方式，目前在竞赛和工业界都被大量应用，并取得了很好的效果。&lt;/p&gt;
+&lt;h2 id=&quot;BoostedTree&quot;&gt;&lt;a href=&quot;#BoostedTree&quot; class=&quot;headerlink&quot; title=&quot;BoostedTree&quot;&gt;&lt;/a&gt;BoostedTree&lt;/h2&gt;&lt;h3 id=&quot;回归树&quot;&gt;&lt;a href=&quot;#回归树&quot; class=&quot;headerlink&quot; title=&quot;回归树&quot;&gt;&lt;/a&gt;回归树&lt;/h3&gt;&lt;p&gt;BoostedTree的基本组成部分是回归树（Classification And Regression Tree），称作CART。&lt;br&gt;回归树会把输入的数据，分配到叶子节点上去，每个叶子节点都对应一个实数，非叶子节点都是一个二叉树。属于决策树的一种。&lt;br&gt;&lt;img src=&quot;https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/52.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习笔记：特征工程基本方法</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95.html"/>
+    <id>https://mfcheer.github.io/机器学习笔记：特征工程基本方法.html</id>
+    <published>2018-03-13T14:12:03.000Z</published>
+    <updated>2019-10-10T17:25:42.103Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="为什么要做特征工程？"><a href="#为什么要做特征工程？" class="headerlink" title="为什么要做特征工程？"></a>为什么要做特征工程？</h1><p>“数据和特征决定了机器学习的上限，而模型和算法是在逼近这个上限而已”，所以数据是机器学习的基础。数据来源是各种各样的，文本、语音、视频、图片等，原始的数据必须以特征的形式，加入到模型中，才能进行训练</p><h1 id="特征工程方法"><a href="#特征工程方法" class="headerlink" title="特征工程方法"></a>特征工程方法</h1><h2 id="1、One-Hot编码"><a href="#1、One-Hot编码" class="headerlink" title="1、One-Hot编码"></a>1、One-Hot编码</h2><p>避免连续值导致模型的“误解”</p><h2 id="2、离散化"><a href="#2、离散化" class="headerlink" title="2、离散化"></a>2、离散化</h2><p>对数据进行分区分桶操作</p><h2 id="3、连续值"><a href="#3、连续值" class="headerlink" title="3、连续值"></a>3、连续值</h2><p>使用属性的连续值，某些模型对连续型的特征处理有比较好的效果</p><h2 id="4、特征交叉"><a href="#4、特征交叉" class="headerlink" title="4、特征交叉"></a>4、特征交叉</h2><p>两个甚至多个特征，进行特征组合，形成一组新的特征</p><h2 id="5、归一化"><a href="#5、归一化" class="headerlink" title="5、归一化"></a>5、归一化</h2><p>机器学习中，对数据进行分析之前，都会对数据进行归一化处理，这样做是为了消除部分特征数据对整体结果的影响。一般来说，是通过特定的方法，对数据的区间进行缩放处理，使之达到一个合适值，使各个指标处于同一个数量级。常见的是将数值处理成[0,1]之间的小数</p><h3 id="5-1-最大最小标准化"><a href="#5-1-最大最小标准化" class="headerlink" title="5.1 最大最小标准化"></a>5.1 最大最小标准化</h3><p>通过特征的最大最小值，将每个值处理成[0,1]区间的数字，公式如下<br>设最大maxA,最小值为minA，y=(x-minA)/(maxA-minA)</p><h3 id="5-2-对数函数"><a href="#5-2-对数函数" class="headerlink" title="5.2 对数函数"></a>5.2 对数函数</h3><p>y=log10(x)</p><h3 id="5-3-z-score标准化"><a href="#5-3-z-score标准化" class="headerlink" title="5.3 z-score标准化"></a>5.3 z-score标准化</h3><p>通过特征的平均值和标准差，进行数据处理，公式为：<br>y=(x-μ)/σ 其中x为某一分数，μ为平均数，σ为标准差。<br>y的含义就是x与平均值之间的距离，衡量单位是标准差</p><h1 id="6、二值化"><a href="#6、二值化" class="headerlink" title="6、二值化"></a>6、二值化</h1><p>取值为 0,1</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;为什么要做特征工程？&quot;&gt;&lt;a href=&quot;#为什么要做特征工程？&quot; class=&quot;headerlink&quot; title=&quot;为什么要做特征工程？&quot;&gt;&lt;/a&gt;为什么要做特征工程？&lt;/h1&gt;&lt;p&gt;“数据和特征决定了机器学习的上限，而模型和算法是在逼近这个上限而已”，所以数
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习：决策树</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%EF%BC%9A%E5%86%B3%E7%AD%96%E6%A0%91.html"/>
+    <id>https://mfcheer.github.io/机器学习：决策树.html</id>
+    <published>2018-03-02T15:14:35.000Z</published>
+    <updated>2019-10-10T17:25:42.109Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>决策树是对样本进行分类的树形模型。树由结点和有向边组成：</p><ul><li>内部结点表示一个特征或者属性。</li><li>叶子结点表示一个分类。</li><li>有向边代表了一个划分规则。</li></ul><p>用决策树对需要测试的实例进行分类：从根节点开始，对实例的某一特征进行测试，根据测试结果，将实例分配到其子结点；这时，每一个子结点对应着该特征的一个取值。如此递归地对实例进行测试并分配，直至达到叶结点。最后将实例分配到叶结点的类中。</p><p>它可以认为是 if-then 规则的集合，也可以认为是定义在特征空间与类空间上的条件概率分布。</p><p>决策树的优点：可读性强，分类速度快。</p><p>决策树学习通常包括 3 个步骤：特征选择、决策树的生成和决策树的修剪。</p><a id="more"></a>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;基本概念&quot;&gt;&lt;a href=&quot;#基本概念&quot; class=&quot;headerlink&quot; title=&quot;基本概念&quot;&gt;&lt;/a&gt;基本概念&lt;/h1&gt;&lt;p&gt;决策树是对样本进行分类的树形模型。树由结点和有向边组成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;内部结点表示一个特征或者属性。&lt;/li&gt;
+&lt;li&gt;叶子结点表示一个分类。&lt;/li&gt;
+&lt;li&gt;有向边代表了一个划分规则。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;用决策树对需要测试的实例进行分类：从根节点开始，对实例的某一特征进行测试，根据测试结果，将实例分配到其子结点；这时，每一个子结点对应着该特征的一个取值。如此递归地对实例进行测试并分配，直至达到叶结点。最后将实例分配到叶结点的类中。&lt;/p&gt;
+&lt;p&gt;它可以认为是 if-then 规则的集合，也可以认为是定义在特征空间与类空间上的条件概率分布。&lt;/p&gt;
+&lt;p&gt;决策树的优点：可读性强，分类速度快。&lt;/p&gt;
+&lt;p&gt;决策树学习通常包括 3 个步骤：特征选择、决策树的生成和决策树的修剪。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习笔记：逻辑回归</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92.html"/>
+    <id>https://mfcheer.github.io/机器学习笔记：逻辑回归.html</id>
+    <published>2018-02-16T15:54:16.000Z</published>
+    <updated>2019-10-10T17:25:42.107Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><p>逻辑回归（Logistic Regression）是机器学习中的一种分类模型，用概率的方法预测。</p><h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>交叉熵损失函数的推导:<br><a href="https://www.cnblogs.com/bonelee/p/7253508.html" target="_blank" rel="noopener">https://www.cnblogs.com/bonelee/p/7253508.html</a></p><h2 id="逻辑函数"><a href="#逻辑函数" class="headerlink" title="逻辑函数"></a>逻辑函数</h2><p>sigmoid 函数</p><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/85.png" alt=""><br>带入的x为样本的特征向量。</p><p>从上图可以看到sigmoid函数是一个严格单调递增的s形的曲线，它的取值在[0, 1]之间，在远离0的地方函数的值会很快接近0/1，收敛速度较快。</p><h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>1) LR是以概率的形式输出结果，不只是0和1的判定；<br>2) LR的可解释强，可控性高；<br>3) 训练快，feature engineering之后效果赞；<br>4) 因为结果是概率，可以做ranking model；<br>5) 添加feature简单。 </p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;逻辑回归（Logistic Regression）是机器学习中的一种分类模型，用概率的方法预测。&lt;/p&gt;
+&lt;h2 id=&quot;损失函数&quot;&gt;&lt;a href=&quot;#损失函数&quot; class=&quot;headerlink&quot; title=&quot;损失函数&quot;&gt;&lt;/a&gt;
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习笔记：线性回归</title>
+    <link href="https://mfcheer.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.html"/>
+    <id>https://mfcheer.github.io/机器学习笔记：线性回归.html</id>
+    <published>2018-02-02T15:43:07.000Z</published>
+    <updated>2019-10-10T17:25:42.105Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="线性回归（LinearRegreesion）"><a href="#线性回归（LinearRegreesion）" class="headerlink" title="线性回归（LinearRegreesion）"></a>线性回归（LinearRegreesion）</h2><p>线性回归主要用来解决连续值预测的问题.</p><p>线性回归，是利用数理统计中回归分析，来确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法，运用十分广泛。其表达形式为y = w’x+e，e为误差服从均值为0的正态分布。中学就有接触线性回归，那么线性回归应用在什么地方呢？它适用于有监督学习的预测。 </p><p>一元线性回归分析：y=ax+b，只包括一个自变量和一个因变量，且二者的关系可用一条直线近似表示。</p><p>多元线性回归分析：包括两个或两个以上的自变量，并且因变量和自变量是线性关系。</p><h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>损失函数：是指一种将一个事件（在一个样本空间中的一个元素）映射到一个表达与其事件相关的经济成本或机会成本的实数上的一种函数。更通俗地说，损失函数用来衡量参数选择的准确性。损失函数得到的值越小，损失也就越小。<br><a id="more"></a></p><h2 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h2><p>怎样最小化损失函数?损失函数的定义是一个凸函数，就可以使用凸优化的一些方法：<br>１) 梯度下降：逐步最小化损失函数的过程。如同下山的过程，找准下山方向（梯度），每次迈进一步，直至山底。如果有多个特征，对应多个参数θ，需要对每一个参数做一次迭代，做完以后再求J函数。<br>　　学习率：上段公式中的α就是学习率。它决定了下降的节奏快慢，就像一个人下山时候步伐的快慢。α过小会导致收敛很慢，α太大有可能会导致震荡。如何选择学习率呢，目前也有好多关于学习率自适应算法的研究。工程上，一般会调用一些开源包，包含有一些自适应方法。自己做的话会选择相对较小的α，比如0.01。下图展示了梯度下降的过程。<br>2）牛顿法：速度快适用于小数据，大数据比较耗内存。</p><h2 id="过拟合与正则化"><a href="#过拟合与正则化" class="headerlink" title="过拟合与正则化"></a>过拟合与正则化</h2><p>回归与欠/过拟合：<br>１) 欠拟合：函数假设太简单导致无法覆盖足够的原始数据，可能造成数据预测的不准确。 </p><p>２) 拟合问题：比如我们有很多的特征，假设的函数曲线对原始数据拟合的非常好，从而丧失一般性，导致对新给的待预测样本，预测效果差。</p><p>过拟合解决方法：<br>1) 减少特征个数：手工选择保留特征、模型选择的算法选择特征。<br>2) 正则化：在原来的损失函数中加入θ的平方项，来防止波动太大。即L2正则化。留下所有的特征，但是减少参数的大小。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;线性回归（LinearRegreesion）&quot;&gt;&lt;a href=&quot;#线性回归（LinearRegreesion）&quot; class=&quot;headerlink&quot; title=&quot;线性回归（LinearRegreesion）&quot;&gt;&lt;/a&gt;线性回归（LinearRegreesion）&lt;/h2&gt;&lt;p&gt;线性回归主要用来解决连续值预测的问题.&lt;/p&gt;
+&lt;p&gt;线性回归，是利用数理统计中回归分析，来确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法，运用十分广泛。其表达形式为y = w’x+e，e为误差服从均值为0的正态分布。中学就有接触线性回归，那么线性回归应用在什么地方呢？它适用于有监督学习的预测。 &lt;/p&gt;
+&lt;p&gt;一元线性回归分析：y=ax+b，只包括一个自变量和一个因变量，且二者的关系可用一条直线近似表示。&lt;/p&gt;
+&lt;p&gt;多元线性回归分析：包括两个或两个以上的自变量，并且因变量和自变量是线性关系。&lt;/p&gt;
+&lt;h2 id=&quot;损失函数&quot;&gt;&lt;a href=&quot;#损失函数&quot; class=&quot;headerlink&quot; title=&quot;损失函数&quot;&gt;&lt;/a&gt;损失函数&lt;/h2&gt;&lt;p&gt;损失函数：是指一种将一个事件（在一个样本空间中的一个元素）映射到一个表达与其事件相关的经济成本或机会成本的实数上的一种函数。更通俗地说，损失函数用来衡量参数选择的准确性。损失函数得到的值越小，损失也就越小。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+</feed>
