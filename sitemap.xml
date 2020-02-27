@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://mfcheer.github.io/MySQL%E4%B8%AD%E5%8D%95%E5%BC%95%E5%8F%B7%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98.html</loc>
+    <loc>https://mfcheer.github.io/Scikit-learn%EF%BC%9ACountVectorizer.html</loc>
     
-    <lastmod>2019-11-22T21:31:02.021Z</lastmod>
+    <lastmod>2020-02-27T19:55:59.589Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://mfcheer.github.io/Pandas-ABC.html</loc>
     
-    <lastmod>2019-10-10T18:12:35.477Z</lastmod>
+    <lastmod>2020-02-27T19:55:31.457Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mfcheer.github.io/mlens-SuperLearner-%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90.html</loc>
+    
+    <lastmod>2020-02-27T19:54:59.398Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mfcheer.github.io/MySQL%E4%B8%AD%E5%8D%95%E5%BC%95%E5%8F%B7%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98.html</loc>
+    
+    <lastmod>2019-11-22T21:31:02.021Z</lastmod>
     
   </url>
   
@@ -163,13 +177,6 @@
   </url>
   
   <url>
-    <loc>https://mfcheer.github.io/mlens-SuperLearner-%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90.html</loc>
-    
-    <lastmod>2019-10-10T17:25:42.094Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://mfcheer.github.io/do%7B%7Dwhile(false).html</loc>
     
     <lastmod>2019-10-10T17:25:42.092Z</lastmod>
@@ -187,13 +194,6 @@
     <loc>https://mfcheer.github.io/TIMEWAIT%E7%8A%B6%E6%80%81%E8%BF%87%E5%A4%9A%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95.html</loc>
     
     <lastmod>2019-10-10T17:25:42.089Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mfcheer.github.io/Scikit-learn%EF%BC%9ACountVectorizer.html</loc>
-    
-    <lastmod>2019-10-10T17:25:42.088Z</lastmod>
     
   </url>
   
