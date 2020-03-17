@@ -77,10 +77,11 @@
 
     </div>
   
-		            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" style="position:relative;width:50%;left:500px;right:500px;min-height:100%">
 			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
 			      <script src="/js/md5.min.js"></script>
-			      <div id="gitalk-container" style="position:relative;width:50%;left:500px;right:500px;min-height:100%"></div>
+			      <div id="gitalk-container" style="position:relative;width:50%;left:500px;right:500px;min-height:100%">
+		                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      </div>
 			      <script>
 		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {}else{
 			            var gitalk = new Gitalk({
