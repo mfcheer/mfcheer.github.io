@@ -78,10 +78,11 @@
 			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
 			      <script src="/js/md5.min.js"></script>
-			      <div id="gitalk-container" style="position:relative;width:50%;left:500px;right:500px;min-height:100%">
+			      <div id="gitalk-container" style="position:relative;width:50%;left:500px;right:500px">
 			      </div>
 			      <script>
-		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {}else{
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
 			            var gitalk = new Gitalk({
 					            clientID: 'ae1d662690808720bf41',
 					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
