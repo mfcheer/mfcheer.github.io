@@ -331,7 +331,7 @@ footer .author {
 .category-all-page {
   margin: 30px 40px 30px 40px;
   position: relative;
-  min-height: 70vh;
+  min-height: 10vh;
 }
 .category-all-page h3 {
   margin: 20px 0;
