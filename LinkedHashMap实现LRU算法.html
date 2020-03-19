@@ -23,7 +23,8 @@
   <link rel="stylesheet" href="/css/style.css">
 
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
-</head>
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 </html>
   <body>
     <div class="container">
@@ -52,7 +53,30 @@
 <p>LinkedHashMap也提供了一个方法removeEldestEntry，只要重写这个方法，就很容易实现LRU的cache。当调用map的put和putAll方法后会调用removeEldestEntry()检查是否应该删除eldest元素。</p>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><a id="more"></a>
 <p>构造了一个大小为3的LRU缓存</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class LRUDemo &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">		</span><br><span class="line">		LinkedHashMap&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt; lru = <span class="keyword">new</span> LinkedHashMap&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt;(<span class="number">5</span>, <span class="number">0.75</span>f, true) &#123;</span><br><span class="line">			@Override</span><br><span class="line">			 <span class="keyword">protected</span> <span class="keyword">boolean</span> removeEldestEntry(Map.Entry&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt; eldest) &#123;</span><br><span class="line">                <span class="built_in">return</span> <span class="built_in">size</span>() &gt; <span class="number">3</span>;</span><br><span class="line">            &#125;</span><br><span class="line">		&#125;;</span><br><span class="line">		</span><br><span class="line">		lru.<span class="built_in">put</span>(<span class="string">"a"</span>, <span class="string">"1"</span>);</span><br><span class="line">		lru.<span class="built_in">put</span>(<span class="string">"b"</span>, <span class="string">"2"</span>);</span><br><span class="line">		lru.<span class="built_in">put</span>(<span class="string">"c"</span>, <span class="string">"3"</span>);</span><br><span class="line">		System.out.<span class="built_in">println</span>(lru.toString());</span><br><span class="line">		lru.<span class="built_in">get</span>(<span class="string">"b"</span>);</span><br><span class="line">		System.out.<span class="built_in">println</span>(lru.toString());</span><br><span class="line">		lru.<span class="built_in">put</span>(<span class="string">"d"</span>, <span class="string">"4"</span>);</span><br><span class="line">		System.out.<span class="built_in">println</span>(lru.toString());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#123;a=<span class="number">1</span>, b=<span class="number">2</span>, c=<span class="number">3</span>&#125;</span><br><span class="line">&#123;a=<span class="number">1</span>, c=<span class="number">3</span>, b=<span class="number">2</span>&#125;</span><br><span class="line">&#123;c=<span class="number">3</span>, b=<span class="number">2</span>, d=<span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>public class LRUDemo {
+    public static void main(String[] args) {
+
+        LinkedHashMap&lt;String, String&gt; lru = new LinkedHashMap&lt;String, String&gt;(5, 0.75f, true) {
+            @Override
+             protected boolean removeEldestEntry(Map.Entry&lt;String, String&gt; eldest) {
+                return size() &gt; 3;
+            }
+        };
+
+        lru.put(&quot;a&quot;, &quot;1&quot;);
+        lru.put(&quot;b&quot;, &quot;2&quot;);
+        lru.put(&quot;c&quot;, &quot;3&quot;);
+        System.out.println(lru.toString());
+        lru.get(&quot;b&quot;);
+        System.out.println(lru.toString());
+        lru.put(&quot;d&quot;, &quot;4&quot;);
+        System.out.println(lru.toString());
+    }
+}
+{a=1, b=2, c=3}
+{a=1, c=3, b=2}
+{c=3, b=2, d=4}
+</code></pre>
   </div>
   <div class="post-footer">
     <br>

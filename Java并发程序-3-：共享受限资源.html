@@ -23,7 +23,8 @@
   <link rel="stylesheet" href="/css/style.css">
 
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
-</head>
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 </html>
   <body>
     <div class="container">
@@ -49,11 +50,84 @@
   <div class="post-content">
     <h1 id="synchronized关键字"><a href="#synchronized关键字" class="headerlink" title="synchronized关键字"></a>synchronized关键字</h1><p>当任务要执行被synchronized保护的代码片段的时候，会检查锁是否可用，然后获取锁，执行代码，释放锁。</p>
 <h2 id="同步规则"><a href="#同步规则" class="headerlink" title="同步规则"></a>同步规则</h2><p>如果你正在写一个变量，它接下来可能将被另一个线程读取，或者读取一个上一次已经被另一个线程写过的变量，那么你必须使用同步，并且，读写线程都必须使用相同的监视器锁同步。</p>
-<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> class synchronizedDemo implements Runnable &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> run() &#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">			<span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">				System.out.<span class="built_in">println</span>(Thread.currentThread().getName() + <span class="string">" synchronized loop lock "</span> + i);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">			System.out.<span class="built_in">println</span>(Thread.currentThread().getName() + <span class="string">" synchronized loop no lock "</span> + i);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">		synchronizedDemo common = <span class="keyword">new</span> synchronizedDemo();</span><br><span class="line">		</span><br><span class="line">		Thread ta = <span class="keyword">new</span> Thread(common, <span class="string">"A"</span>);</span><br><span class="line">		Thread tb = <span class="keyword">new</span> Thread(common, <span class="string">"B"</span>);</span><br><span class="line">		ta.start();</span><br><span class="line">		tb.start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">输出：</span><br><span class="line">A <span class="keyword">synchronized</span> <span class="built_in">loop</span> lock <span class="number">0</span></span><br><span class="line">A <span class="keyword">synchronized</span> <span class="built_in">loop</span> lock <span class="number">1</span></span><br><span class="line">A <span class="keyword">synchronized</span> <span class="built_in">loop</span> lock <span class="number">2</span></span><br><span class="line">A <span class="keyword">synchronized</span> <span class="built_in">loop</span> lock <span class="number">3</span></span><br><span class="line">A <span class="keyword">synchronized</span> <span class="built_in">loop</span> lock <span class="number">4</span></span><br><span class="line">A <span class="keyword">synchronized</span> <span class="built_in">loop</span> no lock <span class="number">0</span></span><br><span class="line">B <span class="keyword">synchronized</span> <span class="built_in">loop</span> lock <span class="number">0</span></span><br><span class="line">A <span class="keyword">synchronized</span> <span class="built_in">loop</span> no lock <span class="number">1</span></span><br><span class="line">B <span class="keyword">synchronized</span> <span class="built_in">loop</span> lock <span class="number">1</span></span><br><span class="line">B <span class="keyword">synchronized</span> <span class="built_in">loop</span> lock <span class="number">2</span></span><br><span class="line">B <span class="keyword">synchronized</span> <span class="built_in">loop</span> lock <span class="number">3</span></span><br><span class="line">B <span class="keyword">synchronized</span> <span class="built_in">loop</span> lock <span class="number">4</span></span><br><span class="line">A <span class="keyword">synchronized</span> <span class="built_in">loop</span> no lock <span class="number">2</span></span><br><span class="line">A <span class="keyword">synchronized</span> <span class="built_in">loop</span> no lock <span class="number">3</span></span><br><span class="line">A <span class="keyword">synchronized</span> <span class="built_in">loop</span> no lock <span class="number">4</span></span><br><span class="line">B <span class="keyword">synchronized</span> <span class="built_in">loop</span> no lock <span class="number">0</span></span><br><span class="line">B <span class="keyword">synchronized</span> <span class="built_in">loop</span> no lock <span class="number">1</span></span><br><span class="line">B <span class="keyword">synchronized</span> <span class="built_in">loop</span> no lock <span class="number">2</span></span><br><span class="line">B <span class="keyword">synchronized</span> <span class="built_in">loop</span> no lock <span class="number">3</span></span><br><span class="line">B <span class="keyword">synchronized</span> <span class="built_in">loop</span> no lock <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<p>被synchronized修饰的代码片段会被阻塞，其它代码块不会阻塞。</p>
+<pre><code>
+public class synchronizedDemo implements Runnable {
+    public void run() {
+        synchronized (this) {
+            for (int i = 0; i &lt; 5; i++) {
+                System.out.println(Thread.currentThread().getName() + &quot; synchronized loop lock &quot; + i);
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = 0; i &lt; 5; i++) {
+            System.out.println(Thread.currentThread().getName() + &quot; synchronized loop no lock &quot; + i);
+        }
+    }
+
+    public static void main(String[] args) {
+        synchronizedDemo common = new synchronizedDemo();
+
+        Thread ta = new Thread(common, &quot;A&quot;);
+        Thread tb = new Thread(common, &quot;B&quot;);
+        ta.start();
+        tb.start();
+    }
+}
+输出：
+A synchronized loop lock 0
+A synchronized loop lock 1
+A synchronized loop lock 2
+A synchronized loop lock 3
+A synchronized loop lock 4
+A synchronized loop no lock 0
+B synchronized loop lock 0
+A synchronized loop no lock 1
+B synchronized loop lock 1
+B synchronized loop lock 2
+B synchronized loop lock 3
+B synchronized loop lock 4
+A synchronized loop no lock 2
+A synchronized loop no lock 3
+A synchronized loop no lock 4
+B synchronized loop no lock 0
+B synchronized loop no lock 1
+B synchronized loop no lock 2
+B synchronized loop no lock 3
+B synchronized loop no lock 4
+</code></pre><p>被synchronized修饰的代码片段会被阻塞，其它代码块不会阻塞。</p>
 <h1 id="使用显示的Lock对象"><a href="#使用显示的Lock对象" class="headerlink" title="使用显示的Lock对象"></a>使用显示的Lock对象</h1><p>Lock对象必须显示的被创建、锁定和释放。优点的更加的灵活。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">lockDemo</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">	Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		lock.lock();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">			System.out.println(<span class="string">"hello "</span> + Thread.currentThread().getName());</span><br><span class="line">		&#125;</span><br><span class="line">		lock.unlock();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		ExecutorService executorService = Executors.newCachedThreadPool();</span><br><span class="line">		lockDemo lk = <span class="keyword">new</span> lockDemo();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">			executorService.execute(lk);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class lockDemo implements Runnable{
+    Lock lock = new ReentrantLock();
+
+    @Override
+    public void run() {
+        lock.lock();
+        for(int i = 0; i &lt; 10; i++) {
+            System.out.println(&quot;hello &quot; + Thread.currentThread().getName());
+        }
+        lock.unlock();
+    }
+
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        lockDemo lk = new lockDemo();
+        for(int i = 0;i &lt; 5; i++) {
+            executorService.execute(lk);
+        }
+    }
+
+}
+</code></pre><ul>
 <li>lock()方法是平常使用得最多的一个方法，就是用来获取锁。如果锁已被其他线程获取，则进行等待。</li>
 <li>tryLock()方法是有返回值的，它表示用来尝试获取锁，如果获取成功，则返回true，如果获取失败（即锁已被其他线程获取），则返回false，也就说这个方法无论如何都会立即返回。在拿不到锁时不会一直在那等待。</li>
 <li>tryLock(long time, TimeUnit unit)方法和tryLock()方法是类似的，只不过区别在于这个方法在拿不到锁时会等待一定的时间，在时间期限之内如果还拿不到锁，就返回false。如果如果一开始拿到锁或者在等待期间内拿到了锁，则返回true。</li>
@@ -67,15 +141,34 @@
 </ul>
 <p>1、保证所有线程对该变量的可见性<br>2、禁止指令重排序优化</p>
 <h1 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h1><p>希望防止多个线程同时访问方法内部的部分代码而不是整个方法，分离出来的代码片段成为“临界区“，也成为同步控制块</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">synchronized</span><span class="params">(syncObject)</span></span>&#123;</span><br><span class="line">	<span class="comment">//临界区</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>也可以使用Lock对象实现。</p>
+<pre><code>synchronized(syncObject){
+    //临界区
+}
+</code></pre><p>也可以使用Lock对象实现。</p>
 <h1 id="线程本地存储-ThreadLocal"><a href="#线程本地存储-ThreadLocal" class="headerlink" title="线程本地存储 ThreadLocal"></a>线程本地存储 ThreadLocal</h1><p>通常情况下，创建的变量是可以被任何一个线程访问并修改的。而使用ThreadLocal创建的变量只能被当前线程访问，其他线程则无法访问和修改。</p>
 <ul>
 <li>set方法，将数据插入线程的存储对象中并返回对象</li>
 <li>get方法，返回线程相关联对象的副本</li>
 </ul>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">threadLocalDemo</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>&#123;</span><br><span class="line">		Thread t = <span class="keyword">new</span> Thread() &#123;</span><br><span class="line">			ThreadLocal&lt;String&gt; mStringThreadLocal = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br><span class="line"></span><br><span class="line">			@Override</span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				super.run();</span><br><span class="line">				mStringThreadLocal.<span class="keyword">set</span>(<span class="string">"mfcheer"</span>);</span><br><span class="line">				System.<span class="keyword">out</span>.println(mStringThreadLocal.<span class="keyword">get</span>());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;;</span><br><span class="line">		t.start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">输出：</span><br><span class="line">mfcheer</span><br></pre></td></tr></table></figure>
+<pre><code>public class threadLocalDemo {
 
+    public static void main(String[] args) {
+        Thread t = new Thread() {
+            ThreadLocal&lt;String&gt; mStringThreadLocal = new ThreadLocal&lt;&gt;();
+
+            @Override
+            public void run() {
+                super.run();
+                mStringThreadLocal.set(&quot;mfcheer&quot;);
+                System.out.println(mStringThreadLocal.get());
+            }
+        };
+        t.start();
+    }
+}
+输出：
+mfcheer
+</code></pre>
   </div>
   <div class="post-footer">
     <br>

@@ -23,7 +23,8 @@
   <link rel="stylesheet" href="/css/style.css">
 
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
-</head>
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 </html>
   <body>
     <div class="container">
@@ -47,10 +48,92 @@
   <div class="post-meta">
   </div>
   <div class="post-content">
-    <figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="comment">--help</span></span><br><span class="line">查看所有命令</span><br></pre></td></tr></table></figure>
-<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">容器版本</span><br><span class="line">docker --version</span><br><span class="line">从仓库获取镜像</span><br><span class="line">docker pull <span class="tag">&lt;<span class="name">镜像名:tag</span>&gt;</span></span><br><span class="line">查看正在运行的容器</span><br><span class="line">docker ps </span><br><span class="line">查看所有容器，包括退出的</span><br><span class="line">docker ps -a</span><br><span class="line">删除镜像</span><br><span class="line">docker rmi <span class="tag">&lt;<span class="name">镜像名</span>&gt;</span> </span><br><span class="line">删除容器</span><br><span class="line">docker rm <span class="tag">&lt;<span class="name">容器名orID</span>&gt;</span></span><br><span class="line">停止容器</span><br><span class="line">docker stop <span class="tag">&lt;<span class="name">容器名orID</span>&gt;</span></span><br><span class="line">启动容器</span><br><span class="line">docker start <span class="tag">&lt;<span class="name">容器名orID</span>&gt;</span></span><br><span class="line">杀死运行的容器</span><br><span class="line">docker kill <span class="tag">&lt;<span class="name">容器名orID</span>&gt;</span></span><br><span class="line">查看所有镜像</span><br><span class="line">docker images</span><br><span class="line">制作运行容器，-d是后台运行，-p是本地端口到容器端口的映射，</span><br><span class="line">--name为容器起名字</span><br><span class="line">docker run -d -p 80:80 --name <span class="tag">&lt;<span class="name">容器名</span>&gt;</span> <span class="tag">&lt;<span class="name">镜像名</span>&gt;</span></span><br><span class="line">进入容器bash界面</span><br><span class="line">docker exec -it <span class="tag">&lt;<span class="name">容器名</span>&gt;</span> bash</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<h1 id="所有命令"><a href="#所有命令" class="headerlink" title="所有命令"></a>所有命令</h1><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">Usage:	docker COMMAND</span><br><span class="line">Management Commands:</span><br><span class="line">  checkpoint  Manage checkpoints</span><br><span class="line">  config      Manage Docker configs</span><br><span class="line">  container   Manage containers</span><br><span class="line">  image       Manage images</span><br><span class="line">  network     Manage networks</span><br><span class="line">  node        Manage Swarm nodes</span><br><span class="line">  <span class="keyword">plugin</span>      Manage plugins</span><br><span class="line">  secret      Manage Docker secrets</span><br><span class="line">  service     Manage services</span><br><span class="line">  <span class="keyword">stack</span>       Manage Docker stacks</span><br><span class="line">  swarm       Manage Swarm</span><br><span class="line">  system      Manage Docker</span><br><span class="line">  volume      Manage volumes</span><br><span class="line">Commands:</span><br><span class="line">  attach      Attach <span class="keyword">local</span> standard <span class="keyword">input</span>, output, and <span class="keyword">error</span> streams to a running container</span><br><span class="line">  build       Build <span class="keyword">an</span> image from a Dockerfile</span><br><span class="line">  commit      Create a new image from a container's changes</span><br><span class="line">  cp          <span class="keyword">Copy</span> files/folders between a container and the <span class="keyword">local</span> filesystem</span><br><span class="line">  create      Create a new container</span><br><span class="line">  deploy      Deploy a new <span class="keyword">stack</span> or <span class="keyword">update</span> <span class="keyword">an</span> existing <span class="keyword">stack</span></span><br><span class="line">  diff        <span class="keyword">Inspect</span> changes to files or directories <span class="keyword">on</span> a container's filesystem</span><br><span class="line">  events      Get real time events from the server</span><br><span class="line">  exec        <span class="keyword">Run</span> a command <span class="keyword">in</span> a running container</span><br><span class="line">  export      Export a container's filesystem <span class="keyword">as</span> a tar archive</span><br><span class="line">  history     Show the history of <span class="keyword">an</span> image</span><br><span class="line">  images      <span class="keyword">List</span> images</span><br><span class="line">  import      Import the contents from a tarball to create a filesystem image</span><br><span class="line">  info        <span class="keyword">Display</span> system-wide information</span><br><span class="line">  <span class="keyword">inspect</span>     <span class="keyword">Return</span> low-level information <span class="keyword">on</span> Docker objects</span><br><span class="line">  kill        Kill <span class="keyword">one</span> or <span class="keyword">more</span> running containers</span><br><span class="line">  load        Load <span class="keyword">an</span> image from a tar archive or STDIN</span><br><span class="line">  login       <span class="keyword">Log</span> <span class="keyword">in</span> to a Docker registry</span><br><span class="line">  logout      <span class="keyword">Log</span> <span class="keyword">out</span> from a Docker registry</span><br><span class="line">  logs        Fetch the logs of a container</span><br><span class="line">  <span class="keyword">pause</span>       <span class="keyword">Pause</span> all processes within <span class="keyword">one</span> or <span class="keyword">more</span> containers</span><br><span class="line">  port        <span class="keyword">List</span> port mappings or a specific mapping <span class="keyword">for</span> the container</span><br><span class="line">  ps          <span class="keyword">List</span> containers</span><br><span class="line">  pull        Pull <span class="keyword">an</span> image or a repository from a registry</span><br><span class="line">  push        Push <span class="keyword">an</span> image or a repository to a registry</span><br><span class="line">  <span class="keyword">rename</span>      <span class="keyword">Rename</span> a container</span><br><span class="line">  restart     Restart <span class="keyword">one</span> or <span class="keyword">more</span> containers</span><br><span class="line">  <span class="keyword">rm</span>          Remove <span class="keyword">one</span> or <span class="keyword">more</span> containers</span><br><span class="line">  rmi         Remove <span class="keyword">one</span> or <span class="keyword">more</span> images</span><br><span class="line">  <span class="keyword">run</span>         <span class="keyword">Run</span> a command <span class="keyword">in</span> a new container</span><br><span class="line">  <span class="keyword">save</span>        <span class="keyword">Save</span> <span class="keyword">one</span> or <span class="keyword">more</span> images to a tar archive (streamed to STDOUT <span class="keyword">by</span> default)</span><br><span class="line">  <span class="keyword">search</span>      <span class="keyword">Search</span> the Docker Hub <span class="keyword">for</span> images</span><br><span class="line">  start       Start <span class="keyword">one</span> or <span class="keyword">more</span> stopped containers</span><br><span class="line">  stats       <span class="keyword">Display</span> a live stream of container(s) resource usage statistics</span><br><span class="line">  stop        Stop <span class="keyword">one</span> or <span class="keyword">more</span> running containers</span><br><span class="line">  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE</span><br><span class="line">  top         <span class="keyword">Display</span> the running processes of a container</span><br><span class="line">  unpause     Unpause all processes within <span class="keyword">one</span> or <span class="keyword">more</span> containers</span><br><span class="line">  <span class="keyword">update</span>      <span class="keyword">Update</span> configuration of <span class="keyword">one</span> or <span class="keyword">more</span> containers</span><br><span class="line">  <span class="keyword">version</span>     Show the Docker <span class="keyword">version</span> information</span><br><span class="line">  wait        Block until <span class="keyword">one</span> or <span class="keyword">more</span> containers stop, then <span class="keyword">print</span> their <span class="keyword">exit</span> codes</span><br></pre></td></tr></table></figure>
+    <pre><code>docker --help
+查看所有命令
+</code></pre><h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><pre><code>容器版本
+docker --version
+从仓库获取镜像
+docker pull &lt;镜像名:tag&gt;
+查看正在运行的容器
+docker ps 
+查看所有容器，包括退出的
+docker ps -a
+删除镜像
+docker rmi &lt;镜像名&gt; 
+删除容器
+docker rm &lt;容器名orID&gt;
+停止容器
+docker stop &lt;容器名orID&gt;
+启动容器
+docker start &lt;容器名orID&gt;
+杀死运行的容器
+docker kill &lt;容器名orID&gt;
+查看所有镜像
+docker images
+制作运行容器，-d是后台运行，-p是本地端口到容器端口的映射，
+--name为容器起名字
+docker run -d -p 80:80 --name &lt;容器名&gt; &lt;镜像名&gt;
+进入容器bash界面
+docker exec -it &lt;容器名&gt; bash
+</code></pre><a id="more"></a>
+<h1 id="所有命令"><a href="#所有命令" class="headerlink" title="所有命令"></a>所有命令</h1><pre><code>Usage:    docker COMMAND
+Management Commands:
+  checkpoint  Manage checkpoints
+  config      Manage Docker configs
+  container   Manage containers
+  image       Manage images
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  volume      Manage volumes
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container&#39;s changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  deploy      Deploy a new stack or update an existing stack
+  diff        Inspect changes to files or directories on a container&#39;s filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container&#39;s filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+</code></pre>
   </div>
   <div class="post-footer">
     <br>
