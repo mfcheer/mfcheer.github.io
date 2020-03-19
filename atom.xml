@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mfcheer.github.io/"/>
-  <updated>2020-02-27T19:54:59.398Z</updated>
+  <updated>2019-10-10T17:25:42.097Z</updated>
   <id>https://mfcheer.github.io/</id>
   
   <author>
@@ -15,76 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>mlens-SuperLearner 模型集成</title>
-    <link href="https://mfcheer.github.io/mlens-SuperLearner-%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90.html"/>
-    <id>https://mfcheer.github.io/mlens-SuperLearner-模型集成.html</id>
-    <published>2018-11-15T15:17:49.000Z</published>
-    <updated>2020-02-27T19:54:59.398Z</updated>
-    
-    <content type="html"><![CDATA[<a id="more"></a><p>SuperLearner所做的事情就是将多个模型的输出结果作为特征输入选择的基模型，弥补单个模型准召的不足。</p><p><a href="https://zhuanlan.zhihu.com/p/32949396" target="_blank" rel="noopener">每个Kaggle冠军的获胜法门：揭秘Python中的模型集成</a></p><p><a href="https://zhuanlan.zhihu.com/p/36161812" target="_blank" rel="noopener">集成学习三大法宝-bagging、boosting、stacking</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;p&gt;SuperLearner所做的事情就是将多个模型的输出结果作为特征输入选择的基模型，弥补单个模型准召的不足。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/32949396&quot; target=&quot;_
-      
-    
-    </summary>
-    
-      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Pandas ABC</title>
-    <link href="https://mfcheer.github.io/Pandas-ABC.html"/>
-    <id>https://mfcheer.github.io/Pandas-ABC.html</id>
-    <published>2018-11-04T18:07:16.000Z</published>
-    <updated>2020-02-27T19:55:31.457Z</updated>
-    
-    <content type="html"><![CDATA[<a id="more"></a><p><a href="https://towardsdatascience.com/learn-advanced-features-for-pythons-main-data-analysis-library-in-20-minutes-d0eedd90d086" target="_blank" rel="noopener">A Comprehensive Guide to Pandas’ Advanced Features in 20 Minutes</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;p&gt;&lt;a href=&quot;https://towardsdatascience.com/learn-advanced-features-for-pythons-main-data-analysis-library-in-20-minutes-d0
-      
-    
-    </summary>
-    
-      <category term="Python" scheme="https://mfcheer.github.io/categories/Python/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Scikit-learn：CountVectorizer</title>
-    <link href="https://mfcheer.github.io/Scikit-learn%EF%BC%9ACountVectorizer.html"/>
-    <id>https://mfcheer.github.io/Scikit-learn：CountVectorizer.html</id>
-    <published>2018-11-01T02:03:36.000Z</published>
-    <updated>2020-02-27T19:55:59.589Z</updated>
-    
-    <content type="html"><![CDATA[<p>CountVectorizer是用于产生文本统计类特征的工具。将分词后的多个文章作为输入，词频统计结果作为输出。</p><p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer</a></p><a id="more"></a><p>假设通过jieba分词处理好的数据为  [‘hello’, ‘hello everyone’, ‘hello china’] </p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line"></span><br><span class="line">vectorizer = CountVectorizer(min_df=<span class="number">1</span>, max_features=<span class="number">300</span>)</span><br><span class="line"></span><br><span class="line">words_lists = [<span class="string">'hello'</span>, <span class="string">'hello everyone'</span>, <span class="string">'hello china'</span>]</span><br><span class="line">X = vectorizer.fit_transform(words_lists)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 高频词</span></span><br><span class="line">feature_names = vectorizer.get_feature_names()</span><br><span class="line"><span class="keyword">print</span> feature_names</span><br><span class="line"></span><br><span class="line"><span class="comment"># 词频字典</span></span><br><span class="line">feature_name_count = vectorizer.vocabulary_</span><br><span class="line"><span class="keyword">print</span> feature_name_count</span><br><span class="line"></span><br><span class="line"><span class="comment"># 高频词汇的01特征矩阵</span></span><br><span class="line"><span class="keyword">print</span> X.A</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">[<span class="string">u'china'</span>, <span class="string">u'everyone'</span>, <span class="string">u'hello'</span>]</span><br><span class="line">&#123;<span class="string">u'everyone'</span>: <span class="number">1</span>, <span class="string">u'china'</span>: <span class="number">0</span>, <span class="string">u'hello'</span>: <span class="number">2</span>&#125;</span><br><span class="line">[[<span class="number">0</span> <span class="number">0</span> <span class="number">1</span>]</span><br><span class="line"> [<span class="number">0</span> <span class="number">1</span> <span class="number">1</span>]</span><br><span class="line"> [<span class="number">1</span> <span class="number">0</span> <span class="number">1</span>]]</span><br></pre></td></tr></table></figure><p>可以看到具体的词频统计结果和01矩阵，01矩阵可以作为特征出入到其它模型中。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;CountVectorizer是用于产生文本统计类特征的工具。将分词后的多个文章作为输入，词频统计结果作为输出。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer&lt;/a&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-  </entry>
   
   <entry>
     <title>机器学习：L1/L2正则化</title>
@@ -287,6 +217,31 @@
   </entry>
   
   <entry>
+    <title>mlens-SuperLearner 模型集成</title>
+    <link href="https://mfcheer.github.io/mlens-SuperLearner-%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90.html"/>
+    <id>https://mfcheer.github.io/mlens-SuperLearner-模型集成.html</id>
+    <published>2018-04-29T15:17:49.000Z</published>
+    <updated>2020-03-19T16:21:35.455Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a><p>SuperLearner所做的事情就是将多个模型的输出结果作为特征输入选择的基模型，弥补单个模型准召的不足。</p><p><a href="https://zhuanlan.zhihu.com/p/32949396" target="_blank" rel="noopener">每个Kaggle冠军的获胜法门：揭秘Python中的模型集成</a></p><p><a href="https://zhuanlan.zhihu.com/p/36161812" target="_blank" rel="noopener">集成学习三大法宝-bagging、boosting、stacking</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;SuperLearner所做的事情就是将多个模型的输出结果作为特征输入选择的基模型，弥补单个模型准召的不足。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/32949396&quot; target=&quot;_
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>MySQL：Limit分页优化</title>
     <link href="https://mfcheer.github.io/MySQL%EF%BC%9ALimit%E5%88%86%E9%A1%B5%E4%BC%98%E5%8C%96.html"/>
     <id>https://mfcheer.github.io/MySQL：Limit分页优化.html</id>
@@ -398,6 +353,27 @@
 &lt;li&gt;bagging 是由不同的分类器（1.数据随机化 2.特征随机化）经过训练，综合得出的出现最多分类结果；boosting 是通过调整已有分类器错分的那些数据来获得新的分类器，得出目前最优的结果。&lt;/li&gt;
 &lt;li&gt;bagging 中的分类器权重是相等的；而 boosting 中的分类器加权求和，所以权重并不相等，每个权重代表的是其对应分类器在上一轮迭代中的成功度。&lt;/li&gt;
 &lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Scikit-learn：CountVectorizer</title>
+    <link href="https://mfcheer.github.io/Scikit-learn%EF%BC%9ACountVectorizer.html"/>
+    <id>https://mfcheer.github.io/Scikit-learn：CountVectorizer.html</id>
+    <published>2018-03-28T02:03:36.000Z</published>
+    <updated>2020-03-19T16:22:15.082Z</updated>
+    
+    <content type="html"><![CDATA[<p>CountVectorizer是用于产生文本统计类特征的工具。将分词后的多个文章作为输入，词频统计结果作为输出。</p><p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer</a></p><a id="more"></a><p>假设通过jieba分词处理好的数据为  [‘hello’, ‘hello everyone’, ‘hello china’] </p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line"></span><br><span class="line">vectorizer = CountVectorizer(min_df=<span class="number">1</span>, max_features=<span class="number">300</span>)</span><br><span class="line"></span><br><span class="line">words_lists = [<span class="string">'hello'</span>, <span class="string">'hello everyone'</span>, <span class="string">'hello china'</span>]</span><br><span class="line">X = vectorizer.fit_transform(words_lists)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 高频词</span></span><br><span class="line">feature_names = vectorizer.get_feature_names()</span><br><span class="line"><span class="keyword">print</span> feature_names</span><br><span class="line"></span><br><span class="line"><span class="comment"># 词频字典</span></span><br><span class="line">feature_name_count = vectorizer.vocabulary_</span><br><span class="line"><span class="keyword">print</span> feature_name_count</span><br><span class="line"></span><br><span class="line"><span class="comment"># 高频词汇的01特征矩阵</span></span><br><span class="line"><span class="keyword">print</span> X.A</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">[<span class="string">u'china'</span>, <span class="string">u'everyone'</span>, <span class="string">u'hello'</span>]</span><br><span class="line">&#123;<span class="string">u'everyone'</span>: <span class="number">1</span>, <span class="string">u'china'</span>: <span class="number">0</span>, <span class="string">u'hello'</span>: <span class="number">2</span>&#125;</span><br><span class="line">[[<span class="number">0</span> <span class="number">0</span> <span class="number">1</span>]</span><br><span class="line"> [<span class="number">0</span> <span class="number">1</span> <span class="number">1</span>]</span><br><span class="line"> [<span class="number">1</span> <span class="number">0</span> <span class="number">1</span>]]</span><br></pre></td></tr></table></figure><p>可以看到具体的词频统计结果和01矩阵，01矩阵可以作为特征出入到其它模型中。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;CountVectorizer是用于产生文本统计类特征的工具。将分词后的多个文章作为输入，词频统计结果作为输出。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer&lt;/a&gt;&lt;/p&gt;
     
     </summary>
     
@@ -524,6 +500,26 @@
     </summary>
     
       <category term="机器学习" scheme="https://mfcheer.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Redis：主从同步</title>
+    <link href="https://mfcheer.github.io/Redis%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5.html"/>
+    <id>https://mfcheer.github.io/Redis主从同步.html</id>
+    <published>2018-01-22T15:29:42.000Z</published>
+    <updated>2019-10-10T17:25:42.084Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="全量同步"><a href="#全量同步" class="headerlink" title="全量同步"></a>全量同步</h1><p>Redis全量复制一般发生在Slave初始化阶段，这时Slave需要将Master上的所有数据都复制一份。具体步骤如下：<br>　　1）从服务器连接主服务器，发送SYNC命令；<br>　　2）主服务器接收到SYNC命名后，开始执行BGSAVE命令生成RDB文件并使用缓冲区记录此后执行的所有写命令；<br>　　3）主服务器BGSAVE执行完后，向所有从服务器发送快照文件，并在发送期间继续记录被执行的写命令；<br>　　4）从服务器收到快照文件后丢弃所有旧数据，载入收到的快照；<br>　　5）主服务器快照发送完毕后开始向从服务器发送缓冲区中的写命令；<br>　　6）从服务器完成对快照的载入，开始接收命令请求，并执行来自主服务器缓冲区的写命令；<br><a id="more"></a></p><h1 id="增量同步"><a href="#增量同步" class="headerlink" title="增量同步"></a>增量同步</h1><p>Redis增量复制是指Slave初始化后开始正常工作时主服务器发生的写操作同步到从服务器的过程。<br>增量复制的过程主要是主服务器每执行一个写命令就会向从服务器发送相同的写命令，从服务器接收并执行收到的写命令</p><h1 id="Redis主从同步策略"><a href="#Redis主从同步策略" class="headerlink" title="Redis主从同步策略"></a>Redis主从同步策略</h1><p>　　主从刚刚连接的时候，进行全量同步；全同步结束后，进行增量同步。当然，如果有需要，slave 在任何时候都可以发起全量同步。redis 策略是，无论如何，首先会尝试进行增量同步，如不成功，要求从机进行全量同步。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;全量同步&quot;&gt;&lt;a href=&quot;#全量同步&quot; class=&quot;headerlink&quot; title=&quot;全量同步&quot;&gt;&lt;/a&gt;全量同步&lt;/h1&gt;&lt;p&gt;Redis全量复制一般发生在Slave初始化阶段，这时Slave需要将Master上的所有数据都复制一份。具体步骤如下：&lt;br&gt;　　1）从服务器连接主服务器，发送SYNC命令；&lt;br&gt;　　2）主服务器接收到SYNC命名后，开始执行BGSAVE命令生成RDB文件并使用缓冲区记录此后执行的所有写命令；&lt;br&gt;　　3）主服务器BGSAVE执行完后，向所有从服务器发送快照文件，并在发送期间继续记录被执行的写命令；&lt;br&gt;　　4）从服务器收到快照文件后丢弃所有旧数据，载入收到的快照；&lt;br&gt;　　5）主服务器快照发送完毕后开始向从服务器发送缓冲区中的写命令；&lt;br&gt;　　6）从服务器完成对快照的载入，开始接收命令请求，并执行来自主服务器缓冲区的写命令；&lt;br&gt;
+    
+    </summary>
+    
+      <category term="数据库" scheme="https://mfcheer.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
   </entry>
