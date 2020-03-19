@@ -3,7 +3,7 @@
   <!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta name="generator" content="Hexo 3.9.0">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   
   <title>Java：Java8新特性 - mfcheer</title>
@@ -21,13 +21,13 @@
   
 
   <link rel="stylesheet" href="/css/style.css">
-
+  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
-<link rel="stylesheet" href="/css/prism.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 </html>
   <body>
-    <div class="container">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
       <header class="header">
   <div class="blog-title">
     <a href="/" class="logo">mfcheer</a>
@@ -53,36 +53,19 @@
 <li>函数式接口里是可以包含默认方法，因为默认方法不是抽象方法</li>
 <li>函数式接口里是可以包含静态方法，因为静态方法不能是抽象方法</li>
 </ul>
-<pre><code>@FunctionalInterface
-public interface funcInterfaceDemo {
-    public abstract void hello();
-}
-</code></pre><h1 id="Lambda表达式"><a href="#Lambda表达式" class="headerlink" title="Lambda表达式"></a>Lambda表达式</h1><p>我们能够使用 Lambda 实例化函数式接口<br>Lambda表达式由三个部分组成：第一部分为一个括号内用逗号分隔的形式参数，参数是函数式接口里面方法的参数；第二部分为一个箭头符号：-&gt;；第三部分为方法体，可以是表达式和代码块。<br>若方法体为代码块，必须用 {} 来包裹起来。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">funcInterfaceDemo</span> </span>&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title">hello</span><span class="hljs-params"><code class="language-hljs undefined"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">funcInterfaceDemo</span> </span>&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title">hello</span><span class="hljs-params">()</span></span>;<br>&#125;<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<h1 id="Lambda表达式"><a href="#Lambda表达式" class="headerlink" title="Lambda表达式"></a>Lambda表达式</h1><p>我们能够使用 Lambda 实例化函数式接口<br>Lambda表达式由三个部分组成：第一部分为一个括号内用逗号分隔的形式参数，参数是函数式接口里面方法的参数；第二部分为一个箭头符号：-&gt;；第三部分为方法体，可以是表达式和代码块。<br>若方法体为代码块，必须用 {} 来包裹起来。</p>
 <p>要使用 Lambda 表达式，需要定义一个函数式接口，这样会让程序充斥着过量的仅为 Lambda 表达式服务的函数式接口。为了减少这样过量的函数式接口，Java 8 在 java.util.function 中增加了不少新的函数式通用接口。</p>
 <ul>
 <li>Function&lt;T, R&gt;：将 T 作为输入，返回 R 作为输出</li>
 <li>Predicate<t> ：将 T 作为输入，返回一个布尔值作为输出</t></li>
 <li>Consumer<t> ：将 T 作为输入，不返回任何内容</t></li>
 </ul>
-<pre><code>Function&lt;Integer, String&gt; f = (t)-&gt;String.valueOf(t);
-String fString = f.apply(5);
-System.out.println(fString);
-</code></pre><a id="more"></a>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-function"><span class="hljs-keyword">Function</span>&lt;<span class="hljs-title">Integer</span>, <span class="hljs-title">String</span>&gt; <span class="hljs-title">f</span> = <span class="hljs-params">(t)</span>-&gt;<span class="hljs-title">String</span>.<span class="hljs-title">valueOf</span><span class="hljs-params">(t)</span>;</span><br><span class="hljs-keyword">String</span> fString = f.apply(<span class="hljs-number">5</span>);<br>System.<span class="hljs-keyword"><code class="language-hljs undefined"><span class="hljs-function"><span class="hljs-keyword">Function</span>&lt;<span class="hljs-title">Integer</span>, <span class="hljs-title">String</span>&gt; <span class="hljs-title">f</span> = <span class="hljs-params">(t)</span>-&gt;<span class="hljs-title">String</span>.<span class="hljs-title">valueOf</span><span class="hljs-params">(t)</span>;</span><br><span class="hljs-keyword">String</span> fString = f.apply(<span class="hljs-number">5</span>);<br>System.<span class="hljs-keyword">out</span>.println(fString);<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<a id="more"></a>
 <h1 id="forEach方法"><a href="#forEach方法" class="headerlink" title="forEach方法"></a>forEach方法</h1><p>使用forEach方法遍历List和Map</p>
-<pre><code>public static void main(String args[]) {
-    List&lt;String&gt; rlList = Arrays.asList(&quot;1&quot;,&quot;2&quot;);
-    rlList.forEach(t-&gt;{
-            System.out.println(t);
-    });
-
-    Map&lt;String, String&gt; items = new HashMap&lt;&gt;();
-    items.put(&quot;1&quot;, &quot;A&quot;);
-    items.put(&quot;2&quot;, &quot;B&quot;);
-    items.forEach((k,v)-&gt;{
-        System.out.println(k + v);
-    });
-}
-</code></pre><h1 id="接口的增强"><a href="#接口的增强" class="headerlink" title="接口的增强"></a>接口的增强</h1><p>在接口中可以添加使用 default 关键字修饰的非抽象方法,还可以在接口中定义静态方法。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> main(<span class="hljs-keyword">String</span> args[]) &#123;<br>	List&lt;<span class="hljs-keyword">String</span>&gt; rlList = Arrays.asList(<span class="hljs-string">"1"</span>,<span class="hljs-string">"2"</span>);<br>	rlList.forEach(t-&gt;&#123;<br>			System.out.<span class="hljs-built_in">println</span>(t);<br>	&#125;);<br>	<br>	Map&lt;<span class="hljs-keyword">String</span>, <span class="hljs-keyword">String</span>&gt; items = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br>	items.<span class="hljs-built_in">put</span>(<span class="hljs-string">"1"</span>, <span class="hljs-string">"A"</span>);<br>	items.<span class="hljs-built_in">put</span>(<span class="hljs-string">"2"</span>, <span class="hljs-string">"B"</span>);<br>	items.forEach((k,v)-&gt;&#123;<br>		System.out.<span class="hljs-built_in"><code class="language-hljs undefined"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> main(<span class="hljs-keyword">String</span> args[]) &#123;<br>	List&lt;<span class="hljs-keyword">String</span>&gt; rlList = Arrays.asList(<span class="hljs-string">"1"</span>,<span class="hljs-string">"2"</span>);<br>	rlList.forEach(t-&gt;&#123;<br>			System.out.<span class="hljs-built_in">println</span>(t);<br>	&#125;);<br>	<br>	Map&lt;<span class="hljs-keyword">String</span>, <span class="hljs-keyword">String</span>&gt; items = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br>	items.<span class="hljs-built_in">put</span>(<span class="hljs-string">"1"</span>, <span class="hljs-string">"A"</span>);<br>	items.<span class="hljs-built_in">put</span>(<span class="hljs-string">"2"</span>, <span class="hljs-string">"B"</span>);<br>	items.forEach((k,v)-&gt;&#123;<br>		System.out.<span class="hljs-built_in">println</span>(k + v);<br>	&#125;);<br>&#125;<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<h1 id="接口的增强"><a href="#接口的增强" class="headerlink" title="接口的增强"></a>接口的增强</h1><p>在接口中可以添加使用 default 关键字修饰的非抽象方法,还可以在接口中定义静态方法。</p>
 <h1 id="流式操作（Stream）"><a href="#流式操作（Stream）" class="headerlink" title="流式操作（Stream）"></a>流式操作（Stream）</h1><p>通过Stream可以实现对集合（Collection）的并行处理和函数式操作。根据操作返回的结果不同，流式操作分为中间操作和最终操作两种。最终操作返回一特定类型的结果，而中间操作返回流本身，这样就可以将多个操作依次串联起来。根据流的并发性，流又可以分为串行和并行两种。流式操作实现了集合的过滤、排序、映射等功能。</p>
 <p>Stream 和 Collection 集合的区别：Collection 是一种静态的内存数据结构，而 Stream 是有关计算的。前者是主要面向内存，存储在内存中，后者主要是面向 CPU，通过 CPU 实现计算。</p>
 <p>通过 stream.sequential() 返回串行的流，通过 stream.parallel() 返回并行的流。相比较串行的流，并行的流可以很大程度上提高程序的执行效率。</p>
@@ -93,17 +76,8 @@ System.out.println(fString);
 <li>distinct()：去除重复元素；</li>
 <li>subStream()：获取子 Stream 等。</li>
 </ul>
-<p>sorted()排序</p>
-<pre><code>List&lt;Integer&gt; rlList = Arrays.asList(1,6,4,2,7,9,3);
-rlList.forEach(t-&gt;{
-    System.out.print(t);
-});
-
-rlList = rlList.stream().parallel().sorted().collect(Collectors.toList());
-rlList.forEach(t-&gt;{
-    System.out.print(t);
-});
-</code></pre><h2 id="最终操作"><a href="#最终操作" class="headerlink" title="最终操作"></a>最终操作</h2><ul>
+<p>sorted()排序<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">List&lt;Integer&gt; rlList = Arrays.asList(<span class="hljs-number">1</span>,<span class="hljs-number">6</span>,<span class="hljs-number">4</span>,<span class="hljs-number">2</span>,<span class="hljs-number">7</span>,<span class="hljs-number">9</span>,<span class="hljs-number"><code class="language-hljs undefined">List&lt;Integer&gt; rlList = Arrays.asList(<span class="hljs-number">1</span>,<span class="hljs-number">6</span>,<span class="hljs-number">4</span>,<span class="hljs-number">2</span>,<span class="hljs-number">7</span>,<span class="hljs-number">9</span>,<span class="hljs-number">3</span>);<br>rlList.forEach(t->&#123;<br>	System.out.print(t);<br>&#125;);<br>		<br>rlList = rlList.stream().parallel().sorted().collect(Collectors.toList());<br>rlList.forEach(t->&#123;<br>	System.out.print(t);<br>&#125;);<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
+<h2 id="最终操作"><a href="#最终操作" class="headerlink" title="最终操作"></a>最终操作</h2><ul>
 <li>forEach()：对每个元素做处理；</li>
 <li>toArray()：把元素导出到数组；</li>
 <li>findFirst()：返回第一个匹配的元素；</li>
@@ -127,9 +101,11 @@ rlList.forEach(t-&gt;{
     mfcheer
   </span>
 </footer>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 
-    </div>
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>

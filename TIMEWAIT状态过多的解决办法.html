@@ -3,7 +3,7 @@
   <!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta name="generator" content="Hexo 3.9.0">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   
   <title>TIMEWAIT状态过多的解决办法 - mfcheer</title>
@@ -21,13 +21,13 @@
   
 
   <link rel="stylesheet" href="/css/style.css">
-
+  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
-<link rel="stylesheet" href="/css/prism.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 </html>
   <body>
-    <div class="container">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
       <header class="header">
   <div class="blog-title">
     <a href="/" class="logo">mfcheer</a>
@@ -48,19 +48,9 @@
   <div class="post-meta">
   </div>
   <div class="post-content">
-    <p>TIME_WAIT发生在TCP连接的四次挥手的阶段，在发起中断请求的一方产生<br>以客户端发起中断为例</p>
-<pre><code>客户端先发送FIN，进入FIN_WAIT1状态
-服务端收到FIN，发送ACK，进入CLOSE_WAIT状态
-客户端收到这个ACK，进入FIN_WAIT2状态
-服务端发送FIN，进入LAST_ACK状态
-客户端收到FIN，发送ACK，进入TIME_WAIT状态，服务端收到ACK，进入CLOSE状态
-客户端TIME_WAIT持续2倍MSL时长，在linux体系中大概是60s，转换成CLOSE状态
-</code></pre><p>出现TIME_WAIT状态过多，怎么解决呢？<br>可以通过修改内核参数进行缓解<br>设置如下参数：<br><a id="more"></a></p>
-<pre><code>net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_tw_reuse = 1
-net.ipv4.tcp_tw_recycle = 1
-net.ipv4.tcp_fin_timeout = 30
-</code></pre><p>/etc/sysctl.conf中进行配置<br>使用sysctl -p生效</p>
+    <p>TIME_WAIT发生在TCP连接的四次挥手的阶段，在发起中断请求的一方产生<br>以客户端发起中断为例<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">客户端先发送FIN，进入FIN_WAIT1状态<br>服务端收到FIN，发送ACK，进入<span class="hljs-built_in">CLOSE_WAIT</span>状态<br>客户端收到这个ACK，进入FIN_WAIT2状态<br>服务端发送FIN，进入LAST_ACK状态<br>客户端收到FIN，发送ACK，进入TIME_WAIT状态，服务端收到ACK，进入<span class="hljs-built_in">CLOSE</span>状态<br>客户端TIME_WAIT持续<span class="hljs-number">2</span>倍MSL时长，在linux体系中大概是<span class="hljs-number">60</span>s，转换成<span class="hljs-built_in"><code class="language-hljs undefined">客户端先发送FIN，进入FIN_WAIT1状态<br>服务端收到FIN，发送ACK，进入<span class="hljs-built_in">CLOSE_WAIT</span>状态<br>客户端收到这个ACK，进入FIN_WAIT2状态<br>服务端发送FIN，进入LAST_ACK状态<br>客户端收到FIN，发送ACK，进入TIME_WAIT状态，服务端收到ACK，进入<span class="hljs-built_in">CLOSE</span>状态<br>客户端TIME_WAIT持续<span class="hljs-number">2</span>倍MSL时长，在linux体系中大概是<span class="hljs-number">60</span>s，转换成<span class="hljs-built_in">CLOSE</span>状态<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
+<p>出现TIME_WAIT状态过多，怎么解决呢？<br>可以通过修改内核参数进行缓解<br>设置如下参数：<br><a id="more"></a><br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">net<span class="hljs-selector-class">.ipv4</span><span class="hljs-selector-class">.tcp_syncookies</span> = <span class="hljs-number">1</span><br>net<span class="hljs-selector-class">.ipv4</span><span class="hljs-selector-class">.tcp_tw_reuse</span> = <span class="hljs-number">1</span><br>net<span class="hljs-selector-class">.ipv4</span><span class="hljs-selector-class">.tcp_tw_recycle</span> = <span class="hljs-number">1</span><br>net<span class="hljs-selector-class">.ipv4</span><span class="hljs-selector-class">.tcp_fin_timeout</span> = <span class="hljs-number"><code class="language-hljs undefined">net<span class="hljs-selector-class">.ipv4</span><span class="hljs-selector-class">.tcp_syncookies</span> = <span class="hljs-number">1</span><br>net<span class="hljs-selector-class">.ipv4</span><span class="hljs-selector-class">.tcp_tw_reuse</span> = <span class="hljs-number">1</span><br>net<span class="hljs-selector-class">.ipv4</span><span class="hljs-selector-class">.tcp_tw_recycle</span> = <span class="hljs-number">1</span><br>net<span class="hljs-selector-class">.ipv4</span><span class="hljs-selector-class">.tcp_fin_timeout</span> = <span class="hljs-number">30</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
+<p>/etc/sysctl.conf中进行配置<br>使用sysctl -p生效</p>
 <p>含义：<br>net.ipv4.tcp_syncookies = 1 表示开启SYN Cookies。当出现SYN等待队列溢出时，启用cookies来处理，可防范少量SYN攻击，默认为0，表示关闭。<br>net.ipv4.tcp_tw_reuse = 1 表示开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接，默认为0，表示关闭。<br>net.ipv4.tcp_tw_recycle = 1 表示开启TCP连接中TIME-WAIT sockets的快速回收，默认为0，表示关闭。<br>net.ipv4.tcp_fin_timeout 修改系統默认的TIMEOUT 时间。</p>
 
   </div>
@@ -80,9 +70,11 @@ net.ipv4.tcp_fin_timeout = 30
     mfcheer
   </span>
 </footer>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 
-    </div>
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>

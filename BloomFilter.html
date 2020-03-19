@@ -3,7 +3,7 @@
   <!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta name="generator" content="Hexo 3.9.0">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   
   <title>BloomFilter - mfcheer</title>
@@ -21,13 +21,13 @@
   
 
   <link rel="stylesheet" href="/css/style.css">
-
+  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
-<link rel="stylesheet" href="/css/prism.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 </html>
   <body>
-    <div class="container">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
       <header class="header">
   <div class="blog-title">
     <a href="/" class="logo">mfcheer</a>
@@ -53,77 +53,10 @@
 <p>原理：位数组+k个独立hash函数。将hash函数对应的值的位数组置1，查找时如果发现所有hash函数对应位都是1说明存在，很明显这个过程并不保证查找的结果是100%正确的。同时也不支持删除一个已经插入的关键字，因为该关键字对应的位会牵动到其他的关键字。</p>
 <p>一个字节有8个比特位，位图就是利用比特位进行信息存储，节省资源开销的一种方式。这种方法可以用在大数据排序，查询，去重等操作中</p>
 <h1 id="位图"><a href="#位图" class="headerlink" title="位图"></a>位图</h1><p>依赖下面三个元操作</p>
-<pre><code>将第n位置为1
-set_bit(char x,int n)
-x |= 1&lt;&lt;n
-将第n位置为0
-clear_bit(char x,int n)
-1 &amp;= ~(1&lt;&lt;n)
-取第n位的值
-get_bit(char x,int n)
-1 &amp; (x&gt;&gt;n)
-</code></pre><h1 id="详细的介绍"><a href="#详细的介绍" class="headerlink" title="详细的介绍"></a>详细的介绍</h1><p><a href="http://blog.csdn.net/dadoneo/article/details/6847481" target="_blank" rel="noopener">http://blog.csdn.net/dadoneo/article/details/6847481</a></p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">将第<span class="hljs-built_in">n</span>位置为<span class="hljs-number">1</span><br>set_bit(<span class="hljs-built_in">char</span> x,<span class="hljs-built_in">int</span> <span class="hljs-built_in">n</span>)<br>x |= <span class="hljs-number">1</span>&lt;&lt;<span class="hljs-built_in">n</span><br>将第<span class="hljs-built_in">n</span>位置为<span class="hljs-number">0</span><br>clear_bit(<span class="hljs-built_in">char</span> x,<span class="hljs-built_in">int</span> <span class="hljs-built_in">n</span>)<br><span class="hljs-number">1</span> &amp;= ~(<span class="hljs-number">1</span>&lt;&lt;<span class="hljs-built_in">n</span>)<br>取第<span class="hljs-built_in">n</span>位的值<br>get_bit(<span class="hljs-built_in">char</span> x,<span class="hljs-built_in">int</span> <span class="hljs-built_in">n</span>)<br><span class="hljs-number">1</span> &amp; (x&gt;&gt;<span class="hljs-built_in"><code class="language-hljs undefined">将第<span class="hljs-built_in">n</span>位置为<span class="hljs-number">1</span><br>set_bit(<span class="hljs-built_in">char</span> x,<span class="hljs-built_in">int</span> <span class="hljs-built_in">n</span>)<br>x |= <span class="hljs-number">1</span>&lt;&lt;<span class="hljs-built_in">n</span><br>将第<span class="hljs-built_in">n</span>位置为<span class="hljs-number">0</span><br>clear_bit(<span class="hljs-built_in">char</span> x,<span class="hljs-built_in">int</span> <span class="hljs-built_in">n</span>)<br><span class="hljs-number">1</span> &amp;= ~(<span class="hljs-number">1</span>&lt;&lt;<span class="hljs-built_in">n</span>)<br>取第<span class="hljs-built_in">n</span>位的值<br>get_bit(<span class="hljs-built_in">char</span> x,<span class="hljs-built_in">int</span> <span class="hljs-built_in">n</span>)<br><span class="hljs-number">1</span> &amp; (x&gt;&gt;<span class="hljs-built_in">n</span>)<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<h1 id="详细的介绍"><a href="#详细的介绍" class="headerlink" title="详细的介绍"></a>详细的介绍</h1><p><a href="http://blog.csdn.net/dadoneo/article/details/6847481" target="_blank" rel="noopener">http://blog.csdn.net/dadoneo/article/details/6847481</a></p>
 <h1 id="Java简单实现"><a href="#Java简单实现" class="headerlink" title="Java简单实现"></a>Java简单实现</h1><a id="more"></a>
-<pre><code>import java.util.*;
-
-public class BloomFilter {
-
-    int [] seeds;
-    BitSet bitset;
-
-    public BloomFilter(int bloomfiterSize,int [] seeds){
-        this.seeds = seeds;
-        this.bitset = new BitSet(bloomfiterSize);
-    }
-
-    void add(String s){
-        for(int i=0;i&lt;seeds.length;i++){
-            int pos = hashFunc(s, seeds[i]);
-            bitset.set(pos, true);
-        }
-    }
-
-    Boolean isContain(String s){
-        for(int i=0;i&lt;seeds.length;i++){
-            int pos = hashFunc(s, seeds[i]);
-            if(bitset.get(pos) == false){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static int hashFunc(String key, int hashCode){  
-        int arraySize = 100000007;
-        for(int i=0;i&lt;key.length();i++){        
-            int letterValue = key.charAt(i) - 96;
-            hashCode = ((hashCode &lt;&lt; 5) + letterValue) % arraySize;
-        }  
-        return Math.abs(hashCode); 
-    }  
-
-    public static void main(String[] args){
-        int bloomfiterSize = (int) Math.pow(2, 32);
-        int [] seeds = {1,3,5,7,9,11};
-
-        BloomFilter bloomFilter = new BloomFilter(bloomfiterSize, seeds);
-
-        String s1 = &quot;1234567&quot;;
-        String s2 = &quot;12345678&quot;;
-
-        bloomFilter.add(s1);
-        System.out.println(bloomFilter.isContain(s1));
-        System.out.println(bloomFilter.isContain(s2));
-        bloomFilter.add(s2);
-        System.out.println(bloomFilter.isContain(s2));
-    }
-}
-/*
-true
-false
-true
-*/
-</code></pre>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-keyword">import</span> java.util.*;<br><br><span class="hljs-keyword">public</span> class BloomFilter &#123;<br>	<br>	<span class="hljs-built_in">int</span> [] seeds;<br>	BitSet bitset;<br>	<br>	<span class="hljs-keyword">public</span> BloomFilter(<span class="hljs-built_in">int</span> bloomfiterSize,<span class="hljs-built_in">int</span> [] seeds)&#123;<br>		<span class="hljs-keyword">this</span>.seeds = seeds;<br>		<span class="hljs-keyword">this</span>.bitset = <span class="hljs-keyword">new</span> BitSet(bloomfiterSize);<br>	&#125;<br>	<br>	<span class="hljs-keyword">void</span> <span class="hljs-built_in">add</span>(<span class="hljs-keyword">String</span> s)&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;seeds.length;i++)&#123;<br>			<span class="hljs-built_in">int</span> pos = hashFunc(s, seeds[i]);<br>			bitset.<span class="hljs-built_in">set</span>(pos, <span class="hljs-keyword">true</span>);<br>		&#125;<br>	&#125;<br>	<br>	Boolean isContain(<span class="hljs-keyword">String</span> s)&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;seeds.length;i++)&#123;<br>			<span class="hljs-built_in">int</span> pos = hashFunc(s, seeds[i]);<br>			<span class="hljs-keyword">if</span>(bitset.<span class="hljs-built_in">get</span>(pos) == <span class="hljs-keyword">false</span>)&#123;<br>				<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>			&#125;<br>		&#125;<br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>	&#125;<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">int</span> hashFunc(<span class="hljs-keyword">String</span> <span class="hljs-built_in">key</span>, <span class="hljs-built_in">int</span> hashCode)&#123;  <br>	    <span class="hljs-built_in">int</span> arraySize = <span class="hljs-number">100000007</span>;<br>	    <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-built_in">key</span>.length();i++)&#123;        <br>	        <span class="hljs-built_in">int</span> letterValue = <span class="hljs-built_in">key</span>.charAt(i) - <span class="hljs-number">96</span>;<br>	        hashCode = ((hashCode &lt;&lt; <span class="hljs-number">5</span>) + letterValue) % arraySize;<br>	    &#125;  <br>	    <span class="hljs-keyword">return</span> Math.<span class="hljs-built_in">abs</span>(hashCode); <br>	&#125;  <br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> main(<span class="hljs-keyword">String</span>[] args)&#123;<br>		<span class="hljs-built_in">int</span> bloomfiterSize = (<span class="hljs-built_in">int</span>) Math.<span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>, <span class="hljs-number">32</span>);<br>		<span class="hljs-built_in">int</span> [] seeds = &#123;<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">5</span>,<span class="hljs-number">7</span>,<span class="hljs-number">9</span>,<span class="hljs-number">11</span>&#125;;<br>		<br>		BloomFilter bloomFilter = <span class="hljs-keyword">new</span> BloomFilter(bloomfiterSize, seeds);<br>		<br>		<span class="hljs-keyword">String</span> s1 = <span class="hljs-string">"1234567"</span>;<br>		<span class="hljs-keyword">String</span> s2 = <span class="hljs-string">"12345678"</span>;<br>		<br>		bloomFilter.<span class="hljs-built_in">add</span>(s1);<br>		System.out.<span class="hljs-built_in">println</span>(bloomFilter.isContain(s1));<br>		System.out.<span class="hljs-built_in">println</span>(bloomFilter.isContain(s2));<br>		bloomFilter.<span class="hljs-built_in">add</span>(s2);<br>		System.out.<span class="hljs-built_in">println</span>(bloomFilter.isContain(s2));<br>	&#125;<br>&#125;<br><span class="hljs-comment"><code class="language-hljs undefined"><span class="hljs-keyword">import</span> java.util.*;<br><br><span class="hljs-keyword">public</span> class BloomFilter &#123;<br>	<br>	<span class="hljs-built_in">int</span> [] seeds;<br>	BitSet bitset;<br>	<br>	<span class="hljs-keyword">public</span> BloomFilter(<span class="hljs-built_in">int</span> bloomfiterSize,<span class="hljs-built_in">int</span> [] seeds)&#123;<br>		<span class="hljs-keyword">this</span>.seeds = seeds;<br>		<span class="hljs-keyword">this</span>.bitset = <span class="hljs-keyword">new</span> BitSet(bloomfiterSize);<br>	&#125;<br>	<br>	<span class="hljs-keyword">void</span> <span class="hljs-built_in">add</span>(<span class="hljs-keyword">String</span> s)&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;seeds.length;i++)&#123;<br>			<span class="hljs-built_in">int</span> pos = hashFunc(s, seeds[i]);<br>			bitset.<span class="hljs-built_in">set</span>(pos, <span class="hljs-keyword">true</span>);<br>		&#125;<br>	&#125;<br>	<br>	Boolean isContain(<span class="hljs-keyword">String</span> s)&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;seeds.length;i++)&#123;<br>			<span class="hljs-built_in">int</span> pos = hashFunc(s, seeds[i]);<br>			<span class="hljs-keyword">if</span>(bitset.<span class="hljs-built_in">get</span>(pos) == <span class="hljs-keyword">false</span>)&#123;<br>				<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>			&#125;<br>		&#125;<br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>	&#125;<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">int</span> hashFunc(<span class="hljs-keyword">String</span> <span class="hljs-built_in">key</span>, <span class="hljs-built_in">int</span> hashCode)&#123;  <br>	    <span class="hljs-built_in">int</span> arraySize = <span class="hljs-number">100000007</span>;<br>	    <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-built_in">key</span>.length();i++)&#123;        <br>	        <span class="hljs-built_in">int</span> letterValue = <span class="hljs-built_in">key</span>.charAt(i) - <span class="hljs-number">96</span>;<br>	        hashCode = ((hashCode &lt;&lt; <span class="hljs-number">5</span>) + letterValue) % arraySize;<br>	    &#125;  <br>	    <span class="hljs-keyword">return</span> Math.<span class="hljs-built_in">abs</span>(hashCode); <br>	&#125;  <br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> main(<span class="hljs-keyword">String</span>[] args)&#123;<br>		<span class="hljs-built_in">int</span> bloomfiterSize = (<span class="hljs-built_in">int</span>) Math.<span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>, <span class="hljs-number">32</span>);<br>		<span class="hljs-built_in">int</span> [] seeds = &#123;<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">5</span>,<span class="hljs-number">7</span>,<span class="hljs-number">9</span>,<span class="hljs-number">11</span>&#125;;<br>		<br>		BloomFilter bloomFilter = <span class="hljs-keyword">new</span> BloomFilter(bloomfiterSize, seeds);<br>		<br>		<span class="hljs-keyword">String</span> s1 = <span class="hljs-string">"1234567"</span>;<br>		<span class="hljs-keyword">String</span> s2 = <span class="hljs-string">"12345678"</span>;<br>		<br>		bloomFilter.<span class="hljs-built_in">add</span>(s1);<br>		System.out.<span class="hljs-built_in">println</span>(bloomFilter.isContain(s1));<br>		System.out.<span class="hljs-built_in">println</span>(bloomFilter.isContain(s2));<br>		bloomFilter.<span class="hljs-built_in">add</span>(s2);<br>		System.out.<span class="hljs-built_in">println</span>(bloomFilter.isContain(s2));<br>	&#125;<br>&#125;<br><span class="hljs-comment">/*<br>true<br>false<br>true<br>*/</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
   </div>
   <div class="post-footer">
     <br>
@@ -141,9 +74,11 @@ true
     mfcheer
   </span>
 </footer>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 
-    </div>
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>

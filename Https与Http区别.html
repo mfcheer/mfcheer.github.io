@@ -3,7 +3,7 @@
   <!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta name="generator" content="Hexo 3.9.0">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   
   <title>Https与Http区别 - mfcheer</title>
@@ -21,13 +21,13 @@
   
 
   <link rel="stylesheet" href="/css/style.css">
-
+  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
-<link rel="stylesheet" href="/css/prism.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 </html>
   <body>
-    <div class="container">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
       <header class="header">
   <div class="blog-title">
     <a href="/" class="logo">mfcheer</a>
@@ -49,10 +49,8 @@
   </div>
   <div class="post-content">
     <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>HTTP协议以明文方式发送内容，不提供任何方式的数据加密。HTTP + TLS/SSL = HTTPS，是以安全为目标的HTTP通道。TLS (Transport Layer Security)是传输层加密协议，它的前身是 SSL 协议。</p>
-<h1 id="TLS-协议如何保证安全"><a href="#TLS-协议如何保证安全" class="headerlink" title="TLS 协议如何保证安全"></a>TLS 协议如何保证安全</h1><pre><code>1，    内容加密。
-2，    身份认证。
-3，    数据完整性。
-</code></pre><h1 id="TLS加密方式"><a href="#TLS加密方式" class="headerlink" title="TLS加密方式"></a>TLS加密方式</h1><ul>
+<h1 id="TLS-协议如何保证安全"><a href="#TLS-协议如何保证安全" class="headerlink" title="TLS 协议如何保证安全"></a>TLS 协议如何保证安全</h1><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-number">1</span>，	内容加密。<br><span class="hljs-number">2</span>，	身份认证。<br><span class="hljs-number"><code class="language-hljs undefined"><span class="hljs-number">1</span>，	内容加密。<br><span class="hljs-number">2</span>，	身份认证。<br><span class="hljs-number">3</span>，	数据完整性。<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<h1 id="TLS加密方式"><a href="#TLS加密方式" class="headerlink" title="TLS加密方式"></a>TLS加密方式</h1><ul>
 <li>对称加密<br>加密强度较高<br>无法安全的保管密钥<br>常见算法:DES、3DES、Blowfish、<br>IDEA、RC4、RC5、RC6和AES</li>
 <li>非对称加密<br>比对称加密更安全<br>CPU消耗大<br>加密长度有限制，不可超过公钥长度<br>常见算法:  RSA / ECDHE / DH / DHE</li>
 </ul>
@@ -87,9 +85,11 @@
     mfcheer
   </span>
 </footer>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 
-    </div>
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>

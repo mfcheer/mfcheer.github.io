@@ -3,7 +3,7 @@
   <!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta name="generator" content="Hexo 3.9.0">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   
   <title>Java并发程序(3)：共享受限资源 - mfcheer</title>
@@ -21,13 +21,13 @@
   
 
   <link rel="stylesheet" href="/css/style.css">
-
+  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
-<link rel="stylesheet" href="/css/prism.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 </html>
   <body>
-    <div class="container">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
       <header class="header">
   <div class="blog-title">
     <a href="/" class="logo">mfcheer</a>
@@ -50,84 +50,11 @@
   <div class="post-content">
     <h1 id="synchronized关键字"><a href="#synchronized关键字" class="headerlink" title="synchronized关键字"></a>synchronized关键字</h1><p>当任务要执行被synchronized保护的代码片段的时候，会检查锁是否可用，然后获取锁，执行代码，释放锁。</p>
 <h2 id="同步规则"><a href="#同步规则" class="headerlink" title="同步规则"></a>同步规则</h2><p>如果你正在写一个变量，它接下来可能将被另一个线程读取，或者读取一个上一次已经被另一个线程写过的变量，那么你必须使用同步，并且，读写线程都必须使用相同的监视器锁同步。</p>
-<pre><code>
-public class synchronizedDemo implements Runnable {
-    public void run() {
-        synchronized (this) {
-            for (int i = 0; i &lt; 5; i++) {
-                System.out.println(Thread.currentThread().getName() + &quot; synchronized loop lock &quot; + i);
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        for (int i = 0; i &lt; 5; i++) {
-            System.out.println(Thread.currentThread().getName() + &quot; synchronized loop no lock &quot; + i);
-        }
-    }
-
-    public static void main(String[] args) {
-        synchronizedDemo common = new synchronizedDemo();
-
-        Thread ta = new Thread(common, &quot;A&quot;);
-        Thread tb = new Thread(common, &quot;B&quot;);
-        ta.start();
-        tb.start();
-    }
-}
-输出：
-A synchronized loop lock 0
-A synchronized loop lock 1
-A synchronized loop lock 2
-A synchronized loop lock 3
-A synchronized loop lock 4
-A synchronized loop no lock 0
-B synchronized loop lock 0
-A synchronized loop no lock 1
-B synchronized loop lock 1
-B synchronized loop lock 2
-B synchronized loop lock 3
-B synchronized loop lock 4
-A synchronized loop no lock 2
-A synchronized loop no lock 3
-A synchronized loop no lock 4
-B synchronized loop no lock 0
-B synchronized loop no lock 1
-B synchronized loop no lock 2
-B synchronized loop no lock 3
-B synchronized loop no lock 4
-</code></pre><p>被synchronized修饰的代码片段会被阻塞，其它代码块不会阻塞。</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><br><span class="hljs-keyword">public</span> class synchronizedDemo implements Runnable &#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> run() &#123;<br>		<span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>) &#123;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;<br>				System.out.<span class="hljs-built_in">println</span>(Thread.currentThread().getName() + <span class="hljs-string">" synchronized loop lock "</span> + i);<br>			&#125;<br>			<span class="hljs-keyword">try</span> &#123;<br>				Thread.sleep(<span class="hljs-number">1000</span>);<br>			&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>		<br>		<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;<br>			System.out.<span class="hljs-built_in">println</span>(Thread.currentThread().getName() + <span class="hljs-string">" synchronized loop no lock "</span> + i);<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> main(<span class="hljs-keyword">String</span>[] args) &#123;<br>		synchronizedDemo common = <span class="hljs-keyword">new</span> synchronizedDemo();<br>		<br>		Thread ta = <span class="hljs-keyword">new</span> Thread(common, <span class="hljs-string">"A"</span>);<br>		Thread tb = <span class="hljs-keyword">new</span> Thread(common, <span class="hljs-string">"B"</span>);<br>		ta.start();<br>		tb.start();<br>	&#125;<br>&#125;<br>输出：<br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">0</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">1</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">2</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">3</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">4</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">0</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">0</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">1</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">1</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">2</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">3</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">4</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">2</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">3</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">4</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">0</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">1</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">2</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">3</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number"><code class="language-hljs undefined"><br><span class="hljs-keyword">public</span> class synchronizedDemo implements Runnable &#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> run() &#123;<br>		<span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>) &#123;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;<br>				System.out.<span class="hljs-built_in">println</span>(Thread.currentThread().getName() + <span class="hljs-string">" synchronized loop lock "</span> + i);<br>			&#125;<br>			<span class="hljs-keyword">try</span> &#123;<br>				Thread.sleep(<span class="hljs-number">1000</span>);<br>			&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>				e.printStackTrace();<br>			&#125;<br>		&#125;<br>		<br>		<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;<br>			System.out.<span class="hljs-built_in">println</span>(Thread.currentThread().getName() + <span class="hljs-string">" synchronized loop no lock "</span> + i);<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> main(<span class="hljs-keyword">String</span>[] args) &#123;<br>		synchronizedDemo common = <span class="hljs-keyword">new</span> synchronizedDemo();<br>		<br>		Thread ta = <span class="hljs-keyword">new</span> Thread(common, <span class="hljs-string">"A"</span>);<br>		Thread tb = <span class="hljs-keyword">new</span> Thread(common, <span class="hljs-string">"B"</span>);<br>		ta.start();<br>		tb.start();<br>	&#125;<br>&#125;<br>输出：<br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">0</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">1</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">2</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">3</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">4</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">0</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">0</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">1</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">1</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">2</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">3</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> lock <span class="hljs-number">4</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">2</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">3</span><br>A <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">4</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">0</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">1</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">2</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">3</span><br>B <span class="hljs-keyword">synchronized</span> <span class="hljs-built_in">loop</span> no lock <span class="hljs-number">4</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<p>被synchronized修饰的代码片段会被阻塞，其它代码块不会阻塞。</p>
 <h1 id="使用显示的Lock对象"><a href="#使用显示的Lock对象" class="headerlink" title="使用显示的Lock对象"></a>使用显示的Lock对象</h1><p>Lock对象必须显示的被创建、锁定和释放。优点的更加的灵活。</p>
-<pre><code>import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-public class lockDemo implements Runnable{
-    Lock lock = new ReentrantLock();
-
-    @Override
-    public void run() {
-        lock.lock();
-        for(int i = 0; i &lt; 10; i++) {
-            System.out.println(&quot;hello &quot; + Thread.currentThread().getName());
-        }
-        lock.unlock();
-    }
-
-    public static void main(String[] args) {
-        ExecutorService executorService = Executors.newCachedThreadPool();
-        lockDemo lk = new lockDemo();
-        for(int i = 0;i &lt; 5; i++) {
-            executorService.execute(lk);
-        }
-    }
-
-}
-</code></pre><ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-keyword">import</span> java.util.concurrent.ExecutorService;<br><span class="hljs-keyword">import</span> java.util.concurrent.Executors;<br><span class="hljs-keyword">import</span> java.util.concurrent.locks.Lock;<br><span class="hljs-keyword">import</span> java.util.concurrent.locks.ReentrantLock;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">lockDemo</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span></span>&#123;<br>	Lock lock = <span class="hljs-keyword">new</span> ReentrantLock();<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>		lock.lock();<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;<br>			System.out.println(<span class="hljs-string">"hello "</span> + Thread.currentThread().getName());<br>		&#125;<br>		lock.unlock();<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		ExecutorService executorService = Executors.newCachedThreadPool();<br>		lockDemo lk = <span class="hljs-keyword">new</span> lockDemo();<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;i &lt; <span class="hljs-number"><code class="language-hljs undefined"><span class="hljs-keyword">import</span> java.util.concurrent.ExecutorService;<br><span class="hljs-keyword">import</span> java.util.concurrent.Executors;<br><span class="hljs-keyword">import</span> java.util.concurrent.locks.Lock;<br><span class="hljs-keyword">import</span> java.util.concurrent.locks.ReentrantLock;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">lockDemo</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span></span>&#123;<br>	Lock lock = <span class="hljs-keyword">new</span> ReentrantLock();<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>		lock.lock();<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;<br>			System.out.println(<span class="hljs-string">"hello "</span> + Thread.currentThread().getName());<br>		&#125;<br>		lock.unlock();<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		ExecutorService executorService = Executors.newCachedThreadPool();<br>		lockDemo lk = <span class="hljs-keyword">new</span> lockDemo();<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;i &lt; <span class="hljs-number">5</span>; i++) &#123;<br>			executorService.execute(lk);<br>		&#125;<br>	&#125;<br>	<br>&#125;<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<ul>
 <li>lock()方法是平常使用得最多的一个方法，就是用来获取锁。如果锁已被其他线程获取，则进行等待。</li>
 <li>tryLock()方法是有返回值的，它表示用来尝试获取锁，如果获取成功，则返回true，如果获取失败（即锁已被其他线程获取），则返回false，也就说这个方法无论如何都会立即返回。在拿不到锁时不会一直在那等待。</li>
 <li>tryLock(long time, TimeUnit unit)方法和tryLock()方法是类似的，只不过区别在于这个方法在拿不到锁时会等待一定的时间，在时间期限之内如果还拿不到锁，就返回false。如果如果一开始拿到锁或者在等待期间内拿到了锁，则返回true。</li>
@@ -141,34 +68,15 @@ public class lockDemo implements Runnable{
 </ul>
 <p>1、保证所有线程对该变量的可见性<br>2、禁止指令重排序优化</p>
 <h1 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h1><p>希望防止多个线程同时访问方法内部的部分代码而不是整个方法，分离出来的代码片段成为“临界区“，也成为同步控制块</p>
-<pre><code>synchronized(syncObject){
-    //临界区
-}
-</code></pre><p>也可以使用Lock对象实现。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-function"><span class="hljs-title">synchronized</span><span class="hljs-params">(syncObject)</span></span>&#123;<br>	<span class="hljs-comment"><code class="language-hljs undefined"><span class="hljs-function"><span class="hljs-title">synchronized</span><span class="hljs-params">(syncObject)</span></span>&#123;<br>	<span class="hljs-comment">//临界区</span><br>&#125;<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<p>也可以使用Lock对象实现。</p>
 <h1 id="线程本地存储-ThreadLocal"><a href="#线程本地存储-ThreadLocal" class="headerlink" title="线程本地存储 ThreadLocal"></a>线程本地存储 ThreadLocal</h1><p>通常情况下，创建的变量是可以被任何一个线程访问并修改的。而使用ThreadLocal创建的变量只能被当前线程访问，其他线程则无法访问和修改。</p>
 <ul>
 <li>set方法，将数据插入线程的存储对象中并返回对象</li>
 <li>get方法，返回线程相关联对象的副本</li>
 </ul>
-<pre><code>public class threadLocalDemo {
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">threadLocalDemo</span> &#123;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span>(<span class="hljs-params">String[] args</span>) </span>&#123;<br>		Thread t = <span class="hljs-keyword">new</span> Thread() &#123;<br>			ThreadLocal&lt;String&gt; mStringThreadLocal = <span class="hljs-keyword">new</span> ThreadLocal&lt;&gt;();<br><br>			@<span class="hljs-function">Override<br>			<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span>(<span class="hljs-params"></span>) </span>&#123;<br>				super.run();<br>				mStringThreadLocal.<span class="hljs-keyword">set</span>(<span class="hljs-string">"mfcheer"</span>);<br>				System.<span class="hljs-keyword">out</span>.println(mStringThreadLocal.<span class="hljs-keyword"><code class="language-hljs undefined"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">threadLocalDemo</span> &#123;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span>(<span class="hljs-params">String[] args</span>) </span>&#123;<br>		Thread t = <span class="hljs-keyword">new</span> Thread() &#123;<br>			ThreadLocal&lt;String&gt; mStringThreadLocal = <span class="hljs-keyword">new</span> ThreadLocal&lt;&gt;();<br><br>			@<span class="hljs-function">Override<br>			<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span>(<span class="hljs-params"></span>) </span>&#123;<br>				super.run();<br>				mStringThreadLocal.<span class="hljs-keyword">set</span>(<span class="hljs-string">"mfcheer"</span>);<br>				System.<span class="hljs-keyword">out</span>.println(mStringThreadLocal.<span class="hljs-keyword">get</span>());<br>			&#125;<br>		&#125;;<br>		t.start();<br>	&#125;<br>&#125;<br>输出：<br>mfcheer<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 
-    public static void main(String[] args) {
-        Thread t = new Thread() {
-            ThreadLocal&lt;String&gt; mStringThreadLocal = new ThreadLocal&lt;&gt;();
-
-            @Override
-            public void run() {
-                super.run();
-                mStringThreadLocal.set(&quot;mfcheer&quot;);
-                System.out.println(mStringThreadLocal.get());
-            }
-        };
-        t.start();
-    }
-}
-输出：
-mfcheer
-</code></pre>
   </div>
   <div class="post-footer">
     <br>
@@ -186,9 +94,11 @@ mfcheer
     mfcheer
   </span>
 </footer>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 
-    </div>
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
