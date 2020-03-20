@@ -37,9 +37,11 @@
       
     </ul>
   </nav>
-  <link rel="stylesheet" href="/css/highlight/styles/a11y-light.css">
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
   <script src="/js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
 </header>
 
 <article class="post">
@@ -51,8 +53,7 @@
   </div>
   <div class="post-content">
     <h1 id="Runnable-或者-Callable"><a href="#Runnable-或者-Callable" class="headerlink" title="Runnable 或者 Callable"></a>Runnable 或者 Callable</h1><p>通过实现接口的run方法，实现任务</p>
-<pre><code>
-public class LiftOff implements Runnable {
+<pre><code>public class LiftOff implements Runnable {
     protected int countDown = 10;
     private static int taskCount = 0;
     private int id = taskCount++;
