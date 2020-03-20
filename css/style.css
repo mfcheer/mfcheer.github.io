@@ -57,6 +57,10 @@ a {
 .page p {
   line-height: 1.5em;
 }
+pre {
+  background-color: #f7f7f7 !important;
+  font-size: 15px !important;
+}
 .header {
   margin-bottom: 2em;
   padding: 0 20px;
