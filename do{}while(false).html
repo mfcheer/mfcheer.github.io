@@ -21,9 +21,6 @@
   
 
   <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
@@ -40,6 +37,9 @@
       
     </ul>
   </nav>
+  <script src="/js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
 </header>
 
 <article class="post">
@@ -50,15 +50,49 @@
   <div class="post-meta">
   </div>
   <div class="post-content">
-    <p>今天遇到了一段代码，类似下面<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-keyword">do</span>&#123;<br>    <span class="hljs-params">...</span><br>&#125;<span class="hljs-keyword">while</span>(<span class="hljs-literal"><code class="language-hljs undefined"><span class="hljs-keyword">do</span>&#123;<br>    <span class="hljs-params">...</span><br>&#125;<span class="hljs-keyword">while</span>(<span class="hljs-literal">false</span>)<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>开始很疑惑，为什么这样写，后来上网搜了一下才恍然大悟。这种语法是为了解决代码嵌套、实现goto的用途</p>
+    <p>今天遇到了一段代码，类似下面</p>
+<pre><code>do{
+    ...
+}while(false)
+</code></pre><p>开始很疑惑，为什么这样写，后来上网搜了一下才恍然大悟。这种语法是为了解决代码嵌套、实现goto的用途</p>
 <p>下面是同样功能的三段代码</p>
-<p>1、代码嵌套<br><a id="more"></a><br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-keyword">if</span>( <span class="hljs-attr">A==true</span> ) &#123;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-attr">B</span> == <span class="hljs-literal">true</span>) &#123;<br>    	<span class="hljs-keyword">if</span>(<span class="hljs-attr">C</span> == <span class="hljs-literal">true</span>) &#123;<br>    		<span class="hljs-keyword">if</span>(<span class="hljs-attr">D</span> == <span class="hljs-literal"><code class="language-hljs undefined"><span class="hljs-keyword">if</span>( <span class="hljs-attr">A==true</span> ) &#123;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-attr">B</span> == <span class="hljs-literal">true</span>) &#123;<br>    	<span class="hljs-keyword">if</span>(<span class="hljs-attr">C</span> == <span class="hljs-literal">true</span>) &#123;<br>    		<span class="hljs-keyword">if</span>(<span class="hljs-attr">D</span> == <span class="hljs-literal">true</span>)&#123;<br>    			//doSomething<br>    		&#125;<br>    	&#125;<br>    &#125;<br>&#125;<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>这样箭头形代码很丑，且可读性差</p>
-<p>2、goto代码<br><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-keyword">if</span><span class="hljs-comment">( A==false )</span>  <br>    <span class="hljs-keyword">goto</span> tag;  <br><span class="hljs-keyword">if</span><span class="hljs-comment">( B==false )</span>  <br>    <span class="hljs-keyword">goto</span> tag;  <br><span class="hljs-keyword">if</span><span class="hljs-comment">( C==false )</span>  <br>    <span class="hljs-keyword">goto</span> tag;  <br><span class="hljs-keyword">if</span><span class="hljs-comment">( D==false )</span>  <br>    <span class="hljs-keyword">goto</span> tag; <br><span class="hljs-comment"><code class="language-hljs undefined"><span class="hljs-keyword">if</span><span class="hljs-comment">( A==false )</span>  <br>    <span class="hljs-keyword">goto</span> tag;  <br><span class="hljs-keyword">if</span><span class="hljs-comment">( B==false )</span>  <br>    <span class="hljs-keyword">goto</span> tag;  <br><span class="hljs-keyword">if</span><span class="hljs-comment">( C==false )</span>  <br>    <span class="hljs-keyword">goto</span> tag;  <br><span class="hljs-keyword">if</span><span class="hljs-comment">( D==false )</span>  <br>    <span class="hljs-keyword">goto</span> tag; <br><span class="hljs-comment">//doSomething</span><br>tag:<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>3、do{}while(false)</p>
-<p>这样的结构能够创造可读性良好的代码，又可以避免goto可能产生的问题<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-keyword">do</span>  <br>&#123;  <br>    <span class="hljs-keyword">if</span>( A==<span class="hljs-literal">false</span> )  <br>        <span class="hljs-keyword">break</span>;  <br>    <span class="hljs-keyword">if</span>( B==<span class="hljs-literal">false</span> )  <br>        <span class="hljs-keyword">break</span>;  <br>    <span class="hljs-keyword">if</span>( C==<span class="hljs-literal">false</span> )  <br>        <span class="hljs-keyword">break</span>;  <br>    <span class="hljs-keyword">if</span>( D==<span class="hljs-literal">false</span> )  <br>        <span class="hljs-keyword">break</span>; <br>    <span class="hljs-comment">//doSomething</span><br>&#125;<span class="hljs-keyword">while</span>(<span class="hljs-literal"><code class="language-hljs undefined"><span class="hljs-keyword">do</span>  <br>&#123;  <br>    <span class="hljs-keyword">if</span>( A==<span class="hljs-literal">false</span> )  <br>        <span class="hljs-keyword">break</span>;  <br>    <span class="hljs-keyword">if</span>( B==<span class="hljs-literal">false</span> )  <br>        <span class="hljs-keyword">break</span>;  <br>    <span class="hljs-keyword">if</span>( C==<span class="hljs-literal">false</span> )  <br>        <span class="hljs-keyword">break</span>;  <br>    <span class="hljs-keyword">if</span>( D==<span class="hljs-literal">false</span> )  <br>        <span class="hljs-keyword">break</span>; <br>    <span class="hljs-comment">//doSomething</span><br>&#125;<span class="hljs-keyword">while</span>(<span class="hljs-literal">false</span>);<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-
+<p>1、代码嵌套<br><a id="more"></a></p>
+<pre><code>if( A==true ) {
+    if(B == true) {
+        if(C == true) {
+            if(D == true){
+                //doSomething
+            }
+        }
+    }
+}
+</code></pre><p>这样箭头形代码很丑，且可读性差</p>
+<p>2、goto代码</p>
+<pre><code>if( A==false )  
+    goto tag;  
+if( B==false )  
+    goto tag;  
+if( C==false )  
+    goto tag;  
+if( D==false )  
+    goto tag; 
+//doSomething
+tag: 
+</code></pre><p>3、do{}while(false)</p>
+<p>这样的结构能够创造可读性良好的代码，又可以避免goto可能产生的问题</p>
+<pre><code>do  
+{  
+    if( A==false )  
+        break;  
+    if( B==false )  
+        break;  
+    if( C==false )  
+        break;  
+    if( D==false )  
+        break; 
+    //doSomething
+}while(false); 
+</code></pre>
   </div>
   <div class="post-footer">
     <br>

@@ -21,9 +21,6 @@
   
 
   <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
@@ -40,6 +37,9 @@
       
     </ul>
   </nav>
+  <script src="/js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
 </header>
 
 <article class="post">
@@ -50,15 +50,63 @@
   <div class="post-meta">
   </div>
   <div class="post-content">
-    <h1 id="连接GitHub"><a href="#连接GitHub" class="headerlink" title="连接GitHub"></a>连接GitHub</h1><figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">创建SSH <span class="hljs-keyword">Key</span>，在用户主目录（~）下创建SSH <span class="hljs-keyword">Key</span>: <br>ssh-keygen -t rsa -C “youremail@example.com”<br>然后一路回车使用默认值即可。<br>执行完之后，我们可以找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH <span class="hljs-keyword">Key</span>的密钥对，id_rsa是私钥，id_rsa.pub是公钥。<br>登录GitHub，打开”Account settings”，找到”SSH Keys”页面，点击”Add SSH <span class="hljs-keyword"><code class="language-hljs undefined">创建SSH <span class="hljs-keyword">Key</span>，在用户主目录（~）下创建SSH <span class="hljs-keyword">Key</span>: <br>ssh-keygen -t rsa -C “youremail@example.com”<br>然后一路回车使用默认值即可。<br>执行完之后，我们可以找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH <span class="hljs-keyword">Key</span>的密钥对，id_rsa是私钥，id_rsa.pub是公钥。<br>登录GitHub，打开”Account settings”，找到”SSH Keys”页面，点击”Add SSH <span class="hljs-keyword">Key</span>”，把id_rsa.pub文件中的内容粘贴过来。<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<a id="more"></a>
-<h1 id="创建版本库-Repository"><a href="#创建版本库-Repository" class="headerlink" title="创建版本库(Repository)"></a>创建版本库(Repository)</h1><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">新建一个目录: mkdir my_dir &amp;&amp; cd my_dir<br>用 git init 把目录变成Git可以管理Repository<br>git clone: 克隆已有的远端仓库<br>git <span class="hljs-keyword">add</span><span class="bash"> filename 将文件添加到仓库<br></span>git commit -m “xxxxx” 告诉Git把文件提交到Repository <br>git <span class="hljs-keyword">add</span><span class="bash"><code class="language-hljs undefined">新建一个目录: mkdir my_dir &amp;&amp; cd my_dir<br>用 git init 把目录变成Git可以管理Repository<br>git clone: 克隆已有的远端仓库<br>git <span class="hljs-keyword">add</span><span class="bash"> filename 将文件添加到仓库<br></span>git commit -m “xxxxx” 告诉Git把文件提交到Repository <br>git <span class="hljs-keyword">add</span><span class="bash"> 命令可以执行多次，添加多个文件到仓库 <br></span>git commit 命令中 -m 后面输入的是本次提交的说明，可以输入任意内容<br>版本修改<br>git status 命令查看Repository当前的状态<br>git diff filename 查看修改过的但还没提交的文件与已经commit到仓库中的区别<br>git log 查看从最近到最远的提交日志<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<h1 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h1><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-symbol">git</span> <span class="hljs-keyword">branch: </span>查看所有本地分支，带*的是当前分支。<br><span class="hljs-symbol">git</span> checkout –<span class="hljs-keyword">b </span>dev: 以当前分支为基础，创建一个新的dev分支，并切换到dev.<br><span class="hljs-symbol">git</span> checkout $&#123;<span class="hljs-keyword">br_name&#125;: </span>切换到名为$&#123;<span class="hljs-keyword">br_name&#125;的分支。<br></span><span class="hljs-symbol">git</span> <span class="hljs-keyword">branch </span>-a: 查看所有分支，包括远端<br><span class="hljs-symbol">git</span> merge $&#123;<span class="hljs-keyword">br_name&#125;: </span>把分支$&#123;<span class="hljs-keyword"><code class="language-hljs undefined"><span class="hljs-symbol">git</span> <span class="hljs-keyword">branch: </span>查看所有本地分支，带*的是当前分支。<br><span class="hljs-symbol">git</span> checkout –<span class="hljs-keyword">b </span>dev: 以当前分支为基础，创建一个新的dev分支，并切换到dev.<br><span class="hljs-symbol">git</span> checkout $&#123;<span class="hljs-keyword">br_name&#125;: </span>切换到名为$&#123;<span class="hljs-keyword">br_name&#125;的分支。<br></span><span class="hljs-symbol">git</span> <span class="hljs-keyword">branch </span>-a: 查看所有分支，包括远端<br><span class="hljs-symbol">git</span> merge $&#123;<span class="hljs-keyword">br_name&#125;: </span>把分支$&#123;<span class="hljs-keyword">br_name&#125;的最新内容合并到当前分支</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<h1 id="工作区"><a href="#工作区" class="headerlink" title="工作区"></a>工作区</h1><figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">工作区（Working Directory）和版本库（Repository）的区别 <br>工作区就是指的某个目录，例如上面的my_dir。<br>在my_dir中有一个隐藏目录.git，这个就是版本库。 <br>版本库中最重要的就是被称为stage（或者index）的暂存区，还有Git为我们自动创建的第一个分支master以及指向master的指针HEAD。<br>git add 命令就是把文件添加的暂存区<br>git commit 命令提交更改后，就是把暂存区的所有内容提交到当前分支<br>git checkout – <span class="hljs-keyword">filename</span> 命令可以把文件在工作区的修改全部撤消掉，有两种情况： <br>一种是<span class="hljs-keyword">filename</span>文件修改后还没添加到暂存区，撤消修改之后就和版本库一样。<br>一种是<span class="hljs-keyword">filename</span>文件修改后添加到暂存区，撤消修改之后就回到添加到暂存区后的状态。<br>当在工作区把某个文件删除了之后，版本库中还存在，这时用git status 命令可以看到版本库中那些文件在工作区被删除了，这时有两种选择： <br>一种是确实要删除某个文件，那么版本库中也应该相应删除，可以使用git rm <span class="hljs-keyword">filename</span> 并且git commit -m “xxxx” 命令在版本库中删除。<br>另一种是删错了，那么可以使用git checkout – <span class="hljs-keyword"><code class="language-hljs undefined">工作区（Working Directory）和版本库（Repository）的区别 <br>工作区就是指的某个目录，例如上面的my_dir。<br>在my_dir中有一个隐藏目录.git，这个就是版本库。 <br>版本库中最重要的就是被称为stage（或者index）的暂存区，还有Git为我们自动创建的第一个分支master以及指向master的指针HEAD。<br>git add 命令就是把文件添加的暂存区<br>git commit 命令提交更改后，就是把暂存区的所有内容提交到当前分支<br>git checkout – <span class="hljs-keyword">filename</span> 命令可以把文件在工作区的修改全部撤消掉，有两种情况： <br>一种是<span class="hljs-keyword">filename</span>文件修改后还没添加到暂存区，撤消修改之后就和版本库一样。<br>一种是<span class="hljs-keyword">filename</span>文件修改后添加到暂存区，撤消修改之后就回到添加到暂存区后的状态。<br>当在工作区把某个文件删除了之后，版本库中还存在，这时用git status 命令可以看到版本库中那些文件在工作区被删除了，这时有两种选择： <br>一种是确实要删除某个文件，那么版本库中也应该相应删除，可以使用git rm <span class="hljs-keyword">filename</span> 并且git commit -m “xxxx” 命令在版本库中删除。<br>另一种是删错了，那么可以使用git checkout – <span class="hljs-keyword">filename</span> 命令把工作区误删的文件恢复到最新版。<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<h1 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h1><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">git remote add origin git@github.com:xxxx/xxxx.git 命令将本地仓库与GitHub仓库关联。 <br>执行之后，远程库的名字就是origin。<br>git pull 把远程仓库的东西pull到本地<br>git push -u origin <span class="hljs-keyword">master</span> <span class="hljs-title">命令把本地库中的所有内容推送到远程库中。 <br>git</span> push 命令就是把当前分支<span class="hljs-literal">master</span>推送到远程<br>由于一开始远程库是空的，-u参数不仅能够将本地<span class="hljs-literal">master</span>分支内容推送到远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送和拉取时就可以简化命令。<br>之后就可以用git push origin <span class="hljs-keyword">master</span> <span class="hljs-title">命令了。<br>注意可以用git</span> push -f命令来强制推送。<br>git <span class="hljs-keyword">clone</span> <span class="hljs-title"><code class="language-hljs undefined">git remote add origin git@github.com:xxxx/xxxx.git 命令将本地仓库与GitHub仓库关联。 <br>执行之后，远程库的名字就是origin。<br>git pull 把远程仓库的东西pull到本地<br>git push -u origin <span class="hljs-keyword">master</span> <span class="hljs-title">命令把本地库中的所有内容推送到远程库中。 <br>git</span> push 命令就是把当前分支<span class="hljs-literal">master</span>推送到远程<br>由于一开始远程库是空的，-u参数不仅能够将本地<span class="hljs-literal">master</span>分支内容推送到远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送和拉取时就可以简化命令。<br>之后就可以用git push origin <span class="hljs-keyword">master</span> <span class="hljs-title">命令了。<br>注意可以用git</span> push -f命令来强制推送。<br>git <span class="hljs-keyword">clone</span> <span class="hljs-title">git</span>@github.com:xxxx/xxxx.git 命令从远程库中克隆一个到本地仓库<br>git fetch [origin] [br_name]: 从远端仓库origin拉取分支br_name的最新代码到本地。用于更新本地代码。<br>git pull = git fetch + git merge<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<h1 id="缓存回滚"><a href="#缓存回滚" class="headerlink" title="缓存回滚"></a>缓存回滚</h1><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">git stash: 把当前分支上的修改缓存起来，得到一个干净的working <span class="hljs-built_in">directory</span>。缓存是独立于分支的，可以在任何分支git stash <span class="hljs-built_in">pop</span>恢复最近的被缓存起来的修改。<br>git <span class="hljs-built_in">reset</span>: 对于未<span class="hljs-built_in">push</span>到远端的修改，优先使用这个。<br>git <span class="hljs-built_in">revert</span>: 对于<span class="hljs-built_in"><code class="language-hljs undefined">git stash: 把当前分支上的修改缓存起来，得到一个干净的working <span class="hljs-built_in">directory</span>。缓存是独立于分支的，可以在任何分支git stash <span class="hljs-built_in">pop</span>恢复最近的被缓存起来的修改。<br>git <span class="hljs-built_in">reset</span>: 对于未<span class="hljs-built_in">push</span>到远端的修改，优先使用这个。<br>git <span class="hljs-built_in">revert</span>: 对于<span class="hljs-built_in">push</span>到远端的修改。<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<h1 id="常见错误"><a href="#常见错误" class="headerlink" title="常见错误"></a>常见错误</h1><figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-keyword"><code class="language-hljs undefined"><span class="hljs-keyword">error: </span>failed to push some refs to ...<br>出现错误的主要原因是github中的README.md文件不在本地代码目录中<br>可以通过如下命令进行代码合并【注：pull=fetch+merge]<br>git pull --rebase origin master<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">提交代码成功后并不显示绿格子<br>原因是本地Git的配置邮箱和github上面的邮箱不一致。<br>git<span class="hljs-built_in"> config </span>--global user.name <span class="hljs-string">"youname"</span><br>git<span class="hljs-built_in"> config </span>--global user.email <span class="hljs-string"><code class="language-hljs undefined">提交代码成功后并不显示绿格子<br>原因是本地Git的配置邮箱和github上面的邮箱不一致。<br>git<span class="hljs-built_in"> config </span>--global user.name <span class="hljs-string">"youname"</span><br>git<span class="hljs-built_in"> config </span>--global user.email <span class="hljs-string">"youeamil@email.com"</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+    <h1 id="连接GitHub"><a href="#连接GitHub" class="headerlink" title="连接GitHub"></a>连接GitHub</h1><pre><code>创建SSH Key，在用户主目录（~）下创建SSH Key: 
+ssh-keygen -t rsa -C “youremail@example.com”
+然后一路回车使用默认值即可。
+执行完之后，我们可以找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的密钥对，id_rsa是私钥，id_rsa.pub是公钥。
+登录GitHub，打开”Account settings”，找到”SSH Keys”页面，点击”Add SSH Key”，把id_rsa.pub文件中的内容粘贴过来。
+</code></pre><a id="more"></a>
+<h1 id="创建版本库-Repository"><a href="#创建版本库-Repository" class="headerlink" title="创建版本库(Repository)"></a>创建版本库(Repository)</h1><pre><code>新建一个目录: mkdir my_dir &amp;&amp; cd my_dir
+用 git init 把目录变成Git可以管理Repository
+git clone: 克隆已有的远端仓库
+git add filename 将文件添加到仓库
+git commit -m “xxxxx” 告诉Git把文件提交到Repository 
+git add 命令可以执行多次，添加多个文件到仓库 
+git commit 命令中 -m 后面输入的是本次提交的说明，可以输入任意内容
+版本修改
+git status 命令查看Repository当前的状态
+git diff filename 查看修改过的但还没提交的文件与已经commit到仓库中的区别
+git log 查看从最近到最远的提交日志
+</code></pre><h1 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h1><pre><code>git branch: 查看所有本地分支，带*的是当前分支。
+git checkout –b dev: 以当前分支为基础，创建一个新的dev分支，并切换到dev.
+git checkout ${br_name}: 切换到名为${br_name}的分支。
+git branch -a: 查看所有分支，包括远端
+git merge ${br_name}: 把分支${br_name}的最新内容合并到当前分支
+</code></pre><h1 id="工作区"><a href="#工作区" class="headerlink" title="工作区"></a>工作区</h1><pre><code>工作区（Working Directory）和版本库（Repository）的区别 
+工作区就是指的某个目录，例如上面的my_dir。
+在my_dir中有一个隐藏目录.git，这个就是版本库。 
+版本库中最重要的就是被称为stage（或者index）的暂存区，还有Git为我们自动创建的第一个分支master以及指向master的指针HEAD。
+git add 命令就是把文件添加的暂存区
+git commit 命令提交更改后，就是把暂存区的所有内容提交到当前分支
+git checkout – filename 命令可以把文件在工作区的修改全部撤消掉，有两种情况： 
+一种是filename文件修改后还没添加到暂存区，撤消修改之后就和版本库一样。
+一种是filename文件修改后添加到暂存区，撤消修改之后就回到添加到暂存区后的状态。
+当在工作区把某个文件删除了之后，版本库中还存在，这时用git status 命令可以看到版本库中那些文件在工作区被删除了，这时有两种选择： 
+一种是确实要删除某个文件，那么版本库中也应该相应删除，可以使用git rm filename 并且git commit -m “xxxx” 命令在版本库中删除。
+另一种是删错了，那么可以使用git checkout – filename 命令把工作区误删的文件恢复到最新版。
+</code></pre><h1 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h1><pre><code>git remote add origin git@github.com:xxxx/xxxx.git 命令将本地仓库与GitHub仓库关联。 
+执行之后，远程库的名字就是origin。
+git pull 把远程仓库的东西pull到本地
+git push -u origin master 命令把本地库中的所有内容推送到远程库中。 
+git push 命令就是把当前分支master推送到远程
+由于一开始远程库是空的，-u参数不仅能够将本地master分支内容推送到远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送和拉取时就可以简化命令。
+之后就可以用git push origin master 命令了。
+注意可以用git push -f命令来强制推送。
+git clone git@github.com:xxxx/xxxx.git 命令从远程库中克隆一个到本地仓库
+git fetch [origin] [br_name]: 从远端仓库origin拉取分支br_name的最新代码到本地。用于更新本地代码。
+git pull = git fetch + git merge
+</code></pre><h1 id="缓存回滚"><a href="#缓存回滚" class="headerlink" title="缓存回滚"></a>缓存回滚</h1><pre><code>git stash: 把当前分支上的修改缓存起来，得到一个干净的working directory。缓存是独立于分支的，可以在任何分支git stash pop恢复最近的被缓存起来的修改。
+git reset: 对于未push到远端的修改，优先使用这个。
+git revert: 对于push到远端的修改。
+</code></pre><h1 id="常见错误"><a href="#常见错误" class="headerlink" title="常见错误"></a>常见错误</h1><pre><code>error: failed to push some refs to ...
+出现错误的主要原因是github中的README.md文件不在本地代码目录中
+可以通过如下命令进行代码合并【注：pull=fetch+merge]
+git pull --rebase origin master
+</code></pre><pre><code>提交代码成功后并不显示绿格子
+原因是本地Git的配置邮箱和github上面的邮箱不一致。
+git config --global user.name &quot;youname&quot;
+git config --global user.email &quot;youeamil@email.com&quot;
+</code></pre>
   </div>
   <div class="post-footer">
     <br>

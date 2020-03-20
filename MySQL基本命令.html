@@ -21,9 +21,6 @@
   
 
   <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
@@ -40,6 +37,9 @@
       
     </ul>
   </nav>
+  <script src="/js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
 </header>
 
 <article class="post">
@@ -55,11 +55,15 @@
 <hr>
 <p>MySQL 为关系型数据库(Relational Database Management System), 这种所谓的”关系型”可以理解为”表格”的概念, 一个关系型数据库由一个或数个表格组成</p>
 <h1 id="登录到MySQL"><a href="#登录到MySQL" class="headerlink" title="登录到MySQL"></a>登录到MySQL</h1><p>当 MySQL 服务已经运行时, 我们可以通过MySQL自带的客户端工具登录到MySQL数据库中, 首先打开命令提示符, 输入以下格式的命名:</p>
-<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">mysql -h 主机名 -u 用户名 -p<br>-<span class="ruby">h : 该命令用于指定客户端所要登录的MySQL主机名, 登录当前机器该参数可以省略;<br></span>-<span class="ruby">u : 所要登录的用户名;<br></span>-<span class="ruby"><code class="language-hljs undefined">mysql -h 主机名 -u 用户名 -p<br>-<span class="ruby">h : 该命令用于指定客户端所要登录的MySQL主机名, 登录当前机器该参数可以省略;<br></span>-<span class="ruby">u : 所要登录的用户名;<br></span>-<span class="ruby">p : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<p>以登录刚刚安装在本机的MySQL数据库为例, 在命令行下输入 mysql -u root -p 按回车确认</p>
+<pre><code>mysql -h 主机名 -u 用户名 -p
+-h : 该命令用于指定客户端所要登录的MySQL主机名, 登录当前机器该参数可以省略;
+-u : 所要登录的用户名;
+-p : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。
+</code></pre><p>以登录刚刚安装在本机的MySQL数据库为例, 在命令行下输入 mysql -u root -p 按回车确认</p>
 <p>然后命令提示符会一直以 mysql&gt; 加一个闪烁的光标等待命令的输入</p>
-<p>例子：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-selector-tag">mysql</span> <span class="hljs-selector-tag">-h10</span><span class="hljs-selector-class">.16</span><span class="hljs-selector-class">.44</span><span class="hljs-selector-class">.210</span> <span class="hljs-selector-tag">-P3350</span> <span class="hljs-selector-tag">-uuser</span> <span class="hljs-selector-tag"><code class="language-hljs undefined"><span class="hljs-selector-tag">mysql</span> <span class="hljs-selector-tag">-h10</span><span class="hljs-selector-class">.16</span><span class="hljs-selector-class">.44</span><span class="hljs-selector-class">.210</span> <span class="hljs-selector-tag">-P3350</span> <span class="hljs-selector-tag">-uuser</span> <span class="hljs-selector-tag">-ppassword</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<a id="more"></a>
+<p>例子：</p>
+<pre><code>mysql -h10.16.44.210 -P3350 -uuser -ppassword
+</code></pre><a id="more"></a>
 <h1 id="创建一个数据库"><a href="#创建一个数据库" class="headerlink" title="创建一个数据库"></a>创建一个数据库</h1><p>使用 create database 语句可完成对数据库的创建, 创建命令的格式如下:</p>
 <p>create database 数据库名 [其他选项];</p>
 <p>例如我们需要创建一个名为 samp_db 的数据库, 在命令行下执行以下命令:</p>

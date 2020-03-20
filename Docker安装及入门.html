@@ -21,9 +21,6 @@
   
 
   <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
@@ -40,6 +37,9 @@
       
     </ul>
   </nav>
+  <script src="/js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
 </header>
 
 <article class="post">
@@ -52,28 +52,42 @@
   <div class="post-content">
     <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p>简单来说，<br>仓库是存储镜像的地方<br>镜像是一个包含配置和运行环境的文件系统<br>容器是镜像的一个实体，一个镜像可生成多个容器</p>
 <h1 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h1><p>mac下docker下载及入门<br><a href="https://docs.docker.com/docker-for-mac/" target="_blank" rel="noopener">官网</a></p>
-<p>下载dmg文件后按步骤安装<br>运行docker命令查看是否安装成功<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">docker --<span class="hljs-keyword">version</span><br>Docker <span class="hljs-keyword">version</span> <span class="hljs-number">17.09</span>.<span class="hljs-number">0</span>-<span class="hljs-keyword"><code class="language-hljs undefined">docker --<span class="hljs-keyword">version</span><br>Docker <span class="hljs-keyword">version</span> <span class="hljs-number">17.09</span>.<span class="hljs-number">0</span>-<span class="hljs-keyword">ce</span>, build afdb6d4<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>docker执行pull的时候出现超时,改为使用国内的仓库<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">echo <span class="hljs-string">"DOCKER_OPTS=\"</span>\$DOCKER_OPTS --registry-mirror=http://f2d6cb40.m.daocloud.io\<span class="hljs-string">""</span> | sudo tee -a /etc/<span class="hljs-keyword"><code class="language-hljs undefined">echo <span class="hljs-string">"DOCKER_OPTS=\"</span>\$DOCKER_OPTS --registry-mirror=http://f2d6cb40.m.daocloud.io\<span class="hljs-string">""</span> | sudo tee -a /etc/<span class="hljs-keyword">default</span>/docker<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="例子1"><a href="#例子1" class="headerlink" title="例子1"></a>例子1</h2><p>helloworld<br>下载一个镜像</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-attribute"><code class="language-hljs undefined"><span class="hljs-attribute">docker pull hello-world</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<p>下载成功后查看镜像信息</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-attribute"><code class="language-hljs undefined"><span class="hljs-attribute">docker images hello-world</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/39.png" alt=""></p>
+<p>下载dmg文件后按步骤安装<br>运行docker命令查看是否安装成功</p>
+<pre><code>docker --version
+Docker version 17.09.0-ce, build afdb6d4
+</code></pre><p>docker执行pull的时候出现超时,改为使用国内的仓库</p>
+<pre><code>echo &quot;DOCKER_OPTS=\&quot;\$DOCKER_OPTS --registry-mirror=http://f2d6cb40.m.daocloud.io\&quot;&quot; | sudo tee -a /etc/default/docker
+</code></pre><h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="例子1"><a href="#例子1" class="headerlink" title="例子1"></a>例子1</h2><p>helloworld<br>下载一个镜像</p>
+<pre><code>docker pull hello-world
+</code></pre><p>下载成功后查看镜像信息</p>
+<pre><code>docker images hello-world
+</code></pre><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/39.png" alt=""></p>
 <a id="more"></a>
-<p>制作一个容器<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">docker <span class="hljs-keyword">run</span><span class="bash"><code class="language-hljs undefined">docker <span class="hljs-keyword">run</span><span class="bash"> hello-world</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/40.png" alt=""><br>查看所有容器<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-attribute"><code class="language-hljs undefined"><span class="hljs-attribute">docker ps -a</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/41.png" alt=""></p>
-<p>删除容器<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">docker rm <span class="hljs-built_in"><code class="language-hljs undefined">docker rm <span class="hljs-built_in">id</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/42.png" alt=""></p>
-<h2 id="例子2"><a href="#例子2" class="headerlink" title="例子2"></a>例子2</h2><p>docker的web服务<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">docker pull nginx<br>docker <span class="hljs-built_in">run</span> -d -p <span class="hljs-number">80</span>:<span class="hljs-number">80</span> <span class="hljs-comment"><code class="language-hljs undefined">docker pull nginx<br>docker <span class="hljs-built_in">run</span> -d -p <span class="hljs-number">80</span>:<span class="hljs-number">80</span> <span class="hljs-comment">--name webserver nginx</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>访问80端口<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/43.png" alt=""><br>进入docker容器<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">docker exec -<span class="hljs-keyword"><code class="language-hljs undefined">docker exec -<span class="hljs-keyword">it</span> webserver bash<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>修改网页<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">echo <span class="hljs-string">'&lt;h1&gt;Hello, Docker!&lt;/h1&gt;'</span> &gt; <span class="hljs-regexp">/usr/</span>share<span class="hljs-regexp">/nginx/</span>html<span class="hljs-regexp"><code class="language-hljs undefined">echo <span class="hljs-string">'&lt;h1&gt;Hello, Docker!&lt;/h1&gt;'</span> &gt; <span class="hljs-regexp">/usr/</span>share<span class="hljs-regexp">/nginx/</span>html<span class="hljs-regexp">/index.html</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/45.png" alt=""><br>再次访问80端口<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/44.png" alt=""><br>修改了容器的内容，查看不同，和svn类似<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-attribute"><code class="language-hljs undefined"><span class="hljs-attribute">docker diff webserver</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/46.png" alt=""></p>
-<p>生成新的镜像<br><figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-string">docker </span><span class="hljs-string">commit </span><span class="hljs-built_in">--author</span> <span class="hljs-string">"mfcheer"</span> <span class="hljs-built_in">--message</span> <span class="hljs-string">"修改了默认网页"</span> <span class="hljs-string">webserver </span><span class="hljs-string"><code class="language-hljs undefined"><span class="hljs-string">docker </span><span class="hljs-string">commit </span><span class="hljs-built_in">--author</span> <span class="hljs-string">"mfcheer"</span> <span class="hljs-built_in">--message</span> <span class="hljs-string">"修改了默认网页"</span> <span class="hljs-string">webserver </span><span class="hljs-string">nginx:v2</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/47.png" alt=""><br>查看当前nginx镜像<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-attribute"><code class="language-hljs undefined"><span class="hljs-attribute">docker images nginx</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/48.png" alt=""><br>查看所有容器<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-attribute"><code class="language-hljs undefined"><span class="hljs-attribute">docker ps -a</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/49.png" alt=""></p>
+<p>制作一个容器</p>
+<pre><code>docker run hello-world
+</code></pre><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/40.png" alt=""><br>查看所有容器</p>
+<pre><code>docker ps -a
+</code></pre><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/41.png" alt=""></p>
+<p>删除容器</p>
+<pre><code>docker rm id
+</code></pre><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/42.png" alt=""></p>
+<h2 id="例子2"><a href="#例子2" class="headerlink" title="例子2"></a>例子2</h2><p>docker的web服务</p>
+<pre><code>docker pull nginx
+docker run -d -p 80:80 --name webserver nginx
+</code></pre><p>访问80端口<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/43.png" alt=""><br>进入docker容器</p>
+<pre><code>docker exec -it webserver bash
+</code></pre><p>修改网页</p>
+<pre><code>echo &#39;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&#39; &gt; /usr/share/nginx/html/index.html
+</code></pre><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/45.png" alt=""><br>再次访问80端口<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/44.png" alt=""><br>修改了容器的内容，查看不同，和svn类似</p>
+<pre><code>docker diff webserver
+</code></pre><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/46.png" alt=""></p>
+<p>生成新的镜像</p>
+<pre><code>docker commit --author &quot;mfcheer&quot; --message &quot;修改了默认网页&quot; webserver nginx:v2
+</code></pre><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/47.png" alt=""><br>查看当前nginx镜像</p>
+<pre><code>docker images nginx
+</code></pre><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/48.png" alt=""><br>查看所有容器</p>
+<pre><code>docker ps -a
+</code></pre><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/49.png" alt=""></p>
 
   </div>
   <div class="post-footer">

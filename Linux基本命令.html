@@ -21,9 +21,6 @@
   
 
   <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
   <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
@@ -40,6 +37,9 @@
       
     </ul>
   </nav>
+  <script src="/js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="/css/highlight/styles/vs.css">
 </header>
 
 <article class="post">
@@ -50,34 +50,130 @@
   <div class="post-meta">
   </div>
   <div class="post-content">
-    <p>查看端口占用情况：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">lsof -<span class="hljs-selector-tag">i</span>:端口号 用于查看某一端口的占用情况，比如查看<span class="hljs-number">8000</span>端口使用情况，lsof -<span class="hljs-selector-tag">i</span>:<span class="hljs-number"><code class="language-hljs undefined">lsof -<span class="hljs-selector-tag">i</span>:端口号 用于查看某一端口的占用情况，比如查看<span class="hljs-number">8000</span>端口使用情况，lsof -<span class="hljs-selector-tag">i</span>:<span class="hljs-number">8000</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>压缩命令<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">单个文件压缩打包 tar czvf my<span class="hljs-selector-class">.tar</span> file1<br>多个文件压缩打包 tar czvf my<span class="hljs-selector-class">.tar</span> file1 file2,...<br>单个目录压缩打包 tar czvf my<span class="hljs-selector-class">.tar</span> dir1<br>多个目录压缩打包 tar czvf my<span class="hljs-selector-class"><code class="language-hljs undefined">单个文件压缩打包 tar czvf my<span class="hljs-selector-class">.tar</span> file1<br>多个文件压缩打包 tar czvf my<span class="hljs-selector-class">.tar</span> file1 file2,...<br>单个目录压缩打包 tar czvf my<span class="hljs-selector-class">.tar</span> dir1<br>多个目录压缩打包 tar czvf my<span class="hljs-selector-class">.tar</span> dir1 dir2<br>解包至当前目录：tar xzvf my.tar<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>解压war文件<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">jar -xvf <span class="hljs-built_in"><code class="language-hljs undefined">jar -xvf <span class="hljs-built_in">name</span>.war<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>Linux 统计某个字符串出现的次数</p>
-<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">cat filename |<span class="hljs-type">grep</span> str |<span class="hljs-type"><code class="language-hljs undefined">cat filename |<span class="hljs-type">grep</span> str |<span class="hljs-type">wc</span> -l<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<p>定时任务<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-attribute"><code class="language-hljs undefined"><span class="hljs-attribute">crontab -e</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>查看文件内容 </p>
-<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">如果你只想看文件的前<span class="hljs-number">5</span>行，可以使用head命令，如： <br>head <span class="hljs-number">-5</span> /etc/passwd <br>如果你想查看文件的后<span class="hljs-number">10</span>行，可以使用<span class="hljs-keyword">tail</span>命令，如： <br><span class="hljs-keyword">tail</span> <span class="hljs-number">-10</span> /etc/passwd 或 <span class="hljs-keyword">tail</span> -n <span class="hljs-number">10</span> /etc/passwd <br><span class="hljs-keyword">tail</span> -f /var/log/messages <br>参数-f使<span class="hljs-keyword">tail</span>不停地去读最新的内容，这样有实时监视的效果 用Ctrl＋<span class="hljs-keyword"><code class="language-hljs undefined">如果你只想看文件的前<span class="hljs-number">5</span>行，可以使用head命令，如： <br>head <span class="hljs-number">-5</span> /etc/passwd <br>如果你想查看文件的后<span class="hljs-number">10</span>行，可以使用<span class="hljs-keyword">tail</span>命令，如： <br><span class="hljs-keyword">tail</span> <span class="hljs-number">-10</span> /etc/passwd 或 <span class="hljs-keyword">tail</span> -n <span class="hljs-number">10</span> /etc/passwd <br><span class="hljs-keyword">tail</span> -f /var/log/messages <br>参数-f使<span class="hljs-keyword">tail</span>不停地去读最新的内容，这样有实时监视的效果 用Ctrl＋<span class="hljs-keyword">c</span>来终止！<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<p>本地文件上传到主机<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-attribute"><code class="language-hljs undefined"><span class="hljs-attribute">rz -be</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>主机文件下载到本地<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-attribute">sz</span> <span class="hljs-string"><code class="language-hljs undefined"><span class="hljs-attribute">sz</span> <span class="hljs-string">"filename"</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<a id="more"></a>
-<p>日志定期清理sh<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-meta">#!/bin/bash</span><br>log_path=/opt/web/mFangchanIndex <span class="hljs-comment">#日志路径</span><br><span class="hljs-built_in">export</span> log_path<br>expried_time=7      <span class="hljs-comment">#此处定义你的日志过期时间，如7天</span><br>find <span class="hljs-variable">$log_path</span> -<span class="hljs-built_in">type</span> f -mtime +7 -iname <span class="hljs-string"><code class="language-hljs undefined"><span class="hljs-meta">#!/bin/bash</span><br>log_path=/opt/web/mFangchanIndex <span class="hljs-comment">#日志路径</span><br><span class="hljs-built_in">export</span> log_path<br>expried_time=7      <span class="hljs-comment">#此处定义你的日志过期时间，如7天</span><br>find <span class="hljs-variable">$log_path</span> -<span class="hljs-built_in">type</span> f -mtime +7 -iname <span class="hljs-string">"log.*"</span> | xargs rm  1>/dev/null 2>&1<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>查看进程和删除进程</p>
-<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">ps 命令用于查看当前正在运行的进程。<br>grep 是搜索<br>ps [选项]<br>-<span class="ruby">e 显示所有进程,环境变量<br></span>-<span class="ruby">f 全格式<br></span>-<span class="ruby">h 不显示标题<br></span>-<span class="ruby">l 长格式<br></span>-<span class="ruby">w 宽输出<br></span>kill 命令用于终止进程<br>-<span class="ruby"><span class="hljs-number"><code class="language-hljs undefined">ps 命令用于查看当前正在运行的进程。<br>grep 是搜索<br>ps [选项]<br>-<span class="ruby">e 显示所有进程,环境变量<br></span>-<span class="ruby">f 全格式<br></span>-<span class="ruby">h 不显示标题<br></span>-<span class="ruby">l 长格式<br></span>-<span class="ruby">w 宽输出<br></span>kill 命令用于终止进程<br>-<span class="ruby"><span class="hljs-number">9</span> 表示强迫进程立即停止<br></span><br>例子：<br>ps -ef | grep java<br>ps aux|grep tcp<br>kill -9 [PID]<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<p>Linux间进行文件传送-scp命令<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">linux 的 scp 命令可以在 linux 之间复制文件和目录；  <br>scp 可以在 <span class="hljs-number">2</span>个 linux 主机间复制文件； <br>命令基本格式： <br>scp [可选参数] file_source file_target <br>从本地复制到远程： <br>复制文件： <br>scp local_file <span class="hljs-string">remote_ip:</span>remote_file <br>scp <span class="hljs-regexp">/home/</span>space<span class="hljs-regexp">/music/</span><span class="hljs-number">1.</span>mp3 root<span class="hljs-meta">@www</span>.cumt.edu.<span class="hljs-string">cn:</span><span class="hljs-regexp">/home/</span>root<span class="hljs-regexp">/others/</span>music <br>复制目录：  <br>scp -r local_folder remote_username<span class="hljs-meta">@remote</span><span class="hljs-string">_ip:</span>remote_folder <br>命令执行后需要输入密码； <br>例子： <br>scp -r <span class="hljs-regexp">/home/</span>space<span class="hljs-regexp">/music/</span> root<span class="hljs-meta">@www</span>.cumt.edu.<span class="hljs-string">cn:</span><span class="hljs-regexp">/home/</span>root<span class="hljs-regexp">/others/</span> <br>从远程复制到本地 ，只要将从本地复制到远程的命令的后<span class="hljs-number"><code class="language-hljs undefined">linux 的 scp 命令可以在 linux 之间复制文件和目录；  <br>scp 可以在 <span class="hljs-number">2</span>个 linux 主机间复制文件； <br>命令基本格式： <br>scp [可选参数] file_source file_target <br>从本地复制到远程： <br>复制文件： <br>scp local_file <span class="hljs-string">remote_ip:</span>remote_file <br>scp <span class="hljs-regexp">/home/</span>space<span class="hljs-regexp">/music/</span><span class="hljs-number">1.</span>mp3 root<span class="hljs-meta">@www</span>.cumt.edu.<span class="hljs-string">cn:</span><span class="hljs-regexp">/home/</span>root<span class="hljs-regexp">/others/</span>music <br>复制目录：  <br>scp -r local_folder remote_username<span class="hljs-meta">@remote</span><span class="hljs-string">_ip:</span>remote_folder <br>命令执行后需要输入密码； <br>例子： <br>scp -r <span class="hljs-regexp">/home/</span>space<span class="hljs-regexp">/music/</span> root<span class="hljs-meta">@www</span>.cumt.edu.<span class="hljs-string">cn:</span><span class="hljs-regexp">/home/</span>root<span class="hljs-regexp">/others/</span> <br>从远程复制到本地 ，只要将从本地复制到远程的命令的后<span class="hljs-number">2</span>个参数调换顺序即可；<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>解压 .lzop压缩文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-meta">#</span><span class="bash"> lzop -v <span class="hljs-built_in">test</span> <span class="hljs-comment"># 创建test.lzo压缩文件，输出详细信息，保留test文件不变</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop -Uv <span class="hljs-built_in">test</span> <span class="hljs-comment"># 创建test.lzo压缩文件，输出详细信息，删除test文件</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop -t test.lzo <span class="hljs-comment"># 测试test.lzo压缩文件的完整性</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop –info test.lzo <span class="hljs-comment"># 列出test.lzo中各个文件的文件头</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop -l test.lzo <span class="hljs-comment"># 列出test.lzo中各个文件的压缩信息</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop –ls test.lzo <span class="hljs-comment"># 列出test.lzo文件的内容，同ls -l功能</span></span><br><span class="hljs-meta">#</span><span class="bash"> cat <span class="hljs-built_in">test</span> | lzop &gt; t.lzo <span class="hljs-comment"># 压缩标准输入并定向到标准输出</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop -dv test.lzo <span class="hljs-comment"><code class="language-hljs undefined"><span class="hljs-meta">#</span><span class="bash"> lzop -v <span class="hljs-built_in">test</span> <span class="hljs-comment"># 创建test.lzo压缩文件，输出详细信息，保留test文件不变</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop -Uv <span class="hljs-built_in">test</span> <span class="hljs-comment"># 创建test.lzo压缩文件，输出详细信息，删除test文件</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop -t test.lzo <span class="hljs-comment"># 测试test.lzo压缩文件的完整性</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop –info test.lzo <span class="hljs-comment"># 列出test.lzo中各个文件的文件头</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop -l test.lzo <span class="hljs-comment"># 列出test.lzo中各个文件的压缩信息</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop –ls test.lzo <span class="hljs-comment"># 列出test.lzo文件的内容，同ls -l功能</span></span><br><span class="hljs-meta">#</span><span class="bash"> cat <span class="hljs-built_in">test</span> | lzop &gt; t.lzo <span class="hljs-comment"># 压缩标准输入并定向到标准输出</span></span><br><span class="hljs-meta">#</span><span class="bash"> lzop -dv test.lzo <span class="hljs-comment"># 解压test.lzo得到test文件，输出详细信息，保留test.lzo不变</span></span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
-<p>rsync命令<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">kinit username<br>例子：<br>rsync -av rec/ work<span class="hljs-variable">@10</span>.<span class="hljs-number">12.90</span>.<span class="hljs-number">13</span><span class="hljs-symbol">:/opt/rec</span> --exclude=<span class="hljs-string">'logs'</span><br>--exclude=<span class="hljs-string"><code class="language-hljs undefined">kinit username<br>例子：<br>rsync -av rec/ work<span class="hljs-variable">@10</span>.<span class="hljs-number">12.90</span>.<span class="hljs-number">13</span><span class="hljs-symbol">:/opt/rec</span> --exclude=<span class="hljs-string">'logs'</span><br>--exclude=<span class="hljs-string">'logs'</span>说明 ： 不拷贝logs文件夹<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>SSH基本的用法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">SSH主要用于远程登录。假定你要以用户名user，登录远程主机host，只要一条简单命令就可以了。<br><span class="hljs-meta">$</span><span class="bash"> ssh user@host</span><br>如果本地用户名与远程用户名一致，登录时可以省略用户名。<br><span class="hljs-meta">$</span><span class="bash"> ssh host</span><br>SSH的默认端口是22，也就是说，你的登录请求会送进远程主机的22端口。使用p参数，可以修改这个端口。<br><span class="hljs-meta">$</span><span class="bash"><code class="language-hljs undefined">SSH主要用于远程登录。假定你要以用户名user，登录远程主机host，只要一条简单命令就可以了。<br><span class="hljs-meta">$</span><span class="bash"> ssh user@host</span><br>如果本地用户名与远程用户名一致，登录时可以省略用户名。<br><span class="hljs-meta">$</span><span class="bash"> ssh host</span><br>SSH的默认端口是22，也就是说，你的登录请求会送进远程主机的22端口。使用p参数，可以修改这个端口。<br><span class="hljs-meta">$</span><span class="bash"> ssh -p 2222 user@host</span><br>上面这条命令表示，ssh直接连接远程主机的2222端口。<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>搜索输入过的命令<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">ctrl+r:搜索某个以前输入过的命令 或者!<span class="hljs-keyword"><code class="language-hljs undefined">ctrl+r:搜索某个以前输入过的命令 或者!<span class="hljs-keyword">command</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>cat合并文件<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">使用cat合并文件，如cat <span class="hljs-number">1.</span>txt <span class="hljs-number">2.</span>txt <span class="hljs-number">3.</span>txt &gt; <span class="hljs-number">4.</span>txt；<br>如果<span class="hljs-number">1</span>/<span class="hljs-number">2</span>/<span class="hljs-number">3.</span>txt中存在多个空行，最终保存到<span class="hljs-number">4.</span>txt时，连续的空行会被替换为<span class="hljs-number">1</span>行。<br>如果我们希望去掉空行，可以使用如下：cat -s <span class="hljs-number">1.</span>txt <span class="hljs-number">2.</span>txt <span class="hljs-number">3.</span>txt &gt; <span class="hljs-number"><code class="language-hljs undefined">使用cat合并文件，如cat <span class="hljs-number">1.</span>txt <span class="hljs-number">2.</span>txt <span class="hljs-number">3.</span>txt &gt; <span class="hljs-number">4.</span>txt；<br>如果<span class="hljs-number">1</span>/<span class="hljs-number">2</span>/<span class="hljs-number">3.</span>txt中存在多个空行，最终保存到<span class="hljs-number">4.</span>txt时，连续的空行会被替换为<span class="hljs-number">1</span>行。<br>如果我们希望去掉空行，可以使用如下：cat -s <span class="hljs-number">1.</span>txt <span class="hljs-number">2.</span>txt <span class="hljs-number">3.</span>txt &gt; <span class="hljs-number">4.</span>txt<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>diff命令<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">在使用<span class="hljs-keyword">diff命令的时候有3种显示，但是如果我们仅仅需要查看2个文件所有不同的记录，<br></span>去掉<span class="hljs-keyword">diff加上的123a124或者&gt;或者&lt;,可以先diff </span>a <span class="hljs-keyword">b </span>&gt; <span class="hljs-keyword">difflog，<br></span>然后使用grep+sed：cat <span class="hljs-keyword"><code class="language-hljs undefined">在使用<span class="hljs-keyword">diff命令的时候有3种显示，但是如果我们仅仅需要查看2个文件所有不同的记录，<br></span>去掉<span class="hljs-keyword">diff加上的123a124或者&gt;或者&lt;,可以先diff </span>a <span class="hljs-keyword">b </span>&gt; <span class="hljs-keyword">difflog，<br></span>然后使用grep+sed：cat <span class="hljs-keyword">difflog</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>df -h 查看磁盘使用情况<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined"><span class="hljs-attribute"><code class="language-hljs undefined"><span class="hljs-attribute">df -h</span><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>nohup 后台运行<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">nohup command <span class="hljs-number">1</span>&gt;output <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number"><code class="language-hljs undefined">nohup command <span class="hljs-number">1</span>&gt;output <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> &<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>split 将一个大文件分割成很多个小文件<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">每<span class="hljs-number">3</span>行（-l <span class="hljs-number">3</span>）拆分成一个文件，拆分后的文件名以name开头，以数字作为后缀（-d）后缀长度为<span class="hljs-number">1</span>（-a <span class="hljs-number">1</span>）<br>split -l <span class="hljs-number">3</span> test -d -a <span class="hljs-number"><code class="language-hljs undefined">每<span class="hljs-number">3</span>行（-l <span class="hljs-number">3</span>）拆分成一个文件，拆分后的文件名以name开头，以数字作为后缀（-d）后缀长度为<span class="hljs-number">1</span>（-a <span class="hljs-number">1</span>）<br>split -l <span class="hljs-number">3</span> test -d -a <span class="hljs-number">1</span> name<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>自定义命令，例如mac不支持ll命令<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">vim ~/<span class="hljs-selector-class">.bash_profile</span><br>输入以下内容<br>alias ll=<span class="hljs-string">'ls -lF'</span><br>保存完成之后<br>source ~/<span class="hljs-selector-class"><code class="language-hljs undefined">vim ~/<span class="hljs-selector-class">.bash_profile</span><br>输入以下内容<br>alias ll=<span class="hljs-string">'ls -lF'</span><br>保存完成之后<br>source ~/<span class="hljs-selector-class">.bash_profile</span><br>可以使用ll等命令了<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
-<p>自动拉起后台程序脚本例子<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs undefined">function monitorService()<br>&#123;<br>    <span class="hljs-attribute">cnt</span>=$( ps -ef | grep java | grep -v grep | grep<span class="hljs-built_in"> service </span>| wc -l )<br>    echo <span class="hljs-variable">$cnt</span><br>    <span class="hljs-keyword">if</span> [ <span class="hljs-variable">$cnt</span> -eq 0 ]; then<br>        <span class="hljs-attribute">msg</span>=<span class="hljs-string">"<span class="hljs-variable">$bin</span> service is not running, start it."</span><br>        echo <span class="hljs-variable">$msg</span><br>        #发送短信到负责人<br>        sh /opt<span class="hljs-built_in">/server </span>server.sh<br>    <span class="hljs-keyword">else</span><br>        echo <span class="hljs-string">"<span class="hljs-variable"><code class="language-hljs undefined">function monitorService()<br>&#123;<br>    <span class="hljs-attribute">cnt</span>=$( ps -ef | grep java | grep -v grep | grep<span class="hljs-built_in"> service </span>| wc -l )<br>    echo <span class="hljs-variable">$cnt</span><br>    <span class="hljs-keyword">if</span> [ <span class="hljs-variable">$cnt</span> -eq 0 ]; then<br>        <span class="hljs-attribute">msg</span>=<span class="hljs-string">"<span class="hljs-variable">$bin</span> service is not running, start it."</span><br>        echo <span class="hljs-variable">$msg</span><br>        #发送短信到负责人<br>        sh /opt<span class="hljs-built_in">/server </span>server.sh<br>    <span class="hljs-keyword">else</span><br>        echo <span class="hljs-string">"<span class="hljs-variable">$bin</span> service is running."</span><br>    fi<br>&#125;<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure></p>
+    <p>查看端口占用情况：</p>
+<pre><code>lsof -i:端口号 用于查看某一端口的占用情况，比如查看8000端口使用情况，lsof -i:8000
+</code></pre><p>压缩命令</p>
+<pre><code>单个文件压缩打包 tar czvf my.tar file1
+多个文件压缩打包 tar czvf my.tar file1 file2,...
+单个目录压缩打包 tar czvf my.tar dir1
+多个目录压缩打包 tar czvf my.tar dir1 dir2
+解包至当前目录：tar xzvf my.tar
+</code></pre><p>解压war文件</p>
+<pre><code>jar -xvf name.war
+</code></pre><p>Linux 统计某个字符串出现的次数</p>
+<pre><code>cat filename |grep str |wc -l
+</code></pre><p>定时任务</p>
+<pre><code>crontab -e 
+</code></pre><p>查看文件内容 </p>
+<pre><code>如果你只想看文件的前5行，可以使用head命令，如： 
+head -5 /etc/passwd 
+如果你想查看文件的后10行，可以使用tail命令，如： 
+tail -10 /etc/passwd 或 tail -n 10 /etc/passwd 
+tail -f /var/log/messages 
+参数-f使tail不停地去读最新的内容，这样有实时监视的效果 用Ctrl＋c来终止！ 
+</code></pre><p>本地文件上传到主机</p>
+<pre><code>rz -be
+</code></pre><p>主机文件下载到本地</p>
+<pre><code>sz &quot;filename&quot;
+</code></pre><a id="more"></a>
+<p>日志定期清理sh</p>
+<pre><code>#!/bin/bash
+log_path=/opt/web/mFangchanIndex #日志路径
+export log_path
+expried_time=7      #此处定义你的日志过期时间，如7天
+find $log_path -type f -mtime +7 -iname &quot;log.*&quot; | xargs rm  1&gt;/dev/null 2&gt;&amp;1
+</code></pre><p>查看进程和删除进程</p>
+<pre><code>ps 命令用于查看当前正在运行的进程。
+grep 是搜索
+ps [选项]
+-e 显示所有进程,环境变量
+-f 全格式
+-h 不显示标题
+-l 长格式
+-w 宽输出
+kill 命令用于终止进程
+-9 表示强迫进程立即停止
 
+例子：
+ps -ef | grep java
+ps aux|grep tcp
+kill -9 [PID]
+</code></pre><p>Linux间进行文件传送-scp命令</p>
+<pre><code>linux 的 scp 命令可以在 linux 之间复制文件和目录；  
+scp 可以在 2个 linux 主机间复制文件； 
+命令基本格式： 
+scp [可选参数] file_source file_target 
+从本地复制到远程： 
+复制文件： 
+scp local_file remote_ip:remote_file 
+scp /home/space/music/1.mp3 root@www.cumt.edu.cn:/home/root/others/music 
+复制目录：  
+scp -r local_folder remote_username@remote_ip:remote_folder 
+命令执行后需要输入密码； 
+例子： 
+scp -r /home/space/music/ root@www.cumt.edu.cn:/home/root/others/ 
+从远程复制到本地 ，只要将从本地复制到远程的命令的后2个参数调换顺序即可； 
+</code></pre><p>解压 .lzop压缩文件</p>
+<pre><code># lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变
+# lzop -Uv test # 创建test.lzo压缩文件，输出详细信息，删除test文件
+# lzop -t test.lzo # 测试test.lzo压缩文件的完整性
+# lzop –info test.lzo # 列出test.lzo中各个文件的文件头
+# lzop -l test.lzo # 列出test.lzo中各个文件的压缩信息
+# lzop –ls test.lzo # 列出test.lzo文件的内容，同ls -l功能
+# cat test | lzop &gt; t.lzo # 压缩标准输入并定向到标准输出
+# lzop -dv test.lzo # 解压test.lzo得到test文件，输出详细信息，保留test.lzo不变
+</code></pre><p>rsync命令</p>
+<pre><code>kinit username
+例子：
+rsync -av rec/ work@10.12.90.13:/opt/rec --exclude=&#39;logs&#39;
+--exclude=&#39;logs&#39;说明 ： 不拷贝logs文件夹
+</code></pre><p>SSH基本的用法</p>
+<pre><code>SSH主要用于远程登录。假定你要以用户名user，登录远程主机host，只要一条简单命令就可以了。
+$ ssh user@host
+如果本地用户名与远程用户名一致，登录时可以省略用户名。
+$ ssh host
+SSH的默认端口是22，也就是说，你的登录请求会送进远程主机的22端口。使用p参数，可以修改这个端口。
+$ ssh -p 2222 user@host
+上面这条命令表示，ssh直接连接远程主机的2222端口。
+</code></pre><p>搜索输入过的命令</p>
+<pre><code>ctrl+r:搜索某个以前输入过的命令 或者!command
+</code></pre><p>cat合并文件</p>
+<pre><code>使用cat合并文件，如cat 1.txt 2.txt 3.txt &gt; 4.txt；
+如果1/2/3.txt中存在多个空行，最终保存到4.txt时，连续的空行会被替换为1行。
+如果我们希望去掉空行，可以使用如下：cat -s 1.txt 2.txt 3.txt &gt; 4.txt
+</code></pre><p>diff命令</p>
+<pre><code>在使用diff命令的时候有3种显示，但是如果我们仅仅需要查看2个文件所有不同的记录，
+去掉diff加上的123a124或者&gt;或者&lt;,可以先diff a b &gt; difflog，
+然后使用grep+sed：cat difflog
+</code></pre><p>df -h 查看磁盘使用情况</p>
+<pre><code>df -h
+</code></pre><p>nohup 后台运行</p>
+<pre><code>nohup command 1&gt;output 2&gt;&amp;1 &amp;
+</code></pre><p>split 将一个大文件分割成很多个小文件</p>
+<pre><code>每3行（-l 3）拆分成一个文件，拆分后的文件名以name开头，以数字作为后缀（-d）后缀长度为1（-a 1）
+split -l 3 test -d -a 1 name
+</code></pre><p>自定义命令，例如mac不支持ll命令</p>
+<pre><code>vim ~/.bash_profile
+输入以下内容
+alias ll=&#39;ls -lF&#39;
+保存完成之后
+source ~/.bash_profile
+可以使用ll等命令了
+</code></pre><p>自动拉起后台程序脚本例子</p>
+<pre><code>function monitorService()
+{
+    cnt=$( ps -ef | grep java | grep -v grep | grep service | wc -l )
+    echo $cnt
+    if [ $cnt -eq 0 ]; then
+        msg=&quot;$bin service is not running, start it.&quot;
+        echo $msg
+        #发送短信到负责人
+        sh /opt/server server.sh
+    else
+        echo &quot;$bin service is running.&quot;
+    fi
+}
+</code></pre>
   </div>
   <div class="post-footer">
     <br>
