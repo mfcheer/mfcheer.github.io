@@ -59,29 +59,25 @@ a {
 }
 code {
   margin-left: 21px;
-  display: inline;
+  display: block;
   background-color: #1e1e1e !important;
   padding: 24px 48px;
-  font-weight: 400;
-  font-style: normal;
-  font-family: Georgia, serif;
-  font-size: 0.8em;
-  overflow-x: auto;
+  overflow-x: scroll;
   overflow-y: auto;
   word-break: keep-all;
+  width: 100%;
   white-space: pre;
+  border-width: 0px 0px 0px 0px !important;
 }
 pre {
   display: block;
+  width: 100%;
   background-color: #1e1e1e !important;
   font-family: Georgia, serif;
   font-size: 17.5px !important;
   line-height: 1.2em !important;
   list-style: none !important;
   letter-spacing: 0.7px !important;
-}
-pre code.hljs {
-  overflow: hidden;
 }
 .header {
   margin-bottom: 2em;
