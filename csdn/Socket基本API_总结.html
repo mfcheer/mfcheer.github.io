@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Socket基本API 总结 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">Socket基本API 总结</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46432733" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/46432733</a></p>
+<p>套接字建立过程：</p>
+<pre><code>srever:
+1 socket创建套接字
+2 bind ip和port
+3 listen
+4 accept
+5 read/write
+6 close
+
+client:
+1 socket
+2 connect
+3 read/write
+4 close
+
+
+int socket(int domain, int type, int protocol);
+//失败返回-1，成功返回文件描述符
+//domain 套接字协议族 type数据类型 protocol通信协议信息
+
+int bind(int sockfd, struct sockaddr *myaddr, socklen_t addrlen);
+
+int listen(int sockfd, int backlog);
+
+int accept(int sockfd, struct sockaddr *addr,socklen_t *addrlen);
+
+int connect(int sockfd, struct,sockaddr *serv_addr, socklen_t, addrlen);
+/*
+成功返回0，失败返回-1
+*/
+</code></pre><p>协议族：<br>PF_INET, PF_INET6,PF_LOCAL等</p>
+<p>套接字类型：<br>SOCK_STREAM 面向连接<br>SOCK_DGRAM 面向消息</p>
+<p>文件描述符：</p>
+<pre><code>int open(const char *path, int flag);
+//path 地址,flag打开方式
+
+int close(int fd);
+//成功返回0，失败返回-1
+
+//写入文件：
+ssize_t write(int fd, const void *buf, size_t, ntypes);
+//失败返回-1，成功返回写入的字节数
+
+//读取文件
+ssize_t read(int fd, void *buf, size_t nbytes);
+//失败返回-1，成功返回接收的字节数
+</code></pre><p>IPv4结构体</p>
+<pre><code>struct sockaddr_in
+{
+    sa_family_t    sin_family; //地址族
+    uint16_t       sin_port;   //端口号
+    struct in_addr sin_addr;   //32位ip
+    char           sin_zero[8];//不使用   
+};
+
+struct in_addr
+{
+    In_addr_t   s_addr;        //32位iPv4地址
+}
+</code></pre><p>地址族： AF_INET,AF_INET6,AF_LOCAL</p>
+<p>字节序转换：</p>
+<pre><code>unsigned short htons(unsigned short);
+unsigned short ntohs(unsigned short);
+unsigned short htonl(unsigned short);
+unsigned short ntohl(unsigned short);
+/*
+h代表主机(host)字节序
+n代表网络(network)字节序
+s是short
+l是long
+*/
+
+in_addr_t inet_addr(const char *string);
+//返回32位大端整数值，失败返回INADDR_NONE
+
+int inet_aton(const char *string, struct in_addr * addr);
+//成功返回1，失败返回0
+//将字符串32位ip地址转换为整数
+
+char *inet_ntoa(struct in_addr adr);
+//成功返回地址值，失败返回-1
+//将整数ip转换为字符串
+</code></pre><p>UDP函数</p>
+<pre><code>ssize_t sendto(int sock, void *buff, size_t ntypes, int flags, struct sockaddr *to, socklen_t addrlen);
+
+ssize_t recvfrom(int sock, void *buff, size_t nbytes, int flags, struct sockaddr *from, socklen_t *addrlen);
+</code></pre><p>断开函数shutdown</p>
+<pre><code>int shutdown(int sock, int howto);
+/*
+第二个参数是断开方式：
+SHUT_RD    断开输入流
+SHUT_WR    断开输出流
+SHUT_RDWR  同时断开O/I流
+*/
+</code></pre><p>IP与域名的转换</p>
+<pre><code>struct hostent * gethostbyname(const char *hostname);
+//通过域名获得ip
+
+struct hostent * gethostbyaddr(const char *addr, socklen_t len, int family);
+//通过ip获得域相关信息
+
+struct hostent
+{
+    char * h_name;       //official name
+    char ** h_aliases;   //alias list 
+    int h_addrtype;      //host address type
+    int h_length;        //address length
+    char ** h_addr_list; //address list
+};
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

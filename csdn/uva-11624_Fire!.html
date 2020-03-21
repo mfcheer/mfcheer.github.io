@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>uva-11624 Fire! - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">uva-11624 Fire!</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42275651" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/42275651</a></p>
+<h2 id=""><a href="#" class="headerlink" title=" "></a> </h2><h2 id="Problem-B-Fire"><a href="#Problem-B-Fire" class="headerlink" title="Problem B: Fire!"></a>Problem B: Fire!</h2><p><img src="http://uva.onlinejudge.org/external/116/p11624.png" alt=""> Joe works in a maze.<br>Unfortunately, portions of the maze have caught on fire, and the owner of the<br>maze neglected to create a fire escape plan. Help Joe escape the maze.</p>
+<p>Given Joe’s location in the maze and which squares of the maze are on fire,<br>you must determine whether Joe can exit the maze before the fire reaches him,<br>and how fast he can do it.</p>
+<p>Joe and the fire each move one square per minute, vertically or horizontally<br>(not diagonally). The fire spreads all four directions from each square that<br>is on fire. Joe may exit the maze from any square that borders the edge of the<br>maze. Neither Joe nor the fire may enter a square that is occupied by a wall.</p>
+<h3 id="Input-Specification"><a href="#Input-Specification" class="headerlink" title="Input Specification"></a>Input Specification</h3><p>The first line of input contains a single integer, the number of test cases to<br>follow. The first line of each test case contains the two integers  R  and  C<br>, separated by spaces, with 1 &lt;=  R  ,  C  &lt;= 1000. The following  R  lines<br>of the test case each contain one row of the maze. Each of these lines<br>contains exactly  C  characters, and each of these characters is one of:</p>
+<ul>
+<li><code>#</code> , a wall </li>
+<li><code>.</code> , a passable square </li>
+<li><code>J</code> , Joe’s initial position in the maze, which is a passable square </li>
+<li><code>F</code> , a square that is on fire </li>
+</ul>
+<p>There will be exactly one  <code>J</code> in each test case.</p>
+<h3 id="Sample-Input"><a href="#Sample-Input" class="headerlink" title="Sample Input"></a>Sample Input</h3><pre><code>2
+4 4
+####
+#JF#
+#..#
+#..#
+3 3
+###
+#J.
+#.F
+</code></pre><h3 id="Output-Specification"><a href="#Output-Specification" class="headerlink" title="Output Specification"></a>Output Specification</h3><p>For each test case, output a single line containing  <code>IMPOSSIBLE</code> if Joe<br>cannot exit the maze before the fire reaches him, or an integer giving the<br>earliest time Joe can safely exit the maze, in minutes.</p>
+<h3 id="Output-for-Sample-Input"><a href="#Output-for-Sample-Input" class="headerlink" title="Output for Sample Input"></a>Output for Sample Input</h3><pre><code>3
+IMPOSSIBLE
+
+
+
+
+
+//3
+#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+#define MAX 1010
+using namespace std;
+
+int n,m;
+int t;
+
+int dir[4][2] = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+
+char p[MAX][MAX];
+
+int check(int x, int y)
+{
+    if (x &gt;= 0 &amp;&amp; x &lt; n &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; m)
+        return 1;
+    return 0;
+}
+
+int a[MAX][MAX];
+queue&lt;pair&lt;int,int&gt; &gt; q;
+
+void bfs1()
+{
+    while (!q.empty())
+        q.pop();
+    memset(a,-1,sizeof(a));
+    for (int i = 0; i &lt; n; i++)
+        for (int j = 0; j &lt; m; j++)
+        {
+            if (p[i][j] == &#39;F&#39;)
+            {
+                a[i][j] = 0;
+                q.push(make_pair(i,j));
+            }
+        }
+
+    while (!q.empty())
+    {
+        pair&lt;int, int&gt; tmp;
+        tmp = q.front();
+        q.pop();
+
+        for (int i = 0; i &lt; 4; i++)
+        {
+            int x = tmp.first + dir[i][0];
+            int y = tmp.second + dir[i][1];
+            if ( check(x, y) == 0 || a[x][y] != -1 || p[x][y] == &#39;#&#39;)
+                continue;
+            a[x][y] = a[tmp.first][tmp.second] + 1;
+            q.push(make_pair(x,y));
+        }
+    }
+}
+
+int b[MAX][MAX]; 
+
+void bfs()
+{
+    while (!q.empty())
+        q.pop();
+
+    memset(b,-1,sizeof(b));
+    for (int i = 0; i &lt; n; i++)
+        for (int j = 0; j &lt; m; j++)
+        {
+            if (p[i][j] == &#39;J&#39;)
+            {
+                q.push(make_pair(i, j));
+                b[i][j] = 0;
+                break;
+            }
+        }
+
+    while (!q.empty())
+    {
+        pair&lt;int,int&gt; tmp;
+        tmp = q.front();
+        q.pop();
+
+        if ( tmp.first == 0 || tmp.first == n-1 || tmp.second == 0 || tmp.second == m-1)
+        {
+            printf(&quot;%d\n&quot;,b[tmp.first][tmp.second] + 1);
+            return;
+        }
+
+        for (int i = 0; i &lt; 4; i++)
+        {
+            int x = tmp.first + dir[i][0];
+            int y = tmp.second + dir[i][1];
+            if (check(x, y) == 0 || b[x][y]!=-1 || p[x][y] == &#39;#&#39;)
+                continue;
+            if (a[x][y] != -1 &amp;&amp; b[tmp.first][tmp.second] + 1 &gt;= a[x][y])
+                continue;
+
+            b[x][y] = b[tmp.first][tmp.second] + 1;
+            q.push(make_pair(x, y));
+        }
+    }
+
+    printf(&quot;IMPOSSIBLE\n&quot;);
+    return;
+}
+
+int main()
+{
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
+        for (int i = 0; i &lt; n; i++)
+            scanf(&quot;%s&quot;,p[i]);
+
+        bfs1();
+        bfs();
+
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

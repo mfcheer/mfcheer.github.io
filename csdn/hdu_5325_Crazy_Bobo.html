@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>hdu 5325 Crazy Bobo - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">hdu 5325 Crazy Bobo</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47130531" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/47130531</a></p>
+<p>题目链接： <a href="http://acm.hdu.edu.cn/showproblem.php?pid=5325" target="_blank" rel="noopener"> http://acm.hdu.edu.cn/showproblem.php?pid=5325
+</a></p>
+<p>题意：<br>n个点，每个点都有权值。n-1条边构成树。<br>求一个最大集合，使得集合中的所有点联通，且按照点的权值排列之后相邻两个点之间的路径上的点的权值都要比起点小。</p>
+<p>思路：<br>题目转化为以一个点作为权值最小点，以权值递增的规则看它能到达多少个点。<br>将无向图建成有向图，权值小的点指向权值大的点。<br>使用dfs，进行记忆化搜索，num数组记录该点的子树节点数量。</p>
+<p>代码：（需要手动扩栈）</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;string&gt;
+#include &lt;assert.h&gt;
+#pragma comment(linker,&quot;/STACK:1024000000,1024000000&quot;)  
+using namespace std;
+
+template &lt;class T&gt;
+
+inline bool scan_d(T &amp;ret)
+{
+    char c; int sgn;
+    if (c = getchar(), c == EOF) return 0; //EOF  
+    while (c != &#39;-&#39; &amp;&amp; (c&lt;&#39;0&#39; || c&gt;&#39;9&#39;)) c = getchar();
+    sgn = (c == &#39;-&#39;) ? -1 : 1;
+    ret = (c == &#39;-&#39;) ? 0 : (c - &#39;0&#39;);
+    while (c = getchar(), c &gt;= &#39;0&#39;&amp;&amp;c &lt;= &#39;9&#39;) ret = ret * 10 + (c - &#39;0&#39;);
+    ret *= sgn;
+    return 1;
+}
+
+const int MAXN = 500010;
+int  n;
+int a[MAXN];
+int ans;
+
+struct Edge
+{
+    int to;
+    int next;
+}edge[MAXN];
+
+int head[MAXN], tot;
+
+void addedge(int u, int v)
+{
+    edge[tot].to = v;
+    edge[tot].next = head[u];
+    head[u] = tot++;
+}
+
+int num[MAXN];// 记录点i为set最小值的时候i可以到达的点的数目
+
+int dfs(int u)
+{
+    if (num[u] != 0) return num[u];
+    num[u] = 1;
+    for (int i = head[u]; i != -1; i = edge[i].next)
+    {
+        int v = edge[i].to;
+        num[u] += dfs(v);
+    }
+    ans = max(ans, num[u]);
+    return num[u];
+}
+
+int main()
+{
+    while (~scanf(&quot;%d&quot;, &amp;n))
+    {
+        tot = 0;
+        for (int i = 1; i &lt;= n; i++)
+        {
+            scan_d(a[i]);
+            head[i] = -1;
+            num[i] = 0;
+        }
+        int x, y;
+        for (int i = 1; i &lt; n; i++)
+        {
+            scan_d(x);
+            scan_d(y);
+            if (a[x] &gt; a[y])
+                addedge(y, x);
+            else 
+                addedge(x, y);
+        }
+        ans = 0;
+        for (int i = 1; i &lt;= n; i++)
+            dfs(i);
+        printf(&quot;%d\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

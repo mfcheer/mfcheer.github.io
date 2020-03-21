@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>hdu-1698 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="算法,acm">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">hdu-1698</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42921585" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/42921585</a></p>
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1698" target="_blank" rel="noopener"> http://acm.hdu.edu.cn/showproblem.php?pid=1698
+</a></p>
+<p>实现求全部区间的和 ，修改部分区间的值。</p>
+<p>成段更新需要用到懒惰标记 lazy。<br>简单来说就是每次更新的时候不要更新到底，用延迟标记使得更新延迟到下次需要更新or询问到的时候。延迟标记的意思是：这个区间的左右儿子都需要被更新，但是当前区间已经更新了。</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;string&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdlib&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;iomanip&gt;
+
+using namespace std;
+
+#define ll(ind) (ind&lt;&lt;1)
+#define rr(ind) (ind&lt;&lt;1|1)
+#define Mid(a,b) (a+((b-a)&gt;&gt;1))
+
+const int N = 100100;
+
+struct node
+{
+    int left,right,sum;
+    int mid()
+    {
+        return Mid(left, right);
+    }
+
+    int lazy;
+
+    void fun(int summ)
+    {
+        lazy = summ; 
+        sum = (right - left + 1) * lazy;
+    }
+};
+
+struct segtree
+{
+    node tree[N*4];
+
+    void real(int ind)//更新懒惰标记
+    {
+        if (tree[ind].lazy)
+        {
+            tree[ll(ind)].fun(tree[ind].lazy);
+            tree[rr(ind)].fun(tree[ind].lazy);
+            tree[ind].lazy = 0;
+        }
+    }
+
+    void buildtree(int left,int right,int ind)
+    {
+        tree[ind].left = left;
+        tree[ind].right = right;
+        tree[ind].sum = right - left + 1;
+        tree[ind].lazy = 1;
+        if (left != right)
+        {
+            int mid = tree[ind].mid();
+            buildtree(left, mid, ll(ind));
+            buildtree(mid + 1, right, rr(ind));
+        }
+    }
+
+    void update(int st, int ed, int ind, int type)
+    {
+        int left = tree[ind].left;
+        int right = tree[ind].right;
+        if (st &lt;= left &amp;&amp; right &lt;= ed)
+            tree[ind].fun(type);
+        else
+        {
+            real(ind);
+
+            int mid = tree[ind].mid();
+            if (st &lt;= mid) update(st, ed, ll(ind), type);
+            if (ed &gt; mid) update(st, ed, rr(ind), type);
+            tree[ind].sum = tree[ll(ind)].sum + tree[rr(ind)].sum;
+        }
+    }
+}seg;
+
+int main()
+{
+    int ca = 1;
+    int t,n,m;
+    int x, y, z;
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        scanf(&quot;%d%d&quot;, &amp;n, &amp;m);
+        seg.buildtree(1, n, 1);
+
+
+        while (m--)
+        {
+            scanf(&quot;%d%d%d&quot;, &amp;x, &amp;y, &amp;z);
+            seg.update(x, y, 1, z);
+        }
+
+        printf(&quot;Case %d: The total value of the hook is %d.\n&quot;, ca++, seg.tree[1].sum);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>poj 3734 Blocks 【矩阵快速幂】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">poj 3734 Blocks 【矩阵快速幂】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44724359" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44724359</a></p>
+<p>Blocks<br>Time Limit: 1000MS Memory Limit: 65536K<br>Total Submissions: 4529 Accepted: 2044<br>Description</p>
+<p>Panda has received an assignment of painting a line of blocks. Since Panda is<br>such an intelligent boy, he starts to think of a math problem of painting.<br>Suppose there are N blocks in a line and each block can be paint red, blue,<br>green or yellow. For some myterious reasons, Panda want both the number of red<br>blocks and green blocks to be even numbers. Under such conditions, Panda wants<br>to know the number of different ways to paint these blocks.</p>
+<p>Input</p>
+<p>The first line of the input contains an integer T(1≤T≤100), the number of test<br>cases. Each of the next T lines contains an integer N(1≤N≤10^9) indicating the<br>number of blocks.</p>
+<p>Output</p>
+<p>For each test cases, output the number of ways to paint the blocks in a single<br>line. Since the answer may be quite large, you have to module it by 10007.</p>
+<p>Sample Input</p>
+<p>2<br>1<br>2<br>Sample Output</p>
+<p>2<br>6<br>Source</p>
+<p>PKU Campus 2009 (POJ Monthly Contest – 2009.05.17), Simon</p>
+<p>思路：<br>假设染色第i个方块时，红绿都为偶数方案数ai ，一个奇数一个偶数方案bi，均为奇数方案ci;<br>则 ai+1 = 2<em>ai + bi;<br>bi+1 = 2</em>ai + 2<em>bi+2</em>ci;<br>ci+1 = 2*ci + bi;<br>所以可构造矩阵：<br>2 1 0<br>2 2 2<br>0 1 2</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+const long long MOD = 10007;
+
+struct node
+{
+    long long m[3][3];
+}ans, base;
+long long a, b;
+
+node multi(node a, node b)
+{
+    node tmp;
+    for (int i = 0; i&lt;3; i++)
+        for (int j = 0; j&lt;3; j++)
+        {
+            tmp.m[i][j] = 0;
+            for (int k = 0; k&lt;3; k++)
+            {
+                tmp.m[i][j] = ((tmp.m[i][j] + a.m[i][k] * b.m[k][j]) % MOD + MOD) % MOD;
+            }
+        }
+    return tmp;
+}
+
+void fast_mod(int n)// 求矩阵 base 的  n 次幂
+{
+    base.m[0][0] = 2; base.m[0][1]=1; base.m[0][2] = 0;
+    base.m[1][0] = 2; base.m[1][1]=2; base.m[1][2] = 2;
+    base.m[2][0] = 0; base.m[2][1]=1; base.m[2][2] = 2;
+    memset(ans.m,0,sizeof(ans.m));
+    ans.m[0][0] = ans.m[1][1] = 1; ans.m[2][2] = 1;// ans 初始化为单位矩阵
+    while (n)
+    {
+        if (n &amp; 1) //实现 ans *= t; 其中要先把 ans赋值给 tmp，然后用 ans = tmp * t
+            ans = multi(ans, base);
+        base = multi(base, base);
+        n &gt;&gt;= 1;
+    }
+}
+
+int t;
+int n;
+
+int main()
+{
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        scanf(&quot;%d&quot;,&amp;n);
+        fast_mod(n);
+        long long anss = ((ans.m[0][0] % MOD) + MOD) % MOD;
+        printf(&quot;%lld\n&quot;, anss);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

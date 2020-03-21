@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>C++primer 17.4 随机数 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">C++primer 17.4 随机数</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49560641" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/49560641</a></p>
+<p>c语言的库函数 rand 生成的随机数为伪随机数。<br><strong>c++提供随机数引擎类和随机数分布类</strong><br>头文件: random</p>
+<h3 id="随机数引擎："><a href="#随机数引擎：" class="headerlink" title="随机数引擎："></a>随机数引擎：</h3><p>随机数引擎的例子：</p>
+<pre><code>default_random_engine e;
+ for (int i = 1;i &lt;= 10;i++)
+    cout &lt;&lt; e() &lt;&lt; endl;//e()对象生成下一个随机数
+</code></pre><p>随机数引擎操作</p>
+<pre><code>    default_random_engine e;//默认构造函数
+    default_random_engine e(100);//100为随机种子
+    e.seed(100);//100为随机种子
+    cout &lt;&lt; e.min() &lt;&lt; endl;//引擎能生成的最小值
+    cout &lt;&lt; e.max() &lt;&lt; endl;//引擎能生成的最大值
+</code></pre><h3 id="分布类型："><a href="#分布类型：" class="headerlink" title="分布类型："></a>分布类型：</h3><p>为了得到一定范围内的数，使用分布类型的对象：</p>
+<pre><code>    uniform_int_distribution&lt;unsigned&gt; u(1, 100);
+    default_random_engine e;
+    for (int i = 1;i &lt;= 10;i++)
+        cout &lt;&lt; u(e) &lt;&lt; endl;
+</code></pre><p>为了得到随机序列引擎和分布对象定义为static的：</p>
+<pre><code>    static uniform_int_distribution&lt;unsigned&gt; u(1, 100);
+    static default_random_engine e;
+    for (int i = 1;i &lt;= 10;i++)
+        cout &lt;&lt; u(e) &lt;&lt; endl;
+</code></pre><p>设置随机数种子：<br>可以使用系统的时间函数</p>
+<pre><code>default_random_engine e(time(0));
+</code></pre><p>随机初始化的种子。</p>
+<h3 id="其他随机数分布"><a href="#其他随机数分布" class="headerlink" title="其他随机数分布"></a>其他随机数分布</h3><h4 id="生成随机实数："><a href="#生成随机实数：" class="headerlink" title="生成随机实数："></a>生成随机实数：</h4><pre><code>    default_random_engine e(time(0));
+    uniform_real_distribution&lt;double&gt; v(0,1);//随机实数的函数
+
+    for (int i = 1;i &lt;= 10;i++)
+        cout &lt;&lt; v(e) &lt;&lt; endl;
+</code></pre><h4 id="非均匀分布的随机数"><a href="#非均匀分布的随机数" class="headerlink" title="非均匀分布的随机数"></a>非均匀分布的随机数</h4><p>c++支持非均匀分布的随机数，新标准库定义20种分布类型，下面介绍一个正态分布的一个函数：</p>
+<h5 id="normal-distribution"><a href="#normal-distribution" class="headerlink" title="normal_distribution"></a>normal_distribution</h5><p>例子：</p>
+<pre><code>    default_random_engine e(time(0));   
+    normal_distribution&lt;&gt; n(4,1.5);//均值为4，标准差1.5
+    for (int i = 1;i &lt;= 10;i++)
+    {
+        int t = n(e);
+        for (int j = 1;j &lt;= t;j++)
+            cout &lt;&lt; &quot;*&quot;;
+        cout &lt;&lt; endl;
+
+    }   
+</code></pre><p><img src="https://img-blog.csdn.net/20151101190922482" alt="这里写图片描述"></p>
+<h5 id="bernoulli-distribution-类"><a href="#bernoulli-distribution-类" class="headerlink" title="bernoulli_distribution 类"></a>bernoulli_distribution 类</h5><p>用来随机产生bool值，默认概率为0.5-0.5，可修改：</p>
+<pre><code>    default_random_engine e(time(0));
+    bernoulli_distribution b;
+    cout &lt;&lt; b(e) &lt;&lt; endl;
+</code></pre><p>true的概率修改为99%</p>
+<pre><code>    default_random_engine e(time(0));
+    bernoulli_distribution b(.99);
+    cout &lt;&lt; b(e) &lt;&lt; endl;
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

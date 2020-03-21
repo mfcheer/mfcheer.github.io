@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>uva 11029 【快速幂】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">uva 11029 【快速幂】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44158189" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44158189</a></p>
+<p>Leading and Trailing</p>
+<p><strong>Time Limit:</strong> 2000  MS <strong>Memory Limit:</strong> 32768  KB <strong>64bit IO Format:</strong> %lld<br>&amp; %llu</p>
+<p>Submit  <a href="http://acm.hust.edu.cn/vjudge/contest/view.action?cid=70017#status//E/0" target="_blank" rel="noopener"> Status
+</a></p>
+<p>Description</p>
+<p>You are given two integers: <strong>n</strong> and <strong>k</strong> , your task is to find the most<br>significant three digits, and least significant three digits of <strong>n k  </strong> .</p>
+<p>Input</p>
+<p>Input starts with an integer <strong>T (≤ 1000)</strong> , denoting the number of test<br>cases.</p>
+<p>Each case starts with a line containing two integers: <strong>n (2 ≤ n &lt; 2  31  ) </strong><br>and <strong>k (1 ≤ k ≤ 10 7  ) </strong> .</p>
+<p>Output</p>
+<p>For each case, print the case number and the three leading digits (most<br>significant) and three trailing digits (least significant). You can assume<br>that the input is given such that <strong>n k  </strong> contains at least six digits.</p>
+<p>Sample Input</p>
+<p>5</p>
+<p>123456 1</p>
+<p>123456 2</p>
+<p>2 31</p>
+<p>2 32</p>
+<p>29 8751919</p>
+<p>Sample Output</p>
+<p>Case 1: 123 456</p>
+<p>Case 2: 152 936</p>
+<p>Case 3: 214 648</p>
+<p>Case 4: 429 296</p>
+<p>Case 5: 665 669</p>
+<p>题意： 求解a^b 的前三位和后三位</p>
+<p>解法： 对于后三位，快速幂取模1000即可；</p>
+<p>前三位要具体进行分析。</p>
+<p>n可以写成n=10^b,这个a是个小数</p>
+<p>所以b=i+d，i是整数部分，d是数部分<br>则n=10^(i+d)=10^i <em> 10^d<br>这里很重要，10^i其实有什么用？i是整数，所以10^i一定是1000…………000，然后</em>10^d，d是一个小于1的小数（别忘了是b的小数部分）<br>所以决定n这个大数会出现什么数字的，是10^d，10^i只是给10^d起到往后移动小数点的作用<br>所以我们要知道10^d<br>另外我们知道0 &lt;=d&lt;1，所以 10^0 &lt;= 10^d &lt; 10^1   即1&lt;=10^d&lt;10</p>
+<p>这样只需要10^d*100然后取整数部分，就能得到一个3位整数，这3个数字正是我们要的答案</p>
+<p>a=10^k , a^n=(10^k)^n=10^k<em>n=10^i </em> 10^d    ,  这里i是k<em>n的整数部分，d是k</em>n的小数部分</p>
+<p>要得到k就使用库函数fmod即可    d=fmod(k<em>n , 1) ， 返回k</em>n/1的余数，也就是小数部分</p>
+<p>另外k=log10(a) ， 写在一起就是   d=fmod( log10(a)*n , 1)</p>
+<p>然后就是求  100*10^d=10^(d+2)</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;iterator&gt;
+
+using namespace std;
+
+long long quickpow(long long m, long long n, long long  k)//快速幂
+{
+    long long  b = 1;
+    while (n &gt; 0)
+    {
+        if (n &amp; 1)
+            b = (b*m) % k;
+        n = n &gt;&gt; 1;
+        m = (m*m) % k;
+    }
+    return b;
+}
+
+int t;
+long long a, b , ans1, ans2;
+
+int main()
+{
+    int cases = 1;
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        scanf(&quot;%lld %lld&quot;,&amp;a,&amp;b);
+        long long x = a % 1000;
+        ans1 = (int)pow(10, 2 + fmod (b * log10(a*1.0) ,1 ));//求前三位
+        ans2 = quickpow(x,b,1000);
+        printf(&quot;Case %d: %03lld %03lld\n&quot;, cases++, ans1, ans2);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

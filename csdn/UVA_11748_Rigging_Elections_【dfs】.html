@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>UVA 11748	Rigging Elections 【dfs】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="uva,dfs">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">UVA 11748	Rigging Elections 【dfs】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47362411" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/47362411</a></p>
+<p><a href="https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;problem=2848" target="_blank" rel="noopener"><br>https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;problem=2848
+</a><br>题意：n个人选举，给出m个人的投票人对于每个人的优先级，想让第c个人赢，问能不能</p>
+<p>思路：对于两个人上场，如果a能赢b,就建一条a-&gt;b的边，然后问题其实就变成能否以c为根节点是一棵树，直接dfs一遍即可</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;math.h&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+int n, m, c;
+
+vector&lt;int&gt; g[110];
+int is[110][110];
+int vis[110];
+int ans;
+
+void dfs(int u)
+{
+    if (!vis[u]) ans += 1;
+    vis[u] = 1;
+    for (int i = 0; i &lt; g[u].size(); i++)
+        if (!vis[g[u][i]]) dfs(g[u][i]);
+}
+
+int main()
+{
+    while (cin &gt;&gt; n &gt;&gt; m &gt;&gt; c)
+    {
+        if (n == 0 &amp;&amp; m == 0 &amp;&amp; c == 0) break;
+        memset(is,0,sizeof(is));
+        memset(vis, 0, sizeof(vis));
+        for (int i = 0; i &lt;= 105; i++) g[i].clear();
+
+        for (int i = 1; i &lt;= m; i++)
+        {
+            for (int j = 1; j &lt;= n; j++)
+            {
+                int x;
+                cin &gt;&gt; x;
+                is[i][x] = j;
+            }
+        }
+
+        for (int i = 1; i &lt;= n; i++)
+            for (int j = i + 1; j &lt;= n; j++)
+            {
+                int num = 0;
+                for (int k = 1; k &lt;= m; k++)
+                {
+                    if (is[k][i] &lt; is[k][j])
+                        num++;
+                }
+                if (num * 2 &gt; m)
+                    g[i].push_back(j);
+                else
+                    g[j].push_back(i);
+            }
+        ans = 0;
+        dfs(c);
+        if (ans == n) puts(&quot;yes&quot;);
+        else puts(&quot;no&quot;);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

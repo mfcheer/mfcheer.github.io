@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Java编程思想 - 第7章、复用类 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">Java编程思想 - 第7章、复用类</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49490127" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/49490127</a></p>
+<h3 id="代码的复用"><a href="#代码的复用" class="headerlink" title="代码的复用"></a>代码的复用</h3><pre><code>has a: 组合
+is a: 继承
+中庸之道:代理
+</code></pre><h4 id="1，组合，继承，代理"><a href="#1，组合，继承，代理" class="headerlink" title="1，组合，继承，代理"></a>1，组合，继承，代理</h4><p>为了继承，一般的规则是将所有的数据成员都设置为private，而将所有的方法都设置为public。这样，当不同的包下的类继承该类时，就可以获得该类所有的方法，和包内、包外没有区别。如果不加修饰符，就是限制包内访问，那么包外继承的时候，只能获得public修饰的方法，这样内外的方法不一致，就会出现问题了。当然，特殊情况需要特殊考虑。</p>
+<p>try和finally语句：<br>关键字try表示，下面的块，是所谓的保护区，意味着总要被特殊处理。其中一项特殊处理就是try块无论如何退出，保护区后的finally子句中的代码都会执行。</p>
+<pre><code>try{
+ }
+finally {
+}
+</code></pre><p>protected关键字：<br>对于类用户而而言，protected是privated的，而对于其导出类或同一个包中的类来说是有访问权限的。</p>
+<p>向上转型：<br>“新类是现有类的一种类型”<br>由导出类转换为基类，是安全的。</p>
+<h4 id="2，final-关键字"><a href="#2，final-关键字" class="headerlink" title="2，final 关键字"></a>2，final 关键字</h4><p>表示这是无法改变的。<br>用处：<br>1），永不改变的编译时变量<br>2），运行时初始化的值，不希望它被改变。<br>对final变量定义时，必须对其赋值。<br>一个既是static又是final的域只占一段不能改变的存储空间，惯例用大写字母加下划线分隔单词。</p>
+<p>空白final：可以通过在定义处或者在构造函数中初始化，而在构造函数中初始化可以使不同对象的对象拥有不同的值（比如身份证号，唯一且不能改变）。这样就保证final数据在使用前被初始化且无法改变的特征。</p>
+<p>final参数：java可在参数列表中以声明的方式将参数指明为final，意味着你无法在方法中更改参数引用所指的对象。</p>
+<p>final类：表明了你不打算继承该类，而且也不允许别人这样做。你对该类的设计并不需要改变，或者是处于安全的考虑，你不希望它有子类。</p>
+<p>使用final原因：<br>1），将方法锁定。<br>2），效率。</p>
+<p>类中的private方法都隐式的指定为final。</p>
+<h4 id="3，初始化"><a href="#3，初始化" class="headerlink" title="3，初始化"></a>3，初始化</h4><pre><code>    在执行xx.main的时候，因为main是static方法，就触发了该类的加载（因为Java采用了动态加载技术，只有使用的时候才会被加载）。于是Java解释器调用类加载器在CLASSPATH中找xx.class，如果xx继承自aa，那么编译器注意到xx有一个基类aa（通过extends得到），就开始加载基类，不管你是否打算产生一个该基类的对象（因为需要将该类加载进内存，有其子必有其父是也）。如果该基类继承自其它类，就会以此类推。
+    根基类中的static初始化会被执行，然后是第二个基类，以此类推（如果没有调用new，到这里就结束了）
+    如果使用new创建对象，就会在堆上为该对象分配足够的存储空间
+    存储空间先清空，然后进行默认初始化，基本类型给默认值，引用类型给null。其实这一块是通过将对象内存设为二进制零值一举生成的，说成两个过程是便于理解，本质是分配内存的同时进行设置默认值
+    从根基类开始，执行每个类定义处的域初始化
+    从根基类的构造器开始执行，一直到底
+</code></pre><h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><p>组合和继承相比，更加灵活。优先选择组合，而非继承，除非必要。</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

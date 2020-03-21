@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>uva 1395 Silm Span 【MST-Kruskal】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">uva 1395 Silm Span 【MST-Kruskal】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44731415" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44731415</a></p>
+<p>题目链接： <a href="http://uva.onlinejudge.org/external/13/1395.pdf" target="_blank" rel="noopener"> 点击链接 </a><br>题意:求生成树，使得最大边与最小边差最小，输出最小值；<br>枚举边更新答案。</p>
+<pre><code>#include &lt;stdio.h&gt;  
+#include &lt;iostream&gt;  
+#include &lt;string.h&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;math.h&gt;  
+#include &lt;stack&gt;  
+#include &lt;queue&gt;  
+
+using namespace std;
+
+const int MAXN = 110;//点
+const int MAXM = 510;//边
+
+int f[MAXM];//并查集使用
+
+struct Edge
+{
+    int u, v, w;
+}edge[MAXM];
+
+int tol;//边数 初始化 0
+
+void addedge(int u, int v, int w)
+{
+    edge[tol].u = u;
+    edge[tol].v = v;
+    edge[tol++].w = w;
+}
+
+bool cmp(Edge a, Edge b)
+{
+    return a.w &lt; b.w;
+}
+
+int find(int x)
+{
+    if (f[x] == -1)
+        return x;
+    else
+        return f[x] = find(f[x]);
+}
+
+int kruskal(int n)
+{
+    sort(edge, edge + tol, cmp);
+    int cnt ;
+    int ans = 1e9, ok = 0;
+    int MAX;
+    for (int j = 0; j &lt; tol; j++)
+    {
+        MAX = -1;
+        memset(f, -1, sizeof(f));
+        cnt = 0;
+        for (int i = j; i &lt; tol; i++)
+        {
+            int u = edge[i].u;
+            int v = edge[i].v;
+            int w = edge[i].w;
+            MAX = max(MAX, w);
+            int t1 = find(u);
+            int t2 = find(v);
+            if (t1 != t2)
+            {
+                f[t1] = t2;
+                cnt++;
+            }
+            if (cnt == n - 1)
+                break;
+        }
+        if (cnt == n - 1)
+        {
+            ok = 1;
+            ans = min(ans, MAX - edge[j].w);
+        }
+    }
+    if (ok)
+        return ans;
+    else
+        return -1;
+}
+
+int n, m;
+int u, v, w;
+
+int main()
+{
+    while (scanf(&quot;%d%d&quot;, &amp;n, &amp;m) != EOF)
+    {
+        if (n == 0 &amp;&amp; m == 0)
+            break;
+        tol = 0;
+        for (int i = 0; i &lt; m; i++)
+        {
+            scanf(&quot;%d%d%d&quot;, &amp;u, &amp;v, &amp;w);
+            addedge(u, v, w);
+        }
+        int ans = kruskal(n);
+        printf(&quot;%d\n&quot;, ans);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

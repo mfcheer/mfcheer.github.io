@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Codeforces Round - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">Codeforces Round</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47267583" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/47267583</a></p>
+<p>B. Pasha and Tea</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Pasha decided to invite his friends to a tea party. For that occasion, he has<br>a large teapot with the capacity of  _w_ milliliters and  2 _n_ tea cups, each<br>cup is for one of Pasha’s friends. The  _i_ -th cup can hold at most  _a_ _i_<br>milliliters of water.</p>
+<p>It turned out that among Pasha’s friends there are exactly  _n_ boys and<br>exactly  _n_ girls and all of them are going to come to the tea party. To<br>please everyone, Pasha decided to pour the water for the tea as follows:</p>
+<ul>
+<li>Pasha can boil the teapot exactly once by pouring there at most  _w_ milliliters of water; </li>
+<li>Pasha pours the same amount of water to each girl; </li>
+<li>Pasha pours the same amount of water to each boy; </li>
+<li>if each girl gets  _x_ milliliters of water, then each boy gets  2 _x_ milliliters of water. </li>
+</ul>
+<p>In the other words, each boy should get two times more water than each girl<br>does.</p>
+<p>Pasha is very kind and polite, so he wants to maximize the total amount of the<br>water that he pours to his friends. Your task is to help him and determine the<br>optimum distribution of cups between Pasha’s friends.</p>
+<p>Input</p>
+<p>The first line of the input contains two integers,  _n_ and  _w_ (  1 ≤ _n_ ≤<br>10  5  ,  1 ≤ _w_ ≤ 10  9  ) — the number of Pasha’s friends that are boys<br>(equal to the number of Pasha’s friends that are girls) and the capacity of<br>Pasha’s teapot in milliliters.</p>
+<p>The second line of the input contains the sequence of integers  _a_ _i_ (  1 ≤<br>_a_ _i_ ≤ 10  9  ,  1 ≤ _i_ ≤ 2 _n_ ) — the capacities of Pasha’s tea cups in<br>milliliters.</p>
+<p>Output</p>
+<p>Print a single real number — the maximum total amount of water in milliliters<br>that Pasha can pour to his friends without violating the given conditions.<br>Your answer will be considered correct if its absolute or relative error<br>doesn’t exceed  10  - 6  .</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>2 4
+1 1 1 1
+</code></pre><p>output</p>
+<pre><code>3
+</code></pre><p>input</p>
+<pre><code>3 18
+4 4 4 2 2 2
+</code></pre><p>output</p>
+<pre><code>18
+</code></pre><p>input</p>
+<pre><code>1 5
+2 3
+</code></pre><p>output</p>
+<pre><code>4.5
+</code></pre><p>二分答案即可</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;assert.h&gt;
+
+using namespace std;
+
+int n, w;
+double p[200010];
+
+int main()
+
+{
+    while (cin &gt;&gt; n)
+    {
+        cin &gt;&gt; w;
+        for (int i = 1; i &lt;= n * 2; i++)
+            scanf(&quot;%lf&quot;,&amp;p[i]);
+        sort(p + 1, p + 1 + 2 * n);
+        int t1 = p[1];
+        int t2 = p[n + 1];
+        double ans;
+
+        if (t2 &gt;= t1 * 2)  //yes
+        {
+            double left = 0;
+            double right = w;
+            double mid;
+            while (left + 0.000000001 &lt;right)
+            {
+                mid = (left + right) / 2;
+                //n*X + n*X/2 &lt;= mid 
+                double x = mid / n / 3;
+                if (x &lt;= t1)
+                {
+                    left = mid;
+                    ans = mid;
+                }
+                else
+                    right = mid;
+            }
+        }
+        else
+        {
+            double left = 0;
+            double right = w;
+            double mid;
+            while (left + 0.000000001 &lt;right)
+            {
+                mid = (left + right) / 2;
+                //n*X + n*X/2 &lt;= mid 
+                double x = mid * 2 / n / 3;
+                if (x &lt;= t2)
+                {
+                    left = mid;
+                    ans = mid;
+                }
+                else
+                    right = mid;
+            }
+        }
+        printf(&quot;%.8lf\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

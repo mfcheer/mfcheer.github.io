@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>数据结构 课设二 唯一地确定一棵二叉树 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">数据结构 课设二 唯一地确定一棵二叉树</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40866187" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/40866187</a></p>
+<p>唯一地确定一棵二叉树  </p>
+<p>【问题描述】<br>如果给出了遍历二叉树的前序序列和中序序列，则可以构造出唯<br>一的一棵二叉树。试编写实现上述功能的程序。  </p>
+<p>【基本要求】<br>已知一棵二叉树的前序和中序序列，试设计完成下列任务的一个<br>算法：<br>（1）构造一棵二叉树；<br>（2）以凹入表形式输出二叉树。<br>（3）证明构造正确（即分别以前序和中序遍历该树，将得到的结  </p>
+<p>果与给出的序列进行比较）。</p>
+<p>【测试数据】<br>前序序列为ABDEGCFHIJ，中序序列为DBGEAHFIJC。  </p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;malloc.h&gt;
+#include&lt;string.h&gt;
+
+typedef struct Node
+{
+    char data;
+    struct Node *leftChild;
+    struct Node *rightChild;
+}BiTreeNode;
+
+void Initiate(BiTreeNode **root)
+{
+    *root=(BiTreeNode *)malloc(sizeof(BiTreeNode));
+    (*root)-&gt;leftChild=NULL;
+    (*root)-&gt;rightChild=NULL;
+}
+BiTreeNode *InsertLeftNode(BiTreeNode *curr,char x)
+{
+    BiTreeNode *s,*t;
+    if(curr==NULL) return NULL;
+    t=curr-&gt;leftChild;
+    s=(BiTreeNode *)malloc(sizeof(BiTreeNode));
+    s-&gt;data=x;
+    s-&gt;leftChild=t;
+    s-&gt;rightChild=NULL;
+    curr-&gt;leftChild=s;
+    return curr-&gt;leftChild;
+}
+BiTreeNode *InsertRightNode(BiTreeNode *curr,char x)
+{
+    BiTreeNode *s,*t;
+    if(curr==NULL) return NULL;
+    t=curr-&gt;rightChild;
+    s=(BiTreeNode *)malloc(sizeof(BiTreeNode));
+    s-&gt;data=x;
+    s-&gt;rightChild=t;
+    s-&gt;leftChild=NULL;
+    curr-&gt;rightChild=s;
+    return curr-&gt;rightChild;
+}
+void PrintBiTree(BiTreeNode *bt,int n)
+{
+    int i;
+    if(bt==NULL) return;
+    PrintBiTree(bt-&gt;rightChild,n+1);
+    for(i=0;i&lt;n-1;i++) printf(&quot;   &quot;);
+    if(n&gt;0)
+    {
+        printf(&quot;---&quot;);
+        printf(&quot;%c\n&quot;,bt-&gt;data);
+    }
+    PrintBiTree(bt-&gt;leftChild,n+1);
+}
+void Visit(char item)
+{
+    printf(&quot;%c   &quot;,item);
+}
+void PreOrder(BiTreeNode *t,void Visit(char item))
+{
+    if(t!=NULL)
+    {
+        Visit(t-&gt;data);
+        PreOrder(t-&gt;leftChild,Visit);
+        PreOrder(t-&gt;rightChild,Visit);
+    }
+}
+void InOrder(BiTreeNode *t,void Visit(char item))
+{
+    if(t!=NULL)
+    {
+        InOrder(t-&gt;leftChild,Visit);
+        Visit(t-&gt;data);
+        InOrder(t-&gt;rightChild,Visit);
+    }
+}
+int Search(char str[],char t)
+{
+    int i=0;
+    while(str[i]!=t)
+        i++;
+    return i;
+}
+int SearchLeft(int Num[],int t)
+{
+    int i;
+    i=t;
+    while(Num[i]!=1&amp;&amp;i&gt;=0)
+        i--;
+    if(Num[i]==1)
+        return i;
+    else return -1;
+}
+int SearchRight(int Num[],int t)
+{
+    int i;
+    i=t;
+    while(Num[i]!=1&amp;&amp;i&lt;=10000)
+        i++;
+    if(Num[i]==1)
+        return i;
+    else return -1;
+}
+
+int main()
+{
+    int i;
+    BiTreeNode *q[10000];
+    BiTreeNode *root;
+    int left,right,temp;
+
+    int Num[10000]={0};
+    char strA[10000];
+    char strB[10000];
+    char point;
+    int n;
+
+    printf(&quot;请输入前序遍历:&quot;);
+
+    scanf(&quot;%s&quot;,strA);
+
+    printf(&quot;请输入中序遍历:&quot;);
+    scanf(&quot;%s&quot;,strB);
+
+    n=strlen(strA);
+    Initiate(&amp;root);
+
+    for(i=0;i&lt;n;i++)
+    {
+        point=strA[i];
+        temp=Search(strB,point);
+        left=SearchLeft(Num,temp);
+        right=SearchRight(Num,temp);
+        if(left==-1&amp;&amp;right==-1)
+        {
+            q[temp]=InsertLeftNode(root,point);
+            Num[temp]=1;
+        }
+        else if(left!=-1&amp;&amp;q[left]-&gt;rightChild==NULL)
+        {
+            q[temp]=InsertRightNode(q[left],point);
+            Num[temp]=1;
+        }
+        else if(right!=-1&amp;&amp;q[right]-&gt;leftChild==NULL)
+        {
+            q[temp]=InsertLeftNode(q[right],point);
+            Num[temp]=1;
+        }
+    }
+    PrintBiTree(root,0);
+
+    printf(&quot;前序遍历: \n\n&quot;);
+    PreOrder(root-&gt;leftChild,Visit);
+
+    printf(&quot;\n中序遍历:\n&quot;);
+    InOrder(root-&gt;leftChild,Visit);
+
+    printf(&quot;\n\n                  by :192132 孟凡强\n&quot;);
+
+    return 0;
+
+
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

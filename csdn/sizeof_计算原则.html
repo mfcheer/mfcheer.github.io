@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>sizeof 计算原则 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">sizeof 计算原则</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/50829983" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/50829983</a></p>
+<h2 id="sizeof-计算类大小的一些基本原则："><a href="#sizeof-计算类大小的一些基本原则：" class="headerlink" title="sizeof()计算类大小的一些基本原则："></a>sizeof()计算类大小的一些基本原则：</h2><pre><code>   (1)类的大小为类的非静态成员数据的类型大小之和，也就是说静态成员数据不作考虑；
+
+   (2)类的总大小也遵守类似class字节对齐的，调整规则；(参考５分钟搞定内存字节对齐)
+
+   (3)成员函数都是不会被计算的；
+
+   (4)如果是子类，那么父类中的成员也会被计算；
+
+   (5)虚函数由于要维护虚函数表，所以要占据一个指针大小，也就是4字节。
+</code></pre><p>总结即：一个类中，虚函数、成员函数（包括静态与非静态）和静态数据成员都不占用类对象的存储空间。</p>
+<p>当我们声明该类型的实例时，必须在内存中占有一定得空间，否则无法使用这些实例。至于占多少内存，由编译器决定。在Visual<br>Studio中，每个空类型的实例占用1字节的空间。</p>
+<h2 id="例子："><a href="#例子：" class="headerlink" title="例子："></a>例子：</h2><pre><code>#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+class A
+{
+
+};
+
+class B
+{
+public:
+    int x;
+};
+
+class C
+{
+    static int x;
+};
+
+class D
+{
+    static int x() {};
+};
+
+class E
+{
+    virtual int x() {};
+};
+
+class F
+{
+    int x() {};
+};
+
+int main()
+{
+    cout &lt;&lt; sizeof(A) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(B) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(C) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(D) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(E) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(F) &lt;&lt; endl;
+    return 0;
+}
+/*
+输出：
+1
+4
+1
+1
+4
+1
+*/
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

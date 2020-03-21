@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>LightOJ 1341 - Aladdin and the Flying Carpet【合数分解】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">LightOJ 1341 - Aladdin and the Flying Carpet【合数分解】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46535889" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/46535889</a></p>
+<p>题目链接： <a href="http://lightoj.com/volume_showproblem.php?problem=1341" target="_blank" rel="noopener"> http://lightoj.com/volume_showproblem.php?problem=1341
+</a></p>
+<p>题意：<br>给出整数 a 和 b ，求区间[b, a] 内的 a 的约数对的个数，a 的约数对（比如[2, 3] 与 [3, 2] 为同一对）。</p>
+<p>解法：<br>主要利用公式:<br>一个整数ｎ可以表示为若干素数乘积：　n = p1^a1 <em> p2^a2</em>…<em>pm^am;<br>则 n 的正因数的个数可以表示为： num = (a1+1) _</em>(a2+1)…_ (am+1);</p>
+<p>代码：</p>
+<pre><code> #include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;assert.h&gt;
+
+using namespace std;
+
+long long n, m;
+
+const int MAXN = 1000010;
+
+bool notprime[MAXN];//值为false表示素数，值为true表示非素数
+int prime[MAXN + 1];
+
+void getPrime()
+{
+    memset(notprime, false, sizeof(notprime));
+    notprime[0] = notprime[1] = true;
+    memset(prime, 0, sizeof(prime));
+    for (int i = 2; i &lt;= MAXN; i++)
+    {
+        if (!notprime[i])prime[++prime[0]] = i;
+        for (int j = 1; j &lt;= prime[0] &amp;&amp; prime[j] &lt;= MAXN / i; j++)
+        {
+            notprime[prime[j] * i] = true;
+            if (i%prime[j] == 0) break;
+        }
+    }
+}
+
+int getFactors()
+{
+    int ans = 1;
+    int fatCnt = 0;
+    long long tmp = n;
+    if (n / m &lt; m) return 0;
+    for (int i = 1; prime[i] &lt;= tmp / prime[i]; i++)
+    {
+        int c = 0;
+        while (tmp%prime[i] == 0)
+        {
+            c++;
+            tmp /= prime[i];
+        }
+        ans *= (c + 1);
+    }
+    if (tmp &gt; 1)
+        ans &lt;&lt;= 1;
+    ans &gt;&gt;= 1;
+    for (int i = 1; i &lt; m; i++)
+        if (n % i == 0)
+            ans--;
+
+    return ans;
+}
+
+int main()
+{
+    getPrime();
+    int t;
+    scanf(&quot;%d&quot;, &amp;t);
+    for (int cases = 1; cases &lt;= t; cases++)
+    {
+        scanf(&quot;%lld%lld&quot;, &amp;n, &amp;m);
+        printf(&quot;Case %d: %d\n&quot;, cases, getFactors());
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

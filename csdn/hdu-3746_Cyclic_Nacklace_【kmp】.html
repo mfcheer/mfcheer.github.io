@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>hdu-3746 Cyclic Nacklace 【kmp】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">hdu-3746 Cyclic Nacklace 【kmp】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44114187" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44114187</a></p>
+<h1 id="Cyclic-Nacklace"><a href="#Cyclic-Nacklace" class="headerlink" title="Cyclic Nacklace"></a>Cyclic Nacklace</h1><p><strong> Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 32768/32768 K<br>(Java/Others)<br>Total Submission(s): 3253    Accepted Submission(s): 1488  
+</strong>  </p>
+<p>Problem Description</p>
+<p>CC always becomes very depressed at the end of this month, he has checked his<br>credit card yesterday, without any surprise, there are only 99.9 yuan left. he<br>is too distressed and thinking about how to tide over the last days. Being<br>inspired by the entrepreneurial spirit of “HDU CakeMan”, he wants to sell some<br>little things to make money. Of course, this is not an easy task.  </p>
+<p>As Christmas is around the corner, Boys are busy in choosing christmas<br>presents to send to their girlfriends. It is believed that chain bracelet is a<br>good choice. However, Things are not always so simple, as is known to<br>everyone, girl’s fond of the colorful decoration to make bracelet appears<br>vivid and lively, meanwhile they want to display their mature side as college<br>students. after CC understands the girls demands, he intends to sell the chain<br>bracelet called CharmBracelet. The CharmBracelet is made up with colorful<br>pearls to show girls’ lively, and the most important thing is that it must be<br>connected by a cyclic chain which means the color of pearls are cyclic<br>connected from the left to right. And the cyclic count must be more than one.<br>If you connect the leftmost pearl and the rightmost pearl of such chain, you<br>can make a CharmBracelet. Just like the pictrue below, this CharmBracelet’s<br>cycle is 9 and its cyclic count is 2:<br><img src="http://acm.hdu.edu.cn/data/images/C319-1003-1.jpg" alt=""><br>Now CC has brought in some ordinary bracelet chains, he wants to buy minimum<br>number of pearls to make CharmBracelets so that he can save more money. but<br>when remaking the bracelet, he can only add color pearls to the left end and<br>right end of the chain, that is to say, adding to the middle is forbidden.<br>CC is satisfied with his ideas and ask you for help.</p>
+<p>Input</p>
+<p>The first line of the input is a single integer T ( 0  &lt; T &lt;= 100 ) which<br>means the number of test cases.<br>Each test case contains only one line describe the original ordinary chain to<br>be remade. Each character in the string stands for one pearl and there are 26<br>kinds of pearls being described by ‘a’ ~’z’ characters. The length of the<br>string Len: ( 3 &lt;= Len &lt;= 100000 ).</p>
+<p>Output</p>
+<p>For each case, you are required to output the minimum count of pearls added to<br>make a CharmBracelet.</p>
+<p>Sample Input</p>
+<p>3 aaa abca abcde</p>
+<p>Sample Output</p>
+<p>0 2 5</p>
+<p>Author</p>
+<p>possessor WC</p>
+<p>Source</p>
+<p><a href="http://acm.hdu.edu.cn/search.php?field=problem&amp;key=HDU+3rd+%A1%B0Vegetable-
+Birds+Cup%A1%B1+Programming+Open+Contest&amp;source=1&amp;searchmode=source" target="_blank" rel="noopener"> HDU 3rd “Vegetable-Birds Cup” Programming Open Contest
+</a></p>
+<p>求循环节 <a href="http://www.cnblogs.com/wuyiqi/archive/2012/01/06/2314078.html" target="_blank" rel="noopener"> http://www.cnblogs.com/wuyiqi/archive/2012/01/06/2314078.html
+</a></p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+
+using namespace std;
+
+char  b[100050];
+int Next[100050];
+
+void get_next(char b[], int m)
+{
+    int i = 0;
+    Next[0] = -1;
+    int j = -1;
+    while (i&lt;m)
+    {
+        if (j == -1 || b[i] == b[j])
+        {
+            ++i;
+            ++j;
+            if (b[i] == b[j])
+                Next[i] = Next[j];
+            else
+                Next[i] = j;
+        }
+        else
+            j = Next[j];
+    }
+}
+
+int main()
+{
+    int test, n, m, i, j;
+    scanf(&quot;%d&quot;, &amp;test);
+    while (test--)
+    {
+        scanf(&quot;%s&quot;,b);
+        int m = strlen(b);
+        get_next(b, m);
+        int t = Next[m];
+        if (t == 0)
+        {
+            printf(&quot;%d\n&quot;,m);
+            continue;
+        }
+        int s = m - t;
+        if (m%s == 0)
+            printf(&quot;0\n&quot;);
+        else
+            printf(&quot;%d\n&quot;,s-m%s);
+    }
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

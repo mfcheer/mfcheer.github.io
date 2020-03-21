@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>hdu 1134 Game of Connections 【卡特兰数+大数】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">hdu 1134 Game of Connections 【卡特兰数+大数】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44133703" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44133703</a></p>
+<h1 id="Game-of-Connections"><a href="#Game-of-Connections" class="headerlink" title="Game of Connections"></a>Game of Connections</h1><p><strong> Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 65536/32768 K<br>(Java/Others)<br>Total Submission(s): 3327    Accepted Submission(s): 1896  
+</strong>  </p>
+<p>Problem Description</p>
+<p>This is a small but ancient game. You are supposed to write down the numbers<br>1, 2, 3, … , 2n - 1, 2n consecutively in clockwise order on the ground to<br>form a circle, and then, to draw some straight line segments to connect them<br>into number pairs. Every number must be connected to exactly one another. And,<br>no two segments are allowed to intersect.  </p>
+<p>It’s still a simple game, isn’t it? But after you’ve written down the 2n<br>numbers, can you tell me in how many different ways can you connect the<br>numbers into pairs? Life is harder, right?  </p>
+<p>Input</p>
+<p>Each line of the input file will be a single positive number n, except the<br>last line, which is a number -1. You may assume that 1  &lt;= n &lt;= 100.  </p>
+<p>Output</p>
+<p>For each n, print in a single line the number of ways to connect the 2n<br>numbers into pairs.  </p>
+<p>Sample Input</p>
+<p>2 3 -1</p>
+<p>Sample Output</p>
+<p>2 5</p>
+<p>Source</p>
+<p><a href="http://acm.hdu.edu.cn/search.php?field=problem&amp;key=Asia+2004%2C+Shanghai+%28Mainland+China%29%2C+Preliminary&amp;source=1&amp;searchmode=source" target="_blank" rel="noopener"> Asia 2004, Shanghai (Mainland China), Preliminary
+</a></p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;iterator&gt;
+
+using namespace std;
+
+#define MAXN 9999
+#define MAXSIZE 1010
+#define DLEN 4
+
+class BigNum
+{
+private:
+    int a[1000];  //可以控制大数的位数
+    int len;
+public:
+    BigNum(){ len = 1; memset(a, 0, sizeof(a)); }  //构造函数
+    BigNum(const int);     //将一个int类型的变量转化成大数
+    BigNum(const char*);   //将一个字符串类型的变量转化为大数
+    BigNum(const BigNum &amp;); //拷贝构造函数
+    BigNum &amp;operator=(const BigNum &amp;); //重载赋值运算符，大数之间进行赋值运算
+    friend istream&amp; operator&gt;&gt;(istream&amp;, BigNum&amp;); //重载输入运算符
+    friend ostream&amp; operator&lt;&lt;(ostream&amp;, BigNum&amp;); //重载输出运算符
+
+    BigNum operator+(const BigNum &amp;)const;  //重载加法运算符，两个大数之间的相加运算
+    BigNum operator-(const BigNum &amp;)const;  //重载减法运算符，两个大数之间的相减运算
+    BigNum operator*(const BigNum &amp;)const;  //重载乘法运算符，两个大数之间的相乘运算
+    BigNum operator/(const int &amp;)const;     //重载除法运算符，大数对一个整数进行相除运算
+
+    BigNum operator^(const int &amp;)const;     //大数的n次方运算
+    int operator%(const int &amp;)const;        //大数对一个int类型的变量进行取模运算
+    bool operator&gt;(const BigNum &amp;T)const;   //大数和另一个大数的大小比较
+    bool operator&gt;(const int &amp;t)const;      //大数和一个int类型的变量的大小比较
+
+    void print();        //输出大数
+};
+BigNum::BigNum(const int b)   //将一个int类型的变量转化为大数
+{
+    int c, d = b;
+    len = 0;
+    memset(a, 0, sizeof(a));
+    while (d&gt;MAXN)
+    {
+        c = d - (d / (MAXN + 1))*(MAXN + 1);
+        d = d / (MAXN + 1);
+        a[len++] = c;
+    }
+    a[len++] = d;
+}
+BigNum::BigNum(const char *s)  //将一个字符串类型的变量转化为大数
+{
+    int t, k, index, L, i;
+    memset(a, 0, sizeof(a));
+    L = strlen(s);
+    len = L / DLEN;
+    if (L%DLEN)len++;
+    index = 0;
+    for (i = L - 1; i &gt;= 0; i -= DLEN)
+    {
+        t = 0;
+        k = i - DLEN + 1;
+        if (k&lt;0)k = 0;
+        for (int j = k; j &lt;= i; j++)
+            t = t * 10 + s[j] - &#39;0&#39;;
+        a[index++] = t;
+    }
+}
+BigNum::BigNum(const BigNum &amp;T) :len(T.len)  //拷贝构造函数
+{
+    int i;
+    memset(a, 0, sizeof(a));
+    for (i = 0; i&lt;len; i++)
+        a[i] = T.a[i];
+}
+BigNum &amp; BigNum::operator=(const BigNum &amp;n)  //重载赋值运算符，大数之间赋值运算
+{
+    int i;
+    len = n.len;
+    memset(a, 0, sizeof(a));
+    for (i = 0; i&lt;len; i++)
+        a[i] = n.a[i];
+    return *this;
+}
+istream&amp; operator&gt;&gt;(istream &amp;in, BigNum &amp;b)
+{
+    char ch[MAXSIZE * 4];
+    int i = -1;
+    in &gt;&gt; ch;
+    int L = strlen(ch);
+    int count = 0, sum = 0;
+    for (i = L - 1; i &gt;= 0;)
+    {
+        sum = 0;
+        int t = 1;
+        for (int j = 0; j&lt;4 &amp;&amp; i &gt;= 0; j++, i--, t *= 10)
+        {
+            sum += (ch[i] - &#39;0&#39;)*t;
+        }
+        b.a[count] = sum;
+        count++;
+    }
+    b.len = count++;
+    return in;
+}
+ostream&amp; operator&lt;&lt;(ostream&amp; out, BigNum&amp; b)  //重载输出运算符
+{
+    int i;
+    cout &lt;&lt; b.a[b.len - 1];
+    for (i = b.len - 2; i &gt;= 0; i--)
+    {
+        printf(&quot;%04d&quot;, b.a[i]);
+    }
+    return out;
+}
+BigNum BigNum::operator+(const BigNum &amp;T)const   //两个大数之间的相加运算
+{
+    BigNum t(*this);
+    int i, big;
+    big = T.len&gt;len ? T.len : len;
+    for (i = 0; i&lt;big; i++)
+    {
+        t.a[i] += T.a[i];
+        if (t.a[i]&gt;MAXN)
+        {
+            t.a[i + 1]++;
+            t.a[i] -= MAXN + 1;
+        }
+    }
+    if (t.a[big] != 0)
+        t.len = big + 1;
+    else t.len = big;
+    return t;
+}
+BigNum BigNum::operator-(const BigNum &amp;T)const  //两个大数之间的相减运算
+{
+    int i, j, big;
+    bool flag;
+    BigNum t1, t2;
+    if (*this&gt;T)
+    {
+        t1 = *this;
+        t2 = T;
+        flag = 0;
+    }
+    else
+    {
+        t1 = T;
+        t2 = *this;
+        flag = 1;
+    }
+    big = t1.len;
+    for (i = 0; i&lt;big; i++)
+    {
+        if (t1.a[i]&lt;t2.a[i])
+        {
+            j = i + 1;
+            while (t1.a[j] == 0)
+                j++;
+            t1.a[j--]--;
+            while (j&gt;i)
+                t1.a[j--] += MAXN;
+            t1.a[i] += MAXN + 1 - t2.a[i];
+        }
+        else t1.a[i] -= t2.a[i];
+    }
+    t1.len = big;
+    while (t1.a[t1.len - 1] == 0 &amp;&amp; t1.len&gt;1)
+    {
+        t1.len--;
+        big--;
+    }
+    if (flag)
+        t1.a[big - 1] = 0 - t1.a[big - 1];
+    return t1;
+}
+BigNum BigNum::operator*(const BigNum &amp;T)const  //两个大数之间的相乘
+{
+    BigNum ret;
+    int i, j, up;
+    int temp, temp1;
+    for (i = 0; i&lt;len; i++)
+    {
+        up = 0;
+        for (j = 0; j&lt;T.len; j++)
+        {
+            temp = a[i] * T.a[j] + ret.a[i + j] + up;
+            if (temp&gt;MAXN)
+            {
+                temp1 = temp - temp / (MAXN + 1)*(MAXN + 1);
+                up = temp / (MAXN + 1);
+                ret.a[i + j] = temp1;
+            }
+            else
+            {
+                up = 0;
+                ret.a[i + j] = temp;
+            }
+        }
+        if (up != 0)
+            ret.a[i + j] = up;
+    }
+    ret.len = i + j;
+    while (ret.a[ret.len - 1] == 0 &amp;&amp; ret.len&gt;1)ret.len--;
+    return ret;
+}
+BigNum BigNum::operator/(const int &amp;b)const  //大数对一个整数进行相除运算
+{
+    BigNum ret;
+    int i, down = 0;
+    for (i = len - 1; i &gt;= 0; i--)
+    {
+        ret.a[i] = (a[i] + down*(MAXN + 1)) / b;
+        down = a[i] + down*(MAXN + 1) - ret.a[i] * b;
+    }
+    ret.len = len;
+    while (ret.a[ret.len - 1] == 0 &amp;&amp; ret.len&gt;1)
+        ret.len--;
+    return ret;
+}
+int BigNum::operator%(const int &amp;b)const   //大数对一个 int类型的变量进行取模
+{
+    int i, d = 0;
+    for (i = len - 1; i &gt;= 0; i--)
+        d = ((d*(MAXN + 1)) % b + a[i]) % b;
+    return d;
+}
+BigNum BigNum::operator^(const int &amp;n)const  //大数的n次方运算
+{
+    BigNum t, ret(1);
+    int i;
+    if (n&lt;0)exit(-1);
+    if (n == 0)return 1;
+    if (n == 1)return *this;
+    int m = n;
+    while (m&gt;1)
+    {
+        t = *this;
+        for (i = 1; (i &lt;&lt; 1) &lt;= m; i &lt;&lt;= 1)
+            t = t*t;
+        m -= i;
+        ret = ret*t;
+        if (m == 1)ret = ret*(*this);
+    }
+    return ret;
+}
+bool BigNum::operator&gt;(const BigNum &amp;T)const    //大数和另一个大数的大小比较
+{
+    int ln;
+    if (len&gt;T.len)return true;
+    else if (len == T.len)
+    {
+        ln = len - 1;
+        while (a[ln] == T.a[ln] &amp;&amp; ln &gt;= 0)
+            ln--;
+        if (ln &gt;= 0 &amp;&amp; a[ln]&gt;T.a[ln])
+            return true;
+        else
+            return false;
+    }
+    else
+        return false;
+}
+bool BigNum::operator&gt;(const int &amp;t)const  //大数和一个int类型的变量的大小比较
+{
+    BigNum b(t);
+    return *this&gt;b;
+}
+void BigNum::print()   //输出大数
+{
+    int i;
+    printf(&quot;%d&quot;, a[len - 1]);
+    for (i = len - 2; i &gt;= 0; i--)
+        printf(&quot;%04d&quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+BigNum p[3010];
+
+
+int main()
+{
+    int i, n;
+    p[0] = 1;
+    for (int i = 1; i&lt;= 100; i++)
+        p[i] = p[i - 1] * (4 * i - 2) / (i + 1);
+
+    while (cin&gt;&gt;n &amp;&amp; n!=-1)
+    {
+        p[n].print();
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

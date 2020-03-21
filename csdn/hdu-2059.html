@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>hdu-2059 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">hdu-2059</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40818459" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/40818459</a></p>
+<p>在没学算法之前就做过这道题 ，当时不会做，也不知道动态规划算法，最近在做DP入门，碰到这个题，感觉AC萌萌哒。</p>
+<pre><code>本题的主要思路：先考虑可能在任意一个加油站作为乌龟最后加油的地方。。。然后利用第推的思想卒个求和。。。。比如乌龟可能把第二个加油站作为最后加油的地点。。。由此我们需要依次求出把原点作为前一个加油站到第二个加油站的时间和把第一个加油站作为前一个加油站到第二加油站的时间。。。然后比较两种路径所用时间的多少求出把第二个作为最后加油站所用的最短时间。。。以此类推。。。以后各种情况均可由此法求得。。。。
+
+
+
+
+
+#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;malloc.h&gt;
+
+using namespace std;
+
+int l,n,c,t,vr,v1,v2;
+int p[110];
+
+double dp[110];
+
+int main ()
+{
+    while (scanf (&quot;%d%d%d%d%d%d%d&quot;,&amp;l,&amp;n,&amp;c,&amp;t,&amp;vr,&amp;v1,&amp;v2)!=EOF)
+    {
+        for (int i=1 ;i&lt;=n;i++)
+            scanf (&quot;%d&quot;,&amp;p[i]);
+
+        p[0]=0;
+        p[n+1]=l;
+        dp[0]=0.0;
+
+        /*for (int i=2 ;i&lt;=n;i++)
+        {
+            dp[i] = min ( dp[i-1] +( p[i] - p[i-1])*1.0/v2*1.0,dp[i-1] + (p[i] - p[i-1])*1.0/v1 + t*1.0 );
+        }
+        */
+        for (int i =1 ;i&lt;=n+1;i++)
+        {
+            dp[i]=1000000;
+            for (int j =0 ;j&lt;i;j++)
+            {
+                double tmp;
+                double len = (p[i] - p[j])*1.0;
+                if ( len &gt;= c )
+                    tmp = c*1.0/v1 + (len - c)*1.0/v2;
+                else
+                    tmp = len*1.0/v1 ;
+                if (j)
+                    tmp+=t;
+                dp[i] = min( dp[i],dp[j]+tmp);
+            }
+        }
+        double t1 = l*1.0 / vr;
+        if (t1 &gt; dp[n+1])
+            printf(&quot;What a pity rabbit!\n&quot;);
+        else
+            printf(&quot;Good job,rabbit!\n&quot;);
+
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

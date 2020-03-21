@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>背包专题 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">背包专题</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40592727" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/40592727</a></p>
+<p>AC <a href="http://acm.hdu.edu.cn/showproblem.php?pid=2602" target="_blank" rel="noopener"> Hdu 2602 Bone Collector
+</a> 非常常规的  01<br>背包问题，用一维和二维数组都可以做，一维快相当多。</p>
+<pre><code>#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include &lt;string&gt;
+#include &lt;sstream&gt;
+
+using namespace std;
+
+int max(int a,int b)
+{
+    if(a&gt;b)
+        return a;
+    else
+        return b;
+}
+
+int main()
+{
+    int t;
+    scanf(&quot;%d&quot;,&amp;t);
+    int a[1000],c[1000],dp[10000];
+    while(t--)
+    {
+        int n,v;
+        scanf(&quot;%d%d&quot;,&amp;n,&amp;v);
+
+        for(int i=0;i&lt;n;i++)
+            scanf(&quot;%d&quot;,&amp;a[i]);
+        for(int i=0;i&lt;n;i++)
+            scanf(&quot;%d&quot;,&amp;c[i]);
+
+            memset(dp,0,sizeof(dp));
+
+            for(int i=0;i&lt;n;i++)
+            for(int j=v;j&gt;=0;j--)
+            {
+                if(j-c[i]&gt;=0)
+                    dp[j]=max(dp[j],dp[j-c[i]]+a[i]);
+            }
+            printf(&quot;%d\n&quot;,dp[v]);
+    }
+}
+</code></pre><p>AC <a href="http://poj.org/problem?id=3624" target="_blank" rel="noopener"> Poj 3624 Charm Bracelet  </a> 赤裸裸的  01<br>背包问题。</p>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;math.h&quot;
+
+using namespace std;
+
+int max(int a,int b)
+{
+    if(a&gt;b)
+        return a;
+    else
+        return b;
+}
+
+int main()
+{
+    int n,m;
+    int a[40000],b[40000];
+    int dp[40000];
+    while( cin&gt;&gt;n&gt;&gt;m )
+    {
+        for(int i=0;i&lt;n;i++)
+            cin&gt;&gt;a[i]&gt;&gt;b[i];
+
+memset(dp,0,sizeof(dp));
+            for(int i=0;i&lt;n;i++)
+                for(int j=m;j&gt;=0;j--)
+            {
+                if(j-a[i]&gt;=0)
+                    dp[j]=max(dp[j],dp[j-a[i]]+b[i]);
+            }
+            cout&lt;&lt;dp[m]&lt;&lt;endl;
+    }
+}
+</code></pre><p>AC <a href="http://acm.hdu.edu.cn/showproblem.php?pid=2546" target="_blank" rel="noopener"> Hdu 2546  饭卡  </a> n<br>种菜选若干种使剩下的钱最少，背包容量是开始时的钱，物品体积是菜的价格，状态转移时记录答案。  </p>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdlib&quot;
+#include &quot;cstring&quot;
+#include &quot;cmath&quot;
+#include &quot;algorithm&quot;
+using namespace std;
+
+int max(int a,int b)
+{
+    if(a&gt;b)
+        return a;
+    else 
+        return b;
+}
+int main()
+{
+    int i,j,m,n,a[2000],d[2000];
+    while( scanf(&quot;%d&quot;,&amp;n)!=EOF &amp;&amp; n )
+    {
+        for(i=0;i&lt;n;i++)
+            scanf(&quot;%d&quot;,&amp;a[i]);
+            scanf(&quot;%d&quot;,&amp;m);
+
+        sort(a,a+n);
+        memset(d,0,sizeof(d));
+
+        if(m&gt;=5)
+        {
+            {
+            for(i=0;i&lt;n-1;i++)
+                for(j=m-5;j&gt;=a[i];j--)
+                {
+                    d[j]=max(d[j],d[j-a[i]]+a[i]);      
+                }
+            }
+            printf(&quot;%d\n&quot;,m-d[m-5]-a[n-1]);
+        }
+        else 
+            printf(&quot;%d\n&quot;,m);
+    }
+}
+
+//先计算出m-5块钱在n-1个物品内最多买多少钱的菜，然后再减去最大价格的菜
+</code></pre><p>AC <a href="http://acm.hdu.edu.cn/showproblem.php?pid=2955" target="_blank" rel="noopener"> Hdu 2955 Robberies  </a> （推荐<br>)  抢劫方案最优问题，需要一个简单地转换，我们求的是不被抓的概率而非被抓的概率，各个银行的储蓄总和为背包容量，体积为单个银行 的储蓄，价值为不被抓概率。</p>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdlib&quot;
+#include &quot;cstring&quot;
+#include &quot;cmath&quot;
+#include &quot;algorithm&quot;
+
+using namespace std;
+
+int max(int a,int b)
+{
+    if(a&gt;b)
+        return a;
+    else
+        return b;
+}
+
+double p;
+int n,t,sum;
+int m[1000];
+double q[1000];
+double dp[10000];
+int main()
+{
+    scanf(&quot;%d&quot;,&amp;t);
+    while(t--)
+    {
+
+        int ss;
+        sum=0;
+        scanf(&quot;%lf %d&quot;,&amp;p,&amp;n);
+        for(int i=0;i&lt;n;i++)
+        {
+            scanf(&quot;%d%lf&quot;,&amp;m[i],&amp;q[i]);
+            q[i]=1.0-q[i];
+            sum+=m[i];
+        }
+
+
+        memset(dp,0,sizeof(dp));
+        dp[0]=1;
+
+
+        for(int i=0;i&lt;n;i++)
+            for(int j=sum;j&gt;=0;j--)
+            {
+                if(j-m[i]&gt;=0)
+                dp[j]=max(dp[j],dp[j-m[i]]*q[i]);
+            }
+
+        for(int i=0;i&lt;=sum;i++)
+        {
+            int big=-1;
+            if( dp[i]&gt;big &amp;&amp; ( dp[i]&gt;=(1-p)) )
+            {
+                big=dp[i];
+                ss=i;
+            }
+        }
+
+        printf(&quot;%d\n&quot;,ss);
+
+
+
+    }
+
+
+}
+</code></pre><p>AC <a href="http://poj.org/problem?id=2184" target="_blank" rel="noopener"> Poj 2184 Cow Exhibition  </a> （推荐  )  变形的<br>01  背包，其实问题的本质是保证智商和幽默感和不为负数情况下的最大和。智商属性体积，幽默感属性为价值，问题转换为求体积大等于  0  时的体积、价值总和。  </p>
+<pre><code>#include &quot;stdio.h&quot;
+#include &quot;stdlib.h&quot;
+#include &quot;algorithm&quot;
+#include &quot;iostream&quot;
+#include &quot;math.h&quot;
+#include &quot;string.h&quot;
+
+using namespace std;
+
+#define max(a,b)    ((a)&gt;(b)?(a):(b))  
+
+int a[110],b[110];
+int dp[200000];
+
+int main()
+{
+    int n;
+    int t=10000;
+
+    while(scanf(&quot;%d&quot;,&amp;n)!=EOF )
+    {
+        for(int i=0;i&lt;n;i++)
+            scanf(&quot;%d%d&quot;,&amp;a[i],&amp;b[i]);
+
+        memset(dp,-10000,sizeof(dp));
+
+        dp[t]=0;
+
+        for(int i=0;i&lt;n;i++)
+        {
+            if(a[i]&lt;0 &amp;&amp; b[i]&lt;0 )
+                continue ;
+            else if(a[i]&gt;0)
+            {
+                for(int j=199999;j&gt;=a[i];j--)
+                dp[j]=max(dp[j-a[i]]+b[i],dp[j]);
+            }
+            else
+            {
+                for(int j=0;j&lt;200000+a[i];j++)
+                dp[j]=max(dp[j-a[i]]+b[i],dp[j]);
+            }
+        }
+
+        int ans=0;
+
+        for(int i=t;i&lt;200000;i++)
+            if(dp[i]&gt;0)
+            ans=max(ans,i-t+dp[i]);
+
+        printf(&quot;%d\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre><p>AC  <a href="http://acm.hdu.edu.cn/showproblem.php?pid=3466" target="_blank" rel="noopener"> Hdu 3466 Proud Merchants
+</a> 与顺序有关的  01  背包，先按  q-p<br>排序再来处理，难想容易敲。</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include &lt;string&gt;
+#include &lt;sstream&gt;
+
+using namespace std;
+
+int dp[100000];
+
+int max (int a,int b)
+{
+    if (a&gt;b )
+        return a ;
+    else 
+        return b;
+}
+
+struct Ac
+{
+    int p;
+    int q;
+    int v;
+}ac[1000000];
+
+bool cmp(Ac ss ,Ac sss)
+{
+    return ( ss.q-ss.p )  &lt; ( sss.q- sss.p )  ; 
+}
+
+
+int main()
+{
+    int n,m;
+    int t,s ,k;
+    while(scanf(&quot;%d%d&quot;,&amp;n,&amp;m)!=EOF )
+    {
+        for(int i=0;i&lt;n;i++)
+            scanf(&quot;%d%d%d&quot;,&amp;ac[i].p,&amp;ac[i].q,&amp;ac[i].v);
+
+        memset(dp,0,sizeof(dp));
+
+        sort(ac,ac+n,cmp);
+
+            for (int i=0;i&lt;n;i++)
+                for (int j=m;j&gt;=0;j--)
+                {
+                    if ( j-ac[i].q&gt;=0 ) 
+                    dp[j]=max (dp[j],dp[j-ac[i].p]+ac[i].v); 
+                }
+
+                printf(&quot;%d\n&quot;,dp[m]);
+    }
+    return 0;
+}
+</code></pre><p>AC <a href="http://acm.hdu.edu.cn/showproblem.php?pid=1114" target="_blank" rel="noopener"> Hdu 1114 Piggy-Bank  </a><br>简单多重背包，但当成  01  背包来暴力也完全没有问题</p>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdlib&quot;
+#include &quot;cstring&quot;
+#include &quot;cmath&quot;
+#include &quot;algorithm&quot;
+
+using namespace std;
+
+int min(int a,int b)
+{
+    if(a&gt;b)
+        return b;
+    else 
+        return a;
+}
+
+int main()
+{
+    int t,ok,k;
+    int e,f,n,s;
+    int p[1000],w[1000],dp[10000];
+    scanf(&quot;%d&quot;,&amp;t);
+    while(t--)
+    {
+        scanf(&quot;%d%d&quot;,&amp;e,&amp;f);
+        scanf(&quot;%d&quot;,&amp;n);
+        for(int i=0;i&lt;n;i++)
+            scanf(&quot;%d%d&quot;,&amp;p[i],&amp;w[i]);
+
+
+        memset(dp,1000000,sizeof(dp));
+        dp[0]=0;
+
+        s=f-e;
+        ok=0;
+
+        for(int i=0;i&lt;n;i++)
+            for(int j=0;j&lt;=s;j++)
+            {
+                if(j-w[i]&gt;=0)
+                    dp[j]=min(dp[j],dp[j-w[i]]+p[i]);
+            }
+
+
+
+                if(dp[s]!=1000000 &amp;&amp; dp[s]&lt;1000000)
+                printf(&quot;The minimum amount of money in the piggy-bank is %d.\n&quot;,dp[s]);
+                else
+                    printf(&quot;This is impossible.\n&quot;);
+
+    }
+
+}
+</code></pre><p>AC  <a href="http://acm.hdu.edu.cn/showproblem.php?pid=1059" target="_blank" rel="noopener"> Hdu 1059 Dividing  </a><br>简单多重背包，体积为硬币数，价值为币值，可用二进制处理成  01  背包求解，可用  30  对  num  进行优化。</p>
+<pre><code>//多重背包
+//HDU 1059
+//题意：价值分别为1,2,3,4,5,6的物品的个数分别为 a[1],a[2],````a[6]
+//问能不能分成两堆价值相等的
+
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+int a[7];
+int f[120005];
+int v,k;
+void ZeroOnePack(int cost,int weight)//cost 为费用， weight 为价值 
+{
+    for(int i=v;i&gt;=cost;i--)
+       if(f[i-cost]+weight&gt;f[i]) f[i]=f[i-cost]+weight;
+}    
+void CompletePack(int cost,int weight)
+{
+    for(int i=cost;i&lt;=v;i++)
+        if(f[i-cost]+weight&gt;f[i]) f[i]=f[i-cost]+weight;
+}         
+void MultiplePack(int cost ,int weight,int amount)
+{
+    if(cost*amount&gt;=v) CompletePack(cost,weight);
+    else
+    {
+        for(int k=1;k&lt;amount;)
+        {
+            ZeroOnePack(k*cost,k*weight);
+            amount-=k;
+            k&lt;&lt;=1;
+        }    
+        ZeroOnePack(amount*cost,amount*weight);
+    }    
+}    
+int main()
+{
+    int tol;
+    int iCase=0;
+    while(1)
+    {
+        iCase++;
+        tol=0;
+        for(int i=1;i&lt;7;i++)
+        {
+            scanf(&quot;%d&quot;,&amp;a[i]);
+            tol+=a[i]*i;//总价值数 
+        }  
+        if(tol==0) break;
+        if(tol%2==1)
+        {
+            printf(&quot;Collection #%d:\nCan&#39;t be divided.\n\n&quot;,iCase);
+            continue;
+        }      
+        else
+        {
+            v=tol/2;
+            memset(f,0,sizeof(f));
+            for(int i=1;i&lt;7;i++)
+              MultiplePack(i,i,a[i]);
+            if(f[v]==v) 
+              printf(&quot;Collection #%d:\nCan be divided.\n\n&quot;,iCase);
+            else printf(&quot;Collection #%d:\nCan&#39;t be divided.\n\n&quot;,iCase);
+        }    
+    }    
+    return 0;    
+}
+</code></pre><p>AC <a href="http://acm.hdu.edu.cn/showproblem.php?pid=2191" target="_blank" rel="noopener"> Hdu 2191  悼念  512  汶川大地震遇难同胞  ——  珍惜现在，感恩生活
+</a> 标题超长超简单的多重背包，可用  01  背包求解。</p>
+<pre><code>#include &lt;stdio.h&gt;  
+#include &lt;string.h&gt;  
+#include &lt;algorithm&gt;  
+using namespace std;  
+
+const int INF = 0x3f3f3f3f;  
+int n,m;  
+int c[110],w[110],num[110],dp[110];  
+
+ void ZeroOnePack(int cost, int weight)  
+ {  
+     for(int i = n; i &gt;= cost; i--)  
+         dp[i] = max(dp[i],dp[i-cost]+weight);  
+}  
+
+void CompletePack(int cost, int weight)  
+{  
+    for(int i = cost; i &lt;= n; i++)  
+        dp[i] = max(dp[i],dp[i-cost]+weight);  
+
+}  
+
+void MultiplePack(int cost, int weight, int amount)  
+{  
+    if(cost * amount &gt;= n)
+    {  
+        CompletePack(cost,weight);  
+    }  
+    else
+   {  
+        int k = 1;  
+        while(k &lt; amount)  
+        {  
+           ZeroOnePack(k*cost,k*weight);  
+            amount -= k;  
+            k = k &lt;&lt; 1;  
+       }  
+        ZeroOnePack(amount*cost,amount*weight);  
+   }  
+}  
+
+int main()  
+{  
+    int test;  
+    scanf(&quot;%d&quot;,&amp;test);  
+    while(test--)  
+    {  
+       scanf(&quot;%d %d&quot;,&amp;n,&amp;m);  
+        for(int i = 1; i &lt;= m; i++)  
+       {  
+            scanf(&quot;%d %d %d&quot;,&amp;c[i],&amp;w[i],&amp;num[i]);  
+        }  
+
+        memset(dp,0,sizeof(dp));          
+
+       for(int i = 1; i &lt;= m; i++)  
+        {  
+           MultiplePack(c[i],w[i],num[i]);  
+        }  
+       printf(&quot;%d\n&quot;,dp[n]);  
+   }  
+   return 0;  
+}  
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

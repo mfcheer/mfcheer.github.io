@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>hdu 4857 逃生【反向拓扑排序】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">hdu 4857 逃生【反向拓扑排序】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47620875" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/47620875</a></p>
+<p>题目链接：<br><a href="http://acm.hdu.edu.cn/showproblem.php?pid=4857" target="_blank" rel="noopener"> http://acm.hdu.edu.cn/showproblem.php?pid=4857
+</a></p>
+<p>题意:中文不解释</p>
+<p>解法：</p>
+<p>input:<br>1<br>3 1<br>3 1<br>answer:<br>3 1 2<br>而不是<br>2 3 1<br>所以逆向建边 拓扑</p>
+<p>代码：</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;string.h&gt;
+
+using namespace std;
+
+int n, m;
+int a, b;
+int in[30010];
+int ans[30010];
+vector&lt;int&gt; g[30010];
+
+struct cmp
+{
+    bool operator()(int &amp;a, int &amp;b)
+    {
+        return a &lt; b;
+    }
+};
+
+int main()
+{
+    int t;
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+        memset(in, 0, sizeof(in));
+        for (int i = 1; i &lt;= n; i++) g[i].clear();
+        while (m--)
+        {
+            scanf(&quot;%d%d&quot;,&amp;a,&amp;b);
+            g[b].push_back(a);
+            in[a]++;
+        }
+        priority_queue&lt;int,vector&lt;int&gt;,cmp&gt; que;
+        while (!que.empty()) que.pop();
+        for (int i = 1; i &lt;= n; i++)
+            if (in[i] == 0) que.push(i);
+        int cnt = 0;
+        while (!que.empty())
+        {
+            int t = que.top(); que.pop();
+            ans[cnt++] = t;
+            for (int i = 0; i &lt; g[t].size(); i++)
+            {
+                in[g[t][i]] --;
+                if (in[g[t][i]] == 0)
+                    que.push(g[t][i]);
+            }
+        }
+        for (int i = cnt - 1; i &gt;= 0; i--)
+        {
+            printf(&quot;%d&quot;,ans[i]); 
+            if (i == 0) printf(&quot;\n&quot;); else printf(&quot; &quot;);
+        }
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>poj 2195 Going Home【最小费用最大流】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">poj 2195 Going Home【最小费用最大流】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47344457" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/47344457</a></p>
+<p>题目链接：<br><a href="http://poj.org/problem?id=2195" target="_blank" rel="noopener"> http://poj.org/problem?id=2195 </a></p>
+<p>题意：给你一些人的位置，和屋子的位置，求使得所有人回到屋子的最小花费是多少。每个屋子只能装一人。人每横着或竖着走一步，花费为1。</p>
+<p>解法：最小费用流。bin神板子<br>建图是原点到人 ，人到屋子， 屋子到汇点。流量均为1，人与屋子费用为距离。其他费用为0；</p>
+<p>代码：</p>
+<pre><code>/*
+POJ 2195 Going Home
+邻接矩阵形式最小费用最大流
+*/
+
+#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;algorithm&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+using namespace std;
+
+
+//************************************************************
+//最小费用最大流算法
+//SPFA求最短路
+//邻接矩阵形式
+//初始化:cap:容量，没有边为0
+//cost:耗费，对称形式，没有边的也为0
+//c是最小费用
+//f是最大流
+//*******************************************************
+const int MAXN=500;
+const int INF=0x3fffffff;
+int cap[MAXN][MAXN];//容量，没有边为0
+int flow[MAXN][MAXN];
+//耗费矩阵是对称的，有i到j的费用，则j到i的费用为其相反数
+int cost[MAXN][MAXN];//花费
+
+
+int n;//顶点数目0~n-1
+int f;//最大流
+int c;//最小费用
+int start,end;//源点和汇点
+
+bool vis[MAXN];//在队列标志
+int que[MAXN];
+int pre[MAXN];
+int dist[MAXN];//s-t路径最小耗费
+bool SPFA()
+{
+    int front=0,rear=0;
+    for(int u=0;u&lt;=n;u++)
+    {
+        if(u==start)
+        {
+            que[rear++]=u;
+            dist[u]=0;
+            vis[u]=true;
+        }
+        else
+        {
+            dist[u]=INF;
+            vis[u]=false;
+        }
+    }
+    while(front!=rear)
+    {
+        int u=que[front++];
+        vis[u]=false;
+        if(front&gt;=MAXN)front=0;
+        for(int v=0;v&lt;=n;v++)
+        {
+            if(cap[u][v]&gt;flow[u][v]&amp;&amp;dist[v]&gt;dist[u]+cost[u][v])
+            {
+                dist[v]=dist[u]+cost[u][v];
+                pre[v]=u;
+                if(!vis[v])
+                {
+                    vis[v]=true;
+                    que[rear++]=v;
+                    if(rear&gt;=MAXN)rear=0;
+                }
+            }
+        }
+    }
+    if(dist[end]&gt;=INF)return false;
+    return true;
+}
+
+void minCostMaxflow()
+{
+    memset(flow,0,sizeof(flow));
+    c=f=0;
+    while(SPFA())
+    {
+        int Min=INF;
+        for(int u=end;u!=start;u=pre[u])
+           Min=min(Min,cap[pre[u]][u]-flow[pre[u]][u]);
+        for(int u=end;u!=start;u=pre[u])
+        {
+            flow[pre[u]][u]+=Min;
+            flow[u][pre[u]]-=Min;
+        }
+        c+=dist[end]*Min;
+        f+=Min;
+    }
+}
+//************************************************************
+
+struct Node
+{
+    int x,y;
+};
+
+Node node1[MAXN],node2[MAXN];
+char str[MAXN][MAXN];
+
+int main()
+{
+    int N,M;
+    while(~scanf(&quot;%d%d&quot;,&amp;N,&amp;M))
+    {
+        if(N==0&amp;&amp;M==0)break;
+
+        int tol1=0,tol2=0;
+        //人和房子的数目 从 1 开始
+
+        for(int i=0;i&lt;N;i++)
+        {
+            scanf(&quot;%s&quot;,&amp;str[i]);
+
+            for(int j=0;j&lt;M;j++)
+            {
+                if(str[i][j]==&#39;m&#39;)
+                {
+                    tol1++;
+                    node1[tol1].x=i;
+                    node1[tol1].y=j;
+                }
+                else if(str[i][j]==&#39;H&#39;)
+                {
+                    tol2++;
+                    node2[tol2].x=i;
+                    node2[tol2].y=j;
+                }
+            }
+        }
+
+        start=0;
+
+        n=tol1+tol2+1;
+
+        end=tol1+tol2+1;
+
+        memset(cap,0,sizeof(cap));
+        memset(cost,0,sizeof(cost));
+
+        for(int i=1;i&lt;=tol1;i++)
+        {
+            cost[0][i]=cost[i][0]=0;
+            cap[0][i]=1;
+        }
+
+        for(int i=1;i&lt;=tol2;i++)
+        {
+            cost[tol1+i][end]=0;
+            cap[tol1+i][end]=1;
+        }
+
+        for(int i=1;i&lt;=tol1;i++)
+          for(int j=1;j&lt;=tol2;j++)
+          {
+              cost[i][tol1+j]=abs(node1[i].x-node2[j].x)+abs(node1[i].y-node2[j].y);
+
+              cost[tol1+j][i]=-cost[i][tol1+j];
+
+              cap[i][tol1+j]=1;
+          }
+
+        minCostMaxflow();
+        printf(&quot;%d\n&quot;,c);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

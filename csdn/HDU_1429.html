@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>HDU 1429 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="算法,acm">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold" class="article--title">HDU 1429</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42062533" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/42062533</a></p>
+<p>终于过了这道题  </p>
+<p>做的第一道位压缩</p>
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1429" target="_blank" rel="noopener"> http://acm.hdu.edu.cn/showproblem.php?pid=1429
+</a>  </p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+int n, m, t;
+
+int ans,num;
+
+char s[22];
+
+int sx, sy;
+
+int dir[4][2] = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };//四个方向
+
+int vis[22][22][1025];
+
+struct Q
+{
+    int x;
+    int y;
+    char ele;
+    int step;
+    int nkeys;
+}p[22][22];
+
+int check(int x, int y)
+{
+    if (x&gt;=0 &amp;&amp; x&lt;n &amp;&amp; y&gt;=0 &amp;&amp; y&lt;m)
+        return 1;
+    else
+        return 0;
+}
+
+void bfs()
+{
+    memset(vis,0,sizeof(vis));
+    queue &lt;Q&gt; q;
+    Q qq, qqq;
+    p[sx][sy].step = 0;
+    p[sx][sy].nkeys = 0;
+
+    vis[sx][sy][p[sx][sy].nkeys] = 1;
+
+    q.push(p[sx][sy]);
+
+    while (!q.empty())
+    {
+        qq = q.front();
+        q.pop();
+
+        if (p[qq.x][qq.y].ele == &#39;^&#39; &amp;&amp; qq.step &lt; t)
+        {
+            printf(&quot;%d\n&quot;,qq.step);
+            return ;
+        }
+        else if ( p[qq.x][qq.y].ele == &#39;^&#39; &amp;&amp; qq.step &gt;= t )
+        {
+            printf(&quot;-1\n&quot;);
+            return ;
+        }
+
+        for (int i = 0; i &lt; 4;i++)
+        {
+            int x = qq.x+dir[i][0];
+            int y = qq.y+dir[i][1];
+
+            qqq = qq;
+            qqq.x = x;
+            qqq.y = y;
+
+            if ( check(qqq.x, qqq.y)  &amp;&amp;  p[qqq.x][qqq.y].ele != &#39;*&#39;  &amp;&amp;  !vis[qqq.x][qqq.y][qqq.nkeys])
+            {
+                if (p[qqq.x][qqq.y].ele &gt;= &#39;a&#39; &amp;&amp; p[qqq.x][qqq.y].ele &lt;= &#39;j&#39; )
+                {
+                    int key = 1 &lt;&lt; (p[qqq.x][qqq.y].ele - &#39;a&#39;);
+
+                    qqq.nkeys |= key;//拾取钥匙
+                    if (!vis[qqq.x][qqq.y][qqq.nkeys])
+                    {
+                        qqq.step += 1;
+                        vis[qqq.x][qqq.y][qqq.nkeys] = 1;
+                        q.push(qqq);
+                    }
+                }
+                else if (p[qqq.x][qqq.y].ele &gt;= &#39;A&#39; &amp;&amp; p[qqq.x][qqq.y].ele &lt;= &#39;J&#39; )
+                {
+                    int key = 1 &lt;&lt; (p[qqq.x][qqq.y].ele - &#39;A&#39;);
+
+                    if ( (qqq.nkeys &amp; key) )//检查手头是否有该门的钥匙
+                    {
+                        qqq.step += 1;
+                        vis[qqq.x][qqq.y][qqq.nkeys] = 1;
+                        q.push(qqq);
+                    }
+                }
+                else 
+                {
+                    qqq.step += 1;
+                    vis[qqq.x][qqq.y][qqq.nkeys] = 1;
+                        q.push(qqq);
+                }
+            }
+        }
+    }
+    printf(&quot;-1\n&quot;);
+    return;
+}
+
+int main()
+{
+    while (scanf(&quot;%d %d %d&quot;, &amp;n, &amp;m, &amp;t) != EOF)
+    {
+        num = 0;
+        sx = sy = 0;
+        for (int i = 0; i &lt; n; i++)
+        {
+            scanf(&quot;%s&quot;,s);
+            for (int j = 0; j &lt; m; j++)
+            {
+                p[i][j].ele = s[j];
+                p[i][j].step = 0 ;
+                p[i][j].nkeys = 0 ;
+                p[i][j].x = i;
+                p[i][j].y = j;
+
+                if (p[i][j].ele == &#39;@&#39;)
+                {
+                    sx = i;
+                    sy = j;
+                }
+            }
+        }
+
+        bfs();
+
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("message_board") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>
