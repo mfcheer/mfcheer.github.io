@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mfcheer.github.io/about/index.html</loc>
+    
+    <lastmod>2020-12-30T16:57:27.777Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mfcheer.github.io/message_board/index.html</loc>
+    
+    <lastmod>2020-12-30T16:52:45.966Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://mfcheer.github.io/streamlit.html</loc>
     
     <lastmod>2020-12-24T18:46:34.047Z</lastmod>
@@ -12,13 +26,6 @@
     <loc>https://mfcheer.github.io/%E4%B9%B0%E6%88%BF.html</loc>
     
     <lastmod>2020-04-25T11:52:08.568Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mfcheer.github.io/message_board/index.html</loc>
-    
-    <lastmod>2020-03-21T13:13:46.430Z</lastmod>
     
   </url>
   
@@ -96,13 +103,6 @@
     <loc>https://mfcheer.github.io/archives/index.html</loc>
     
     <lastmod>2019-10-10T17:25:42.120Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mfcheer.github.io/about/index.html</loc>
-    
-    <lastmod>2019-10-10T17:25:42.118Z</lastmod>
     
   </url>
   
