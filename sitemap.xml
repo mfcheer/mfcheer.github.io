@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://mfcheer.github.io/about/index.html</loc>
+    <loc>https://mfcheer.github.io/article/Python%E9%9B%86%E5%90%88.html</loc>
     
-    <lastmod>2021-01-21T16:08:48.097Z</lastmod>
+    <lastmod>2021-01-21T16:54:37.811Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://mfcheer.github.io/article/Python%E9%9B%86%E5%90%88.html</loc>
+    <loc>https://mfcheer.github.io/about/index.html</loc>
     
-    <lastmod>2021-01-07T17:07:10.671Z</lastmod>
+    <lastmod>2021-01-21T16:08:48.097Z</lastmod>
     
   </url>
   
@@ -33,20 +33,6 @@
     <loc>https://mfcheer.github.io/article/Python%E6%89%A7%E8%A1%8Csh%E6%88%96py%E6%96%87%E4%BB%B6.html</loc>
     
     <lastmod>2020-03-20T19:22:15.584Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mfcheer.github.io/article/Pandas-ABC.html</loc>
-    
-    <lastmod>2020-03-19T16:23:01.131Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mfcheer.github.io/article/Scikit-learn%EF%BC%9ACountVectorizer.html</loc>
-    
-    <lastmod>2020-03-19T16:22:15.082Z</lastmod>
     
   </url>
   
@@ -4363,7 +4349,7 @@
   </url>
   
   <url>
-    <loc>https://mfcheer.github.io/article/Fitness.html</loc>
+    <loc>https://mfcheer.github.io/Fitness.html</loc>
     
     <lastmod>2019-10-10T17:25:41.170Z</lastmod>
     
