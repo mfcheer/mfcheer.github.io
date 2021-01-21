@@ -19,7 +19,8 @@ var isMobile = {
   }
 };
 
-if ($('.local-search').size() && !isMobile.any()) {
+
+if ($('.local-search').size()==0 && !isMobile.any()) {
   $.getScript('/js/search.js', function() {
     searchFunc("/search.xml", 'local-search-input', 'local-search-result');
   });
