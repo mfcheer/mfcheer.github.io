@@ -54,22 +54,24 @@
   </div>
   <div class="post-content">
     <p>今天遇到了一段代码，类似下面</p>
-<pre><code>do{
-    ...
-}while(false)
-</code></pre><p>开始很疑惑，为什么这样写，后来上网搜了一下才恍然大悟。这种语法是为了解决代码嵌套、实现goto的用途</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">do</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span> <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>开始很疑惑，为什么这样写，后来上网搜了一下才恍然大悟。这种语法是为了解决代码嵌套、实现goto的用途</p>
 <p>下面是同样功能的三段代码</p>
 <p>1、代码嵌套<br><a id="more"></a></p>
-<pre><code>if( A==true ) {
-    if(B == true) {
-        if(C == true) {
-            if(D == true){
-                //doSomething
-            }
-        }
-    }
-}
-</code></pre><p>这样箭头形代码很丑，且可读性差</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">if</span><span class="token punctuation">(</span> A<span class="token operator">==</span><span class="token boolean">true</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>B <span class="token operator">==</span> <span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>C <span class="token operator">==</span> <span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>D <span class="token operator">==</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">//doSomething</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样箭头形代码很丑，且可读性差</p>
 <p>2、goto代码</p>
 <pre><code>if( A==false )  
     goto tag;  
