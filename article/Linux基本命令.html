@@ -54,20 +54,25 @@
   </div>
   <div class="post-content">
     <p>查看端口占用情况：</p>
-<pre><code>lsof -i:端口号 用于查看某一端口的占用情况，比如查看8000端口使用情况，lsof -i:8000
-</code></pre><p>压缩命令</p>
-<pre><code>单个文件压缩打包 tar czvf my.tar file1
+<pre class="line-numbers language-shell"><code class="language-shell">lsof -i:端口号 用于查看某一端口的占用情况，比如查看8000端口使用情况，lsof -i:8000
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>压缩命令</p>
+<pre class="line-numbers language-shell"><code class="language-shell">单个文件压缩打包 tar czvf my.tar file1
 多个文件压缩打包 tar czvf my.tar file1 file2,...
 单个目录压缩打包 tar czvf my.tar dir1
 多个目录压缩打包 tar czvf my.tar dir1 dir2
 解包至当前目录：tar xzvf my.tar
-</code></pre><p>解压war文件</p>
-<pre><code>jar -xvf name.war
-</code></pre><p>Linux 统计某个字符串出现的次数</p>
-<pre><code>cat filename |grep str |wc -l
-</code></pre><p>定时任务</p>
-<pre><code>crontab -e 
-</code></pre><p>查看文件内容 </p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>解压war文件</p>
+<pre class="line-numbers language-shell"><code class="language-shell">jar -xvf name.war
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>Linux 统计某个字符串出现的次数</p>
+<pre class="line-numbers language-shell"><code class="language-shell">cat filename |grep str |wc -l
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>定时任务</p>
+<pre class="line-numbers language-shell"><code class="language-shell">crontab -e 
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>查看文件内容 </p>
 <pre><code>如果你只想看文件的前5行，可以使用head命令，如： 
 head -5 /etc/passwd 
 如果你想查看文件的后10行，可以使用tail命令，如： 
@@ -153,29 +158,54 @@ $ ssh -p 2222 user@host
 </code></pre><p>nohup 后台运行</p>
 <pre><code>nohup command 1&gt;output 2&gt;&amp;1 &amp;
 </code></pre><p>split 将一个大文件分割成很多个小文件</p>
-<pre><code>每3行（-l 3）拆分成一个文件，拆分后的文件名以name开头，以数字作为后缀（-d）后缀长度为1（-a 1）
+<pre class="line-numbers language-shell"><code class="language-shell">每3行（-l 3）拆分成一个文件，拆分后的文件名以name开头，以数字作为后缀（-d）后缀长度为1（-a 1）
 split -l 3 test -d -a 1 name
-</code></pre><p>自定义命令，例如mac不支持ll命令</p>
-<pre><code>vim ~/.bash_profile
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>自定义命令，例如mac不支持ll命令</p>
+<pre class="line-numbers language-shell"><code class="language-shell">vim ~/.bash_profile
 输入以下内容
-alias ll=&#39;ls -lF&#39;
+alias ll='ls -lF'
 保存完成之后
 source ~/.bash_profile
 可以使用ll等命令了
-</code></pre><p>自动拉起后台程序脚本例子</p>
-<pre><code>function monitorService()
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>自动拉起后台程序脚本例子</p>
+<pre class="line-numbers language-shell"><code class="language-shell">function monitorService()
 {
     cnt=$( ps -ef | grep java | grep -v grep | grep service | wc -l )
     echo $cnt
     if [ $cnt -eq 0 ]; then
-        msg=&quot;$bin service is not running, start it.&quot;
+        msg="$bin service is not running, start it."
         echo $msg
         #发送短信到负责人
         sh /opt/server server.sh
     else
-        echo &quot;$bin service is running.&quot;
+        echo "$bin service is running."
     fi
 }
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>hadoop 查看文件夹下文件名称，按存储从大到小排列</p>
+<pre class="line-numbers language-shell"><code class="language-shell">hadoop fs -du xxx|sort -n -r  | awk '/^[0-9]+/ { print int($1/(1024**3)) " [GB]\t" $2 $3}'
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>Win10打开Ubuntu的文件夹</p>
+<pre class="line-numbers language-shell"><code class="language-shell">在Shell界面输入命令
+explorer.exe .
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>Python Lib库加载</p>
+<pre class="line-numbers language-shell"><code class="language-shell">export LD_LIBRARY_PATH=/opt/xxx/ss_lib/so:$LD_LIBRARY_PATH
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>Python sqlacodegen 生成 ORM文件</p>
+<pre class="line-numbers language-shell"><code class="language-shell">sqlacodegen mysql://db_name:password@ip:port/table
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>markdown2激活码</p>
+<pre><code>邮箱地址：
+Soar360@live.com
+授权秘钥：
+GBPduHjWfJU1mZqcPM3BikjYKF6xKhlKIys3i1MU2eJHqWGImDHzWdD6xhMNLGVpbP2M5SN6bnxn2kSE8qHqNY5QaaRxmO3YSMHxlv2EYpjdwLcPwfeTG7kUdnhKE0vVy4RidP6Y2wZ0q74f47fzsZo45JE2hfQBFi2O9Jldjp1mW8HUpTtLA2a5/sQytXJUQl/QKO0jUQY4pa5CCx20sV1ClOTZtAGngSOJtIOFXK599sBr5aIEFyH0K7H4BoNMiiDMnxt1rD8Vb/ikJdhGMMQr0R4B+L3nWU97eaVPTRKfWGDE8/eAgKzpGwrQQoDh+nzX1xoVQ8NAuH+s4UcSeQ==
+</code></pre><p>kepler 地图可视化</p>
+<pre><code>https://kepler.gl/
+
+切换地图为中文，设置map style = mapbox://styles/mapbox/streets-zh-v1  
 </code></pre>
   </div>
   <div class="post-footer">
