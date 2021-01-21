@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>C++ static 关键字 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="c++,面向对象">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">C++ static 关键字</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>C++的static有两种用法： 面向过程程序设计中的static 和<br>面向对象程序设计中的static。前者应用于普通变量和函数，不涉及类；后者主要说明static在类中的作用。<br>一、面向过程设计中的static<br>1、静态全局变量<br>在全局变量前，加上关键字static，该变量就被定义成为一个静态全局变量。我们先举一个静态全局变量的例子，如下：  </p>
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="view plain" target="_blank" rel="noopener"> view plain
+</a> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="copy" target="_blank" rel="noopener"><br>copy </a></p>
+<ol>
+<li>#include <iostream></iostream></li>
+<li>using  namespace  std; </li>
+<li><ol start="4">
+<li>static  int  n;  //定义静态全局变量 </li>
+</ol>
+</li>
+<li><ol start="6">
+<li>void  fn() </li>
+</ol>
+</li>
+<li>{ </li>
+<li>n++; </li>
+<li>cout&lt;&lt;n&lt;&lt;endl; </li>
+<li>} </li>
+<li><ol start="12">
+<li>int  main(  void  ) </li>
+</ol>
+</li>
+<li>{ </li>
+<li>n = 20; </li>
+<li>cout&lt;&lt;n&lt;&lt;endl; </li>
+<li>fn(); </li>
+<li>return  0; </li>
+<li>} </li>
+</ol>
+<p>静态全局变量有以下特点：</p>
+<ul>
+<li>该变量在全局数据区分配内存； </li>
+<li>未经初始化的静态全局变量会被程序自动初始化为0（自动变量的值是随机的，除非它被显式初始化）； </li>
+<li>静态全局变量在声明它的整个文件都是可见的，而在文件之外是不可见的； </li>
+</ul>
+<p>静态变量都在全局数据区分配内存，包括后面将要提到的静态局部变量。对于一个完整的程序，在内存中的分布情况如下图：  </p>
+<h2 id="代码区"><a href="#代码区" class="headerlink" title="代码区  "></a>代码区  </h2><p>全局数据区<br>堆区<br>栈区  </p>
+<p>一般程序的由new产生的动态数据存放在堆区，函数内部的自动变量存放在栈区。自动变量一般会随着函数的退出而释放空间，静态数据（即使是函数内部的静态局部变量）也存放在全局数据区。全局数据区的数据并不会因为函数的退出而释放空间。细心的读者可能会发现，Example<br>1中的代码中将</p>
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="view plain" target="_blank" rel="noopener"> view plain
+</a> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="copy" target="_blank" rel="noopener"><br>copy </a></p>
+<ol>
+<li>static  int  n;  //定义静态全局变量 </li>
+</ol>
+<p>改为</p>
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="view plain" target="_blank" rel="noopener"> view plain
+</a> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="copy" target="_blank" rel="noopener"><br>copy </a></p>
+<ol>
+<li>int  n;  //定义全局变量 </li>
+</ol>
+<p>程序照样正常运行。<br>的确，定义全局变量就可以实现变量在文件中的共享，但定义静态全局变量还有以下好处：<br>静态全局变量不能被其它文件所用；<br>其它文件中可以定义相同名字的变量，不会发生冲突；<br>您可以将上述示例代码改为如下：  </p>
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="view plain" target="_blank" rel="noopener"> view plain
+</a> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="copy" target="_blank" rel="noopener"><br>copy </a></p>
+<ol>
+<li>//File1 </li>
+<li>#include <iostream></iostream></li>
+<li>using  namespace  std; </li>
+<li><ol start="5">
+<li>void  fn(); </li>
+</ol>
+</li>
+<li>static  int  n;  //定义静态全局变量 </li>
+<li><ol start="8">
+<li>int  main(  void  ) </li>
+</ol>
+</li>
+<li>{ </li>
+<li>n = 20; </li>
+<li>cout&lt;&lt;n&lt;&lt;endl; </li>
+<li>fn(); </li>
+<li>return  0; </li>
+<li>} </li>
+<li><ol start="16">
+<li>//File2 </li>
+</ol>
+</li>
+<li>#include<iostream></iostream></li>
+<li>using  namespace  std; </li>
+<li><ol start="20">
+<li>extern  int  n; </li>
+</ol>
+</li>
+<li><ol start="22">
+<li>void  fn() </li>
+</ol>
+</li>
+<li>{ </li>
+<li>n++; </li>
+<li>cout&lt;&lt;n&lt;&lt;endl; </li>
+<li>} </li>
+</ol>
+<p>编译并运行这个程序，您就会发现上述代码可以分别通过编译，但运行时出现错误。试着将</p>
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="view plain" target="_blank" rel="noopener"> view plain
+</a> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="copy" target="_blank" rel="noopener"><br>copy </a></p>
+<ol>
+<li>static  int  n;  //定义静态全局变量 </li>
+</ol>
+<p>改为</p>
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="view plain" target="_blank" rel="noopener"> view plain
+</a> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="copy" target="_blank" rel="noopener"><br>copy </a></p>
+<ol>
+<li>int  n;  //定义全局变量 </li>
+</ol>
+<p>再次编译运行程序，细心体会全局变量和静态全局变量的区别。<br>2、静态局部变量<br>在局部变量前，加上关键字static，该变量就被定义成为一个静态局部变量。<br>我们先举一个静态局部变量的例子，如下：  </p>
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="view plain" target="_blank" rel="noopener"> view plain
+</a> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="copy" target="_blank" rel="noopener"><br>copy </a></p>
+<ol>
+<li>#include <iostream></iostream></li>
+<li>using  namespace  std; </li>
+<li><ol start="4">
+<li>void  fn(); </li>
+</ol>
+</li>
+<li><ol start="6">
+<li>int  main(  void  ) </li>
+</ol>
+</li>
+<li>{ </li>
+<li>fn(); </li>
+<li>fn(); </li>
+<li>fn(); </li>
+<li>return  0; </li>
+<li>} </li>
+<li><ol start="14">
+<li>void  fn() </li>
+</ol>
+</li>
+<li>{ </li>
+<li>static  int  n = 10; </li>
+<li>cout&lt;&lt;n&lt;&lt;endl; </li>
+<li>n++; </li>
+<li>} </li>
+</ol>
+<p>通常，在函数体内定义了一个变量，每当程序运行到该语句时都会给该局部变量分配栈内存。但随着程序退出函数体，系统就会收回栈内存，局部变量也相应失效。<br>但有时候我们需要在两次调用之间对变量的值进行保存。通常的想法是定义一个全局变量来实现。但这样一来，变量已经不再属于函数本身了，不再仅受函数的控制，给程序的维护带来不便。<br>静态局部变量正好可以解决这个问题。静态局部变量保存在全局数据区，而不是保存在栈中，每次的值保持到下一次调用，直到下次赋新值。<br>静态局部变量有以下特点：<br>（1）该变量在全局数据区分配内存；<br>（2）静态局部变量在程序执行到该对象的声明处时被首次初始化，即以后的函数调用不再进行初始化；<br>（3）静态局部变量一般在声明处初始化，如果没有显式初始化，会被程序自动初始化为0；<br>（4）它始终驻留在全局数据区，直到程序运行结束。但其作用域为局部作用域，当定义它的函数或语句块结束时，其作用域随之结束；<br>3、静态函数<br>在函数的返回类型前加上static关键字,函数即被定义为静态函数。静态函数与普通函数不同，它只能在声明它的文件当中可见，不能被其它文件使用。<br>静态函数的例子：  </p>
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="view plain" target="_blank" rel="noopener"> view plain
+</a> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="copy" target="_blank" rel="noopener"><br>copy </a></p>
+<ol>
+<li>#include <iostream></iostream></li>
+<li>using  namespace  std; </li>
+<li><ol start="4">
+<li>static  void  fn();  //声明静态函数 </li>
+</ol>
+</li>
+<li><ol start="6">
+<li>int  main(  void  ) </li>
+</ol>
+</li>
+<li>{ </li>
+<li>fn(); </li>
+<li>return  0; </li>
+<li>} </li>
+<li><ol start="12">
+<li>void  fn()  //定义静态函数 </li>
+</ol>
+</li>
+<li>{ </li>
+<li>int  n = 10; </li>
+<li>cout&lt;&lt;n&lt;&lt;endl; </li>
+<li>} </li>
+</ol>
+<p>定义静态函数的好处：<br>静态函数不能被其它文件所用；<br>其它文件中可以定义相同名字的函数，不会发生冲突；<br>二、面向对象的static关键字（类中的static关键字）<br>1、静态数据成员<br>在类内数据成员的声明前加上关键字static，该数据成员就是类内的静态数据成员。先举一个静态数据成员的例子。  </p>
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="view plain" target="_blank" rel="noopener"> view plain
+</a> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="copy" target="_blank" rel="noopener"><br>copy </a></p>
+<ol>
+<li>#include <iostream></iostream></li>
+<li>using  namespace  std; </li>
+<li><ol start="4">
+<li>class  Myclass </li>
+</ol>
+</li>
+<li>{ </li>
+<li>private  : </li>
+<li>int  a , b , c; </li>
+<li>static  int  sum;  //声明静态数据成员 </li>
+<li>public  : </li>
+<li>Myclass(  int  a ,  int  b ,  int  c); </li>
+<li>void  GetSum(); </li>
+<li>}; </li>
+<li><ol start="14">
+<li>int  Myclass::sum = 0;  //定义并初始化静态数据成员 </li>
+</ol>
+</li>
+<li><ol start="16">
+<li>Myclass::Myclass(  int  a ,  int  b ,  int  c) </li>
+</ol>
+</li>
+<li>{ </li>
+<li>this  -&gt;a = a; </li>
+<li>this  -&gt;b = b; </li>
+<li>this  -&gt;c = c; </li>
+<li>sum += a+b+c; </li>
+<li>} </li>
+<li>void  Myclass::GetSum() </li>
+<li>{ </li>
+<li>cout&lt;&lt; “sum=”  &lt;&lt;sum&lt;&lt;endl; </li>
+<li>} </li>
+<li><ol start="28">
+<li>int  main(  void  ) </li>
+</ol>
+</li>
+<li>{ </li>
+<li>Myclass M(1 , 2 , 3); </li>
+<li>M.GetSum(); </li>
+<li>Myclass N(4 , 5 , 6); </li>
+<li>N.GetSum(); </li>
+<li>M.GetSum(); </li>
+<li>return  0; </li>
+<li>} </li>
+</ol>
+<p>可以看出，静态数据成员有以下特点：</p>
+<ul>
+<li>对于非静态数据成员，每个类对象都有自己的拷贝。而静态数据成员被当作是类的成员。无论这个类的对象被定义了多少个，静态数据成员在程序中也只有一份拷贝，由该类型的所有对象共享访问。也就是说，静态数据成员是该类的所有对象所共有的。对该类的多个对象来说，静态数据成员只分配一次内存，供所有对象共用。所以，静态数据成员的值对每个对象都是一样的，它的值可以更新； </li>
+<li>静态数据成员存储在全局数据区。静态数据成员定义时要分配空间，所以不能在类声明中定义。在Example 5中，语句int Myclass::Sum=0;是定义静态数据成员； </li>
+<li>静态数据成员和普通数据成员一样遵从public,protected,private访问规则； </li>
+<li>因为静态数据成员在全局数据区分配内存，属于本类的所有对象共享，所以，它不属于特定的类对象，在没有产生类对象时其作用域就可见，即在没有产生类的实例时，我们就可以操作它； </li>
+<li><p>静态数据成员初始化与一般数据成员初始化不同。静态数据成员初始化的格式为：<br>＜数据类型＞＜类名＞::＜静态数据成员名＞=＜值＞</p>
+</li>
+<li><p>类的静态数据成员有两种访问形式：<br>＜类对象名＞.＜静态数据成员名＞ 或 ＜类类型名＞::＜静态数据成员名＞<br>如果静态数据成员的访问权限允许的话（即public的成员），可在程序中，按上述格式来引用静态数据成员 ；</p>
+</li>
+<li><p>静态数据成员主要用在各个对象都有相同的某项属性的时候。比如对于一个存款类，每个实例的利息都是相同的。所以，应该把利息设为存款类的静态数据成员。这有两个好处，第一，不管定义多少个存款类对象，利息数据成员都共享分配在全局数据区的内存，所以节省存储空间。第二，一旦利息需要改变时，只要改变一次，则所有存款类对象的利息全改变过来了； </p>
+</li>
+<li>同全局变量相比，使用静态数据成员有两个优势： </li>
+</ul>
+<ol>
+<li>静态数据成员没有进入程序的全局名字空间，因此不存在与程序中其它全局名字冲突的可能性； </li>
+<li>可以实现信息隐藏。静态数据成员可以是private成员，而全局变量不能； </li>
+</ol>
+<p>2、静态成员函数  </p>
+<p>与静态数据成员一样，我们也可以创建一个静态成员函数，它为类的全部服务而不是为某一个类的具体对象服务。静态成员函数与静态数据成员一样，都是类的内部实现，属于类定义的一部分。普通的成员函数一般都隐含了一个this指针，this指针指向类的对象本身，因为普通成员函数总是具体的属于某个类的具体对象的。通常情况下，this是缺省的。如函数fn()实际上是this-&gt;fn()。<br><strong>但是与普通函数相比，静态成员函数由于不是与任何的对象相联系，因此它不具有this指针。从这个意义上讲，它无法访问属于类对象的非静态数据成员，也无法访问非静态成员函数，它只能调用其余的静态成员函数。</strong><br>下面举个静态成员函数的例子。</p>
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="view plain" target="_blank" rel="noopener"> view plain
+</a> <a href="http://blog.csdn.net/hackbuteer1/article/details/7487694#" title="copy" target="_blank" rel="noopener"><br>copy </a></p>
+<ol>
+<li>#include <iostream></iostream></li>
+<li>using  namespace  std; </li>
+<li><ol start="4">
+<li>class  Myclass </li>
+</ol>
+</li>
+<li>{ </li>
+<li>private  : </li>
+<li>int  a , b , c; </li>
+<li>static  int  sum;  //声明静态数据成员 </li>
+<li>public  : </li>
+<li>Myclass(  int  a ,  int  b ,  int  c); </li>
+<li>static  void  GetSum();  //声明静态成员函数 </li>
+<li>}; </li>
+<li><ol start="14">
+<li>int  Myclass::sum = 0;  //定义并初始化静态数据成员 </li>
+</ol>
+</li>
+<li><ol start="16">
+<li>Myclass::Myclass(  int  a ,  int  b ,  int  c) </li>
+</ol>
+</li>
+<li>{ </li>
+<li>this  -&gt;a = a; </li>
+<li>this  -&gt;b = b; </li>
+<li>this  -&gt;c = c; </li>
+<li>sum += a+b+c;  //非静态成员函数可以访问静态数据成员 </li>
+<li>} </li>
+<li>void  Myclass::GetSum()  //静态成员函数的实现 </li>
+<li>{ </li>
+<li>//cout&lt;&lt;a&lt;&lt;endl;    //错误代码，a是非静态数据成员 </li>
+<li>cout&lt;&lt; “sum=”  &lt;&lt;sum&lt;&lt;endl; </li>
+<li>} </li>
+<li><ol start="29">
+<li>int  main(  void  ) </li>
+</ol>
+</li>
+<li>{ </li>
+<li>Myclass M(1 , 2 , 3); </li>
+<li>M.GetSum(); </li>
+<li>Myclass N(4 , 5 , 6); </li>
+<li>N.GetSum(); </li>
+<li>Myclass::GetSum(); </li>
+<li>return  0; </li>
+<li>} </li>
+</ol>
+<p>关于静态成员函数，可以总结为以下几点：</p>
+<ul>
+<li>出现在类体外的函数定义不能指定关键字static； </li>
+<li>静态成员之间可以相互访问，包括静态成员函数访问静态数据成员和访问静态成员函数； </li>
+<li>非静态成员函数可以任意地访问静态成员函数和静态数据成员； </li>
+<li>静态成员函数不能访问非静态成员函数和非静态数据成员； </li>
+<li>由于没有this指针的额外开销，因此静态成员函数与类的全局函数相比速度上会有少许的增长； </li>
+<li><p>调用静态成员函数，可以用成员访问操作符(.)和(-&gt;)为一个类的对象或指向类对象的指针调用静态成员函数，也可以直接使用如下格式：<br>＜类名＞::＜静态成员函数名＞（＜参数表＞）<br>调用类的静态成员函数。</p>
+</li>
+<li></li>
+</ul>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

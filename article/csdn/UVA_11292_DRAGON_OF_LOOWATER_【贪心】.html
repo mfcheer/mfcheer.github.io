@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>UVA 11292 DRAGON OF LOOWATER 【贪心】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">UVA 11292 DRAGON OF LOOWATER 【贪心】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383453" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/46383453</a></p>
+<p>Description</p>
+<p>Problem C: The Dragon of Loowater</p>
+<p>Once upon a time, in the Kingdom of Loowater, a minor nuisance turned into a<br>major problem.The shores of Rellau Creek in central Loowater had always been a<br>prime breeding ground for geese. Due to the lack of predators, the geese<br>population was out of control. The people of Loowater mostly kept clear of the<br>geese. Occasionally, a goose would attack one of the people, and perhaps bite<br>off a finger or two, but in general, the people tolerated the geese as a minor<br>nuisance.</p>
+<p>One day, a freak mutation occurred, and one of the geese spawned a multi-<br>headed fire-breathing dragon. When the dragon grew up, he threatened to burn<br>the Kingdom of Loowater to a crisp. Loowater had a major problem. The king was<br>alarmed, and called on his knights to slay the dragon and save the kingdom.</p>
+<p>The knights explained: “To slay the dragon, we must chop off all its heads.<br>Each knight can chop off one of the dragon’s heads. The heads of the dragon<br>are of different sizes. In order to chop off a head, a knight must be at least<br>as tall as the diameter of the head. The knights’ union demands that for<br>chopping off a head, a knight must be paid a wage equal to one gold coin for<br>each centimetre of the knight’s height.”</p>
+<p>Would there be enough knights to defeat the dragon? The king called on his<br>advisors to help him decide how many and which knights to hire. After having<br>lost a lot of money building Mir Park, the king wanted to minimize the expense<br>of slaying the dragon. As one of the advisors, your job was to help the king.<br>You took it very seriously: if you failed, you and the whole kingdom would be<br>burnt to a crisp!</p>
+<p>INPUT SPECIFICATION:</p>
+<p>The input contains several test cases. The first line of each test case<br>contains two integers between 1 and 20000 inclusive, indicating the number n<br>of heads that the dragon has, and the number m of knights in the kingdom. The<br>next n lines each contain an integer, and give the diameters of the dragon’s<br>heads, in centimetres. The following m lines each contain an integer, and<br>specify the heights of the knights of Loowater, also in centimetres.</p>
+<p>The last test case is followed by a line containing:</p>
+<p>0 0<br>OUTPUT SPECIFICATION:</p>
+<p>For each test case, output a line containing the minimum number of gold coins<br>that the king needs to pay to slay the dragon. If it is not possible for the<br>knights of Loowater to slay the dragon, output the line:</p>
+<p>Loowater is doomed!<br>SAMPLE INPUT:</p>
+<p>2 3<br>5<br>4<br>7<br>8<br>4<br>2 1<br>5<br>5<br>10<br>0 0<br>OUTPUT FOR SAMPLE INPUT:</p>
+<p>11<br>Loowater is doomed!</p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;cstdio&gt;  
+#include &lt;cstring&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;string&gt;  
+#include &lt;queue&gt;  
+
+using namespace std;
+
+int n, m;
+int p[20010], q[20010];
+
+int main()
+{
+    while (scanf(&quot;%d%d&quot;, &amp;n, &amp;m) != EOF)
+    {
+        if (n == 0 &amp;&amp; m == 0) break;
+        for (int i = 0; i &lt; n; i++) scanf(&quot;%d&quot;,&amp;p[i]);
+        for (int i = 0; i &lt; m; i++) scanf(&quot;%d&quot;, &amp;q[i]);
+        sort(p, p + n);
+        sort(q, q + m);
+        if (n &gt; m)
+        {
+            printf(&quot;Loowater is doomed!\n&quot;);
+            continue;
+        }
+        int num = 0;
+        int ans = 0;
+        for (int i = 0; i &lt; m; i++)
+        {
+            if (num == n) break;
+            if (q[i] &gt;= p[num])
+            {
+                num++;
+                ans += q[i];
+            }
+        }
+        if (num == n) printf(&quot;%d\n&quot;,ans);
+        else printf(&quot;Loowater is doomed!\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

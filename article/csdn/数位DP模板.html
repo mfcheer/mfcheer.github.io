@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>数位DP模板 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="dp,dfs">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">数位DP模板</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>通常的数位dp可以写成如下形式：</p>
+<pre><code>int dfs(int i, int s, bool e) {
+    if (i==-1) return s==target_s;
+    if (!e &amp;&amp; ~f[i][s]) return f[i][s];
+    int res = 0;
+    int u = e?num[i]:9;
+    for (int d = first?1:0; d &lt;= u; ++d)
+        res += dfs(i-1, new_s(s, d), e&amp;&amp;d==u);
+    return e?res:f[i][s]=res;
+}
+</code></pre><p>其中：</p>
+<p>f为记忆化数组；</p>
+<p>i为当前处理串的第i位（权重表示法，也即后面剩下i+1位待填数）；</p>
+<p>s为之前数字的状态（如果要求后面的数满足什么状态，也可以再记一个目标状态t之类，for的时候枚举下t）；</p>
+<p>e表示之前的数是否是上界的前缀（即后面的数能否任意填）。</p>
+<p>for循环枚举数字时，要注意是否能枚举0，以及0对于状态的影响，有的题目前导0和中间的0是等价的，但有的不是，对于后者可以在dfs时再加一个状态变量z，表示前面是否全部是前导0，也可以看是否是首位，然后外面统计时候枚举一下位数。It<br>depends.</p>
+<p>于是关键就在怎么设计状态。当然做多了之后状态一眼就可以瞄出来。</p>
+<p>注意：</p>
+<p>不满足区间减法性质的话（如hdu 4376），不能用solve(r)-solve(l-1)，状态设计会更加诡异。</p>
+<p>转自： <a href="http://www.cnblogs.com/jffifa/archive/2012/08/17/2644847.html" target="_blank" rel="noopener"> http://www.cnblogs.com/jffifa/archive/2012/08/17/2644847.html
+</a></p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

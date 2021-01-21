@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Docker：基本命令 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">Docker：基本命令</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <pre><code>docker --help
+查看所有命令
+</code></pre><h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><pre><code>容器版本
+docker --version
+从仓库获取镜像
+docker pull &lt;镜像名:tag&gt;
+查看正在运行的容器
+docker ps 
+查看所有容器，包括退出的
+docker ps -a
+删除镜像
+docker rmi &lt;镜像名&gt; 
+删除容器
+docker rm &lt;容器名orID&gt;
+停止容器
+docker stop &lt;容器名orID&gt;
+启动容器
+docker start &lt;容器名orID&gt;
+杀死运行的容器
+docker kill &lt;容器名orID&gt;
+查看所有镜像
+docker images
+制作运行容器，-d是后台运行，-p是本地端口到容器端口的映射，
+--name为容器起名字
+docker run -d -p 80:80 --name &lt;容器名&gt; &lt;镜像名&gt;
+进入容器bash界面
+docker exec -it &lt;容器名&gt; bash
+</code></pre><a id="more"></a>
+<h1 id="所有命令"><a href="#所有命令" class="headerlink" title="所有命令"></a>所有命令</h1><pre><code>Usage:    docker COMMAND
+Management Commands:
+  checkpoint  Manage checkpoints
+  config      Manage Docker configs
+  container   Manage containers
+  image       Manage images
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  volume      Manage volumes
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container&#39;s changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  deploy      Deploy a new stack or update an existing stack
+  diff        Inspect changes to files or directories on a container&#39;s filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container&#39;s filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/容器/">容器</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

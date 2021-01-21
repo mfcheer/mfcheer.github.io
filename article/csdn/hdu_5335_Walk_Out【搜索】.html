@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>hdu 5335 Walk Out【搜索】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">hdu 5335 Walk Out【搜索】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47174459" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/47174459</a></p>
+<p>题目链接： <a href="http://acm.hdu.edu.cn/showproblem.php?pid=5335" target="_blank" rel="noopener"> http://acm.hdu.edu.cn/showproblem.php?pid=5335
+</a></p>
+<p>题意：给你一个n*m的0 1矩阵，要求你从（1，1）坐标开始走到（n,m）要求是的路径的上组成的01序列二进制表示最小，前导0可以忽略。</p>
+<p>思路:只能向下或右走，否则二进制表示长度增加，必然增大。首先找到从（1，1）能走到的最远的0是多远，从这个或这些点再向（n，m）走。注意：dfs会爆栈，要手动加栈。</p>
+<p>code：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;string&gt;
+#include &lt;assert.h&gt;
+#pragma comment(linker,&quot;/STACK:1024000000,1024000000&quot;) 
+
+using namespace std;
+
+const int MAXN = 1010;
+
+int n, m;
+char s[MAXN][MAXN];
+int tot;
+int c[MAXN][MAXN];
+int f[MAXN][MAXN];//标记s[i][j]是否为 0
+
+void dfs(int x, int y)
+{
+    if (x &lt; 1 || x &gt; n || y &lt; 1 || y &gt; m) return;
+    if (c[x][y]) return;
+    c[x][y] = 1;
+    if (s[x][y] == &#39;1&#39;) return;
+    f[x][y] = 1;
+    tot = max(tot, x + y);
+    dfs(x - 1, y);
+    dfs(x + 1, y);
+    dfs(x, y - 1);
+    dfs(x, y + 1);
+}
+
+int main()
+{
+    int t;
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        memset(c, 0, sizeof(c));
+        memset(f, 0, sizeof(f));
+        tot = 1;
+
+        scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
+        for (int i = 1; i &lt;= n; i++)
+            scanf(&quot;%s&quot;, s[i] + 1);
+        dfs(1, 1);
+        //printf(&quot;tot is ：%d\n&quot;, tot);
+        if (tot == n + m)
+        {
+            printf(&quot;0\n&quot;);
+            continue;
+        }
+        if (tot == 1)
+        {
+            tot = 2;
+            f[1][1] = 1;
+            printf(&quot;1&quot;);
+        }
+        for (int i = tot; i &lt; n + m; i++)
+        {
+            int ok = 1;
+            for (int j = max(1, i - m); j &lt;= min(n, i - 1); j++)
+            {
+                if (f[j][i - j])
+                {
+                    int x, y;
+                    if (j &lt; n) x = s[j + 1][i - j] - &#39;0&#39;;//向右走
+                    else x = 1;
+                    if (i - j &lt; m) y = s[j][i - j + 1] - &#39;0&#39;;//向下走
+                    else y = 1;
+                    ok = min(ok, min(x, y));
+                }
+            }
+            for (int j = max(1, i - m); j &lt;= min(n, i - 1); j++)
+            {
+                if (f[j][i - j])
+                {
+                    int x, y;
+                    if (j &lt; n) x = s[j + 1][i - j] - &#39;0&#39;;//向右走
+                    else x = 1;
+                    if (i - j &lt; m) y = s[j][i - j + 1] - &#39;0&#39;;//向下走
+                    else y = 1;
+                    if (x == ok) f[j + 1][i - j] = 1;
+                    if (y == ok) f[j][i - j + 1] = 1;
+                }
+            }
+            printf(&quot;%d&quot;,ok);
+        }
+        printf(&quot;\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

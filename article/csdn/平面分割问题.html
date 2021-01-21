@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>平面分割问题 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">平面分割问题</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40650731" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/40650731</a></p>
+<p>(1) n条直线最多分平面问题</p>
+<p>题目大致如:n条直线，最多可以把平面分为多少个区域。</p>
+<p>析:可能你以前就见过这题目，这充其量是一道初中的思考题。但一个类型的题目还是从简单的入手，才容易发现规律。当有n-<br>1条直线时，平面最多被分成了f（n-1）个区域。则第n条直线要是切成的区域数最多，就必须与每条直线相交且不能有同一交点。 这样就会得到n-1个交点<br>。这些交点将第n条直线分为2条射线和n-2条线断。而每条射线和线断将以有的区域一分为二。这样就多出了2+（n-2）个区域。</p>
+<p>故：f(n)=f(n-1)+n</p>
+<p>=f(n-2)+(n-1)+n</p>
+<p>……</p>
+<p>=f(1)+1+2+……+n</p>
+<p>=n(n+1)/2+1</p>
+<p>(2) 折线分平面（hdu2050）</p>
+<p>根据直线分平面可知，由交点决定了射线和线段的条数，进而决定了新增的区域数。当n-1条折线时，区域数为f（n-1）。为了使增加的区域最多<br>，则折线的两边的线段要和n-<br>1条折线的边，即2<em>（n-1）条线段相交。那么新增的线段数为4</em>（n-1），射线数为2。但要注意的是，折线本身相邻的两线段只能增加一个区域。</p>
+<p>故：f(n)=f(n-1)+4(n-1)+2-1</p>
+<p>=f(n-1)+4(n-1)+1</p>
+<p>=f(n-2)+4(n-2)+4(n-1)+2</p>
+<p>……</p>
+<p>=f(1)+4+4*2+……+4(n-1)+(n-1)</p>
+<p>=2n^2-n+1</p>
+<p>(3) 封闭曲线分平面问题</p>
+<p>题目大致如设有n条封闭曲线画在平面上，而任何两条封闭曲线恰好相交于两点，且任何三条封闭曲线不相交于同一点，问这些封闭曲线把平面分割成的区域个数。</p>
+<p>析：当n-1个圆时，区域数为f(n-1).那么第n个圆就必须与前n-1个圆相交，则第n个圆被分为2（n-1）段线段，增加了2（n-1）个区域。</p>
+<p>故： f(n)=f(n-1)+2(n-1)</p>
+<p>=f(1)+2+4+……+2(n-1)</p>
+<p>=n^2-n+2</p>
+<p>(4)平面分割空间问题（hdu1290）</p>
+<p>由二维的分割问题可知，平面分割与线之间的交点有关，即交点决定射线和线段的条数，从而决定新增的区域数。试想在三维中则是否与平面的交线有关呢？当有n-<br>1个平面时，分割的空间数为f（n-1）。要有最多的空间数，则第n个平面需与前n-1个平面相交，且不能有共同的交线。即最多有n-1 条交线。而这n-<br>1条交线把第n个平面最多分割成g（n-1）个区域。（g（n）为（1）中的直线分平面的个数 ）此平面将原有的空间一分为二，则最多增加g（n-1）个空间。</p>
+<p>故：f=f(n-1)+g(n-1) ps:g(n)=n(n+1)/2+1</p>
+<p>=f(n-2)+g(n-2)+g(n-1)</p>
+<p>……</p>
+<p>=f(1)+g(1)+g(2)+……+g(n-1)</p>
+<p>=2+(1<em>2+2</em>3+3*4+……+(n-1)n)/2+（n-1）</p>
+<p>=(1+2^2+3^2+4^2+……+n^2-1-2-3-……-n )/2+n+1</p>
+<p>=(n^3+5n)/6+1</p>
+<hr>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

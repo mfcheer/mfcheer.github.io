@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>哈希表VS红黑树 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">哈希表VS红黑树</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/52558993" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/52558993</a></p>
+<h2 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h2><p>Hash，也可以称为“散列”，就是把任意长度的输入，通过散列算法，变换成固定长度的输出，该输出就是散列值。这是一种压缩映射，也就是，散列值的空间通常远小于输入的空间，不同的输入可能会散列成相同的输出（也就是多对一的关系）。</p>
+<h3 id="哈希表的构造"><a href="#哈希表的构造" class="headerlink" title="哈希表的构造"></a>哈希表的构造</h3><p>在所有的线性数据结构中，数组的定位速度最快，因为它可通过数组下标直接定位到相应的数组空间，就不需要一个个查找。而哈希表就是利用数组这个能够快速定位数据的结构解决以上的问题的。<br>“数组可以通过下标直接定位到相应的空间”，对就是这句，哈希表的做法其实很简单，就是把Key通过一<br>个固定的算法函数既所谓的哈希函数转换成一个整型数字，然后就将该数字对数组长度进行取余，取余结果就当作数组的下标，将value存储在以该数字为下标<br>的数组空间里，而当使用哈希表进行查询的时候，就是再次使用哈希函数将key转换为对应的数组下标，并定位到该空间获取value，如此一来，就可以充分<br>利用到数组的定位性能进行数据定位。</p>
+<p>通过关键字除以槽数m将关键字映射到槽里的方法。哈希函数是H(k)=k Mod m。<br>举个例子，m=12，k=100，H(100)=4。<br>而如果m=2k，那么无论k是什么，H(K)的值都是一个0和奇数，也即是说只要奇数槽和0槽被占用，其他的偶数槽都是浪费掉了。如果m=2^r，那么H(k)的值就是k的低r位（化成二进制）。这样造成的后果是某一个槽有很多的关键字。所以来说一般的m取值尽量不要接近2的整数幂，而且还要是质数。</p>
+<p>虽然我们不希望发生冲突（同一个key有多个value），但实际上发生冲突的可能性仍是存在的。当关键字值域远大于哈希表的长度，而且事先并不知道关键字的具体取值时。冲突就难免会发生。另外，当关键字的实际取值大于哈希表的长度时，而且表中已装满了记录，如果插入一个新记录，不仅发生冲突，而且还会发生溢出。因此，处理冲突和溢出是哈希技术中的两个重要问题。一般有开放地址法、链地址法。</p>
+<h3 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h3><p>快速查找，删除的基本数据结构，通常需要总数据量可以放入内存。</p>
+<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p>Map是C++标准库STL提供的一类关联式容器，提供key-value的存储和查找功能。<br>Map是基于红黑树的（同样set也是），那么它的查找速度是log(n)级别的。<br>它的优点是占用内存小。</p>
+<h2 id="Hash与Map的区别"><a href="#Hash与Map的区别" class="headerlink" title="Hash与Map的区别"></a>Hash与Map的区别</h2><p>权衡三个因素: 查找速度, 数据量, 内存使用，可扩展性，有序性。<br>总体来说，hash查找速度会比RB树快，而且查找速度基本和数据量大小无关，属于常数级别;而RB树的查找速度是log(n)级别。并不一定常数就比log(n)<br>小，因为hash还有hash函数的耗时。当元素达到一定数量级时，考虑hash。但若你对内存使用特别严格，<br>希望程序尽可能少消耗内存，那么hash可能会让你陷入尴尬，特别是当你的hash对象特别多时，你就更无法控制了，而且 hash的构造速度较慢。<br>红黑树并不适应所有应用树的领域。如果数据基本上是静态的，那么让他们待在他们能够插入，并且不影响平衡的地方会具有更好的性能。如果数据完全是静态的，例如，做一个哈希表，性能可能会更好一些。</p>
+<p>在实际的系统中，例如，需要使用动态规则的防火墙系统，使用红黑树而不是散列表被实践证明具有更好的伸缩性。Linux内核在管理vm_area_struct时就是采用了红黑树来维护内存块的。</p>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>红黑树是有序的，Hash是无序的，根据需求来选择。<br>红黑树占用的内存更小（仅需要为其存在的节点分配内存），而Hash事先就应该分配足够的内存存储散列表（即使有些槽可能遭弃用）。<br>红黑树查找和删除的时间复杂度都是O(logn)，Hash查找和删除的时间复杂度都是O(1)。<br>补充：<br>如果只需要判断Map中某个值是否存在之类的操作，当然是Hash实现的要更加高效。<br>如果是需要将两个Map求并集交集差集等大量比较操作，就是红黑树实现的Map更加高效。</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

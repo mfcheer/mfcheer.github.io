@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>机器学习：K-Means算法 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">机器学习：K-Means算法</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>K-Means算法属于基于划分的聚类算法，对N维欧氏空间中的点进行聚类，是一种最简单的无监督学习方法。它通过迭代来实现，其基本思想是：每次确定K个类别中心，然后将各个结点归属到与之距离最近的中心点所在的Cluster，然后将类别中心更新为属于各Cluster的所有样本的均值，反复迭代，直至类别中心不再发生变化或变化小于某阈值。</p>
+<h1 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h1><p>（1）随机生成c个类的初始中心；<br>（2）在第k次迭代中，对任意一个样本，求其到c各中心的距离，将该样本归到距离最短的那个中心所在的类；<br>（3）利用均值等方法更新该类的中心值；<br>（4）对于所有的C个聚类中心，如果利用（2）（3）的迭代法更新后，值保持不变，则迭代结束；否则继续迭代。<br><a id="more"></a></p>
+<p>不同的初始化k值和中心点的选择有可能引起不同的聚类结果</p>
+<h1 id="聚类数k的选取评价方法"><a href="#聚类数k的选取评价方法" class="headerlink" title="聚类数k的选取评价方法"></a>聚类数k的选取评价方法</h1><h3 id="1、事前的数据分析，选取合适的k值"><a href="#1、事前的数据分析，选取合适的k值" class="headerlink" title="1、事前的数据分析，选取合适的k值"></a>1、事前的数据分析，选取合适的k值</h3><h3 id="2、手肘法"><a href="#2、手肘法" class="headerlink" title="2、手肘法"></a>2、手肘法</h3><p>手肘法的核心指标是SSE(误差平方和)。取名的原因是拟合曲线形状和手肘形状相似。</p>
+<p>手肘法的核心思想是：随着聚类数k的增大，样本划分会更加精细，每个簇的聚合程度会逐渐提高，那么误差平方和SSE自然会逐渐变小。并且，当k小于真实聚类数时，由于k的增大会大幅增加每个簇的聚合程度，故SSE的下降幅度会很大，而当k到达真实聚类数时，再增加k所得到的聚合程度回报会迅速变小，所以SSE的下降幅度会骤减，然后随着k值的继续增大而趋于平缓，也就是说SSE和k的关系图是一个手肘的形状，而这个肘部对应的k值就是数据的真实聚类数。当然，这也是该方法被称为手肘法的原因。</p>
+<h3 id="3、轮廓系数法"><a href="#3、轮廓系数法" class="headerlink" title="3、轮廓系数法"></a>3、轮廓系数法</h3><p>轮廓系数的公式为 s = (a-b)/max(a,b)。其中a为当前样本点x与同簇的其他样本的平均距离，称为凝聚度，b为x与最近簇中所有样本的平均距离，称为分离度。顾名思义，最近簇为除了同簇的最近的簇。</p>
+<p>求出所有样本的轮廓系数后再求平均值就得到了平均轮廓系数。平均轮廓系数的取值范围为[-1,1]，且簇内样本的距离越近，簇间样本距离越远，平均轮廓系数越大，聚类效果越好。</p>
+<h1 id="随机点的选取评价方法"><a href="#随机点的选取评价方法" class="headerlink" title="随机点的选取评价方法"></a>随机点的选取评价方法</h1><h3 id="1、事前的数据分析，选取合适中心点"><a href="#1、事前的数据分析，选取合适中心点" class="headerlink" title="1、事前的数据分析，选取合适中心点"></a>1、事前的数据分析，选取合适中心点</h3><h3 id="2、随机化选择"><a href="#2、随机化选择" class="headerlink" title="2、随机化选择"></a>2、随机化选择</h3><p>第一个簇心A随机找；第二个簇心B要找距离A最远的，是因为簇心之间要相距远一些，如果很近的话，很容易当作一类，影响聚类效果；第三个簇心C也是同样的，它得离A、B远一些；如此类推。</p>
+<h1 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h1><p>k-means算法的时间复杂度为：<br>O(mnkd)，m为迭代次数。n为数据集中数据样本数量，k为聚类个数，d为数据的维数。</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/机器学习/">机器学习</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

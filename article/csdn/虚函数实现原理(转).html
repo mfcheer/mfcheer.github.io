@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>虚函数实现原理(转) - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">虚函数实现原理(转)</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/52491723" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/52491723</a></p>
+<p>虚函数表（Virtual Table），简称为V-<br>Table。在这个表中，主是要一个类的虚函数的地址表，这张表解决了继承、覆盖的问题，保证其容真实反应实际的函数。这样，在有虚函数的类的实例中这个表被分配在了这个实例的内存中，所以，当我们用父类的指针来操作一个子类的时候，这张虚函数表就显得由为重要了，它就像一个地图一样，指明了实际所应该调用的函数。在类的对象地址空间中存储一个该虚表的入口，占4个字节</p>
+<p>虚函数表的指针存在于对象实例中最前面的位置。这意味着我们通过对象实例的地址得到这张虚函数表，然后就可以遍历其中函数指针，并调用相应的函数。</p>
+<p>画个图解释一下</p>
+<p><img src="https://img-blog.csdn.net/20160909234659177" alt="这里写图片描述"><br>上面这个图中，我在虚函数表的最后多加了一个结点，这是虚函数表的结束结点，就像字符串的结束符“\0”一样，其标志了虚函数表的结束。</p>
+<p>下面，我将分别说明“无覆盖”和“有覆盖”时的虚函数表的样子。没有覆盖父类的虚函数是毫无意义的。我之所以要讲述没有覆盖的情况，主要目的是为了给一个对比。在比较之下，我们可以更加清楚地知道其内部的具体实现。</p>
+<h2 id="一般继承（无虚函数覆盖）"><a href="#一般继承（无虚函数覆盖）" class="headerlink" title="一般继承（无虚函数覆盖）"></a>一般继承（无虚函数覆盖）</h2><p>下面，再让我们来看看继承时的虚函数表是什么样的。假设有如下所示的一个继承关系：<br><img src="https://img-blog.csdn.net/20160909234824144" alt="这里写图片描述"></p>
+<p>在这个继承关系中，子类没有重载任何父类的函数。那么，在派生类的实例中，其虚函数表如下所示：</p>
+<p>对于实例：Derive d; 的虚函数表如下：<br><img src="https://img-blog.csdn.net/20160909234853850" alt="这里写图片描述"></p>
+<p>我们可以看到下面几点：</p>
+<p>1）虚函数按照其声明顺序放于表中。</p>
+<p>2）父类的虚函数在子类的虚函数前面。</p>
+<h2 id="一般继承（有虚函数覆盖）"><a href="#一般继承（有虚函数覆盖）" class="headerlink" title="一般继承（有虚函数覆盖）"></a>一般继承（有虚函数覆盖）</h2><p>覆盖父类的虚函数是很显然的事情，不然，虚函数就变得毫无意义。下面，我们来看一下，如果子类中有虚函数重载了父类的虚函数，会是一个什么样子？假设，我们有下面这样的一个继承关系。</p>
+<p><img src="https://img-blog.csdn.net/20160909234939803" alt="这里写图片描述"></p>
+<p>这个类的设计中，我只覆盖了父类的一个函数：f()。那么，对于派生类的实例，其虚函数表会是下面的一个样子：<br><img src="https://img-blog.csdn.net/20160909235011132" alt="这里写图片描述"></p>
+<p>从表中可以看到下面几点，</p>
+<p>1）覆盖的f()函数被放到了虚表中原来父类虚函数的位置。</p>
+<p>2）没有被覆盖的函数依旧。</p>
+<pre><code>这样，我们就可以看到对于下面这样的程序，
+
+Base *b = new Derive();
+
+b-&gt;f();
+
+由b所指的内存中的虚函数表的f()的位置已经被Derive::f()函数地址所取代，于是在实际调用发生时，是Derive::f()被调用了。这就实现了多态。
+</code></pre><h2 id="多重继承（无虚函数覆盖）"><a href="#多重继承（无虚函数覆盖）" class="headerlink" title="多重继承（无虚函数覆盖）"></a>多重继承（无虚函数覆盖）</h2><p>下面，再让我们来看看多重继承中的情况，假设有下面这样一个类的继承关系。注意：子类并没有覆盖父类的函数。<br><img src="https://img-blog.csdn.net/20160909235131399" alt="这里写图片描述"></p>
+<p>对于子类实例中的虚函数表，是下面这个样子<br><img src="https://img-blog.csdn.net/20160909235200649" alt="这里写图片描述"></p>
+<p>我们可以看到：</p>
+<p>1） 每个父类都有自己的虚表。</p>
+<p>2） 子类的成员函数被放到了第一个父类的表中。（所谓的第一个父类是按照声明顺序来判断的）</p>
+<p>这样做就是为了解决不同的父类类型的指针指向同一个子类实例，而能够调用到实际的函数。</p>
+<h2 id="多重继承（有虚函数覆盖）"><a href="#多重继承（有虚函数覆盖）" class="headerlink" title="多重继承（有虚函数覆盖）"></a>多重继承（有虚函数覆盖）</h2><p>下面我们再来看看，如果发生虚函数覆盖的情况。<br>下图中，我们在子类中覆盖了父类的f()函数。<br><img src="https://img-blog.csdn.net/20160909235327086" alt="这里写图片描述"><br>下面是对于子类实例中的虚函数表的图：<br><img src="https://img-blog.csdn.net/20160909235345620" alt="这里写图片描述"></p>
+<p>可以看见，三个父类虚函数表中的f()的位置被替换成了子类的函数指针。这样，我们就可以任一静态类型的父类来指向子类，并调用子类的f()了。如：</p>
+<pre><code>Derive d;
+
+Base1 *b1 = &amp;d;
+
+Base2 *b2 = &amp;d;
+
+Base3 *b3 = &amp;d;
+
+b1-&gt;f(); //Derive::f()
+
+b2-&gt;f(); //Derive::f()
+
+b3-&gt;f(); //Derive::f()
+
+b1-&gt;g(); //Base1::g()
+
+b2-&gt;g(); //Base2::g()
+
+b3-&gt;g(); //Base3::g()
+</code></pre><h2 id="析构函数定义为虚函数原因"><a href="#析构函数定义为虚函数原因" class="headerlink" title="析构函数定义为虚函数原因"></a>析构函数定义为虚函数原因</h2><p>用基类的指针指向派生类的时候，虚函数发挥了动态的作用。<br>析构函数执行时先调用派生类的析构函数，其次才调用基类的析构函数。如果析构函数不是虚函数，而程序执行时又要通过基类的指针去销毁派生类的动态对象，那么用delete销毁对象时，只调用了基类的析构函数，未调用派生类的析构函数。这样会造成销毁对象不完全。<br>如果一个类不用作基类或者不需具有多态性，便不应该为它声明虚析构器。</p>
+<p>文章中大部分内容转自： <a href="http://blog.csdn.net/wanghaobo920/article/details/7674631" target="_blank" rel="noopener"> http://blog.csdn.net/wanghaobo920/article/details/7674631
+</a></p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

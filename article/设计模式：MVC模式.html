@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>设计模式：MVC模式 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">设计模式：MVC模式</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <h2 id="三层体系结构"><a href="#三层体系结构" class="headerlink" title="三层体系结构"></a>三层体系结构</h2><p>三层体系结构是在客户端和数据库端之间引入一个“组件层”，并以业务逻辑为核心，将整个项目在逻辑逻辑上分为表现层、业务层、数据访问层。</p>
+<h2 id="MVC设计思想"><a href="#MVC设计思想" class="headerlink" title="MVC设计思想"></a>MVC设计思想</h2><p>M代表model V代表view C代表controller。view即为客户所能看到的页面,controller即为控制器，model即为模型。MVC设计思想主要用于表现层，准确来说 MVC 是以页面为核心，将表现层分为模型、视图、控制器三部分，是基于界面开发的指导思想。</p>
+<h2 id="三层体系结构内涵"><a href="#三层体系结构内涵" class="headerlink" title="三层体系结构内涵"></a>三层体系结构内涵</h2><p>层与层之间：1.上层依赖下层 2.下层不可依赖上层，上层对下层是不可见的。3.层与层之间通过接口联系。</p>
+<p>表现层负责用户界面的交互，表现层不能直接访问数据。业务层负责数据的传递和业务方法的处理，业务层不能直接访问数据库，而是要通过数据访问层提供的接口实现数据的调用。数据访问层负责数据的处理工作，封装了所有与数据库的交互操作。</p>
+<h2 id="MVC设计思想的内涵"><a href="#MVC设计思想的内涵" class="headerlink" title="MVC设计思想的内涵"></a>MVC设计思想的内涵</h2><p>web中引入MVC设计思想是为了实现表现层与业务层的分离，MVC提供了视图与模型分离的机制–控制器。一般把跳转关系的管理、表单数据的封装、国际化、验证等任务交给控制器处理。<br><a id="more"></a><br>controller、view、model并不像三层体系结构那样存在上下层的关系，各层之间是平行的，不是分层模式，而是彼此独立的组件，是相互协作的关系。</p>
+<p>controller接受用户的请求，完成视图与模型的匹配，不负责处理业务信息，只是把用户请求的消息传递给模型，告诉模型的做什么，返回符合要求的视图，起到控制业务流程的作用。一个视图可以对应多个模型，一个模型也可以对应多个视图。</p>
+<p>model是MVC的核心，负责业务流程/状态、业务规则、数据模型的制定。业务流程的处理对其他层是不可见的。model拥有最多的处理任务，其返回的数据是与格式无关的。这样一个model就可以为多个视图提供数据，提高了代码利用率。</p>
+<p>view是用户看到并与之交互的界面。视图向用户显示相关的数据，并能接收用户的输入数据，但是它并不进行任何实际的业务处理。视图可以向模型查询业务状态，但不能改变模型。视图还能接受模型发出的数据更新事件，从而对用户界面进行同步更新。</p>
+<h2 id="MVC工作流程"><a href="#MVC工作流程" class="headerlink" title="MVC工作流程"></a>MVC工作流程</h2><p>在 MVC 模式中，Web 用户向服务器提交的所有请求都由控制器接管。接受到请求之后，控制器负责决定应该调用哪个模型来进行处理；然后模型根据用户请求进行相应的业务逻辑处理，并返回数据；最后控制器调用相应的视图来格式化模型返回的数据，并通过视图呈现给用户。</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/Java/">Java</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

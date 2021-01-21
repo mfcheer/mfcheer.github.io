@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Codeforces Round - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="算法,acm,codeforces">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">Codeforces Round</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41262259" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/41262259</a></p>
+<p>题目： <a href="http://codeforces.com/contest/489/problem/C" target="_blank" rel="noopener"> http://codeforces.com/contest/489/problem/C
+</a></p>
+<p>C. Given Length and Sum of Digits…</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>You have a positive integer  _m_ and a non-negative integer  _s_ . Your task<br>is to find the smallest and the largest of the numbers that have length  _m_<br>and sum of digits  _s_ . The required numbers should be non-negative integers<br>written in the decimal base without leading zeroes.</p>
+<p>Input</p>
+<p>The single line of the input contains a pair of integers  _m_ ,  _s_ (  1 ≤<br>_m_ ≤ 100, 0 ≤ _s_ ≤ 900  ) — the length and the sum of the digits of the<br>required numbers.</p>
+<p>Output</p>
+<p>In the output print the pair of the required non-negative integer numbers —<br>first the minimum possible number, then — the maximum possible number. If no<br>numbers satisfying conditions required exist, print the pair of numbers “  -1<br>-1  “ (without the quotes).</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>2 15
+</code></pre><p>output</p>
+<pre><code>69 96
+</code></pre><p>input</p>
+<pre><code>3 0
+</code></pre><p>output</p>
+<pre><code>-1 -1
+
+
+#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+int n,m;
+int a[110];
+
+int main ()
+{
+    while (scanf(&quot;%d %d&quot;,&amp;n,&amp;m)!=EOF)
+    {
+        if ( m == 0 )
+        {
+            if ( n == 1)
+                printf(&quot;0 0\n&quot;);
+            else
+                printf(&quot;-1 -1\n&quot;);
+        }
+        else if ( n*9 &lt; m)
+            printf(&quot;-1 -1\n&quot;);
+        else
+        {
+            {
+                memset(a,0,sizeof(a));
+                a[n-1] = 1;
+                int ans = m-1;
+                for(int i=0 ;ans &amp;&amp; i&lt;n;i++)
+                {
+                    while (ans != 0 &amp;&amp; a[i]&lt;9)
+                    {
+                        ans--;
+                        a[i]++;
+                    }
+                }
+                for(int i=n-1;i&gt;=0;i--)
+                    printf(&quot;%d&quot;,a[i]);
+                printf(&quot; &quot;);
+            }
+            {
+                memset(a,0,sizeof(a));
+                a[0]= 1 ;
+                int ans = m-1;
+                for(int i=0;ans &amp;&amp; i&lt;n;i++)
+                {
+                    while (ans !=0 &amp;&amp; a[i]&lt;9)
+                    {
+                        ans --;
+                        a[i]++;
+                    }
+                }
+                for(int i=0 ;i&lt;n;i++)
+                    printf(&quot;%d&quot;,a[i]);
+                printf(&quot;\n&quot;);
+            }
+        }
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

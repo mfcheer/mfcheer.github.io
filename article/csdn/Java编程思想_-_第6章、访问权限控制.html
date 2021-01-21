@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Java编程思想 - 第6章、访问权限控制 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">Java编程思想 - 第6章、访问权限控制</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49488911" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/49488911</a></p>
+<h3 id="本章主要知识点是访问权限"><a href="#本章主要知识点是访问权限" class="headerlink" title="本章主要知识点是访问权限:"></a>本章主要知识点是访问权限:</h3><p>public &gt; protected &gt; (无关键词) &gt; private</p>
+<p>1，</p>
+<h4 id="杂碎的知识点："><a href="#杂碎的知识点：" class="headerlink" title="杂碎的知识点："></a>杂碎的知识点：</h4><p>包内含有一组类，它们在单一的名字空间下被组织到了一起。<br>import关键字用于导入类。<br>例子：</p>
+<pre><code>import java.util.ArrayList;
+
+public class mfcheer 
+{
+     public static void main(String[] args) 
+     {
+         ArrayList list = new java.util.ArrayList();
+     }
+}
+</code></pre><p>导入所有类只需使用 <code>import java.util.*;</code></p>
+<p>代码组织：<br>关键字 package 在文件起始位置处，这样写</p>
+<pre><code>package access；
+</code></pre><p>表示你在声明该编译单元是名为access的类库的一部分。</p>
+<p>Java解释器运行过程：<br>首先找出环境变量CLASSPATH，CLASSPATH包含一个或多个目录，用于查找.class文件根目录。从根目录开始产生一个路径名称，得到的路径与CLASSPATH各个不同项目链接，解释器就会在目录中查找与你所创建的类名称相关的.class文件。</p>
+<p>2，</p>
+<h4 id="Java访问权限修饰词："><a href="#Java访问权限修饰词：" class="headerlink" title="Java访问权限修饰词："></a>Java访问权限修饰词：</h4><pre><code>    public：import之后包内包外可以使用
+    protected：继承访问权限，只有子类可以访问。同时，protected也提供包访问权限
+    包访问权限：（类前面没有权限修饰符）一个包的代码可以访问本包内所有代码，但是本包对外界成员是透明的、不可见的
+    private：除本类外包内包外均无法访问
+</code></pre><p>封装的原因：<br>1），设定客户端程序员可以使用和不适用的界限，建立内部机制。<br>2），将接口和具体实现分离。便于重构。</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

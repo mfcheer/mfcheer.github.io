@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>各种查找算法效率比较 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">各种查找算法效率比较</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44598923" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44598923</a></p>
+<p>题目描述：<br>给定一个已经排好序的N个整数的序列（数据从1到N），在该序列中查找指定的整数，并观察不同算法的运行时间。考查3类查找算法：折半查找，平衡二叉排序树的查找，B-树的查找。<br>要求：<br>（1）构造树表的算法要考虑各种可能的输入数据序列；<br>（2）可根据要求输出树表结构；<br>（3）分析最坏情况下，三种查找算法的复杂度；<br>（4）测量并比较三种算法在N=100，500，1000，2000，4000，6000，8000，10000时的性能，要求完成以下三个方面的工作：<br>① 对每个测试数据集，统计计算每种查找算法的ASL；<br>② 对每个测试数据集运行多次获得运行时间的平均值；<br>③ 绘制算法实际运行结果（ASL和运行时间）的曲线图，验证和理论分析的时间复杂度的吻合性。</p>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;stdio.h&gt;
+#include &lt;time.h&gt;
+#include &lt;malloc.h&gt;
+
+using namespace std;
+
+#define CLOCKS_PER_SEC ((clock_t)1000)
+#define MaxSize 100002
+#define M 100
+int Step;
+int Bjishu;
+using namespace std;
+
+typedef struct
+{
+    int key;
+
+}DataType;
+typedef struct
+{
+    DataType list[MaxSize];
+    int size;
+}SeqList;
+
+typedef struct node
+{
+    DataType data;
+    struct node *LeftChild;//
+    struct node *RightChild;//
+    struct node *Parent;
+    int i;//height
+}BITreeNode, BTnode, *Tree;//二叉平衡树结构体
+
+typedef struct Node
+{
+    struct Node *parent;        /*指向双亲结点*/
+    int key[M];              /*关键字向量，0号单元未用(M-1阶)*/
+    struct Node *ptr[M];        /*子树指针向量*/
+}B_TNode;//B_树结构体
+
+
+void ListInitiate(SeqList *L)
+{
+    L-&gt;size = 0;
+}
+int ListLength(SeqList L)
+{
+    return L.size;
+}
+int ListInsert(SeqList *L, int x)
+{
+    // int j;
+    if (L-&gt;size &gt;= MaxSize)
+    {
+        printf(&quot;顺序表已满\n&quot;);
+        return 0;
+    }
+    else
+    {
+        //for(j=L-&gt;size;j&gt;i;j--)L-&gt;list[j]=L-&gt;list[j-1];
+        L-&gt;list[L-&gt;size].key = x;
+        L-&gt;size++;
+        return 1;
+    }
+}
+int BInarySearch(SeqList S, DataType x)//折半查找
+{
+    int js = 1;                        //次数记录
+    int low = 0;
+    int high = S.size - 1;
+    int mid;
+    while (low &lt;= high)
+    {
+        mid = (low + high) / 2;             //中间位置
+        if (S.list[mid].key == x.key)return js;
+        else if (S.list[mid].key&lt;x.key)low = mid + 1;
+        else if (S.list[mid].key&gt;x.key)high = mid - 1;
+        js++;
+    }
+    return -1;
+}
+int Hetree(BTnode *Root)
+{
+    if (Root == NULL)return 0;
+    return
+        Hetree(Root-&gt;LeftChild)&gt;Hetree(Root-&gt;RightChild) ? Hetree(Root-&gt;LeftChild) + 1 : Hetree(Root-&gt;RightChild) + 1;
+}
+
+
+int IsBlance(BTnode *Root)//判断二叉树的平衡)
+{
+    int bf;
+    if (Root != NULL)
+    {
+        bf = Hetree(Root-&gt;LeftChild) - Hetree(Root-&gt;RightChild);
+        if ((bf&lt;-1) || (bf&gt;1))
+            return 0;//不平衡
+        else
+        {
+            if (IsBlance(Root-&gt;LeftChild) &amp;&amp; IsBlance(Root-&gt;RightChild))
+                return 1;
+            else
+                return 0;
+        }
+    }
+    return 1;
+}
+BTnode *R_Rotate(BTnode *Root, BTnode *p)//LL型调平衡(右旋)
+{
+    BTnode *b, *q, *c, *d;
+    q = p-&gt;Parent;
+    b = p-&gt;LeftChild;
+    c = b-&gt;LeftChild;
+    d = b-&gt;RightChild;
+    p-&gt;LeftChild = d;
+    if (d != NULL)
+        d-&gt;Parent = p;
+    b-&gt;RightChild = p;
+    p-&gt;Parent = b;
+    if (q == NULL)
+    {
+        Root = b;
+        b-&gt;Parent = NULL;            //b的父结点为空，即b就是根结点
+    }
+    else if (q-&gt;LeftChild == p)        //如果a是父结点的左孩子
+    {
+        q-&gt;LeftChild = b;            //将b赋值给q的左孩子
+        b-&gt;Parent = q;            //b的父结点是q
+    }
+    else if (q-&gt;RightChild == p)        //如果a是父结点的右孩子
+    {
+        q-&gt;RightChild = b;            //将b赋值给q的右孩子
+        b-&gt;Parent = q;            //b的父结点是q
+    }
+    return Root;
+}
+
+
+BTnode *L_Rotate(BTnode *Root, BTnode *p)//RR型调平衡
+{
+    BTnode *b, *q, *c, *d;
+    q = p-&gt;Parent;
+
+    b = p-&gt;RightChild;
+    c = b-&gt;RightChild;
+    d = b-&gt;LeftChild;
+
+    p-&gt;RightChild = d;
+    if (d != NULL)
+        d-&gt;Parent = p;
+
+    b-&gt;LeftChild = p;
+    p-&gt;Parent = b;
+
+    if (q == NULL)
+    {
+        Root = b;                //二叉树的根结点就是b，把b赋值给树Root
+        b-&gt;Parent = NULL;        //b的父结点为空，即b就是根结点
+    }
+    else if (q-&gt;LeftChild == p)    //如果p是父结点的左孩子
+    {
+        q-&gt;LeftChild = b;        //将b赋值给q的左孩子
+        b-&gt;Parent = q;        //b的父结点是q
+    }
+    else if (q-&gt;RightChild == p)    //如果p是父结点的右孩子
+    {
+        q-&gt;RightChild = b;        //将b赋值给q的右孩子
+        b-&gt;Parent = q;        //b的父结点是q
+    }
+
+    return Root;
+}
+BTnode *LR_Rotate(BTnode *Root, BTnode *p)
+{
+    BTnode *b, *q, *c, *d;
+    q = p-&gt;Parent;
+    b = p-&gt;LeftChild;
+    c = b-&gt;LeftChild;
+    d = b-&gt;RightChild;
+    p-&gt;LeftChild = d;
+    if (d != NULL)
+        d-&gt;Parent = p;
+    b-&gt;RightChild = p;
+    p-&gt;Parent = b;
+    if (q == NULL)
+    {
+        Root = b;
+        b-&gt;Parent = NULL;            //b的父结点为空，即b就是根结点
+    }
+    else if (q-&gt;LeftChild == p)        //如果a是父结点的右孩子
+    {
+        q-&gt;LeftChild = b;            //将b赋值给q的左孩子
+        b-&gt;Parent = q;            //b的父结点是q
+    }
+    else if (q-&gt;RightChild == p)        //如果a是父结点的左孩子
+    {
+        q-&gt;RightChild = b;            //将b赋值给q的右孩子
+        b-&gt;Parent = q;            //b的父结点是q
+    }
+    return Root;
+}
+BTnode *RL_Rotate(BTnode *Root, BTnode *p)
+{
+    BTnode *b, *q, *c, *d;
+    q = p-&gt;Parent;
+
+    b = p-&gt;RightChild;
+    c = b-&gt;RightChild;
+    d = b-&gt;LeftChild;
+
+    p-&gt;RightChild = d;
+    if (d != NULL)
+        d-&gt;Parent = p;
+
+    b-&gt;LeftChild = p;
+    p-&gt;Parent = b;
+
+    if (q == NULL)
+    {
+        Root = b;                //二叉树的根结点就是b，把b赋值给树Root
+        b-&gt;Parent = NULL;        //b的父结点为空，即b就是根结点
+    }
+    else if (q-&gt;LeftChild == p)    //如果p是父结点的右孩子
+    {
+        q-&gt;LeftChild = b;        //将b赋值给q的左孩子
+        b-&gt;Parent = q;        //b的父结点是q
+    }
+    else if (q-&gt;RightChild == p)    //如果p是父结点的左孩子
+    {
+        q-&gt;RightChild = b;        //将b赋值给q的右孩子
+        b-&gt;Parent = q;        //b的父结点是q
+    }
+
+    return Root;
+}
+int blancebinarytreesearch(BTnode *Root, int x)//查找平衡二叉排序树
+{
+    BTnode *p;
+    int count = 0;
+    if (Root != NULL)
+    {
+        p = Root;
+        while (p != NULL)
+        {
+            count++;
+            if (p-&gt;i == x)return count;
+            else if (x&lt;p-&gt;i)p = p-&gt;LeftChild;
+            else if (x&gt;p-&gt;i)p = p-&gt;RightChild;
+        }
+    }
+    return 0;
+}
+int InPEtree(BTnode **Root, int x)//创建平衡二叉排序树的函数
+{
+    BTnode *cur, *parent = NULL, *p, *q;
+    cur = *Root;
+    while (cur != NULL)
+    {
+        if (x == cur-&gt;i)return 0;
+        parent = cur;
+        if (x&lt;cur-&gt;i)cur = cur-&gt;LeftChild;
+        else if (x&gt;cur-&gt;i)cur = cur-&gt;RightChild;
+    }
+    p = (BTnode *)malloc(sizeof(BTnode));
+    p-&gt;i = x;
+    p-&gt;LeftChild = NULL;
+    p-&gt;RightChild = NULL;
+    p-&gt;Parent = NULL;
+    if (parent == NULL)*Root = p;
+    else if (x&lt;parent-&gt;i)
+    {
+        parent-&gt;LeftChild = p;
+        p-&gt;Parent = parent;
+    }
+    else if (x&gt;parent-&gt;i)
+    {
+        parent-&gt;RightChild = p;
+        p-&gt;Parent = parent;
+    }
+
+    int bf;
+
+    if (IsBlance(*Root) == 0)        //如果二叉树是不平衡的
+    {
+        bf = Hetree(parent-&gt;LeftChild) - Hetree(parent-&gt;RightChild);
+        while ((bf &gt;= -1) &amp;&amp; (bf &lt;= 1))
+        {
+            parent = parent-&gt;Parent;
+            bf = Hetree(parent-&gt;LeftChild) - Hetree(parent-&gt;RightChild);
+        }
+        q = parent;///找到离插入点最近的不平衡点
+        if (p-&gt;i&gt;q-&gt;i&amp;&amp;p-&gt;i&gt;q-&gt;RightChild-&gt;i)//新结点插入在q结点的右孩子的右子树中。
+        {
+            *Root = L_Rotate(*Root, q);
+        }
+        else if (p-&gt;i&gt;q-&gt;i&amp;&amp;p-&gt;i&lt;q-&gt;RightChild-&gt;i)//新结点插入在A结点的右孩子的左子树中
+        {
+            *Root = RL_Rotate(*Root, q);
+        }
+        else if (p-&gt;i&lt;q-&gt;i&amp;&amp;p-&gt;i&gt;q-&gt;LeftChild-&gt;i)//新结点插入在q结点的左孩子的右子树中
+        {
+            *Root = LR_Rotate(*Root, q);
+        }
+        else //结点插入在A结点的左孩子的左子树中
+        {
+            *Root = R_Rotate(*Root, q);
+        }
+    }
+    return 1;
+}
+
+void PrintBiTree(BTnode *root, int n)
+{
+    int i;
+    if (root == NULL)return;
+    PrintBiTree(root-&gt;RightChild, n + 1);
+    for (i = 0; i&lt;n - 1; i++)printf(&quot;     &quot;);
+    if (n&gt;0)
+    {
+        printf(&quot;-----&quot;);
+        printf(&quot;%d\n&quot;, root-&gt;i);
+    }
+    if (n == 0)
+    {
+        //printf(&quot;--&quot;);
+        printf(&quot;%d\n&quot;, root-&gt;i);
+    }
+    PrintBiTree(root-&gt;LeftChild, n + 1);
+}
+
+int B_treetreesearch(B_TNode *Root, int x)//查找B-树
+{
+    int i;
+    if (Root == NULL)return 0;
+    for (i = 1; i &lt;= Root-&gt;key[0]; i++)
+    {
+        Bjishu++;
+        if (x&lt;Root-&gt;key[i])break;
+        if (x == Root-&gt;key[i])return Bjishu;
+    }
+    return B_treetreesearch(Root-&gt;ptr[i - 1], x);
+}
+
+B_TNode* B_treetreeinsert(B_TNode *Root, int x)//3.B-树的插入函数
+{
+    int i;
+    if (Root == NULL)//B_树为空
+    {
+        Root = (B_TNode *)malloc(sizeof(B_TNode));
+        Root-&gt;key[0] = 1;
+        Root-&gt;key[1] = x;
+        for (i = 0; i&lt;M; i++)
+            Root-&gt;ptr[i] = NULL;
+        Root-&gt;parent = NULL;
+        return Root;
+    }
+    B_TNode *p = Root, *q, *s;
+    q = p;
+    while (p != NULL)
+    {
+        for (i = 1; i &lt;= p-&gt;key[0]; i++)
+            if (x&lt;p-&gt;key[i])break;
+        q = p;
+        p = p-&gt;ptr[i - 1];
+    }
+    int j;
+    q-&gt;key[i] = x;
+
+    for (j = q-&gt;key[0]; j &gt;= i; j--)
+    {
+        q-&gt;key[j + 1] = q-&gt;key[j];
+        q-&gt;ptr[j + 1] = q-&gt;ptr[j];
+    }
+    q-&gt;key[0]++;
+    int temp;
+    i = q-&gt;key[0];
+    int m, num = 0;
+    while (q-&gt;key[0] == Step + 1 - 1)
+    {
+        num++;
+        temp = q-&gt;key[(i - 1) / 2 + 1];
+        p = q-&gt;parent;
+        q-&gt;key[0] = (i - 1) / 2;//分裂左树
+        m = (i - 1) / 2 + 1;
+        //加到双亲结点
+        if (p == NULL)
+        {
+            p = (B_TNode *)malloc(sizeof(B_TNode));
+            for (i = 0; i&lt;M; i++)
+                p-&gt;ptr[i] = NULL;
+            Root = p;
+            Root-&gt;parent = NULL;
+            p-&gt;key[0] = 1;
+            p-&gt;key[1] = temp;
+            p-&gt;ptr[0] = q;
+            p-&gt;parent = NULL;
+        }
+        else
+        {
+            for (i = 1; i &lt;= p-&gt;key[0]; i++)
+                if (temp&lt;p-&gt;key[i])break;
+            for (j = p-&gt;key[0]; j &gt;= i; j--)
+            {
+                p-&gt;key[j + 1] = p-&gt;key[j];
+                p-&gt;ptr[j + 1] = p-&gt;ptr[j];
+            }
+            p-&gt;key[i] = temp;//
+            p-&gt;ptr[i - 1] = q;//
+            p-&gt;key[0]++;
+        }
+        //分配右树
+        s = (B_TNode *)malloc(sizeof(B_TNode));
+        for (i = 0; i&lt;M; i++)
+            s-&gt;ptr[i] = NULL;
+        p-&gt;ptr[p-&gt;key[0]] = s;
+        p-&gt;ptr[p-&gt;key[0] - 1] = q;
+        s-&gt;key[0] = Step + 1 - 1 - m;
+        s-&gt;parent = p;
+        q-&gt;parent = p;
+        for (i = 1; i &lt;= s-&gt;key[0]; i++)
+        {
+            s-&gt;key[i] = q-&gt;key[i + m];
+            s-&gt;ptr[i - 1] = q-&gt;ptr[i + m - 1];    ////////////////
+
+        }
+        if (num&gt;1)s-&gt;ptr[i - 1] = q-&gt;ptr[i + m - 1];
+        for (i = 0; i &lt;= s-&gt;key[0]; i++)
+        {
+            if (s-&gt;ptr[i] != NULL)s-&gt;ptr[i]-&gt;parent = s;////////////////
+        }
+        q = p;
+        i = q-&gt;key[0];
+    }
+    return Root;
+}
+int B_treetreeprint(B_TNode *Root, int n)
+{
+    int i, j;
+    if (Root == NULL)return 0;
+
+    for (i = Root-&gt;key[0]; i&gt;0; i--)
+    {
+        B_treetreeprint(Root-&gt;ptr[i], n + 1);
+        for (j = 0; j&lt;n; j++)
+            printf(&quot;----&quot;);
+        cout &lt;&lt; Root-&gt;key[i] &lt;&lt; endl;
+    }
+    B_treetreeprint(Root-&gt;ptr[0], n + 1);
+}
+/*
+int B_treetreeprint(B_TNode *Root,int n)
+{
+int i;
+if(Root==NULL)return 0;
+if(Root-&gt;key[0]&gt;=2)
+{
+
+B_treetreeprint(Root-&gt;ptr[2],n+1);
+for(i=0;i&lt;n;i++)
+printf(&quot;--&quot;);
+printf(&quot;%d  &quot;,Root-&gt;key[2]);
+printf(&quot;\n&quot;);
+}
+if(Root-&gt;key[0]&gt;=1)
+{
+B_treetreeprint(Root-&gt;ptr[1],n+1);
+for(i=0;i&lt;n;i++)
+printf(&quot;--&quot;);
+
+printf(&quot;%d  &quot;,Root-&gt;key[1]);
+printf(&quot;\n&quot;);        //printf(&quot;\n&quot;);
+}
+if(Root-&gt;ptr[0]!=NULL)
+{
+
+B_treetreeprint(Root-&gt;ptr[0],n+1);
+//    for(i=0;i&lt;n;i++)
+//    printf(&quot;---&quot;);
+}
+}
+
+
+int B_treetreeprint(B_TNode *Root,int n)
+{
+int i;
+if(Root==NULL)return 0;
+if(Root-&gt;key[0]&gt;=2)
+{
+
+B_treetreeprint(Root-&gt;ptr[2],n+1);
+for(i=0;i&lt;n;i++)
+printf(&quot;--&quot;);
+printf(&quot;%d  &quot;,Root-&gt;key[2]);
+printf(&quot;\n&quot;);
+}
+if(Root-&gt;key[0]&gt;=1)
+{
+B_treetreeprint(Root-&gt;ptr[1],n+1);
+for(i=0;i&lt;n;i++)
+printf(&quot;--&quot;);
+
+printf(&quot;%d  &quot;,Root-&gt;key[1]);
+printf(&quot;\n&quot;);        //printf(&quot;\n&quot;);
+}
+if(Root-&gt;ptr[0]!=NULL)
+{
+
+B_treetreeprint(Root-&gt;ptr[0],n+1);
+//    for(i=0;i&lt;n;i++)
+//    printf(&quot;---&quot;);
+}
+}
+*/
+int main()
+{
+    int i;
+    int s, j, k, k1, k2, k3, Size, Sizex;
+    int x;
+    SeqList L;
+    DataType Me;
+    double runtime;
+    double Start, End;
+    printf(&quot;请输入序列中数的个数Size：&quot;);
+    //while (scanf(&quot;%d&quot;, &amp;Size) != EOF&amp;&amp;Size != 0)
+    scanf(&quot;%d&quot;, &amp;Size);
+    {
+        ListInitiate(&amp;L); //初始化线性表
+        Tree t = NULL;   //初始化二叉平衡树
+        Tree zt = NULL; //初始化折半查找树
+        B_TNode *Root = NULL;
+        s = 0;
+        printf(&quot;请输入B_树的阶：&quot;);
+        scanf(&quot;%d&quot;, &amp;Step);
+        for (i = 0; i&lt;Size; i++)
+        {
+            InPEtree(&amp;t, i + 1); //Insert (&amp;t,i+1);创建二叉平衡树
+            ListInsert(&amp;L, i + 1);//创建线性表
+            Root = B_treetreeinsert(Root, i + 1);//创建B_树
+        }
+        printf(&quot;平衡二叉树\n&quot;);
+        PrintBiTree(t, 0);//打印二叉平衡树PrintfTree(t,1);
+        printf(&quot;\nB_树\n&quot;);
+        B_treetreeprint(Root, 0);
+        //printf(&quot;请输入需要查找的数（1~Size）：&quot;);
+        Sizex = Size;
+        printf(&quot;输入要查找的数\n&quot;);
+        scanf(&quot;%d&quot;,&amp;Sizex);
+        if (Sizex &lt;0 || Sizex &gt;Size)
+        {
+            printf(&quot;查找失败，不存在此数！\n&quot;);
+            return 0;
+        }
+        //while (Sizex &gt;= 1)
+        {
+
+            k1 = 0;  k2 = 0; k3 = 0;          //记次数
+            k1 = blancebinarytreesearch(t, Sizex);
+            printf(&quot;平衡二叉树查询%d用了%d次\n&quot;, Sizex, k1);
+            Me.key = Sizex;
+            k2 = BInarySearch(L, Me);
+            printf(&quot;折半查找法查询%d用了%d次\n&quot;, Sizex, k2);
+            Bjishu = 0;
+            printf(&quot;B_树查找%d用了%d次\n&quot;, Sizex, B_treetreesearch(Root, Sizex));
+            //printf(&quot;请输入需要查找的数（1~Size）：&quot;);
+        }
+
+        k = 0;
+        Start = clock();//开始计时
+        for (i = 0; i&lt;Size; i++)
+        {
+            k += blancebinarytreesearch(t, i + 1);//SearchBST(t,i+1,s);
+        }
+        End = clock();//结束计时】
+        runtime = (double)(End - Start) / (CLOCKS_PER_SEC*Size);
+        printf(&quot;%d个数的数组\n\t\t 平衡二叉排序树ASL= %.2f \t平均时间：%lf ms\n&quot;, Size, (float)k / Size, runtime);
+
+        k = 0;
+        Start = clock();
+        for (i = 0; i&lt;Size; i++)
+        {
+            Me.key = i + 1;
+            k += BInarySearch(L, Me);
+        }
+        End = clock();
+        runtime = (double)(End - Start) / (CLOCKS_PER_SEC*Size);
+        printf(&quot;\t\t 折半查找法ASL= %.2f \t 平均时间：%lf ms\n&quot;, (float)k / Size, runtime);
+
+        Bjishu = 0;
+        Start = clock();
+        for (i = 0; i&lt;Size; i++)
+        {
+            B_treetreesearch(Root, i + 1);
+        }
+        End = clock();
+        runtime = (double)(End - Start) / (CLOCKS_PER_SEC*Size);
+        printf(&quot;\t\t B_树查找ASL= %.2f \t    平均时间：%lf ms\n&quot;, (float)Bjishu / Size, runtime);
+
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

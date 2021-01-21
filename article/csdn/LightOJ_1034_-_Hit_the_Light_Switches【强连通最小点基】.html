@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>LightOJ 1034 - Hit the Light Switches【强连通最小点基】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">LightOJ 1034 - Hit the Light Switches【强连通最小点基】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/48445943" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/48445943</a></p>
+<p>题目链接： <a href="http://www.lightoj.com/volume_showproblem.php?problem=1034" target="_blank" rel="noopener"> http://www.lightoj.com/volume_showproblem.php?problem=1034
+</a></p>
+<p>题意：有向图，选择尽量少的点，从这些点出发，使得所有点都被到达过。</p>
+<p>思路：首先，进行强连通缩点。然后每个强连通间按照拓扑排序的思想建边。入度为0的强连通的个数即为答案。</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;stack&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+#include &lt;sstream&gt;
+#include &lt;malloc.h&gt;
+#include &lt;functional&gt;
+
+using namespace std;
+
+const int MAXN = 20010;
+const int MAXM = 500100;
+
+struct Edge
+{
+    int to, next;
+}edge[MAXM];
+
+int head[MAXM], tot;
+int Low[MAXN], Dfn[MAXN], Stack[MAXN], Belong[MAXN];//Belong的值为 1 ~ scc
+int Index, top;
+int scc;//强连通个数
+bool Instack[MAXN];
+int num[MAXN];//各个强连通包含的点的个数
+
+void addedge(int u, int v)
+{
+    edge[tot].to = v;
+    edge[tot].next = head[u];
+    head[u] = tot++;
+}
+
+void Tarjan(int u)
+{
+    int v;
+    Low[u] = Dfn[u] = ++Index;
+    Stack[top++] = u;
+    Instack[u] = true;
+    for (int i = head[u]; i != -1; i = edge[i].next)
+    {
+        v = edge[i].to;
+        if (!Dfn[v])
+        {
+            Tarjan(v);
+            if (Low[u] &gt; Low[v])
+                Low[u] = Low[v];
+        }
+        else if (Instack[v] &amp;&amp; Low[u] &gt; Dfn[v])
+            Low[u] = Dfn[v];
+    }
+    if (Low[u] == Dfn[u])
+    {
+        scc++;
+        do
+        {
+            v = Stack[--top];
+            Instack[v] = false;
+            Belong[v] = scc;
+            num[scc]++;
+        } while (v != u);
+    }
+}
+
+void solve(int N)
+{
+    memset(Dfn, 0, sizeof(Dfn));
+    memset(Instack, false, sizeof(Instack));
+    memset(num, 0, sizeof(num));
+    Index = scc = top = 0;
+    for (int i = 1; i &lt;= N; i++)
+    {
+        if (!Dfn[i])
+            Tarjan(i);
+    }
+}
+
+void init()
+{
+    tot = 0;
+    memset(head, -1, sizeof(head));
+}
+
+int n, m;
+int in[100010];
+
+int main()
+{
+    int t, cases = 1;
+    scanf(&quot;%d&quot;, &amp;t);
+
+    while (t--)
+    {
+        init();
+        memset(in, 0, sizeof(in));
+
+        scanf(&quot;%d%d&quot;, &amp;n, &amp;m);
+        int u, v;
+        for (int i = 1;i &lt;= m;i++)
+        {
+            scanf(&quot;%d%d&quot;, &amp;u, &amp;v);
+            addedge(u, v);
+        }
+        solve(n);
+        for (int u = 1;u &lt;= n;u++)
+        {
+            for (int j = head[u];j != -1;j = edge[j].next)
+            {
+                int v = edge[j].to;
+                int t1 = Belong[u];
+                int t2 = Belong[v];
+                if (t1 != t2)
+                    in[t2]++;
+            }
+        }
+
+        int ans = 0;
+        for (int i = 1;i &lt;= scc;i++)
+            if (in[i] == 0) ans++;
+        printf(&quot;Case %d: %d\n&quot;, cases++, ans);
+
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

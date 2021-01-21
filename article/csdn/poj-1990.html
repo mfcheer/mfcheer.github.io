@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>poj-1990 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">poj-1990</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41038245" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/41038245</a></p>
+<p>题目大意：一群牛参加完牛的节日后都有了不同程度的耳聋，第i头牛听见别人的讲话，别人的音量必须大于v[i]，当两头牛i，j交流的时候，交流的最小声音为max{v[i],v[j]}*他们之间的距离。现在有n头牛，求他们之间两两交流最少要的音量和。</p>
+<p>解题思路：一开始水水的写了一个n^2的算法，这题终究没有那么白痴。原来是用了树状数组。首先将这n头牛按照v值从小到大排序（后面说的排在谁的前面，都是基于这个排序）。这样，排在后面的牛和排在前面的牛讲话，两两之间所用的音量必定为后面的牛的v值，这样一来才有优化的余地。然后，对于某头牛i来说，只要关心跟排在他前面的牛交流就好了。我们必须快速地求出排在他前面的牛和他之间距离的绝对值只和ans，只要快速地求出ans，就大功告成。这里需要两个树状数组。树状数组可以用来快速地求出某个区间内和，利用这个性质，我们可以快速地求出对于牛i，x位置比i小牛的个数，以及这个牛的位置之和。这里就需要两个树状数组，一个记录比x小的牛的个数a，一个记录比x小的牛的位置之和b，然后，我们可以快速地求出牛i和比牛i位置小的牛的所有距离的绝对值为：a<em>x[i]-b;也可以方便地求出比牛i位置大的牛到牛i的距离和，即所有距离-b-(i-1-a)</em>x[i]；那么此题就差不多了。</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+#include&lt;stdexcept&gt;
+
+using namespace std;
+
+int n;
+
+struct q
+{
+    int v;
+    int x;
+}p[20005];
+
+int a[20005];
+int b[20005];
+
+bool cmp (q a,q b)
+{
+    if (a.v != b.v)
+        return a.v &lt;= b.v;
+}
+
+int lowbit(int i)
+{
+    return i&amp;-i;
+}
+
+void add(int i,int v,int *a)
+{
+    while (i&lt;=20004)//求所有牛总和
+    {
+        a[i] += v;
+        i+=lowbit(i);
+    }
+}
+
+int sum (int i,int *a)
+{
+    long long ans =0;
+    while (i&gt;0)
+    {
+        ans += a[i];
+        i-=lowbit(i);
+    }
+    return ans;
+}
+
+int main()
+{
+    while ( scanf(&quot;%d&quot;,&amp;n)!=EOF )
+    {
+        memset (a,0,sizeof(a));
+        memset (b,0,sizeof(b));
+
+        for (int i=1;i&lt;=n;i++)
+        {
+            scanf(&quot;%d %d&quot;,&amp;p[i].v,&amp;p[i].x);
+        }
+
+        sort (p+1,p+1+n,cmp);
+
+        long long  ans = 0;
+        long long  dis1;
+        long long num1;
+        long long alldis=0;
+
+        long long  all=0;;
+
+        for (int i=1;i&lt;=n;i++)
+        {
+            dis1 = sum( p[i].x ,a);
+            num1 = sum( p[i].x ,b);
+
+            ans += p[i].v * ( num1 * p[i].x - dis1 + all- dis1-(i-num1-1)*p[i].x );
+
+            add( p[i].x , p[i].x ,a);
+            add( p[i].x , 1,b);
+
+            all += p[i].x;
+        }
+        printf(&quot;%I64d\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

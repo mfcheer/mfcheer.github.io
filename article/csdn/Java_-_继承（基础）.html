@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Java - 继承（基础） - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="java,继承,class">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">Java - 继承（基础）</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49474241" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/49474241</a></p>
+<h3 id="继承："><a href="#继承：" class="headerlink" title="继承："></a>继承：</h3><p>增强代码复用性，使类和类之间产生关系，为多肽提供前提。<br>extends 关键字<br>使用类的继承时，查看体系顶层类，了解功能，创建子类对象完善功能的使用。</p>
+<h4 id="什么时候用继承？"><a href="#什么时候用继承？" class="headerlink" title="什么时候用继承？"></a>什么时候用继承？</h4><p>类与类之间存在所属关系，定义继承。比如xx（狗）是yy（犬科动物）的一种。</p>
+<h4 id="java支持单继承，对c-多继承进行改良，支持多重继承。"><a href="#java支持单继承，对c-多继承进行改良，支持多重继承。" class="headerlink" title="java支持单继承，对c++多继承进行改良，支持多重继承。"></a>java支持单继承，对c++多继承进行改良，支持多重继承。</h4><p>单继承 ：一个子类只能有一个父类。</p>
+<pre><code>class C extends A
+{
+
+}
+</code></pre><p>多继承 ：一个子类可以有多个父类。(java不允许，进行改良)<br>不直接支持愿意，会产生调用不确定性。</p>
+<p>多重继承：比如B继承C，A继承B。</p>
+<h4 id="子父类变量间的关系"><a href="#子父类变量间的关系" class="headerlink" title="子父类变量间的关系"></a>子父类变量间的关系</h4><p>成员特点体现：<br>1 , 成员变量<br>若变量同名，则优先调用子类中变量。<br>同名时，用super区分父类。<br>和this用法相似。<br>this：代表本类对象引用<br>super：代表父类空间<br>子类不能直接访问父类私有变量内容。</p>
+<p>2，成员函数<br>若函数同名，则优先调用子类中函数。这种现象称为覆盖操作。<br>函数两个特性：<br>1） 重载：同一类中<br>2） 覆盖：子类中<br>覆盖注意事项：<br>1），覆盖时，子类权限必须大于等于父类权限才可以引发覆盖。<br>public &gt;无&gt; private<br>2），static方法只能被static覆盖。</p>
+<p>3，构造函数<br>子类构造对象时，访问子类构造函数时，父类也运行了。<br>子类构造函数第一行有隐式语句，super()，调用父类的（空参数）构造函数。<br>子类所以构造函数都会调用父类的空参数构造函数。<br><img src="https://img-blog.csdn.net/20151029170805357" alt="这里写图片描述"><br>小例子：</p>
+<pre><code>package if_i_can_do;
+import java.util.*;
+
+class Person
+{
+    String name;
+    int age;
+    int num = 5;
+    private int money = 1000000;
+    void speak0()
+    {
+        System.out.println(&quot;peo!&quot;);
+    }
+}
+
+class Student extends Person
+{
+    private int num = 4;
+    Student(){}
+    void speak()
+    {
+        System.out.println(&quot;stu!&quot;);
+        System.out.println(num + &quot;   &quot; + num);//若变量同名，则优先调用子类中变量。
+        System.out.println(this.num + &quot;   &quot; + super.num);//同名时，用super区分父类。
+        //System.out.println(super.money); error:子类不能直接访问父类私有变量内容。
+    }
+}
+
+class Worker extends Person
+{
+    Worker(){}
+    void speak0()
+    {
+        System.out.println(&quot;66666!&quot;);
+    }
+    void speak()
+    {
+        System.out.println(&quot;work!&quot;);
+    }
+}
+
+
+public class mfcheer 
+{
+     public static void main(String[] args) 
+     {
+         Student s1 = new Student();
+         s1.speak0();
+         s1.speak();
+
+         Worker w1 = new Worker();
+         w1.speak0();
+         w1.speak();
+     }  
+
+}
+</code></pre><p>运行结果：</p>
+<p><img src="https://img-blog.csdn.net/20151028210126027" alt="这里写图片描述"></p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

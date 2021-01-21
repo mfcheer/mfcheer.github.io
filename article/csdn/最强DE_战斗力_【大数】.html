@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>最强DE 战斗力 【大数】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">最强DE 战斗力 【大数】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44133613" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44133613</a></p>
+<h2 id="最强DE-战斗力"><a href="#最强DE-战斗力" class="headerlink" title="最强DE 战斗力"></a>最强DE 战斗力</h2><p>Time Limit:  1 Sec  Memory Limit:  128 MB<br>Submit:  86  Solved:  13<br>[ <a href="http://www.homeforaoge.com/submitpage.php?cid=1000&amp;pid=1&amp;langmask=0" target="_blank" rel="noopener"> Submit
+</a> ][ <a href="http://www.homeforaoge.com/problemstatus.php?id=1003" target="_blank" rel="noopener"><br>Status </a> ][ <a href="http://www.homeforaoge.com/bbs.php?pid=1003&amp;cid=1000" target="_blank" rel="noopener"> Web Board
+</a> ]</p>
+<h2 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h2><p>春秋战国时期，赵国地大物博，资源非常丰富，人民安居乐业。但许多国家对它虎视眈眈，准备联合起来对赵国发起一场战争。</p>
+<p>显然，面对多个国家的部队去作战，赵国的兵力明显处于劣势。战斗力是决定战争成败的关键因素，一般来说，一支部队的战斗力与部队的兵力成正比。但当把一支部队分成若干个作战队伍时，这个部队的战斗力就会大大的增强。</p>
+<p>一支部队的战斗力是可以通过以下两个规则计算出来的：</p>
+<p>1.若一支作战队伍的兵力为N，则这支作战队伍的战斗力为N；</p>
+<p>2.若将一支部队分为若干个作战队伍，则这支部队的总战斗力为这些作战队伍战斗力的乘积。</p>
+<p>比如：一支部队的兵力为5时的战斗力分析如下：</p>
+<p>情况</p>
+<p>|</p>
+<p>作战安排</p>
+<p>|</p>
+<p>总的战斗力  </p>
+<p>—|—|—  </p>
+<p>1</p>
+<p>|</p>
+<p>1，1，1，1，1（共分为5个作战队伍）</p>
+<p>|</p>
+<p>1<em>1</em>1<em>1</em>1=1  </p>
+<p>2</p>
+<p>|</p>
+<p>1，1，1，2   （共分为4个作战队伍）</p>
+<p>|</p>
+<p>1<em>1</em>1*2=2  </p>
+<p>3</p>
+<p>|</p>
+<p>1，2，2     （共分为3个作战队伍）</p>
+<p>|</p>
+<p>1<em>2</em>2=4  </p>
+<p>4</p>
+<p>|</p>
+<p>1，1，3     （共分为3个作战队伍）</p>
+<p>|</p>
+<p>1<em>1</em>3=3  </p>
+<p>5</p>
+<p>|</p>
+<p><strong>2，3</strong> （共分为2个作战队伍）</p>
+<p>|</p>
+<p><strong>2*3=6</strong>  </p>
+<p>6</p>
+<p>|</p>
+<p>1，4        （共分为2个作战队伍）</p>
+<p>|</p>
+<p>1*4=4  </p>
+<p>7</p>
+<p>|</p>
+<p>5           （共分为1个作战队伍）</p>
+<p>|</p>
+<p>5=5  </p>
+<p>显然，将部队分为2个作战队伍（一个为2，另一个为3），总的战斗力达到最大！</p>
+<h2 id="Input"><a href="#Input" class="headerlink" title="Input"></a>Input</h2><p>第一行： <strong>N</strong> 表示有N组测试数据。  (2 &lt;=N&lt;=5)</p>
+<p>接下来有N行，每行有一个整数Ti 代表赵国部队的兵力。 （1 &lt;= Ti &lt;= 1000）i=1，…N</p>
+<h2 id="Output"><a href="#Output" class="headerlink" title="Output"></a>Output</h2><p>对于每一行测试数据，输出占一行，仅一个整数S， 表示作战安排的最大战斗力。</p>
+<h2 id="Sample-Input"><a href="#Sample-Input" class="headerlink" title="Sample Input"></a>Sample Input</h2><pre><code>2
+
+
+5
+
+
+4
+</code></pre><h2 id="Sample-Output"><a href="#Sample-Output" class="headerlink" title="Sample Output"></a>Sample Output</h2><pre><code>6
+
+
+4
+</code></pre><h2 id="HINT"><a href="#HINT" class="headerlink" title="HINT"></a>HINT</h2><pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;iterator&gt;
+
+using namespace std;
+
+#define MAXN 9999
+#define MAXSIZE 1010
+#define DLEN 4
+
+class BigNum
+{
+private:
+    int a[1000];  //可以控制大数的位数
+    int len;
+public:
+    BigNum(){ len = 1; memset(a, 0, sizeof(a)); }  //构造函数
+    BigNum(const int);     //将一个int类型的变量转化成大数
+    BigNum(const char*);   //将一个字符串类型的变量转化为大数
+    BigNum(const BigNum &amp;); //拷贝构造函数
+    BigNum &amp;operator=(const BigNum &amp;); //重载赋值运算符，大数之间进行赋值运算
+    friend istream&amp; operator&gt;&gt;(istream&amp;, BigNum&amp;); //重载输入运算符
+    friend ostream&amp; operator&lt;&lt;(ostream&amp;, BigNum&amp;); //重载输出运算符
+
+    BigNum operator+(const BigNum &amp;)const;  //重载加法运算符，两个大数之间的相加运算
+    BigNum operator-(const BigNum &amp;)const;  //重载减法运算符，两个大数之间的相减运算
+    BigNum operator*(const BigNum &amp;)const;  //重载乘法运算符，两个大数之间的相乘运算
+    BigNum operator/(const int &amp;)const;     //重载除法运算符，大数对一个整数进行相除运算
+
+    BigNum operator^(const int &amp;)const;     //大数的n次方运算
+    int operator%(const int &amp;)const;        //大数对一个int类型的变量进行取模运算
+    bool operator&gt;(const BigNum &amp;T)const;   //大数和另一个大数的大小比较
+    bool operator&gt;(const int &amp;t)const;      //大数和一个int类型的变量的大小比较
+
+    void print();        //输出大数
+};
+BigNum::BigNum(const int b)   //将一个int类型的变量转化为大数
+{
+    int c, d = b;
+    len = 0;
+    memset(a, 0, sizeof(a));
+    while (d&gt;MAXN)
+    {
+        c = d - (d / (MAXN + 1))*(MAXN + 1);
+        d = d / (MAXN + 1);
+        a[len++] = c;
+    }
+    a[len++] = d;
+}
+BigNum::BigNum(const char *s)  //将一个字符串类型的变量转化为大数
+{
+    int t, k, index, L, i;
+    memset(a, 0, sizeof(a));
+    L = strlen(s);
+    len = L / DLEN;
+    if (L%DLEN)len++;
+    index = 0;
+    for (i = L - 1; i &gt;= 0; i -= DLEN)
+    {
+        t = 0;
+        k = i - DLEN + 1;
+        if (k&lt;0)k = 0;
+        for (int j = k; j &lt;= i; j++)
+            t = t * 10 + s[j] - &#39;0&#39;;
+        a[index++] = t;
+    }
+}
+BigNum::BigNum(const BigNum &amp;T) :len(T.len)  //拷贝构造函数
+{
+    int i;
+    memset(a, 0, sizeof(a));
+    for (i = 0; i&lt;len; i++)
+        a[i] = T.a[i];
+}
+BigNum &amp; BigNum::operator=(const BigNum &amp;n)  //重载赋值运算符，大数之间赋值运算
+{
+    int i;
+    len = n.len;
+    memset(a, 0, sizeof(a));
+    for (i = 0; i&lt;len; i++)
+        a[i] = n.a[i];
+    return *this;
+}
+istream&amp; operator&gt;&gt;(istream &amp;in, BigNum &amp;b)
+{
+    char ch[MAXSIZE * 4];
+    int i = -1;
+    in &gt;&gt; ch;
+    int L = strlen(ch);
+    int count = 0, sum = 0;
+    for (i = L - 1; i &gt;= 0;)
+    {
+        sum = 0;
+        int t = 1;
+        for (int j = 0; j&lt;4 &amp;&amp; i &gt;= 0; j++, i--, t *= 10)
+        {
+            sum += (ch[i] - &#39;0&#39;)*t;
+        }
+        b.a[count] = sum;
+        count++;
+    }
+    b.len = count++;
+    return in;
+}
+ostream&amp; operator&lt;&lt;(ostream&amp; out, BigNum&amp; b)  //重载输出运算符
+{
+    int i;
+    cout &lt;&lt; b.a[b.len - 1];
+    for (i = b.len - 2; i &gt;= 0; i--)
+    {
+        printf(&quot;%04d&quot;, b.a[i]);
+    }
+    return out;
+}
+BigNum BigNum::operator+(const BigNum &amp;T)const   //两个大数之间的相加运算
+{
+    BigNum t(*this);
+    int i, big;
+    big = T.len&gt;len ? T.len : len;
+    for (i = 0; i&lt;big; i++)
+    {
+        t.a[i] += T.a[i];
+        if (t.a[i]&gt;MAXN)
+        {
+            t.a[i + 1]++;
+            t.a[i] -= MAXN + 1;
+        }
+    }
+    if (t.a[big] != 0)
+        t.len = big + 1;
+    else t.len = big;
+    return t;
+}
+BigNum BigNum::operator-(const BigNum &amp;T)const  //两个大数之间的相减运算
+{
+    int i, j, big;
+    bool flag;
+    BigNum t1, t2;
+    if (*this&gt;T)
+    {
+        t1 = *this;
+        t2 = T;
+        flag = 0;
+    }
+    else
+    {
+        t1 = T;
+        t2 = *this;
+        flag = 1;
+    }
+    big = t1.len;
+    for (i = 0; i&lt;big; i++)
+    {
+        if (t1.a[i]&lt;t2.a[i])
+        {
+            j = i + 1;
+            while (t1.a[j] == 0)
+                j++;
+            t1.a[j--]--;
+            while (j&gt;i)
+                t1.a[j--] += MAXN;
+            t1.a[i] += MAXN + 1 - t2.a[i];
+        }
+        else t1.a[i] -= t2.a[i];
+    }
+    t1.len = big;
+    while (t1.a[t1.len - 1] == 0 &amp;&amp; t1.len&gt;1)
+    {
+        t1.len--;
+        big--;
+    }
+    if (flag)
+        t1.a[big - 1] = 0 - t1.a[big - 1];
+    return t1;
+}
+BigNum BigNum::operator*(const BigNum &amp;T)const  //两个大数之间的相乘
+{
+    BigNum ret;
+    int i, j, up;
+    int temp, temp1;
+    for (i = 0; i&lt;len; i++)
+    {
+        up = 0;
+        for (j = 0; j&lt;T.len; j++)
+        {
+            temp = a[i] * T.a[j] + ret.a[i + j] + up;
+            if (temp&gt;MAXN)
+            {
+                temp1 = temp - temp / (MAXN + 1)*(MAXN + 1);
+                up = temp / (MAXN + 1);
+                ret.a[i + j] = temp1;
+            }
+            else
+            {
+                up = 0;
+                ret.a[i + j] = temp;
+            }
+        }
+        if (up != 0)
+            ret.a[i + j] = up;
+    }
+    ret.len = i + j;
+    while (ret.a[ret.len - 1] == 0 &amp;&amp; ret.len&gt;1)ret.len--;
+    return ret;
+}
+BigNum BigNum::operator/(const int &amp;b)const  //大数对一个整数进行相除运算
+{
+    BigNum ret;
+    int i, down = 0;
+    for (i = len - 1; i &gt;= 0; i--)
+    {
+        ret.a[i] = (a[i] + down*(MAXN + 1)) / b;
+        down = a[i] + down*(MAXN + 1) - ret.a[i] * b;
+    }
+    ret.len = len;
+    while (ret.a[ret.len - 1] == 0 &amp;&amp; ret.len&gt;1)
+        ret.len--;
+    return ret;
+}
+int BigNum::operator%(const int &amp;b)const   //大数对一个 int类型的变量进行取模
+{
+    int i, d = 0;
+    for (i = len - 1; i &gt;= 0; i--)
+        d = ((d*(MAXN + 1)) % b + a[i]) % b;
+    return d;
+}
+BigNum BigNum::operator^(const int &amp;n)const  //大数的n次方运算
+{
+    BigNum t, ret(1);
+    int i;
+    if (n&lt;0)exit(-1);
+    if (n == 0)return 1;
+    if (n == 1)return *this;
+    int m = n;
+    while (m&gt;1)
+    {
+        t = *this;
+        for (i = 1; (i &lt;&lt; 1) &lt;= m; i &lt;&lt;= 1)
+            t = t*t;
+        m -= i;
+        ret = ret*t;
+        if (m == 1)ret = ret*(*this);
+    }
+    return ret;
+}
+bool BigNum::operator&gt;(const BigNum &amp;T)const    //大数和另一个大数的大小比较
+{
+    int ln;
+    if (len&gt;T.len)return true;
+    else if (len == T.len)
+    {
+        ln = len - 1;
+        while (a[ln] == T.a[ln] &amp;&amp; ln &gt;= 0)
+            ln--;
+        if (ln &gt;= 0 &amp;&amp; a[ln]&gt;T.a[ln])
+            return true;
+        else
+            return false;
+    }
+    else
+        return false;
+}
+bool BigNum::operator&gt;(const int &amp;t)const  //大数和一个int类型的变量的大小比较
+{
+    BigNum b(t);
+    return *this&gt;b;
+}
+void BigNum::print()   //输出大数
+{
+    int i;
+    printf(&quot;%d&quot;, a[len - 1]);
+    for (i = len - 2; i &gt;= 0; i--)
+        printf(&quot;%04d&quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+int a[3010];
+BigNum p[3010];
+
+
+int main(void)
+{
+    int i, n;
+
+    cin &gt;&gt; n;
+    while (n--)
+    {
+        cin &gt;&gt; i;
+        if (i == 1)
+            cout &lt;&lt; &quot;1&quot; &lt;&lt; endl;
+        else
+        {
+            BigNum bign(1);
+            while (i)
+            {
+
+                if (i == 1)
+                {
+                    bign = (bign / 3) * 4;
+                    i -= 1;
+                }
+                else if (i == 2)
+                {
+                    bign = bign * 2;
+                    i -= 2;
+                }
+                else
+                {
+                    bign = bign * 3;
+                    i -= 3;
+                }
+
+            }
+            bign.print();
+        }
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

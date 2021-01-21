@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>机器学习：ROC曲线及AUC含义 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">机器学习：ROC曲线及AUC含义</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <h1 id="ROC曲线"><a href="#ROC曲线" class="headerlink" title="ROC曲线"></a>ROC曲线</h1><p>Receiver Operating Characteristic curve（受试者工作特征曲线）</p>
+<p>我们将二分类器的所有可能取值，做一个方格图如下：<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/81.png" alt=""></p>
+<ul>
+<li>TP —— True Positive （真正, TP）被模型预测为正的正样本（原来为正预测为正）</li>
+<li>TN —— True Negative（真负 , TN）被模型预测为负的负样本（原来为负预测为负）</li>
+<li>FP ——False Positive （假正, FP）被模型预测为正的负样本（原来为负预测为正）</li>
+<li>FN—— False Negative（假负 , FN）被模型预测为负的正样本 （原来为正预测为负）</li>
+</ul>
+<p>TP + TN + FP + FN = 样本总数。<br>两个指标，准确率和召回率</p>
+<ul>
+<li>准确率 P = TP/(TP + FP)</li>
+<li>召回率 R = TP/(TP + FN)</li>
+</ul>
+<p>下图为ROC曲线图：<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/82.png" alt=""><br>图像的横轴是False Positive rate值（不是FP值），也就是实际为负并且预测错误的个数占总的负值的比例；图像的纵轴是True Positive rate值（不是TP值），也就是实际为正值并且预测正确的个数占总的正值的比例。</p>
+<h2 id="ROC曲线中的“四点一线”"><a href="#ROC曲线中的“四点一线”" class="headerlink" title="ROC曲线中的“四点一线”"></a>ROC曲线中的“四点一线”</h2><ul>
+<li>第一个点，(0,1)，即FPR=0, TPR=1，这意味着FN（false negative）=0，并且FP（false positive）=0。这是一个完美的分类器，它将所有的样本都正确分类。</li>
+<li>第二个点，(1,0)，即FPR=1，TPR=0，类似地分析可以发现这是一个最糟糕的分类器，因为它成功避开了所有的正确答案。</li>
+<li>第三个点，(0,0)，即FPR=TPR=0，即FP（false positive）=TP（true positive）=0，可以发现该分类器预测所有的样本都为负样本（negative）。</li>
+<li>第四个点（1,1），分类器实际上预测所有的样本都为正样本。</li>
+</ul>
+<p>对于ROC曲线，我们可以这样理解，对于二分类问题，曲线的每一个点都代表一个阈值，分类器给每个样本一个得分，得分大于阈值的我们认为是正样本，小于阈值的我们认为是负样本。</p>
+<ul>
+<li>若学习器A的ROC曲线将另外一个学习器B的曲线完全包住，则A的性能一定比B好</li>
+<li>AUC值等于0.5时，我们可以认为分类器不起作用</li>
+</ul>
+<h1 id="AUC值"><a href="#AUC值" class="headerlink" title="AUC值"></a>AUC值</h1><p>Area Under Curve score (曲线下面积值)，也就是ROC曲线之下与坐标轴围成的面积。<br>AUC值是一个概率值，当你随机挑选一个正样本以及一个负样本，当前的分类算法根据计算得到的Score值将这个正样本排在负样本前面的概率就是AUC值。AUC值越大，当前的分类算法越有可能将正样本排在负样本前面，即能够更好的分类。</p>
+<h1 id="下面是觉得不错的相关文章"><a href="#下面是觉得不错的相关文章" class="headerlink" title="下面是觉得不错的相关文章"></a>下面是觉得不错的相关文章</h1><p><a href="https://zhuanlan.zhihu.com/p/52930683" target="_blank" rel="noopener">乱弹机器学习评估指标AUC</a></p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/机器学习/">机器学习</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>

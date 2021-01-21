@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>hdu-4513 吉哥系列故事——完美队形II 【Manacher】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">hdu-4513 吉哥系列故事——完美队形II 【Manacher】</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44103569" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44103569</a></p>
+<h1 id="吉哥系列故事——完美队形II"><a href="#吉哥系列故事——完美队形II" class="headerlink" title="吉哥系列故事——完美队形II"></a>吉哥系列故事——完美队形II</h1><p><strong> Time Limit: 3000/1000 MS (Java/Others)    Memory Limit: 65535/32768 K<br>(Java/Others)<br>Total Submission(s): 1159    Accepted Submission(s): 429  
+</strong>  </p>
+<p>Problem Description</p>
+<p>吉哥又想出了一个新的完美队形游戏！<br>假设有n个人按顺序站在他的面前，他们的身高分别是h[1], h[2] …<br>h[n]，吉哥希望从中挑出一些人，让这些人形成一个新的队形，新的队形若满足以下三点要求，则就是新的完美队形：  </p>
+<p>1、挑出的人保持原队形的相对顺序不变，且必须都是在原队形中连续的；<br>2、左右对称，假设有m个人形成新的队形，则第1个人和第m个人身高相同，第2个人和第m-1个人身高相同，依此类推，当然如果m是奇数，中间那个人可以任意；<br>3、从左到中间那个人，身高需保证不下降，如果用H表示新队形的高度，则H[1]  &lt;= H[2] &lt;= H[3] …. &lt;= H[mid]。  </p>
+<p>现在吉哥想知道：最多能选出多少人组成新的完美队形呢？</p>
+<p>Input</p>
+<p>输入数据第一行包含一个整数T，表示总共有T组测试数据(T &lt;= 20)；<br>每组数据首先是一个整数n(1 &lt;= n &lt;= 100000)，表示原先队形的人数，接下来一行输入n个整数，表示原队形从左到右站的人的身高（50 &lt;= h<br>&lt;= 250，不排除特别矮小和高大的）。</p>
+<p>Output</p>
+<p>请输出能组成完美队形的最多人数，每组输出占一行。</p>
+<p>Sample Input</p>
+<p>2 3 51 52 51 4 51 52 52 51</p>
+<p>Sample Output</p>
+<p>3 4</p>
+<p>Source</p>
+<p><a href="http://acm.hdu.edu.cn/search.php?field=problem&amp;key=2013%CC%DA%D1%B6%B1%E0%B3%CC%C2%ED%C0%AD%CB%C9%B3%F5%C8%FC%B5%DA%B6%FE%B3%A1%A3%A83%D4%C222%C8%D5%A3%A9&amp;source=1&amp;searchmode=source" target="_blank" rel="noopener"> 2013腾讯编程马拉松初赛第二场（3月22日）
+</a></p>
+<p>manacher 简单变形</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+
+using namespace std;
+
+const int MAXN = 2000100;
+int n, t, ans;
+int s[MAXN];
+int ma[MAXN * 2];
+int mp[MAXN];
+
+void manacher()
+{
+    int l = 0;
+    ma[l++] = 99999999;
+    ma[l++] = 1000000000;
+    for (int i = 0; i &lt; n; i++)
+    {
+        ma[l++] = s[i];
+        ma[l++] = 1000000000;
+    }
+    ma[l] = 88888888;
+    int mx = 0, id = 0;
+    for (int i = 0; i &lt; l; i++)
+    {
+        mp[i] = mx&gt;i ? min(mp[2 * id - i], mx - i) : 1;
+
+        int m = ma[i];
+        while (ma[i + mp[i]] == ma[i - mp[i]] &amp;&amp; ma[i-mp[i]] &lt;= ma[i-mp[i]+2]) mp[i]++;    
+        if (i + mp[i] &gt; mx)
+        {
+            mx = i + mp[i];
+            id = i;
+        }
+    }
+}
+
+int main()
+{
+    scanf(&quot;%d&quot;, &amp;t);
+    while (t--)
+    {
+        ans = 0;
+        memset(s, 0, sizeof(s));
+        memset(mp, 0, sizeof(mp));
+        scanf(&quot;%d&quot;, &amp;n);
+        for (int i = 0; i &lt; n; i++)
+            scanf(&quot;%d&quot;, &amp;s[i]);
+        manacher();
+        for (int i = 0; i &lt; n*2+1;i++)
+        ans = max(ans, mp[i] - 1);
+        printf(&quot;%d\n&quot;, ans);
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+
+using namespace std;
+
+const int MAXN = 2000100;
+int n, t, ans;
+int s[MAXN];
+int ma[MAXN * 2];
+int mp[MAXN];
+
+void manacher()
+{
+    int l = 0;
+    ma[l++] = 99999999;
+    ma[l++] = 1000000000;
+    for (int i = 0; i &lt; n; i++)
+    {
+        ma[l++] = s[i];
+        ma[l++] = 1000000000;
+    }
+    ma[l] = 88888888;
+    int mx = 0, id = 0;
+    for (int i = 0; i &lt; l; i++)
+    {
+        mp[i] = mx&gt;i ? min(mp[2 * id - i], mx - i) : 1;
+
+        int m = ma[i];
+        while (ma[i + mp[i]] == ma[i - mp[i]])
+        {
+            if (ma[i + mp[i]] == 1000000000)
+            {
+                mp[i]++;
+                continue;
+            }
+            if (m &gt;= ma[i + mp[i]])
+            {
+                m = ma[i + mp[i]];
+                mp[i]++;//两行的顺序不能反，因为这里WA了几发
+            }
+            else
+                break;
+        }
+        if (i + mp[i] &gt; mx)
+        {
+            mx = i + mp[i];
+            id = i;
+        }
+
+    }
+}
+
+int main()
+{
+    scanf(&quot;%d&quot;, &amp;t);
+    while (t--)
+    {
+        ans = 0;
+        memset(s, 0, sizeof(s));
+        memset(mp, 0, sizeof(mp));
+        scanf(&quot;%d&quot;, &amp;n);
+        for (int i = 0; i &lt; n; i++)
+            scanf(&quot;%d&quot;, &amp;s[i]);
+        manacher();
+        for (int i = 0; i &lt; n*2+1;i++)
+        ans = max(ans, mp[i] - 1);
+        printf(&quot;%d\n&quot;, ans);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      </body>
+</html>
