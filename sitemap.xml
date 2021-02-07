@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mfcheer.github.io/article/%E9%80%9A%E8%BF%87JNI%E8%B0%83%E7%94%A8Fasttext%E6%A8%A1%E5%9E%8B.html</loc>
+    
+    <lastmod>2021-02-07T16:06:01.584Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mfcheer.github.io/algorithm/index.html</loc>
+    
+    <lastmod>2021-02-07T15:17:23.774Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://mfcheer.github.io/about/index.html</loc>
     
-    <lastmod>2021-01-22T15:35:29.153Z</lastmod>
+    <lastmod>2021-02-07T13:02:08.922Z</lastmod>
     
   </url>
   
@@ -411,13 +425,6 @@
     <loc>https://mfcheer.github.io/article/%E9%81%97%E6%86%BE%E7%9A%84%E4%B8%A4%E4%BB%B6%E4%BA%8B.html</loc>
     
     <lastmod>2019-10-10T17:25:42.045Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mfcheer.github.io/article/%E9%80%9A%E8%BF%87JNI%E8%B0%83%E7%94%A8Fasttext%E6%A8%A1%E5%9E%8B.html</loc>
-    
-    <lastmod>2019-10-10T17:25:42.043Z</lastmod>
     
   </url>
   
