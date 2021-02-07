@@ -114,8 +114,7 @@
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="二、排序"><a href="#二、排序" class="headerlink" title="二、排序"></a>二、排序</h2><p>冒泡排序<br>快速排序<br>堆排序</p>
 <h2 id="四、数据结构"><a href="#四、数据结构" class="headerlink" title="四、数据结构"></a>四、数据结构</h2><p>链表<br>队列<br>栈<br>堆<br>二叉树<br>拓扑排序<br>并查集<br>最小生成树<br>树状数组<br>Trie树</p>
-<h2 id="五、动态规划"><a href="#五、动态规划" class="headerlink" title="五、动态规划"></a>五、动态规划</h2><p>01背包问题</p>
-<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
+<h2 id="五、动态规划"><a href="#五、动态规划" class="headerlink" title="五、动态规划"></a>五、动态规划</h2><h3 id="01背包问题"><a href="#01背包问题" class="headerlink" title="01背包问题"></a>01背包问题</h3><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
 <span class="token keyword">import</span> <span class="token string">"fmt"</span>
 
 <span class="token keyword">type</span> Bag <span class="token keyword">struct</span> <span class="token punctuation">{</span>
@@ -158,7 +157,33 @@
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>最长递增子序列<br>最长公共子序列<br>斐波那契</p>
-<h2 id="六、搜索"><a href="#六、搜索" class="headerlink" title="六、搜索"></a>六、搜索</h2><p>二分查找<br>BFS<br>DFS</p>
+<h2 id="六、搜索"><a href="#六、搜索" class="headerlink" title="六、搜索"></a>六、搜索</h2><h3 id="二分查找"><a href="#二分查找" class="headerlink" title="二分查找"></a>二分查找</h3><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
+<span class="token keyword">import</span> <span class="token string">"fmt"</span>
+
+<span class="token keyword">func</span> <span class="token function">binarySearchIndex</span><span class="token punctuation">(</span>arr <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> x <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">int</span> <span class="token punctuation">{</span>
+    st<span class="token punctuation">,</span> ed <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token function">len</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span>
+    <span class="token keyword">for</span> st <span class="token operator">&lt;=</span> ed <span class="token punctuation">{</span>
+        mid <span class="token operator">:=</span> <span class="token punctuation">(</span>st <span class="token operator">+</span> ed<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span>
+        <span class="token keyword">if</span> arr<span class="token punctuation">[</span>mid<span class="token punctuation">]</span> <span class="token operator">==</span> x <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> mid
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> arr<span class="token punctuation">[</span>mid<span class="token punctuation">]</span> <span class="token operator">></span> x <span class="token punctuation">{</span>
+            ed <span class="token operator">=</span> mid<span class="token number">-1</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            st <span class="token operator">=</span> mid<span class="token operator">+</span><span class="token number">1</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> arr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">9</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">}</span>
+    x <span class="token operator">:=</span> <span class="token number">5</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">binarySearchIndex</span><span class="token punctuation">(</span>arr<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>BFS</p>
+<p>DFS</p>
 <h2 id="七、图算法"><a href="#七、图算法" class="headerlink" title="七、图算法"></a>七、图算法</h2><p>最短路径<br>二分图</p>
 
   </div>
