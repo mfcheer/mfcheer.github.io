@@ -6,10 +6,10 @@
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   
-  <title>hdu-1253 - mfcheer</title>
+  <title>Go-GPM调度器 - mfcheer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   
-  <meta name="keywords" content="算法,acm">
+  <meta name="keywords" content="博客">
   
     <meta name="description" content="help change the world">
   
@@ -49,111 +49,20 @@
 
 <article class="post">
   <div class="post-title">
-    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">hdu-1253</span>
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">Go-GPM调度器</span>
 	<br>
   </div>
   <div class="post-meta">
   </div>
   <div class="post-content">
-    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41732231" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/41732231</a></p>
-<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1253" target="_blank" rel="noopener"> http://acm.hdu.edu.cn/showproblem.php?pid=1253
-</a>  </p>
-<p>这道水题<br><img src="http://static.blog.csdn.net/xheditor/xheditor_emot/default/angry.gif" alt="发火"></p>
-<pre><code>#include&lt;stdio.h&gt;    
-#include&lt;iostream&gt;    
-#include&lt;math.h&gt;    
-#include&lt;stdlib.h&gt;    
-#include&lt;ctype.h&gt;    
-#include&lt;algorithm&gt;    
-#include&lt;vector&gt;    
-#include&lt;string.h&gt;    
-#include&lt;queue&gt;    
-#include&lt;stack&gt;    
-#include&lt;set&gt;    
-#include&lt;map&gt;    
-#include&lt;sstream&gt;    
-#include&lt;time.h&gt;    
-#include&lt;utility&gt;    
-#include&lt;malloc.h&gt;    
-#include&lt;stdexcept&gt;    
+    <a id="more"></a>
+<p><a href="https://github.com/lifei6671/interview-go/blob/master/base/go-gpm.md" target="_blank" rel="noopener">GPM调度器原理</a></p>
 
-using namespace std;
-
-int k,n,m,t,tt,T;
-
-int mapp[55][55][55];  
-int vis[55][55][55];  
-int d[55][55][55];  
-int xx[6]={0,0,0,0,-1,1};  
-int yy[6]={0,0,1,-1,0,0};  
-int zz[6]={1,-1,0,0,0,0};  
-
-void bfs()  
-{  
-  queue&lt;int&gt; q;  
-  vis[1][1][1]=1;  
-  d[1][1][1]=0;  
-  int s=1*10000+100+1;  
-  q.push(s);  
-  while(!q.empty())  
-  {  
-      s=q.front();  
-      q.pop();  
-      int i;  
-      int x,y,z;  
-      int tz=s%100;  
-      s=s/100;  
-      int ty=s%100;  
-      s=s/100;  
-      int tx=s;  
-      for(i=0;i&lt;6;i++)  
-      {  
-          x=tx+xx[i];  
-          y=ty+yy[i];  
-          z=tz+zz[i];  
-          if(vis[x][y][z]==1||mapp[x][y][z]==1||mapp[x][y][z]==-1)  
-                continue;  
-          vis[x][y][z]=1;  
-          d[x][y][z]=d[tx][ty][tz]+1;  
-          q.push(x*10000+y*100+z);  
-      }  
-  }  
-}  
-int main()  
-{  
-    int k;  
-    scanf(&quot;%d&quot;,&amp;k);  
-    int cas=1;  
-    for(cas=1;cas&lt;=k;cas++)  
-    {  
-        int a,b,c,t;  
-        scanf(&quot;%d%d%d%d&quot;,&amp;a,&amp;b,&amp;c,&amp;t);  
-        int i,j,l;  
-
-        memset(mapp,-1,sizeof(mapp));  
-        memset(vis,0,sizeof(vis));  
-        memset(d,-1,sizeof(d));  
-
-        for(i=1;i&lt;=a;i++)  
-            for(j=1;j&lt;=b;j++)  
-                for(l=1;l&lt;=c;l++)  
-                    scanf(&quot;%d&quot;,&amp;mapp[i][j][l]);  
-
-        bfs();  
-
-        if(d[a][b][c] &lt;= t &amp;&amp; d[a][b][c] != -1)  
-            printf(&quot;%d\n&quot;,d[a][b][c]);  
-        else  
-            printf(&quot;-1\n&quot;);  
-    }  
-    return 0;  
-}  
-</code></pre>
   </div>
   <div class="post-footer">
     <br>
     
-      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/Go/">Go</a></li></ul>
     
 
     <a href="#top" class="top" style="color:#E00000;">返回顶部</a>

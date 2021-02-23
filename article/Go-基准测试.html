@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Go-基准测试 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">Go-基准测试</span>
+	<br>
+  </div>
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <a id="more"></a>
+<h2 id="go-test"><a href="#go-test" class="headerlink" title="go test"></a>go test</h2><p>Go语言拥有一套单元测试和性能测试系统，go test 命令，会自动读取源码目录下面名为 *_test.go 的文件，生成并运行测试用的可执行文件</p>
+<ul>
+<li>测试用例文件不会参与正常源码编译，不会被包含到可执行文件中</li>
+<li>命名文件时需要让文件必须以_test结尾</li>
+<li>每个测试用例函数需要以Test为前缀</li>
+</ul>
+<p>常用的参数：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token operator">-</span>v 显示测试的详细命令
+<span class="token operator">-</span>run regexp 只运行 regexp 匹配的函数，例如 <span class="token operator">-</span>run<span class="token operator">=</span>Array 那么就执行包含有 Array 开头的函数
+<span class="token operator">-</span>cover 开启测试覆盖率
+<span class="token operator">-</span>bench regexp 执行相应的 benchmarks，例如 <span class="token operator">-</span>bench<span class="token operator">=</span><span class="token punctuation">.</span>；
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>单元测试源码<em>_test文件可以由多个测试用例组成，每个测试用例函数需要以Test为前缀，一般参数为 </em>testing.T</p>
+<p>日志：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token operator">*</span>t testing<span class="token punctuation">.</span>T
+t<span class="token punctuation">.</span>Log
+t<span class="token punctuation">.</span>Logf
+t<span class="token punctuation">.</span>Error
+t<span class="token punctuation">.</span>Errorf
+t<span class="token punctuation">.</span>Fatal
+t<span class="token punctuation">.</span>Fatalf
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>下面是例子：<br>文件</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">import</span> <span class="token string">"testing"</span>
+<span class="token keyword">func</span> <span class="token function">TestA</span><span class="token punctuation">(</span>t <span class="token operator">*</span>testing<span class="token punctuation">.</span>T<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    t<span class="token punctuation">.</span><span class="token function">Log</span><span class="token punctuation">(</span><span class="token string">"A"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">func</span> <span class="token function">TestAB</span><span class="token punctuation">(</span>t <span class="token operator">*</span>testing<span class="token punctuation">.</span>T<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    t<span class="token punctuation">.</span><span class="token function">Log</span><span class="token punctuation">(</span><span class="token string">"AB"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">func</span> <span class="token function">TestC</span><span class="token punctuation">(</span>t <span class="token operator">*</span>testing<span class="token punctuation">.</span>T<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    t<span class="token punctuation">.</span><span class="token function">Log</span><span class="token punctuation">(</span><span class="token string">"C"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-go"><code class="language-go">执行：
+<span class="token keyword">go</span> test <span class="token operator">-</span>v <span class="token operator">-</span>run TestA select_test<span class="token punctuation">.</span><span class="token keyword">go</span>
+输出：
+<span class="token operator">==</span><span class="token operator">=</span> RUN   TestA
+<span class="token operator">--</span><span class="token operator">-</span> PASS<span class="token punctuation">:</span> <span class="token function">TestA</span> <span class="token punctuation">(</span><span class="token number">0.</span>00s<span class="token punctuation">)</span>
+        select_test<span class="token punctuation">.</span><span class="token keyword">go</span><span class="token punctuation">:</span><span class="token number">6</span><span class="token punctuation">:</span> A
+<span class="token operator">==</span><span class="token operator">=</span> RUN   TestAB
+<span class="token operator">--</span><span class="token operator">-</span> PASS<span class="token punctuation">:</span> <span class="token function">TestAB</span> <span class="token punctuation">(</span><span class="token number">0.</span>00s<span class="token punctuation">)</span>
+        select_test<span class="token punctuation">.</span><span class="token keyword">go</span><span class="token punctuation">:</span><span class="token number">10</span><span class="token punctuation">:</span> AB
+PASS
+ok          command<span class="token operator">-</span>line<span class="token operator">-</span>arguments        <span class="token number">0.</span>003s
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>TestA 和 TestAB 的测试用例都被执行，原因是-run跟随的测试用例的名称支持正则表达式，使用-run TestA$即可只执行 TestA 测试用例。</p>
+<h2 id="基准测试"><a href="#基准测试" class="headerlink" title="基准测试"></a>基准测试</h2><p>go test包支持基准测试，区别是传入的参数改为 b *testing.B，函数名称为 Benchmark为前缀。默认执行go test时是不执行基准的，需要使用 -bench标时</p>
+<ul>
+<li>可以使用-cpu标识更改测试使用的GOMAXPROCS 值</li>
+<li>如果函数耗时高，1s内不能准确测试性能的话， 可以使用-benchtime标识增加运行时间：go test -bench=. -benchtime=10s</li>
+<li>执行测试次数过多的话，测试结果会受GC等影响，可以使用-count参数多次运行基准测试来解决，go test -count=10 </li>
+<li>-run=none  表示过滤掉单元测试</li>
+<li>-bench=.   表示的是运行所有的基准测试，. 表示全部</li>
+<li>-benchmem:表示显示memory的指标</li>
+<li>有些测试需要一定的启动和初始化时间，如果从 Benchmark() 函数开始计时会很大程度上影响测试结果的精准性。StopTimer() 可以停止这个计数过程，做一些耗时的操作，通过 StartTimer() 重新开始计时。ResetTimer() 可以重置计数器的数据</li>
+</ul>
+<p>b.N 标示函数需要执行的次数。b.N 从 1 开始，如果基准测试函数在1秒内就完成 (默认值)，则 b.N 增加，并再次运行基准测试函数。b.N 在近似这样的序列中不断增加；1, 2, 3, 5, 10, 20, 30, 50, 100 等等。 基准框架试图变得聪明，如果它看到当b.N较小而且测试很快就完成的时候，它将让序列增加地更快。</p>
+<p>例子：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">BenchmarkFuncA</span><span class="token punctuation">(</span>b <span class="token operator">*</span>testing<span class="token punctuation">.</span>B<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        b<span class="token punctuation">.</span><span class="token function">ResetTimer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">for</span> n <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> n <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>N<span class="token punctuation">;</span> n<span class="token operator">++</span> <span class="token punctuation">{</span>
+                <span class="token function">FuncA</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 运行 Fib 函数 N 次</span>
+        <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">go</span> test <span class="token operator">-</span>bench<span class="token operator">=</span>FuncA <span class="token operator">-</span>count<span class="token operator">=</span><span class="token number">10</span> <span class="token operator">-</span>benchtime<span class="token operator">=</span>10s <span class="token operator">-</span>cpu<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">4</span> <span class="token operator">-</span>run<span class="token operator">=</span>none
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/Go/">Go</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<footer>
+  &copy; 2021
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      
