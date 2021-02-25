@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mfcheer.github.io/feed/index.html</loc>
+    
+    <lastmod>2021-02-25T15:25:31.233Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://mfcheer.github.io/article/Python%E9%9B%86%E5%90%88.html</loc>
     
     <lastmod>2021-02-23T15:52:47.672Z</lastmod>
@@ -114,7 +121,7 @@
   </url>
   
   <url>
-    <loc>https://mfcheer.github.io/feed/index.html</loc>
+    <loc>https://mfcheer.github.io/feed/feed_index.html</loc>
     
     <lastmod>2019-10-10T17:25:42.126Z</lastmod>
     
