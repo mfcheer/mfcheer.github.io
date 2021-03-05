@@ -74,22 +74,33 @@
 <span class="token keyword">import</span> <span class="token string">"fmt"</span>
 
 <span class="token keyword">func</span> <span class="token function">qpow</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">int</span> <span class="token punctuation">{</span>
-    <span class="token keyword">var</span> result <span class="token builtin">int</span> <span class="token operator">=</span> <span class="token number">1</span>
-    <span class="token keyword">var</span> x_copy <span class="token builtin">int</span> <span class="token operator">=</span> x
+    <span class="token keyword">if</span> n <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token number">1</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> n <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        x <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">/</span> x
+        n <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">*</span> n
+    <span class="token punctuation">}</span>
+
+    result <span class="token operator">:=</span> <span class="token number">1</span>
     <span class="token keyword">for</span> <span class="token punctuation">{</span>
         <span class="token keyword">if</span> n <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> result
+            <span class="token keyword">break</span>
         <span class="token punctuation">}</span>
-        result <span class="token operator">*=</span> x
-        x <span class="token operator">*=</span> x_copy
-        n<span class="token operator">>>=</span><span class="token number">1</span>
+        <span class="token keyword">if</span> n<span class="token operator">&amp;</span><span class="token number">1</span> <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">{</span>
+            result <span class="token operator">*=</span> x
+        <span class="token punctuation">}</span>
+        x <span class="token operator">*=</span> x
+        n <span class="token operator">>>=</span> <span class="token number">1</span>
     <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> result
 <span class="token punctuation">}</span>
 
 <span class="token keyword">func</span> <span class="token function">main</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">qpow</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="素数线性筛"><a href="#素数线性筛" class="headerlink" title="素数线性筛"></a>素数线性筛</h3><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
 <span class="token keyword">import</span> <span class="token string">"fmt"</span>
 
