@@ -52,6 +52,7 @@
     <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">给定两个正整数（二进制形式表示）A和B，问把A变为B需要改变多少位（bit）?也就是说，整数A和B的二进制表示中有多少位是不同的？</span>
 	<br>
   </div>
+
   <div class="post-meta">
   </div>
   <div class="post-content">
