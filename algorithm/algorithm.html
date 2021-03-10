@@ -462,7 +462,7 @@
     <span class="token keyword">return</span> head
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="3-2-队列"><a href="#3-2-队列" class="headerlink" title="3.2 队列"></a>3.2 队列</h3><h3 id="3-3-栈"><a href="#3-3-栈" class="headerlink" title="3.3 栈"></a>3.3 栈</h3><h3 id="3-4-堆"><a href="#3-4-堆" class="headerlink" title="3.4 堆"></a>3.4 堆</h3><h3 id="3-5-二叉树"><a href="#3-5-二叉树" class="headerlink" title="3.5 二叉树"></a>3.5 二叉树</h3><p>二叉树结构</p>
+<h3 id="3-2-堆"><a href="#3-2-堆" class="headerlink" title="3.2 堆"></a>3.2 堆</h3><h3 id="3-3-二叉树"><a href="#3-3-二叉树" class="headerlink" title="3.3 二叉树"></a>3.3 二叉树</h3><p>二叉树结构</p>
 <pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// Definition for a binary tree node.</span>
 <span class="token keyword">type</span> TreeNode <span class="token keyword">struct</span> <span class="token punctuation">{</span>
     Val <span class="token builtin">int</span>
@@ -517,7 +517,54 @@
     <span class="token keyword">return</span> result
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="二叉树的宽度"><a href="#二叉树的宽度" class="headerlink" title="二叉树的宽度"></a>二叉树的宽度</h4><h3 id="3-6-并查集"><a href="#3-6-并查集" class="headerlink" title="3.6 并查集"></a>3.6 并查集</h3><h3 id="3-7-树状数组"><a href="#3-7-树状数组" class="headerlink" title="3.7 树状数组"></a>3.7 树状数组</h3><h3 id="3-8-线段树"><a href="#3-8-线段树" class="headerlink" title="3.8 线段树"></a>3.8 线段树</h3><h3 id="3-9-Trie树"><a href="#3-9-Trie树" class="headerlink" title="3.9 Trie树"></a>3.9 Trie树</h3><h3 id="3-10-散列表"><a href="#3-10-散列表" class="headerlink" title="3.10 散列表"></a>3.10 散列表</h3><h3 id="3-11-二叉排序树"><a href="#3-11-二叉排序树" class="headerlink" title="3.11 二叉排序树"></a>3.11 二叉排序树</h3><h2 id="第四章-动态规划"><a href="#第四章-动态规划" class="headerlink" title="第四章 动态规划"></a>第四章 动态规划</h2><h3 id="4-1-01背包问题"><a href="#4-1-01背包问题" class="headerlink" title="4.1 01背包问题"></a>4.1 01背包问题</h3><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
+<h4 id="二叉树的宽度"><a href="#二叉树的宽度" class="headerlink" title="二叉树的宽度"></a>二叉树的宽度</h4><h3 id="3-4-并查集"><a href="#3-4-并查集" class="headerlink" title="3.4 并查集"></a>3.4 并查集</h3><p>示例题目：<a href="https://leetcode-cn.com/problems/number-of-provinces/" target="_blank" rel="noopener">省份数量</a></p>
+<pre><code>var fa[210]int
+
+func findXFa(x int) int {
+    if x == fa[x] {
+        return x
+    } else {
+        return findXFa(fa[x])
+    }
+}
+
+func union(x int, y int) {
+    fx := findXFa(x)
+    fy := findXFa(y)
+
+    if (fx == fy){
+        return
+    } else if fy &gt; fx {
+        fa[fy] = fx
+    } else { 
+        fa[fx] = fy
+    }
+}
+
+func findCircleNum(isConnected [][]int) int {
+    n := len(isConnected)
+    for i := 0; i &lt; n; i++ {
+        fa[i] = i
+    }
+
+    for i := 0; i &lt; n; i++ {
+        for j := 0; j &lt; n; j++ {
+            if i != j &amp;&amp; isConnected[i][j] == 1 {
+                union(i, j)
+            }
+        }
+    }
+
+    var result int
+    for i := 0; i &lt; n; i++ {
+        if fa[i] == i {
+            result += 1
+        }
+    }
+    return result
+}
+</code></pre><h3 id="3-5-树状数组"><a href="#3-5-树状数组" class="headerlink" title="3.5 树状数组"></a>3.5 树状数组</h3><h3 id="3-6-线段树"><a href="#3-6-线段树" class="headerlink" title="3.6 线段树"></a>3.6 线段树</h3><h3 id="3-7-Trie树"><a href="#3-7-Trie树" class="headerlink" title="3.7 Trie树"></a>3.7 Trie树</h3><h3 id="3-8-二叉排序树"><a href="#3-8-二叉排序树" class="headerlink" title="3.8 二叉排序树"></a>3.8 二叉排序树</h3><p>### </p>
+<h2 id="第四章-动态规划"><a href="#第四章-动态规划" class="headerlink" title="第四章 动态规划"></a>第四章 动态规划</h2><h3 id="4-1-01背包问题"><a href="#4-1-01背包问题" class="headerlink" title="4.1 01背包问题"></a>4.1 01背包问题</h3><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
 <span class="token keyword">import</span> <span class="token string">"fmt"</span>
 
 <span class="token keyword">type</span> Bag <span class="token keyword">struct</span> <span class="token punctuation">{</span>
