@@ -53,6 +53,7 @@
   </div>
   <div class="page-content">
     <p>Algorithm Manual - analysis in Go</p>
+<p><a href="https://mfcheer.com/" target="_blank" rel="noopener">My Blog</a></p>
 <p>[TOC]</p>
 <h2 id="第一章-数论"><a href="#第一章-数论" class="headerlink" title="第一章 数论"></a>第一章 数论</h2><h3 id="1-1-GCD"><a href="#1-1-GCD" class="headerlink" title="1.1 GCD"></a><a href="https://baike.baidu.com/item/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95/1647675?fr=aladdin" target="_blank" rel="noopener">1.1 GCD</a></h3><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
 <span class="token keyword">import</span> <span class="token string">"fmt"</span>
@@ -517,7 +518,35 @@
     <span class="token keyword">return</span> result
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="二叉树的宽度"><a href="#二叉树的宽度" class="headerlink" title="二叉树的宽度"></a>二叉树的宽度</h4><h3 id="3-4-并查集"><a href="#3-4-并查集" class="headerlink" title="3.4 并查集"></a>3.4 并查集</h3><p>示例题目：<a href="https://leetcode-cn.com/problems/number-of-provinces/" target="_blank" rel="noopener">省份数量</a></p>
+<h4 id="二叉树的宽度"><a href="#二叉树的宽度" class="headerlink" title="二叉树的宽度"></a>二叉树的宽度</h4><h4 id="镜像二叉树"><a href="#镜像二叉树" class="headerlink" title="镜像二叉树"></a>镜像二叉树</h4><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">swapNode</span><span class="token punctuation">(</span>root <span class="token operator">*</span>TreeNode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> root <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> root<span class="token punctuation">.</span>Left <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token operator">&amp;&amp;</span> root<span class="token punctuation">.</span>Right <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> 
+    <span class="token punctuation">}</span>
+
+    swap <span class="token operator">:=</span> root<span class="token punctuation">.</span>Left
+    root<span class="token punctuation">.</span>Left <span class="token operator">=</span> root<span class="token punctuation">.</span>Right
+    root<span class="token punctuation">.</span>Right <span class="token operator">=</span> swap
+
+    <span class="token function">swapNode</span><span class="token punctuation">(</span>root<span class="token punctuation">.</span>Left<span class="token punctuation">)</span>
+    <span class="token function">swapNode</span><span class="token punctuation">(</span>root<span class="token punctuation">.</span>Right<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">mirrorTree</span><span class="token punctuation">(</span>root <span class="token operator">*</span>TreeNode<span class="token punctuation">)</span> <span class="token operator">*</span>TreeNode <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> root <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">nil</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> root<span class="token punctuation">.</span>Left <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token operator">&amp;&amp;</span> root<span class="token punctuation">.</span>Right <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> root
+    <span class="token punctuation">}</span>
+
+    <span class="token function">swapNode</span><span class="token punctuation">(</span>root<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> root
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="3-4-并查集"><a href="#3-4-并查集" class="headerlink" title="3.4 并查集"></a>3.4 并查集</h3><p>示例题目：<a href="https://leetcode-cn.com/problems/number-of-provinces/" target="_blank" rel="noopener">省份数量</a></p>
 <pre><code>var fa[210]int
 
 func findXFa(x int) int {
@@ -563,8 +592,7 @@ func findCircleNum(isConnected [][]int) int {
     }
     return result
 }
-</code></pre><h3 id="3-5-树状数组"><a href="#3-5-树状数组" class="headerlink" title="3.5 树状数组"></a>3.5 树状数组</h3><h3 id="3-6-线段树"><a href="#3-6-线段树" class="headerlink" title="3.6 线段树"></a>3.6 线段树</h3><h3 id="3-7-Trie树"><a href="#3-7-Trie树" class="headerlink" title="3.7 Trie树"></a>3.7 Trie树</h3><h3 id="3-8-二叉排序树"><a href="#3-8-二叉排序树" class="headerlink" title="3.8 二叉排序树"></a>3.8 二叉排序树</h3><p>### </p>
-<h2 id="第四章-动态规划"><a href="#第四章-动态规划" class="headerlink" title="第四章 动态规划"></a>第四章 动态规划</h2><h3 id="4-1-01背包问题"><a href="#4-1-01背包问题" class="headerlink" title="4.1 01背包问题"></a>4.1 01背包问题</h3><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
+</code></pre><h3 id="3-5-树状数组"><a href="#3-5-树状数组" class="headerlink" title="3.5 树状数组"></a>3.5 树状数组</h3><h3 id="3-6-线段树"><a href="#3-6-线段树" class="headerlink" title="3.6 线段树"></a>3.6 线段树</h3><h3 id="3-7-Trie树"><a href="#3-7-Trie树" class="headerlink" title="3.7 Trie树"></a>3.7 Trie树</h3><h3 id="3-8-二叉排序树"><a href="#3-8-二叉排序树" class="headerlink" title="3.8 二叉排序树"></a>3.8 二叉排序树</h3><h2 id="第四章-动态规划"><a href="#第四章-动态规划" class="headerlink" title="第四章 动态规划"></a>第四章 动态规划</h2><h3 id="4-1-01背包问题"><a href="#4-1-01背包问题" class="headerlink" title="4.1 01背包问题"></a>4.1 01背包问题</h3><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
 <span class="token keyword">import</span> <span class="token string">"fmt"</span>
 
 <span class="token keyword">type</span> Bag <span class="token keyword">struct</span> <span class="token punctuation">{</span>
@@ -765,7 +793,7 @@ func findCircleNum(isConnected [][]int) int {
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="6-4-最小生成树"><a href="#6-4-最小生成树" class="headerlink" title="6.4 最小生成树"></a>6.4 最小生成树</h3><p>##　第七章 字符串算法</p>
-<h3 id="7-1-KMP"><a href="#7-1-KMP" class="headerlink" title="7.1 KMP"></a>7.1 KMP</h3><h3 id="7-2-BM"><a href="#7-2-BM" class="headerlink" title="7.2 BM"></a>7.2 BM</h3><h3 id="7-3-Manacher"><a href="#7-3-Manacher" class="headerlink" title="7.3 Manacher"></a>7.3 Manacher</h3><h3 id="7-4-AC自动机"><a href="#7-4-AC自动机" class="headerlink" title="7.4 AC自动机"></a>7.4 AC自动机</h3><h2 id="第八章-海量数据处理"><a href="#第八章-海量数据处理" class="headerlink" title="第八章 海量数据处理"></a>第八章 海量数据处理</h2><h3 id="8-1-布隆过滤器"><a href="#8-1-布隆过滤器" class="headerlink" title="8.1 布隆过滤器"></a>8.1 布隆过滤器</h3><h3 id="8-2-Bitmap"><a href="#8-2-Bitmap" class="headerlink" title="8.2 Bitmap"></a>8.2 Bitmap</h3><h3 id="8-3-Simhash"><a href="#8-3-Simhash" class="headerlink" title="8.3 Simhash"></a>8.3 Simhash</h3><h3 id="8-4-MapReduce"><a href="#8-4-MapReduce" class="headerlink" title="8.4 MapReduce"></a>8.4 MapReduce</h3>
+<h3 id="7-1-KMP"><a href="#7-1-KMP" class="headerlink" title="7.1 KMP"></a>7.1 KMP</h3><h3 id="7-2-BM"><a href="#7-2-BM" class="headerlink" title="7.2 BM"></a>7.2 BM</h3><h3 id="7-3-Manacher"><a href="#7-3-Manacher" class="headerlink" title="7.3 Manacher"></a>7.3 Manacher</h3><h3 id="7-4-AC自动机"><a href="#7-4-AC自动机" class="headerlink" title="7.4 AC自动机"></a>7.4 AC自动机</h3><h2 id="第八章-海量数据处理"><a href="#第八章-海量数据处理" class="headerlink" title="第八章 海量数据处理"></a>第八章 海量数据处理</h2><h3 id="8-1-布隆过滤器"><a href="#8-1-布隆过滤器" class="headerlink" title="8.1 布隆过滤器"></a>8.1 布隆过滤器</h3><h3 id="8-2-Bitmap"><a href="#8-2-Bitmap" class="headerlink" title="8.2 Bitmap"></a>8.2 Bitmap</h3><h3 id="8-3-Simhash"><a href="#8-3-Simhash" class="headerlink" title="8.3 Simhash"></a>8.3 Simhash</h3><h3 id="8-4-MapReduce"><a href="#8-4-MapReduce" class="headerlink" title="8.4 MapReduce"></a>8.4 MapReduce</h3><h2 id="第九章-其他"><a href="#第九章-其他" class="headerlink" title="第九章 其他"></a>第九章 其他</h2><h3 id="9-1-LRU"><a href="#9-1-LRU" class="headerlink" title="9.1 LRU"></a>9.1 LRU</h3><h3 id="9-2-贪心"><a href="#9-2-贪心" class="headerlink" title="9.2 贪心"></a>9.2 贪心</h3><h3 id="9-3-两个有序数组第k大"><a href="#9-3-两个有序数组第k大" class="headerlink" title="9.3 两个有序数组第k大"></a>9.3 两个有序数组第k大</h3><h3 id="9-4-调整数组顺序使奇数位于偶数前面"><a href="#9-4-调整数组顺序使奇数位于偶数前面" class="headerlink" title="9.4 调整数组顺序使奇数位于偶数前面"></a>9.4 调整数组顺序使奇数位于偶数前面</h3><h3 id="9-5-两个栈实现队列"><a href="#9-5-两个栈实现队列" class="headerlink" title="9.5 两个栈实现队列"></a>9.5 两个栈实现队列</h3>
   </div>
 </div>
 <footer>
