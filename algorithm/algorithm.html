@@ -187,7 +187,7 @@
 
 <span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     a <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">}</span>
-    <span class="token function">quickSort</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token function">len</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token function">quickSort</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token function">len</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
     fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
     <span class="token keyword">return</span>
 <span class="token punctuation">}</span>
@@ -486,7 +486,66 @@
     <span class="token keyword">return</span> root<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="二叉树的直径"><a href="#二叉树的直径" class="headerlink" title="二叉树的直径"></a>二叉树的直径</h4><h4 id="二叉树的最大距离（即相距最远的两个叶子节点）"><a href="#二叉树的最大距离（即相距最远的两个叶子节点）" class="headerlink" title="二叉树的最大距离（即相距最远的两个叶子节点）"></a>二叉树的最大距离（即相距最远的两个叶子节点）</h4><h4 id="二叉树的深度"><a href="#二叉树的深度" class="headerlink" title="二叉树的深度"></a><a href="https://leetcode-cn.com/problems/er-cha-shu-de-shen-du-lcof/" target="_blank" rel="noopener">二叉树的深度</a></h4><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">maxDepth</span><span class="token punctuation">(</span>root <span class="token operator">*</span>TreeNode<span class="token punctuation">)</span> <span class="token builtin">int</span> <span class="token punctuation">{</span>
+<h4 id="二叉树的最近公共祖先"><a href="#二叉树的最近公共祖先" class="headerlink" title="二叉树的最近公共祖先"></a><a href="https://leetcode-cn.com/problems/er-cha-shu-de-zui-jin-gong-gong-zu-xian-lcof/" target="_blank" rel="noopener">二叉树的最近公共祖先</a></h4><pre class="line-numbers language-c"><code class="language-c"><span class="token comment" spellcheck="true">/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */</span>
+
+<span class="token keyword">struct</span> TreeNode<span class="token operator">*</span> <span class="token function">lowestCommonAncestor</span><span class="token punctuation">(</span><span class="token keyword">struct</span> TreeNode<span class="token operator">*</span> root<span class="token punctuation">,</span> <span class="token keyword">struct</span> TreeNode<span class="token operator">*</span> p<span class="token punctuation">,</span> <span class="token keyword">struct</span> TreeNode<span class="token operator">*</span> q<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>root <span class="token operator">==</span> <span class="token constant">NULL</span> <span class="token operator">||</span> p <span class="token operator">==</span> root <span class="token operator">||</span> q <span class="token operator">==</span> root<span class="token punctuation">)</span> <span class="token keyword">return</span> root<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> TreeNode<span class="token operator">*</span> lResult <span class="token operator">=</span> <span class="token function">lowestCommonAncestor</span><span class="token punctuation">(</span>root<span class="token operator">-></span>left<span class="token punctuation">,</span> p<span class="token punctuation">,</span> q<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> TreeNode<span class="token operator">*</span> rResult <span class="token operator">=</span> <span class="token function">lowestCommonAncestor</span><span class="token punctuation">(</span>root<span class="token operator">-></span>right<span class="token punctuation">,</span> p<span class="token punctuation">,</span> q<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>lResult <span class="token operator">!=</span> <span class="token constant">NULL</span> <span class="token operator">&amp;&amp;</span> rResult <span class="token operator">!=</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token keyword">return</span> root<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>lResult <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token keyword">return</span> rResult<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>rResult <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token keyword">return</span> lResult<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> root<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="二叉树的直径"><a href="#二叉树的直径" class="headerlink" title="二叉树的直径"></a><a href="https://leetcode-cn.com/problems/diameter-of-binary-tree/" target="_blank" rel="noopener">二叉树的直径</a></h4><pre><code>var result = 0
+
+func max(a, b int) int {
+    if a &gt; b {
+        return a
+    }
+    return b
+}
+
+func getTreeDeep(root *TreeNode) int {
+    if root == nil {
+        return 0
+    }
+    return max(getTreeDeep(root.Left), getTreeDeep(root.Right)) + 1
+}
+
+func calResult(root *TreeNode) {
+    if root == nil {
+        return
+    }
+
+    lRootDeep := getTreeDeep(root.Left)
+    rRootDeep := getTreeDeep(root.Right)
+
+    if lRootDeep + rRootDeep &gt; result {
+        result = lRootDeep + rRootDeep
+    }
+
+    calResult(root.Left)
+    calResult(root.Right)
+}
+
+func diameterOfBinaryTree(root *TreeNode) int {
+    if root == nil {
+        return 0
+    }
+    result = 0
+    calResult(root)
+    return result
+}
+</code></pre><h4 id="二叉树的深度"><a href="#二叉树的深度" class="headerlink" title="二叉树的深度"></a><a href="https://leetcode-cn.com/problems/er-cha-shu-de-shen-du-lcof/" target="_blank" rel="noopener">二叉树的深度</a></h4><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">maxDepth</span><span class="token punctuation">(</span>root <span class="token operator">*</span>TreeNode<span class="token punctuation">)</span> <span class="token builtin">int</span> <span class="token punctuation">{</span>
     result <span class="token operator">:=</span> <span class="token number">0</span>
     <span class="token keyword">if</span> root <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> result
@@ -518,7 +577,44 @@
     <span class="token keyword">return</span> result
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="二叉树的宽度"><a href="#二叉树的宽度" class="headerlink" title="二叉树的宽度"></a>二叉树的宽度</h4><h4 id="镜像二叉树"><a href="#镜像二叉树" class="headerlink" title="镜像二叉树"></a>镜像二叉树</h4><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">swapNode</span><span class="token punctuation">(</span>root <span class="token operator">*</span>TreeNode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<h4 id="二叉树最大宽度"><a href="#二叉树最大宽度" class="headerlink" title="二叉树最大宽度"></a><a href="https://leetcode-cn.com/problems/maximum-width-of-binary-tree/" target="_blank" rel="noopener">二叉树最大宽度</a></h4><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">widthOfBinaryTree</span><span class="token punctuation">(</span>root <span class="token operator">*</span>TreeNode<span class="token punctuation">)</span> <span class="token builtin">int</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> root <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token number">0</span>
+    <span class="token punctuation">}</span>
+
+    result <span class="token operator">:=</span> <span class="token number">1</span>
+    stack <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>TreeNode<span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    root<span class="token punctuation">.</span>Val <span class="token operator">=</span> <span class="token number">1</span>
+    stack <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>stack<span class="token punctuation">,</span> root<span class="token punctuation">)</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token function">len</span><span class="token punctuation">(</span>stack<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            <span class="token keyword">break</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> stack<span class="token punctuation">[</span><span class="token function">len</span><span class="token punctuation">(</span>stack<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Val <span class="token operator">-</span> stack<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Val <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">></span> result <span class="token punctuation">{</span>
+            result <span class="token operator">=</span> stack<span class="token punctuation">[</span><span class="token function">len</span><span class="token punctuation">(</span>stack<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Val <span class="token operator">-</span> stack<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Val <span class="token operator">+</span> <span class="token number">1</span>
+        <span class="token punctuation">}</span>
+
+        now_stack <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>TreeNode<span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span>  i <span class="token operator">&lt;</span> <span class="token function">len</span><span class="token punctuation">(</span>stack<span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> stack<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>Left <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+                stack<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>Left<span class="token punctuation">.</span>Val <span class="token operator">=</span> stack<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>Val <span class="token operator">*</span> <span class="token number">2</span>
+                now_stack <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>now_stack<span class="token punctuation">,</span> stack<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>Left<span class="token punctuation">)</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">if</span> stack<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>Right <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+                stack<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>Right<span class="token punctuation">.</span>Val <span class="token operator">=</span> stack<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>Val <span class="token operator">*</span> <span class="token number">2</span> <span class="token operator">+</span> <span class="token number">1</span>
+                now_stack <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>now_stack<span class="token punctuation">,</span> stack<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>Right<span class="token punctuation">)</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        stack <span class="token operator">=</span> now_stack
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> result
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="镜像二叉树"><a href="#镜像二叉树" class="headerlink" title="镜像二叉树"></a>镜像二叉树</h4><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">swapNode</span><span class="token punctuation">(</span>root <span class="token operator">*</span>TreeNode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> root <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span>
     <span class="token punctuation">}</span>
@@ -546,6 +642,37 @@
     <span class="token keyword">return</span> root
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="对称的二叉树"><a href="#对称的二叉树" class="headerlink" title=" 对称的二叉树"></a><a href="https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/" target="_blank" rel="noopener"> 对称的二叉树</a></h4><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">isSymmetric</span><span class="token punctuation">(</span>root <span class="token operator">*</span>TreeNode<span class="token punctuation">)</span> <span class="token builtin">bool</span> <span class="token punctuation">{</span>
+    nodeList <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>TreeNode<span class="token punctuation">{</span>root<span class="token punctuation">}</span>
+    <span class="token keyword">for</span> <span class="token punctuation">{</span>
+        isBreak <span class="token operator">:=</span> <span class="token boolean">true</span>
+        values <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+        nodeListNew <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>TreeNode<span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> node <span class="token operator">:=</span> <span class="token keyword">range</span> nodeList <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> node <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+                values <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>values<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">123456789</span><span class="token punctuation">)</span>
+                nodeListNew <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>nodeListNew<span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+                nodeListNew <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>nodeListNew<span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                isBreak <span class="token operator">=</span> <span class="token boolean">false</span>
+                values <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>values<span class="token punctuation">,</span> node<span class="token punctuation">.</span>Val<span class="token punctuation">)</span>
+                nodeListNew <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>nodeListNew<span class="token punctuation">,</span> node<span class="token punctuation">.</span>Left<span class="token punctuation">)</span>
+                nodeListNew <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>nodeListNew<span class="token punctuation">,</span> node<span class="token punctuation">.</span>Right<span class="token punctuation">)</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> isBreak <span class="token punctuation">{</span>
+            <span class="token keyword">break</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">for</span> i<span class="token operator">:=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;=</span><span class="token function">len</span><span class="token punctuation">(</span>values<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> values<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">!=</span> values<span class="token punctuation">[</span><span class="token function">len</span><span class="token punctuation">(</span>values<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token operator">-</span>i<span class="token punctuation">]</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token boolean">false</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        nodeList <span class="token operator">=</span> nodeListNew
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="3-4-并查集"><a href="#3-4-并查集" class="headerlink" title="3.4 并查集"></a>3.4 并查集</h3><p>示例题目：<a href="https://leetcode-cn.com/problems/number-of-provinces/" target="_blank" rel="noopener">省份数量</a></p>
 <pre><code>var fa[210]int
 
@@ -793,7 +920,22 @@ func findCircleNum(isConnected [][]int) int {
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="6-4-最小生成树"><a href="#6-4-最小生成树" class="headerlink" title="6.4 最小生成树"></a>6.4 最小生成树</h3><p>##　第七章 字符串算法</p>
-<h3 id="7-1-KMP"><a href="#7-1-KMP" class="headerlink" title="7.1 KMP"></a>7.1 KMP</h3><h3 id="7-2-BM"><a href="#7-2-BM" class="headerlink" title="7.2 BM"></a>7.2 BM</h3><h3 id="7-3-Manacher"><a href="#7-3-Manacher" class="headerlink" title="7.3 Manacher"></a>7.3 Manacher</h3><h3 id="7-4-AC自动机"><a href="#7-4-AC自动机" class="headerlink" title="7.4 AC自动机"></a>7.4 AC自动机</h3><h2 id="第八章-海量数据处理"><a href="#第八章-海量数据处理" class="headerlink" title="第八章 海量数据处理"></a>第八章 海量数据处理</h2><h3 id="8-1-布隆过滤器"><a href="#8-1-布隆过滤器" class="headerlink" title="8.1 布隆过滤器"></a>8.1 布隆过滤器</h3><h3 id="8-2-Bitmap"><a href="#8-2-Bitmap" class="headerlink" title="8.2 Bitmap"></a>8.2 Bitmap</h3><h3 id="8-3-Simhash"><a href="#8-3-Simhash" class="headerlink" title="8.3 Simhash"></a>8.3 Simhash</h3><h3 id="8-4-MapReduce"><a href="#8-4-MapReduce" class="headerlink" title="8.4 MapReduce"></a>8.4 MapReduce</h3><h2 id="第九章-其他"><a href="#第九章-其他" class="headerlink" title="第九章 其他"></a>第九章 其他</h2><h3 id="9-1-LRU"><a href="#9-1-LRU" class="headerlink" title="9.1 LRU"></a>9.1 LRU</h3><h3 id="9-2-贪心"><a href="#9-2-贪心" class="headerlink" title="9.2 贪心"></a>9.2 贪心</h3><h3 id="9-3-两个有序数组第k大"><a href="#9-3-两个有序数组第k大" class="headerlink" title="9.3 两个有序数组第k大"></a>9.3 两个有序数组第k大</h3><h3 id="9-4-调整数组顺序使奇数位于偶数前面"><a href="#9-4-调整数组顺序使奇数位于偶数前面" class="headerlink" title="9.4 调整数组顺序使奇数位于偶数前面"></a>9.4 调整数组顺序使奇数位于偶数前面</h3><h3 id="9-5-两个栈实现队列"><a href="#9-5-两个栈实现队列" class="headerlink" title="9.5 两个栈实现队列"></a>9.5 两个栈实现队列</h3>
+<h3 id="7-1-KMP"><a href="#7-1-KMP" class="headerlink" title="7.1 KMP"></a>7.1 KMP</h3><h3 id="7-2-BM"><a href="#7-2-BM" class="headerlink" title="7.2 BM"></a>7.2 BM</h3><h3 id="7-3-Manacher"><a href="#7-3-Manacher" class="headerlink" title="7.3 Manacher"></a>7.3 Manacher</h3><h3 id="7-4-AC自动机"><a href="#7-4-AC自动机" class="headerlink" title="7.4 AC自动机"></a>7.4 AC自动机</h3><h2 id="第八章-海量数据处理"><a href="#第八章-海量数据处理" class="headerlink" title="第八章 海量数据处理"></a>第八章 海量数据处理</h2><h3 id="8-1-布隆过滤器"><a href="#8-1-布隆过滤器" class="headerlink" title="8.1 布隆过滤器"></a>8.1 布隆过滤器</h3><h3 id="8-2-Bitmap"><a href="#8-2-Bitmap" class="headerlink" title="8.2 Bitmap"></a>8.2 Bitmap</h3><h3 id="8-3-Simhash"><a href="#8-3-Simhash" class="headerlink" title="8.3 Simhash"></a>8.3 Simhash</h3><h3 id="8-4-MapReduce"><a href="#8-4-MapReduce" class="headerlink" title="8.4 MapReduce"></a>8.4 MapReduce</h3><h2 id="第九章-其他"><a href="#第九章-其他" class="headerlink" title="第九章 其他"></a>第九章 其他</h2><h3 id="9-1-LRU-LFU"><a href="#9-1-LRU-LFU" class="headerlink" title="9.1 LRU LFU"></a>9.1 LRU LFU</h3><h3 id="9-2-贪心"><a href="#9-2-贪心" class="headerlink" title="9.2 贪心"></a>9.2 贪心</h3><h3 id="9-3-两个有序数组第k大"><a href="#9-3-两个有序数组第k大" class="headerlink" title="9.3 两个有序数组第k大"></a>9.3 两个有序数组第k大</h3><h3 id="9-4-调整数组顺序使奇数位于偶数前面"><a href="#9-4-调整数组顺序使奇数位于偶数前面" class="headerlink" title="9.4 调整数组顺序使奇数位于偶数前面"></a>9.4 调整数组顺序使奇数位于偶数前面</h3><h3 id="9-5-两个栈实现队列"><a href="#9-5-两个栈实现队列" class="headerlink" title="9.5 两个栈实现队列"></a>9.5 两个栈实现队列</h3><h3 id="9-6-数组中出现次数超过一半的数字"><a href="#9-6-数组中出现次数超过一半的数字" class="headerlink" title="9.6 数组中出现次数超过一半的数字"></a>9.6 <a href="https://leetcode-cn.com/problems/shu-zu-zhong-chu-xian-ci-shu-chao-guo-yi-ban-de-shu-zi-lcof/" target="_blank" rel="noopener">数组中出现次数超过一半的数字</a></h3><pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">majorityElement</span><span class="token punctuation">(</span>nums <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">int</span> <span class="token punctuation">{</span>
+    val<span class="token punctuation">,</span> cnt <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> idx<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> <span class="token keyword">range</span> nums <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> cnt <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            val <span class="token operator">=</span> nums<span class="token punctuation">[</span>idx<span class="token punctuation">]</span>
+            cnt <span class="token operator">=</span> cnt <span class="token operator">+</span> <span class="token number">1</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> nums<span class="token punctuation">[</span>idx<span class="token punctuation">]</span> <span class="token operator">==</span> val <span class="token punctuation">{</span>
+            cnt <span class="token operator">=</span> cnt <span class="token operator">+</span> <span class="token number">1</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            cnt <span class="token operator">=</span> cnt <span class="token operator">-</span> <span class="token number">1</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> val
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
   </div>
 </div>
 <footer>
