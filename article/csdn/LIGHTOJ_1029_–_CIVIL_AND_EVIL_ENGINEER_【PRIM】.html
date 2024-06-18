@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>LIGHTOJ 1029 – CIVIL AND EVIL ENGINEER 【PRIM】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">LIGHTOJ 1029 – CIVIL AND EVIL ENGINEER 【PRIM】</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383157" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/46383157</a></p>
+<p>题目链接： <a href="http://www.lightoj.com/volume_showproblem.php?problem=1029" target="_blank" rel="noopener"> http://www.lightoj.com/volume_showproblem.php?problem=1029
+</a></p>
+<p>根据给出的条件，求最大和最小生成树的平均值。</p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+const int inf = 100000000;
+int n, a, b, c;
+int maxp[110][110];
+int minp[110][110];
+
+int dis[110], v[110];
+int prim(int map[][110],int n)
+{
+    memset(v, 0, sizeof(v));
+    int min, sum = 0;
+    for (int i = 0; i &lt;= n; i++)
+        dis[i] = map[0][i];
+    v[0] = 1;
+    for (int i = 1; i &lt;= n; i++)
+    {
+        int k = 0;
+        min = inf;
+        for (int j = 0; j &lt;= n; j++)
+            if (!v[j] &amp;&amp; min&gt;dis[j])
+            {
+                k = j;
+                min = dis[j];
+            }
+        sum += min;
+        v[k] = 1;
+        for (int j = 0; j &lt;= n; j++)
+            if (!v[j] &amp;&amp; dis[j]&gt;map[k][j])
+                dis[j] = map[k][j];
+    }
+    return sum;
+}
+
+int primmax(int map[][110], int n)
+{
+    memset(v, 0, sizeof(v));
+    int min, sum = 0;
+    for (int i = 0; i &lt;= n; i++)
+        dis[i] = map[0][i];
+    v[0] = 1;
+    for (int i = 1; i &lt;= n; i++)
+    {
+        int k = 0;
+        min = -1;
+        for (int j = 0; j &lt;= n; j++)
+            if (!v[j] &amp;&amp; min&lt;dis[j])
+            {
+                k = j;
+                min = dis[j];
+            }
+        sum += min;
+        v[k] = 1;
+        for (int j = 0; j &lt;= n; j++)
+            if (!v[j] &amp;&amp; dis[j]&lt;map[k][j])
+                dis[j] = map[k][j];
+    }
+    return sum;
+}
+
+void init(int n)
+{
+    for (int i = 0; i &lt;= n; i++)
+        for (int j = 0; j &lt;= n; j++)
+        {
+            if (i == j)
+            {
+                maxp[i][j] = maxp[j][i] = minp[i][j] = minp[j][i] = 0;
+            }
+            else
+            {
+                maxp[i][j] = maxp[j][i] = -1;
+                minp[i][j] = minp[j][i] = inf;
+            }
+        }
+}
+
+int main()
+{
+    int t;
+    scanf(&quot;%d&quot;,&amp;t);
+    for (int k = 1; k &lt;= t; k++)
+    {
+        scanf(&quot;%d&quot;, &amp;n);
+        init(n);
+        while (scanf(&quot;%d%d%d&quot;, &amp;a, &amp;b, &amp;c) != EOF)
+        {
+            if (a == 0 &amp;&amp; b == 0 &amp;&amp; c == 0)
+                break;
+            if (minp[a][b] &gt; c)
+            {
+                minp[a][b] = minp[b][a] = c;
+            }
+            if (maxp[a][b] &lt; c)
+            {
+                maxp[a][b] = maxp[b][a] = c;
+            }
+        }
+
+        int ans1 = primmax(maxp, n);
+        int ans2 = prim(minp, n);
+        int ans = ans1 + ans2;
+        if (!(ans%2))
+            printf(&quot;Case %d: %d\n&quot;, k, ans/2);
+        else 
+            printf(&quot;Case %d: %d%c%d\n&quot;, k, ans,&#39;/&#39;,2);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

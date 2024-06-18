@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>树状数组区间求和三种模型 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="acm,c语言,位运算,树状数组,amp">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">树状数组区间求和三种模型</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>树状数组在区间求和问题上有大用，其三种复杂度都比线段树要低很多……有关区间求和的问题主要有以下三个模型（以下设A[1..N]为一个长为N的序列，初始值为全0）：</p>
+<p>（1）“改点求段”型，即对于序列A有以下操作：</p>
+<p>【1】修改操作：将A[x]的值加上c；</p>
+<p>【2】求和操作：求此时A[l..r]的和。</p>
+<p>这是最容易的模型，不需要任何辅助数组。树状数组中从x开始不断减lowbit(x)（即x&amp;(-x)）可以得到整个[1..x]的和，而从x开始不断加lowbit(x)则可以得到x的所有前趋。代码：</p>
+<p>void  ADD(  int  x,  int  c)<br>{<br>for  (  int  i  =  x; i  &lt;=  n; i  +=  i  &amp; (  -  i)) a[i]  +=  c;<br>}<br>int  SUM(  int  x)<br>{<br>int  s  =  0  ;<br>for  (  int  i  =  x; i  &gt; 0  ; i  -=  i  &amp; (  -  i)) s  +=  a[i];<br>return  s;<br>}  </p>
+<p>操作【1】：ADD(x, c);</p>
+<p>操作【2】：SUM(r)-SUM(l-1)。  </p>
+<p>（2）“改段求点”型，即对于序列A有以下操作：</p>
+<p>【1】修改操作：将A[l..r]之间的全部元素值加上c；</p>
+<p>【2】求和操作：求此时A[x]的值。  </p>
+<p>这个模型中需要设置一个辅助数组B：B[i]表示A[1..i]到目前为止共被整体加了多少（或者可以说成，到目前为止的所有ADD(i, c)操作中c的总和）。</p>
+<p>则可以发现，对于之前的所有ADD(x,<br>c)操作，当且仅当x&gt;=i时，该操作会对A[i]的值造成影响（将A[i]加上c），又由于初始A[i]=0，所以有A[i] =<br>B[i..N]之和！而ADD(i, c)（将A[1..i]整体加上c），将B[i]加上c即可——只要对B数组进行操作就行了。</p>
+<p>【首先对于每个数A定义集合up(A)表示{A, A+lowestbit(A),<br>A+lowestbit(A)+lowestbit(A+lowestbit(A))…} 定义集合down(A)表示{A, A-lowestbit(A),<br>A-lowestbit(A)-lowestbit(A-lowestbit(A)) … ,<br>0}。可以发现对于任何A&lt;B，up(A)和down(B)的交集有且仅有一个数。</p>
+<p>翻转一个区间[A,B]（为了便于讨论先把原问题降为一维的情况），我们可以把down(B)的所有元素的翻转次数+1，再把down(A-1)的所有元素的翻转次数-1。而每次查询一个元素C时，只需要统计up(C)的所有元素的翻转次数之和，即为C实际被翻转的次数】</p>
+<p>这样就把该模型转化成了“改点求点”型，只是有一点不同的是，SUM(x)不是求B[1..x]的和而是求B[x..N]的和，此时只需把ADD和SUM中的增减次序对调即可（模型1中是ADD加SUM减，这里是ADD减SUM加）。代码：  </p>
+<p>void  ADD(  int  x,  int  c)<br>{<br>for  (  int  i  =  x; i  &gt; 0  ; i  -=  i  &amp; (  -  i)) b[i]  +=  c;<br>}<br>int  SUM(  int  x)<br>{<br>int  s  =  0  ;<br>for  (  int  i  =  x; i  &lt;=  n; i  +=  i  &amp; (  -  i)) s  +=  b[i];<br>return  s;<br>}</p>
+<p>操作【1】：ADD(l-1, -c); ADD(r, c);  </p>
+<p>操作【2】：SUM(x)。  </p>
+<p>（3）“改段求段”型，即对于序列A有以下操作：  </p>
+<p>【1】修改操作：将A[l..r]之间的全部元素值加上c；  </p>
+<p>【2】求和操作：求此时A[l..r]的和。  </p>
+<p>这是最复杂的模型，需要两个辅助数组：B[i]表示A[1..i]到目前为止共被整体加了多少（和模型2中的一样），C[i]表示A[1..i]到目前为止共被整体加了多少的总和（或者说，C[i]=B[i]*i）。  </p>
+<p>对于ADD(x, c)，只要将B[x]加上c，同时C[x]加上c*x即可（根据C[x]和B[x]间的关系可得）；  </p>
+<p>而ADD(x,<br>c)操作是这样影响A[1..i]的和的：若x&lt;i，则会将A[1..i]的和加上x<em>c，否则（x&gt;=i）会将A[1..i]的和加上i</em>c。也就是，A[1..i]之和<br>= B[i..N]之和 * i + C[1..i-1]之和。<br>这样对于B和C两个数组而言就变成了“改点求段”（不过B是求后缀和而C是求前缀和）。<br>另外，该模型中需要特别注意越界问题，即x=0时不能执行SUM_B操作和ADD_C操作！代码：  </p>
+<p>void  ADD_B(  int  x,  int  c)<br>{<br>for  (  int  i  =  x; i  &gt; 0  ; i  -=  i  &amp; (  -  i)) B[i]  +=  c;<br>}<br>void  ADD_C(  int  x,  int  c)<br>{<br>for  (  int  i  =  x; i  &lt;=  n; i  +=  i  &amp; (  -  i)) C[i]  +=  x  <em>  c;<br>}<br>int  SUM_B(  int  x)<br>{<br>int  s  =  0  ;<br>for  (  int  i  =  x; i  &lt;=  n; i  +=  i  &amp; (  -  i)) s  +=  B[i];<br>return  s;<br>}<br>int  SUM_C(  int  x)<br>{<br>int  s  =  0  ;<br>for  (  int  i  =  x; i  &gt; 0  ; i  -=  i  &amp; (  -  i)) s  +=  C[i];<br>return  s;<br>}<br>inline  int  SUM(  int  x)<br>{<br>if  (x)  return  SUM_B(x)  </em>  x  +  SUM_C(x  -  1  );  else  return  0  ;<br>}</p>
+<p>操作【1】：<br>ADD_B(r, c); ADD_C(r, c);<br>if (l &gt; 1) {ADD_B(l - 1, -c); ADD_C(l - 1, -c);}<br>操作【2】：SUM(r) - SUM(l - 1)。</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

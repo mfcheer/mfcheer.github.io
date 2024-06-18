@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>poj 2195 Going Home【zkw费用流】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="poj">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">poj 2195 Going Home【zkw费用流】</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/48224263" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/48224263</a></p>
+<p>题目链接： <a href="http://poj.org/problem?id=2195" target="_blank" rel="noopener"> http://poj.org/problem?id=2195 </a></p>
+<p>题意：每个人都走到一个屋子的最小花费。二分图类型</p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;set&gt;  
+#include &lt;map&gt;  
+#include &lt;string.h&gt;  
+#include &lt;queue&gt;  
+#include &lt;sstream&gt;  
+#include &lt;stdio.h&gt;  
+#include &lt;math.h&gt;  
+#include &lt;stdlib.h&gt;  
+#include &lt;string&gt;
+
+using namespace std;
+
+const int MAXN = 1000;
+const int MAXM = 200000;
+const int INF = 0x3f3f3f3f;
+struct Edge
+{
+    int to, next, cap, flow, cost;
+    Edge(int _to = 0, int _next = 0, int _cap = 0, int _flow = 0, int _cost = 0) :
+        to(_to), next(_next), cap(_cap), flow(_flow), cost(_cost) {}
+}edge[MAXM];
+
+struct ZKW_MinCostMaxFlow
+{
+    int head[MAXN], tot;
+    int cur[MAXN];
+    int dis[MAXN];
+    bool vis[MAXN];
+    int ss, tt, N;//源点、汇点和点的总个数（编号是0~N-1）,不需要额外赋值，调用会直接赋值
+    int min_cost, max_flow;
+    void init()
+    {
+        tot = 0;
+        memset(head, -1, sizeof(head));
+    }
+    void addedge(int u, int v, int cap, int cost)
+    {
+        edge[tot] = Edge(v, head[u], cap, 0, cost);
+        head[u] = tot++;
+        edge[tot] = Edge(u, head[v], 0, 0, -cost);
+        head[v] = tot++;
+    }
+    int aug(int u, int flow)
+    {
+        if (u == tt)return flow;
+        vis[u] = true;
+        for (int i = cur[u];i != -1;i = edge[i].next)
+        {
+            int v = edge[i].to;
+            if (edge[i].cap &gt; edge[i].flow &amp;&amp; !vis[v] &amp;&amp; dis[u] == dis[v] + edge[i].cost)
+            {
+                int tmp = aug(v, min(flow, edge[i].cap - edge[i].flow));
+                edge[i].flow += tmp;
+                edge[i ^ 1].flow -= tmp;
+                cur[u] = i;
+                if (tmp)return tmp;
+            }
+        }
+        return 0;
+    }
+    bool modify_label()
+    {
+        int d = INF;
+        for (int u = 0;u &lt; N;u++)
+            if (vis[u])
+                for (int i = head[u];i != -1;i = edge[i].next)
+                {
+                    int v = edge[i].to;
+                    if (edge[i].cap&gt;edge[i].flow &amp;&amp; !vis[v])
+                        d = min(d, dis[v] + edge[i].cost - dis[u]);
+                }
+        if (d == INF)return false;
+        for (int i = 0;i &lt; N;i++)
+            if (vis[i])
+            {
+                vis[i] = false;
+                dis[i] += d;
+
+            }
+        return true;
+    }
+    /*
+    * 直接调用获取最小费用和最大流
+    * 输入: start-源点，end-汇点，n-点的总个数（编号从0开始）
+    * 返回值: pair&lt;int,int&gt; 第一个是最小费用，第二个是最大流
+    */
+    pair&lt;int, int&gt; mincostmaxflow(int start, int end, int n)
+    {
+        ss = start, tt = end, N = n;
+        min_cost = max_flow = 0;
+        for (int i = 0;i &lt; n;i++)dis[i] = 0;
+        while (1)
+        {
+            for (int i = 0;i &lt; n;i++)cur[i] = head[i];
+            while (1)
+            {
+                for (int i = 0;i &lt; n;i++)vis[i] = false;
+                int tmp = aug(ss, INF);
+                if (tmp == 0)break;
+                max_flow += tmp;
+                min_cost += tmp*dis[ss];
+            }
+            if (!modify_label())break;
+        }
+        return make_pair(min_cost, max_flow);
+    }
+}solve;
+
+int n, m;
+char s[110][110];
+
+int main()
+{
+    while (~scanf(&quot;%d%d&quot;, &amp;n, &amp;m))
+    {
+        if (n == 0 &amp;&amp; m == 0) break;
+
+        solve.init();
+
+        for (int i = 0;i &lt; n;i++)
+        {
+            scanf(&quot;%s&quot;, s[i]);
+            for (int j = 0;j &lt; m;j++)
+                if (s[i][j] == &#39;H&#39;)
+                    solve.addedge(n*m, i*m + j, 1, 0);
+                else if (s[i][j] == &#39;m&#39;)
+                    solve.addedge(i*m + j, n*m + 1, 1, 0);
+        }
+
+        for (int i = 0;i &lt; n*m;i++)
+            for (int j = 0;j &lt; n*m;j++)
+            {
+                int x1 = i / m;
+                int y1 = i % m;
+                int x2 = j / m;
+                int y2 = j % m;
+                if (s[x1][y1] == &#39;H&#39; &amp;&amp; s[x2][y2] == &#39;m&#39;)
+                    solve.addedge(i, j, 1, abs(x1 - x2) + abs(y1 - y2));
+            }
+        pair&lt;int, int&gt; ans = solve.mincostmaxflow(n * m, n * m + 1, n*m + 2);
+        printf(&quot;%d\n&quot;,ans.first);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

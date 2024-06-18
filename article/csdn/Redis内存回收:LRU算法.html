@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Redis内存回收:LRU算法 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="算法,redis,内存,内存管理">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">Redis内存回收:LRU算法</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49999467" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/49999467</a></p>
+<h2><span id="lru算法最近最久未使用算法">LRU算法(最近最久未使用算法)</span></h2><p>LRU算法作为内存管理的一种有效算法,其含义是在内存有限的情况下，当内存容量不足时，为了保证程序的运行，这时就不得不淘汰内存中的一些对象，释放这些对象占用的空间，那么选择淘汰哪些对象呢？LRU算法就提供了一种策略，告诉我们选择最近一段时间内，最久未使用的对象将其淘汰，至于为什么要选择最久未使用的，可以想想，最近一段时间内使用的东西，我们是不是可能一会又要用到呢~，而很长一段时间内都没有使用过的东西，也许永远都不会再使用</p>
+<p>在操作系统中LRU算法淘汰的不是内存中的对象，而是页,当内存中数据不足时，通过LRU算法，选择一页(一般是4KB)将其交换到虚拟内存区(Swap区)</p>
+<h2><span id="lru算法演示">LRU算法演示</span></h2><p><img src="https://img-blog.csdn.net/20160911155045785" alt="这里写图片描述"></p>
+<p>算法实现应该采用怎样的数据结构</p>
+<p>队列,FIFO，LRU算法最为精典的实现，HashMap+Double LinkedList，时间复杂度为O(1)</p>
+<pre><code>struct Node
+{
+    Node(int _key,int _value){key = _key;value = _value;pre = next = NULL;}
+    int key;
+    int value;
+    Node*pre;
+    Node*next;
+};
+class LRUCache{
+public:
+    // @param capacity, an integer
+    LRUCache(int capacity) {
+        // write your code here
+        this-&gt;capacity = capacity;
+        size = 0;
+        head = NULL;
+        tail = NULL;
+    }
+
+    // @return an integer
+    int get(int key) {
+        // write your code here
+        if(m.find(key)==m.end())
+        {
+            return -1;
+        }
+        else
+        {
+            Node* n = m[key];
+            int ret = n-&gt;value;
+            if(head!=n)
+            {
+                if(n==tail)
+                    tail = tail-&gt;pre;
+                Node*pre = n-&gt;pre;
+                if(n-&gt;next!=NULL)
+                    n-&gt;next-&gt;pre = pre;
+                pre-&gt;next = n-&gt;next;
+                n-&gt;next = head;
+                head-&gt;pre = n;
+                head = n;
+            }
+            return ret;
+        }
+    }
+
+    // @param key, an integer
+    // @param value, an integer
+    // @return nothing
+    void set(int key, int value) {
+        // write your code here
+        if(head==NULL)
+        {
+            head = new Node(key,value);
+            tail = head;
+            size++;
+            m[key] = head;
+            return;
+        }
+        if(m.find(key)==m.end())
+        {
+            Node*n = new Node(key,value);
+            n-&gt;next = head;
+            head-&gt;pre = n;
+            head = n;
+            m[key] = n;
+            size++;
+        }
+        else
+        {
+            Node*n = m[key];
+            if(head!=n)
+            {
+                if(n==tail)
+                    tail = tail-&gt;pre;
+                Node*pre = n-&gt;pre;
+                pre-&gt;next = n-&gt;next;
+                if(n-&gt;next!=NULL)
+                    n-&gt;next-&gt;pre = pre;
+                n-&gt;next = head;
+                head-&gt;pre = n;
+                head = n;
+                m[key] = n;
+            }
+            head-&gt;value = value;
+        }
+        if(size&gt;capacity)
+        {
+            Node*todel = tail;
+            int keyToDel = todel-&gt;key;
+            tail = tail-&gt;pre;
+            tail-&gt;next = NULL;
+            delete todel;
+            m.erase(m.find(keyToDel));
+            size--;
+        }
+
+    }
+
+    private:
+        int capacity;
+        int size;
+        Node*head;
+        Node*tail;
+        unordered_map&lt;int,Node*&gt; m;
+};
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

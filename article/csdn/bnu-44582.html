@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>bnu-44582 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">bnu-44582</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42193079" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/42193079</a></p>
+<p>昨天北师大新生赛的题，本弱做一做。。。</p>
+<p>贪心题，按照结束时间排序进行贪心。</p>
+<p><a href="http://www.bnuoj.com/v3/problem_show.php?pid=44582" target="_blank" rel="noopener"> http://www.bnuoj.com/v3/problem_show.php?pid=44582
+</a>  </p>
+<h2><span id="mlx的疯狂睡眠">MLX的疯狂睡眠</span></h2><p>Time Limit: 1000ms</p>
+<p>Memory Limit: 65536KB</p>
+<p>64-bit integer IO format:  %lld  Java class name:  Main</p>
+<p><a href="http://www.bnuoj.com/v3/problem_show.php?pid=44581" target="_blank" rel="noopener"> Prev </a></p>
+<p><a href="http://www.bnuoj.com/v3/problem_show.php?pid=44582#" target="_blank" rel="noopener"> Submit </a> <a href="http://www.bnuoj.com/v3/status.php?showpid=44582" target="_blank" rel="noopener"> Status
+</a> <a href="http://www.bnuoj.com/v3/problem_stat.php?pid=44582" target="_blank" rel="noopener"> Statistics
+</a> <a href="http://www.bnuoj.com/v3/discuss.php?pid=44582" target="_blank" rel="noopener"> Discuss
+</a></p>
+<p><a href="http://www.bnuoj.com/v3/problem_show.php?pid=44583" target="_blank" rel="noopener"> Next </a></p>
+<p>Type:</p>
+<p>None</p>
+<p>None  Graph Theory  2-SAT  Articulation/Bridge/Biconnected Component<br>Cycles/Topological Sorting/Strongly Connected Component  Shortest Path<br>Bellman Ford  Dijkstra/Floyd Warshall  Euler Trail/Circuit  Heavy-Light<br>Decomposition  Minimum Spanning Tree  Stable Marriage Problem  Trees  Directed<br>Minimum Spanning Tree  Flow/Matching  Graph Matching  Bipartite Matching<br>Hopcroft–Karp Bipartite Matching  Weighted Bipartite Matching/Hungarian<br>Algorithm  Flow  Max Flow/Min Cut  Min Cost Max Flow  DFS-like  Backtracking<br>with Pruning/Branch and Bound  Basic Recursion  IDA* Search  Parsing/Grammar<br>Breadth First Search/Depth First Search  Advanced Search Techniques  Binary<br>Search/Bisection  Ternary Search  Geometry  Basic Geometry  Computational<br>Geometry  Convex Hull  Pick’s Theorem  Game Theory  Green Hackenbush/Colon<br>Principle/Fusion Principle  Nim  Sprague-Grundy Number  Matrix  Gaussian<br>Elimination  Matrix Exponentiation  Data Structures  Basic Data Structures<br>Binary Indexed Tree  Binary Search Tree  Hashing  Orthogonal Range Search<br>Range Minimum Query/Lowest Common Ancestor  Segment Tree/Interval Tree  Trie<br>Tree  Sorting  Disjoint Set  String  Aho Corasick  Knuth-Morris-Pratt  Suffix<br>Array/Suffix Tree  Math  Basic Math  Big Integer Arithmetic  Number Theory<br>Chinese Remainder Theorem  Extended Euclid  Inclusion/Exclusion  Modular<br>Arithmetic  Combinatorics  Group Theory/Burnside’s lemma  Counting<br>Probability/Expected Value  Others  Tricky  Hardest  Unusual  Brute Force<br>Implementation  Constructive Algorithms  Two Pointer  Bitmask  Beginner<br>Discrete Logarithm/Shank’s Baby-step Giant-step Algorithm  Greedy  Divide and<br>Conquer  Dynamic Programming  Tag it!</p>
+<p>在一个寝室中，有早上6点多起床跑自习室或者图书馆，晚上11点多回寝室洗洗直接睡觉的神牛（真是神一般的存在）；也有早上11点多起来直接吃饭，下午玩一会累了又sleep的睡神；也有白天一直陪妹子，大晚上和寝室程序猴子作伴的泡神；也有早上不知道何时起，从下午到第二天早些时候（确实早啊！）一直code的神码手····那么现在问题来了，寝室本来是一个非常友好的team，但是为了证明自己的睡眠行为是大学最完美的，他们决定来一场惊天地的辩论····MLX作为寝室的一员，突然做出一个疯狂的决定：统计出寝室每一个成员的睡眠时间段（每一个成员可能有多个睡眠时间段），然后将亲自实践每一个成员睡眠方式，然后再决定谁的更好。聪明的您可能会想这样一个问题：如果MLX从进入一个睡眠段开始到结束中途不醒，MLX那一天最多能睡多少次？</p>
+<p>现在将问题进一步抽象为：一天内有n个睡眠区间，每一个睡眠区间分别为距离当天0点的第Si秒开始，第Ti秒结束。对于每一次睡眠，MLX都可以参与或者不参与，如果选择了，那么MLX就必须将本次睡眠进行到底。此外，参与睡眠的时间不能重复（即使是刚开始的瞬间和结束的瞬间的重复也是不允许的），请问MLX最多能参与多少次睡眠？</p>
+<h3><span id="input">Input</span></h3><p>第一行输入T，表示T组测试数据。</p>
+<p>每一组的第一行输入n，表示有n个睡眠区间（1&lt;= n &lt;=10^5 ）</p>
+<p>接下来n行，每一行输入两个整数Si，Ti（空格隔开），表示睡眠区间的开始和结束时间（1&lt;= Si&lt; Ti&lt; 24*3600）</p>
+<h3><span id="output">Output</span></h3><p>MLX最多参与的睡眠次数</p>
+<h3><span id="sample-input">Sample Input</span></h3><pre><code>1
+5
+1 3
+2 5
+4 7
+6 9
+8 10
+</code></pre><h3><span id="sample-output">Sample Output</span></h3><pre><code>3
+</code></pre><h3><span id="hint">Hint</span></h3><p>参与的睡眠编号依次是（1,3,5）</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+int n;
+
+struct Q
+{
+    int s;
+    int e;
+}p[100010];
+
+bool cmp(Q a, Q b)
+{
+    return a.e &lt; b.e;
+}
+
+int cases;
+
+int main()
+{
+    cin &gt;&gt; cases;
+
+    while (cases--)
+    {
+        cin &gt;&gt; n;
+        for (int i = 1; i &lt;= n; i++)
+            cin &gt;&gt; p[i].s &gt;&gt; p[i].e;
+
+        sort(p+1,p+1+n,cmp);
+
+        int ans = 1;
+        int t = p[1].e;
+
+        for (int i = 2; i &lt;= n; i++)
+        {
+            if (t &lt; p[i].s)
+            {
+                ans++; 
+                t = p[i].e;
+            }
+        }
+        cout &lt;&lt; ans &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>欧拉函数及其性质 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">欧拉函数及其性质</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44200711" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44200711</a></p>
+<p>对正整数n，欧拉函数是 &lt;= n的数中与n互质的数的数目。</p>
+<p>例如euler(8)=4，因为1,3,5,7均和8互质。</p>
+<p>Euler函数表达通式：euler(x)=x(1-1/p1)(1-1/p2)(1-1/p3)(1-1/p4)…(1-1/pn),其中p1,p2……pn为x的所有素因数，x是不为0的整数。euler(1)=1（唯一和1互质的数就是1本身）。  </p>
+<p>欧拉公式的延伸：一个数的所有质因子之和是euler(n)*n/2。</p>
+<p>特殊性质：当n为奇数时，φ(2n)=φ(n)  </p>
+<p>欧拉函数是 <a href="http://baike.baidu.com/view/2046973.htm" target="_blank" rel="noopener"> 积性函数 </a><br>——若m,n互质，φ(mn)=φ(m)φ(n)。</p>
+<p>若n是质数p的k次幂，φ(n)=p^k-p^(k-1)=(p-1)p^(k-1)，因为除了p的倍数外，其他数都跟n互质。</p>
+<p>设a为N的质因数，若(N % a == 0 &amp;&amp; (N / a) % a == 0) 则有E(N)=E(N / a) <em> a；若(N % a == 0 &amp;&amp;<br>(N / a) % a != 0) 则有：E(N) = E(N / a) </em> (a - 1)。</p>
+<p>欧拉定理：对于互质的正整数a和n，有a^φ(n) ≡ (1 mod n)。  </p>
+<p>代码实现：</p>
+<p>最高效率的线性时间筛法求素数和欧拉函数。</p>
+<p>phi[MAXN] 数组保存的是欧拉函数，prime[MAXN]保存的是素数表。</p>
+<pre><code>bool com[MAXN];
+int primes, prime[MAXN], phi[MAXN];
+
+phi[1] = 1;
+for (int i = 2; i &lt;= n; ++i)
+{
+  if (!com[i])
+  {
+    prime[primes++] = i;
+    phi[i] = i-1;
+  }
+  for (int j = 0; j &lt; primes &amp;&amp; i*prime[j] &lt;= n; ++j)
+  {
+    com[i*prime[j]] = true;
+    if (i % prime[j])
+      phi[i*prime[j]] = phi[i]*(prime[j]-1);
+    else
+      { phi[i*prime[j]] = phi[i]*prime[j]; break; }
+  }
+}
+</code></pre><p><strong>  
+</strong></p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

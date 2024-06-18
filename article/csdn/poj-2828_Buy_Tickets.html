@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>poj-2828 Buy Tickets - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="算法,acm">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">poj-2828 Buy Tickets</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42397919" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/42397919</a></p>
+<p><a href="http://poj.org/problem?id=2828" target="_blank" rel="noopener"> http://poj.org/problem?id=2828 </a></p>
+<p>题意：有n个的排队，每一个人都有一个val来对应，每一个后来人都会插入当前队伍的某一个位置pos。要求把队伍最后的状态输出。  </p>
+<p>逆向思考。这样考虑，最后一个人一定会得到当前队伍他想要的位置，如果我们往前一个阶段，倒数第二个人也一定能得到他想要的位置……，也就是说，我们可以这样处理，我们把最后一个人插入，然后忽略它，再把倒数第二个人插入。即，我们找出当前队伍他想要插入的位置pos的真正坐标就可以。然后去更新整个队伍的长度。如此循环，直到最后一个人。线段树在单点更新的时候，感觉和二分查找是很相似的，可以用它实现。</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;cstdlib&gt;
+#include &lt;algorithm&gt;
+#include &lt;queue&gt;
+#include &lt;stack&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;vector&gt;
+
+#define Mid(a,b) ( a+((b-a)&gt;&gt;1))
+#define ll(x) (x&lt;&lt;1)
+#define rr(x) (x&lt;&lt;1|1)
+
+const int N = 200010;
+
+using namespace std;
+
+int n;
+int pos[N];
+int val[N];
+int ans[N];
+
+struct node
+{
+    int left;
+    int right;
+    int sum;
+    int mid() { return Mid(left, right); }
+};
+
+struct segtree
+{
+    node tree[N * 4];
+    void buildtree(int left,int right,int ind)
+    {
+        tree[ind].left = left;
+        tree[ind].right = right;
+
+        tree[ind].sum = right - left + 1;
+
+        if (left !=right)
+        {
+            int mid = tree[ind].mid();
+            buildtree(left,mid,ll(ind));
+            buildtree(mid+1,right,rr(ind));
+        }
+    }
+
+    int query(int val,int pos)
+    {
+        int left = tree[pos].left;
+        int right = tree[pos].right;
+
+        if (left == right)
+        {
+            tree[pos].sum = 0;
+            return left;
+        }
+        else
+        {
+            int ind;
+            if (tree[ll(pos)].sum &gt;= val)
+                ind = query(val, ll(pos));
+            else
+                ind = query(val - tree[ll(pos)].sum , rr(pos));
+
+            tree[pos].sum = tree[ll(pos)].sum + tree[rr(pos)].sum;
+
+            return ind;
+        }
+    }
+}seg;
+
+int main()
+{
+    while (scanf(&quot;%d&quot;,&amp;n)!=EOF)
+    {
+        seg.buildtree(1,n,1);
+
+        for (int i = 1; i &lt;= n; i++)
+        {
+            scanf(&quot;%d %d&quot;,&amp;pos[i],&amp;val[i]);
+        }
+
+        for(int i = n; i &gt;=1; i--)
+        {
+            int ps = seg.query(pos[i]+1,1);
+            ans[ps] = val[i];
+        }
+
+        for (int i = 1; i &lt;= n; i++)
+        {
+            printf(&quot;%d&quot;,ans[i]);
+            if (i != n)
+                printf(&quot; &quot;);
+        }
+        printf(&quot;\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

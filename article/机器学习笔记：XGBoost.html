@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>机器学习笔记：XGBoost - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">机器学习笔记：XGBoost</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <h1><span id="xgboost">XGBoost</span></h1><p>XGBoost可以看做是GBDT的一种实现方式，目前在竞赛和工业界都被大量应用，并取得了很好的效果。</p>
+<h2><span id="boostedtree">BoostedTree</span></h2><h3><span id="回归树">回归树</span></h3><p>BoostedTree的基本组成部分是回归树（Classification And Regression Tree），称作CART。<br>回归树会把输入的数据，分配到叶子节点上去，每个叶子节点都对应一个实数，非叶子节点都是一个二叉树。属于决策树的一种。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/52.png" alt=""></p>
+<a id="more"></a>
+<p>决策树自上而下建立，根据属性值大小分裂为左右两个节点。</p>
+<h3><span id="treeensemble">TreeEnsemble</span></h3><p>一颗回归树往往无法正确的做出预测，所以可以将多棵树的预测进行一个组合，得到最终的结果。<br>预测结果就是各个回归树的和。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/53.png" alt=""></p>
+<h2><span id="模型组成">模型组成</span></h2><h3><span id="模型和参数">模型和参数</span></h3><p>简单来说，模型是指给定xi如何去预测yi.<br>比较常见的模型如线性模型，yi=w*xi+z,其中w和z就是我们需要预测的值。</p>
+<h3><span id="目标函数误差函数正则项">目标函数=误差函数+正则项</span></h3><p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/54.png" alt=""></p>
+<p>误差函数又称损失函数，是为了尽可能的提高模型预测正确性。一般代表误差，如平方误差等。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos1/84.png" alt=""></p>
+<p>正则项是为了防止过拟合样本数据。常见线性模型有L1、L2正则。</p>
+<h2><span id="模型原理">模型原理</span></h2><p>boosting的过程中，每次保留前面的模型不变，加入一个新的函数到模型中，目标函数如下：<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/55.png" alt=""></p>
+<p>每次加入怎样的函数呢？当然是使得目标函数尽量小的函数<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/56.png" alt=""></p>
+<p>如果为平方误差的情形下，目前函数可以写成<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/57.png" alt=""></p>
+<p>对于不是平方误差的情况，我们会采用如下的泰勒展开近似来定义一个近似的目标函数，方便我们进行这一步的计算。<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/58.png" alt=""></p>
+<p>当我们把常数项移除之后，我们会发现如下一个比较统一的目标函数。这一个目标函数有一个非常明显的特点，它只依赖于每个数据点的在误差函数上的一阶导数和二阶导数. 误差函数为<br><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/59.png" alt=""></p>
+<p>一阶导数、二阶导数为</p>
+<p><img src="https://raw.githubusercontent.com/mfcheer/MarkdownPhotos/master/photos/60.png" alt=""></p>
+<h2><span id="模型参数">模型参数</span></h2><h3><span id="增加随机性">增加随机性</span></h3><ul>
+<li>eta 为了防止过拟合，更新过程中用到的收缩步长。</li>
+<li>subsample 这个就是随机森林的方式，每次不是取出全部样本，而是有放回地取出部分样本。有人把这个称为行抽取，subsample就表示抽取比例</li>
+<li>colsample_bytree和colsample_bylevel 这个是模仿随机森林的方式，这是列抽取。colsample_bytree是每次准备构造一棵新树时，选取部分特征来构造，colsample_bytree就是抽取比例。colsample_bylevel表示的是每次分割节点时，抽取特征的比例。</li>
+<li>max_delta_step 这个是构造树时，允许得到ft(x)的最大值。如果为0，表示无限制。也是为了后续构造树留出空间，和eta相似</li>
+</ul>
+<h3><span id="控制模型复杂度">控制模型复杂度</span></h3><ul>
+<li>max_depth 树的最大深度</li>
+<li>min_child_weight 叶节点最小样本数</li>
+<li>gamma 每次分开一个节点后，造成的最小下降的分数。类似于上面的Gain</li>
+<li>alpha和lambda就是目标函数里的表示模型复杂度中的L1范数和L2范数前面的系数</li>
+</ul>
+<h3><span id="其他参数">其他参数</span></h3><ul>
+<li>num_class 分类数</li>
+<li>booster 表示用哪种模型，一共有gbtree, gbline, dart三种选择。一般用gbtree。</li>
+<li>nthread 并行线成数。如果不设置就是能采用的最大线程。</li>
+<li>sketch_eps 这个就是近似算法里的ϵ。</li>
+<li>scale_pos_weight 这个是针对二分类问题时，正负样例的数量差距过大。</li>
+</ul>
+<h2><span id="控制过拟合">控制过拟合</span></h2><p>通常可以通过两种方式来控制xgboost中的过拟合</p>
+<ul>
+<li>第一种方式是直接控制模型的复杂性<br>包括参数：max_depth，min_child_weight 和 gamma</li>
+<li>第二种方法是增加随机性<br>包括参数：subsample，colsample_bytree，eta</li>
+</ul>
+<h2><span id="与gbdt的差别">与GBDT的差别</span></h2><ul>
+<li>传统GBDT以CART作为基分类器，xgboost还支持线性分类器。</li>
+<li>传统GBDT在优化时只用到一阶导数信息，xgboost则对代价函数进行了二阶泰勒展开，同时用到了一阶和二阶导数。</li>
+<li>xgboost在代价函数里加入了正则项，用于控制模型的复杂度。</li>
+<li>xgboost的权重衰减。</li>
+<li>xgboost支持更好的并行。</li>
+</ul>
+<h1><span id="如何画xgboost里面的决策树">如何画XGBoost里面的决策树</span></h1><p><a href="https://zhuanlan.zhihu.com/p/32943164" target="_blank" rel="noopener">如何画XGBoost里面的决策树</a></p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/机器学习/">机器学习</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

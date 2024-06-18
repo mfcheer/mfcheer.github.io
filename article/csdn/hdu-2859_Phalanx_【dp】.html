@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>hdu-2859 Phalanx 【dp】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">hdu-2859 Phalanx 【dp】</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44022055" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44022055</a></p>
+<h1><span id="phalanx">Phalanx</span></h1><p><strong> Time Limit: 10000/5000 MS (Java/Others)    Memory Limit: 32768/32768 K<br>(Java/Others)<br>Total Submission(s): 452    Accepted Submission(s): 219  
+</strong>  </p>
+<p>Problem Description</p>
+<p>Today is army day, but the servicemen are busy with the phalanx for the<br>celebration of the 60th anniversary of the PRC.<br>A phalanx is a matrix of size n<em>n, each element is a character (a~z or A~Z),<br>standing for the military branch of the servicemen on that position.<br>For some special requirement it has to find out the size of the max<br>symmetrical sub-array. And with no doubt, the Central Military Committee gave<br>this task to ALPCs.<br>A symmetrical matrix is such a matrix that it is symmetrical by the “left-down<br>to right-up” line. The element on the corresponding place should be the same.<br>For example, here is a 3</em>3 symmetrical matrix:<br>cbx<br>cpb<br>zcc</p>
+<p>Input</p>
+<p>There are several test cases in the input file. Each case starts with an<br>integer n (0 &lt;n&lt;=1000), followed by n lines which has n character. There won’t<br>be any blank spaces between characters or the end of line. The input file is<br>ended with a 0.</p>
+<p>Output</p>
+<p>Each test case output one line, the size of the maximum symmetrical sub-<br>matrix.  </p>
+<p>Sample Input</p>
+<p>3 abx cyb zca 4 zaba cbab abbc cacq 0</p>
+<p>Sample Output</p>
+<p>3 3</p>
+<p>求每个元素最上方的列和本行的最大对称长度，如果该元素的最大对称长度大于右上角的矩阵，则是右上角矩阵大小的加1，否则就是最大对称长度。</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+
+using namespace std;
+
+int n,ans;
+char p[1010][1010];
+int dp[1010][1010];
+
+int main()
+{
+    while (cin &gt;&gt; n &amp;&amp; n)
+    {
+        ans = 1;
+        for (int i = 0; i &lt; n; i++)
+            cin &gt;&gt; p[i];
+        memset(dp,0,sizeof(dp));
+        for (int i = 0; i &lt; n; i++)
+        {
+            for (int j = 0; j &lt; n; j++)
+            {
+                if (i == 0 || j == n - 1)
+                    dp[i][j] = 1;
+                else
+                {
+                    int t1 = i,t2 = j;
+                    while (t1 &gt;= 0 &amp;&amp; t2&lt;=n-1 &amp;&amp; p[t1][j] == p[i][t2])
+                    {
+                        t1--;
+                        t2++;
+                    }
+                    int t = i - t1;
+                    if (t&gt;dp[i - 1][j + 1] + 1)
+                        dp[i][j] = dp[i - 1][j + 1] + 1;
+                    else
+                        dp[i][j] = t;
+                    ans = max(ans,dp[i][j]);
+                }
+            }
+        }
+        cout &lt;&lt; ans &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

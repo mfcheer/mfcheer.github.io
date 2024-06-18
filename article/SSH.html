@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>SSH - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">SSH</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <h1><span id="ssh-是什么">SSH 是什么</span></h1><p>SSH(the Secure Shell), 是一个很流行的、强大的、基于软件的网络安全工具。它监听端口22的连接。任何时候，只要电脑向网络上发送数据，SSH都会自动加密。当接受到数据时，SSH会自动解密。这就是所谓的透明加密：用户象往常一样工作，并不会意识到他们的网络通讯受到了安全加密的保护。另外，SSH使用了现代的安全加密算法，可以用于大公司的关键应用。</p>
+<p>SSH采用了client/server体系结构。管理员在服务器上运行SSH server, 用户使用SSH client向服务器发出请求，比如“让我登录吧”，“传送个文件给我”，“请执行这个命令”。client与server之间的所有通讯都进行了安全加密，以防被人修改。</p>
+<p>基于SSH的产品可以是client或server, 也可以两者都包括。Uinx上的产品通常包含client和server两者；其它平台通常只有client，现在也出现了基于Windows的服务器。</p>
+<a id="more"></a>
+<h1><span id="ssh-不是什么">SSH 不是什么</span></h1><p>虽然SSH代表Secure Shell, 但是它并不是真正意义上的shell，他不是命令解释器，也不提供通配符扩展，命令历史等等。SSH的作用是创建一个“通道”，以便在远程计算机上运行 shell，类似于unix的rsh命令，但是在本地与远程计算机之间增加了端对端的加密。</p>
+<p>SSH也不是一个完整的安全解决方案，不过所谓“完整的安全解决方案”是不存在的。它也不能防止“尝试闯入攻击”或“拒绝服务攻击”。它也无法消除病毒、木马、把咖啡洒到键盘上等其它危害。但是，它的确提供了稳固的、用户友好的加密与认证。</p>
+<h1><span id="ssh-协议">SSH 协议</span></h1><p>SSH是一个协议，不是一个产品。它说明了在网络上如何进行安全通讯。SSH协议覆盖了认证、加密、网络数据传送的完整性等方面。简而言之，SSH在计算机之间构建网络连接，确保连接双方身份的真实性，同时，它还保证在此连接上传送的数据到达时不会被人更改，不会被他人窃听。</p>
+<h1><span id="ssh-特点概述">SSH 特点概述</span></h1><p>安全远程登录、安全的文件传送、安全的远程命令执行、密钥与认证代理</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/Unix-Linux/">Unix/Linux</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

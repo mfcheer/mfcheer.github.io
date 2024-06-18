@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>poj 1236 Network of Schools 【Tarjan】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="图">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">poj 1236 Network of Schools 【Tarjan】</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46379683" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/46379683</a></p>
+<p>题目链接： <a href="http://poj.org/problem?id=1236" target="_blank" rel="noopener"> http://poj.org/problem?id=1236 </a></p>
+<p>题意：</p>
+<p>本题为有向图。<br>需解决两个问题：<br>1 需要给多少个点，才能传遍所有点。<br>2 加多少条边，使得整个图变得强连通。<br>使用Tarjan进行缩点，得到一个SCC图、<br>这个图有多少个入度为0的，多少个出度为0的。<br>假设有n个入度为0，m个出度为0<br>那么第一个答案就是n,第二个答案是max(n,m)<br>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;string.h&gt;
+#include &lt;string&gt;
+#include &lt;queue&gt;
+#include &lt;stack&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;sstream&gt;
+#include &lt;time.h&gt;
+
+using namespace std;
+
+const int MAXN = 20010;
+const int MAXM = 50010;
+
+struct Edge
+{
+    int to, next;
+}edge[MAXM];
+
+int head[MAXM], tot;
+int Low[MAXN], Dfn[MAXN], Stack[MAXN], Belong[MAXN];//Belong的值为 1 ~ scc
+int Index, top;
+int scc;//强连通个数
+bool Instack[MAXN];
+int num[MAXN];//各个强连通包含的点的个数
+
+void addedge(int u, int v)
+{
+    edge[tot].to = v;
+    edge[tot].next = head[u];
+    head[u] = tot++;
+}
+
+void Tarjan(int u)
+{
+    int v;
+    Low[u] = Dfn[u] = ++Index;
+    Stack[top++] = u;
+    Instack[u] = true;
+    for (int i = head[u]; i != -1; i = edge[i].next)
+    {
+        v = edge[i].to;
+        if (!Dfn[v])
+        {
+            Tarjan(v);
+            if (Low[u] &gt; Low[v]) 
+                Low[u] = Low[v];
+        }
+        else if (Instack[v] &amp;&amp; Low[u] &gt; Dfn[v])
+            Low[u] = Dfn[v];
+    }
+    if (Low[u] == Dfn[u])
+    {
+        scc++;
+        do
+        {
+            v = Stack[--top];
+            Instack[v] = false;
+            Belong[v] = scc;
+            num[scc]++;
+        } while (v != u);
+    }
+}
+
+int in[MAXN], out[MAXN];
+
+void solve(int N)
+{
+    memset(Dfn,0,sizeof(Dfn));
+    memset(Instack,false,sizeof(Instack));
+    memset(num,0,sizeof(num));
+    Index = scc = top = 0;
+    for (int i = 1; i &lt;= N; i++)
+    {
+        if (!Dfn[i])
+            Tarjan(i);
+    }
+    if (scc == 1)
+    {
+        printf(&quot;1\n0\n&quot;);
+        return;
+    }
+    for (int i = 1; i &lt;= scc; i++)
+        in[i] = out[i] = 0;
+    for (int u = 1; u &lt;= N; u++)
+    {
+        for (int i = head[u]; i != -1; i = edge[i].next)
+        {
+            int v = edge[i].to;
+            if (Belong[u] != Belong[v])
+            {
+                in[Belong[v]]++;
+                out[Belong[u]]++;
+            }
+        }
+    }
+    int ans1 = 0, ans2 = 0;
+    for (int i = 1; i &lt;= scc; i++)
+    {
+        if (in[i] == 0) ans1++;
+        if (out[i] == 0) ans2++;
+    }
+    //printf(&quot;%d\n&quot;,scc);
+    printf(&quot;%d\n%d\n&quot;,ans1,max(ans1,ans2));
+}
+
+void init()
+{
+    tot = 0;
+    memset(head,-1,sizeof(head));
+}
+
+int main()
+{
+    int n;
+    int u, v;
+    while (~scanf(&quot;%d&quot;, &amp;n))
+    {
+        init();
+        for (int i = 1; i &lt;= n; i++)
+        {
+            while (~scanf(&quot;%d&quot;, &amp;u) &amp;&amp; u)
+            {
+                addedge(i,u);
+            }
+        }
+        solve(n);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

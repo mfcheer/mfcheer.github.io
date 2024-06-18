@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>poj-2481 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="acm,poj,二叉树">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">poj-2481</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40889511" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/40889511</a></p>
+<p>题目链接： <a href="http://poj.org/problem?id=2481" target="_blank" rel="noopener"> 点击打开链接 </a></p>
+<p>又是树状数组的应用 ，花了好长时间。</p>
+<p>题目大意：</p>
+<p>给你很多线段的头S和尾E，问每一条线段中包含了多少个线段，（S和E相同不计在内）。这题先一看，完全不知道什么方法，感觉非常的难办。</p>
+<p>但是！树状数组可以轻松解决这个问题！！！首先，将她们线段的s和e当做是(s,e)一个点，这样子把所有点画出来，你就会发现一个很神奇的现象，题目要求就会变成：问每一个点的左上角有多少个点？</p>
+<p>！！！这样不就和那题最简单的stars一样吗？？？！！！</p>
+<p>stars那题是问左下角有多少个点，而这题是问左上角，而且点不是有序排好的，所以有些不同，特殊处理一下就可以。</p>
+<p>如果正常做，那个y是递增的，所以sum和update那个方向就会相反了，这个其实没什么所谓，一样的，排序的时候先y由大到小排，y相同时x由小到大排，这样小小的处理，就变成stars那题了！！！</p>
+<p>难点在于处理相同区间，对于相同区间，只是把答案直接拷贝过来，并把其加入树状数组，不可以直接在树状数组中求和。  </p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+struct q
+{
+    int s;
+    int e ;
+    int id;
+}p[100005];
+
+int a[100005];
+int b[100005];
+int n;
+int maxnum;
+
+bool cmp (q a ,q b)
+{
+    if (a.e == b.e )
+        return a.s &lt; b.s;
+    else 
+        return a.e &gt; b.e;
+}
+
+int lowbit(int i)
+{
+    return i &amp; (-i);
+}
+
+int sum(int i)
+{
+    int ans = 0;
+    while (i&gt;0)
+    {
+        ans += b[i];
+        i-=lowbit(i);
+    }
+    return ans;
+}
+
+void update (int i,int v)
+{
+    while (i &lt;= maxnum + 1)
+    {
+        b[i]+=v;
+        i+=lowbit(i);
+    }
+}
+
+int main ()
+{
+    while (scanf (&quot;%d&quot;,&amp;n), n)
+    {
+        maxnum = -1;
+        memset (b,0,sizeof (b));
+        memset (a,0,sizeof (a));
+
+        for (int i=0;i&lt;n;i++)
+        {
+            scanf(&quot;%d %d&quot;,&amp;p[i].s,&amp;p[i].e);
+            p[i].e++;
+            p[i].s++;
+
+            p[i].id=i;
+            maxnum = max (maxnum,p[i].s);
+        }
+
+        sort (p,p+n,cmp);
+
+        a[p[0].id]=sum(p[0].s);
+        update(p[0].s,1);
+
+        for (int i=1;i&lt;n;i++)
+        {
+            if (p[i].e == p[i-1].e &amp;&amp; p[i].s == p[i-1].s )
+            {
+                a[p[i].id] = a[p[i-1].id];
+            }
+            else 
+            {
+                a[p[i].id] = sum(p[i].s );
+            }
+            update(p[i].s ,1);
+        }
+
+        printf (&quot;%d&quot;,a[0]);
+        for (int i=1 ;i&lt;n;i++)
+            printf(&quot; %d&quot;,a[i]);
+        printf(&quot;\n&quot;);
+
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

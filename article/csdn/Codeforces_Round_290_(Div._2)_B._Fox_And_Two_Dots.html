@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Codeforces Round - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">Codeforces Round</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/43458753" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/43458753</a></p>
+<p>题目链接 : <a href="http://codeforces.com/contest/510/problem/B" target="_blank" rel="noopener"> http://codeforces.com/contest/510/problem/B
+</a></p>
+<p>B. Fox And Two Dots</p>
+<p>time limit per test</p>
+<p>2 seconds</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Fox Ciel is playing a mobile puzzle game called “Two Dots”. The basic levels<br>are played on a board of size  _n_ × _m_ cells, like this:</p>
+<p><img src="http://espresso.codeforces.com/56dcae7c8d1ee32ea083e76eb5cd70ae21b63c24.png" alt=""></p>
+<p>Each cell contains a dot that has some color. We will use different uppercase<br>Latin characters to express different colors.</p>
+<p>The key of this game is to find a cycle that contain dots of same color.<br>Consider 4 blue dots on the picture forming a circle as an example. Formally,<br>we call a sequence of dots  _d_ 1  , _d_ 2  , …, _d_ _k_ a  cycle  if and<br>only if it meets the following condition:</p>
+<ol>
+<li>These  _k_ dots are different: if  _i_ ≠ _j_ then  _d_ _i_ is different from  _d_ _j_ . </li>
+<li>_k_ is at least 4. </li>
+<li>All dots belong to the same color. </li>
+<li>For all  1 ≤ _i_ ≤ _k_ - 1  :  _d_ _i_ and  _d_ _i_ + 1  are adjacent. Also,  _d_ _k_ and  _d_ 1  should also be adjacent. Cells  _x_ and  _y_ are called adjacent if they share an edge. </li>
+</ol>
+<p>Determine if there exists a  cycle  on the field.</p>
+<p>Input</p>
+<p>The first line contains two integers  _n_ and  _m_ (  2 ≤ _n_ , _m_ ≤ 50  ):<br>the number of rows and columns of the board.</p>
+<p>Then  _n_ lines follow, each line contains a string consisting of  _m_<br>characters, expressing colors of dots in each line. Each character is an<br>uppercase Latin letter.</p>
+<p>Output</p>
+<p>Output “  Yes  “ if there exists a  cycle  , and “  No  “ otherwise.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>3 4
+AAAA
+ABCA
+AAAA
+</code></pre><p>output</p>
+<pre><code>Yes
+</code></pre><p>input</p>
+<pre><code>3 4
+AAAA
+ABCA
+AADA
+</code></pre><p>output</p>
+<pre><code>No
+</code></pre><p>input</p>
+<pre><code>4 4
+YYYR
+BYBY
+BBBY
+BBBY
+</code></pre><p>output</p>
+<pre><code>Yes
+</code></pre><p>input</p>
+<pre><code>7 6
+AAAAAB
+ABBBAB
+ABAAAB
+ABABBB
+ABAAAB
+ABBBAB
+AAAAAB
+</code></pre><p>output</p>
+<pre><code>Yes
+</code></pre><p>input</p>
+<pre><code>2 13
+ABCDEFGHIJKLM
+NOPQRSTUVWXYZ
+</code></pre><p>output</p>
+<pre><code>No
+</code></pre><p>DFS 判断是否存在环 。</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;string&gt;
+#include&lt;sstream&gt;
+
+using namespace std;
+
+int n, m, ok;
+char s[100][100];
+int vis[100][100];
+int dir[4][2] = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+int is_ok(int x, int y)
+{
+    if (x &gt;= 0 &amp;&amp; x &lt; n &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; m)
+        return 1;
+    return 0;
+}
+
+int dfs(int x, int y, int prex, int prey, char c)
+{
+    vis[x][y] = 1;
+    for (int i = 0; i &lt; 4; i++)
+    {
+        int xx = x + dir[i][0];
+        int yy = y + dir[i][1];
+        if (xx == prex &amp;&amp; yy == prey) continue;
+        if (is_ok(xx, yy) &amp;&amp; s[xx][yy] == c)
+        {
+            if (vis[xx][yy])
+                return 1;
+            if (dfs(xx, yy, x, y, c))
+                return 1;
+        }
+    }
+    return 0;
+}
+
+int main()
+{
+    while (cin &gt;&gt; n &gt;&gt; m)
+    {
+        ok = 0; memset(vis, 0, sizeof(vis));
+        for (int i = 0; i &lt; n; i++)
+            cin &gt;&gt; s[i];
+
+        for (int i = 0; i &lt; n; i++)
+            for (int j = 0; j &lt; m; j++)
+            {
+                if (!vis[i][j])
+                    if (dfs(i, j, -1, -1, s[i][j]))
+                    {
+                        cout &lt;&lt; &quot;Yes&quot; &lt;&lt; endl;
+                        ok = 1;
+                        return 0;
+                    }
+            }
+        if (!ok)
+            cout &lt;&lt; &quot;No&quot; &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

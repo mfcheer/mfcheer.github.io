@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>二分图多重匹配问题 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">二分图多重匹配问题</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/48319639" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/48319639</a></p>
+<p>转自： <a href="http://www.cppblog.com/MatoNo1/archive/2011/03/26/142766.html" target="_blank" rel="noopener"> http://www.cppblog.com/MatoNo1/archive/2011/03/26/142766.html
+</a></p>
+<p>在二分图最大匹配中，每个点（不管是X方点还是Y方点）最多只能和一条匹配边相关联，然而，我们经常遇到这种问题，即二分图匹配中一个点可以和多条匹配边相关联，但有上限，或者说，Li表示点i最多可以和多少条匹配边相关联。</p>
+<p>二分图多重匹配分为二分图多重最大匹配与二分图多重最优匹配两种，分别可以用最大流与最大费用最大流解决。</p>
+<p>（1）二分图多重最大匹配：<br>在原图上建立源点S和汇点T，S向每个X方点连一条容量为该X方点L值的边，每个Y方点向T连一条容量为该Y方点L值的边，原来二分图中各边在新的网络中仍存在，容量为1（若该边可以使用多次则容量大于1），求该网络的最大流，就是该二分图多重最大匹配的值。</p>
+<p>（2）二分图多重最优匹配：<br>在原图上建立源点S和汇点T，S向每个X方点连一条容量为该X方点L值、费用为0的边，每个Y方点向T连一条容量为该Y方点L值、费用为0的边，原来二分图中各边在新的网络中仍存在，容量为1（若该边可以使用多次则容量大于1），费用为该边的权值。求该网络的最大费用最大流，就是该二分图多重最优匹配的值。</p>
+<p>例题：<br>【1】POJ1698 Alice’s Chance<br>将电影作为X方点，每一天作为Y方点（最多50周，每周7天，所以共设350个Y方点），若第i个电影可以在第j天搞就连边(i,<br>j)。每个X方点的L值为该电影总共要搞多少天，每个Y方点的L值为1（每天最多只能搞一个电影），然后求二分图多重最大匹配，若能使所有从源点连向X方点的边都满流，则输出Yes，否则输出No。<br>【2】POJ2112 Optimal Milking<br>先预处理求出每两个点（包括挤奶点和牛）间的最短距离，然后将所有挤奶点作为X方点（L值为该挤奶点最多可以容纳多少牛），所有牛作为Y方点（L值为1），Xi和Yj间边的权值为这两个点之间的最短距离（若这两点间不存在路径则此处无边），然后问题就变成了求一个多重匹配，使得每个Y方点都有匹配点且匹配边中权值的最大值最小。<br>可以枚举最大边权值S，然后，原图中所有权值大于S的边都要删去。若此时图中存在符合要求的多重匹配，则S合法否则S不合法。由于S的合法性是单调的，所以可以二分枚举S。</p>
+
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

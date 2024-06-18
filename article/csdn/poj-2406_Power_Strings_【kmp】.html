@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>poj-2406 Power Strings 【kmp】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">poj-2406 Power Strings 【kmp】</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44116531" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44116531</a></p>
+<p>Power Strings</p>
+<table>
+<thead>
+<tr>
+<th><strong>Time Limit:</strong> 3000MS</th>
+<th></th>
+<th><strong>Memory Limit:</strong> 65536K  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Total Submissions:</strong> 34716</td>
+<td></td>
+<td><strong>Accepted:</strong> 14367  </td>
+</tr>
+</tbody>
+</table>
+<p>Description</p>
+<p>Given two strings a and b we define a<em>b to be their concatenation. For<br>example, if a = “abc” and b = “def” then a</em>b = “abcdef”. If we think of<br>concatenation as multiplication, exponentiation by a non-negative integer is<br>defined in the normal way: a^0 = “” (the empty string) and a^(n+1) = a*(a^n).</p>
+<p>Input</p>
+<p>Each test case is a line of input representing s, a string of printable<br>characters. The length of s will be at least 1 and will not exceed 1 million<br>characters. A line containing a period follows the last test case.</p>
+<p>Output</p>
+<p>For each s you should print the largest n such that s = a^n for some string a.</p>
+<p>Sample Input</p>
+<pre><code>abcd
+aaaa
+ababab
+.
+</code></pre><p>Sample Output</p>
+<pre><code>1
+4
+3
+</code></pre><p>Hint</p>
+<p>This problem has huge input, use scanf instead of cin to avoid time limit<br>exceed.</p>
+<p>Source</p>
+<p><a href="http://poj.org/searchproblem?field=source&amp;key=Waterloo+local+2002.07.01" target="_blank" rel="noopener"> Waterloo local 2002.07.01
+</a></p>
+<p>循环节 ，求字符串的循环的最大数量。</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+
+using namespace std;
+
+char  b[1000500];
+int Next[1000500];
+
+void get_next(char b[], int m)
+{
+    int i = 0,j = -1;
+    memset(Next,0,sizeof(Next));
+    Next[0] = -1;
+    while (b[i])
+    {
+        if (j == -1 || b[i] == b[j])
+        {
+            ++i;
+            ++j;
+            Next[i] = j;
+        }
+        else
+            j = Next[j];
+    }
+}
+
+int main()
+{
+    int cases = 1, n, m, i, j, ans;
+
+    while (scanf(&quot;%s&quot;,&amp;b)!=EOF &amp;&amp; b[0]!=&#39;.&#39;)
+    {
+        n = strlen(b);
+        get_next(b, n);
+
+        int t = Next[n];
+
+        int s = n - t;
+        if (n % s == 0)
+            ans = n / s;
+        else
+            ans = 1;
+        printf(&quot;%d\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

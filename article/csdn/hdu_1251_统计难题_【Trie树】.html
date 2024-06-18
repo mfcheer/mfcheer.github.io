@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>hdu 1251 统计难题 【Trie树】 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">hdu 1251 统计难题 【Trie树】</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44228365" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/44228365</a></p>
+<p>trie树，又叫做字典数。</p>
+<p>字典数学习资料： <a href="http://www.cnblogs.com/tanky_woo/archive/2010/09/24/1833717.html" target="_blank" rel="noopener"> http://www.cnblogs.com/tanky_woo/archive/2010/09/24/1833717.html
+</a></p>
+<h1><span id="统计难题">统计难题</span></h1><p><strong> Time Limit: 4000/2000 MS (Java/Others)    Memory Limit: 131070/65535 K<br>(Java/Others)<br>Total Submission(s): 20110    Accepted Submission(s): 8797  
+</strong>  </p>
+<p>Problem Description</p>
+<p>Ignatius最近遇到一个难题,老师交给他很多单词(只有小写字母组成,不会有重复的单词出现),现在老师要他统计出以某个字符串为前缀的单词数量(单词本身也是自己的前缀).  </p>
+<p>Input</p>
+<p>输入数据的第一部分是一张单词表,每行一个单词,单词的长度不超过10,它们代表的是老师交给Ignatius统计的单词,一个空行代表单词表的结束.第二部分是一连串的提问,每行一个提问,每个提问都是一个字符串.  </p>
+<p>注意:本题只有一组测试数据,处理到文件结束.  </p>
+<p>Output</p>
+<p>对于每个提问,给出以该字符串为前缀的单词的数量.  </p>
+<p>Sample Input</p>
+<p>banana band bee absolute acm ba b band abc</p>
+<p>Sample Output</p>
+<p>2 3 1 0</p>
+<pre><code>#include &lt;stdio.h&gt;  
+#include &lt;iostream&gt;  
+#include &lt;string.h&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;math.h&gt;  
+#include &lt;ctype.h&gt;  
+#include &lt;time.h&gt;  
+#include &lt;queue&gt;  
+#include &lt;iterator&gt; 
+
+using namespace std;
+
+typedef struct Trie{
+    int v;
+    Trie *next[26];
+}Trie;
+
+Trie root;
+
+void createTrie(char *str)
+{
+    int len = strlen(str);
+    Trie *p = &amp;root, *q;
+    for(int i=0; i&lt;len; ++i)
+    {
+        int id = str[i]-&#39;a&#39;;
+        if(p-&gt;next[id] == NULL)
+        {
+            q = (Trie *)malloc(sizeof(root));
+            q-&gt;v = 1;
+            for(int j=0; j&lt;26; ++j)
+                q-&gt;next[j] = NULL;
+            p-&gt;next[id] = q;
+            p = p-&gt;next[id];
+        }
+        else
+        {
+            p-&gt;next[id]-&gt;v++;
+            p = p-&gt;next[id];
+        }
+    }
+}
+
+int findTrie(char *str)
+{
+    int len = strlen(str);
+    Trie *p = &amp;root;
+    for(int i=0; i&lt;len; ++i)
+    {
+        int id = str[i]-&#39;a&#39;;
+        p = p-&gt;next[id];
+        if(p == NULL)
+            return 0;
+    }
+    return p-&gt;v;
+}
+
+int main()
+{
+    //freopen(&quot;input.txt&quot;, &quot;r&quot;, stdin);
+    char str[15];
+    int i;
+    for(i=0; i&lt;26; ++i)
+        root.next[i] = NULL;
+    while(gets(str) &amp;&amp; str[0]!=&#39;\0&#39;)
+        createTrie(str);
+    memset(str, 0, sizeof(str));
+    while(scanf(&quot;%s&quot;, str) != EOF)
+    {
+        int ans = findTrie(str);
+        printf(&quot;%d\n&quot;, ans);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

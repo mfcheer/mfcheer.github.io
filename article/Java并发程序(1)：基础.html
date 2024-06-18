@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Java并发程序(1)：基础 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">Java并发程序(1)：基础</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <h1><span id="线程中断interrupted">线程中断（interrupted）</span></h1><p>意义是通知线程，有人希望你退出啦！但是线程会如何处理，由线程自己决定。</p>
+<pre><code>package Chapter02;
+
+public class InterruptDemo {
+    public static void main(String[] args) throws InterruptedException{
+        Thread t1 = new Thread(){
+            public void run(){
+                while (true){
+                    System.out.println(&quot;hello&quot;);
+                }
+            }
+        };
+        t1.start();
+        t1.sleep(1000);
+        t1.interrupt();
+    }
+}
+不会发生任何中断
+</code></pre><a id="more"></a>
+<pre><code>package Chapter02;
+
+public class InterruptDemo {
+    public static void main(String[] args) throws InterruptedException{
+        Thread t1 = new Thread(){
+            public void run(){
+                while (true){
+                    System.out.println(&quot;hello&quot;);
+                    if(Thread.currentThread().interrupted())
+                        break;
+                }
+            }
+        };
+        t1.start();
+        t1.sleep(1000);
+        t1.interrupt();
+    }
+}
+会发生中断
+</code></pre><h1><span id="等待wait和通知notify">等待（wait）和通知（notify）</span></h1><p>wait和notify方法在Object类中。什么时候会等待呢，当线程A中调用了obj.wait()，A就会停止继续执行，何时结束呢？当其他线程调用了obj.notify()</p>
+<pre><code>package Chapter02;
+
+import java.security.PublicKey;
+
+import org.omg.CORBA.PUBLIC_MEMBER;
+
+public class wnDemo {
+        final static Object object = new Object();
+        public static class T1 extends Thread{
+            public void run(){
+                synchronized (object) {
+                    System.out.println(&quot;T1 start&quot;);
+                    try{
+                        System.out.println(&quot;T1 wait start&quot;);
+                        object.wait();
+                    }catch(Exception e){
+                        System.out.println(e);
+                    }
+                    System.out.println(&quot;T1 end&quot;);
+                }
+            }
+        }
+        public static class T2 extends Thread{
+            public void run(){
+                synchronized (object) {
+                    System.out.println(&quot;T2 start&quot;);
+                    try{
+                        System.out.println(&quot;T2 notify start&quot;);
+                        Thread.sleep(2000);
+                        object.notify();
+                        System.out.println(&quot;T2 end&quot;);
+                    }catch(Exception e){
+                        System.out.println(e);
+                    }
+                }
+            }
+        }
+
+        public static void main(String[] args){
+
+            Thread t1 = new T1();
+            Thread t2 = new T2();
+
+            t1.start();
+            t2.start();
+        }
+}
+/*
+T1 start
+T1 wait start
+T2 start
+T2 notify start
+T2 end
+T1 end
+*/
+</code></pre><h1><span id="挂起和继续执行">挂起和继续执行</span></h1><p>Thread类的方法。</p>
+<h1><span id="等待线程结束join和谦让yield">等待线程结束（join）和谦让（yield）</span></h1><p>等待线程结束。等待run方法执行结束，再继续执行。</p>
+<pre><code>package Chapter02;
+
+public class joinDemo {
+    private  static int i = 0;
+
+    public static class AddThread extends Thread{
+        public void run(){
+            for(i=0;i&lt;100000000;i++){
+                ;
+            }
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException{
+        AddThread t1 = new AddThread();
+        t1.start();
+        t1.join();
+
+        System.out.println(i);
+    }
+}
+//100000000
+</code></pre><p>Thread.yield()需要解释一下，它是对线程调度器的一种建议，它在声明：”我已经执行完生命周期中最重要的部分了，此刻可以切换给别的任务，让它们执行吧。”这仅仅是一种建议，线程调度器不一定会执行。当调用 yield()时，其实是在建议线程调度器去调度具有相同优先级的其他线程工作。</p>
+<h1><span id="volatile与java内存模型jmm">volatile与Java内存模型（JMM）</span></h1><p>用volatile修饰的变量，线程在每次使用变量的时候，都会读取变量修改后的最的值。volatile很容易被误用，用来进行原子性操作。</p>
+<p>1）保证了不同线程对这个变量进行操作时的可见性，即一个线程修改了某个变量的值，这新值对其他线程来说是立即可见的。<br>2）禁止进行指令重排序。</p>
+<h1><span id="线程组threadgroup">线程组（ThreadGroup）</span></h1><pre><code>package Chapter02;
+
+public class ThreadGroupDemo implements Runnable{
+    @Override
+    public void run() {
+        String groupName = Thread.currentThread().getThreadGroup().getName()
+                + &quot;-&quot; + Thread.currentThread().getName();
+        while(true){
+            System.out.println(&quot;I am &quot; + groupName);
+            try{
+                Thread.sleep(2000);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args){
+        ThreadGroup tg = new ThreadGroup(&quot;Group&quot;);
+        Thread t1 = new Thread(tg, new ThreadGroupDemo(), &quot;T1&quot;); 
+        Thread t2 = new Thread(tg, new ThreadGroupDemo(), &quot;T2&quot;); 
+        t1.start();
+        t2.start();
+        System.out.println(tg.activeCount());
+        tg.list();
+    }
+}
+/*
+2
+I am Group-T1
+I am Group-T2
+java.lang.ThreadGroup[name=Group,maxpri=10]
+    Thread[T1,5,Group]
+    Thread[T2,5,Group]
+I am Group-T2
+I am Group-T1
+I am Group-T2
+I am Group-T1
+I am Group-T1
+I am Group-T2
+*/
+</code></pre><h1><span id="守护进程daemon">守护进程（Daemon）</span></h1><p>Daemon的作用是为其他线程的运行提供便利服务，守护线程最典型的应用就是 GC (垃圾回收器)，它就是一个很称职的守护者。<br>User和Daemon两者几乎没有区别，唯一的不同之处就在于虚拟机的离开：如果 User Thread已经全部退出运行了，只剩下Daemon Thread存在了，虚拟机也就退出了。</p>
+<pre><code>package Chapter02;
+
+public class DaemonDemo{
+    static class daemonDemo extends Thread{
+        public void run(){
+            while (true){
+                System.out.println(&quot;i am alive&quot;);
+                try{
+                    Thread.sleep(1000);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }    
+    }
+    public static void main(String[] args) throws InterruptedException{
+        Thread t = new daemonDemo();
+        t.setDaemon(true);
+        t.start();
+
+        Thread.sleep(2000);
+    }
+}
+
+</code></pre><h1><span id="线程优先级">线程优先级</span></h1><pre><code>package Chapter02;
+
+public class PrirityDemo {
+    public static class HighPri extends Thread{
+        static int count = 0;
+        public void run(){
+            while (true){
+                synchronized (PrirityDemo.class) {
+                    count++;
+                    if(count &gt; 10000000){
+                        System.out.println(&quot;HighPri Thread end&quot;);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    public static class LowPri extends Thread{
+        static int count = 0;
+        public void run(){
+            while (true){
+                synchronized (PrirityDemo.class) {
+                    count++;
+                    if(count &gt; 10000000){
+                        System.out.println(&quot;LowPri Thread end&quot;);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    public static void main(String[] args){
+        Thread highThread = new HighPri();
+        Thread lowThread = new LowPri();
+        highThread.setPriority(Thread.MAX_PRIORITY);
+        lowThread.setPriority(Thread.MIN_PRIORITY);
+        lowThread.start();
+        highThread.start();
+    }
+}
+/*
+大多数情况：
+HighPri Thread end
+LowPri Thread end
+*/
+</code></pre><h1><span id="线程安全与synchronized">线程安全与synchronized</span></h1><p>当synchronized用来修饰一个方法或者一个代码块的时候，能够保证在同一时刻最多只有一个线程执行该段代码。</p>
+<h1><span id="程序中的幽灵隐蔽的错误">程序中的幽灵：隐蔽的错误</span></h1>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/Java/">Java</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

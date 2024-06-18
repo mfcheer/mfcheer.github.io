@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>Codeforces Round - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="acm,codeforces">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">Codeforces Round</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41262527" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/41262527</a></p>
+<p><a href="http://codeforces.com/contest/486/problem/A" target="_blank" rel="noopener"> http://codeforces.com/contest/486/problem/A
+</a>  </p>
+<p>A. Calculating Function</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>For a positive integer  _n_ let’s define a function  _f_ :</p>
+<p>_f_ ( _n_ ) =  - 1 + 2 - 3 + .. + ( - 1)  _n_ _n_</p>
+<p>Your task is to calculate  _f_ ( _n_ )  for a given integer  _n_ .</p>
+<p>Input</p>
+<p>The single line contains the positive integer  _n_ (  1 ≤ _n_ ≤ 10  15  ).</p>
+<p>Output</p>
+<p>Print  _f_ ( _n_ )  in a single line.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>4
+</code></pre><p>output</p>
+<pre><code>2
+</code></pre><p>input</p>
+<pre><code>5
+</code></pre><p>output</p>
+<pre><code>-3
+</code></pre><p>Note</p>
+<p>_f_ (4) =  - 1 + 2 - 3 + 4 = 2</p>
+<p>_f_ (5) =  - 1 + 2 - 3 + 4 - 5 =  - 3</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;malloc.h&gt;
+#include&lt;string.h&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+
+using namespace std;
+
+long long n;
+
+
+int main ()
+{
+    while (scanf(&quot;%I64d&quot;,&amp;n)!=EOF)
+    {
+        if (n%2 == 0)
+            printf(&quot;%I64d\n&quot;,n/2);
+        else
+            printf(&quot;%I64d\n&quot;,(n/2+1)*-1);
+    }
+    return 0;
+}
+</code></pre><p><a href="http://codeforces.com/contest/486/problem/B" target="_blank" rel="noopener"> http://codeforces.com/contest/486/problem/B
+</a>  </p>
+<p>B. OR in Matrix</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Let’s define logical  _OR_ as an operation on two logical values (i. e. values<br>that belong to the set  {0, 1}  ) that is equal to  1  if either or both of<br>the logical values is set to  1  , otherwise it is  0  . We can define logical<br>_OR_ of three or more logical values in the same manner:</p>
+<p><img src="http://espresso.codeforces.com/661f67f4b56b351d145dce2e9a87cd7c5f6a4d64.png" alt=""><br>where<br><img src="http://espresso.codeforces.com/7bcdd7440cc300269a3395fa037d5af6351c3221.png" alt=""><br>is equal to  1  if some  _a_ _i_ = 1  , otherwise it is equal to  0  .</p>
+<p>Nam has a matrix  _A_ consisting of  _m_ rows and  _n_ columns. The rows are<br>numbered from  1  to  _m_ , columns are numbered from  1  to  _n_ . Element at<br>row  _i_ (  1 ≤ _i_ ≤ _m_ ) and column  _j_ (  1 ≤ _j_ ≤ _n_ ) is denoted as<br>_A_ _ij_ . All elements of  _A_ are either 0 or 1. From matrix  _A_ , Nam<br>creates another matrix  _B_ of the same size using formula:</p>
+<p><img src="http://espresso.codeforces.com/4332dfa4828fa3b9679abe53387834c43c801689.png" alt=""><br>.</p>
+<p>(  _B_ _ij_ is  _OR_ of all elements in row  _i_ and column  _j_ of matrix<br>_A_ )</p>
+<p>Nam gives you matrix  _B_ and challenges you to guess matrix  _A_ . Although<br>Nam is smart, he could probably make a mistake while calculating matrix  _B_ ,<br>since size of  _A_ can be large.</p>
+<p>Input</p>
+<p>The first line contains two integer  _m_ and  _n_ (  1 ≤ _m_ , _n_ ≤ 100  ),<br>number of rows and number of columns of matrices respectively.</p>
+<p>The next  _m_ lines each contain  _n_ integers separated by spaces describing<br>rows of matrix  _B_ (each element of  _B_ is either  0  or  1  ).</p>
+<p>Output</p>
+<p>In the first line, print “  NO  “ if Nam has made a mistake when calculating<br>_B_ , otherwise print “  YES  “. If the first line is “  YES  “, then also<br>print  _m_ rows consisting of  _n_ integers representing matrix  _A_ that can<br>produce given matrix  _B_ . If there are several solutions print any one.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>2 2
+1 0
+0 0
+</code></pre><p>output</p>
+<pre><code>NO
+</code></pre><p>input</p>
+<pre><code>2 3
+1 1 1
+1 1 1
+</code></pre><p>output</p>
+<pre><code>YES
+1 1 1
+1 1 1
+</code></pre><p>input</p>
+<pre><code>2 3
+0 1 0
+1 1 1
+</code></pre><p>output</p>
+<pre><code>YES
+0 0 0
+0 1 0
+
+
+
+
+
+
+
+
+
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;iterator&gt;
+#include &lt;deque&gt;
+#include &lt;vector&gt;
+#include &lt;unordered_set&gt;
+#include &lt;unordered_map&gt;
+#include &lt;set&gt;
+#include &lt;valarray&gt;
+#include &lt;list&gt;
+#include &lt;stack&gt;
+#include &lt;array&gt;
+#include &lt;iomanip&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+#include &lt;queue&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+
+
+using namespace std;
+
+
+int A[100][100];
+int B[100][100];
+
+int main(int argc, char* argv[])
+{
+    long long m, n;
+    cin &gt;&gt; m &gt;&gt; n;
+
+    for (size_t i = 0; i &lt; m; ++i)
+        for (size_t j = 0; j &lt; n; ++j)
+            A[i][j] = 1;
+
+    for (size_t i = 0; i &lt; m; ++i)
+        for (size_t j = 0; j &lt; n; ++j)
+        {
+            cin &gt;&gt; B[i][j];
+
+            if (B[i][j] == 0)
+            {
+                for (size_t k = 0; k &lt; m; ++k)
+                    A[k][j] = 0;
+
+                for (size_t k = 0; k &lt; n; ++k)
+                    A[i][k] = 0;
+            }
+        }
+
+    for (size_t i = 0; i &lt; m; ++i)
+        for (size_t j = 0; j &lt; n; ++j)
+        {
+            int a = 0;
+
+            for (size_t k = 0; k &lt; m; ++k)
+                a |= A[k][j];
+
+            for (size_t k = 0; k &lt; n; ++k)
+                a |= A[i][k];
+
+            if (a != B[i][j])
+            {
+                cout &lt;&lt; &quot;NO\n&quot;;
+                return 0;
+            }
+        }
+
+    cout &lt;&lt; &quot;YES\n&quot;;
+    for (size_t i = 0; i &lt; m; ++i)
+    {
+        for (size_t j = 0; j &lt; n; ++j)
+            cout &lt;&lt; A[i][j] &lt;&lt; &quot; &quot;;
+        cout &lt;&lt; endl;
+    }
+
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      

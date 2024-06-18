@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>图论——次小生成树 - mfcheer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content="博客">
+  
+    <meta name="description" content="help change the world">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="mfcheer" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/load.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" href="/css/prism-solarizedlight.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">mfcheer</a>
+    <div class="subtitle">help change the world</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+    </ul>
+  </nav>
+  <link rel="stylesheet" href="/css/highlight/styles/atelier-forest-dark.css">
+  <script src="/js/md5.min.js"></script>
+  <script src="/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</header>
+
+<article class="post">
+  <div class="post-title">
+    <span style="text-align: center;display:block;font-size:24px;font-weight:bold;color:#E00000;" class="article--title">图论——次小生成树</span>
+	<br>
+  </div>
+
+  <div class="post-meta">
+  </div>
+  <div class="post-content">
+    <p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/43193753" target="_blank" rel="noopener">https://blog.csdn.net/u014427196/article/details/43193753</a></p>
+<p>次小生成树模板</p>
+<p>通过poj 1679</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+
+using namespace std;
+#define INF 10000000
+
+/*
+ * 次小生成树
+ * 求最小生成树时，用数组Max[i][j]来表示MST中i到j最大边权
+ * 求完后，直接枚举所有不在MST中的边，替换掉最大边权的边，更新答案
+ * 点的编号从1开始
+ */
+const int MAXN=110;
+bool vis[MAXN];
+int lowc[MAXN];
+int pre[MAXN];//记录前驱节点
+int Max[MAXN][MAXN];//Max[i][j]表示在最小生成树中从i到j的路径中的最大边权
+bool used[MAXN][MAXN];//是否是最小生成树的边
+
+int Prim(int cost[][MAXN],int n)
+{
+    int ans=0;
+    memset(vis,false,sizeof(vis));
+    memset(Max,0,sizeof(Max));
+    memset(used,false,sizeof(used));
+    memset(lowc,0,sizeof(lowc));
+
+    for(int i=1;i&lt;=n;i++)
+    {
+        lowc[i]=cost[1][i];
+        pre[i]=1;
+    }
+    lowc[1]=0;
+    vis[1]=true;
+    pre[1]=-1; 
+
+    for(int i=1;i&lt;n;i++)
+    {
+        int minc=INF;
+        int p=-1;
+        for(int j=1;j&lt;=n;j++)
+            if(!vis[j] &amp;&amp; minc &gt; lowc[j])
+            {
+                minc = lowc[j];
+                p = j;
+            }
+        if(minc==INF)
+            return -1;
+
+        ans += minc;
+        vis[p]=true;
+        used[p][pre[p]]=used[pre[p]][p]=true;
+
+        for(int j=1;j&lt;=n;j++)
+        {
+            if(vis[j])
+                Max[j][p]=Max[p][j]=max(Max[j][pre[p]],lowc[p]);
+
+            if(!vis[j]&amp;&amp;lowc[j]&gt;cost[p][j])
+            {
+                lowc[j]=cost[p][j];
+                pre[j]=p;
+            }
+        }
+    }
+    return ans;
+}
+int ans;
+int smst(int cost[][MAXN],int n)//求次小生成树
+{
+    int Min=INF;
+    for(int i=1;i&lt;=n;i++)
+        for(int j=i+1;j&lt;=n;j++)
+            if(cost[i][j]!=INF &amp;&amp; !used[i][j])
+            {
+                Min=min(Min,ans+cost[i][j]-Max[i][j]);
+            }
+    if(Min==INF)
+        return -1;//不存在
+    return Min;
+}
+int cost[MAXN][MAXN];
+int main()
+{
+    int T;
+    int n,m;
+    scanf(&quot;%d&quot;,&amp;T);
+    while(T--)
+    {
+        scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+        int u,v,w;
+        for(int i=1;i&lt;=n;i++)
+            for(int j=1;j&lt;=n;j++)
+            {
+                if(i==j)
+                    cost[i][j]=0;
+                else
+                    cost[i][j]=INF;
+            }
+        while(m--)
+        {
+            scanf(&quot;%d%d%d&quot;,&amp;u,&amp;v,&amp;w);
+            if (cost[u][v] &gt; w)
+                cost[u][v]=cost[v][u]=w;
+        }
+
+        ans=Prim(cost,n);
+        if(ans==smst(cost,n))
+            printf(&quot;Not Unique!\n&quot;);//次小生成树和最小生成树一样大
+        else
+            printf(&quot;%d\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre>
+  </div>
+  <div class="post-footer">
+    <br>
+    
+      <ul class="post-categories-list"><li class="post-categories-list-item"><a class="post-categories-list-link" href="/categories/CSDN备份/">CSDN备份</a></li></ul>
+    
+
+    <a href="#top" class="top" style="color:#E00000;">返回顶部</a>
+    <br>
+  </div>
+</article>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d10cb6eccb01550fa2e97b1d8908b2f6";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<footer>
+  &copy; 2022
+  <span class="author">
+    mfcheer
+  </span>
+</footer>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </body>
+</html>
+			      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+			      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+			      <script src="/js/md5.min.js"></script>
+			      <div id="gitalk-container" style="position:absolute;width:60%;left:0;right:0;margin:auto">
+			      </div>
+			      <script>
+		      if(location.pathname == '/' || location.pathname.indexOf("categories") != -1 || location.pathname == '/archives/' ||  location.pathname == '/feed/')  {} 
+		      else if (location.pathname.indexOf("about") != -1) { 
+			            var gitalk = new Gitalk({
+					            clientID: 'ae1d662690808720bf41',
+					            clientSecret: 'c4d4d901a6fca52d5172519420dda00f8a2d9693',
+					            repo: 'mfcheer.github.io',
+					            owner: 'mfcheer',
+					            admin: 'mfcheer',
+					            id: md5(location.pathname),
+					            distractionFreeMode: false
+					          });
+			            
+			            gitalk.render('gitalk-container');
+			          }
+		      </script>
+			      
