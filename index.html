@@ -3,121 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人主页</title>
+    <title>mfcheer · Backend Engineer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- 主容器 -->
+    <div class="page-bg"></div>
     <div class="container">
-        <!-- 顶部导航 -->
-        <nav class="navbar">
-            <div class="nav-logo">
-                <h1>mfcheer</h1>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#about">关于</a></li>
-                <li><a href="#skills">技能</a></li>
-                <li><a href="#contact">联系</a></li>
-            </ul>
-        </nav>
+        <header class="topbar">
+            <a class="brand" href="#about">mfcheer</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#about">关于</a></li>
+                    <li><a href="#skills">技能</a></li>
+                    <li><a href="#contact">联系</a></li>
+                </ul>
+            </nav>
+        </header>
 
-        <!-- Hero 部分 -->
-        <section class="hero" id="about">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    <span class="gradient-text">后端开发者</span>
-                </h1>
-                <p class="hero-subtitle">用代码创造美好的互联网体验</p>
-                <p class="hero-description">
-                    热爱技术 | 追求创新 | 专注用户体验
-                </p>
+        <main>
+            <section class="hero glass" id="about">
+                <p class="eyebrow">Backend Engineer</p>
+                <h1>构建稳定、优雅、值得信赖的后端系统。</h1>
+                <p class="intro">专注高并发服务、数据链路与业务架构优化，用简洁的技术方案支撑长期增长。</p>
                 <div class="hero-cta">
-                    <a href="#contact" class="btn btn-primary">联系我</a>
-                    <a href="#skills" class="btn btn-secondary">了解更多</a>
+                    <a class="btn btn-primary" href="#contact">联系我</a>
+                    <a class="btn btn-secondary" href="#skills">查看技能</a>
                 </div>
-            </div>
-            <div class="hero-visual">
-                <div class="floating-card card-1">
+            </section>
+
+            <section class="section glass" id="skills">
+                <h2>核心能力</h2>
+                <div class="chips">
                     <span>Go</span>
-                </div>
-                <div class="floating-card card-1">
                     <span>Python</span>
-                </div>
-                <div class="floating-card card-1">
-                    <span>数据流处理</span>
-                </div>
-                <div class="floating-card card-2">
-                    <span>数据存储</span>
-                </div>
-                <div class="floating-card card-3">
-                    <span>高吞吐系统</span>
-                </div>
-                <div class="floating-card card-4">
-                    <span>机器学习</span>
-                </div>
-                <div class="floating-card card-1">
-                    <span>大数据技术</span>
-                </div>
-                <div class="floating-card card-5">
                     <span>MySQL</span>
-                </div>
-                <div class="floating-card card-6">
-                    <span>MQ</span>
-                </div>
-                <div class="floating-card card-7">
-                    <span>KV存储</span>
-                </div>
-                <div class="floating-card card-8">
+                    <span>消息队列</span>
+                    <span>KV 存储</span>
+                    <span>高吞吐系统</span>
                     <span>推荐系统</span>
                 </div>
-                <div class="floating-card card-9">
-                    <span>广告业务</span>
-                </div>
-                <div class="floating-card card-10">
-                    <span>房产业务</span>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- 个人信息部分 -->
-        <section class="about-section">
-            <h2>关于我</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p> 资深工程师 | 热爱新技术 | 追求代码优雅</p>
-                    <p> 专注 后端开发、系统架构设计</p>
+            <section class="section glass" id="contact">
+                <h2>保持联系</h2>
+                <p class="intro">欢迎交流工程实践、系统设计与业务增长。</p>
+                <div class="contact-links">
+                    <a href="mailto:mfcheer@qq.com">✉︎ mfcheer@qq.com</a>
+                    <a href="https://github.com/mfcheer" target="_blank" rel="noreferrer">GitHub</a>
+                    <a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
                 </div>
-            </div>
-        </section>
+            </section>
+        </main>
 
-        <!-- 联系方式 -->
-        <section class="contact-section" id="contact">
-            <h2>📬 联系我</h2>
-            <p class="contact-subtitle">期待与你相识</p>
-            <div class="contact-links">
-                <a href="mfcheer@qq.com" class="contact-btn">
-                    <span class="contact-icon">✉</span>
-                    <span>发送邮件</span>
-                </a>
-                <a href="https://github.com/mfcheer" target="_blank" class="contact-btn">
-                    <span class="contact-icon">💻</span>
-                    <span>GitHub</span>
-                </a>
-                <a href="https://linkedin.com" target="_blank" class="contact-btn">
-                    <span class="contact-icon">🔗</span>
-                    <span>LinkedIn</span>
-                </a>
-                <a href="https://twitter.com" target="_blank" class="contact-btn">
-                    <span class="contact-icon">𝕏</span>
-                    <span>Twitter</span>
-                </a>
-            </div>
-        </section>
-
-        <!-- 页脚 -->
-        <footer class="footer">
-            <p>💫 Build with love | © 2026 All rights reserved</p>
-        </footer>
+        <footer class="footer">Designed with -inspired simplicity · © 2026 mfcheer</footer>
     </div>
 
     <script src="script.js"></script>
