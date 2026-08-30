@@ -1,39 +1,27 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="时栖（TimeNook）支持与帮助" />
-    <title>支持 · 时栖 TimeNook</title>
+    <meta name="description" content="TimeNook (时栖) Support" />
+    <title>Support · TimeNook</title>
     <style>
       :root { color-scheme: light dark; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif; }
       body { max-width: 720px; margin: 0 auto; padding: 48px 24px 72px; line-height: 1.7; color: #27222e; background: #fff; }
       h1 { margin-bottom: 4px; font-size: 32px; line-height: 1.25; } h2 { margin-top: 36px; font-size: 21px; }
-      .meta { color: #6c6474; } a { color: #7250b5; } .language { text-align: right; }
+      .meta { color: #6c6474; } a { color: #7250b5; }
+      .language { text-align: right; margin-bottom: 8px; }
+      .language button { font-size: 14px; padding: 6px 14px; border-radius: 18px; border: 1px solid rgba(114,80,181,.35); background: transparent; color: inherit; cursor: pointer; }
+      [hidden] { display: none !important; }
       @media (prefers-color-scheme: dark) { body { color: #f3edf7; background: #15111d; } .meta { color: #c6bbcf; } a { color: #c99cff; } }
     </style>
   </head>
   <body>
-    <p class="language"><a href="#english">English</a></p>
-    <h1>时栖支持</h1>
-    <p class="meta">TimeNook · 横屏时钟与日程</p>
-    <p>感谢使用时栖。遇到问题、想提出建议或需要隐私帮助，请发送邮件至 <a href="mailto:469236905@qq.com">469236905@qq.com</a>。</p>
-    <h2>日程没有显示</h2>
-    <ol>
-      <li>在 iPhone「设置」&gt;「隐私与安全性」&gt;「日历」中确认已允许时栖访问日历。</li>
-      <li>在时栖的「设置」&gt;「日历来源」中确认需要显示的日历已开启。</li>
-      <li>回到主界面下拉刷新，或重启应用后重试。</li>
-    </ol>
-    <h2>如何进入纯时钟模式</h2>
-    <p>双击主时钟可隐藏日程面板；点击右上角按钮即可恢复日程视图。</p>
-    <h2>如何减少动画或耗电</h2>
-    <p>应用会在系统开启「减少动态效果」、低电量模式或设备过热时自动降低动画或亮度，并通过细微像素位移保护长期显示。正常电量下，亮度由你通过主界面手势自行调节。你也可在应用设置中关闭「桌面宠物」。</p>
-    <h2>提交问题时请附上</h2>
-    <p>请提供 iPhone 型号、iOS 版本、应用版本、问题发生步骤及截图（如方便）。请不要通过邮件发送完整日历内容或其他敏感信息。</p>
-    <p><a href="../privacy/">查看隐私政策</a></p>
+    <p class="language">
+      <button id="langToggle" type="button">简体中文</button>
+    </p>
 
-    <hr />
-    <section id="english" lang="en">
+    <section id="en" lang="en">
       <h1>TimeNook Support</h1>
       <p class="meta">Landscape clock and calendar</p>
       <p>For help, feedback, or privacy requests, email <a href="mailto:469236905@qq.com">469236905@qq.com</a>.</p>
@@ -51,5 +39,42 @@
       <p>Please include your iPhone model, iOS version, app version, steps to reproduce, and a screenshot if possible. Do not email complete calendar content or other sensitive information.</p>
       <p><a href="../privacy/">Privacy Policy</a></p>
     </section>
+
+    <section id="zh" lang="zh-CN" hidden>
+      <h1>时栖支持</h1>
+      <p class="meta">TimeNook · 横屏时钟与日程</p>
+      <p>感谢使用时栖。遇到问题、想提出建议或需要隐私帮助，请发送邮件至 <a href="mailto:469236905@qq.com">469236905@qq.com</a>。</p>
+      <h2>日程没有显示</h2>
+      <ol>
+        <li>在 iPhone「设置」&gt;「隐私与安全性」&gt;「日历」中确认已允许时栖访问日历。</li>
+        <li>在时栖的「设置」&gt;「日历来源」中确认需要显示的日历已开启。</li>
+        <li>回到主界面下拉刷新，或重启应用后重试。</li>
+      </ol>
+      <h2>如何进入纯时钟模式</h2>
+      <p>双击主时钟可隐藏日程面板；点击右上角按钮即可恢复日程视图。</p>
+      <h2>如何减少动画或耗电</h2>
+      <p>应用会在系统开启「减少动态效果」、低电量模式或设备过热时自动降低动画或亮度，并通过细微像素位移保护长期显示。正常电量下，亮度由你通过主界面手势自行调节。你也可在应用设置中关闭「桌面宠物」。</p>
+      <h2>提交问题时请附上</h2>
+      <p>请提供 iPhone 型号、iOS 版本、应用版本、问题发生步骤及截图（如方便）。请不要通过邮件发送完整日历内容或其他敏感信息。</p>
+      <p><a href="../privacy/">查看隐私政策</a></p>
+    </section>
+
+    <script>
+      (function () {
+        var btn = document.getElementById('langToggle');
+        var en = document.getElementById('en');
+        var zh = document.getElementById('zh');
+        var zhMode = false;
+        function apply() {
+          en.hidden = zhMode;
+          zh.hidden = !zhMode;
+          btn.textContent = zhMode ? 'English' : '简体中文';
+        }
+        btn.addEventListener('click', function () {
+          zhMode = !zhMode;
+          apply();
+        });
+      })();
+    </script>
   </body>
 </html>
