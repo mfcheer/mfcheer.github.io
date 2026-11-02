@@ -107,3 +107,27 @@ if (copyEmailBtn) {
         }
     });
 }
+
+// Live Beijing Time updater
+function updateBeijingTime() {
+    const timeEl = document.getElementById('beijingTime');
+    if (!timeEl) return;
+    try {
+        const now = new Date();
+        const options = {
+            timeZone: 'Asia/Shanghai',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        };
+        const formatter = new Intl.DateTimeFormat('zh-CN', options);
+        timeEl.textContent = formatter.format(now);
+    } catch (e) {
+        const now = new Date();
+        timeEl.textContent = now.toTimeString().substring(0, 8);
+    }
+}
+
+updateBeijingTime();
+setInterval(updateBeijingTime, 1000);

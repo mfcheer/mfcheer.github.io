@@ -260,6 +260,87 @@ main {
     padding: 4px 10px;
     border-radius: 999px;
     font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #34c759;
+    box-shadow: 0 0 0 2px rgba(52, 199, 89, 0.25);
+    animation: pulse-dot-anim 2.5s infinite;
+}
+
+@keyframes pulse-dot-anim {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.85); }
+}
+
+[data-theme="dark"] .pulse-dot {
+    background: #30d158;
+    box-shadow: 0 0 0 2px rgba(48, 209, 88, 0.3);
+}
+
+/* ============================================================
+   ACTIVITY / GITHUB GRAPH
+   ============================================================ */
+.card-activity h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--text);
+}
+
+.activity-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.activity-badge {
+    font-size: 12.5px;
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.18s ease;
+}
+
+.activity-badge:hover {
+    color: var(--accent);
+}
+
+.gh-chart-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 16px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+}
+
+.gh-chart-img {
+    display: block;
+    min-width: 630px;
+    width: 100%;
+    height: auto;
+    transition: filter 0.3s ease;
+}
+
+[data-theme="dark"] .gh-chart-img {
+    filter: invert(0.92) hue-rotate(180deg) brightness(1.1);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .gh-chart-img {
+        filter: invert(0.92) hue-rotate(180deg) brightness(1.1);
+    }
 }
 
 /* ============================================================

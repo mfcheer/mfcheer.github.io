@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mfcheer</title>
     <meta name="description" content="mfcheer 个人主页 · Backend Engineer">
-    <link rel="stylesheet" href="styles.css?v=1.0.3">
+    <link rel="stylesheet" href="styles.css?v=1.0.4">
 </head>
 <body>
     <div class="page-bg"></div>
@@ -17,6 +17,7 @@
                 <nav>
                     <ul class="nav-links">
                         <li><a href="#about">关于</a></li>
+                        <li><a href="#activity">动态</a></li>
                         <li><a href="#contact">联系</a></li>
                     </ul>
                 </nav>
@@ -44,9 +45,27 @@
                 </div>
 
                 <div class="quick-meta">
+                    <span class="meta-item">
+                        <span class="pulse-dot"></span>
+                        <span id="beijingTime">--:--:--</span> CST
+                    </span>
                     <span class="meta-item">📍 Beijing</span>
                     <span class="meta-item">💻 Backend</span>
                     <span class="meta-item">⚽ FC Barcelona</span>
+                </div>
+            </section>
+
+            <!-- GitHub 活跃动态卡片 -->
+            <section class="glass card-activity" id="activity">
+                <div class="activity-head">
+                    <h2>GitHub 活跃</h2>
+                    <a class="activity-badge" href="https://github.com/mfcheer" target="_blank" rel="noreferrer">
+                        <span>@mfcheer</span>
+                        <span>↗</span>
+                    </a>
+                </div>
+                <div class="gh-chart-container">
+                    <img class="gh-chart-img" src="https://ghchart.rshah.org/0071e3/mfcheer" alt="mfcheer's GitHub Contributions" loading="lazy">
                 </div>
             </section>
 
@@ -80,7 +99,7 @@
 
         <!-- 页脚 -->
         <footer class="footer">
-            <span>© 2026 mfcheer</span>
+            <span>© 2026 mfcheer · 39°54'N 116°23'E</span>
             <a href="#" class="back-to-top">回到顶部 ↑</a>
         </footer>
     </div>
@@ -88,6 +107,6 @@
     <!-- 复制提示 Toast -->
     <div class="toast" id="toast">已复制邮箱到剪贴板</div>
 
-    <script src="script.js?v=1.0.3"></script>
+    <script src="script.js?v=1.0.4"></script>
 </body>
 </html>
