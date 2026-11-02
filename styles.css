@@ -210,12 +210,18 @@ main {
     margin-bottom: 20px;
 }
 
-.avatar-placeholder {
+.avatar-placeholder,
+.avatar-img {
     width: 52px;
     height: 52px;
     border-radius: 16px;
-    background: linear-gradient(135deg, rgba(0, 113, 227, 0.15), rgba(175, 82, 222, 0.15));
+    object-fit: cover;
     border: 1px solid var(--line);
+    flex-shrink: 0;
+}
+
+.avatar-placeholder {
+    background: linear-gradient(135deg, rgba(0, 113, 227, 0.15), rgba(175, 82, 222, 0.15));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -499,12 +505,16 @@ main {
         margin-bottom: 14px;
     }
 
-    .avatar-placeholder {
+    .avatar-placeholder,
+    .avatar-img {
         width: 44px;
         height: 44px;
-        font-size: 18px;
         border-radius: 13px;
         flex-shrink: 0;
+    }
+
+    .avatar-placeholder {
+        font-size: 18px;
     }
 
     .profile-title h1 {
