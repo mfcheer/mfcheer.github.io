@@ -88,3 +88,24 @@ function updateBeijingTime() {
 
 updateBeijingTime();
 setInterval(updateBeijingTime, 1000);
+
+// Load GitHub Chart and ensure responsive vector scaling without dragging/overflow
+async function loadGitHubChart() {
+    const container = document.getElementById('ghChart');
+    if (!container) return;
+    try {
+        const res = await fetch('https://ghchart.rshah.org/0071e3/mfcheer');
+        if (!res.ok) return;
+        let svgText = await res.text();
+        if (svgText.includes('<svg')) {
+            if (!svgText.includes('viewBox')) {
+                svgText = svgText.replace('<svg ', '<svg viewBox="0 0 663 104" preserveAspectRatio="xMinYMid meet" ');
+            }
+            container.innerHTML = svgText;
+        }
+    } catch (e) {
+        // Fallback: the static img remains displayed safely
+    }
+}
+
+loadGitHubChart();

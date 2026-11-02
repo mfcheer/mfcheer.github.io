@@ -338,41 +338,35 @@ main {
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
     padding: 14px 16px;
     background: var(--surface-subtle);
     border: 1px solid var(--line);
     border-radius: 14px;
 }
 
-.gh-chart-container::-webkit-scrollbar {
-    height: 4px;
-}
-
-.gh-chart-container::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.gh-chart-container::-webkit-scrollbar-thumb {
-    background: var(--line);
-    border-radius: 999px;
-}
-
+.gh-chart-container svg,
 .gh-chart-img {
     display: block;
-    min-width: 630px;
     width: 100%;
+    max-width: 100%;
     height: auto;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
     transition: filter 0.3s ease;
 }
 
+[data-theme="dark"] .gh-chart-container svg,
 [data-theme="dark"] .gh-chart-img {
     filter: invert(0.92) hue-rotate(180deg) brightness(1.1);
 }
 
 @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .gh-chart-container svg,
     :root:not([data-theme="light"]) .gh-chart-img {
         filter: invert(0.92) hue-rotate(180deg) brightness(1.1);
     }
