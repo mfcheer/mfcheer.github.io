@@ -3,64 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mfcheer · Backend Engineer</title>
+    <title>mfcheer</title>
+    <meta name="description" content="mfcheer 个人主页 · Backend Engineer">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="page-bg"></div>
     <div class="container">
+        <!-- 顶部导航 -->
         <header class="topbar">
-            <a class="brand" href="#about">mfcheer</a>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#about">关于</a></li>
-                    <li><a href="#skills">技能</a></li>
-                    <li><a href="#contact">联系</a></li>
-                </ul>
-            </nav>
+            <a class="brand" href="#">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#about">关于</a></li>
+                        <li><a href="#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题">
+                    🌙
+                </button>
+            </div>
         </header>
 
         <main>
-            <section class="hero glass" id="about">
-                <p class="eyebrow">Backend engineer. System optimizer. Builder.</p>
-                <h2>构建稳定、优雅、值得信赖的后端系统</h2>
-                <p class="intro">I care about performance, architecture, and clean design.</p>
-                <p class="intro">I enjoy turning messy requirements into structured, scalable systems.</p>
-                <p class="intro">Football ⚽ (FC Barcelona fan, MSN era believer)</p>
-                <p class="intro">Father of an energetic little boy.</p>
-                <p class="intro">Learning patience, discipline, and long-term thinking — on and off the field.</p>
-                <div class="hero-cta">
-                    <a class="btn btn-primary" href="#contact">联系我</a>
-                    <a class="btn btn-secondary" href="#skills">查看技能</a>
+            <!-- 个人简介卡片 -->
+            <section class="glass card-hero" id="about">
+                <div class="profile-header">
+                    <div class="avatar-placeholder">M</div>
+                    <div class="profile-title">
+                        <h1>mfcheer</h1>
+                        <p class="role-text">Backend Engineer / Developer</p>
+                    </div>
+                </div>
+
+                <div class="bio-content">
+                    <p>写代码，做系统，偶尔做做独立工具。</p>
+                    <p class="text-secondary">关注后端架构、基础组件与实用软件。</p>
+                </div>
+
+                <div class="quick-meta">
+                    <span class="meta-item">📍 Beijing</span>
+                    <span class="meta-item">💻 Backend</span>
                 </div>
             </section>
 
-            <section class="section glass" id="skills">
-                <h2>核心能力</h2>
-                <div class="chips">
-                    <span>Go</span>
-                    <span>Python</span>
-                    <span>MySQL</span>
-                    <span>MQ</span>
-                    <span>KV存储</span>
-                    <span>高吞吐系统</span>
-                    <span>推荐系统</span>
-                </div>
-            </section>
+            <!-- 常用链接与联系 -->
+            <section class="glass card-contact" id="contact">
+                <h2>联系 & 链接</h2>
+                <div class="links-grid">
+                    <a class="link-item" href="mailto:mfcheer@qq.com">
+                        <div class="link-info">
+                            <span class="link-title">Email</span>
+                            <span class="link-desc">mfcheer@qq.com</span>
+                        </div>
+                        <span class="link-action">发送邮件 ↗</span>
+                    </a>
 
-            <section class="section glass" id="contact">
-                <h2>保持联系</h2>
-                <p class="intro">欢迎交流工程实践、系统设计与业务增长。</p>
-                <div class="contact-links">
-                    <a href="mailto:mfcheer@qq.com">✉︎ mfcheer@qq.com</a>
-                    <a href="https://github.com/mfcheer" target="_blank" rel="noreferrer">GitHub</a>
-                    <a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+                    <a class="link-item" href="https://github.com/mfcheer" target="_blank" rel="noreferrer">
+                        <div class="link-info">
+                            <span class="link-title">GitHub</span>
+                            <span class="link-desc">@mfcheer</span>
+                        </div>
+                        <span class="link-action">访问 ↗</span>
+                    </a>
+                </div>
+
+                <div class="copy-box">
+                    <span class="copy-text">快捷复制邮箱: <code>mfcheer@qq.com</code></span>
+                    <button class="btn-copy" id="copyEmailBtn" type="button">复制</button>
                 </div>
             </section>
         </main>
 
-        <footer class="footer">Designed with -inspired simplicity · © 2026 mfcheer</footer>
+        <!-- 页脚 -->
+        <footer class="footer">
+            <span>© 2026 mfcheer</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
     </div>
+
+    <!-- 复制提示 Toast -->
+    <div class="toast" id="toast">已复制邮箱到剪贴板</div>
 
     <script src="script.js"></script>
 </body>
