@@ -65,49 +65,6 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
     }
 });
 
-// Copy Email functionality with Toast notification
-const copyEmailBtn = document.getElementById('copyEmailBtn');
-const toast = document.getElementById('toast');
-let toastTimer = null;
-
-function showToast(message) {
-    if (!toast) return;
-    toast.textContent = message;
-    toast.classList.add('show');
-
-    if (toastTimer) {
-        clearTimeout(toastTimer);
-    }
-
-    toastTimer = setTimeout(() => {
-        toast.classList.remove('show');
-    }, 2000);
-}
-
-if (copyEmailBtn) {
-    copyEmailBtn.addEventListener('click', async () => {
-        const email = 'mfcheer@qq.com';
-        try {
-            if (navigator.clipboard && window.isSecureContext) {
-                await navigator.clipboard.writeText(email);
-            } else {
-                const textArea = document.createElement('textarea');
-                textArea.value = email;
-                textArea.style.position = 'fixed';
-                textArea.style.left = '-999999px';
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                document.execCommand('copy');
-                textArea.remove();
-            }
-            showToast('✓ 已复制邮箱: ' + email);
-        } catch (err) {
-            showToast('复制失败，请手动选择');
-        }
-    });
-}
-
 // Live Beijing Time updater
 function updateBeijingTime() {
     const timeEl = document.getElementById('beijingTime');

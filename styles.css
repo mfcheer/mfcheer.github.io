@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 :root {
@@ -66,6 +67,9 @@
 html,
 body {
     scroll-behavior: smooth;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
 }
 
 body {
@@ -175,6 +179,8 @@ main {
     margin-top: 24px;
     display: grid;
     gap: 18px;
+    min-width: 0;
+    width: 100%;
 }
 
 .glass {
@@ -186,6 +192,8 @@ main {
     -webkit-backdrop-filter: blur(20px);
     padding: 30px 28px;
     transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .glass:hover {
@@ -287,6 +295,11 @@ main {
 /* ============================================================
    ACTIVITY / GITHUB GRAPH
    ============================================================ */
+.card-activity {
+    overflow: hidden;
+    min-width: 0;
+}
+
 .card-activity h2 {
     font-size: 18px;
     font-weight: 600;
@@ -317,12 +330,28 @@ main {
 
 .gh-chart-container {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
     padding: 14px 16px;
     background: var(--surface-subtle);
     border: 1px solid var(--line);
     border-radius: 14px;
+}
+
+.gh-chart-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.gh-chart-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.gh-chart-container::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 999px;
 }
 
 .gh-chart-img {
@@ -401,79 +430,6 @@ main {
     color: var(--accent);
 }
 
-.copy-box {
-    background: var(--surface-subtle);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    font-size: 13px;
-}
-
-.copy-text {
-    color: var(--muted);
-}
-
-.copy-text code {
-    color: var(--text);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-weight: 600;
-}
-
-.btn-copy {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    color: var(--text);
-    font-size: 12px;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.18s ease;
-}
-
-.btn-copy:hover {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-}
-
-/* ============================================================
-   TOAST NOTIFICATION
-   ============================================================ */
-.toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: rgba(29, 29, 31, 0.9);
-    color: #fff;
-    padding: 9px 18px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 500;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    z-index: 1000;
-}
-
-[data-theme="dark"] .toast {
-    background: rgba(255, 255, 255, 0.92);
-    color: #121212;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
 /* ============================================================
    FOOTER
    ============================================================ */
@@ -497,26 +453,121 @@ main {
 }
 
 /* ============================================================
-   RESPONSIVE DESIGN
+   RESPONSIVE DESIGN (MOBILE OPTIMIZATIONS)
    ============================================================ */
 @media (max-width: 600px) {
     .container {
-        padding: 14px 14px 40px;
+        padding: 12px 14px 40px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .topbar {
+        padding: 8px 14px;
+        top: 8px;
+    }
+
+    .brand {
+        font-size: 14.5px;
+    }
+
+    .topbar-right {
+        gap: 10px;
+    }
+
+    .nav-links {
+        gap: 10px;
+    }
+
+    .nav-links a {
+        font-size: 12.5px;
+    }
+
+    .theme-toggle-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 11.5px;
     }
 
     .glass {
-        padding: 22px 18px;
+        padding: 20px 16px;
         border-radius: 18px;
     }
 
-    .copy-box {
+    .profile-header {
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .avatar-placeholder {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+        border-radius: 13px;
+        flex-shrink: 0;
+    }
+
+    .profile-title h1 {
+        font-size: 21px;
+    }
+
+    .role-text {
+        font-size: 13px;
+    }
+
+    .bio-content {
+        font-size: 14px;
+        gap: 6px;
+        line-height: 1.65;
+    }
+
+    .quick-meta {
+        gap: 6px;
+        margin-top: 14px;
+        padding-top: 14px;
+    }
+
+    .meta-item {
+        font-size: 11.5px;
+        padding: 3px 8px;
+    }
+
+    .card-activity h2,
+    .card-contact h2 {
+        font-size: 17px;
+    }
+
+    .activity-head {
+        margin-bottom: 10px;
+    }
+
+    .gh-chart-container {
+        padding: 10px 12px;
+        border-radius: 12px;
+    }
+
+    .link-item {
+        padding: 12px 14px;
+    }
+
+    .link-title {
+        font-size: 13.5px;
+    }
+
+    .link-desc {
+        font-size: 12px;
+    }
+
+    .footer {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
+        padding: 18px 4px 10px;
     }
+}
 
-    .btn-copy {
-        width: 100%;
-        text-align: center;
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .container {
+        padding-bottom: calc(40px + env(safe-area-inset-bottom));
     }
 }
