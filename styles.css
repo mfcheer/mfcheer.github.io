@@ -565,6 +565,133 @@ html[data-theme="dark"] .fcb-tooltip {
 }
 
 /* ============================================================
+   PROJECTS (个人作品)
+   ============================================================ */
+.card-projects h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--text);
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.22s ease,
+                background-color 0.22s ease,
+                box-shadow 0.22s ease;
+    min-width: 0;
+}
+
+.project-card:hover {
+    transform: translateY(-2px);
+    background: var(--surface-hover);
+    border-color: rgba(0, 113, 227, 0.35);
+    box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="dark"] .project-card:hover {
+    border-color: rgba(41, 151, 255, 0.4);
+    box-shadow: 0 12px 32px -6px rgba(0, 0, 0, 0.5);
+}
+
+.project-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.project-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    object-fit: cover;
+    flex: none;
+    background: var(--surface);
+    border: 1px solid var(--line-subtle);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.project-title-wrap {
+    min-width: 0;
+    flex: 1;
+}
+
+.project-name {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.18s ease;
+}
+
+.project-card:hover .project-name {
+    color: var(--accent);
+}
+
+.project-arrow {
+    font-size: 13px;
+    color: var(--muted);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.18s ease;
+}
+
+.project-card:hover .project-arrow {
+    transform: translate(2px, -2px);
+    color: var(--accent);
+}
+
+.project-tagline {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 12px 0 14px;
+    flex-grow: 1;
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+}
+
+.project-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2.5px 8px;
+    border-radius: 6px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--line-subtle);
+    color: var(--muted);
+    letter-spacing: -0.005em;
+}
+
+/* ============================================================
    MEDIA (书影音)
    ============================================================ */
 .card-media {
@@ -828,10 +955,27 @@ html[data-theme="dark"] .media-stars {
         padding: 3px 8px;
     }
 
+    .card-projects h2,
     .card-activity h2,
     .card-contact h2,
     .card-moments h2 {
         font-size: 17px;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .project-card {
+        padding: 14px 14px;
+        border-radius: 14px;
+    }
+
+    .project-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
     }
 
     .activity-head {
@@ -870,6 +1014,20 @@ html[data-theme="dark"] .media-stars {
         align-items: flex-start;
         gap: 8px;
         padding: 18px 4px 10px;
+    }
+}
+
+@media (max-width: 400px) {
+    .nav-links {
+        gap: 7px;
+    }
+
+    .nav-links a {
+        font-size: 11.5px;
+    }
+
+    .brand {
+        font-size: 13.5px;
     }
 }
 
