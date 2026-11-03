@@ -467,6 +467,104 @@ html[data-theme="dark"] .ico-bytedance {
 }
 
 /* ============================================================
+   MEDIA (书影音)
+   ============================================================ */
+.card-media {
+    padding: 18px 20px 8px;
+}
+
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.media-col {
+    min-width: 0;
+}
+
+.media-col-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.media-col-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.media-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px;
+    margin: 0 -6px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.18s ease;
+}
+
+.media-item:hover {
+    background: var(--surface-hover);
+}
+
+.media-cover {
+    width: 46px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex: none;
+    background: var(--surface-card);
+    border: 1px solid var(--line-subtle);
+}
+
+.media-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+}
+
+.media-title {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+.media-stars {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    color: #f5a623;
+}
+
+html[data-theme="dark"] .media-stars {
+    color: #e8b339;
+}
+
+.media-tag {
+    font-size: 11px;
+    line-height: 1;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    padding: 3px 8px;
+    border-radius: 999px;
+    width: fit-content;
+}
+
+.media-date {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+/* ============================================================
    MOMENTS (说说)
    ============================================================ */
 .card-moments h2 {
@@ -663,6 +761,11 @@ html[data-theme="dark"] .ico-bytedance {
     .contact-icon {
         width: 42px;
         height: 42px;
+    }
+
+    .media-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
     }
 
     .moment-item {
