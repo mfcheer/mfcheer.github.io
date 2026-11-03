@@ -466,9 +466,32 @@ main {
     word-break: break-word;
 }
 
+.moment-head {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.moment-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--surface-subtle);
+}
+
+.moment-name {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text);
+}
+
 .moment-date {
     font-size: 12px;
     color: var(--muted);
+    margin-left: auto;
 }
 
 .moment-empty {

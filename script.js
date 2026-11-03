@@ -111,9 +111,9 @@ async function loadGitHubChart() {
 loadGitHubChart();
 
 // Moments (说说) — GitHub Issues as CMS
-// 发布方式：在本仓库创建 Issue（正文优先，标题兜底），仅展示仓库所有者创建的 Issue
+// 发布方式：在本仓库创建 Issue（正文优先，标题兜底），所有 Open 状态的 Issue 均展示（自动排除 PR）
 const MOMENTS_API_URL =
-    'https://api.github.com/repos/mfcheer/mfcheer.github.io/issues?creator=mfcheer&state=open&per_page=20&sort=created&direction=desc';
+    'https://api.github.com/repos/mfcheer/mfcheer.github.io/issues?state=open&per_page=20&sort=created&direction=desc';
 const MOMENTS_CACHE_KEY = 'momentsData';
 const MOMENTS_ETAG_KEY = 'momentsEtag';
 const MOMENTS_TIME_KEY = 'momentsTime';
@@ -153,13 +153,30 @@ function renderMoments(list) {
     list.forEach((m) => {
         const item = document.createElement('div');
         item.className = 'moment-item';
-        const text = document.createElement('p');
-        text.className = 'moment-text';
-        text.textContent = m.text; // 仅用 textContent，防 XSS
+
+        const head = document.createElement('div');
+        head.className = 'moment-head';
+        if (m.avatar && m.name) {
+            const avatar = document.createElement('img');
+            avatar.className = 'moment-avatar';
+            avatar.src = m.avatar;
+            avatar.alt = m.name;
+            avatar.loading = 'lazy';
+            avatar.referrerPolicy = 'no-referrer';
+            const name = document.createElement('span');
+            name.className = 'moment-name';
+            name.textContent = m.name; // 仅用 textContent，防 XSS
+            head.append(avatar, name);
+        }
         const date = document.createElement('span');
         date.className = 'moment-date';
         date.textContent = m.date;
-        item.append(text, date);
+        head.append(date);
+
+        const text = document.createElement('p');
+        text.className = 'moment-text';
+        text.textContent = m.text; // 仅用 textContent，防 XSS
+        item.append(head, text);
         listEl.append(item);
     });
 }
@@ -217,7 +234,9 @@ async function loadMoments() {
                 .filter((it) => it && !it.pull_request) // Issues API 会混入 PR，需排除
                 .map((it) => ({
                     date: formatMomentDate(it.created_at),
-                    text: ((it.body || '').trim() || (it.title || '')).trim()
+                    text: ((it.body || '').trim() || (it.title || '')).trim(),
+                    name: it.user && it.user.login,
+                    avatar: it.user && it.user.avatar_url
                 }))
                 .filter((m) => m.text);
             renderMoments(list);
