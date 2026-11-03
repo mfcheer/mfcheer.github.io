@@ -432,6 +432,52 @@ main {
 }
 
 /* ============================================================
+   MOMENTS (说说)
+   ============================================================ */
+.card-moments h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--text);
+}
+
+.moment-count {
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+.moment-item {
+    display: grid;
+    gap: 6px;
+    padding: 14px 2px;
+    border-top: 1px solid var(--line-subtle);
+}
+
+.moment-item:first-child {
+    border-top: none;
+    padding-top: 4px;
+}
+
+.moment-text {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.moment-date {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.moment-empty {
+    font-size: 13.5px;
+    color: var(--muted);
+    padding: 6px 2px;
+}
+
+/* ============================================================
    FOOTER
    ============================================================ */
 .footer {
@@ -538,7 +584,8 @@ main {
     }
 
     .card-activity h2,
-    .card-contact h2 {
+    .card-contact h2,
+    .card-moments h2 {
         font-size: 17px;
     }
 
@@ -561,6 +608,14 @@ main {
 
     .link-desc {
         font-size: 12px;
+    }
+
+    .moment-item {
+        padding: 12px 2px;
+    }
+
+    .moment-text {
+        font-size: 14px;
     }
 
     .footer {
