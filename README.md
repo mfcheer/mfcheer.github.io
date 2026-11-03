@@ -45,6 +45,6 @@ python3 -m http.server 8000
 1. 抓取 RSS 与主页预览，合并去重，按分类筛出各 5 条；
 2. 更新 `data/media.json`；
 3. 下载新条目封面到 `assets/covers/{subject_id}.jpg`（记得带 Referer）；
-4. 同步更新 `index.html` 中 `#media` 板块的静态条目（标题 / 星级 / 状态胶囊 / 封面路径）；
+4. 同步更新 `index.html` 中 `#media` 板块的静态条目（标题 / 星级 / 封面路径）；
 5. `styles.css` 版本号 +1（缓存刷新）；
 6. 提交并推送到 `main`。

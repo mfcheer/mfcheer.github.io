@@ -549,21 +549,6 @@ html[data-theme="dark"] .media-stars {
     color: #e8b339;
 }
 
-.media-tag {
-    font-size: 11px;
-    line-height: 1;
-    color: var(--muted);
-    border: 1px solid var(--line);
-    padding: 3px 8px;
-    border-radius: 999px;
-    width: fit-content;
-}
-
-.media-date {
-    font-size: 11px;
-    color: var(--muted);
-}
-
 /* ============================================================
    MOMENTS (说说)
    ============================================================ */
