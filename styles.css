@@ -329,6 +329,17 @@ html[data-theme="dark"] .ico-bytedance {
     gap: 6px;
 }
 
+.fcb-crest {
+    width: 17px;
+    height: 17px;
+    flex: none;
+    color: #A50044;
+}
+
+html[data-theme="dark"] .fcb-crest {
+    color: #EDBB00;
+}
+
 .pulse-dot {
     width: 6px;
     height: 6px;
