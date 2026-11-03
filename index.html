@@ -5,7 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>mfcheer</title>
     <meta name="description" content="mfcheer 个人主页 · Backend Engineer">
-    <link rel="stylesheet" href="styles.css?v=1.1.9">
+
+    <!-- Favicon 图标 -->
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <!-- Open Graph / 社交分享卡片 -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="mfcheer · Backend Engineer">
+    <meta property="og:description" content="关注后端架构、基础组件与实用软件 · FC Barcelona">
+    <meta property="og:image" content="https://mfcheer.github.io/avatar.jpg">
+    <meta property="og:url" content="https://mfcheer.github.io">
+
+    <!-- Twitter / X 社交卡片 -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="mfcheer · Backend Engineer">
+    <meta name="twitter:description" content="关注后端架构、基础组件与实用软件 · FC Barcelona">
+    <meta name="twitter:image" content="https://mfcheer.github.io/avatar.jpg">
+
+    <!-- 移动端沉浸式状态栏颜色 -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="stylesheet" href="styles.css?v=1.2.0">
 </head>
 <body>
     <div class="page-bg"></div>
@@ -221,8 +244,14 @@
             <!-- 说说 -->
             <section class="glass card-moments" id="moments">
                 <div class="activity-head">
-                    <h2>说说</h2>
-                    <span class="moment-count" id="momentCount"></span>
+                    <div class="head-title-wrap">
+                        <h2>说说</h2>
+                        <span class="moment-count" id="momentCount"></span>
+                    </div>
+                    <a class="activity-badge" href="https://github.com/mfcheer/mfcheer.github.io/issues/new" target="_blank" rel="noreferrer">
+                        <span>写一条</span>
+                        <span>↗</span>
+                    </a>
                 </div>
                 <div class="moment-list" id="momentList"></div>
             </section>
@@ -277,6 +306,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=1.1.4"></script>
+    <script src="script.js?v=1.2.0"></script>
 </body>
 </html>
