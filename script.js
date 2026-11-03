@@ -185,7 +185,15 @@ function readMomentsCache() {
     try {
         const raw = localStorage.getItem(MOMENTS_CACHE_KEY);
         const list = raw ? JSON.parse(raw) : null;
-        return Array.isArray(list) ? list : null;
+        // 兼容旧版缓存：旧条目缺少 name 字段（无头像/昵称），视为无效，
+        // 同时清除配套的 ETag/时间戳，避免 If-None-Match 命中 304 后永远沿用旧格式
+        if (!Array.isArray(list) || list.some((m) => !m || typeof m.name !== 'string')) {
+            localStorage.removeItem(MOMENTS_CACHE_KEY);
+            localStorage.removeItem(MOMENTS_ETAG_KEY);
+            localStorage.removeItem(MOMENTS_TIME_KEY);
+            return null;
+        }
+        return list;
     } catch (e) {
         return null;
     }
