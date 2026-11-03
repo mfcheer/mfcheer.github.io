@@ -117,7 +117,7 @@ const MOMENTS_API_URL =
 const MOMENTS_CACHE_KEY = 'momentsData';
 const MOMENTS_ETAG_KEY = 'momentsEtag';
 const MOMENTS_TIME_KEY = 'momentsTime';
-const MOMENTS_TTL = 10 * 60 * 1000; // 10 分钟内直接使用本地缓存，不请求 API
+const MOMENTS_TTL = 30 * 1000; // 仅 30 秒内直接用缓存；过期后带 ETag 条件请求重新验证（304 不计入 API 限流，近乎实时）
 
 function formatMomentDate(isoString) {
     try {
