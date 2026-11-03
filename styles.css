@@ -394,7 +394,7 @@ main {
     background: var(--surface-card);
     border: 1px solid var(--line);
     border-radius: 14px;
-    padding: 14px 16px;
+    padding: 11px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -409,8 +409,9 @@ main {
 
 .link-info {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
 }
 
 .link-title {
