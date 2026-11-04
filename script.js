@@ -166,9 +166,9 @@ async function loadBarcaSchedule() {
             sub.textContent = `周${'日一二三四五六'[d.getDay()]} ${hh}:${mm}`;
             dateCol.append(day, sub);
 
-            const makeTeam = (t) => {
+            const makeTeam = (t, isHomeCell) => {
                 const s = document.createElement('span');
-                s.className = 'bm-team' + (t.id === BARCA_ESPN_ID ? ' is-barca' : '');
+                s.className = 'bm-team' + (t.id === BARCA_ESPN_ID ? ' is-barca' : '') + (isHomeCell ? ' is-home' : '');
                 const img = document.createElement('img');
                 img.className = 'bm-logo';
                 img.loading = 'lazy';
@@ -178,7 +178,12 @@ async function loadBarcaSchedule() {
                 const name = document.createElement('span');
                 name.className = 'bm-name';
                 name.textContent = t.name;
-                s.append(img, name);
+                // 主队 cell：队名在外、徽章贴 vs；客队 cell：徽章贴 vs、队名在外（vs 居中对称）
+                if (isHomeCell) {
+                    s.append(name, img);
+                } else {
+                    s.append(img, name);
+                }
                 return s;
             };
             const makeVs = () => {
@@ -192,8 +197,8 @@ async function loadBarcaSchedule() {
             venue.className = 'bm-venue' + (m.isHome ? ' is-home' : '');
             venue.textContent = m.isHome ? '主场' : '客场';
 
-            // 每行 5 个 cell：日期 | 主队 | vs | 客队 | 主客徽（配合 CSS subgrid 实现 vs 竖向对齐）
-            row.append(dateCol, makeTeam(m.teams[0]), makeVs(), makeTeam(m.teams[1]), venue);
+            // 每行 5 个 cell：日期 | 主队 | vs | 客队 | 主客徽（配合 CSS subgrid 实现 vs 竖向对齐与徽章对称）
+            row.append(dateCol, makeTeam(m.teams[0], true), makeVs(), makeTeam(m.teams[1], false), venue);
             wrap.append(row);
         });
         wrap.hidden = false;

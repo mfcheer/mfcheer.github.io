@@ -352,24 +352,21 @@ html[data-theme="dark"] .fcb-crest {
     outline: none;
 }
 
-/* 巴萨近期赛程（关于卡底部，ESPN 接口注入，失败整块隐藏）
+/* 巴萨赛程卡（独立 section，ESPN 接口注入，失败整块隐藏）
    布局：外层 grid 定 5 列（日期/主队/vs/客队/主客徽），每行 subgrid 继承同一列模板，
    主队列取所有行中最宽者 → 各行 vs 自动落在同一竖线上 */
 .barca-schedule {
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
     display: grid;
     grid-template-columns: 68px minmax(0, max-content) max-content minmax(0, 1fr) auto;
     align-items: center;
     column-gap: 10px;
 }
 
-.barca-schedule-title {
-    grid-column: 1 / -1;
-    margin: 0 0 2px;
-    font-size: 12px;
-    font-weight: 500;
+.barca-src {
+    cursor: default;
+}
+
+.barca-src:hover {
     color: var(--muted);
 }
 
@@ -415,6 +412,11 @@ html[data-theme="dark"] .fcb-crest {
     color: var(--text);
     min-width: 0;
     overflow: hidden;
+}
+
+/* 主队 cell 内右对齐：队名向外、徽章紧贴 vs，与客队徽形成中心对称 */
+.bm-team.is-home {
+    justify-content: flex-end;
 }
 
 .bm-team.is-barca {
