@@ -117,6 +117,45 @@ async function loadGitHubChart() {
 
 loadGitHubChart();
 
+// 巴萨下一场比赛：ESPN 公开接口（免 Key、CORS 开放、非官方）
+// 成功时在 FCB 胶囊内追加「· 11月22日 23:15 客场 vs 对手」；失败/无数据时静默，胶囊保持纯队名
+const BARCA_ESPN_ID = '83';
+
+async function loadBarcaNext() {
+    const nextEl = document.getElementById('fcbNext');
+    if (!nextEl) return;
+    try {
+        const res = await fetch(
+            `https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams/${BARCA_ESPN_ID}/schedule?fixture=true`
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        const now = Date.now();
+        const next = (Array.isArray(data.events) ? data.events : [])
+            .map((e) => {
+                const comp = e.competitions && e.competitions[0];
+                const teams = comp && Array.isArray(comp.competitors) ? comp.competitors : [];
+                const barca = teams.find((t) => t && t.team && t.team.id === BARCA_ESPN_ID);
+                const rival = teams.find((t) => t && t.team && t.team.id !== BARCA_ESPN_ID);
+                if (!barca || !rival) return null;
+                const ts = new Date(e.date).getTime();
+                if (!Number.isFinite(ts) || ts <= now) return null;
+                return { ts, homeAway: barca.homeAway === 'home' ? '主场' : '客场', rival: rival.team.displayName };
+            })
+            .filter(Boolean)
+            .sort((a, b) => a.ts - b.ts)[0];
+        if (!next) return;
+        const d = new Date(next.ts);
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mm = String(d.getMinutes()).padStart(2, '0');
+        nextEl.textContent = ` · ${d.getMonth() + 1}月${d.getDate()}日 ${hh}:${mm} ${next.homeAway} vs ${next.rival}`;
+    } catch (e) {
+        // 接口失败或网络异常：保持胶囊原样，不打扰
+    }
+}
+
+loadBarcaNext();
+
 // Moments (说说) — GitHub Issues as CMS
 // 发布方式：在本仓库创建 Issue（正文优先，标题兜底），所有 Open 状态的 Issue 均展示（自动排除 PR）
 const MOMENTS_API_URL =

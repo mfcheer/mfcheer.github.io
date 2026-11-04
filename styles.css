@@ -352,6 +352,13 @@ html[data-theme="dark"] .fcb-crest {
     outline: none;
 }
 
+/* 下一场比赛（ESPN 接口注入，弱化显示） */
+.fcb-next {
+    color: var(--muted);
+    font-weight: 400;
+    white-space: nowrap;
+}
+
 .meta-item-fcb:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
