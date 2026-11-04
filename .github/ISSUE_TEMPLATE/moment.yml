@@ -1,0 +1,18 @@
+name: ✨ 说说
+description: 发布一条说说，提交后会实时展示在个人主页上
+title: "✨ 说说"
+labels: [moment]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        正文会直接展示在主页「说说」板块，标题不会展示（保持默认即可）。
+        支持多行文字；纯文本，无需任何格式。
+  - type: textarea
+    id: content
+    attributes:
+      label: 想说的话
+      description: 提交后稍等片刻（约 30 秒内）即可在主页看到。
+      placeholder: 今天……
+    validations:
+      required: true

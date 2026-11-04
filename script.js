@@ -35,12 +35,14 @@ function applyTheme(theme) {
         if (themeToggleBtn) {
             themeToggleBtn.textContent = '☀️';
             themeToggleBtn.setAttribute('title', '切换至浅色模式');
+            themeToggleBtn.setAttribute('aria-pressed', 'true');
         }
     } else {
         rootElement.setAttribute('data-theme', 'light');
         if (themeToggleBtn) {
             themeToggleBtn.textContent = '🌙';
             themeToggleBtn.setAttribute('title', '切换至深色模式');
+            themeToggleBtn.setAttribute('aria-pressed', 'false');
         }
     }
 }
@@ -54,6 +56,7 @@ if (themeToggleBtn) {
         currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
         localStorage.setItem('theme', currentTheme);
         applyTheme(currentTheme);
+        syncGiscusTheme(currentTheme);
     });
 }
 
@@ -62,6 +65,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
     if (!localStorage.getItem('theme')) {
         currentTheme = e.matches ? 'dark' : 'light';
         applyTheme(currentTheme);
+        syncGiscusTheme(currentTheme);
     }
 });
 
@@ -261,3 +265,50 @@ async function loadMoments() {
 }
 
 loadMoments();
+
+// Giscus 评论区（基于 GitHub Discussions；主题跟随站点深浅色）
+// 前置条件：仓库需开启 Discussions 并安装 giscus App（github.com/apps/giscus）
+const GISCUS_REPO = 'mfcheer/mfcheer.github.io';
+const GISCUS_REPO_ID = 'R_kgDOQ-YRwg';
+const GISCUS_CATEGORY = 'General';
+const GISCUS_CATEGORY_ID = 'DIC_kwDOQ-YRws4DKVoQ'; // Discussions · General 分类
+
+function giscusTheme(theme) {
+    return theme === 'dark' ? 'dark_dimmed' : 'light';
+}
+
+function initGiscus() {
+    const box = document.getElementById('giscusBox');
+    if (!box || !GISCUS_CATEGORY_ID) return; // 分类 ID 未配置前不渲染，避免页面上出现报错组件
+    const s = document.createElement('script');
+    s.src = 'https://giscus.app/client.js';
+    s.async = true;
+    s.crossOrigin = 'anonymous';
+    const attrs = {
+        'data-repo': GISCUS_REPO,
+        'data-repo-id': GISCUS_REPO_ID,
+        'data-category': GISCUS_CATEGORY,
+        'data-category-id': GISCUS_CATEGORY_ID,
+        'data-mapping': 'pathname',
+        'data-strict': '0',
+        'data-reactions-enabled': '1',
+        'data-emit-metadata': '0',
+        'data-input-position': 'top',
+        'data-theme': giscusTheme(currentTheme),
+        'data-lang': 'zh-CN',
+        'data-loading': 'lazy'
+    };
+    Object.entries(attrs).forEach(([k, v]) => s.setAttribute(k, v));
+    box.append(s);
+}
+
+function syncGiscusTheme(theme) {
+    const frame = document.querySelector('iframe.giscus-frame');
+    if (!frame) return;
+    frame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: giscusTheme(theme) } } },
+        'https://giscus.app'
+    );
+}
+
+initGiscus();

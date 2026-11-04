@@ -1036,3 +1036,25 @@ html[data-theme="dark"] .media-stars {
         padding-bottom: calc(40px + env(safe-area-inset-bottom));
     }
 }
+
+/* ============================================================
+   Giscus 评论区（说说板块底部）
+   ============================================================ */
+.giscus-box {
+    margin-top: 18px;
+    padding-top: 2px;
+}
+
+.giscus-box:empty {
+    display: none; /* 未配置 giscus 时整块隐藏，不占空间 */
+}
+
+/* ============================================================
+   键盘可达性：统一的焦点可视样式
+   ============================================================ */
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid #0071e3;
+    outline-offset: 3px;
+    border-radius: 8px;
+}

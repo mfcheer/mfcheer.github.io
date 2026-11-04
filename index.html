@@ -28,7 +28,8 @@
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
-    <link rel="stylesheet" href="styles.css?v=1.2.2">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css?v=1.2.3">
 </head>
 <body>
     <div class="page-bg"></div>
@@ -47,7 +48,7 @@
                         <li><a href="#contact">联系</a></li>
                     </ul>
                 </nav>
-                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题">
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
                     🌙
                 </button>
             </div>
@@ -249,12 +250,13 @@
                         <h2>说说</h2>
                         <span class="moment-count" id="momentCount"></span>
                     </div>
-                    <a class="activity-badge" href="https://github.com/mfcheer/mfcheer.github.io/issues/new" target="_blank" rel="noreferrer">
+                    <a class="activity-badge" href="https://github.com/mfcheer/mfcheer.github.io/issues/new?template=moment.yml" target="_blank" rel="noreferrer">
                         <span>写一条</span>
                         <span>↗</span>
                     </a>
                 </div>
                 <div class="moment-list" id="momentList"></div>
+                <div class="giscus-box" id="giscusBox"></div>
             </section>
 
             <!-- 个人作品 -->
