@@ -372,22 +372,26 @@ async function loadMoments() {
 
 loadMoments();
 
-// 书影音统计行：数 DOM 中各列条目数，显示「最近 N 部电影 · N 本书 · N 款游戏」
-function renderMediaStats() {
+// 书影音统计行：真实累计数来自 data/media-stats.json（维护时从豆瓣主页同步，流程见 README）；
+// 页面上每列只展示 5 条，用 DOM 计数会不准。读取失败则保持隐藏，宁缺毋假。
+async function renderMediaStats() {
     const statsEl = document.getElementById('mediaStats');
     if (!statsEl) return;
-    const cols = document.querySelectorAll('#media .media-col');
-    const parts = [];
-    cols.forEach((col) => {
-        const titleEl = col.querySelector('.media-col-title');
-        const count = col.querySelectorAll('.media-item').length;
-        if (!titleEl || !count) return;
-        const label = titleEl.textContent.replace(/[^\u4e00-\u9fa5A-Za-z]/g, '').trim(); // 去掉 emoji 图标
-        if (label) {
-            parts.push(`${count} ${label}`);
+    try {
+        const res = await fetch('data/media-stats.json', { cache: 'no-cache' });
+        if (!res.ok) return;
+        const stats = await res.json();
+        const parts = [];
+        if (typeof stats.movies === 'number') parts.push(`看过 ${stats.movies} 部电影`);
+        if (typeof stats.books === 'number') parts.push(`读过 ${stats.books} 本书`);
+        if (typeof stats.games === 'number') parts.push(`玩过 ${stats.games} 款游戏`);
+        if (parts.length) {
+            statsEl.textContent = `豆瓣累计 ${parts.join(' · ')}`;
+            statsEl.hidden = false;
         }
-    });
-    statsEl.textContent = parts.length ? `最近 ${parts.join(' · ')}` : '';
+    } catch (e) {
+        // 保持 hidden：不显示不准确的数据
+    }
 }
 
 renderMediaStats();

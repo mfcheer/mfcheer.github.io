@@ -24,6 +24,7 @@ python3 -m http.server 8000
 
 - `data/media.json` —— 结构化数据（电影 / 书 / 游戏各 5 条）
 - `assets/covers/*.jpg` —— 封面图，以豆瓣 subject id 命名
+- `data/media-stats.json` —— **累计总数**（电影 / 书 / 游戏各分类的真实累计量，如「看过 314 部」），页面统计行显示这个数
 - `index.html` 的 `#media` 板块 —— **静态渲染的 HTML 条目**（无前端 fetch，更新数据时必须同步改这里）
 
 ### 数据源（均为匿名公开数据）
@@ -46,5 +47,6 @@ python3 -m http.server 8000
 2. 更新 `data/media.json`；
 3. 下载新条目封面到 `assets/covers/{subject_id}.jpg`（记得带 Referer）；
 4. 同步更新 `index.html` 中 `#media` 板块的静态条目（标题 / 星级 / 封面路径）；
-5. `styles.css` 版本号 +1（缓存刷新）；
-6. 提交并推送到 `main`。
+5. **同步更新 `data/media-stats.json` 的累计总数**：从豆瓣主页 HTML 中抓取（匿名可访问，必须带浏览器 User-Agent）：电影匹配「`314部看过`」、书匹配「`52本读过`」、游戏匹配「`玩过17款`」（注意游戏是「玩过」在前），依次对应 movies / books / games；
+6. `styles.css` 版本号 +1（缓存刷新）；
+7. 提交并推送到 `main`。
