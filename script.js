@@ -117,13 +117,13 @@ async function loadGitHubChart() {
 
 loadGitHubChart();
 
-// 巴萨下一场比赛：ESPN 公开接口（免 Key、CORS 开放、非官方）
-// 成功时在 FCB 胶囊内追加「· 11月22日 23:15 客场 vs 对手」；失败/无数据时静默，胶囊保持纯队名
+// 巴萨近期赛程（ESPN 公开接口，免 Key、CORS 开放、非官方）：在「关于」卡底部渲染近 3 场；
+// 失败/无数据时整块隐藏。队徽用 ESPN CDN（以球队数字 ID 拼接，缩写路径已实测 404）。
 const BARCA_ESPN_ID = '83';
 
-async function loadBarcaNext() {
-    const nextEl = document.getElementById('fcbNext');
-    if (!nextEl) return;
+async function loadBarcaSchedule() {
+    const wrap = document.getElementById('barcaSchedule');
+    if (!wrap) return;
     try {
         const res = await fetch(
             `https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams/${BARCA_ESPN_ID}/schedule?fixture=true`
@@ -131,30 +131,76 @@ async function loadBarcaNext() {
         if (!res.ok) return;
         const data = await res.json();
         const now = Date.now();
-        const next = (Array.isArray(data.events) ? data.events : [])
+        const matches = (Array.isArray(data.events) ? data.events : [])
             .map((e) => {
                 const comp = e.competitions && e.competitions[0];
                 const teams = comp && Array.isArray(comp.competitors) ? comp.competitors : [];
                 const barca = teams.find((t) => t && t.team && t.team.id === BARCA_ESPN_ID);
-                const rival = teams.find((t) => t && t.team && t.team.id !== BARCA_ESPN_ID);
-                if (!barca || !rival) return null;
                 const ts = new Date(e.date).getTime();
-                if (!Number.isFinite(ts) || ts <= now) return null;
-                return { ts, homeAway: barca.homeAway === 'home' ? '主场' : '客场', rival: rival.team.displayName };
+                if (!barca || teams.length < 2 || !Number.isFinite(ts) || ts <= now) return null;
+                return {
+                    ts,
+                    isHome: barca.homeAway === 'home',
+                    // 按足球惯例主队在前
+                    teams: teams.map((t) => ({ id: t.team.id, name: t.team.displayName }))
+                };
             })
             .filter(Boolean)
-            .sort((a, b) => a.ts - b.ts)[0];
-        if (!next) return;
-        const d = new Date(next.ts);
-        const hh = String(d.getHours()).padStart(2, '0');
-        const mm = String(d.getMinutes()).padStart(2, '0');
-        nextEl.textContent = ` · ${d.getMonth() + 1}月${d.getDate()}日 ${hh}:${mm} ${next.homeAway} vs ${next.rival}`;
+            .sort((a, b) => a.ts - b.ts)
+            .slice(0, 3);
+        if (!matches.length) return;
+        matches.forEach((m) => {
+            const d = new Date(m.ts);
+            const row = document.createElement('div');
+            row.className = 'barca-match';
+
+            const dateCol = document.createElement('div');
+            dateCol.className = 'bm-date';
+            const day = document.createElement('span');
+            day.className = 'bm-day';
+            day.textContent = `${d.getMonth() + 1}月${d.getDate()}日`;
+            const sub = document.createElement('span');
+            sub.className = 'bm-sub';
+            const hh = String(d.getHours()).padStart(2, '0');
+            const mm = String(d.getMinutes()).padStart(2, '0');
+            sub.textContent = `周${'日一二三四五六'[d.getDay()]} ${hh}:${mm}`;
+            dateCol.append(day, sub);
+
+            const teamsCol = document.createElement('div');
+            teamsCol.className = 'bm-teams';
+            m.teams.forEach((t, i) => {
+                if (i) {
+                    const vs = document.createElement('span');
+                    vs.className = 'bm-vs';
+                    vs.textContent = 'vs';
+                    teamsCol.append(vs);
+                }
+                const s = document.createElement('span');
+                s.className = 'bm-team' + (t.id === BARCA_ESPN_ID ? ' is-barca' : '');
+                const img = document.createElement('img');
+                img.className = 'bm-logo';
+                img.loading = 'lazy';
+                img.alt = '';
+                img.src = `https://a.espncdn.com/i/teamlogos/soccer/500/${t.id}.png`;
+                img.addEventListener('error', () => img.remove());
+                s.append(img, document.createTextNode(t.name));
+                teamsCol.append(s);
+            });
+
+            const venue = document.createElement('span');
+            venue.className = 'bm-venue' + (m.isHome ? ' is-home' : '');
+            venue.textContent = m.isHome ? '主场' : '客场';
+
+            row.append(dateCol, teamsCol, venue);
+            wrap.append(row);
+        });
+        wrap.hidden = false;
     } catch (e) {
-        // 接口失败或网络异常：保持胶囊原样，不打扰
+        // 接口失败或网络异常：保持隐藏，不打扰
     }
 }
 
-loadBarcaNext();
+loadBarcaSchedule();
 
 // Moments (说说) — GitHub Issues as CMS
 // 发布方式：在本仓库创建 Issue（正文优先，标题兜底），所有 Open 状态的 Issue 均展示（自动排除 PR）

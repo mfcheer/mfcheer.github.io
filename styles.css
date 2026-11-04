@@ -352,11 +352,98 @@ html[data-theme="dark"] .fcb-crest {
     outline: none;
 }
 
-/* 下一场比赛（ESPN 接口注入，弱化显示） */
-.fcb-next {
+/* 巴萨近期赛程（关于卡底部，ESPN 接口注入，失败整块隐藏） */
+.barca-schedule {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.barca-schedule-title {
+    margin: 0 0 2px;
+    font-size: 12px;
+    font-weight: 500;
     color: var(--muted);
-    font-weight: 400;
+}
+
+.barca-match {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.barca-match:last-child {
+    border-bottom: none;
+    padding-bottom: 2px;
+}
+
+.bm-date {
+    flex-shrink: 0;
+    min-width: 68px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.bm-day {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.bm-sub {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.bm-teams {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.bm-team {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text);
     white-space: nowrap;
+}
+
+.bm-team.is-barca {
+    font-weight: 600;
+}
+
+.bm-logo {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.bm-vs {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.bm-venue {
+    flex-shrink: 0;
+    font-size: 10.5px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px 9px;
+}
+
+.bm-venue.is-home {
+    color: var(--accent);
+    border-color: var(--accent);
 }
 
 .meta-item-fcb:focus-visible {
