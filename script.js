@@ -274,7 +274,7 @@ const GISCUS_CATEGORY = 'General';
 const GISCUS_CATEGORY_ID = 'DIC_kwDOQ-YRws4DKVoQ'; // Discussions · General 分类
 
 function giscusTheme(theme) {
-    return theme === 'dark' ? 'dark_dimmed' : 'light';
+    return theme === 'dark' ? 'transparent_dark' : 'light';
 }
 
 function initGiscus() {
