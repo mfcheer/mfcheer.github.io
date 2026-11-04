@@ -352,14 +352,21 @@ html[data-theme="dark"] .fcb-crest {
     outline: none;
 }
 
-/* 巴萨近期赛程（关于卡底部，ESPN 接口注入，失败整块隐藏） */
+/* 巴萨近期赛程（关于卡底部，ESPN 接口注入，失败整块隐藏）
+   布局：外层 grid 定 5 列（日期/主队/vs/客队/主客徽），每行 subgrid 继承同一列模板，
+   主队列取所有行中最宽者 → 各行 vs 自动落在同一竖线上 */
 .barca-schedule {
     margin-top: 16px;
     padding-top: 12px;
     border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 68px minmax(0, max-content) max-content minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 10px;
 }
 
 .barca-schedule-title {
+    grid-column: 1 / -1;
     margin: 0 0 2px;
     font-size: 12px;
     font-weight: 500;
@@ -367,9 +374,10 @@ html[data-theme="dark"] .fcb-crest {
 }
 
 .barca-match {
-    display: flex;
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
     align-items: center;
-    gap: 14px;
     padding: 10px 0;
     border-bottom: 1px solid var(--border);
 }
@@ -380,8 +388,7 @@ html[data-theme="dark"] .fcb-crest {
 }
 
 .bm-date {
-    flex-shrink: 0;
-    min-width: 68px;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -391,29 +398,23 @@ html[data-theme="dark"] .fcb-crest {
     font-size: 13px;
     font-weight: 600;
     color: var(--text);
+    white-space: nowrap;
 }
 
 .bm-sub {
     font-size: 11px;
     color: var(--muted);
-}
-
-.bm-teams {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    white-space: nowrap;
 }
 
 .bm-team {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 6px;
     font-size: 13px;
     color: var(--text);
-    white-space: nowrap;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .bm-team.is-barca {
@@ -427,23 +428,47 @@ html[data-theme="dark"] .fcb-crest {
     flex-shrink: 0;
 }
 
+.bm-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .bm-vs {
     font-size: 11px;
     color: var(--muted);
+    justify-self: center;
 }
 
 .bm-venue {
-    flex-shrink: 0;
     font-size: 10.5px;
     color: var(--muted);
     border: 1px solid var(--border);
     border-radius: 999px;
     padding: 2px 9px;
+    white-space: nowrap;
 }
 
 .bm-venue.is-home {
     color: var(--accent);
     border-color: var(--accent);
+}
+
+/* 不支持 subgrid 的老浏览器：退化为每行 flex，vs 不对齐但可正常显示 */
+@supports not (grid-template-columns: subgrid) {
+    .barca-schedule {
+        display: block;
+    }
+
+    .barca-match {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bm-vs {
+        margin: 0 2px;
+    }
 }
 
 .meta-item-fcb:focus-visible {
@@ -1173,6 +1198,21 @@ html[data-theme="dark"] .media-stars {
 
     .card-contact {
         padding: 14px 16px;
+    }
+
+    /* 赛程区：窄屏压缩列宽与字号，超长队名省略号 */
+    .barca-schedule {
+        grid-template-columns: 56px minmax(0, max-content) max-content minmax(0, 1fr) auto;
+        column-gap: 8px;
+    }
+
+    .bm-team {
+        font-size: 12.5px;
+    }
+
+    .bm-logo {
+        width: 18px;
+        height: 18px;
     }
 
     .profile-header {

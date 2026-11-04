@@ -166,15 +166,7 @@ async function loadBarcaSchedule() {
             sub.textContent = `周${'日一二三四五六'[d.getDay()]} ${hh}:${mm}`;
             dateCol.append(day, sub);
 
-            const teamsCol = document.createElement('div');
-            teamsCol.className = 'bm-teams';
-            m.teams.forEach((t, i) => {
-                if (i) {
-                    const vs = document.createElement('span');
-                    vs.className = 'bm-vs';
-                    vs.textContent = 'vs';
-                    teamsCol.append(vs);
-                }
+            const makeTeam = (t) => {
                 const s = document.createElement('span');
                 s.className = 'bm-team' + (t.id === BARCA_ESPN_ID ? ' is-barca' : '');
                 const img = document.createElement('img');
@@ -183,15 +175,25 @@ async function loadBarcaSchedule() {
                 img.alt = '';
                 img.src = `https://a.espncdn.com/i/teamlogos/soccer/500/${t.id}.png`;
                 img.addEventListener('error', () => img.remove());
-                s.append(img, document.createTextNode(t.name));
-                teamsCol.append(s);
-            });
+                const name = document.createElement('span');
+                name.className = 'bm-name';
+                name.textContent = t.name;
+                s.append(img, name);
+                return s;
+            };
+            const makeVs = () => {
+                const vs = document.createElement('span');
+                vs.className = 'bm-vs';
+                vs.textContent = 'vs';
+                return vs;
+            };
 
             const venue = document.createElement('span');
             venue.className = 'bm-venue' + (m.isHome ? ' is-home' : '');
             venue.textContent = m.isHome ? '主场' : '客场';
 
-            row.append(dateCol, teamsCol, venue);
+            // 每行 5 个 cell：日期 | 主队 | vs | 客队 | 主客徽（配合 CSS subgrid 实现 vs 竖向对齐）
+            row.append(dateCol, makeTeam(m.teams[0]), makeVs(), makeTeam(m.teams[1]), venue);
             wrap.append(row);
         });
         wrap.hidden = false;
