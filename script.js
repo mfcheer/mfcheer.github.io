@@ -248,7 +248,37 @@ function renderMomentsState(state = 'ok') {
 
         const text = document.createElement('p');
         text.className = 'moment-text';
-        text.textContent = m.text; // 仅用 textContent，防 XSS
+        // 正文中的 URL 自动转为可点击链接；仅用 createElement/textContent，防 XSS
+        const URL_RE = /(https?:\/\/[^\s]+)/g;
+        const TRAILING_PUNCT_RE = /[.,;:!?)\]}'"\u3001\u3002\uFF0C\uFF1F\uFF01\uFF1B\uFF1A\uFF09\u3011\u300B\u201D\u2019]+$/;
+        let cursor = 0;
+        let match;
+        while ((match = URL_RE.exec(m.text)) !== null) {
+            let url = match[0];
+            const punctMatch = url.match(TRAILING_PUNCT_RE);
+            const punct = punctMatch ? punctMatch[0] : '';
+            if (punct) {
+                url = url.slice(0, -punct.length);
+            }
+            if (match.index > cursor) {
+                text.append(document.createTextNode(m.text.slice(cursor, match.index)));
+            }
+            const link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            link.rel = 'noreferrer';
+            link.textContent = url;
+            text.append(link);
+            if (punct) {
+                text.append(document.createTextNode(punct));
+            }
+            cursor = match.index + match[0].length;
+        }
+        if (cursor === 0) {
+            text.textContent = m.text; // 无 URL，直接整段赋值
+        } else if (cursor < m.text.length) {
+            text.append(document.createTextNode(m.text.slice(cursor)));
+        }
         item.append(head, text);
         listEl.append(item);
     });
@@ -341,6 +371,26 @@ async function loadMoments() {
 }
 
 loadMoments();
+
+// 书影音统计行：数 DOM 中各列条目数，显示「最近 N 部电影 · N 本书 · N 款游戏」
+function renderMediaStats() {
+    const statsEl = document.getElementById('mediaStats');
+    if (!statsEl) return;
+    const cols = document.querySelectorAll('#media .media-col');
+    const parts = [];
+    cols.forEach((col) => {
+        const titleEl = col.querySelector('.media-col-title');
+        const count = col.querySelectorAll('.media-item').length;
+        if (!titleEl || !count) return;
+        const label = titleEl.textContent.replace(/[^\u4e00-\u9fa5A-Za-z]/g, '').trim(); // 去掉 emoji 图标
+        if (label) {
+            parts.push(`${count} ${label}`);
+        }
+    });
+    statsEl.textContent = parts.length ? `最近 ${parts.join(' · ')}` : '';
+}
+
+renderMediaStats();
 
 // Giscus 评论区（基于 GitHub Discussions；主题跟随站点深浅色）
 // 前置条件：仓库需开启 Discussions 并安装 giscus App（github.com/apps/giscus）
