@@ -427,6 +427,57 @@ html[data-theme="dark"] .fcb-tooltip {
     transform: translateX(-50%) translateY(0);
 }
 
+/* ============================================================
+   Spylent · 网易云歌单悬浮（复用 fcb-tooltip 气泡，改为可点击链接）
+   ============================================================ */
+.meta-item-spylent {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.meta-item-spylent:focus {
+    outline: none;
+}
+
+.meta-item-spylent:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.meta-item-spylent:hover,
+.meta-item-spylent:focus {
+    border-color: rgba(0, 113, 227, 0.35);
+    background: rgba(0, 113, 227, 0.05);
+}
+
+.meta-item-spylent .fcb-tooltip {
+    font-style: normal; /* 气泡不用巴萨的斜体 */
+}
+
+.spylent-tip::before {
+    background: linear-gradient(90deg, #C20C0C 0%, #E62E2E 100%); /* 网易云红渐变顶条 */
+}
+
+.spylent-tip {
+    text-decoration: none;
+    pointer-events: none; /* 隐藏时不可点，显示后放开 */
+}
+
+.meta-item-spylent:hover .spylent-tip,
+.meta-item-spylent:focus .spylent-tip,
+.meta-item-spylent:focus-visible .spylent-tip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+.spylent-tip:hover {
+    color: var(--accent);
+}
+
 .pulse-dot {
     width: 6px;
     height: 6px;
