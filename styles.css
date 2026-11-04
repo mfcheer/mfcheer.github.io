@@ -353,11 +353,12 @@ html[data-theme="dark"] .fcb-crest {
 }
 
 /* 巴萨赛程卡（独立 section，ESPN 接口注入，失败整块隐藏）
-   布局：外层 grid 定 5 列（日期/主队/vs/客队/主客徽），每行 subgrid 继承同一列模板，
-   主队列取所有行中最宽者 → 各行 vs 自动落在同一竖线上 */
+   布局：外层 grid 定 5 列（日期/主队/vs/客队/主客徽），每行 subgrid 继承同一列模板。
+   主客两队等宽 1fr、日期与徽章轨道等宽（68px）→ vs 精确落在每行水平中心，
+   队名+徽章组合贴向 vs，短队名行的空隙对称分配到外侧 */
 .barca-schedule {
     display: grid;
-    grid-template-columns: 68px minmax(0, max-content) max-content minmax(0, 1fr) auto;
+    grid-template-columns: 68px minmax(0, 1fr) max-content minmax(0, 1fr) 68px;
     align-items: center;
     column-gap: 10px;
 }
@@ -449,6 +450,7 @@ html[data-theme="dark"] .fcb-crest {
     border-radius: 999px;
     padding: 2px 9px;
     white-space: nowrap;
+    justify-self: end;
 }
 
 .bm-venue.is-home {
@@ -1204,7 +1206,7 @@ html[data-theme="dark"] .media-stars {
 
     /* 赛程区：窄屏压缩列宽与字号，超长队名省略号 */
     .barca-schedule {
-        grid-template-columns: 56px minmax(0, max-content) max-content minmax(0, 1fr) auto;
+        grid-template-columns: 56px minmax(0, 1fr) max-content minmax(0, 1fr) 56px;
         column-gap: 8px;
     }
 
