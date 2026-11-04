@@ -139,21 +139,75 @@ function formatMomentDate(isoString) {
     }
 }
 
-function renderMoments(list) {
+let momentsAll = []; // 全量说说数据
+let momentsFilter = null; // 当前筛选的标签；null = 显示全部
+
+function renderMomentsState(state = 'ok') {
     const listEl = document.getElementById('momentList');
     const countEl = document.getElementById('momentCount');
     if (!listEl) return;
     listEl.innerHTML = '';
+
+    const list = momentsFilter
+        ? momentsAll.filter((m) => (m.labels || []).includes(momentsFilter))
+        : momentsAll;
+
     if (countEl) {
-        countEl.textContent = `共 ${list.length} 条`;
+        countEl.textContent = momentsFilter
+            ? `#${momentsFilter} · ${list.length} 条`
+            : `共 ${momentsAll.length} 条`;
     }
-    if (!list.length) {
+
+    // 加载失败（限流/网络异常）且无缓存可用：给出明确失败态，而非误显示「还没有说说」
+    if (state === 'error') {
+        const err = document.createElement('p');
+        err.className = 'moment-empty';
+        err.textContent = '说说加载失败了（可能是 GitHub 接口限流）';
+        const retry = document.createElement('button');
+        retry.type = 'button';
+        retry.className = 'moment-retry';
+        retry.textContent = '重新加载';
+        retry.addEventListener('click', () => {
+            retry.disabled = true;
+            retry.textContent = '加载中…';
+            loadMoments();
+        });
+        listEl.append(err, retry);
+        return;
+    }
+
+    if (!momentsAll.length) {
         const empty = document.createElement('p');
         empty.className = 'moment-empty';
         empty.textContent = '还没有说说，敬请期待';
         listEl.append(empty);
         return;
     }
+
+    // 筛选中：顶部显示筛选条，可取消
+    if (momentsFilter) {
+        const bar = document.createElement('div');
+        bar.className = 'moment-filterbar';
+        const chip = document.createElement('span');
+        chip.textContent = `只看 #${momentsFilter}`;
+        const clear = document.createElement('button');
+        clear.type = 'button';
+        clear.className = 'moment-filter-clear';
+        clear.textContent = '取消筛选 ✕';
+        clear.addEventListener('click', () => {
+            momentsFilter = null;
+            renderMomentsState();
+        });
+        bar.append(chip, clear);
+        listEl.append(bar);
+    } else if (!list.length) {
+        const empty = document.createElement('p');
+        empty.className = 'moment-empty';
+        empty.textContent = '该标签下暂无说说';
+        listEl.append(empty);
+        return;
+    }
+
     list.forEach((m) => {
         const item = document.createElement('div');
         item.className = 'moment-item';
@@ -172,6 +226,18 @@ function renderMoments(list) {
             name.textContent = m.name; // 仅用 textContent，防 XSS
             head.append(avatar, name);
         }
+        // 标签胶囊：点击进入筛选（发布模板自带的 moment 标签已在数据层排除）
+        (m.labels || []).forEach((label) => {
+            const tag = document.createElement('button');
+            tag.type = 'button';
+            tag.className = 'moment-tag';
+            tag.textContent = `#${label}`;
+            tag.addEventListener('click', () => {
+                momentsFilter = label;
+                renderMomentsState();
+            });
+            head.append(tag);
+        });
         const date = document.createElement('span');
         date.className = 'moment-date';
         date.textContent = m.date;
@@ -221,11 +287,13 @@ async function loadMoments() {
     const isFresh = cached && Date.now() - lastTime < MOMENTS_TTL;
 
     if (isFresh) {
-        renderMoments(cached);
+        momentsAll = cached;
+        renderMomentsState();
         return;
     }
     if (cached) {
-        renderMoments(cached); // 先渲染旧数据，请求成功后再更新
+        momentsAll = cached;
+        renderMomentsState(); // 先渲染旧数据，请求成功后再更新
     }
 
     try {
@@ -248,19 +316,24 @@ async function loadMoments() {
                     date: formatMomentDate(it.created_at),
                     text: ((it.body || '').trim() || (it.title || '')).trim(),
                     name: it.user && it.user.login,
-                    avatar: it.user && it.user.avatar_url
+                    avatar: it.user && it.user.avatar_url,
+                    // 标签用于前端筛选；排除发布模板自带的系统标签 moment
+                    labels: (Array.isArray(it.labels) ? it.labels : [])
+                        .map((l) => l && l.name)
+                        .filter((n) => typeof n === 'string' && n && n !== 'moment')
                 }))
                 .filter((m) => m.text);
-            renderMoments(list);
+            momentsAll = list;
+            renderMomentsState();
             writeMomentsCache(list, res.headers.get('ETag') || undefined);
             return;
         }
-        // 403 限流或其他错误：保留已渲染的旧缓存
+        // 403 限流或其他错误：保留已渲染的旧缓存；无缓存则显示失败态
     } catch (e) {
-        // 网络异常：保留已渲染的旧缓存
+        // 网络异常：保留已渲染的旧缓存；无缓存则显示失败态
     }
     if (!cached) {
-        renderMoments([]);
+        renderMomentsState('error');
     }
 }
 

@@ -900,6 +900,82 @@ html[data-theme="dark"] .media-stars {
     padding: 6px 2px;
 }
 
+.moment-tag {
+    font-size: 11px;
+    line-height: 1;
+    padding: 4px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface-subtle);
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.moment-tag:hover {
+    color: var(--accent);
+    border-color: rgba(0, 113, 227, 0.4);
+    background: var(--accent-bg);
+}
+
+.moment-filterbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 2px 2px 8px;
+}
+
+.moment-filter-clear {
+    font-size: 12px;
+    color: var(--accent);
+    background: none;
+    border: none;
+    padding: 2px 4px;
+    cursor: pointer;
+}
+
+.moment-filter-clear:hover {
+    text-decoration: underline;
+}
+
+.moment-retry {
+    font-size: 13px;
+    padding: 7px 16px;
+    margin-top: 4px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface-subtle);
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.moment-retry:hover:not(:disabled) {
+    border-color: rgba(0, 113, 227, 0.4);
+    background: var(--accent-bg);
+    color: var(--accent);
+}
+
+.moment-retry:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.moment-all {
+    display: block;
+    text-align: right;
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 10px 2px 0;
+    transition: color 0.18s ease;
+}
+
+.moment-all:hover {
+    color: var(--accent);
+}
+
 /* ============================================================
    FOOTER
    ============================================================ */
