@@ -57,7 +57,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css?v=1.2.12">
+    <link rel="stylesheet" href="styles.css?v=1.2.13">
 </head>
 <body>
     <div class="page-bg"></div>
@@ -319,7 +319,8 @@
                         <span>↗</span>
                     </a>
                 </div>
-                <div class="giscus-box" id="giscusBox"></div>
+                <button class="giscus-toggle" id="giscusToggle" type="button" aria-expanded="false" aria-controls="giscusBox">💬 <span class="giscus-toggle-text">展开留言区</span></button>
+                <div class="giscus-box" id="giscusBox" hidden></div>
             </section>
 
             <!-- 个人作品 -->
@@ -424,6 +425,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=1.2.8"></script>
+    <script src="script.js?v=1.2.9"></script>
 </body>
 </html>

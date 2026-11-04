@@ -533,4 +533,21 @@ function syncGiscusTheme(theme) {
     );
 }
 
-initGiscus();
+// 默认折叠留言区：点击展开时才首次挂载 giscus（省篇幅 + 首屏少一个 iframe），可再点收起
+(function () {
+    const toggle = document.getElementById('giscusToggle');
+    const box = document.getElementById('giscusBox');
+    if (!toggle || !box) return;
+    let loaded = false;
+    toggle.addEventListener('click', () => {
+        const expand = box.hidden;
+        if (expand && !loaded) {
+            initGiscus();
+            loaded = true;
+        }
+        box.hidden = !expand;
+        toggle.setAttribute('aria-expanded', String(expand));
+        const textEl = toggle.querySelector('.giscus-toggle-text');
+        if (textEl) textEl.textContent = expand ? '收起留言区' : '展开留言区';
+    });
+})();
