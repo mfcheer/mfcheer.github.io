@@ -94,22 +94,9 @@ updateBeijingTime();
 setInterval(updateBeijingTime, 1000);
 
 // Load GitHub Chart and ensure responsive vector scaling without dragging/overflow
-// 移动端窄屏只显示最近约半年（右侧 26 列），格子更大、图表更高更易读；桌面端保持全年
-const CHART_FULL_VIEWBOX = '0 0 663 104';
-const CHART_MOBILE_VIEWBOX = '351 0 312 104'; // 53 列中右侧 26 列（每列间距 12）
-const chartMobileMQ = window.matchMedia('(max-width: 768px)');
-
-function applyChartViewBox(svg) {
-    if (!svg) return;
-    if (chartMobileMQ.matches) {
-        svg.setAttribute('viewBox', CHART_MOBILE_VIEWBOX);
-        svg.setAttribute('width', '312'); // 同步 intrinsic 宽度，否则浏览器仍按 663/104 比例渲染，高度不变
-    } else {
-        svg.setAttribute('viewBox', CHART_FULL_VIEWBOX);
-        svg.setAttribute('width', '663');
-    }
-}
-
+// 注意：移动端「只显示最近半年」的裁剪由 styles.css 的 @media (max-width: 768px) 实现，
+// 同时作用于 fetch 成功注入的 svg 与降级显示的 img（ghchart.rshah.org 在部分网络不可达，
+// 依赖 JS 裁剪会在降级场景失效）。此处仅保留 viewBox 补丁保证缩放。
 async function loadGitHubChart() {
     const container = document.getElementById('ghChart');
     if (!container) return;
@@ -119,19 +106,14 @@ async function loadGitHubChart() {
         let svgText = await res.text();
         if (svgText.includes('<svg')) {
             if (!svgText.includes('viewBox')) {
-                svgText = svgText.replace('<svg ', `<svg viewBox="${CHART_FULL_VIEWBOX}" preserveAspectRatio="xMinYMid meet" `);
+                svgText = svgText.replace('<svg ', '<svg viewBox="0 0 663 104" preserveAspectRatio="xMinYMid meet" ');
             }
             container.innerHTML = svgText;
-            applyChartViewBox(container.querySelector('svg'));
         }
     } catch (e) {
         // Fallback: the static img remains displayed safely
     }
 }
-
-chartMobileMQ.addEventListener('change', () => {
-    applyChartViewBox(document.querySelector('#ghChart svg'));
-});
 
 loadGitHubChart();
 

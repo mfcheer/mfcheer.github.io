@@ -579,14 +579,18 @@ html[data-theme="dark"] .fcb-tooltip {
     font-weight: 600;
     letter-spacing: -0.015em;
     color: var(--text);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+}
+
+.card-contact {
+    padding: 22px 28px;
 }
 
 .contact-icons {
     display: flex;
     justify-content: center;
     gap: 16px;
-    margin-bottom: 16px;
+    margin-bottom: 0;
 }
 
 .contact-icon {
@@ -1040,6 +1044,10 @@ html[data-theme="dark"] .media-stars {
         border-radius: 18px;
     }
 
+    .card-contact {
+        padding: 14px 16px;
+    }
+
     .profile-header {
         gap: 12px;
         margin-bottom: 14px;
@@ -1112,6 +1120,17 @@ html[data-theme="dark"] .media-stars {
     .gh-chart-container {
         padding: 10px 12px;
         border-radius: 12px;
+    }
+
+    /* 移动端热力图只显示最近约半年（右侧 26/53 列）：
+       放大整体宽度 + 左移裁掉左侧，格子更大、图表更高；
+       同时覆盖 fetch 成功注入的 svg 与降级显示的 img */
+    .gh-chart-container svg,
+    .gh-chart-container .gh-chart-img {
+        width: 212.5%;
+        max-width: none;
+        height: auto;
+        margin-left: -112.5%;
     }
 
     .contact-icons {
