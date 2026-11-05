@@ -742,7 +742,8 @@ html[data-theme="dark"] .fcb-tooltip {
     transform: translateY(-2px);
 }
 
-/* 小红书名片弹层：遮罩 + 居中卡片，点遮罩/×/Esc 关闭 */
+/* 小红书名片弹层：遮罩 + 居中卡片，点遮罩/×/Esc 关闭
+   [hidden] 必须显式声明，否则下面的 display:flex 会覆盖 hidden 的 display:none */
 .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -755,6 +756,10 @@ html[data-theme="dark"] .fcb-tooltip {
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     animation: modalFade 0.18s ease;
+}
+
+.modal-backdrop[hidden] {
+    display: none;
 }
 
 .modal-card {
