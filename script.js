@@ -551,3 +551,28 @@ function syncGiscusTheme(theme) {
         if (textEl) textEl.textContent = expand ? '收起留言区' : '展开留言区';
     });
 })();
+
+// ============================================================
+// PWA: Service Worker 注册与生命周期管理
+// ============================================================
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker
+            .register('./sw.js')
+            .then((reg) => {
+                reg.onupdatefound = () => {
+                    const installingWorker = reg.installing;
+                    if (installingWorker) {
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                console.log('[PWA] 网站已有新版本并在后台缓存完毕');
+                            }
+                        };
+                    }
+                };
+            })
+            .catch((err) => {
+                console.warn('[PWA] ServiceWorker 注册失败:', err);
+            });
+    });
+}
