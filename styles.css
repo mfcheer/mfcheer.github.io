@@ -145,9 +145,16 @@ body {
     color: var(--muted);
     font-size: 13.5px;
     font-weight: 500;
-    /* 中文字形在行盒中天然偏上：收紧行高并轻微下移，保证胶囊条内视觉垂直居中 */
+    /* 垂直居中用平台无关方案：a 为行内元素时，行盒高度由父级 li 的
+       16px × 1.6 大字 strut 决定，各平台默认字体（iOS 苹方 / 安卓 MiSans /
+       桌面 Noto）基线度量不同，会把 13.5px 中文字形整体抬高或压低——
+       手机偏下、桌面偏上即来源于此，line-height 收在行内 a 上反而被 strut 遮蔽。
+       块级化 + line-height:1 后行盒只由链接自身字号决定，与平台度量解耦；
+       不做方向性 padding 补偿（此前 1.5px 下移对手机是反向作用，已移除），
+       上下 6px padding 用于维持触控高度 */
+    display: block;
     line-height: 1;
-    padding-top: 1.5px;
+    padding: 6px 0;
     transition: color 0.18s ease;
 }
 
