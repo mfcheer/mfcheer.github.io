@@ -50,3 +50,13 @@ python3 -m http.server 8000
 5. **同步更新 `data/media-stats.json` 的累计总数**：从豆瓣主页 HTML 中抓取（匿名可访问，必须带浏览器 User-Agent）：电影匹配「`314部看过`」、书匹配「`52本读过`」、游戏匹配「`玩过17款`」（注意游戏是「玩过」在前），依次对应 movies / books / games；
 6. `styles.css` 版本号 +1（缓存刷新）；
 7. 提交并推送到 `main`。
+
+## ⚠️ 缓存更新规则（AI 智能体必读）
+
+本站是**纯静态直出，没有构建/编译步骤**——`git push` 即部署。但手机端（PWA）有一个 Service Worker（`sw.js`）缓存层，更新 CSS/JS 时必须三处同步，否则手机用户会拿到新旧错配的页面（历史事故：弹层加载即显示且无法关闭）：
+
+1. **改了 `styles.css` / `script.js`** → 同步 bump `index.html` 里对应引用的 `?v=` 版本号；
+2. **同步更新 `sw.js`**：`CACHE_VERSION` 递增 + `PRECACHE_ASSETS` 列表里的版本号改成最新；
+3. 不要给 `staleWhileRevalidate` 的 `cache.match` 加回 `ignoreSearch: true`——版本参数 `?v=` 必须参与匹配，否则 query 更新对 SW 缓存无效。
+
+推送后用户端生效需**刷新两次**（第一次触发 SW 更新，第二次拿到新资源）。

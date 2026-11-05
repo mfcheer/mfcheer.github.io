@@ -8,7 +8,7 @@
  * 4. 实时交互（Giscus 留言系统）：Network-Only，不干扰正常使用。
  */
 
-const CACHE_VERSION = 'v1.3.0';
+const CACHE_VERSION = 'v1.3.3';
 const STATIC_CACHE = `mfcheer-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `mfcheer-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `mfcheer-images-${CACHE_VERSION}`;
@@ -16,8 +16,8 @@ const IMAGE_CACHE = `mfcheer-images-${CACHE_VERSION}`;
 const PRECACHE_ASSETS = [
     './',
     './index.html',
-    './styles.css?v=1.2.14',
-    './script.js?v=1.3.0',
+    './styles.css?v=1.3.2',
+    './script.js?v=1.3.1',
     './manifest.json',
     './favicon.ico',
     './favicon-32x32.png',
@@ -173,10 +173,14 @@ async function networkFirstWithTimeout(request, cacheName, timeoutMs = 3500) {
 
 /**
  * Stale-While-Revalidate 策略（缓存优先，后台同步更新）
+ * 注意：match 不使用 ignoreSearch——URL 里的 ?v= 版本参数参与匹配，
+ * 文件更新 bump query 后旧缓存自然失配，浏览器转而走网络拿新版。
+ * （此前 ignoreSearch:true 导致版本参数被忽略、旧 CSS/JS 永不过期，
+ *  与网络优先的 HTML 组合成新旧错配，曾造成弹层加载即显示且无法关闭）
  */
 async function staleWhileRevalidate(request, cacheName) {
     const cache = await caches.open(cacheName);
-    const cachedResponse = await cache.match(request, { ignoreSearch: true });
+    const cachedResponse = await cache.match(request);
 
     const fetchPromise = fetch(request)
         .then((networkResponse) => {
