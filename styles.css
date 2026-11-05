@@ -145,6 +145,9 @@ body {
     color: var(--muted);
     font-size: 13.5px;
     font-weight: 500;
+    /* 中文字形在行盒中天然偏上：收紧行高并轻微下移，保证胶囊条内视觉垂直居中 */
+    line-height: 1;
+    padding-top: 1.5px;
     transition: color 0.18s ease;
 }
 
