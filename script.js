@@ -117,6 +117,30 @@ async function loadGitHubChart() {
 
 loadGitHubChart();
 
+// 小红书名片弹层：点图标打开，点遮罩/×/Esc 关闭
+(function () {
+    const btn = document.getElementById('xhsBtn');
+    const modal = document.getElementById('xhsModal');
+    if (!btn || !modal) return;
+    const closeBtn = document.getElementById('xhsClose');
+    const open = () => {
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+    };
+    btn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) close();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) close();
+    });
+})();
+
 // 巴萨近期赛程（ESPN 公开接口，免 Key、CORS 开放、非官方）：在「关于」卡底部渲染近 3 场；
 // 失败/无数据时整块隐藏。队徽用 ESPN CDN（以球队数字 ID 拼接，缩写路径已实测 404）。
 const BARCA_ESPN_ID = '83';
