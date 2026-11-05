@@ -3,66 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>mfcheer · 后端工程师个人主页</title>
-    <meta name="description" content="mfcheer 的个人主页 —— 后端工程师，专注后端架构、基础组件、任务处理与广告业务，关注搜索推荐、数据存储与检索、机器学习等方向。这里记录我的书影音动态与说说，欢迎交流。">
+    <title>mfcheer · Backend Engineer</title>
+    <meta name="description" content="mfcheer 个人主页 · Backend Engineer · 写代码，做系统，偶尔做做独立工具">
+    <meta name="theme-color" content="#0b1220">
     <link rel="canonical" href="https://mfcheer.github.io/">
-
-    <!-- 结构化数据：给搜索引擎与 AI 检索的语义小抄（页面上不可见） -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "mfcheer",
-        "jobTitle": "Backend Engineer",
-        "description": "后端工程师，专注后端架构、基础组件、任务处理与广告业务",
-        "url": "https://mfcheer.github.io/",
-        "image": "https://mfcheer.github.io/avatar.jpg",
-        "sameAs": [
-            "https://github.com/mfcheer",
-            "https://weibo.com/u/3935133152",
-            "https://www.douban.com/people/mfcheer/"
-        ],
-        "knowsAbout": [
-            "搜索推荐",
-            "广告业务",
-            "数据存储与检索",
-            "机器学习",
-            "数据分析",
-            "任务处理",
-            "数据流"
-        ]
-    }
-    </script>
-
-    <!-- Favicon 图标 -->
-    <link rel="icon" href="favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
-    <!-- Open Graph / 社交分享卡片 -->
+    <!-- Open Graph / 分享卡片 -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="mfcheer">
     <meta property="og:title" content="mfcheer · Backend Engineer">
-    <meta property="og:description" content="关注后端架构、基础组件与实用软件 · FC Barcelona">
-    <meta property="og:image" content="https://mfcheer.github.io/avatar.jpg">
-    <meta property="og:url" content="https://mfcheer.github.io">
-
-    <!-- Twitter / X 社交卡片 -->
-    <meta name="twitter:card" content="summary">
+    <meta property="og:description" content="写代码，做系统，偶尔做做独立工具">
+    <meta property="og:url" content="https://mfcheer.github.io/">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="zh_CN">
+    <!-- Twitter/X 大图卡片 -->
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="mfcheer · Backend Engineer">
-    <meta name="twitter:description" content="关注后端架构、基础组件与实用软件 · FC Barcelona">
-    <meta name="twitter:image" content="https://mfcheer.github.io/avatar.jpg">
-
-    <!-- 移动端沉浸式状态栏颜色 -->
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
-
-    <!-- iOS / PWA 独立窗口支持 -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="mfcheer">
-
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css?v=1.3.2">
+    <meta name="twitter:description" content="写代码，做系统，偶尔做做独立工具">
+    <meta name="twitter:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <link rel="stylesheet" href="styles.css?v=1.1.2">
 </head>
 <body>
     <div class="page-bg"></div>
@@ -74,15 +34,12 @@
                 <nav>
                     <ul class="nav-links">
                         <li><a href="#about">关于</a></li>
-                        <li><a href="#media">书影音</a></li>
-                        <li><a href="#moments">说说</a></li>
-                        <li><a href="#guestbook">留言</a></li>
-                        <li><a href="#projects">作品</a></li>
                         <li><a href="#activity">动态</a></li>
                         <li><a href="#contact">联系</a></li>
+                        <li><a href="#moments">说说</a></li>
                     </ul>
                 </nav>
-                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题">
                     🌙
                 </button>
             </div>
@@ -92,7 +49,7 @@
             <!-- 个人简介卡片 -->
             <section class="glass card-hero" id="about">
                 <div class="profile-header">
-                    <img src="avatar.jpg?v=1.0.9" alt="mfcheer" class="avatar-img">
+                    <img src="avatar.png?v=1.0.8" alt="mfcheer" class="avatar-img">
                     <div class="profile-title">
                         <h1>mfcheer</h1>
                         <p class="role-text">Backend Engineer / Developer</p>
@@ -106,49 +63,6 @@
                     <p class="text-secondary">单曲循环 Spylent，目前最喜欢的歌手 🎧</p>
                 </div>
 
-                <div class="skill-row" aria-label="技术方向">
-                    <span class="skill-tag">搜索推荐</span>
-                    <span class="skill-tag">广告业务</span>
-                    <span class="skill-tag">数据存储与检索</span>
-                    <span class="skill-tag">机器学习</span>
-                    <span class="skill-tag">数据分析</span>
-                    <span class="skill-tag">任务处理</span>
-                    <span class="skill-tag">数据流</span>
-                </div>
-
-                <div class="career-label">曾就职于</div>
-                <div class="career-row" aria-label="工作经历">
-                    <span class="career-badge">
-                        <svg viewBox="0 0 48 48" aria-hidden="true">
-                            <path d="M9.5 5.5h29c2.216 0 4 1.784 4 4v29c0 2.216-1.784 4-4 4h-29c-2.216 0-4-1.784-4-4v-29c0-2.216 1.784-4 4-4" fill="#FFD900"/>
-                            <g fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M29.05 23.86c-2.87 0-5.217 2.465-5.217 5.479c0 3.013 2.348 5.479 5.217 5.479h3.392c2.87 0 5.218-2.466 5.218-5.48c0-3.013-2.348-5.479-5.218-5.479"/>
-                                <path d="M32.703 23.86c2.87 0 5.218-2.467 5.218-5.48s-2.348-5.48-5.218-5.48H29.31c-2.87 0-5.218 2.466-5.218 5.48c0 3.013 2.348 5.48 5.218 5.48m-.26 0h3.653"/>
-                                <path d="M10.287 31.335c1.25 1.1 2.292 1.54 5.001 1.54h.417c2.5 0 4.585-2.2 4.585-4.838s-2.084-4.838-4.585-4.838H10.08v-7.696h10.21"/>
-                            </g>
-                        </svg>
-                        <span>58同城</span>
-                    </span>
-                    <span class="career-badge">
-                        <svg viewBox="0 0 24 24" fill="currentColor" class="ico-bytedance" aria-hidden="true">
-                            <path d="M19.8772 1.4685L24 2.5326v18.9426l-4.1228 1.0563V1.4685zm-13.3481 9.428l4.115 1.0641v8.9786l-4.115 1.0642v-11.107zM0 2.572l4.115 1.0642v16.7354L0 21.428V2.572zm17.4553 5.6205v11.107l-4.1228-1.0642V9.2568l4.1228-1.0642z"/>
-                        </svg>
-                        <span>字节跳动</span>
-                    </span>
-                    <span class="career-badge">
-                        <svg viewBox="0 0 24 24" fill="#FFC300" aria-hidden="true">
-                            <path d="M6.923 0c-2.408 0-3.28.25-4.16.721A4.906 4.907 0 0 0 .722 2.763C.25 3.643 0 4.516 0 6.923v10.154c0 2.407.25 3.28.72 4.16a4.905 4.906 0 0 0 2.042 2.042c.88.47 1.752.721 4.16.721h10.156c2.407 0 3.28-.25 4.16-.721a4.906 4.907 0 0 0 2.04-2.042c.471-.88.722-1.753.722-4.16V6.923c0-2.407-.25-3.28-.722-4.16A4.906 4.907 0 0 0 21.238.72C20.357.251 19.484 0 17.077 0ZM4.17 7.51h1.084c.04.24.07.488.11.737h3.47c.05-.25.08-.497.1-.736h1.105a9.849 9.85 0 0 1-.09.736h1.562v.866H7.62v.696h3.642v.855h-3.64v.667h3.64v.854h-3.64v.816h3.89v.865H7.88c.775.935 2.218 1.532 3.78 1.651l-.538.936c-1.442-.17-3.103-.846-4.028-2.04-.856 1.194-2.487 1.92-4.525 2.07l.318-1.005c1.382-.02 2.814-.736 3.431-1.612h-3.62v-.865h3.86v-.816h-3.64v-.854h3.64v-.667h-3.64v-.855h3.64v-.697H2.7v-.866h1.56zm8.603.182h7.976c.358 0 .567.198.567.547v8.146H13.33c-.358 0-.557-.199-.557-.547zm1.044.885V15.5h6.455V8.577Zm3.999.476h1.024v.756h.975v.835h-.975V13c0 .806-.1 1.402-.318 2.02h-1.113c.338-.717.408-1.224.408-1.99v-2.387h-.935c-.14 1.541-.736 3.451-1.363 4.376h-1.134c.607-.855 1.303-2.526 1.472-4.376h-1.512v-.835h3.472z"/>
-                        </svg>
-                        <span>美团</span>
-                    </span>
-                    <span class="career-badge">
-                        <svg viewBox="0 0 24 24" fill="#2932E1" aria-hidden="true">
-                            <path d="M9.154 0C7.71 0 6.54 1.658 6.54 3.707c0 2.051 1.171 3.71 2.615 3.71 1.446 0 2.614-1.659 2.614-3.71C11.768 1.658 10.6 0 9.154 0zm7.025.594C14.86.58 13.347 2.589 13.2 3.927c-.187 1.745.25 3.487 2.179 3.735 1.933.25 3.175-1.806 3.422-3.364.252-1.555-.995-3.364-2.362-3.674a1.218 1.218 0 0 0-.261-.03zM3.582 5.535a2.811 2.811 0 0 0-.156.008c-2.118.19-2.428 3.24-2.428 3.24-.287 1.41.686 4.425 3.297 3.864 2.617-.561 2.262-3.68 2.183-4.362-.125-1.018-1.292-2.773-2.896-2.75zm16.534 1.753c-2.308 0-2.617 2.119-2.617 3.616 0 1.43.121 3.425 2.988 3.362 2.867-.063 2.553-3.238 2.553-3.988 0-.745-.62-2.99-2.924-2.99zm-8.264 2.478c-1.424.014-2.708.925-3.323 1.947-1.118 1.868-2.863 3.05-3.112 3.363-.25.309-3.61 2.116-2.864 5.42.746 3.301 3.365 3.237 3.365 3.237s1.93.19 4.171-.31c2.24-.495 4.17.123 4.17.123s5.233 1.748 6.665-1.616c1.43-3.364-.808-5.109-.808-5.109s-2.99-2.306-4.736-4.798c-1.072-1.665-2.348-2.268-3.528-2.257zm-2.234 3.84l1.542.024v8.197H7.758c-1.47-.291-2.055-1.292-2.13-1.462-.072-.173-.488-.976-.268-2.343.635-2.049 2.447-2.196 2.447-2.196h1.81zm3.964 2.39v3.881c.096.413.612.488.612.488h1.614v-4.343h1.689v5.782h-3.915c-1.517-.39-1.59-1.465-1.59-1.465v-4.317zm-5.458 1.147c-.66.197-.978.708-1.05.928-.076.22-.247.78-.1 1.269.294 1.095 1.248 1.144 1.248 1.144h1.37v-3.34z"/>
-                        </svg>
-                        <span>百度</span>
-                    </span>
-                </div>
-
                 <div class="quick-meta">
                     <span class="meta-item">
                         <span class="pulse-dot"></span>
@@ -156,227 +70,8 @@
                     </span>
                     <span class="meta-item">📍 Beijing</span>
                     <span class="meta-item">💻 Backend</span>
-                    <span class="meta-item meta-item-fcb" tabindex="0" role="note" aria-label="FC Barcelona · Més que un club"><svg class="fcb-crest" viewBox="0 0 48 48" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M18.5 5.5c4 2 7 2 11 0M9 6.5c3 1.5 6 1.5 9.5-1m20.5 1c-3 1.5-6 1.5-9.5-1M9 6.5l-1.5 2m31.5-2l1.5 2m-33 0c3.5 4.5 3.5 11-2 15m35-15c-3.5 4.5-3.5 11 2 15m-37 0l2.5 2m34.5-2l-2.5 2m-32 0h32M8.68 20h30.64M24 20V7m2.625 13V6.7M29.25 20V5.706M31.875 20V6.94M34.5 20V7.612M8 25.5c0 9 6 14.5 14 14.5l2 2.5l2-2.5c8 0 14-5.5 14-14.5"/><circle cx="24" cy="31.5" r="4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M19.5 20v-3.5H24m0-4h-4.5V5.966m-4 1.126V12.5H9.678m.239 4H15.5V20m-2 5.5v11.905m4-11.905v13.825M22 25.5v2.536m0 6.928V40m4-5.036V40m8.5-14.5v11.905m-4-11.905v13.862M26 25.5v2.536m2 3.464c-1.25-1.25-2.5-2-4-2m0-2c-.5.5-.5 1.5 0 2c-.5.5-.5 1.5 0 2m-2-3.464c-.458 1.707-.482 3.165.268 4.464"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M20.536 33.5c.683.183 1.549-.317 1.732-1c.683.183 1.55-.317 1.732-1m-2 3.464c1.708-.458 2.982-1.165 3.732-2.464"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M27.464 33.5c-.183-.683-1.049-1.183-1.732-1c-.183-.683-1.05-1.183-1.732-1"/></svg><span>FC Barcelona</span><span class="fcb-tooltip" aria-hidden="true">Més que un club</span></span>
-                    <span class="meta-item meta-item-spylent" tabindex="0" role="note" aria-label="Spylent · 网易云音乐歌单">🎧 <span>Spylent</span><a class="fcb-tooltip spylent-tip" href="https://music.163.com/#/playlist?id=4966037241" target="_blank" rel="noreferrer" title="打开网易云音乐歌单">🎵 网易云歌单 ↗</a></span>
-                </div>
-            </section>
-
-            <!-- 书影音 -->
-            <section class="glass card-media" id="media">
-                <div class="activity-head">
-                    <h2>书影音</h2>
-                    <a class="activity-badge" href="https://www.douban.com/people/mfcheer/" target="_blank" rel="noreferrer">
-                        <span>豆瓣主页</span>
-                        <span>↗</span>
-                    </a>
-                </div>
-                <p class="media-stats" id="mediaStats" hidden></p>
-                <div class="media-grid">
-                    <div class="media-col">
-                    <div class="media-col-head"><span class="media-col-title">🎬 电影</span></div>
-                    <a class="media-item" href="https://movie.douban.com/subject/35811064/" target="_blank" rel="noreferrer">
-                    <img class="media-cover" src="assets/covers/35811064.jpg" alt="欢迎来龙餐馆" loading="lazy">
-                    <div class="media-info">
-                    <span class="media-title">欢迎来龙餐馆</span>
-                    <span class="media-stars" title="我的评分：★★★★★">★★★★★</span>
-                    </div>
-                    </a>
-                    <a class="media-item" href="https://movie.douban.com/subject/36246195/" target="_blank" rel="noreferrer">
-                    <img class="media-cover" src="assets/covers/36246195.jpg" alt="蜘蛛侠：崭新之日" loading="lazy">
-                    <div class="media-info">
-                    <span class="media-title">蜘蛛侠：崭新之日</span>
-                    <span class="media-stars" title="我的评分：★★★★☆">★★★★☆</span>
-                    </div>
-                    </a>
-                    <a class="media-item" href="https://movie.douban.com/subject/36571896/" target="_blank" rel="noreferrer">
-                    <img class="media-cover" src="assets/covers/36571896.jpg" alt="命悬一生" loading="lazy">
-                    <div class="media-info">
-                    <span class="media-title">命悬一生</span>
-                    <span class="media-stars" title="我的评分：★★★★☆">★★★★☆</span>
-                    </div>
-                    </a>
-                    <a class="media-item" href="https://movie.douban.com/subject/26797690/" target="_blank" rel="noreferrer">
-                    <img class="media-cover" src="assets/covers/26797690.jpg" alt="大江大河" loading="lazy">
-                    <div class="media-info">
-                    <span class="media-title">大江大河</span>
-                    <span class="media-stars" title="我的评分：★★★★☆">★★★★☆</span>
-                    </div>
-                    </a>
-                    <a class="media-item" href="https://movie.douban.com/subject/26298935/" target="_blank" rel="noreferrer">
-                    <img class="media-cover" src="assets/covers/26298935.jpg" alt="鬼吹灯之精绝古城" loading="lazy">
-                    <div class="media-info">
-                    <span class="media-title">鬼吹灯之精绝古城</span>
-                    <span class="media-stars" title="我的评分：★★★★☆">★★★★☆</span>
-                    </div>
-                    </a>
-                    </div>
-                                        <div class="media-col">
-                    <div class="media-col-head"><span class="media-col-title">📚 书</span></div>
-                                        <a class="media-item" href="https://book.douban.com/subject/36661336/" target="_blank" rel="noreferrer">
-<img class="media-cover" src="assets/covers/36661336.jpg" alt="搞定系统设计" loading="lazy">
-<div class="media-info">
-<span class="media-title">搞定系统设计</span>
-
-</div>
-</a>
-                    <a class="media-item" href="https://book.douban.com/subject/34906885/" target="_blank" rel="noreferrer">
-<img class="media-cover" src="assets/covers/34906885.jpg" alt="让时间陪你慢慢变富" loading="lazy">
-<div class="media-info">
-<span class="media-title">让时间陪你慢慢变富</span>
-
-</div>
-</a>
-                    <a class="media-item" href="https://book.douban.com/subject/25749845/" target="_blank" rel="noreferrer">
-<img class="media-cover" src="assets/covers/25749845.jpg" alt="把时间当作朋友（第3版）" loading="lazy">
-<div class="media-info">
-<span class="media-title">把时间当作朋友（第3版）</span>
-
-</div>
-</a>
-                    <a class="media-item" href="https://book.douban.com/subject/36462984/" target="_blank" rel="noreferrer">
-<img class="media-cover" src="assets/covers/36462984.jpg" alt="把时间当作朋友 (修订版)" loading="lazy">
-<div class="media-info">
-<span class="media-title">把时间当作朋友 (修订版)</span>
-
-</div>
-</a>
-                    <a class="media-item" href="https://book.douban.com/subject/35491439/" target="_blank" rel="noreferrer">
-<img class="media-cover" src="assets/covers/35491439.jpg" alt="伊凡·伊里奇之死" loading="lazy">
-<div class="media-info">
-<span class="media-title">伊凡·伊里奇之死</span>
-
-</div>
-</a>
-                    </div>
-                                        <div class="media-col">
-                    <div class="media-col-head"><span class="media-col-title">🎮 游戏</span></div>
-                    <a class="media-item" href="https://www.douban.com/game/26434256/" target="_blank" rel="noreferrer">
-                    <img class="media-cover" src="assets/covers/26434256.jpg" alt="战争机器：终极版  Gears of War: Ultimate Edition" loading="lazy">
-                    <div class="media-info">
-                    <span class="media-title">战争机器：终极版  Gears of War: Ultimate Edition</span>
-                    
-                    </div>
-                    </a>
-                    <a class="media-item" href="https://www.douban.com/game/26425671/" target="_blank" rel="noreferrer">
-                    <img class="media-cover" src="assets/covers/26425671.jpg" alt="战争机器4 Gears of War 4" loading="lazy">
-                    <div class="media-info">
-                    <span class="media-title">战争机器4 Gears of War 4</span>
-                    
-                    </div>
-                    </a>
-                    <a class="media-item" href="https://www.douban.com/game/30397999/" target="_blank" rel="noreferrer">
-                    <img class="media-cover" src="assets/covers/30397999.jpg" alt="哈迪斯 Hades" loading="lazy">
-                    <div class="media-info">
-                    <span class="media-title">哈迪斯 Hades</span>
-                    
-                    </div>
-                    </a>
-                    <a class="media-item" href="https://www.douban.com/game/35089124/" target="_blank" rel="noreferrer">
-                    <img class="media-cover" src="assets/covers/35089124.jpg" alt="枪火重生 Gunfire Reborn" loading="lazy">
-                    <div class="media-info">
-                    <span class="media-title">枪火重生 Gunfire Reborn</span>
-                    
-                    </div>
-                    </a>
-                    <a class="media-item" href="https://www.douban.com/game/26419552/" target="_blank" rel="noreferrer">
-                    <img class="media-cover" src="assets/covers/26419552.jpg" alt="饥荒联机版 Don&#x27;t Starve Together" loading="lazy">
-                    <div class="media-info">
-                    <span class="media-title">饥荒联机版 Don&#x27;t Starve Together</span>
-                    
-                    </div>
-                    </a>
-                    </div>
-                </div>
-            </section>
-            <!-- 巴萨赛程 -->
-            <section class="glass card-barca" id="barca">
-                <div class="activity-head">
-                    <h2>⚽ 近期赛程</h2>
-                    <span class="activity-badge barca-src">ESPN 数据</span>
-                </div>
-                <div class="barca-schedule" id="barcaSchedule" hidden></div>
-            </section>
-            <!-- 说说 -->
-            <section class="glass card-moments" id="moments">
-                <div class="activity-head">
-                    <div class="head-title-wrap">
-                        <h2>说说</h2>
-                        <span class="moment-count" id="momentCount"></span>
-                    </div>
-                    <a class="activity-badge" href="https://github.com/mfcheer/mfcheer.github.io/issues/new?template=moment.yml" target="_blank" rel="noreferrer">
-                        <span>写一条</span>
-                        <span>↗</span>
-                    </a>
-                </div>
-                <div class="moment-list" id="momentList"></div>
-                <a class="moment-all" href="https://github.com/mfcheer/mfcheer.github.io/issues" target="_blank" rel="noreferrer">查看全部 ↗</a>
-            </section>
-
-            <!-- 留言 -->
-            <section class="glass card-guestbook" id="guestbook">
-                <div class="activity-head">
-                    <div class="head-title-wrap">
-                        <h2>留言</h2>
-                        <span class="moment-count">随便聊聊</span>
-                    </div>
-                    <a class="activity-badge" href="https://github.com/mfcheer/mfcheer.github.io/discussions" target="_blank" rel="noreferrer">
-                        <span>GitHub 讨论</span>
-                        <span>↗</span>
-                    </a>
-                </div>
-                <button class="giscus-toggle" id="giscusToggle" type="button" aria-expanded="false" aria-controls="giscusBox">💬 <span class="giscus-toggle-text">展开留言区</span></button>
-                <div class="giscus-box" id="giscusBox" hidden></div>
-            </section>
-
-            <!-- 个人作品 -->
-            <section class="glass card-projects" id="projects">
-                <div class="activity-head">
-                    <div class="head-title-wrap">
-                        <h2>作品</h2>
-                        <span class="moment-count">2 个项目</span>
-                    </div>
-                    <a class="activity-badge" href="https://github.com/mfcheer?tab=repositories" target="_blank" rel="noreferrer">
-                        <span>全部仓库</span>
-                        <span>↗</span>
-                    </a>
-                </div>
-                <div class="projects-grid">
-                    <a class="project-card" href="https://mfcheer.github.io/luma/" target="_blank" rel="noreferrer">
-                        <div class="project-header">
-                            <img class="project-icon" src="assets/projects/still.png" alt="Still 电视桌面" width="44" height="44" loading="lazy">
-                            <div class="project-title-wrap">
-                                <div class="project-name">
-                                    <span>Still</span>
-                                    <span class="project-arrow" aria-hidden="true">↗</span>
-                                </div>
-                                <div class="project-tagline">Android 电视桌面</div>
-                            </div>
-                        </div>
-                        <p class="project-desc">简洁无广告的 Android 电视桌面。应用自动聚合、自由排序，浅深双主题，给大屏一点留白。</p>
-                        <div class="project-tags">
-                            <span class="project-tag">Android</span>
-                            <span class="project-tag">TV Launcher</span>
-                            <span class="project-tag">Minimalist</span>
-                        </div>
-                    </a>
-                    <a class="project-card" href="https://mfcheer.github.io/TripNote/" target="_blank" rel="noreferrer">
-                        <div class="project-header">
-                            <img class="project-icon" src="assets/projects/tripnote.png" alt="TripNote 旅行规划台" width="44" height="44" loading="lazy">
-                            <div class="project-title-wrap">
-                                <div class="project-name">
-                                    <span>TripNote</span>
-                                    <span class="project-arrow" aria-hidden="true">↗</span>
-                                </div>
-                                <div class="project-tagline">旅行规划台</div>
-                            </div>
-                        </div>
-                        <p class="project-desc">清晰规划每一天的旅行安排，聚焦时间线行程与目的地清单，轻量极简，支持离线与 PWA。</p>
-                        <div class="project-tags">
-                            <span class="project-tag">Web App</span>
-                            <span class="project-tag">PWA</span>
-                            <span class="project-tag">Travel</span>
-                        </div>
-                    </a>
+                    <span class="meta-item">⚽ FC Barcelona</span>
+                    <span class="meta-item">🎧 Spylent</span>
                 </div>
             </section>
 
@@ -397,49 +92,34 @@
             <!-- 联系 -->
             <section class="glass card-contact" id="contact">
                 <h2>联系</h2>
-                <div class="contact-icons">
-                    <a class="contact-icon" href="mailto:mfcheer@qq.com" title="邮件" aria-label="邮件联系">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="3" y="5" width="18" height="14" rx="2.5"/>
-                            <path d="m3.5 7.5 8.5 6 8.5-6"/>
-                        </svg>
+                <div class="links-grid">
+                    <a class="link-item" href="mailto:mfcheer@qq.com">
+                        <div class="link-info">
+                            <span class="link-title">Email</span>
+                            <span class="link-desc">mfcheer@qq.com</span>
+                        </div>
+                        <span class="link-action">发送邮件 ↗</span>
                     </a>
-                    <a class="contact-icon" href="https://github.com/mfcheer" target="_blank" rel="noreferrer" title="GitHub" aria-label="GitHub 主页">
-                        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                        </svg>
+
+                    <a class="link-item" href="https://weibo.com/u/3935133152" target="_blank" rel="noreferrer">
+                        <div class="link-info">
+                            <span class="link-title">Weibo</span>
+                            <span class="link-desc">weibo.com/u/3935133152</span>
+                        </div>
+                        <span class="link-action">访问 ↗</span>
                     </a>
-                    <a class="contact-icon" href="https://weibo.com/u/3935133152" target="_blank" rel="noreferrer" title="微博" aria-label="微博主页">
-                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.737 5.439l-.002.004zM9.05 17.219c-.384.616-1.208.884-1.829.602-.612-.279-.793-.991-.406-1.593.379-.595 1.176-.861 1.793-.601.622.263.82.972.442 1.592zm1.27-1.627c-.141.237-.449.353-.689.253-.236-.09-.313-.361-.177-.586.138-.227.436-.346.672-.24.239.09.315.36.18.601l.014-.028zm.176-2.719c-1.893-.493-4.033.45-4.857 2.118-.836 1.704-.026 3.591 1.886 4.21 1.983.64 4.318-.341 5.132-2.179.8-1.793-.201-3.642-2.161-4.149zm7.563-1.224c-.346-.105-.57-.18-.405-.615.375-.977.42-1.804 0-2.404-.781-1.112-2.915-1.053-5.364-.03 0 0-.766.331-.571-.271.376-1.217.315-2.224-.27-2.809-1.338-1.337-4.869.045-7.888 3.08C1.309 10.87 0 13.273 0 15.348c0 3.981 5.099 6.395 10.086 6.395 6.536 0 10.888-3.801 10.888-6.82 0-1.822-1.547-2.854-2.915-3.284v.01zm1.908-5.092c-.766-.856-1.908-1.187-2.96-.962-.436.09-.706.511-.616.932.09.42.511.691.932.602.511-.105 1.067.044 1.442.465.376.421.466.977.316 1.473-.136.406.089.856.51.992.405.119.857-.105.992-.512.33-1.021.12-2.178-.646-3.035l.03.045zm2.418-2.195c-1.576-1.757-3.905-2.419-6.054-1.968-.496.104-.812.587-.706 1.081.104.496.586.813 1.082.707 1.532-.331 3.185.15 4.296 1.383 1.112 1.246 1.429 2.943.947 4.416-.165.48.106 1.007.586 1.157.479.165.991-.104 1.157-.586.675-2.088.241-4.478-1.338-6.235l.03.045z"/>
-                        </svg>
-                    </a>
-                    <a class="contact-icon" href="https://www.douban.com/people/mfcheer/" target="_blank" rel="noreferrer" title="豆瓣" aria-label="豆瓣主页">
-                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M.51 3.06h22.98V.755H.51V3.06Zm20.976 2.537v9.608h-2.137l-1.669 5.76H24v2.28H0v-2.28h6.32l-1.67-5.76H2.515V5.597h18.972Zm-5.066 9.608H7.58l1.67 5.76h5.501l1.67-5.76ZM18.367 7.9H5.634v5.025h12.733V7.9Z"/>
-                        </svg>
-                    </a>
-                    <a class="contact-icon" href="https://music.163.com/#/user/home?id=75622568" target="_blank" rel="noreferrer" title="网易云音乐" aria-label="网易云音乐主页">
-                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M13.046 9.388a3.919 3.919 0 0 0-.66.19c-.809.312-1.447.991-1.666 1.775a2.269 2.269 0 0 0-.074.81c.048.546.333 1.05.764 1.35a1.483 1.483 0 0 0 2.01-.286c.406-.531.355-1.183.24-1.636-.098-.387-.22-.816-.345-1.249a64.76 64.76 0 0 1-.269-.954zm-.82 10.07c-3.984 0-7.224-3.24-7.224-7.223 0-.98.226-3.02 1.884-4.822A7.188 7.188 0 0 1 9.502 5.6a.792.792 0 1 1 .587 1.472 5.619 5.619 0 0 0-2.795 2.462 5.538 5.538 0 0 0-.707 2.7 5.645 5.645 0 0 0 5.638 5.638c1.844 0 3.627-.953 4.542-2.428 1.042-1.68.772-3.931-.627-5.238a3.299 3.299 0 0 0-1.437-.777c.172.589.334 1.18.494 1.772.284 1.12.1 2.181-.519 2.989-.39.51-.956.888-1.592 1.064a3.038 3.038 0 0 1-2.58-.44 3.45 3.45 0 0 1-1.44-2.514c-.04-.467.002-.93.128-1.376.35-1.256 1.356-2.339 2.622-2.826a5.5 5.5 0 0 1 .823-.246l-.134-.505c-.37-1.371.25-2.579 1.547-3.007.329-.109.68-.145 1.025-.105.792.09 1.476.592 1.709 1.023.258.507-.096 1.153-.706 1.153a.788.788 0 0 1-.54-.213c-.088-.08-.163-.174-.259-.247a.825.825 0 0 0-.632-.166.807.807 0 0 0-.634.551c-.056.191-.031.406.02.595.07.256.159.597.217.82 1.11.098 2.162.54 2.97 1.296 1.974 1.844 2.35 4.886.892 7.233-1.197 1.93-3.509 3.177-5.889 3.177zM0 12c0 6.627 5.373 12 12 12s12-5.373 12-12S18.627 0 12 0 0 5.373 0 12Z"/>
-                        </svg>
-                    </a>
-                    <button class="contact-icon" id="xhsBtn" type="button" title="小红书" aria-label="小红书联系方式" aria-haspopup="dialog">
-                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M22.405 9.879c.002.016.01.02.07.019h.725a.797.797 0 0 0 .78-.972.794.794 0 0 0-.884-.618.795.795 0 0 0-.692.794c0 .101-.002.666.001.777zm-11.509 4.808c-.203.001-1.353.004-1.685.003a2.528 2.528 0 0 1-.766-.126.025.025 0 0 0-.03.014L7.7 16.127a.025.025 0 0 0 .01.032c.111.06.336.124.495.124.66.01 1.32.002 1.981 0 .01 0 .02-.006.023-.015l.712-1.545a.025.025 0 0 0-.024-.036zM.477 9.91c-.071 0-.076.002-.076.01a.834.834 0 0 0-.01.08c-.027.397-.038.495-.234 3.06-.012.24-.034.389-.135.607-.026.057-.033.042.003.112.046.092.681 1.523.787 1.74.008.015.011.02.017.02.008 0 .033-.026.047-.044.147-.187.268-.391.371-.606.306-.635.44-1.325.486-1.706.014-.11.021-.22.03-.33l.204-2.616.022-.293c.003-.029 0-.033-.03-.034zm7.203 3.757a1.427 1.427 0 0 1-.135-.607c-.004-.084-.031-.39-.235-3.06a.443.443 0 0 0-.01-.082c-.004-.011-.052-.008-.076-.008h-1.48c-.03.001-.034.005-.03.034l.021.293c.076.982.153 1.964.233 2.946.05.4.186 1.085.487 1.706.103.215.223.419.37.606.015.018.037.051.048.049.02-.003.742-1.642.804-1.765.036-.07.03-.055.003-.112zm3.861-.913h-.872a.126.126 0 0 1-.116-.178l1.178-2.625a.025.025 0 0 0-.023-.035l-1.318-.003a.148.148 0 0 1-.135-.21l.876-1.954a.025.025 0 0 0-.023-.035h-1.56c-.01 0-.02.006-.024.015l-.926 2.068c-.085.169-.314.634-.399.938a.534.534 0 0 0-.02.191.46.46 0 0 0 .23.378.981.981 0 0 0 .46.119h.59c.041 0-.688 1.482-.834 1.972a.53.53 0 0 0-.023.172.465.465 0 0 0 .23.398c.15.092.342.12.475.12l1.66-.001c.01 0 .02-.006.023-.015l.575-1.28a.025.025 0 0 0-.024-.035zm-6.93-4.937H3.1a.032.032 0 0 0-.034.033c0 1.048-.01 2.795-.01 6.829 0 .288-.269.262-.28.262h-.74c-.04.001-.044.004-.04.047.001.037.465 1.064.555 1.263.01.02.03.033.051.033.157.003.767.009.938-.014.153-.02.3-.06.438-.132.3-.156.49-.419.595-.765.052-.172.075-.353.075-.533.002-2.33 0-4.66-.007-6.991a.032.032 0 0 0-.032-.032zm11.784 6.896c0-.014-.01-.021-.024-.022h-1.465c-.048-.001-.049-.002-.05-.049v-4.66c0-.072-.005-.07.07-.07h.863c.08 0 .075.004.075-.074V8.393c0-.082.006-.076-.08-.076h-3.5c-.064 0-.075-.006-.075.073v1.445c0 .083-.006.077.08.077h.854c.075 0 .07-.004.07.07v4.624c0 .095.008.084-.085.084-.37 0-1.11-.002-1.304 0-.048.001-.06.03-.06.03l-.697 1.519s-.014.025-.008.036c.006.01.013.008.058.008 1.748.003 3.495.002 5.243.002.03-.001.034-.006.035-.033v-1.539zm4.177-3.43c0 .013-.007.023-.02.024-.346.006-.692.004-1.037.004-.014-.002-.022-.01-.022-.024-.005-.434-.007-.869-.01-1.303 0-.072-.006-.071.07-.07l.733-.003c.041 0 .081.002.12.015.093.025.16.107.165.204.006.431.002 1.153.001 1.153zm2.67.244a1.953 1.953 0 0 0-.883-.222h-.18c-.04-.001-.04-.003-.042-.04V10.21c0-.132-.007-.263-.025-.394a1.823 1.823 0 0 0-.153-.53 1.533 1.533 0 0 0-.677-.71 2.167 2.167 0 0 0-1-.258c-.153-.003-.567 0-.72 0-.07 0-.068.004-.068-.065V7.76c0-.031-.01-.041-.046-.039H17.93s-.016 0-.023.007c-.006.006-.008.012-.008.023v.546c-.008.036-.057.015-.082.022h-.95c-.022.002-.028.008-.03.032v1.481c0 .09-.004.082.082.082h.913c.082 0 .072.128.072.128V11.19s.003.117-.06.117h-1.482c-.068 0-.06.082-.06.082v1.445s-.01.068.064.068h1.457c.082 0 .076-.006.076.079v3.225c0 .088-.007.081.082.081h1.43c.09 0 .082.007.082-.08v-3.27c0-.029.006-.035.033-.035l2.323-.003c.098 0 .191.02.28.061a.46.46 0 0 1 .274.407c.008.395.003.79.003 1.185 0 .259-.107.367-.33.367h-1.218c-.023.002-.029.008-.028.033.184.437.374.871.57 1.303a.045.045 0 0 0 .04.026c.17.005.34.002.51.003.15-.002.517.004.666-.01a2.03 2.03 0 0 0 .408-.075c.59-.18.975-.698.976-1.313v-1.981c0-.128-.01-.254-.034-.38 0 .078-.029-.641-.724-.998z"/>
-                        </svg>
-                    </button>
                 </div>
             </section>
-        </main>
 
-        <!-- 小红书名片弹层 -->
-        <div class="modal-backdrop" id="xhsModal" hidden role="dialog" aria-modal="true" aria-label="小红书联系方式">
-            <div class="modal-card">
-                <button class="modal-close" id="xhsClose" type="button" aria-label="关闭">×</button>
-                <img src="assets/xiaohongshu-card.jpg" alt="小红书名片：小红书号 428864328">
-            </div>
-        </div>
+            <!-- 说说 -->
+            <section class="glass card-moments" id="moments">
+                <div class="activity-head">
+                    <h2>说说</h2>
+                    <span class="moment-count" id="momentCount"></span>
+                </div>
+                <div class="moment-list" id="momentList"></div>
+            </section>
+        </main>
 
         <!-- 页脚 -->
         <footer class="footer">
@@ -448,6 +128,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=1.3.1"></script>
+    <script src="script.js?v=1.1.2"></script>
 </body>
 </html>
