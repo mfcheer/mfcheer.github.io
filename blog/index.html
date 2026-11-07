@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>文章 · mfcheer</title>
+    <meta name="description" content="mfcheer 的全部文章 —— 后端架构、基础组件、任务处理与广告业务的技术沉淀，以及偶尔的随笔。">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="文章 · mfcheer">
+    <meta property="og:description" content="后端架构、基础组件与随笔">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="文章 · mfcheer">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="alternate" type="application/atom+xml" title="mfcheer 的文章" href="/atom.xml">
+    <link rel="stylesheet" href="/styles.css?v=1.3.6">
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/#blog">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <section class="glass card-bloglist">
+                <div class="activity-head">
+                    <h2>文章</h2>
+                    <a class="activity-badge" href="/atom.xml" target="_blank" rel="noreferrer">
+                        <span>RSS 订阅</span>
+                        <span>↗</span>
+                    </a>
+                </div>
+                <p class="bloglist-sub">共 5 篇 · 按时间倒序</p>
+                <div class="post-year">2026</div>
+<div class="post-group">
+<a class="post-item" href="/blog/camp-nou/">
+  <span class="post-item-main">
+    <span class="post-item-title">诺坎普的黄昏</span>
+    <span class="post-item-summary">巴萨球迷的一点絮叨。从 MSN 时代看到现在，这支球队教会我的事：重建从来不体面，但值得。</span>
+    <span class="post-item-meta">2026/10/24 23:10 · 生活 / 足球 · 约 1 分钟</span>
+  </span>
+  <span class="post-item-arrow" aria-hidden="true">→</span>
+</a>
+<a class="post-item" href="/blog/exactly-once-billing/">
+  <span class="post-item-main">
+    <span class="post-item-title">广告计费系统如何做到不丢不重</span>
+    <span class="post-item-summary">计费系统的钱丢一分都是事故。从埋点到扣费，梳理 exactly-once 的完整实现路径：唯一 ID、幂等落库、对账兜底。</span>
+    <span class="post-item-meta">2026/06/30 19:00 · 广告 / 分布式 · 约 1 分钟</span>
+  </span>
+  <span class="post-item-arrow" aria-hidden="true">→</span>
+</a>
+<a class="post-item" href="/blog/graceful-shutdown/">
+  <span class="post-item-main">
+    <span class="post-item-title">Go 服务的优雅退出：从信号到连接排空</span>
+    <span class="post-item-summary">kill -15 之后到底发生了什么？把优雅退出的完整链路梳理一遍：信号处理、健康检查摘流、连接排空和超时兜底。</span>
+    <span class="post-item-meta">2026/02/18 21:40 · Go / 后端 · 约 1 分钟</span>
+  </span>
+  <span class="post-item-arrow" aria-hidden="true">→</span>
+</a>
+</div>
+<div class="post-year">2025</div>
+<div class="post-group">
+<a class="post-item" href="/blog/task-scheduler/">
+  <span class="post-item-main">
+    <span class="post-item-title">任务调度平台设计要点</span>
+    <span class="post-item-summary">从 0 到 1 搭一个任务调度平台，真正难的从来不是&quot;定时触发&quot;，而是失败处理、幂等和可观测性。沉淀几个设计要点。</span>
+    <span class="post-item-meta">2025/11/03 20:15 · 后端 / 架构 · 约 1 分钟</span>
+  </span>
+  <span class="post-item-arrow" aria-hidden="true">→</span>
+</a>
+<a class="post-item" href="/blog/hello-blog/">
+  <span class="post-item-main">
+    <span class="post-item-title">开博：为什么开始写博客</span>
+    <span class="post-item-summary">工作五年，输出的欲望第一次压过了惰性。这个博客会用最土的办法构建——Markdown 进，静态页出，不多不少。</span>
+    <span class="post-item-meta">2025/08/12 22:30 · 随笔 · 约 1 分钟</span>
+  </span>
+  <span class="post-item-arrow" aria-hidden="true">→</span>
+</a>
+</div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.3"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>广告计费系统如何做到不丢不重 · mfcheer</title>
+    <meta name="description" content="计费系统的钱丢一分都是事故。从埋点到扣费，梳理 exactly-once 的完整实现路径：唯一 ID、幂等落库、对账兜底。">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/exactly-once-billing/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"广告计费系统如何做到不丢不重","description":"计费系统的钱丢一分都是事故。从埋点到扣费，梳理 exactly-once 的完整实现路径：唯一 ID、幂等落库、对账兜底。","datePublished":"2026-06-30T11:00:00.000Z","dateModified":"2026-06-30T11:00:00.000Z","url":"https://mfcheer.github.io/blog/exactly-once-billing/","mainEntityOfPage":"https://mfcheer.github.io/blog/exactly-once-billing/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"广告,分布式","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="广告计费系统如何做到不丢不重 · mfcheer">
+    <meta property="og:description" content="计费系统的钱丢一分都是事故。从埋点到扣费，梳理 exactly-once 的完整实现路径：唯一 ID、幂等落库、对账兜底。">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/exactly-once-billing/">
+    <meta property="article:published_time" content="2026-06-30T11:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="广告计费系统如何做到不丢不重 · mfcheer">
+    <meta name="twitter:description" content="计费系统的钱丢一分都是事故。从埋点到扣费，梳理 exactly-once 的完整实现路径：唯一 ID、幂等落库、对账兜底。">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.6">
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/#blog">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">广告计费系统如何做到不丢不重</h1>
+                    <div class="post-meta">
+                        <span>2026/06/30 19:00</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>436 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">广告</span><span class="post-tag">分布式</span></div>
+                </header>
+                <div class="post-body">
+<p>广告计费是典型的&quot;错一分钱都是事故&quot;的链路：一次点击从发生到扣费，要经过埋点、上报、消息队列、消费、落库、结算六层，任何一层都可能丢、可能重。</p>
+<h2>先接受一个现实</h2>
+<p>网络分区下，经典的结论是：<strong>精确一次的传输不存在，只存在&quot;至少一次 + 幂等消费&quot;</strong>。所以整条链路的设计目标只有一个——让&quot;重复&quot;变得无害。</p>
+<h2>关键设计：全链路唯一 ID</h2>
+<p>给每次计费事件一个全局唯一的 <code>billing_id</code>，在<strong>埋点侧</strong>生成，之后所有环节都用它做幂等键。这一步的前提是 ID 的生成必须无中心瓶颈，常用方案：</p>
+<ul>
+<li>雪花算法（够用，注意时钟回拨）；</li>
+<li>号段模式（DB 发号段，内存分配）。</li>
+</ul>
+<h2>幂等落库</h2>
+<p>消费侧用数据库唯一索引兜底，而不是依赖 MQ 的&quot;恰好一次&quot;：</p>
+<pre><code class="hljs language-sql"><span class="hljs-keyword">CREATE TABLE</span> billing_record (
+    billing_id  <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">64</span>) <span class="hljs-keyword">NOT NULL</span>,
+    user_id     <span class="hljs-type">BIGINT</span>      <span class="hljs-keyword">NOT NULL</span>,
+    amount      <span class="hljs-type">BIGINT</span>      <span class="hljs-keyword">NOT NULL</span> COMMENT <span class="hljs-string">&#x27;微分&#x27;</span>,
+    status      TINYINT     <span class="hljs-keyword">NOT NULL</span>,
+    created_at  DATETIME    <span class="hljs-keyword">NOT NULL</span>,
+    <span class="hljs-keyword">PRIMARY KEY</span> (billing_id)
+);
+</code></pre>
+<p>重复消息走 <code>INSERT IGNORE</code> 或捕获唯一键冲突后比对状态，简单粗暴且正确。</p>
+<h2>对账是最后一道防线</h2>
+<p>幂等做得再好，也要假设它有失效的一天。T+1 对账两条线：</p>
+<ol>
+<li><strong>上游对下游</strong>：曝光/点击侧的日聚合 vs 计费侧的日聚合，差异超过阈值告警；</li>
+<li><strong>资金侧</strong>：账户流水余额恒等式校验，<code>期初 + 充值 - 消耗 = 期末</code>，一天跑一次全量。</li>
+</ol>
+<blockquote>
+<p>监控能发现问题，对账能发现&quot;监控以为没问题&quot;的问题。</p>
+</blockquote>
+<h2>一点体会</h2>
+<p>计费系统的复杂度不在技术选型，而在<strong>对&quot;钱&quot;的敬畏心</strong>：每一条链路都问一句&quot;这条消息丢了会怎样？重了会怎样？&quot;，答案写进设计文档，比任何架构图都有用。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.3"></script>
+</body>
+</html>

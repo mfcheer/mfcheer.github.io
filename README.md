@@ -18,6 +18,16 @@ python3 -m http.server 8000
 # 浏览器访问 http://localhost:8000
 ```
 
+## ✍️ 博客模块
+
+Hexo 式写作体验：`_posts/` 里写 Markdown，push 后 GitHub Actions（`.github/workflows/blog.yml`）自动构建静态页并回写 `main`（提交带 `[skip ci]` 防循环）。
+
+- **写作**：在 `_posts/` 新建 `YYYY-MM-DD-slug.md`，front matter 支持 `title` / `date`（建议引号字符串，按北京时间解析）/ `tags` / `summary` / `slug` / `draft: true`（草稿不发布）；
+- **本地构建预览**：`npm install && npm run build`；
+- **生成物（不手改）**：`blog/<slug>/index.html`、`blog/index.html`（列表页）、`atom.xml`（RSS）、`sitemap.xml`（脚本重建）、`data/blog-index.json`（首页「文章」模块数据源）；
+- **模板**：`templates/post.html` 与 `templates/blog-list.html`；页面里的 CSS/JS 版本号用 `{{CSS_VERSION}}` / `{{JS_VERSION}}` 占位符，由 `scripts/build-posts.mjs` 顶部的 `VERSIONS` 统一维护；
+- **文章页评论**：giscus 直接挂载（`data-mapping=pathname`，每篇文章一个 Discussion）。
+
 ## 📀 书影音数据维护（AI 智能体必读）
 
 首页「书影音」板块的数据**不是自动同步的**，由 AI 智能体在用户提出「更新书影音」时手动抓取并提交。无定时任务、无后端，全靠维护流程。数据分两层：
@@ -53,7 +63,7 @@ python3 -m http.server 8000
 
 ## ⚠️ 缓存更新规则（AI 智能体必读）
 
-本站是**纯静态直出，没有构建/编译步骤**——`git push` 即部署。但手机端（PWA）有一个 Service Worker（`sw.js`）缓存层，更新 CSS/JS 时必须三处同步，否则手机用户会拿到新旧错配的页面（历史事故：弹层加载即显示且无法关闭）：
+本站主体（首页、文章页等）都是**纯静态直出**——`git push` 即部署（博客页由 Actions 预构建后入库，见「博客模块」一节）。但手机端（PWA）有一个 Service Worker（`sw.js`）缓存层，更新 CSS/JS 时必须三处同步，否则手机用户会拿到新旧错配的页面（历史事故：弹层加载即显示且无法关闭）：
 
 1. **改了 `styles.css` / `script.js`** → 同步 bump `index.html` 里对应引用的 `?v=` 版本号；
 2. **同步更新 `sw.js`**：`CACHE_VERSION` 递增 + `PRECACHE_ASSETS` 列表里的版本号改成最新；

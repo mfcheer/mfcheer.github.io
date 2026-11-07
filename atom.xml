@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>mfcheer 的文章</title>
+  <subtitle>后端架构 · 基础组件 · 随笔</subtitle>
+  <link href="https://mfcheer.github.io/"/>
+  <link href="https://mfcheer.github.io/atom.xml" rel="self"/>
+  <id>https://mfcheer.github.io/</id>
+  <updated>2026-10-24T15:10:00.000Z</updated>
+  <author><name>mfcheer</name></author>
+  <entry>
+    <title>诺坎普的黄昏</title>
+    <link href="https://mfcheer.github.io/blog/camp-nou/" rel="alternate"/>
+    <id>https://mfcheer.github.io/blog/camp-nou/</id>
+    <published>2026-10-24T15:10:00.000Z</published>
+    <updated>2026-10-24T15:10:00.000Z</updated>
+    <summary>巴萨球迷的一点絮叨。从 MSN 时代看到现在，这支球队教会我的事：重建从来不体面，但值得。</summary>
+    <content type="html">&lt;p&gt;不是技术文，纯絮叨。&lt;/p&gt;
+&lt;p&gt;从 MSN 时代开始看巴萨，那支场均过人如麻的球队大概是很多人的足球审美启蒙。苏亚雷斯回做、内马尔趟一步、梅西收尾——配合美得像设计好的算法。&lt;/p&gt;
+&lt;p&gt;后来是漫长的重建。2-8 那晚没敢看直播，第二天早上刷完集锦，半天没说话。&lt;/p&gt;
+&lt;h2&gt;为什么还看&lt;/h2&gt;
+&lt;p&gt;朋友问过：都这样了还看什么？想了想，大概三点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;拉玛西亚的少年感&lt;/strong&gt;。看着一批和你的表弟同龄的小孩在一线队奔跑，会想起自己第一次写完一个能跑的服务的样子；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;逆风局的真实&lt;/strong&gt;。重建从来不体面，但值得——这句话对球队成立，对人也成立；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Més que un club&lt;/strong&gt;。这七个字在比分好看时是装饰，在比分难看时才是信仰。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;近况&lt;/h2&gt;
+&lt;p&gt;现在这支球队踢得重新有点样子了。中场出球干净了很多， young players 敢做动作，诺坎普（临时主场）的上座率也回来了。&lt;/p&gt;
+&lt;p&gt;新赛季的愿望很简单：欧冠淘汰赛别再抽到拜仁。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Football is the most important of the least important things.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;写完这篇正好零点，明早还有活儿。Visca el Barça，永远。&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>广告计费系统如何做到不丢不重</title>
+    <link href="https://mfcheer.github.io/blog/exactly-once-billing/" rel="alternate"/>
+    <id>https://mfcheer.github.io/blog/exactly-once-billing/</id>
+    <published>2026-06-30T11:00:00.000Z</published>
+    <updated>2026-06-30T11:00:00.000Z</updated>
+    <summary>计费系统的钱丢一分都是事故。从埋点到扣费，梳理 exactly-once 的完整实现路径：唯一 ID、幂等落库、对账兜底。</summary>
+    <content type="html">&lt;p&gt;广告计费是典型的&amp;quot;错一分钱都是事故&amp;quot;的链路：一次点击从发生到扣费，要经过埋点、上报、消息队列、消费、落库、结算六层，任何一层都可能丢、可能重。&lt;/p&gt;
+&lt;h2&gt;先接受一个现实&lt;/h2&gt;
+&lt;p&gt;网络分区下，经典的结论是：&lt;strong&gt;精确一次的传输不存在，只存在&amp;quot;至少一次 + 幂等消费&amp;quot;&lt;/strong&gt;。所以整条链路的设计目标只有一个——让&amp;quot;重复&amp;quot;变得无害。&lt;/p&gt;
+&lt;h2&gt;关键设计：全链路唯一 ID&lt;/h2&gt;
+&lt;p&gt;给每次计费事件一个全局唯一的 &lt;code&gt;billing_id&lt;/code&gt;，在&lt;strong&gt;埋点侧&lt;/strong&gt;生成，之后所有环节都用它做幂等键。这一步的前提是 ID 的生成必须无中心瓶颈，常用方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;雪花算法（够用，注意时钟回拨）；&lt;/li&gt;
+&lt;li&gt;号段模式（DB 发号段，内存分配）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;幂等落库&lt;/h2&gt;
+&lt;p&gt;消费侧用数据库唯一索引兜底，而不是依赖 MQ 的&amp;quot;恰好一次&amp;quot;：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs language-sql&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;CREATE TABLE&lt;/span&gt; billing_record (
+    billing_id  &lt;span class=&quot;hljs-type&quot;&gt;VARCHAR&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;64&lt;/span&gt;) &lt;span class=&quot;hljs-keyword&quot;&gt;NOT NULL&lt;/span&gt;,
+    user_id     &lt;span class=&quot;hljs-type&quot;&gt;BIGINT&lt;/span&gt;      &lt;span class=&quot;hljs-keyword&quot;&gt;NOT NULL&lt;/span&gt;,
+    amount      &lt;span class=&quot;hljs-type&quot;&gt;BIGINT&lt;/span&gt;      &lt;span class=&quot;hljs-keyword&quot;&gt;NOT NULL&lt;/span&gt; COMMENT &lt;span class=&quot;hljs-string&quot;&gt;&amp;#x27;微分&amp;#x27;&lt;/span&gt;,
+    status      TINYINT     &lt;span class=&quot;hljs-keyword&quot;&gt;NOT NULL&lt;/span&gt;,
+    created_at  DATETIME    &lt;span class=&quot;hljs-keyword&quot;&gt;NOT NULL&lt;/span&gt;,
+    &lt;span class=&quot;hljs-keyword&quot;&gt;PRIMARY KEY&lt;/span&gt; (billing_id)
+);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;重复消息走 &lt;code&gt;INSERT IGNORE&lt;/code&gt; 或捕获唯一键冲突后比对状态，简单粗暴且正确。&lt;/p&gt;
+&lt;h2&gt;对账是最后一道防线&lt;/h2&gt;
+&lt;p&gt;幂等做得再好，也要假设它有失效的一天。T+1 对账两条线：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;上游对下游&lt;/strong&gt;：曝光/点击侧的日聚合 vs 计费侧的日聚合，差异超过阈值告警；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;资金侧&lt;/strong&gt;：账户流水余额恒等式校验，&lt;code&gt;期初 + 充值 - 消耗 = 期末&lt;/code&gt;，一天跑一次全量。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;监控能发现问题，对账能发现&amp;quot;监控以为没问题&amp;quot;的问题。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;一点体会&lt;/h2&gt;
+&lt;p&gt;计费系统的复杂度不在技术选型，而在&lt;strong&gt;对&amp;quot;钱&amp;quot;的敬畏心&lt;/strong&gt;：每一条链路都问一句&amp;quot;这条消息丢了会怎样？重了会怎样？&amp;quot;，答案写进设计文档，比任何架构图都有用。&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Go 服务的优雅退出：从信号到连接排空</title>
+    <link href="https://mfcheer.github.io/blog/graceful-shutdown/" rel="alternate"/>
+    <id>https://mfcheer.github.io/blog/graceful-shutdown/</id>
+    <published>2026-02-18T13:40:00.000Z</published>
+    <updated>2026-02-18T13:40:00.000Z</updated>
+    <summary>kill -15 之后到底发生了什么？把优雅退出的完整链路梳理一遍：信号处理、健康检查摘流、连接排空和超时兜底。</summary>
+    <content type="html">&lt;p&gt;发版时最怕看到的现象：流量一切正常，切流瞬间冒出一批 502。多数时候根因都一样——服务没有优雅退出。&lt;/p&gt;
+&lt;h2&gt;完整链路&lt;/h2&gt;
+&lt;p&gt;一次优雅退出，按时间顺序应该发生四件事：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;收到 &lt;code&gt;SIGTERM&lt;/code&gt;，停止接收&lt;strong&gt;新&lt;/strong&gt;请求；&lt;/li&gt;
+&lt;li&gt;从注册中心摘除实例，等负载均衡刷新（这个时间取决于摘流机制，通常 5~10s）；&lt;/li&gt;
+&lt;li&gt;排空存量连接，处理中的请求给一个上限时间（比如 30s）；&lt;/li&gt;
+&lt;li&gt;超时兜底，强制退出，不能无限等。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;最小可用实现&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs language-go&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt;&lt;/span&gt; {
+    srv := &amp;amp;http.Server{Addr: &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;:8080&amp;quot;&lt;/span&gt;, Handler: mux}
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;go&lt;/span&gt; &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt;&lt;/span&gt; {
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; err := srv.ListenAndServe(); err != &lt;span class=&quot;hljs-literal&quot;&gt;nil&lt;/span&gt; &amp;amp;&amp;amp; !errors.Is(err, http.ErrServerClosed) {
+            log.Fatalf(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;listen: %v&amp;quot;&lt;/span&gt;, err)
+        }
+    }()
+
+    quit := &lt;span class=&quot;hljs-built_in&quot;&gt;make&lt;/span&gt;(&lt;span class=&quot;hljs-keyword&quot;&gt;chan&lt;/span&gt; os.Signal, &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;)
+    signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+    &amp;lt;-quit
+
+    log.Println(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;shutting down ...&amp;quot;&lt;/span&gt;)
+
+    &lt;span class=&quot;hljs-comment&quot;&gt;// 有界等待：先排空连接，30s 强制退出&lt;/span&gt;
+    ctx, cancel := context.WithTimeout(context.Background(), &lt;span class=&quot;hljs-number&quot;&gt;30&lt;/span&gt;*time.Second)
+    &lt;span class=&quot;hljs-keyword&quot;&gt;defer&lt;/span&gt; cancel()
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; err := srv.Shutdown(ctx); err != &lt;span class=&quot;hljs-literal&quot;&gt;nil&lt;/span&gt; {
+        log.Printf(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;forced shutdown: %v&amp;quot;&lt;/span&gt;, err)
+    }
+    log.Println(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;bye&amp;quot;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;两个容易漏的细节：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Shutdown&lt;/code&gt; 只负责&lt;strong&gt;已接受&lt;/strong&gt;的连接，keep-alive 的空闲连接会被关闭，但&lt;strong&gt;未 Accept&lt;/strong&gt; 的连接不受控，所以步骤 2 的摘流仍然不可省；&lt;/li&gt;
+&lt;li&gt;K8s 里记得让 &lt;code&gt;terminationGracePeriodSeconds&lt;/code&gt; 大于应用自己的排空超时，否则 systemd/K8s 会先动手。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;别忘了收尾任务&lt;/h2&gt;
+&lt;p&gt;异步任务、定时器、本地缓存刷盘，都要挂在退出链路上。一个常用的模式是集中管理 &lt;code&gt;io.Closer&lt;/code&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs language-go&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;type&lt;/span&gt; Closer &lt;span class=&quot;hljs-keyword&quot;&gt;struct&lt;/span&gt; {
+    mu     sync.Mutex
+    closers []&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;error&lt;/span&gt;
+}
+
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;(c *Closer)&lt;/span&gt;&lt;/span&gt; Register(f &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;error&lt;/span&gt;) { &lt;span class=&quot;hljs-comment&quot;&gt;/* ... */&lt;/span&gt; }
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;(c *Closer)&lt;/span&gt;&lt;/span&gt; Close() &lt;span class=&quot;hljs-type&quot;&gt;error&lt;/span&gt;            { &lt;span class=&quot;hljs-comment&quot;&gt;/* 逆序执行，聚合错误 */&lt;/span&gt; }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;优雅退出的本质是&lt;strong&gt;把&amp;quot;不可控的中断&amp;quot;变成&amp;quot;有界的交接&amp;quot;&lt;/strong&gt;。这个思路放到任何一个有状态的服务上都成立。&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>任务调度平台设计要点</title>
+    <link href="https://mfcheer.github.io/blog/task-scheduler/" rel="alternate"/>
+    <id>https://mfcheer.github.io/blog/task-scheduler/</id>
+    <published>2025-11-03T12:15:00.000Z</published>
+    <updated>2025-11-03T12:15:00.000Z</updated>
+    <summary>从 0 到 1 搭一个任务调度平台，真正难的从来不是&quot;定时触发&quot;，而是失败处理、幂等和可观测性。沉淀几个设计要点。</summary>
+    <content type="html">&lt;p&gt;做过一个支撑日均千万级任务的任务调度平台，把设计要点沉淀一下。真正难的从来不是&amp;quot;定时触发&amp;quot;，而是失败之后怎么办。&lt;/p&gt;
+&lt;h2&gt;先想清楚需求边界&lt;/h2&gt;
+&lt;p&gt;调度平台的常见形态有三种，边界完全不同：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;形态&lt;/th&gt;
+&lt;th&gt;典型场景&lt;/th&gt;
+&lt;th&gt;核心难点&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;定时任务&lt;/td&gt;
+&lt;td&gt;报表生成、数据清理&lt;/td&gt;
+&lt;td&gt;触发精度、重复执行&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;工作流编排&lt;/td&gt;
+&lt;td&gt;ETL 依赖链&lt;/td&gt;
+&lt;td&gt;DAG 调度、断点恢复&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;延迟队列&lt;/td&gt;
+&lt;td&gt;订单超时关闭&lt;/td&gt;
+&lt;td&gt;时间轮精度、海量桶&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;多数团队的真实需求是第一种加一点第三种，直接上 Airflow 级别的编排引擎属于过度设计。&lt;/p&gt;
+&lt;h2&gt;三个核心抽象&lt;/h2&gt;
+&lt;p&gt;平台侧只需要三个概念：&lt;strong&gt;任务定义&lt;/strong&gt;（做什么）、&lt;strong&gt;调度策略&lt;/strong&gt;（何时做）、&lt;strong&gt;执行记录&lt;/strong&gt;（做得怎么样）。所有花活都应该挂在这三个抽象上，而不是造第四个概念。&lt;/p&gt;
+&lt;h2&gt;幂等是地基&lt;/h2&gt;
+&lt;p&gt;分布式调度逃不开的一个问题：worker 拿到任务后，调度器失联了怎么办？恢复后任务是继续还是重来？&lt;/p&gt;
+&lt;p&gt;答案是：&lt;strong&gt;执行侧幂等，重试就不可怕&lt;/strong&gt;。业务键 + 执行批次号做唯一约束，重复投递直接吞掉：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs language-java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// 幂等表：唯一索引 (task_id, batch_no)&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;try&lt;/span&gt; {
+    idempotentDao.insert(taskId, batchNo);
+} &lt;span class=&quot;hljs-keyword&quot;&gt;catch&lt;/span&gt; (DuplicateKeyException e) {
+    log.warn(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;duplicate dispatch, task={}, batch={}&amp;quot;&lt;/span&gt;, taskId, batchNo);
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt;; &lt;span class=&quot;hljs-comment&quot;&gt;// 重复投递，直接放弃&lt;/span&gt;
+}
+&lt;span class=&quot;hljs-comment&quot;&gt;// 走正常执行流程&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;失败处理的三层策略&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;瞬时失败&lt;/strong&gt;：网络抖动、下游超时，指数退避重试 3 次；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;持续失败&lt;/strong&gt;：重试耗尽，进死信队列，人工介入；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;雪崩保护&lt;/strong&gt;：同一任务连续失败超过阈值，自动熔断并告警，而不是无脑重试打挂下游。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;可观测性不是附属品&lt;/h2&gt;
+&lt;p&gt;调度平台的用户体验，一半在可观测性上。执行耗时分布、失败 Top 任务、队列积压曲线，这三个面板做完，半夜的告警电话至少少一半。&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>开博：为什么开始写博客</title>
+    <link href="https://mfcheer.github.io/blog/hello-blog/" rel="alternate"/>
+    <id>https://mfcheer.github.io/blog/hello-blog/</id>
+    <published>2025-08-12T14:30:00.000Z</published>
+    <updated>2025-08-12T14:30:00.000Z</updated>
+    <summary>工作五年，输出的欲望第一次压过了惰性。这个博客会用最土的办法构建——Markdown 进，静态页出，不多不少。</summary>
+    <content type="html">&lt;p&gt;折腾了几个周末，这个博客模块终于上线了。&lt;/p&gt;
+&lt;p&gt;工作五年，笔记软件里躺了上百篇零散记录，但从来没有一篇是&amp;quot;写给别人看的&amp;quot;。输出的欲望第一次压过了惰性，于是有了这里。&lt;/p&gt;
+&lt;h2&gt;为什么不直接用 Hexo&lt;/h2&gt;
+&lt;p&gt;试过 Hexo，功能很全，但有两个别扭的地方：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;主题体系会把整站接管，我的&lt;a href=&quot;https://mfcheer.github.io/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;个人主页&lt;/a&gt;是手写的，风格已经打磨了很久，不想推翻重来；&lt;/li&gt;
+&lt;li&gt;依赖树太重，我只是想要「Markdown 进，静态页出」这一件事。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;所以最后的选择是：一个几百行的 Node 构建脚本，&lt;code&gt;_posts/&lt;/code&gt; 目录里写 Markdown，push 到 GitHub 后 Actions 自动渲染成静态页并回写仓库。没有黑魔法，每一行生成的 HTML 都能看懂。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;工具的复杂度应该匹配问题的复杂度。个人博客的问题域，撑不起一个框架。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;想写什么&lt;/h2&gt;
+&lt;p&gt;大概三类：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;后端技术&lt;/strong&gt;：任务调度、消息可靠性、广告计费这些工作里踩过的坑；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;工具与效率&lt;/strong&gt;：顺手做的独立小工具，以及构建这个站点本身的过程；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;随笔&lt;/strong&gt;：足球、音乐，以及其他和代码无关的事。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;不求高产，先写起来再说。&lt;/p&gt;
+</content>
+  </entry>
+</feed>
