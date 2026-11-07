@@ -656,39 +656,6 @@ async function renderMediaStats() {
 
 renderMediaStats();
 
-// 首页「文章」模块：最近 3 篇来自 data/blog-index.json（由 scripts/build-posts.mjs 生成），
-// 失败/无数据时整块隐藏，不打断其余模块。textContent 渲染，天然防 XSS。
-async function renderBlogList() {
-    const wrap = document.getElementById('blogList');
-    const section = document.getElementById('blog');
-    if (!wrap || !section) return;
-    try {
-        const res = await fetch('data/blog-index.json', { cache: 'no-cache' });
-        if (!res.ok) return;
-        const data = await res.json();
-        const posts = Array.isArray(data.posts) ? data.posts.slice(0, 3) : [];
-        if (!posts.length) return;
-        wrap.textContent = '';
-        posts.forEach((p) => {
-            const a = document.createElement('a');
-            a.className = 'blog-item';
-            a.href = p.url;
-            const title = document.createElement('span');
-            title.className = 'blog-item-title';
-            title.textContent = p.title;
-            const date = document.createElement('span');
-            date.className = 'blog-item-date';
-            date.textContent = p.dateText;
-            a.append(title, date);
-            wrap.append(a);
-        });
-        section.hidden = false;
-    } catch (e) {
-        // 保持 hidden
-    }
-}
-
-renderBlogList();
 
 // Giscus 评论区（基于 GitHub Discussions；主题跟随站点深浅色）
 // 前置条件：仓库需开启 Discussions 并安装 giscus App（github.com/apps/giscus）
