@@ -1935,6 +1935,72 @@ html[data-theme="dark"] .reading-progress {
 }
 
 /* ============================================================
+   FLOAT TOP BUTTON (全局/文章页悬浮回到顶部)
+   ============================================================ */
+.float-top-btn {
+    position: fixed;
+    bottom: calc(26px + env(safe-area-inset-bottom, 0px));
+    right: calc(26px + env(safe-area-inset-right, 0px));
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--line);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px) scale(0.92);
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.2s ease,
+                border-color 0.2s ease,
+                color 0.2s ease,
+                box-shadow 0.2s ease;
+    z-index: 900;
+    padding: 0;
+}
+
+.float-top-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.float-top-btn:hover {
+    color: var(--accent);
+    border-color: rgba(0, 113, 227, 0.32);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 6px 18px rgba(0, 113, 227, 0.16);
+}
+
+.float-top-btn:active {
+    transform: translateY(0) scale(0.95);
+}
+
+.float-top-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+html[data-theme="dark"] .float-top-btn {
+    background: rgba(30, 30, 36, 0.78);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+
+html[data-theme="dark"] .float-top-btn:hover {
+    border-color: rgba(41, 151, 255, 0.45);
+    box-shadow: 0 6px 22px rgba(41, 151, 255, 0.25);
+}
+
+/* ============================================================
    POST NAV (文章详情页 上一篇 / 下一篇)
    ============================================================ */
 .post-nav {
@@ -2233,6 +2299,13 @@ html[data-theme="dark"] .post-nav-card:hover {
 
     .topbar .nav-links li {
         flex-shrink: 0;
+    }
+
+    .float-top-btn {
+        bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+        right: calc(16px + env(safe-area-inset-right, 0px));
+        width: 38px;
+        height: 38px;
     }
 }
 

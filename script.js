@@ -235,6 +235,52 @@ loadGitHubChart();
     }
 })();
 
+// 全局/文章页悬浮回到顶部按钮（滚动超过阈值淡入，点击平滑滚回顶部）
+(function () {
+    let topBtn = document.getElementById('floatTopBtn');
+    if (!topBtn) {
+        topBtn = document.createElement('button');
+        topBtn.id = 'floatTopBtn';
+        topBtn.className = 'float-top-btn';
+        topBtn.type = 'button';
+        topBtn.setAttribute('title', '回到顶部');
+        topBtn.setAttribute('aria-label', '回到顶部');
+        topBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+        document.body.appendChild(topBtn);
+    }
+
+    let ticking = false;
+    const toggleBtn = () => {
+        if (window.scrollY > 350) {
+            topBtn.classList.add('visible');
+        } else {
+            topBtn.classList.remove('visible');
+        }
+        ticking = false;
+    };
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(toggleBtn);
+            ticking = true;
+        }
+    }, { passive: true });
+
+    topBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // 为页面中已有的 .back-to-top 链接绑定平滑滚动，避免改变 URL 哈希
+    document.querySelectorAll('.back-to-top').forEach((el) => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+
+    toggleBtn();
+})();
+
 // 小红书名片弹层：点图标打开，点遮罩/×/Esc 关闭；焦点陷阱 + 关闭后焦点归还
 (function () {
     const btn = document.getElementById('xhsBtn');
