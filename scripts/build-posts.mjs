@@ -278,7 +278,7 @@ const listHtml = years
     .map((year) => {
         const group = posts.filter((p) => p.year === year);
         return [
-            `<div class="post-year">${year}</div>`,
+            `<div class="post-year" id="year-${year}">${year}</div>`,
             `<div class="post-group">`,
             ...group.map(
                 (p) => [
@@ -301,6 +301,7 @@ fs.writeFileSync(
     path.join(ROOT, 'blog', 'index.html'),
     renderTemplate(listTpl, {
         POST_COUNT: String(posts.length),
+        YEAR_LINKS: years.map((year) => `<a href="#year-${year}">${year}</a>`).join('\n'),
         POST_LIST_HTML: listHtml || '<p class="blog-empty">还没有文章，去 _posts/ 里写第一篇吧。</p>',
         CSS_VERSION: VERSIONS.css,
         JS_VERSION: VERSIONS.js

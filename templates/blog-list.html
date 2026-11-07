@@ -33,6 +33,12 @@
         .blog-search-status { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
         .blog-search-status:empty { display: none; }
         .card-bloglist [hidden] { display: none; }
+        .blog-years { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; font-size: 13px; }
+        .blog-years span { color: var(--muted); margin-right: 2px; }
+        .blog-years a { padding: 5px 11px; border: 1px solid var(--line); border-radius: 999px; color: var(--text-secondary); text-decoration: none; }
+        .blog-years a:hover { color: var(--accent); border-color: var(--accent); }
+        .blog-years a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .post-year { scroll-margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -75,6 +81,10 @@
                     </div>
                 </div>
                 <p class="blog-search-status" id="blogSearchStatus" role="status" aria-live="polite"></p>
+                <nav class="blog-years" aria-label="按年份跳转">
+                    <span>跳转至</span>
+                    {{YEAR_LINKS}}
+                </nav>
                 {{POST_LIST_HTML}}
             </section>
         </main>
@@ -93,6 +103,7 @@
             const groups = [...document.querySelectorAll('.post-group')].map(group => ({
                 group,
                 year: group.previousElementSibling,
+                yearLink: document.querySelector(`.blog-years a[href="#${group.previousElementSibling.id}"]`),
                 items: [...group.querySelectorAll('.post-item')].map(item => ({
                     element: item,
                     text: item.textContent.toLocaleLowerCase()
@@ -101,7 +112,7 @@
             input.addEventListener('input', () => {
                 const query = input.value.trim().toLocaleLowerCase();
                 let matches = 0;
-                groups.forEach(({ group, year, items }) => {
+                groups.forEach(({ group, year, yearLink, items }) => {
                     let groupMatches = 0;
                     items.forEach(({ element, text }) => {
                         const visible = !query || text.includes(query);
@@ -110,6 +121,7 @@
                     });
                     group.hidden = groupMatches === 0;
                     if (year && year.classList.contains('post-year')) year.hidden = groupMatches === 0;
+                    if (yearLink) yearLink.hidden = groupMatches === 0;
                     matches += groupMatches;
                 });
                 status.textContent = query ? (matches ? `找到 ${matches} 篇文章` : '没有找到相关文章，请换个关键词。') : '';
