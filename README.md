@@ -9,7 +9,9 @@
 - **克制极简**：单页聚焦于基本定位与核心联系方式，不矫情、不臃肿。
 - **纯粹质感**：磨砂毛玻璃、细腻边框与大圆角设计，自适应 680px 舒适排版。
 - **深浅色主题**：自动匹配系统主题（Dark Mode），支持右上角一键平滑切换。
-- **零外部依赖**：纯 HTML5 + CSS3 + 原生 JavaScript，秒开且极易维护。
+- **博客系统**：Markdown 写文章，推送即自动构建发布，支持代码高亮、公式、目录与 giscus 评论。
+- **说说动态**：GitHub Issues 当 CMS，建 Issue 即发说说，支持标签筛选。
+- **零外部依赖**：页面本身纯 HTML5 + CSS3 + 原生 JavaScript，秒开且极易维护。
 
 ## 🛠️ 本地预览
 
@@ -23,6 +25,7 @@ python3 -m http.server 8000
 Hexo 式写作体验：`_posts/` 里写 Markdown，push 后 GitHub Actions（`.github/workflows/blog.yml`）自动构建静态页并回写 `main`（提交带 `[skip ci]` 防循环）。
 
 - **写作**：在 `_posts/` 新建 `YYYY-MM-DD-slug.md`，front matter 支持 `title` / `date`（建议引号字符串，按北京时间解析）/ `tags` / `summary` / `slug` / `draft: true`（草稿不发布）；
+- **图片**：放 `assets/images/`，正文引用 `/assets/images/xxx.png`；Obsidian 的双中括号图片嵌入与相对路径引用，构建时会自动转换为标准语法；
 - **本地构建预览**：`npm install && npm run build`；
 - **生成物（不手改）**：`blog/<slug>/index.html`、`blog/index.html`（列表页）、`atom.xml`（RSS）、`sitemap.xml`（脚本重建）、`data/blog-index.json`（首页「文章」模块数据源）；
 - **模板**：`templates/post.html` 与 `templates/blog-list.html`；页面里的 CSS/JS 版本号用 `{{CSS_VERSION}}` / `{{JS_VERSION}}` 占位符，由 `scripts/build-posts.mjs` 顶部的 `VERSIONS` 统一维护；

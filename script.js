@@ -29,15 +29,6 @@ function getPreferredTheme() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-// theme-color 跟随：手动切主题后同步状态栏/浏览器框颜色（否则 iOS 上页面深了状态栏还是浅的）
-function syncThemeColorMeta(theme) {
-    const metas = document.querySelectorAll('meta[name="theme-color"]');
-    if (metas.length !== 2) return;
-    const [light, dark] = metas;
-    light.media = theme === 'dark' ? 'not all' : 'all';
-    dark.media = theme === 'dark' ? 'all' : 'not all';
-}
-
 function applyTheme(theme) {
     if (theme === 'dark') {
         rootElement.setAttribute('data-theme', 'dark');
@@ -54,7 +45,6 @@ function applyTheme(theme) {
             themeToggleBtn.setAttribute('aria-pressed', 'false');
         }
     }
-    syncThemeColorMeta(theme);
 }
 
 // Initialize theme
@@ -80,23 +70,20 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 });
 
 // Live Beijing Time updater
-// formatter 只构造一次（每秒 new Intl.DateTimeFormat 是纯浪费）
-let beijingFormatter = null;
-
 function updateBeijingTime() {
     const timeEl = document.getElementById('beijingTime');
     if (!timeEl) return;
     try {
-        if (!beijingFormatter) {
-            beijingFormatter = new Intl.DateTimeFormat('zh-CN', {
-                timeZone: 'Asia/Shanghai',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-        }
-        timeEl.textContent = beijingFormatter.format(new Date());
+        const now = new Date();
+        const options = {
+            timeZone: 'Asia/Shanghai',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        };
+        const formatter = new Intl.DateTimeFormat('zh-CN', options);
+        timeEl.textContent = formatter.format(now);
     } catch (e) {
         const now = new Date();
         timeEl.textContent = now.toTimeString().substring(0, 8);
@@ -121,14 +108,7 @@ async function loadGitHubChart() {
             if (!svgText.includes('viewBox')) {
                 svgText = svgText.replace('<svg ', '<svg viewBox="0 0 663 104" preserveAspectRatio="xMinYMid meet" ');
             }
-            // DOMParser 产出惰性文档，仅采纳 <svg> 节点并剥离 script 等危险元素，
-            // 不再整段 innerHTML 注入第三方返回内容
-            const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
-            doc.querySelectorAll('script, foreignObject').forEach((n) => n.remove());
-            const svg = doc.querySelector('svg');
-            if (svg) {
-                container.replaceChildren(document.importNode(svg, true));
-            }
+            container.innerHTML = svgText;
         }
     } catch (e) {
         // Fallback: the static img remains displayed safely
