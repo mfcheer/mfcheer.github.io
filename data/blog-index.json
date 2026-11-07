@@ -1,7 +1,20 @@
 {
   "updatedAt": "2026-11-07",
-  "count": 4,
+  "count": 5,
   "posts": [
+    {
+      "title": "Markdown 渲染能力总览",
+      "url": "/blog/markdown-showcase/",
+      "dateText": "2026/11/07 20:00",
+      "year": 2026,
+      "tags": [
+        "博客",
+        "Markdown"
+      ],
+      "summary": "一篇专门用来「压测」渲染器的样张：标题目录、多语言代码、公式、表格、任务列表、图片、跳链……迁移旧文章前，先看看这套博客能吃下哪些语法。",
+      "readingMinutes": 2,
+      "wordCount": 782
+    },
     {
       "title": "单曲循环 Spylent 的第 N 周",
       "url": "/blog/spylent-on-loop/",

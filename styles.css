@@ -2018,6 +2018,21 @@ html[data-theme="dark"] .post-body {
     border-color: rgba(0, 113, 227, 0.4);
 }
 
+/* 任务列表（- [ ] / - [x]）复选框 */
+.post-body input[type='checkbox'] {
+    accent-color: var(--accent);
+    margin-right: 6px;
+    vertical-align: -1px;
+}
+
+.post-body li.task-list-item {
+    list-style: none;
+}
+
+.post-body ul:has(> li.task-list-item) {
+    padding-left: 6px;
+}
+
 @media (max-width: 768px) {
     .card-post {
         padding: 22px 18px;

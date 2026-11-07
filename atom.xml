@@ -5,8 +5,153 @@
   <link href="https://mfcheer.github.io/"/>
   <link href="https://mfcheer.github.io/atom.xml" rel="self"/>
   <id>https://mfcheer.github.io/</id>
-  <updated>2026-11-01T15:40:00.000Z</updated>
+  <updated>2026-11-07T12:00:00.000Z</updated>
   <author><name>mfcheer</name></author>
+  <entry>
+    <title>Markdown 渲染能力总览</title>
+    <link href="https://mfcheer.github.io/blog/markdown-showcase/" rel="alternate"/>
+    <id>https://mfcheer.github.io/blog/markdown-showcase/</id>
+    <published>2026-11-07T12:00:00.000Z</published>
+    <updated>2026-11-07T12:00:00.000Z</updated>
+    <summary>一篇专门用来「压测」渲染器的样张：标题目录、多语言代码、公式、表格、任务列表、图片、跳链……迁移旧文章前，先看看这套博客能吃下哪些语法。</summary>
+    <content type="html">&lt;p&gt;这是本站的「语法样张」：把常用的 Markdown 元素集中在一篇文章里，方便检查渲染效果。以后从 CSDN / Obsidian 迁移文章，遇到样式问题就以这篇为参照。&lt;/p&gt;
+&lt;h2 id=&quot;行内元素&quot; tabindex=&quot;-1&quot;&gt;行内元素&lt;/h2&gt;
+&lt;p&gt;这一段集中演示行内级语法：&lt;strong&gt;加粗文本&lt;/strong&gt;、&lt;em&gt;斜体文本&lt;/em&gt;、&lt;em&gt;&lt;strong&gt;粗斜体&lt;/strong&gt;&lt;/em&gt;、&lt;s&gt;删除线文本&lt;/s&gt;、&lt;code&gt;行内代码 const x = 1&lt;/code&gt;，还有&lt;a href=&quot;/blog/camp-nou/&quot;&gt;站内跳链（诺坎普的黄昏）&lt;/a&gt;、&lt;a href=&quot;https://github.com/mfcheer&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;站外链接（我的 GitHub）&lt;/a&gt;，以及不带标题的自动链接：&lt;a href=&quot;https://mfcheer.github.io&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;https://mfcheer.github.io&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;行内公式也在这演示：质能方程 $E = mc^2$，勾股定理 $a^2 + b^2 = c^2$，以及带分式的 $\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$。&lt;/p&gt;
+&lt;h2 id=&quot;代码块&quot; tabindex=&quot;-1&quot;&gt;代码块&lt;/h2&gt;
+&lt;p&gt;代码块支持语言标签、语法高亮和右上角复制按钮；超长行会横向滚动，不会撑破卡片。&lt;/p&gt;
+&lt;h3 id=&quot;bash&quot; tabindex=&quot;-1&quot;&gt;Bash&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs language-bash&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;# 查看占用 8080 端口的进程并结束它&lt;/span&gt;
+lsof -i :8080 | grep LISTEN
+&lt;span class=&quot;hljs-built_in&quot;&gt;kill&lt;/span&gt; -9 $(lsof -t -i :8080)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;javascript（演示超长行滚动）&quot; tabindex=&quot;-1&quot;&gt;JavaScript（演示超长行滚动）&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs language-js&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;const&lt;/span&gt; staleKeys = (&lt;span class=&quot;hljs-keyword&quot;&gt;await&lt;/span&gt; caches.&lt;span class=&quot;hljs-title function_&quot;&gt;keys&lt;/span&gt;()).&lt;span class=&quot;hljs-title function_&quot;&gt;filter&lt;/span&gt;(&lt;span class=&quot;hljs-function&quot;&gt;(&lt;span class=&quot;hljs-params&quot;&gt;key&lt;/span&gt;) =&amp;gt;&lt;/span&gt; key.&lt;span class=&quot;hljs-title function_&quot;&gt;startsWith&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;#x27;mfcheer-static-&amp;#x27;&lt;/span&gt;) &amp;amp;&amp;amp; key !== &lt;span class=&quot;hljs-string&quot;&gt;`mfcheer-static-&lt;span class=&quot;hljs-subst&quot;&gt;${CACHE_VERSION}&lt;/span&gt;`&lt;/span&gt;);
+&lt;span class=&quot;hljs-keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;hljs-title class_&quot;&gt;Promise&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;all&lt;/span&gt;(staleKeys.&lt;span class=&quot;hljs-title function_&quot;&gt;map&lt;/span&gt;(&lt;span class=&quot;hljs-function&quot;&gt;(&lt;span class=&quot;hljs-params&quot;&gt;key&lt;/span&gt;) =&amp;gt;&lt;/span&gt; caches.&lt;span class=&quot;hljs-title function_&quot;&gt;delete&lt;/span&gt;(key)));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;python&quot; tabindex=&quot;-1&quot;&gt;Python&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs language-python&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;hljs-title function_&quot;&gt;fib&lt;/span&gt;(&lt;span class=&quot;hljs-params&quot;&gt;n: &lt;span class=&quot;hljs-built_in&quot;&gt;int&lt;/span&gt;&lt;/span&gt;) -&amp;gt; &lt;span class=&quot;hljs-built_in&quot;&gt;int&lt;/span&gt;:
+    a, b = &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; _ &lt;span class=&quot;hljs-keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;range&lt;/span&gt;(n):
+        a, b = b, a + b
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; a
+
+&lt;span class=&quot;hljs-built_in&quot;&gt;print&lt;/span&gt;([fib(i) &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; i &lt;span class=&quot;hljs-keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;range&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt;)])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;sql&quot; tabindex=&quot;-1&quot;&gt;SQL&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs language-sql&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;SELECT&lt;/span&gt; user_id, &lt;span class=&quot;hljs-built_in&quot;&gt;COUNT&lt;/span&gt;(&lt;span class=&quot;hljs-operator&quot;&gt;*&lt;/span&gt;) &lt;span class=&quot;hljs-keyword&quot;&gt;AS&lt;/span&gt; pv
+&lt;span class=&quot;hljs-keyword&quot;&gt;FROM&lt;/span&gt; events
+&lt;span class=&quot;hljs-keyword&quot;&gt;WHERE&lt;/span&gt; dt &lt;span class=&quot;hljs-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;#x27;2026-11-07&amp;#x27;&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;GROUP&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;BY&lt;/span&gt; user_id
+&lt;span class=&quot;hljs-keyword&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;BY&lt;/span&gt; pv &lt;span class=&quot;hljs-keyword&quot;&gt;DESC&lt;/span&gt;
+LIMIT &lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;无语言标注&quot; tabindex=&quot;-1&quot;&gt;无语言标注&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;没有语言标注的代码块：不做高亮，但保留等宽字体与复制按钮。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;列表与任务清单&quot; tabindex=&quot;-1&quot;&gt;列表与任务清单&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;无序列表项一&lt;/li&gt;
+&lt;li&gt;无序列表项二
+&lt;ol&gt;
+&lt;li&gt;有序子项一&lt;/li&gt;
+&lt;li&gt;有序子项二&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;无序列表项三&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;有序列表项一&lt;/li&gt;
+&lt;li&gt;有序列表项二
+&lt;ul&gt;
+&lt;li&gt;嵌套无序子项&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;有序列表项三&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;任务清单（Obsidian 里常用）：&lt;/p&gt;
+&lt;ul class=&quot;contains-task-list&quot;&gt;
+&lt;li class=&quot;task-list-item&quot;&gt;&lt;input class=&quot;task-list-item-checkbox&quot; checked=&quot;&quot; disabled=&quot;&quot; type=&quot;checkbox&quot;&gt; 已完成任务：恢复构建流水线&lt;/li&gt;
+&lt;li class=&quot;task-list-item&quot;&gt;&lt;input class=&quot;task-list-item-checkbox&quot; checked=&quot;&quot; disabled=&quot;&quot; type=&quot;checkbox&quot;&gt; 已完成任务：支持代码复制按钮&lt;/li&gt;
+&lt;li class=&quot;task-list-item&quot;&gt;&lt;input class=&quot;task-list-item-checkbox&quot; disabled=&quot;&quot; type=&quot;checkbox&quot;&gt; 待办：迁移 CSDN 文章&lt;/li&gt;
+&lt;li class=&quot;task-list-item&quot;&gt;&lt;input class=&quot;task-list-item-checkbox&quot; disabled=&quot;&quot; type=&quot;checkbox&quot;&gt; 待办：把 Hexo 的旧文搬过来&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;表格&quot; tabindex=&quot;-1&quot;&gt;表格&lt;/h2&gt;
+&lt;p&gt;支持对齐语法（冒号决定左/中/右对齐）：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&quot;text-align:left&quot;&gt;语法元素&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;支持情况&lt;/th&gt;
+&lt;th style=&quot;text-align:right&quot;&gt;备注&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left&quot;&gt;标题 h2-h4&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;支持&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;自动生成锚点与目录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left&quot;&gt;代码高亮&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;支持&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;190+ 语言，亮暗双主题&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left&quot;&gt;复制按钮&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;支持&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;右上角，点击变「已复制」&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left&quot;&gt;数学公式&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;支持&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;KaTeX，检测到公式才加载&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left&quot;&gt;任务列表&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;支持&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;复选框样式&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left&quot;&gt;脚注 Footnote&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;暂不支持&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;有需要再加&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&quot;引用&quot; tabindex=&quot;-1&quot;&gt;引用&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一级引用：写文章和写代码一样，先跑通，再优化。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;嵌套引用：但跑通之前，别急着优化。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;图片&quot; tabindex=&quot;-1&quot;&gt;图片&lt;/h2&gt;
+&lt;p&gt;图片自动懒加载、圆角展示，深色模式下自动压暗边缘：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/spylent-headphones.jpg&quot; alt=&quot;深夜耳机与歌单&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;数学公式块&quot; tabindex=&quot;-1&quot;&gt;数学公式块&lt;/h2&gt;
+&lt;p&gt;独立公式块（&lt;code&gt;$$&lt;/code&gt; 包裹）：&lt;/p&gt;
+&lt;p&gt;$$
+\nabla \cdot \vec{E} = \frac{\rho}{\varepsilon_0}
+$$&lt;/p&gt;
+&lt;h2 id=&quot;分割线&quot; tabindex=&quot;-1&quot;&gt;分割线&lt;/h2&gt;
+&lt;p&gt;上面是分割线，下面继续。&lt;/p&gt;
+&lt;h2 id=&quot;obsidian-语法兼容说明&quot; tabindex=&quot;-1&quot;&gt;Obsidian 语法兼容说明&lt;/h2&gt;
+&lt;p&gt;如果你在 Obsidian 里写作，这几种写法构建时会自动转换：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;图片嵌入（双中括号、感叹号开头）会自动转成标准图片语法，并指向 &lt;code&gt;assets/images/&lt;/code&gt; 目录；&lt;/li&gt;
+&lt;li&gt;用相对路径引用的图片（比如 &lt;code&gt;image/&lt;/code&gt; 或 &lt;code&gt;assets/images/&lt;/code&gt; 开头）会统一改写为站点绝对路径；&lt;/li&gt;
+&lt;li&gt;笔记互链（双中括号、无感叹号）会降级为纯文本，避免渲染成坏链。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;暂不支持-/-需要注意&quot; tabindex=&quot;-1&quot;&gt;暂不支持 / 需要注意&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;脚注语法、Mermaid 图表、在正文里直接写原始 HTML 标签：暂不支持，迁移时遇到我会手工转换；&lt;/li&gt;
+&lt;li&gt;代码块里如果出现图片语法字面量，构建时的路径改写也会作用于它——属于已知边界情况，迁移时我会检查。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;这篇样张会随渲染器升级持续更新。发现哪个元素渲染不对，直接在评论区指出来即可。&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>单曲循环 Spylent 的第 N 周</title>
     <link href="https://mfcheer.github.io/blog/spylent-on-loop/" rel="alternate"/>

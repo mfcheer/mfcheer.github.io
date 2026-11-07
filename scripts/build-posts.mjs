@@ -27,8 +27,9 @@ const TPL_DIR = path.join(ROOT, 'templates');
 
 // 与 index.html / sw.js 的「三同步」版本号保持一处维护（规则见 README）
 import anchor from 'markdown-it-anchor';
+import taskLists from 'markdown-it-task-lists';
 
-const VERSIONS = { css: '1.3.8', js: '1.3.4' };
+const VERSIONS = { css: '1.3.9', js: '1.3.5' };
 
 // ---------- 工具 ----------
 const esc = (s) =>
@@ -119,6 +120,26 @@ md.use(anchor, {
     permalink: false
 });
 
+// 任务列表：- [ ] / - [x] 渲染为复选框
+md.use(taskLists, { label: false });
+
+// Obsidian 兼容预处理（在 Markdown 渲染前对原文做转换）：
+// 1. ![[图片.png]] → ![](/assets/images/图片.png)
+// 2. 相对路径图片 ![alt](image/xxx.png / ./assets/images/xxx.png ...) → 站点绝对路径 /assets/images/xxx.png
+// 3. 笔记互链 [[xxx]] → 纯文本（站点没有同名页面，降级避免坏链）
+function normalizeObsidian(src) {
+    return src
+        .replace(/!\[\[([^\]]+)\]\]/g, (_, name) => `![](/assets/images/${name.trim().replace(/ /g, '%20')})`)
+        .replace(/!\[([^\]]*)\]\(\s*(?!https?:|\/|data:)([^)\s]+)\s*\)/g, (_, alt, srcPath) => {
+            const clean = srcPath
+                .replace(/^\.\//, '')
+                .replace(/^(?:image|images|assets\/images)\//, '')
+                .replace(/ /g, '%20');
+            return `![${alt}](/assets/images/${clean})`;
+        })
+        .replace(/(?<!!)\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/g, '$1');
+}
+
 // KaTeX 按需注入片段：仅当文中检测到 $ / $$ 公式时插入 <head>
 const KATEX_HEAD = [
     '    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">',
@@ -167,7 +188,7 @@ for (const file of files) {
     seenSlugs.add(slug);
 
     const { date, hasTime } = parseDate(data.date, file);
-    const html = md.render(content);
+    const html = md.render(normalizeObsidian(content));
     const tocHtml = buildToc(html);
     const hasMath = /\$\$[\s\S]+?\$\$|\$[^\s$][^$\n]*?\$/.test(content);
     const words = countWords(content);

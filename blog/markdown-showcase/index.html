@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Markdown 渲染能力总览 · mfcheer</title>
+    <meta name="description" content="一篇专门用来「压测」渲染器的样张：标题目录、多语言代码、公式、表格、任务列表、图片、跳链……迁移旧文章前，先看看这套博客能吃下哪些语法。">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/markdown-showcase/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Markdown 渲染能力总览","description":"一篇专门用来「压测」渲染器的样张：标题目录、多语言代码、公式、表格、任务列表、图片、跳链……迁移旧文章前，先看看这套博客能吃下哪些语法。","datePublished":"2026-11-07T12:00:00.000Z","dateModified":"2026-11-07T12:00:00.000Z","url":"https://mfcheer.github.io/blog/markdown-showcase/","mainEntityOfPage":"https://mfcheer.github.io/blog/markdown-showcase/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"博客,Markdown","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Markdown 渲染能力总览 · mfcheer">
+    <meta property="og:description" content="一篇专门用来「压测」渲染器的样张：标题目录、多语言代码、公式、表格、任务列表、图片、跳链……迁移旧文章前，先看看这套博客能吃下哪些语法。">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/markdown-showcase/">
+    <meta property="article:published_time" content="2026-11-07T12:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Markdown 渲染能力总览 · mfcheer">
+    <meta name="twitter:description" content="一篇专门用来「压测」渲染器的样张：标题目录、多语言代码、公式、表格、任务列表、图片、跳链……迁移旧文章前，先看看这套博客能吃下哪些语法。">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.9">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.querySelector('.post-body'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/#blog">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Markdown 渲染能力总览</h1>
+                    <div class="post-meta">
+                        <span>2026/11/07 20:00</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>782 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">博客</span><span class="post-tag">Markdown</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#行内元素">行内元素</a></li><li><a href="#代码块">代码块</a></li><li class="toc-sub"><a href="#bash">Bash</a></li><li class="toc-sub"><a href="#javascript（演示超长行滚动）">JavaScript（演示超长行滚动）</a></li><li class="toc-sub"><a href="#python">Python</a></li><li class="toc-sub"><a href="#sql">SQL</a></li><li class="toc-sub"><a href="#无语言标注">无语言标注</a></li><li><a href="#列表与任务清单">列表与任务清单</a></li><li><a href="#表格">表格</a></li><li><a href="#引用">引用</a></li><li><a href="#图片">图片</a></li><li><a href="#数学公式块">数学公式块</a></li><li><a href="#分割线">分割线</a></li><li><a href="#obsidian-语法兼容说明">Obsidian 语法兼容说明</a></li><li><a href="#暂不支持-/-需要注意">暂不支持 / 需要注意</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>这是本站的「语法样张」：把常用的 Markdown 元素集中在一篇文章里，方便检查渲染效果。以后从 CSDN / Obsidian 迁移文章，遇到样式问题就以这篇为参照。</p>
+<h2 id="行内元素" tabindex="-1">行内元素</h2>
+<p>这一段集中演示行内级语法：<strong>加粗文本</strong>、<em>斜体文本</em>、<em><strong>粗斜体</strong></em>、<s>删除线文本</s>、<code>行内代码 const x = 1</code>，还有<a href="/blog/camp-nou/">站内跳链（诺坎普的黄昏）</a>、<a href="https://github.com/mfcheer" target="_blank" rel="noreferrer">站外链接（我的 GitHub）</a>，以及不带标题的自动链接：<a href="https://mfcheer.github.io" target="_blank" rel="noreferrer">https://mfcheer.github.io</a></p>
+<p>行内公式也在这演示：质能方程 $E = mc^2$，勾股定理 $a^2 + b^2 = c^2$，以及带分式的 $\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$。</p>
+<h2 id="代码块" tabindex="-1">代码块</h2>
+<p>代码块支持语言标签、语法高亮和右上角复制按钮；超长行会横向滚动，不会撑破卡片。</p>
+<h3 id="bash" tabindex="-1">Bash</h3>
+<pre><code class="hljs language-bash"><span class="hljs-comment"># 查看占用 8080 端口的进程并结束它</span>
+lsof -i :8080 | grep LISTEN
+<span class="hljs-built_in">kill</span> -9 $(lsof -t -i :8080)
+</code></pre>
+<h3 id="javascript（演示超长行滚动）" tabindex="-1">JavaScript（演示超长行滚动）</h3>
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> staleKeys = (<span class="hljs-keyword">await</span> caches.<span class="hljs-title function_">keys</span>()).<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">key</span>) =&gt;</span> key.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;mfcheer-static-&#x27;</span>) &amp;&amp; key !== <span class="hljs-string">`mfcheer-static-<span class="hljs-subst">${CACHE_VERSION}</span>`</span>);
+<span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>(staleKeys.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">key</span>) =&gt;</span> caches.<span class="hljs-title function_">delete</span>(key)));
+</code></pre>
+<h3 id="python" tabindex="-1">Python</h3>
+<pre><code class="hljs language-python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">fib</span>(<span class="hljs-params">n: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-built_in">int</span>:
+    a, b = <span class="hljs-number">0</span>, <span class="hljs-number">1</span>
+    <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):
+        a, b = b, a + b
+    <span class="hljs-keyword">return</span> a
+
+<span class="hljs-built_in">print</span>([fib(i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">10</span>)])
+</code></pre>
+<h3 id="sql" tabindex="-1">SQL</h3>
+<pre><code class="hljs language-sql"><span class="hljs-keyword">SELECT</span> user_id, <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">AS</span> pv
+<span class="hljs-keyword">FROM</span> events
+<span class="hljs-keyword">WHERE</span> dt <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;2026-11-07&#x27;</span>
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> user_id
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> pv <span class="hljs-keyword">DESC</span>
+LIMIT <span class="hljs-number">10</span>;
+</code></pre>
+<h3 id="无语言标注" tabindex="-1">无语言标注</h3>
+<pre><code class="hljs">没有语言标注的代码块：不做高亮，但保留等宽字体与复制按钮。
+</code></pre>
+<h2 id="列表与任务清单" tabindex="-1">列表与任务清单</h2>
+<ul>
+<li>无序列表项一</li>
+<li>无序列表项二
+<ol>
+<li>有序子项一</li>
+<li>有序子项二</li>
+</ol>
+</li>
+<li>无序列表项三</li>
+</ul>
+<ol>
+<li>有序列表项一</li>
+<li>有序列表项二
+<ul>
+<li>嵌套无序子项</li>
+</ul>
+</li>
+<li>有序列表项三</li>
+</ol>
+<p>任务清单（Obsidian 里常用）：</p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> 已完成任务：恢复构建流水线</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> 已完成任务：支持代码复制按钮</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> 待办：迁移 CSDN 文章</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> 待办：把 Hexo 的旧文搬过来</li>
+</ul>
+<h2 id="表格" tabindex="-1">表格</h2>
+<p>支持对齐语法（冒号决定左/中/右对齐）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">语法元素</th>
+<th style="text-align:center">支持情况</th>
+<th style="text-align:right">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">标题 h2-h4</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:right">自动生成锚点与目录</td>
+</tr>
+<tr>
+<td style="text-align:left">代码高亮</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:right">190+ 语言，亮暗双主题</td>
+</tr>
+<tr>
+<td style="text-align:left">复制按钮</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:right">右上角，点击变「已复制」</td>
+</tr>
+<tr>
+<td style="text-align:left">数学公式</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:right">KaTeX，检测到公式才加载</td>
+</tr>
+<tr>
+<td style="text-align:left">任务列表</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:right">复选框样式</td>
+</tr>
+<tr>
+<td style="text-align:left">脚注 Footnote</td>
+<td style="text-align:center">暂不支持</td>
+<td style="text-align:right">有需要再加</td>
+</tr>
+</tbody>
+</table>
+<h2 id="引用" tabindex="-1">引用</h2>
+<blockquote>
+<p>一级引用：写文章和写代码一样，先跑通，再优化。</p>
+<blockquote>
+<p>嵌套引用：但跑通之前，别急着优化。</p>
+</blockquote>
+</blockquote>
+<h2 id="图片" tabindex="-1">图片</h2>
+<p>图片自动懒加载、圆角展示，深色模式下自动压暗边缘：</p>
+<p><img src="/assets/images/spylent-headphones.jpg" alt="深夜耳机与歌单" loading="lazy" referrerpolicy="no-referrer"></p>
+<h2 id="数学公式块" tabindex="-1">数学公式块</h2>
+<p>独立公式块（<code>$$</code> 包裹）：</p>
+<p>$$
+\nabla \cdot \vec{E} = \frac{\rho}{\varepsilon_0}
+$$</p>
+<h2 id="分割线" tabindex="-1">分割线</h2>
+<p>上面是分割线，下面继续。</p>
+<h2 id="obsidian-语法兼容说明" tabindex="-1">Obsidian 语法兼容说明</h2>
+<p>如果你在 Obsidian 里写作，这几种写法构建时会自动转换：</p>
+<ul>
+<li>图片嵌入（双中括号、感叹号开头）会自动转成标准图片语法，并指向 <code>assets/images/</code> 目录；</li>
+<li>用相对路径引用的图片（比如 <code>image/</code> 或 <code>assets/images/</code> 开头）会统一改写为站点绝对路径；</li>
+<li>笔记互链（双中括号、无感叹号）会降级为纯文本，避免渲染成坏链。</li>
+</ul>
+<h2 id="暂不支持-/-需要注意" tabindex="-1">暂不支持 / 需要注意</h2>
+<ul>
+<li>脚注语法、Mermaid 图表、在正文里直接写原始 HTML 标签：暂不支持，迁移时遇到我会手工转换；</li>
+<li>代码块里如果出现图片语法字面量，构建时的路径改写也会作用于它——属于已知边界情况，迁移时我会检查。</li>
+</ul>
+<hr>
+<p>这篇样张会随渲染器升级持续更新。发现哪个元素渲染不对，直接在评论区指出来即可。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

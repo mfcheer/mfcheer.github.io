@@ -128,6 +128,25 @@ loadGitHubChart();
     const postBody = document.querySelector('.post-body');
     if (!postBody) return;
 
+    // Clipboard API 仅在 HTTPS 等安全上下文可用，HTTP 环境降级 execCommand
+    async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+            return;
+        }
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+            document.execCommand('copy');
+        } finally {
+            ta.remove();
+        }
+    }
+
     postBody.querySelectorAll('pre').forEach((pre) => {
         const code = pre.querySelector('code');
         if (!code || pre.parentElement.classList.contains('code-block')) return;
@@ -151,7 +170,7 @@ loadGitHubChart();
         btn.textContent = '复制';
         btn.addEventListener('click', async () => {
             try {
-                await navigator.clipboard.writeText(code.innerText);
+                await copyText(code.innerText);
                 btn.textContent = '已复制';
                 btn.classList.add('copied');
             } catch (e) {
