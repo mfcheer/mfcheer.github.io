@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>使用ReentrantLock解决哲学家就餐问题 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：使用ReentrantLock解决哲学家就餐问题">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-f5c1760d8f/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"使用ReentrantLock解决哲学家就餐问题","description":"历史迁移文章：使用ReentrantLock解决哲学家就餐问题","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-f5c1760d8f/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-f5c1760d8f/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="使用ReentrantLock解决哲学家就餐问题 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：使用ReentrantLock解决哲学家就餐问题">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-f5c1760d8f/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="使用ReentrantLock解决哲学家就餐问题 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：使用ReentrantLock解决哲学家就餐问题">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">使用ReentrantLock解决哲学家就餐问题</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>264 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>哲学家就餐问题可以这样表述，假设有五位哲学家围坐在一张圆形餐桌旁，做以下两件事情之一：吃饭，或者思考。吃东西的时候，他们就停止思考，思考的时候也停止吃东西。餐桌中间有一大碗意大利面，每两个哲学家之间有一只餐叉。因为用一只餐叉很难吃到意大利面，所以假设哲学家必须用两只餐叉吃东西。他们只能使用自己左右手边的那两只餐叉。哲学家就餐问题有时也用米饭和筷子而不是意大利面和餐叉来描述，因为很明显，吃米饭必须用两根筷子。</p>
+<p>哲学家从来不交谈，这就很危险，可能产生死锁，每个哲学家都拿着左手的餐叉，永远都在等右边的餐叉（或者相反）。即使没有死锁，也有可能发生资源耗尽。</p>
+<p>&lt;!--more--&gt;
+使用重入锁ReentrantLock解决。</p>
+<p>代码：</p>
+<pre><code class="hljs">
+public class Dinner {
+	
+	public static int SIZE = 10;
+	public static ReentrantLock[] locks = new ReentrantLock[SIZE];
+	
+	public static class Person extends Thread{
+		int pos;
+		public Person(int pos) {
+			this.pos = pos;
+		}
+		 public void run() {
+			 while(true) {
+					 try {
+						 //哲学家思考
+						 Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+					if(locks[pos].tryLock()) {
+						try {
+							if(locks[(pos+1)%SIZE].tryLock()) {
+								try {
+									 System.out.println(&quot;哲学家&quot; + pos + &quot;就餐中...&quot;);
+									 Thread.sleep(1000);
+								} catch (Exception e) {
+									e.printStackTrace();
+								} finally {
+									 locks[(pos+1)%SIZE].unlock();
+								}
+							 }
+						 } finally {
+							 locks[pos].unlock();
+						 }
+					 }
+			 }
+		 }
+	};	
+	 public static void main(String[] args) {
+	        for (int i = 0; i &lt; SIZE; ++i)
+	            locks[i] = new ReentrantLock();
+	 
+	        for (int i = 0; i &lt; SIZE; ++i)
+	            new Person(i).start();
+	    }
+}
+</code></pre>
+<p>输出：</p>
+<pre><code class="hljs">哲学家4就餐中...
+哲学家8就餐中...
+哲学家0就餐中...
+哲学家6就餐中...
+哲学家2就餐中...
+哲学家9就餐中...
+哲学家7就餐中...
+哲学家5就餐中...
+哲学家4就餐中...
+哲学家6就餐中...
+哲学家8就餐中...
+哲学家1就餐中...
+哲学家7就餐中...
+哲学家0就餐中...
+哲学家5就餐中...
+哲学家3就餐中...
+...
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

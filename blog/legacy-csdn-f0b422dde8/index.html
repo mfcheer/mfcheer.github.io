@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Java编程思想 - 第7章、复用类 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49490127 代码的复用 has a: 组合 is a: 继承…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-f0b422dde8/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Java编程思想 - 第7章、复用类","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49490127 代码的复用 has a: 组合 is a: 继承…","datePublished":"2015-10-29T05:03:00.000Z","dateModified":"2015-10-29T05:03:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-f0b422dde8/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-f0b422dde8/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Java编程思想 - 第7章、复用类 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49490127 代码的复用 has a: 组合 is a: 继承…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-f0b422dde8/">
+    <meta property="article:published_time" content="2015-10-29T05:03:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Java编程思想 - 第7章、复用类 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49490127 代码的复用 has a: 组合 is a: 继承…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Java编程思想 - 第7章、复用类</h1>
+                    <div class="post-meta">
+                        <span>2015/10/29 13:03</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>992 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49490127" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/49490127</a></p>
+<h3 id="代码的复用" tabindex="-1">代码的复用</h3>
+<pre><code>has a: 组合
+is a: 继承
+中庸之道:代理
+</code></pre>
+<h4 id="1，组合，继承，代理" tabindex="-1">1，组合，继承，代理</h4>
+<p>为了继承，一般的规则是将所有的数据成员都设置为private，而将所有的方法都设置为public。这样，当不同的包下的类继承该类时，就可以获得该类所有的方法，和包内、包外没有区别。如果不加修饰符，就是限制包内访问，那么包外继承的时候，只能获得public修饰的方法，这样内外的方法不一致，就会出现问题了。当然，特殊情况需要特殊考虑。</p>
+<p>try和finally语句：<br>
+关键字try表示，下面的块，是所谓的保护区，意味着总要被特殊处理。其中一项特殊处理就是try块无论如何退出，保护区后的finally子句中的代码都会执行。</p>
+<pre><code>try{
+ }
+finally {
+}
+</code></pre>
+<p>protected关键字：<br>
+对于类用户而而言，protected是privated的，而对于其导出类或同一个包中的类来说是有访问权限的。</p>
+<p>向上转型：<br>
+“新类是现有类的一种类型”<br>
+由导出类转换为基类，是安全的。</p>
+<h4 id="2，final-关键字" tabindex="-1">2，final 关键字</h4>
+<p>表示这是无法改变的。<br>
+用处：<br>
+1），永不改变的编译时变量<br>
+2），运行时初始化的值，不希望它被改变。<br>
+对final变量定义时，必须对其赋值。<br>
+一个既是static又是final的域只占一段不能改变的存储空间，惯例用大写字母加下划线分隔单词。</p>
+<p>空白final：可以通过在定义处或者在构造函数中初始化，而在构造函数中初始化可以使不同对象的对象拥有不同的值（比如身份证号，唯一且不能改变）。这样就保证final数据在使用前被初始化且无法改变的特征。</p>
+<p>final参数：java可在参数列表中以声明的方式将参数指明为final，意味着你无法在方法中更改参数引用所指的对象。</p>
+<p>final类：表明了你不打算继承该类，而且也不允许别人这样做。你对该类的设计并不需要改变，或者是处于安全的考虑，你不希望它有子类。</p>
+<p>使用final原因：<br>
+1），将方法锁定。<br>
+2），效率。</p>
+<p>类中的private方法都隐式的指定为final。</p>
+<h4 id="3，初始化" tabindex="-1">3，初始化</h4>
+<pre><code>    在执行xx.main的时候，因为main是static方法，就触发了该类的加载（因为Java采用了动态加载技术，只有使用的时候才会被加载）。于是Java解释器调用类加载器在CLASSPATH中找xx.class，如果xx继承自aa，那么编译器注意到xx有一个基类aa（通过extends得到），就开始加载基类，不管你是否打算产生一个该基类的对象（因为需要将该类加载进内存，有其子必有其父是也）。如果该基类继承自其它类，就会以此类推。
+    根基类中的static初始化会被执行，然后是第二个基类，以此类推（如果没有调用new，到这里就结束了）
+    如果使用new创建对象，就会在堆上为该对象分配足够的存储空间
+    存储空间先清空，然后进行默认初始化，基本类型给默认值，引用类型给null。其实这一块是通过将对象内存设为二进制零值一举生成的，说成两个过程是便于理解，本质是分配内存的同时进行设置默认值
+    从根基类开始，执行每个类定义处的域初始化
+    从根基类的构造器开始执行，一直到底
+</code></pre>
+<h3 id="总结：" tabindex="-1">总结：</h3>
+<p>组合和继承相比，更加灵活。优先选择组合，而非继承，除非必要。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

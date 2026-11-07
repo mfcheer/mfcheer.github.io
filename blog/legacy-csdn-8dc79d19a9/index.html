@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Uva 10048 Audiophobia 【floyd】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44749211 Consider yourself lucky!…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-8dc79d19a9/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Uva 10048 Audiophobia 【floyd】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44749211 Consider yourself lucky!…","datePublished":"2015-03-30T04:49:00.000Z","dateModified":"2015-03-30T04:49:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-8dc79d19a9/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-8dc79d19a9/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Uva 10048 Audiophobia 【floyd】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44749211 Consider yourself lucky!…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-8dc79d19a9/">
+    <meta property="article:published_time" content="2015-03-30T04:49:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Uva 10048 Audiophobia 【floyd】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44749211 Consider yourself lucky!…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Uva 10048 Audiophobia 【floyd】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/30 12:49</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>822 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44749211" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44749211</a></p>
+<p>Consider yourself lucky! Consider yourself lucky to be still breathing and
+having fun participating in<br>
+this contest. But we apprehend that many of your descendants may not have this
+luxury. For, as you<br>
+know, we are the dwellers of one of the most polluted cities on earth.
+Pollution is everywhere, both in<br>
+the environment and in society and our lack of consciousness is simply
+aggravating the situation.<br>
+However, for the time being, we will consider only one type of pollution - the
+sound pollution. The<br>
+loudness or intensity level of sound is usually measured in decibels and sound
+having intensity level 130<br>
+decibels or higher is considered painful. The intensity level of normal
+conversation is 60 65 decibels and<br>
+that of heavy traffic is 70 80 decibels.<br>
+Consider the following city map where the edges refer to streets and the nodes
+refer to crossings.<br>
+The integer on each edge is the average intensity level of sound (in decibels)
+in the corresponding street.<br>
+<img src="https://img-blog.csdn.net/20150330123713359" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"><br>
+To get from crossing A to crossing G you may follow the following path: A- C-
+F- G. In that case<br>
+you must be capable of tolerating sound intensity as high as 140 decibels. For
+the paths A- B- E- G,<br>
+A- B- D- G and A- C- F- D- G you must tolerate respectively 90, 120 and 80
+decibels of sound intensity.<br>
+There are other paths, too. However, it is clear that A- C- F- D- G is the
+most comfortable path since<br>
+it does not demand you to tolerate more than 80 decibels.<br>
+In this problem, given a city map you are required to determine the minimum
+sound intensity level<br>
+you must be able to tolerate in order to get from a given crossing to another.<br>
+Input<br>
+The input may contain multiple test cases.<br>
+The first line of each test case contains three integers C(≤ 100), S(≤ 1000)
+and Q(≤ 10000) where<br>
+C indicates the number of crossings (crossings are numbered using distinct
+integers ranging from 1 to<br>
+C), S represents the number of streets and Q is the number of queries.<br>
+Each of the next S lines contains three integers: c1, c2 and d indicating that
+the average sound<br>
+intensity level on the street connecting the crossings c1 and c2 (c1 ̸= c2) is
+d decibels.<br>
+Each of the next Q lines contains two integers c1 and c2 (c1 ̸= c2) asking for
+the minimum sound<br>
+intensity level you must be able to tolerate in order to get from crossing c1
+to crossing c2.<br>
+The input will terminate with three zeros form C, S and Q.<br>
+Output<br>
+For each test case in the input first output the test case number (starting
+from 1) as shown in the<br>
+sample output. Then for each query in the input print a line giving the
+minimum sound intensity level<br>
+(in decibels) you must be able to tolerate in order to get from the first to
+the second crossing in the<br>
+query. If there exists no path between them just print the line “no path”.<br>
+Print a blank line between two consecutive test cases.<br>
+Sample Input<br>
+7 9 3<br>
+1 2 50<br>
+1 3 60<br>
+2 4 120<br>
+2 5 90<br>
+3 6 50<br>
+4 6 80<br>
+4 7 70<br>
+5 7 40<br>
+6 7 140<br>
+1 7<br>
+2 6<br>
+6 2<br>
+7 6 3<br>
+1 2 50<br>
+1 3 60<br>
+2 4 120<br>
+3 6 50<br>
+4 6 80<br>
+5 7 40<br>
+7 5<br>
+1 7<br>
+2 4<br>
+0 0 0<br>
+Sample Output<br>
+Case #1<br>
+80<br>
+60<br>
+60<br>
+Case #2<br>
+40<br>
+no path<br>
+80</p>
+<p>求路径中最大值最小的边；<br>
+floyd 传递闭包；</p>
+<pre><code>#include &lt;stdio.h&gt;  
+#include &lt;iostream&gt;  
+#include &lt;string.h&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;math.h&gt;  
+#include &lt;stack&gt;  
+#include &lt;queue&gt;  
+
+using namespace std;
+
+const int MAXN = 1010;
+const int inf = 1e9;
+
+int c, s, q;
+int dp[MAXN][MAXN];
+int u, v, w, cases = 1;
+
+int main()
+{
+    while (scanf(&quot;%d%d%d&quot;, &amp;c, &amp;s, &amp;q) != EOF)
+    {
+        if (c == 0 &amp;&amp; s == 0 &amp;&amp; q == 0)
+            break;
+        for (int i = 1; i &lt;= c; i++)
+            for (int j = 1; j &lt;= c; j++)
+            {
+                if (i == j)
+                    dp[i][j] = 0;
+                else
+                    dp[i][j] = inf;
+            }
+        while (s--)
+        {
+            scanf(&quot;%d%d%d&quot;, &amp;u, &amp;v, &amp;w);
+                dp[u][v] = dp[v][u] = w;
+        }
+
+        for (int k = 1; k &lt;= c; k++)
+            for (int i = 1; i &lt;= c; i++)
+                for (int j = 1; j &lt;= c; j++)
+                {
+                    if (dp[i][k]!=-1 &amp;&amp; dp[k][j]!=-1)
+                        dp[i][j] = min(dp[i][j],max(dp[i][k],dp[k][j]));
+                }
+        if (cases != 1) printf(&quot;\n&quot;);
+        printf(&quot;Case #%d\n&quot;, cases++);
+        while (q--)
+        {
+            scanf(&quot;%d%d&quot;,&amp;u,&amp;v);
+            if (dp[u][v] != inf)
+                printf(&quot;%d\n&quot;,dp[u][v]);
+            else
+                printf(&quot;no path\n&quot;);
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu 1025 Constructing Roads In JGShining’s Kingdom 【dp+二分】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46379469 题目链接： http://acm.acmcode…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-040b7cf1f4/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu 1025 Constructing Roads In JGShining’s Kingdom 【dp+二分】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46379469 题目链接： http://acm.acmcode…","datePublished":"2015-06-05T09:06:00.000Z","dateModified":"2015-06-05T09:06:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-040b7cf1f4/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-040b7cf1f4/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu 1025 Constructing Roads In JGShining’s Kingdom 【dp+二分】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46379469 题目链接： http://acm.acmcode…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-040b7cf1f4/">
+    <meta property="article:published_time" content="2015-06-05T09:06:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu 1025 Constructing Roads In JGShining’s Kingdom 【dp+二分】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46379469 题目链接： http://acm.acmcode…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu 1025 Constructing Roads In JGShining’s Kingdom 【dp+二分】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 17:06</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>268 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46379469" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46379469</a></p>
+<p>题目链接： <a href="http://acm.acmcoder.com/showproblem.php?pid=1025" target="_blank" rel="noreferrer"> http://acm.acmcoder.com/showproblem.php?pid=1025
+</a></p>
+<p>题意：本求最长公共子序列，但数据太多。转化为求最长不下降子序列。太NB了。复杂度n*log(n).</p>
+<p>解法：dp+二分</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;vector&gt;  
+#include &lt;string&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;iostream&gt;
+#include &lt;iterator&gt;
+#include &lt;fstream&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;math.h&gt;
+
+using namespace std;
+
+const int MAXN = 500010;
+
+int n, pos;
+int a[MAXN];
+int dp[MAXN];
+int h, k;
+
+int search(int num,int low,int high)
+{
+    int mid;
+    while (low &lt;= high)
+    {
+        mid = (low + high) / 2;
+        if (num &gt;= dp[mid]) low = mid + 1;
+        else high = mid - 1;
+    }
+    return low;
+}
+
+int main()
+{
+    int cases = 1;
+    while (~scanf(&quot;%d&quot;, &amp;n))
+    {
+        for (int i = 1; i &lt;= n; i++)
+        {
+            scanf(&quot;%d%d&quot;, &amp;h, &amp;k);
+            a[h] = k;
+        }
+        memset(dp, 0, sizeof(dp));
+        dp[0] = -1; dp[1] = a[1];
+        int len = 1;
+        //  n*log(n) 求解
+
+        for (int i = 2; i &lt;= n; i++)
+        {
+            if (a[i] &gt;= dp[len])
+            {
+                len = len + 1;
+                dp[len] = a[i];
+            }
+            else
+            {
+                pos = search(a[i],1,len);
+                dp[pos] = a[i];
+            }
+        }
+        printf(&quot;Case %d:\n&quot;,cases++);
+        if (len == 1)
+            printf(&quot;My king, at most %d road can be built.\n\n&quot;,len);
+        else 
+            printf(&quot;My king, at most %d roads can be built.\n\n&quot;,len);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

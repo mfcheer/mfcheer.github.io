@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>漂洋过海来看你 【dfs or 最短路】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44351051 漂洋过海来看你 Description BMan…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-15ff3f65b3/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"漂洋过海来看你 【dfs or 最短路】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44351051 漂洋过海来看你 Description BMan…","datePublished":"2015-03-17T13:30:00.000Z","dateModified":"2015-03-17T13:30:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-15ff3f65b3/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-15ff3f65b3/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"dfs","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="漂洋过海来看你 【dfs or 最短路】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44351051 漂洋过海来看你 Description BMan…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-15ff3f65b3/">
+    <meta property="article:published_time" content="2015-03-17T13:30:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="漂洋过海来看你 【dfs or 最短路】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44351051 漂洋过海来看你 Description BMan…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">漂洋过海来看你 【dfs or 最短路】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/17 21:30</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>831 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">dfs</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44351051" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44351051</a></p>
+<p>漂洋过海来看你<br>
+Description<br>
+BMan和hyx住在一个神奇的国度，这个国度有N个城市，这N个城市间只有N-1条路把这个N个城市连接起来。
+现在BMan在第S号城市，他经常想起那个一起AC过的队友hyx，记忆它总是慢慢的累积，在他心中无法抹去，可是他并不知道hyx
+在哪个城市，所以他决定用尽半年的积蓄漂洋过海去找hyx，现在BMan很想知道如果他想去hyx所在的第X号城市，必须经过的前
+一个城市是第几号城市（放心，由于心系队友，BMan是不会选择走重复的路的~）<br>
+Input<br>
+第一行输入一个整数T表示测试数据共有T(1&lt;=T&lt;=10)组
+每组测试数据的第一行输入一个正整数N(1&lt;=N&lt;=1000)和一个正整数S(1&lt;=S&lt;=1000)，N表示城市的总数，S是BMan所在城市的编号 随后的N-
+1行，每行有两个正整数a,b(1&lt;=a,b&lt;=N)，表示第a号城市和第b号城市之间有一条路连通。<br>
+Output<br>
+每组测试数据输N个正整数，其中，第i个数表示从S走到i号城市，必须要经过的上一个城市的编号（其中i=S时，请输出-1）<br>
+Sample Input<br>
+1<br>
+10 1<br>
+1 9<br>
+1 8<br>
+8 10<br>
+10 3<br>
+8 6<br>
+1 2<br>
+10 4<br>
+9 5<br>
+3 7<br>
+Sample Output<br>
+-1 1 10 10 9 8 3 1 1 8</p>
+<p>最短路或dfs均可做</p>
+<p>最短路代码：</p>
+<pre><code>#include &lt;stdio.h&gt;    
+#include &lt;iostream&gt;    
+#include &lt;math.h&gt;    
+#include &lt;stdlib.h&gt;    
+#include &lt;ctype.h&gt;    
+#include &lt;algorithm&gt;    
+#include &lt;vector&gt;    
+#include &lt;string.h&gt;    
+#include &lt;queue&gt;    
+#include &lt;stack&gt;    
+#include &lt;set&gt;     
+#include &lt;sstream&gt;    
+#include &lt;time.h&gt;    
+#include &lt;utility&gt;    
+#include &lt;malloc.h&gt;    
+#include &lt;stdexcept&gt;    
+#include &lt;iomanip&gt;    
+#include &lt;iterator&gt;  
+
+using namespace std;
+const int MAXV = 4010;
+const int inf = 10000000;
+
+int map[MAXV][MAXV];
+int d[MAXV];
+bool vis[MAXV];
+int n, m;
+int pre[MAXV];
+
+void dijkstra(int s)
+{
+    for (int i = 1; i &lt;= n; i++)
+    {
+        vis[i] = 0;
+        d[i] = map[s][i];
+    }
+    while (1)
+    {
+        int min = inf, v = -1;
+        for (int i = 1; i &lt;= n; i++)
+            if (!vis[i] &amp;&amp; d[i]&lt;min)
+            {
+                v = i;
+                min = d[i];
+            }
+        if (v == -1)
+            break;
+        vis[v] = 1;
+        for (int i = 1; i &lt;= n; i++)
+            if (!vis[i] &amp;&amp; d[i] &gt;= d[v] + map[v][i])
+            {
+                d[i] = map[v][i] + d[v];
+                pre[i] = v;
+            }
+    }
+}
+int t, a, b;
+
+int main()
+{
+    scanf(&quot;%d&quot;, &amp;t);
+    while (t--)
+    {
+        scanf(&quot;%d%d&quot;, &amp;n, &amp;m);
+        for (int i = 1; i &lt;= n; i++)
+            for (int j = 1; j &lt;= n; j++)
+            {
+                if (i == j)
+                    map[i][i] = 0;
+                else
+                    map[i][j] = map[j][i] = inf;
+            }
+        memset(pre, 0, sizeof(pre));
+
+        pre[m] = -1;
+
+        for (int i = 1; i &lt; n; i++)
+        {
+            scanf(&quot;%d%d&quot;, &amp;a, &amp;b);
+            map[a][b] = map[b][a] = 1;
+        }
+        dijkstra(m);
+        for (int i = 1; i &lt; n; i++)
+            printf(&quot;%d &quot;, pre[i]);
+        printf(&quot;%d\n&quot;, pre[n]);
+    }
+    return 0;
+}
+</code></pre>
+<p>dfs代码：</p>
+<pre><code>#include &lt;stdio.h&gt;    
+#include &lt;iostream&gt;    
+#include &lt;math.h&gt;    
+#include &lt;stdlib.h&gt;    
+#include &lt;ctype.h&gt;    
+#include &lt;algorithm&gt;    
+#include &lt;vector&gt;    
+#include &lt;string.h&gt;    
+#include &lt;queue&gt;    
+#include &lt;stack&gt;    
+#include &lt;set&gt;     
+#include &lt;sstream&gt;    
+#include &lt;time.h&gt;    
+#include &lt;utility&gt;    
+#include &lt;malloc.h&gt;    
+#include &lt;stdexcept&gt;    
+#include &lt;iomanip&gt;    
+#include &lt;iterator&gt;  
+
+using namespace std;
+const int MAXV = 4010;
+const int inf = 10000000;
+
+int map[MAXV][MAXV];
+int d[MAXV];
+bool vis[MAXV];
+int n, m;
+int pre[MAXV];
+int t, a, b;
+
+void dfs(int s)
+{
+    vis[s] = 1;
+    for (int i = 1; i &lt;= n; i++)
+    {
+        if (!vis[i] &amp;&amp; map[s][i] == 1)
+        {
+            pre[i] = s;
+            vis[i] = 1;
+            dfs(i);
+        }
+    }
+}
+
+int main()
+{
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        memset(vis,0,sizeof(vis));
+        scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+        memset(map,0,sizeof(map));
+        memset(pre,0,sizeof(pre));
+        pre[m] = -1;
+
+        for (int i = 1; i &lt; n; i++)
+        {
+            scanf(&quot;%d%d&quot;,&amp;a,&amp;b);
+            map[a][b] = map[b][a] = 1;
+        }
+        dfs(m);
+        for (int i = 1; i &lt; n; i++)
+            printf(&quot;%d &quot;,pre[i]);
+        printf(&quot;%d\n&quot;,pre[n]);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

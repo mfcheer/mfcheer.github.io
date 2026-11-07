@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>maven的用途 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：maven的用途">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-5718f812cd/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"maven的用途","description":"历史迁移文章：maven的用途","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-5718f812cd/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-5718f812cd/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="maven的用途 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：maven的用途">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-5718f812cd/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="maven的用途 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：maven的用途">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">maven的用途</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>455 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#pom">pom</a></li><li><a href="#artifact">Artifact</a></li><li><a href="#repositories">Repositories</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h1 id="maven的用途" tabindex="-1">maven的用途</h1>
+<p>maven是一个项目构建和管理的工具。可以将项目过程规范化、自动化、高效化以及强大的可扩展性。利用maven自身及其插件还可以获得代码检查报告、单元测试覆盖率、实现持续集成等等.</p>
+<h1 id="核心概念" tabindex="-1">核心概念</h1>
+<h2 id="pom" tabindex="-1">pom</h2>
+<p>pom是指project object Model。pom是一个xml文件。是maven工作的基础，maven会去项目根目录下读取pom.xml获得需要的配置信息。</p>
+<p>pom文件中包含了项目的信息和maven build项目所需的配置信息，通常有项目信息(如版本、成员)、项目的依赖、插件和goal、build选项等等。</p>
+<p>pom是可以继承的，通常对于一个大型的项目或是多个module的情况，子模块的pom需要指定父模块的pom。
+pom文件中节点含义如下：
+&lt;!--more--&gt;</p>
+<pre><code class="hljs">project pom文件的顶级元素
+modelVersion 所使用的object model版本，为了确保稳定的使用，这个元素是强制性的。除非maven开发者升级模板，否则不需要修改
+groupId 是项目创建团体或组织的唯一标志符，通常是域名倒写，如groupId  org.apache.maven.plugins就是为所有maven插件预留的
+artifactId 是项目artifact唯一的基地址名
+packaging artifact打包的方式，如jar、war、ear等等。默认为jar。这个不仅表示项目最终产生何种后缀的文件，也表示build过程使用什么样的lifecycle。
+version artifact的版本，通常能看见为类似0.0.1-SNAPSHOT，其中SNAPSHOT表示项目开发中，为开发版本
+name 表示项目的展现名，在maven生成的文档中使用
+url表示项目的地址，在maven生成的文档中使用
+description 表示项目的描述，在maven生成的文档中使用
+dependencies 表示依赖，在子节点dependencies中添加具体依赖的groupId artifactId和version
+build 表示build配置
+parent 表示父pom
+</code></pre>
+<h2 id="artifact" tabindex="-1">Artifact</h2>
+<p>一个项目将要产生的文件，可以是jar文件，源文件，二进制文件，war文件。每个artifact都由groupId:artifactId:version组成的标识符唯一识别</p>
+<h2 id="repositories" tabindex="-1">Repositories</h2>
+<p>Repositories是用来存储Artifact的。在项目中需要使用某种工具时，在pom中声明dependency，编译代码时就会根据dependency去下载工具（Artifact），供自己使用。
+对于自己的项目完成后可以通过mvn install命令将项目放到仓库（Repositories）中。
+仓库分为本地仓库和远程仓库，远程仓库是指远程服务器上用于存储Artifact的仓库，本地仓库是指本机存储Artifact的仓库，对于windows机器本地仓库地址为系统用户的.m2/repository下面。</p>
+<h1 id="常用命令" tabindex="-1">常用命令</h1>
+<p>将依赖包打包进一个文件夹</p>
+<pre><code class="hljs">dependency:copy-dependencies
+</code></pre>
+<p>将依赖包打包成一个包</p>
+<pre><code class="hljs">&lt;build&gt;
+  &lt;plugins&gt;
+    &lt;plugin&gt;
+        &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
+        &lt;!-- &lt;version&gt;2.1&lt;/version&gt; --&gt;
+        &lt;configuration&gt;
+            &lt;descriptorRefs&gt;
+                &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
+            &lt;/descriptorRefs&gt;
+        &lt;/configuration&gt;
+    &lt;/plugin&gt;
+  &lt;/plugins&gt;
+&lt;/build&gt;
+assembly::assembly
+</code></pre>
+<p>排除依赖包</p>
+<pre><code class="hljs">&lt;exclusions&gt;
+    &lt;exclusion&gt;
+        &lt;groupId&gt;redis.clients&lt;/groupId&gt;
+        &lt;artifactId&gt;jedis&lt;/artifactId&gt;
+    &lt;/exclusion&gt;
+&lt;/exclusions&gt;
+</code></pre>
+<p>设定编译jdk版本</p>
+<pre><code class="hljs">&lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;configuration&gt;
+                    &lt;source&gt;1.8&lt;/source&gt;
+                    &lt;target&gt;1.8&lt;/target&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

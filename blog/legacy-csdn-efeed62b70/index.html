@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Codeforces Round · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41495521 http://codeforces.com/co…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-efeed62b70/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Codeforces Round","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41495521 http://codeforces.com/co…","datePublished":"2014-11-25T15:33:00.000Z","dateModified":"2014-11-25T15:33:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-efeed62b70/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-efeed62b70/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"acm,算法,codeforces","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Codeforces Round · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41495521 http://codeforces.com/co…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-efeed62b70/">
+    <meta property="article:published_time" content="2014-11-25T15:33:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Codeforces Round · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41495521 http://codeforces.com/co…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Codeforces Round</h1>
+                    <div class="post-meta">
+                        <span>2014/11/25 23:33</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1813 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 5 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">acm</span><span class="post-tag">算法</span><span class="post-tag">codeforces</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41495521" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41495521</a></p>
+<p><a href="http://codeforces.com/contest/490/problem/A" target="_blank" rel="noreferrer"> http://codeforces.com/contest/490/problem/A
+</a></p>
+<p>A 题 贪心水题</p>
+<p>A. Team Olympiad</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>The School №0 of the capital of Berland has  <em>n</em> children studying in it. All
+the children in this school are gifted: some of them are good at programming,
+some are good at maths, others are good at PE (Physical Education). Hence, for
+each child we know value  <em>t</em> <em>i</em> :</p>
+<ul>
+<li><em>t</em> <em>i</em> = 1  , if the  <em>i</em> -th child is good at programming,</li>
+<li><em>t</em> <em>i</em> = 2  , if the  <em>i</em> -th child is good at maths,</li>
+<li><em>t</em> <em>i</em> = 3  , if the  <em>i</em> -th child is good at PE</li>
+</ul>
+<p>Each child happens to be good at exactly one of these three subjects.</p>
+<p>The Team Scientific Decathlon Olympias requires teams of three students. The
+school teachers decided that the teams will be composed of three children that
+are good at different subjects. That is, each team must have one
+mathematician, one programmer and one sportsman. Of course, each child can be
+a member of no more than one team.</p>
+<p>What is the maximum number of teams that the school will be able to present at
+the Olympiad? How should the teams be formed for that?</p>
+<p>Input</p>
+<p>The first line contains integer  <em>n</em> (  1 ≤ <em>n</em> ≤ 5000  ) — the number of
+children in the school. The second line contains  <em>n</em> integers  <em>t</em> 1  , <em>t</em> 2
+, ..., <em>t</em> <em>n</em> (  1 ≤ <em>t</em> <em>i</em> ≤ 3  ), where  <em>t</em> <em>i</em> describes the skill of
+the  <em>i</em> -th child.</p>
+<p>Output</p>
+<p>In the first line output integer  <em>w</em> — the largest possible number of teams.</p>
+<p>Then print  <em>w</em> lines, containing three numbers in each line. Each triple
+represents the indexes of the children forming the team. You can print both
+the teams, and the numbers in the triplets in any order. The children are
+numbered from  1  to  <em>n</em> in the order of their appearance in the input. Each
+child must participate in no more than one team. If there are several
+solutions, print any of them.</p>
+<p>If no teams can be compiled, print the only line with value  <em>w</em> equal to 0.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>7
+1 3 1 3 2 1 2
+</code></pre>
+<p>output</p>
+<pre><code>2
+3 5 2
+6 7 4
+</code></pre>
+<p>input</p>
+<pre><code>4
+2 1 1 2
+</code></pre>
+<p>output</p>
+<pre><code>0
+
+
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;sstream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+
+using namespace std;
+
+int n,m;
+int t;
+
+int a[5];
+int b[5005];
+
+int main ()
+{
+    while (scanf(&quot;%d&quot;,&amp;n)!=EOF)
+    {
+        memset(a,0,sizeof(a));
+        for(int i=1;i&lt;=n;i++)
+        {
+            scanf(&quot;%d&quot;,&amp;t);
+            b[i]=t;
+            if(t == 1)
+                a[1]++;
+            if(t == 2)
+                a[2]++;
+            if(t == 3)
+                a[3]++;
+        }
+        int ans = min (a[1],min(a[2],a[3]));
+        printf(&quot;%d\n&quot;,ans);
+        for(int i=1 ;i&lt;=ans;i++)
+        {
+            for(int j =1 ;j&lt;=5005;j++)
+            {
+                if(b[j] == 1)
+                {
+                    printf(&quot;%d &quot;,j);
+                    b[j] = 0;
+                    break;
+                }
+
+            }
+            for(int j =1 ;j&lt;=n;j++)
+            {
+                if(b[j] == 2)
+                {
+                    printf(&quot;%d &quot;,j);
+                    b[j] = 0;
+                    break;
+                }
+
+            }
+            for(int j =1;j&lt;=n;j++)
+            {
+                if(b[j] == 3)
+                {
+                    printf(&quot;%d\n&quot;,j);
+                    b[j] = 0;
+                    break;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+</code></pre>
+<p><a href="http://codeforces.com/contest/490/problem/B" target="_blank" rel="noreferrer"> http://codeforces.com/contest/490/problem/B
+</a></p>
+<p>B. Queue</p>
+<p>time limit per test</p>
+<p>2 seconds</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>During the lunch break all  <em>n</em> Berland State University students lined up in
+the food court. However, it turned out that the food court, too, has a lunch
+break and it temporarily stopped working.</p>
+<p>Standing in a queue that isn't being served is so boring! So, each of the
+students wrote down the number of the student ID of the student that stands in
+line directly in front of him, and the student that stands in line directly
+behind him. If no one stands before or after a student (that is, he is the
+first one or the last one), then he writes down number  0  instead (in Berland
+State University student IDs are numerated from  1  ).</p>
+<p>After that, all the students went about their business. When they returned,
+they found out that restoring the queue is not such an easy task.</p>
+<p>Help the students to restore the state of the queue by the numbers of the
+student ID's of their neighbors in the queue.</p>
+<p>Input</p>
+<p>The first line contains integer  <em>n</em> (  2 ≤ <em>n</em> ≤ 2·10  5  ) — the number of
+students in the queue.</p>
+<p>Then  <em>n</em> lines follow,  <em>i</em> -th line contains the pair of integers  <em>a</em> <em>i</em> ,
+<em>b</em> <em>i</em> (  0 ≤ <em>a</em> <em>i</em> , <em>b</em> <em>i</em> ≤ 10  6  ), where  <em>a</em> <em>i</em> is the ID number
+of a person in front of a student and  <em>b</em> <em>i</em> is the ID number of a person
+behind a student. The lines are given in the arbitrary order. Value  0  is
+given instead of a neighbor's ID number if the neighbor doesn't exist.</p>
+<p>The ID numbers of all students are distinct. It is guaranteed that the records
+correspond too the queue where all the students stand in some order.</p>
+<p>Output</p>
+<p>Print a sequence of  <em>n</em> integers  <em>x</em> 1  , <em>x</em> 2  , ..., <em>x</em> <em>n</em> — the
+sequence of ID numbers of all the students in the order they go in the queue
+from the first student to the last one.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>4
+92 31
+0 7
+31 0
+7 141
+</code></pre>
+<p>output</p>
+<pre><code>92 7 31 141 
+</code></pre>
+<p>Note</p>
+<p>The picture illustrates the queue for the first sample.</p>
+<p><img src="http://espresso.codeforces.com/f089a9d653e574dc26574dc9adce315a616191f9.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>要将给的数据分为奇数位和偶数位来排。。用ne[]来存后继，pre[]存前驱。再用一个flag[]标记. 每次读入两个数 a，b 让ne[a] =
+b,pre[b] = a ,flag [a] = flag[b] = 1;然后让nt从0开始扫一遍就能得到处在偶数位置的数。每次访问后将flag[]置0。
+接下来找奇数位置的数。扫一遍flag 直到遇到flag[i]的值为1的时候退出循环。然后tmp = i
+,然后从tmp开始扫一遍pre找到第一个位置的数，然后就可以填满奇数位置的数了。</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;sstream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+
+using namespace std;
+
+int n;
+int ne[1000010],pre[1000010],flog[1000010];
+int ans [1000010];
+int a,b;
+
+int main ()
+{
+	while (cin&gt;&gt;n)
+	{
+		memset (flog,0,sizeof(flog));
+		memset (ne,-1,sizeof(ne));
+		memset (pre,-1,sizeof(pre));
+		memset (ans,0,sizeof(ans));
+
+		for(int i=1;i&lt;=n;i++)
+		{
+			cin&gt;&gt;a&gt;&gt;b;
+			ne[a] = b;
+			pre[b] = a;
+			flog[a] = 1;
+			flog [b] = 1;
+		}
+		int tmp = 0;
+		int k = 2;
+		while (1)
+		{
+			ans[k]=ne[tmp];
+			flog[tmp]=0;
+
+			k+=2;
+			tmp = ne[tmp];
+			if(tmp &lt;= 0)
+				break;
+		}
+
+		int cnt ;
+		for(int i=1 ;i&lt;=1000000;i++)
+		{
+			if ( flog[i] )
+			{
+				cnt = i;
+				break;
+			}
+		}
+
+		tmp = cnt ;
+		
+		while (1)
+		{
+			if (pre[tmp] &lt; 0)
+				break;
+			tmp = pre[tmp];
+		}
+
+		k=1;
+
+		while (1)
+		{
+			ans[k] = tmp;
+			k+=2;
+			tmp = ne[tmp];
+
+			if (tmp&lt;=0)
+				break;
+		}
+		for(int i=1;i&lt;=n;i++)
+			cout&lt;&lt;ans[i]&lt;&lt;&quot; &quot;;
+		cout&lt;&lt;endl;
+	}
+	return 0;
+}
+</code></pre>
+<p><a href="http://codeforces.com/contest/490/problem/C" target="_blank" rel="noreferrer">http://codeforces.com/contest/490/problem/C</a></p>
+<p>C. Hacking Cypher</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Polycarpus participates in a competition for hacking into a new secure
+messenger. He's almost won.</p>
+<p>Having carefully studied the interaction protocol, Polycarpus came to the
+conclusion that the secret key can be obtained if he properly cuts the public
+key of the application into two parts. The public key is a long integer which
+may consist of even a million digits!</p>
+<p>Polycarpus needs to find such a way to cut the public key into two nonempty
+parts, that the first (left) part is divisible by  <em>a</em> as a separate number,
+and the second (right) part is divisible by  <em>b</em> as a separate number. Both
+parts should be  positive  integers that have no leading zeros. Polycarpus
+knows values  <em>a</em> and  <em>b</em> .</p>
+<p>Help Polycarpus and find any suitable method to cut the public key.</p>
+<p>Input</p>
+<p>The first line of the input contains the public key of the messenger — an
+integer without leading zeroes, its length is in range from  1  to  10  6
+digits. The second line contains a pair of space-separated positive integers
+<em>a</em> ,  <em>b</em> (  1 ≤ <em>a</em> , <em>b</em> ≤ 10  8  ).</p>
+<p>Output</p>
+<p>In the first line print &quot;  YES  &quot; (without the quotes), if the method
+satisfying conditions above exists. In this case, next print two lines — the
+left and right parts after the cut. These two parts, being concatenated, must
+be exactly identical to the public key. The left part must be divisible by
+<em>a</em> , and the right part must be divisible by  <em>b</em> . The two parts must be
+positive integers having no leading zeros. If there are several answers, print
+any of them.</p>
+<p>If there is no answer, print in a single line &quot;  NO  &quot; (without the quotes).</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>116401024
+97 1024
+</code></pre>
+<p>output</p>
+<pre><code>YES
+11640
+1024
+</code></pre>
+<p>input</p>
+<pre><code>284254589153928171911281811000
+1009 1000
+</code></pre>
+<p>output</p>
+<pre><code>YES
+2842545891539
+28171911281811000
+</code></pre>
+<p>input</p>
+<pre><code>120
+12 1
+</code></pre>
+<p>output</p>
+<pre><code>NO
+
+
+
+
+
+
+
+#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;string.h&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;utility&gt;
+
+char s[1000000 + 5];
+long long  a,b;
+int ok_a[1000000 + 5],ok_b[1000000 + 5];
+
+int main ()
+{
+    while (scanf(&quot;%s&quot;,s+1)!=EOF)
+    {
+        int len = strlen(s+1);
+        scanf(&quot;%I64d %I64d&quot;,&amp;a,&amp;b);
+        long long tmp ,t;
+        tmp = 0;
+        for(int i=1;i&lt;=len;i++)
+        {
+            tmp = (tmp*10 + s[i] - '0')%a;
+            if (tmp == 0)
+                ok_a[i] = 1;
+            else
+                ok_a[i] = 0;
+        }
+
+        tmp = 0,t=1;
+        for(int i = len;i&gt;=1;i--)
+        {
+            tmp = ( tmp + t*( s[i] - '0') )%b;
+            t = t*10%b;
+
+            if (tmp == 0 )
+                ok_b[i] = 1;
+            else
+                ok_b[i] = 0;
+        }
+        int ans ;
+        int ok=0;
+		int i;
+
+        for (i = 2; i &lt;= len; ++i)
+           if (ok_a[i - 1] &amp;&amp; ok_b[i] &amp;&amp; s[i] != '0') break;
+
+       if (i == len + 1) 
+	   {
+           puts(&quot;NO&quot;);
+           return 0;
+       }
+	   puts(&quot;YES&quot;);
+       for (int j = 1; j &lt; i; ++j)
+            putchar(s[j]);
+			puts(&quot;&quot;);
+       for (int j = i; j &lt;= len; ++j)
+           putchar(s[j]); puts(&quot;&quot;);
+       return 0;
+    }
+        return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

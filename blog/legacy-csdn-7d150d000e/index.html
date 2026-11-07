@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu 5312 Sequence【数学推导】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47071147 题目链接： http://acm.hdu.edu…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-7d150d000e/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu 5312 Sequence【数学推导】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47071147 题目链接： http://acm.hdu.edu…","datePublished":"2015-07-26T12:26:00.000Z","dateModified":"2015-07-26T12:26:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-7d150d000e/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-7d150d000e/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu 5312 Sequence【数学推导】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47071147 题目链接： http://acm.hdu.edu…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-7d150d000e/">
+    <meta property="article:published_time" content="2015-07-26T12:26:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu 5312 Sequence【数学推导】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47071147 题目链接： http://acm.hdu.edu…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu 5312 Sequence【数学推导】</h1>
+                    <div class="post-meta">
+                        <span>2015/07/26 20:26</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>354 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47071147" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47071147</a></p>
+<p>题目链接：<br>
+<a href="http://acm.hdu.edu.cn/showproblem.php?pid=5312" target="_blank" rel="noreferrer"> http://acm.hdu.edu.cn/showproblem.php?pid=5312
+</a></p>
+<p>解法：<br>
+这个题看上去是一个贪心, 但是这个贪心显然是错的.<br>
+事实上这道题目很简单, 先判断1个是否可以, 然后判断2个是否可以. 之后找到最小的整数k (k &gt; 2), 使得(m - k) mod 6 = 0即可.</p>
+<p>证明如下:<br>
+3n(n-1)+1 = 6(n*(n-1)/2)+1, 注意到n*(n-1)/2是三角形数, 任意一个自然数最多只需要3个三角形数即可表示. 枚举需要k个。</p>
+<p>事实上, 打个表应该也能发现规律.</p>
+<h3 id="三角形数：" tabindex="-1">三角形数：</h3>
+<p>1、3、6、10、15等等这些能够表示成三角形的形状的总数量的数，叫做三角形数。<br>
+一定数目的点或圆在等距离的排列下可以形成一个等边三角形，这样的数被称为三角形数。比如10个点可以组成一个等边三角形，因此10是一个三角形数：<br>
+x<br>
+x　x<br>
+x　x　x<br>
+x　x　x　x<br>
+x　x　x　x x<br>
+开始个18个三角形数是1、3、6、10、15、21、28、36、45、55、66、78、91、105、120、136、153、171……（OEIS中的数列A000217）<br>
+第n个三角形数的公式是 n*(n-1)/2 或 ((2*n+1)^2-1)/8</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

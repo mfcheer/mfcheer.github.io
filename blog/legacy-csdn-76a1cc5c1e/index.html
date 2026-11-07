@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>机器学习实战 第2章 k-近邻算法 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50372072 原理： 选取k个最近的样本，样本中比例最大的种类…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-76a1cc5c1e/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"机器学习实战 第2章 k-近邻算法","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50372072 原理： 选取k个最近的样本，样本中比例最大的种类…","datePublished":"2015-12-21T06:57:00.000Z","dateModified":"2015-12-21T06:57:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-76a1cc5c1e/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-76a1cc5c1e/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="机器学习实战 第2章 k-近邻算法 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50372072 原理： 选取k个最近的样本，样本中比例最大的种类…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-76a1cc5c1e/">
+    <meta property="article:published_time" content="2015-12-21T06:57:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="机器学习实战 第2章 k-近邻算法 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50372072 原理： 选取k个最近的样本，样本中比例最大的种类…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">机器学习实战 第2章 k-近邻算法</h1>
+                    <div class="post-meta">
+                        <span>2015/12/21 14:57</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>156 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/50372072" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/50372072</a></p>
+<p>原理：<br>
+选取k个最近的样本，样本中比例最大的种类即是新数据的分类。</p>
+<p>简单的分类器：</p>
+<pre><code>from numpy import *
+import operator 
+
+def createDataSet():
+    group = array([[1.0,1.1],[1.0,1.0],[0,0],[0,0.1]])
+    labels = ['A','A','B','B']
+    return group,labels
+
+g,la = createDataSet()
+
+def classify0(inx,dataSet,labels,k):
+    dataSetSize = dataSet.shape[0]
+    diffMat = tile(inx,(dataSetSize,1)) - dataSet
+    sqDiffMat = diffMat**2
+    sqDistances = sqDiffMat.sum(axis = 1)
+    distances = sqDistances**0.5;
+    sortedDis = distances.argsort()
+    classCount = {}
+    for i in range (k):
+        votelabel = labels[sortedDis[i]]
+        classCount[votelabel] = classCount.get(votelabel,0) + 1
+    sortedClassCount = sorted(classCount.iteritems(),
+                              key = operator.itemgetter(1),reverse = True)
+    return sortedClassCount[0][0]
+
+print classify0([0,0],g,la,3)
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

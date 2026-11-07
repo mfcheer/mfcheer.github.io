@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Go-基准测试 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：Go-基准测试">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-6cf7741a42/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Go-基准测试","description":"历史迁移文章：Go-基准测试","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-6cf7741a42/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-6cf7741a42/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Go-基准测试 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：Go-基准测试">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-6cf7741a42/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Go-基准测试 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：Go-基准测试">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Go-基准测试</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>612 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#go-test">go test</a></li><li><a href="#基准测试">基准测试</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h2 id="go-test" tabindex="-1">go test</h2>
+<p>Go语言拥有一套单元测试和性能测试系统，go test 命令，会自动读取源码目录下面名为 *_test.go 的文件，生成并运行测试用的可执行文件</p>
+<ul>
+<li>测试用例文件不会参与正常源码编译，不会被包含到可执行文件中</li>
+<li>命名文件时需要让文件必须以_test结尾</li>
+<li>每个测试用例函数需要以Test为前缀</li>
+</ul>
+<p>常用的参数：</p>
+<pre><code class="hljs language-go">-v 显示测试的详细命令
+-run regexp 只运行 regexp 匹配的函数，例如 -run=Array 那么就执行包含有 Array 开头的函数
+-cover 开启测试覆盖率
+-bench regexp 执行相应的 benchmarks，例如 -bench=.；
+</code></pre>
+<p>单元测试源码*_test文件可以由多个测试用例组成，每个测试用例函数需要以Test为前缀，一般参数为 *testing.T</p>
+<p>日志：</p>
+<pre><code class="hljs language-go">*t testing.T
+t.Log
+t.Logf
+t.Error
+t.Errorf
+t.Fatal
+t.Fatalf
+</code></pre>
+<p>下面是例子：
+文件</p>
+<pre><code class="hljs language-go"><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;testing&quot;</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">TestA</span><span class="hljs-params">(t *testing.T)</span></span> {
+    t.Log(<span class="hljs-string">&quot;A&quot;</span>)
+}
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">TestAB</span><span class="hljs-params">(t *testing.T)</span></span> {
+    t.Log(<span class="hljs-string">&quot;AB&quot;</span>)
+}
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">TestC</span><span class="hljs-params">(t *testing.T)</span></span> {
+    t.Log(<span class="hljs-string">&quot;C&quot;</span>)
+}
+</code></pre>
+<pre><code class="hljs language-go">执行：
+<span class="hljs-keyword">go</span> test -v -run TestA select_test.<span class="hljs-keyword">go</span>
+输出：
+=== RUN   TestA
+--- PASS: TestA (<span class="hljs-number">0.00</span>s)
+        select_test.<span class="hljs-keyword">go</span>:<span class="hljs-number">6</span>: A
+=== RUN   TestAB
+--- PASS: TestAB (<span class="hljs-number">0.00</span>s)
+        select_test.<span class="hljs-keyword">go</span>:<span class="hljs-number">10</span>: AB
+PASS
+ok          command-line-arguments        <span class="hljs-number">0.003</span>s
+</code></pre>
+<p>TestA 和 TestAB 的测试用例都被执行，原因是-run跟随的测试用例的名称支持正则表达式，使用-run TestA$即可只执行 TestA 测试用例。</p>
+<h2 id="基准测试" tabindex="-1">基准测试</h2>
+<p>go test包支持基准测试，区别是传入的参数改为 b *testing.B，函数名称为 Benchmark为前缀。默认执行go test时是不执行基准的，需要使用 -bench标时</p>
+<ul>
+<li>可以使用-cpu标识更改测试使用的GOMAXPROCS 值</li>
+<li>如果函数耗时高，1s内不能准确测试性能的话， 可以使用-benchtime标识增加运行时间：go test -bench=. -benchtime=10s</li>
+<li>执行测试次数过多的话，测试结果会受GC等影响，可以使用-count参数多次运行基准测试来解决，go test -count=10</li>
+<li>-run=none  表示过滤掉单元测试</li>
+<li>-bench=.   表示的是运行所有的基准测试，. 表示全部</li>
+<li>-benchmem:表示显示memory的指标</li>
+<li>有些测试需要一定的启动和初始化时间，如果从 Benchmark() 函数开始计时会很大程度上影响测试结果的精准性。StopTimer() 可以停止这个计数过程，做一些耗时的操作，通过 StartTimer() 重新开始计时。ResetTimer() 可以重置计数器的数据</li>
+</ul>
+<p>b.N 标示函数需要执行的次数。b.N 从 1 开始，如果基准测试函数在1秒内就完成 (默认值)，则 b.N 增加，并再次运行基准测试函数。b.N 在近似这样的序列中不断增加；1, 2, 3, 5, 10, 20, 30, 50, 100 等等。 基准框架试图变得聪明，如果它看到当b.N较小而且测试很快就完成的时候，它将让序列增加地更快。</p>
+<p>例子：</p>
+<pre><code class="hljs language-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">BenchmarkFuncA</span><span class="hljs-params">(b *testing.B)</span></span> {
+		init()
+		b.ResetTimer()
+        <span class="hljs-keyword">for</span> n := <span class="hljs-number">0</span>; n &lt; b.N; n++ {
+                FuncA(<span class="hljs-number">20</span>) <span class="hljs-comment">// 运行 Fib 函数 N 次</span>
+        }
+}
+<span class="hljs-keyword">go</span> test -bench=FuncA -count=<span class="hljs-number">10</span> -benchtime=<span class="hljs-number">10</span>s -cpu=<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">4</span> -run=none
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

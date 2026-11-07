@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu 4549 M斐波那契数列 【矩阵+快速幂+欧拉定理】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44631833 M斐波那契数列 Time Limit: 3000…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-6877c98d28/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu 4549 M斐波那契数列 【矩阵+快速幂+欧拉定理】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44631833 M斐波那契数列 Time Limit: 3000…","datePublished":"2015-03-25T15:48:00.000Z","dateModified":"2015-03-25T15:48:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-6877c98d28/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-6877c98d28/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu 4549 M斐波那契数列 【矩阵+快速幂+欧拉定理】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44631833 M斐波那契数列 Time Limit: 3000…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-6877c98d28/">
+    <meta property="article:published_time" content="2015-03-25T15:48:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu 4549 M斐波那契数列 【矩阵+快速幂+欧拉定理】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44631833 M斐波那契数列 Time Limit: 3000…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu 4549 M斐波那契数列 【矩阵+快速幂+欧拉定理】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/25 23:48</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>618 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44631833" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44631833</a></p>
+<p>M斐波那契数列</p>
+<p>Time Limit: 3000/1000 MS (Java/Others) Memory Limit: 65535/32768 K
+(Java/Others)<br>
+Total Submission(s): 1746 Accepted Submission(s): 503</p>
+<p>Problem Description<br>
+M斐波那契数列F[n]是一种整数数列，它的定义如下：</p>
+<p>F[0] = a<br>
+F[1] = b<br>
+F[n] = F[n-1] * F[n-2] ( n &gt; 1 )</p>
+<p>现在给出a, b, n，你能求出F[n]的值吗？</p>
+<p>Input<br>
+输入包含多组测试数据；<br>
+每组数据占一行，包含3个整数a, b, n（ 0 &lt;= a, b, n &lt;= 10^9 ）</p>
+<p>Output<br>
+对每组测试数据请输出一个整数F[n]，由于F[n]可能很大，你只需输出F[n]对1000000007取模后的值即可，每组数据输出一行。</p>
+<p>Sample Input<br>
+0 1 0<br>
+6 10 2</p>
+<p>Sample Output<br>
+0<br>
+60</p>
+<p>Source<br>
+2013金山西山居创意游戏程序挑战赛——初赛（2）</p>
+<p>构建矩阵：<br>
+base.m[0][0] = 0; base.m[0][1] = 1;<br>
+base.m[1][0] = 1; base.m[1][1] = 1;</p>
+<p>由欧拉定理：<br>
+A^B %C 题中C是质素，而且A，C是互质的。<br>
+所以C的欧拉函数值为C-1;<br>
+所以由欧拉定理，直接A^(B%(C-1)) %C</p>
+<p>比较一般的结论是 A^B %C=A^( B%phi(C)+phi(C) ) %C B&gt;=phi(C)</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+const long long MOD = 1000000007;
+
+struct node
+{
+    long long m[2][2];
+}ans, base;
+int  a, b, n;
+
+node multi(node a, node b)
+{
+    node tmp;
+    for (int i = 0; i&lt;2; i++)
+        for (int j = 0; j&lt;2; j++)
+        {
+            tmp.m[i][j] = 0;
+            for (int k = 0; k&lt;2; k++)
+            {
+                tmp.m[i][j] = (tmp.m[i][j] + a.m[i][k] * b.m[k][j]) % (MOD-1);//由欧拉定理
+            }
+        }
+    return tmp;
+}
+
+void fast_mod(int n)// 求矩阵 base 的  n 次幂
+{
+    base.m[0][0] = 0; base.m[0][1] = 1;
+    base.m[1][0] = 1; base.m[1][1] = 1;
+
+    ans.m[0][0] = ans.m[1][1] = 1;// ans 初始化为单位矩阵
+    ans.m[0][1] = ans.m[1][0] = 0;
+    while (n)
+    {
+        if (n &amp; 1) //实现 ans *= t; 其中要先把 ans赋值给 tmp，然后用 ans = tmp * t
+            ans = multi(ans, base);
+        base = multi(base, base);
+        n &gt;&gt;= 1;
+    }
+}
+
+long long quickpow(long long m, long long n, long long k)//快速幂
+{
+    long long  b = 1;
+    long long mm =m%k;
+    while (n &gt; 0)
+    {
+        if (n &amp; 1)
+            b = (b*mm) % k;
+        n = n &gt;&gt; 1;
+        mm = (mm*mm) % k;
+    }
+    return b;
+}
+//////////////////////
+int main()
+{
+    while (scanf(&quot;%d %d %d&quot;, &amp;a, &amp;b, &amp;n) == 3)
+    {
+        if (n == 0)
+        {
+            printf(&quot;%d\n&quot;, a%MOD );
+            continue;
+        }
+        if (n == 1)
+        {
+            printf(&quot;%d\n&quot;, b%MOD );
+            continue;
+        }
+        fast_mod(n-1);
+
+        //printf(&quot;%lld %ld\n\n&quot;,ans.m[1][0],ans.m[1][1]);
+
+        int anss = quickpow(a, ans.m[1][0] , MOD)  *  quickpow(b, ans.m[1][1], MOD) % MOD;
+        printf(&quot;%d\n&quot;, anss);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

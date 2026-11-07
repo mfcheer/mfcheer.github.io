@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>基于Socket的网络聊天室 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52373859 from asyncore import dis…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-04446fd11f/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"基于Socket的网络聊天室","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52373859 from asyncore import dis…","datePublished":"2016-08-30T14:41:00.000Z","dateModified":"2016-08-30T14:41:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-04446fd11f/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-04446fd11f/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="基于Socket的网络聊天室 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52373859 from asyncore import dis…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-04446fd11f/">
+    <meta property="article:published_time" content="2016-08-30T14:41:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="基于Socket的网络聊天室 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52373859 from asyncore import dis…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">基于Socket的网络聊天室</h1>
+                    <div class="post-meta">
+                        <span>2016/08/30 22:41</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>516 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/52373859" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/52373859</a></p>
+<pre><code>from asyncore import dispatcher
+from asynchat import async_chat
+import socket, asyncore
+
+PORT = 5005
+NAME = &quot;ChatRoom&quot;
+
+class EndSession(Exception):pass
+
+class CommandHandler:
+    def unknow(self, session, cmd):
+        session.push('Unknow commans %s\r\n '% cmd)
+
+    def handle(self, session, line):
+        if not line.strip(): return
+        parts = line.split(' ',1)
+        cmd = parts[0]
+        try:line = parts[1].strip()
+        except IndexError :line = ' '
+
+        meth = getattr(self, 'do_'+cmd, None)
+
+        try:
+            meth(session, line)
+        except TypeError:
+            self.unknow(session, cmd)
+
+class Room(CommandHandler):
+
+    def __init__(self, server):
+        self.server = server
+        self.sessions =[]
+
+    def add(self,session):
+        self.sessions.append(session)
+
+    def remove(self, session):
+        self.sessions.remove(session)
+
+    def broadcast(self, line):
+        for session in self.sessions:
+            session.push(line)
+
+    def do_logout(self, session, line):
+        raise EndSession
+
+class LoginRoom(Room):
+    def add(self, session):
+        Room.add(self,session)
+        self.broadcast('welcome to %s \r\n '% self.server.name)
+    def unknow(self, session, cmd):
+        session.push('Please log in \nuse &quot;login &lt;nick&gt;&quot;\r\n')
+
+    def do_login(self, session, line):
+        name = line.strip()
+        if not name:
+            session.push('please enter a name\r\n')
+        elif name in self.server.users:
+            session.push('The name &quot;%s&quot; is taken.\r\n' % name)
+            session.push('Please try again')
+        else:
+            session.name = name
+            session.enter(self.server.main_room)
+
+class ChatRoom(Room):
+    def add(self,session):
+        self.broadcast(session.name + ' has entered the room\r\n')
+        self.server.users[session.name] = session
+        Room.add(self, session)
+    def remove(self, session):
+        Room.remove(self, session)
+        self.broadcast(session.name + ' has left the room')
+    def do_say(self, session, line):
+        self.broadcast(session.name+': ' + line + '\r\n')
+
+    def do_look(self, session, line):
+        session.push('The following are in room:\r\n')
+        for other in self.sessions:
+            session.push(other.name + ' \r\n')
+    def do_who(self,session, line):
+        session.push('The Following are loffed in: \r\n')
+        for name in self.server.users:
+            session.push(name + '\r\n')
+class LogoutRoom(Room):
+    def add(self,session):
+        try:del self.server.users[session.name]
+        except KeyError:pass
+
+class ChatSession(async_chat):
+    def __init__(self, server , sock):
+        async_chat.__init__(self,sock)
+        self.server = server
+        self.set_terminator(&quot;\r\n&quot;)
+        self.data = []
+        self.name = None
+        self.enter(LoginRoom(server))
+
+    def enter(self, room):
+        try: cur = self.room
+        except AttributeError:pass
+        else: cur.remove(self)
+        self.room = room
+        room.add(self)
+
+    def collect_incoming_data(self, data):
+        self.data.append(data)
+
+    def found_terminator(self):
+        line = ''.join(self.data)
+        self.data = []
+        try: self.room.handle(self,line)
+        except EndSession:
+            self.handle_close()
+    def handle_close(self):
+        async_chat.handle_close(self)
+        self.enter(LoginRoom(self.server))
+
+class ChatServer(dispatcher):
+    def __init__(self,port ,name):
+        dispatcher.__init__(self)
+        self.create_socket(socket.AF_INET,socket.SOCK_STREAM)
+        self.set_reuse_addr()
+        self.bind(('',port))
+        self.listen(5)
+        self.name = name
+        self.users ={}
+        self.main_room = ChatRoom(self)
+
+    def handle_accept(self):
+        conn, addr = self.accept()
+        ChatSession(self, conn)
+
+if __name__ == '__main__':
+    s = ChatServer(PORT,NAME)
+    try:asyncore.loop()
+    except KeyboardInterrupt: print
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

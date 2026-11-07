@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Lightoj 1127 - Funny Knapsack 【二分】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47053287 题目链接： http://www.lightoj…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-02babbaa57/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Lightoj 1127 - Funny Knapsack 【二分】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47053287 题目链接： http://www.lightoj…","datePublished":"2015-07-25T01:26:00.000Z","dateModified":"2015-07-25T01:26:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-02babbaa57/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-02babbaa57/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Lightoj 1127 - Funny Knapsack 【二分】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47053287 题目链接： http://www.lightoj…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-02babbaa57/">
+    <meta property="article:published_time" content="2015-07-25T01:26:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Lightoj 1127 - Funny Knapsack 【二分】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47053287 题目链接： http://www.lightoj…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Lightoj 1127 - Funny Knapsack 【二分】</h1>
+                    <div class="post-meta">
+                        <span>2015/07/25 09:26</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>406 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47053287" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47053287</a></p>
+<p>题目链接： <a href="http://www.lightoj.com/volume_showproblem.php?problem=1127" target="_blank" rel="noreferrer"> http://www.lightoj.com/volume_showproblem.php?problem=1127
+</a></p>
+<p>题意：有n个物体（n&lt;30）和一个容量为W的容器，问将容器不装满的放置物品的方式有多少种。</p>
+<p>思路 ：
+状态压缩+二分。将前n/2个物体看做一个整体，将剩下的看做一个整体。1&lt;&lt;(n/2)个状态代表前一半的物品使用情况，然后求出每一种状态的总的体积。排序。对于后面的那一半也是。答案只需枚举一半然后在另一半中找和W差的下界即可。</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;assert.h&gt;
+
+using namespace std;
+
+int n;
+long long w;
+long long a[1000000];
+long long s1[1000000];
+long long s2[1000000];
+
+int main()
+{
+    int t;
+    scanf(&quot;%d&quot;, &amp;t);
+    int cases = 1;
+    while (t--)
+    {
+        memset(s1, 0, sizeof(s1));
+        memset(s2, 0, sizeof(s2));
+        memset(a, 0, sizeof(a));
+
+        scanf(&quot;%d %lld&quot;, &amp;n, &amp;w);
+        for (int i = 0; i &lt; n; i++)
+            scanf(&quot;%lld&quot;, &amp;a[i]);
+
+        int t1 = n &gt;&gt; 1;
+        int t2 = n - t1;
+        int r1 = 1 &lt;&lt; t1;
+        int r2 = 1 &lt;&lt; t2;
+
+        for (int i = 0; i &lt; r1; i++)
+            for (int j = 0; j &lt; t1; j++)
+            {
+                if (i &amp;(1 &lt;&lt; j))
+                    s1[i] += a[j];
+            }
+
+        for (int i = 0; i &lt; r2; i++)
+            for (int j = 0; j &lt; t2; j++)
+            {
+                if (i &amp;(1 &lt;&lt; j))
+                    s2[i] += a[t1 + j];
+            }
+
+        sort(s2, s2 + r2 );
+
+        long long ans = 0;
+        for (int i = 0; i &lt; r1; i++)
+        {
+            if (w - s1[i] &gt;= 0)
+                ans += upper_bound(s2, s2 + r2, w - s1[i]) - s2;
+        }
+        printf(&quot;Case %d: %lld\n&quot;, cases++, ans);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

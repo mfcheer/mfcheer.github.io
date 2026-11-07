@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj 2229 Sumsets【DP】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46380481 题目链接： http://poj.org/pro…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-a056d9c2e6/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj 2229 Sumsets【DP】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46380481 题目链接： http://poj.org/pro…","datePublished":"2015-06-05T10:12:00.000Z","dateModified":"2015-06-05T10:12:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-a056d9c2e6/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-a056d9c2e6/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj 2229 Sumsets【DP】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46380481 题目链接： http://poj.org/pro…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-a056d9c2e6/">
+    <meta property="article:published_time" content="2015-06-05T10:12:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj 2229 Sumsets【DP】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46380481 题目链接： http://poj.org/pro…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj 2229 Sumsets【DP】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 18:12</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>203 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46380481" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46380481</a></p>
+<p>题目链接： <a href="http://poj.org/problem?id=2229" target="_blank" rel="noreferrer"> http://poj.org/problem?id=2229 </a></p>
+<p>题意：一个数n可以表示成多少种不同的二的幂次的和。</p>
+<p>比如7：</p>
+<ol>
+<li>1+1+1+1+1+1+1</li>
+<li>1+1+1+1+1+2</li>
+<li>1+1+1+2+2</li>
+<li>1+1+1+4</li>
+<li>1+2+2+2</li>
+<li>1+2+4</li>
+</ol>
+<p>if (i &amp;1) dp[i] = dp[i-1] eles dp[i] = dp[i-2] + dp[i&gt;&gt;1];</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;iterator&gt;
+#include &lt;vector&gt;
+#include &lt;set&gt;
+
+using namespace std;
+
+int n;
+long long dp[1000010]; 
+
+long long MOD = 1e9;
+
+void init()
+{
+    dp[1] = 1;
+    dp[2] = 2;
+    for (int i = 3; i &lt;= 1000000; i++)
+    {
+        if (i &amp; 1) dp[i] = dp[i-1];
+        else  dp[i] = (dp[i - 1] + dp[i &gt;&gt; 1]) % MOD;
+    }
+}
+
+int main()
+{
+    init();
+    while (scanf(&quot;%d&quot;, &amp;n) != EOF)
+    {
+        printf(&quot;%lld\n&quot;,dp[n]);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

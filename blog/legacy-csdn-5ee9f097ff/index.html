@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Java-单例设计模式（基础） · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49493577 设计模式 对问题的行之有效的解决方法，其实它是一…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-5ee9f097ff/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Java-单例设计模式（基础）","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49493577 设计模式 对问题的行之有效的解决方法，其实它是一…","datePublished":"2015-10-29T08:44:00.000Z","dateModified":"2015-10-29T08:44:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-5ee9f097ff/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-5ee9f097ff/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Java-单例设计模式（基础） · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49493577 设计模式 对问题的行之有效的解决方法，其实它是一…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-5ee9f097ff/">
+    <meta property="article:published_time" content="2015-10-29T08:44:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Java-单例设计模式（基础） · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49493577 设计模式 对问题的行之有效的解决方法，其实它是一…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Java-单例设计模式（基础）</h1>
+                    <div class="post-meta">
+                        <span>2015/10/29 16:44</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>329 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49493577" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/49493577</a></p>
+<h3 id="设计模式" tabindex="-1">设计模式</h3>
+<p>对问题的行之有效的解决方法，其实它是一种思想。不要固化。</p>
+<h4 id="1，单例设计模式。" tabindex="-1">1，单例设计模式。</h4>
+<pre><code>解决的问题：
+保证一个类在内存中的对象唯一性。
+</code></pre>
+<p>必须对于多个程序使用同一配置信息对象时，就该保证对象唯一性。<br>
+如何保证对象唯一性？<br>
+1），不可以让其他程序用new创建对象。<br>
+2），在该类中，创建一个本类实例。<br>
+3），对外提供方法让其他程序获取该对象。<br>
+步骤：<br>
+1），私有化该类构造函数。<br>
+2），通过new在本类中创建一个本类对象。<br>
+3），定义一个共有方法，将创建的对象返回。</p>
+<p>代码例子：</p>
+<pre><code>class Single
+{
+    private static Single s = new Single();
+
+    private Single (){}
+
+    public static Single get()
+    {
+        return s;
+    }
+}
+
+public class mfcheer 
+{   
+    public static void main(String[] args) 
+    {
+        Single s1 = Single.get();//可控
+        Single s2 = Single.get();
+        System.out.println(s1==s2);//返回true
+        // Single sss = Single.s; 不可控
+    }
+}
+
+
+//类加载时，无对象，get方法调用时才创建对象
+//延迟加载形式
+//懒汉式 ： 用到时才创建对象
+//存在的问题：多线程时可能存在安全隐患
+
+class Single
+{
+    private static Single s = null;
+
+    private Single (){}
+
+    public static Single get()
+    {
+        if (s == null)
+            s = new Single();
+        return s;
+    }
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

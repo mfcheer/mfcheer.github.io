@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UVA 10608	Friends【并查集】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47446725 题目链接： https://uva.online…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-a23a6a4aa4/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"UVA 10608\tFriends【并查集】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47446725 题目链接： https://uva.online…","datePublished":"2015-08-12T08:25:00.000Z","dateModified":"2015-08-12T08:25:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-a23a6a4aa4/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-a23a6a4aa4/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="UVA 10608	Friends【并查集】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47446725 题目链接： https://uva.online…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-a23a6a4aa4/">
+    <meta property="article:published_time" content="2015-08-12T08:25:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UVA 10608	Friends【并查集】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47446725 题目链接： https://uva.online…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">UVA 10608	Friends【并查集】</h1>
+                    <div class="post-meta">
+                        <span>2015/08/12 16:25</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>203 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47446725" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47446725</a></p>
+<p>题目链接：<br>
+<a href="https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;problem=1549" target="_blank" rel="noreferrer">
+https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;problem=1549
+</a></p>
+<p>题意：给定n个人m种朋友关系，求最大朋友圈的人数。裸并查集</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+int f[30010];
+int c[30010];
+
+int find(int x)
+{
+    if (f[x] == x) return x;
+    else return f[x] = find(f[x]);
+}
+
+int main()
+{
+    int t;
+    int n,m;
+    scanf(&quot;%d&quot;,&amp;t);
+    while(t--)
+    {
+        scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+        for(int i=1;i&lt;=n;i++)
+        {
+            f[i]=i;c[i]=1;
+        }
+        int a,b;
+        int ans = -1;
+        for(int i=1;i&lt;=m;i++)
+        {
+            scanf(&quot;%d%d&quot;,&amp;a,&amp;b);
+            int t1 = find(a);
+            int t2 = find(b);
+            if (t1 != t2)
+            {
+                f[t2] = t1;
+                c[t1] += c[t2];
+                ans = max(ans,c[t1]);
+            }
+        }
+        printf(&quot;%d\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

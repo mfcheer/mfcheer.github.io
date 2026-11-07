@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>变形金刚 【并查集】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44319309 变形金刚 Description 有一天Stub…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-f5f94f0716/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"变形金刚 【并查集】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44319309 变形金刚 Description 有一天Stub…","datePublished":"2015-03-16T16:18:00.000Z","dateModified":"2015-03-16T16:18:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-f5f94f0716/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-f5f94f0716/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="变形金刚 【并查集】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44319309 变形金刚 Description 有一天Stub…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-f5f94f0716/">
+    <meta property="article:published_time" content="2015-03-16T16:18:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="变形金刚 【并查集】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44319309 变形金刚 Description 有一天Stub…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">变形金刚 【并查集】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/17 00:18</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>611 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44319309" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44319309</a></p>
+<p>变形金刚<br>
+Description<br>
+有一天Stubird买了一台变形金刚，店员说，这台变形金刚和其他那种骗小孩子的不一样 他真的能变形。
+这台变形金刚有n个部件，他们能互相连接，组成机器人，当然，也可以变形。 但是有一天，The tesseract
+的能量突然消失了，部件散落一地，当然有些部件还连接着。 现在你只有把部件全部连接起来，他就能变回原样，例如，有4个部件，1,2是连接的，3,4也是连接着的
+，你只需要把1和3连接起来（1,4或者2,3或者2,4）他就能变回原样啦。 他现在问你最少需要多少次连接才能把它变回原样？</p>
+<p>Input<br>
+第一行一个T，表示有T个测试样例 接下来一个n和m(n&lt;=10^5,0&lt;=m&lt;=10^5)，n表示部件个数，m表示有多少个部件还连接着
+下面m行，每行u，v表示部件u，v是连接着的。(1&lt;=u,v&lt;=n)</p>
+<p>Output<br>
+求最小的连接次数</p>
+<p>Sample Input<br>
+2<br>
+1 0<br>
+5 2<br>
+1 2<br>
+3 4<br>
+Sample Output<br>
+0<br>
+2</p>
+<p>题意：判断有几个不相交集合</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;  
+#include &lt;stdio.h&gt;  
+#include &lt;math.h&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;string.h&gt;  
+
+using namespace std;
+
+int p[30005];
+int rankk[30005];
+
+int findd(int x)
+{
+    if (x == p[x])
+        return x;
+    else return  p[x] = findd(p[x]);
+}
+
+void un(int x, int y)
+{
+    int a, b;
+    a = findd(x);
+    b = findd(y);
+    if (a == b)
+        return;
+    p[b] = a;
+}
+
+int main()
+{
+    int n, m, t, a, b;
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+        for (int i = 1; i&lt;=n; i++)
+        {
+            p[i] = i;
+            rankk[i] = 0;
+        }
+
+        for (int i = 0; i&lt;m; i++)
+        {
+            scanf(&quot;%d%d&quot;,&amp;a,&amp;b);
+            un(a,b);
+        }
+
+        int ans = 0;
+        int f1 = findd(1);
+        for (int i = 2; i &lt;= n; i++)
+        {
+            int fi = findd(i);
+            if (fi != f1)
+            {
+                p[fi] = f1;
+                ans++;
+            }
+        }
+        printf(&quot;%d\n&quot;, ans);
+    }
+}
+</code></pre>
+<p>或</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;  
+#include &lt;stdio.h&gt;  
+#include &lt;math.h&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;string.h&gt;  
+
+using namespace std;
+
+int p[30005];
+int rankk[30005];
+int vis[30000];
+
+int findd(int x)
+{
+    if (x == p[x])
+        return x;
+    else return  p[x] = findd(p[x]);
+}
+
+void un(int x, int y)
+{
+    int a, b;
+    a = findd(x);
+    b = findd(y);
+    if (a == b)
+        return;
+    p[b] = a;
+}
+
+int main()
+{
+    int n, m, t, a, b;
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+        for (int i = 1; i&lt;=n; i++)
+        {
+            p[i] = i;
+            rankk[i] = 0;
+            vis[i] = 0;
+        }
+
+        for (int i = 0; i&lt;m; i++)
+        {
+            scanf(&quot;%d%d&quot;,&amp;a,&amp;b);
+            un(a,b);
+        }
+
+        int ans = 0;
+        for (int i = 1; i &lt;= n; i++)
+        {
+            int fa = findd(i);
+            if (!vis[fa])
+            {
+                vis[fa] = 1;
+                ans++;
+            }
+        }
+
+        printf(&quot;%d\n&quot;, ans-1);
+    }
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

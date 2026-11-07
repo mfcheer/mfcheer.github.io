@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Java导出Excel · mfcheer</title>
+    <meta name="description" content="历史迁移文章：Java导出Excel">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-8dc1f73eac/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Java导出Excel","description":"历史迁移文章：Java导出Excel","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-8dc1f73eac/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-8dc1f73eac/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Java导出Excel · mfcheer">
+    <meta property="og:description" content="历史迁移文章：Java导出Excel">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-8dc1f73eac/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Java导出Excel · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：Java导出Excel">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Java导出Excel</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>20 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#前端代码">前端代码</a></li><li><a href="#后端代码">后端代码</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h2 id="前端代码" tabindex="-1">前端代码</h2>
+<pre><code class="hljs">function exportData() {
+    params = encodeURI(params);
+    window.location.href = &quot;interface?&quot; + params
+}
+</code></pre>
+<h2 id="后端代码" tabindex="-1">后端代码</h2>
+<p>maven依赖</p>
+<pre><code class="hljs">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;
+    &lt;artifactId&gt;poi&lt;/artifactId&gt;
+    &lt;version&gt;3.15&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;
+    &lt;artifactId&gt;poi-ooxml&lt;/artifactId&gt;
+    &lt;version&gt;3.15&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;net.sf.json-lib&lt;/groupId&gt;
+    &lt;artifactId&gt;json-lib&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+    &lt;classifier&gt;jdk15&lt;/classifier&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>发送请求</p>
+<pre><code class="hljs language-java">HttpServletResponse response
+<span class="hljs-comment">// 告诉浏览器用什么软件可以打开此文件</span>
+response.setHeader(<span class="hljs-string">&quot;content-Type&quot;</span>, <span class="hljs-string">&quot;application/vnd.ms-excel&quot;</span>);
+<span class="hljs-comment">// 下载文件的默认名称</span>
+response.setHeader(<span class="hljs-string">&quot;Content-Disposition&quot;</span>, <span class="hljs-string">&quot;attachment;filename=&quot;</span> + <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(ExcelUtil.getExcelFileName(<span class="hljs-built_in">this</span>.excelName).getBytes(),<span class="hljs-string">&quot;iso-8859-1&quot;</span>));
+response.setContentType(<span class="hljs-string">&quot;application/octet-stream;charset=utf-8&quot;</span>);
+logger.info(<span class="hljs-string">&quot;传入的头部链表：&quot;</span>+<span class="hljs-built_in">this</span>.excelHead.toString());
+logger.info(<span class="hljs-string">&quot;传入的数据链表：&quot;</span>+<span class="hljs-built_in">this</span>.dataList.isEmpty());
+<span class="hljs-type">Workbook</span> <span class="hljs-variable">workbook</span> <span class="hljs-operator">=</span> ExcelUtil.createExcel(<span class="hljs-built_in">this</span>.excelHead, <span class="hljs-built_in">this</span>.dataList);
+workbook.write(response.getOutputStream());
+</code></pre>
+<p>&lt;!--more--&gt;
+构造Excel</p>
+<pre><code class="hljs language-java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ExcelUtil</span> {
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">Log</span> <span class="hljs-variable">logger</span> <span class="hljs-operator">=</span> LogFactory.getLog(ExcelUtil.class);
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">Workbook</span> <span class="hljs-title function_">createExcel</span><span class="hljs-params">(List&lt;String&gt; excelHead, List&lt;List&lt;String&gt;&gt; dataList)</span>{
+        <span class="hljs-type">HSSFWorkbook</span> <span class="hljs-variable">excelFramwork</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HSSFWorkbook</span>();
+        <span class="hljs-type">HSSFSheet</span> <span class="hljs-variable">excelSheet</span> <span class="hljs-operator">=</span> excelFramwork.createSheet(<span class="hljs-string">&quot;sheet&quot;</span>);
+        <span class="hljs-comment">//创建表头</span>
+        <span class="hljs-type">HSSFRow</span> <span class="hljs-variable">excelHeadRow</span> <span class="hljs-operator">=</span> excelSheet.createRow(<span class="hljs-number">0</span>);
+        logger.info(<span class="hljs-string">&quot;excelHead长度：&quot;</span>+excelHead.size());
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; excelHead.size(); i++){
+            <span class="hljs-type">HSSFCell</span> <span class="hljs-variable">cell</span> <span class="hljs-operator">=</span> excelHeadRow.createCell(i);
+            cell.setCellValue(excelHead.get(i));
+        }
+        <span class="hljs-comment">//插入数据</span>
+        logger.info(<span class="hljs-string">&quot;deliverList长度：&quot;</span>+dataList.size());
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; dataList.size(); i ++){
+            <span class="hljs-type">List</span>&lt;String&gt; <span class="hljs-variable">data</span> <span class="hljs-operator">=</span> dataList.get(i);
+            <span class="hljs-type">HSSFRow</span> <span class="hljs-variable">excelDataRow</span> <span class="hljs-operator">=</span> excelSheet.createRow(i + <span class="hljs-number">1</span>);
+            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; data.size(); j++){
+                excelDataRow.createCell(j).setCellValue(data.get(j));
+            }
+        } <span class="hljs-comment">//for</span>
+        <span class="hljs-keyword">return</span> excelFramwork;
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-title function_">getExcelFileName</span><span class="hljs-params">(String prefix)</span>{
+        <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">retSb</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>(prefix);
+        <span class="hljs-comment">//获取时间</span>
+        <span class="hljs-type">String</span> <span class="hljs-variable">curDateStr</span> <span class="hljs-operator">=</span> DateUtil.parseDateToString(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(), <span class="hljs-string">&quot;yyyy-MM-dd&quot;</span>);
+        retSb.append(curDateStr);
+        retSb.append(<span class="hljs-string">&quot;.xls&quot;</span>);
+        <span class="hljs-keyword">return</span> retSb.toString();
+    }
+}
+</code></pre>
+<p>&lt;!--more--&gt;</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

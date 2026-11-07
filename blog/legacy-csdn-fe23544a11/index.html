@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>判断互质数的方法 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40442785 一、概念判断法 公约数只有1的两个数叫做互质的数…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-fe23544a11/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"判断互质数的方法","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40442785 一、概念判断法 公约数只有1的两个数叫做互质的数…","datePublished":"2014-10-24T17:58:00.000Z","dateModified":"2014-10-24T17:58:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-fe23544a11/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-fe23544a11/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="判断互质数的方法 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40442785 一、概念判断法 公约数只有1的两个数叫做互质的数…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-fe23544a11/">
+    <meta property="article:published_time" content="2014-10-24T17:58:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="判断互质数的方法 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40442785 一、概念判断法 公约数只有1的两个数叫做互质的数…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">判断互质数的方法</h1>
+                    <div class="post-meta">
+                        <span>2014/10/25 01:58</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>584 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40442785" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/40442785</a></p>
+<p>一、概念判断法</p>
+<p>公约数只有1的两个数叫做互质的数。根据互质数的概念。可以对一组数进行判断。如，4和9的公约数只有1，所以它们是互质数。 　　二、规律判断法</p>
+<p>根据互质数的定义，可总结出一些规律，利用这些规律可迅速判断一组数是否互质。</p>
+<p>（1）两个不相同的质数一定是互质数。例如，19和13是互质数。</p>
+<p>（2）两个连续的自然数一定是互质数。例如，14和15是互质数。</p>
+<p>（3）相邻的两个奇数一定是互质数。例如，91和93是互质数</p>
+<p>（4）1和其它所有自然数一定是互质数。例如，1和4，1和13等。</p>
+<p>（5）两个数中较大数为质数，这两个数一定是互质数。例如16和97是互质数。</p>
+<p>（6）两个数中的较小一个是质数，较大数是合数且不是较小数的倍数，这两个数一定是互质数。例如，7和54是互质数。</p>
+<p>（7）较大数比较小数的2倍多1或少1，这两个数一定是互质数，例如，13和27是互质数，13和25是互质数。</p>
+<p>三、分解判断法</p>
+<p>如果两个数都是合数，可先将两个数分别分解质因数，再看两个数是否含有相同的质因数，如果没有，这两个数是互质数。</p>
+<p>例如：130和231，先将它们分解质因数：130＝2×5×13，231＝3×7×11,分解后，发现它们没有相同的质因数，所以130和231是互质数。</p>
+<p>四、求差判断法</p>
+<p>如果两个数相差不大。可先求出它们的差，再看差与其中较小数是否互质。如果是互质数，则原来两个数一定是互质数。</p>
+<p>例如：194和201，先求出它们的差，201－194＝7，因为7和194互质，所以194和201是互质数。</p>
+<p>五、求商判断法</p>
+<p>用大数除以小数，如果除得的余数与其中较小数互质，则原来两个数是互质数。例如，317和52，317÷52＝6……5，因为余数5与52互质，所以317和52是互质数</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

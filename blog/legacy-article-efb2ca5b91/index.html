@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Hadoop核心 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：Hadoop核心">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-efb2ca5b91/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Hadoop核心","description":"历史迁移文章：Hadoop核心","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-efb2ca5b91/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-efb2ca5b91/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Hadoop核心 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：Hadoop核心">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-efb2ca5b91/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Hadoop核心 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：Hadoop核心">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Hadoop核心</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>612 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<h1 id="hadoop核心" tabindex="-1">Hadoop核心</h1>
+<p>Hadoop的核心是HDFS和MapReduce。Hadoop旗下有很多经典子项目，比如HBase、Hive等，这些都是基于HDFS和MapReduce发展出来的。要想了解Hadoop，就必须知道HDFS和MapReduce是什么。</p>
+<h1 id="hdfs" tabindex="-1">HDFS</h1>
+<p>HDFS（Hadoop Distributed File System，Hadoop分布式文件系统），能提供高吞吐量的数据访问。
+HDFS的设计特点是：
+1、大数据文件，非常适合上T级别的大文件或者一堆大数据文件的存储，如果文件只有几个G甚至更小就没啥意思了。</p>
+<p>2、文件分块存储，HDFS会将一个完整的大文件平均分块存储到不同计算器上，它的意义在于读取文件时可以同时从多个主机取不同区块的文件，多主机读取比单主机读取效率要高得多得都。</p>
+<p>3、流式数据访问，一次写入多次读写，这种模式跟传统文件不同，它不支持动态改变文件内容，而是要求让文件一次写入就不做变化，要变化也只能在文件末添加内容。</p>
+<p>4、廉价硬件，HDFS可以应用在普通PC机上，这种机制能够让给一些公司用几十台廉价的计算机就可以撑起一个大数据集群。</p>
+<p>5、硬件故障，HDFS认为所有计算机都可能会出问题，为了防止某个主机失效读取不到该主机的块文件，它将同一个文件块副本分配到其它某几个主机上，如果其中一台主机失效，可以迅速找另一块副本取文件。
+&lt;!--more--&gt;</p>
+<h2 id="hdfs的关键元素" tabindex="-1">HDFS的关键元素</h2>
+<pre><code class="hljs">Block：将一个文件进行分块，通常是64M。
+NameNode：保存整个文件系统的目录信息、文件信息及分块信息，这是由唯一一台主机专门保存，当然这台主机如果出错，NameNode就失效了。在Hadoop2.*开始支持activity-standy模式----如果主NameNode失效，启动备用主机运行NameNode。
+DataNode：分布在廉价的计算机上，用于存储Block块文件。
+</code></pre>
+<h1 id="mapreduce" tabindex="-1">MapReduce</h1>
+<p>MapReduce是一套从海量源数据提取分析元素最后返回结果集的编程模型，将文件分布式存储到硬盘是第一步，而从海量数据中提取分析我们需要的内容就是MapReduce做的事。</p>
+<p>MapReduce以某几个块为一个Map，计算出Map中的值，然后将每个Map中的值做Reduce操作，Reduce再取值给用户。</p>
+<h1 id="总结" tabindex="-1">总结</h1>
+<p>Hadoop适合应用于大数据存储和大数据分析的应用，适合于服务器几千台到几万台的集群运行，支持PB级的存储容量。
+Hadoop典型应用有：搜索、日志处理、推荐系统、数据分析、视频图像分析、数据保存等。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

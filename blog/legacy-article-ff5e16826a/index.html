@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>机器学习笔记：线性回归 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：机器学习笔记：线性回归">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-ff5e16826a/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"机器学习笔记：线性回归","description":"历史迁移文章：机器学习笔记：线性回归","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-ff5e16826a/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-ff5e16826a/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="机器学习笔记：线性回归 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：机器学习笔记：线性回归">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-ff5e16826a/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="机器学习笔记：线性回归 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：机器学习笔记：线性回归">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">机器学习笔记：线性回归</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>770 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#线性回归（linearregreesion）">线性回归（LinearRegreesion）</a></li><li><a href="#损失函数">损失函数</a></li><li><a href="#梯度下降">梯度下降</a></li><li><a href="#过拟合与正则化">过拟合与正则化</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h2 id="线性回归（linearregreesion）" tabindex="-1">线性回归（LinearRegreesion）</h2>
+<p>线性回归主要用来解决连续值预测的问题.</p>
+<p>线性回归，是利用数理统计中回归分析，来确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法，运用十分广泛。其表达形式为y = w’x+e，e为误差服从均值为0的正态分布。中学就有接触线性回归，那么线性回归应用在什么地方呢？它适用于有监督学习的预测。</p>
+<p>一元线性回归分析：y=ax+b，只包括一个自变量和一个因变量，且二者的关系可用一条直线近似表示。</p>
+<p>多元线性回归分析：包括两个或两个以上的自变量，并且因变量和自变量是线性关系。</p>
+<h2 id="损失函数" tabindex="-1">损失函数</h2>
+<p>损失函数：是指一种将一个事件（在一个样本空间中的一个元素）映射到一个表达与其事件相关的经济成本或机会成本的实数上的一种函数。更通俗地说，损失函数用来衡量参数选择的准确性。损失函数得到的值越小，损失也就越小。
+&lt;!--more--&gt;</p>
+<h2 id="梯度下降" tabindex="-1">梯度下降</h2>
+<p>怎样最小化损失函数?损失函数的定义是一个凸函数，就可以使用凸优化的一些方法：
+１) 梯度下降：逐步最小化损失函数的过程。如同下山的过程，找准下山方向（梯度），每次迈进一步，直至山底。如果有多个特征，对应多个参数θ，需要对每一个参数做一次迭代，做完以后再求J函数。
+　　学习率：上段公式中的α就是学习率。它决定了下降的节奏快慢，就像一个人下山时候步伐的快慢。α过小会导致收敛很慢，α太大有可能会导致震荡。如何选择学习率呢，目前也有好多关于学习率自适应算法的研究。工程上，一般会调用一些开源包，包含有一些自适应方法。自己做的话会选择相对较小的α，比如0.01。下图展示了梯度下降的过程。
+2）牛顿法：速度快适用于小数据，大数据比较耗内存。</p>
+<h2 id="过拟合与正则化" tabindex="-1">过拟合与正则化</h2>
+<p>回归与欠/过拟合：
+１) 欠拟合：函数假设太简单导致无法覆盖足够的原始数据，可能造成数据预测的不准确。</p>
+<p>２) 拟合问题：比如我们有很多的特征，假设的函数曲线对原始数据拟合的非常好，从而丧失一般性，导致对新给的待预测样本，预测效果差。</p>
+<p>过拟合解决方法：</p>
+<ol>
+<li>减少特征个数：手工选择保留特征、模型选择的算法选择特征。</li>
+<li>正则化：在原来的损失函数中加入θ的平方项，来防止波动太大。即L2正则化。留下所有的特征，但是减少参数的大小。</li>
+</ol>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

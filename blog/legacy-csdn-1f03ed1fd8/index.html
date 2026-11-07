@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj-2251 广搜 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42219151 http://poj.org/problem?i…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-1f03ed1fd8/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj-2251 广搜","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42219151 http://poj.org/problem?i…","datePublished":"2014-12-28T13:47:00.000Z","dateModified":"2014-12-28T13:47:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-1f03ed1fd8/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-1f03ed1fd8/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj-2251 广搜 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42219151 http://poj.org/problem?i…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-1f03ed1fd8/">
+    <meta property="article:published_time" content="2014-12-28T13:47:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj-2251 广搜 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42219151 http://poj.org/problem?i…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj-2251 广搜</h1>
+                    <div class="post-meta">
+                        <span>2014/12/28 21:47</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>341 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42219151" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/42219151</a></p>
+<p><a href="http://poj.org/problem?id=2251" target="_blank" rel="noreferrer"> http://poj.org/problem?id=2251 </a></p>
+<pre><code>#include&lt;stdio.h&gt;  
+#include&lt;iostream&gt;  
+#include&lt;math.h&gt;  
+#include&lt;stdlib.h&gt;  
+#include&lt;ctype.h&gt;  
+#include&lt;algorithm&gt;  
+#include&lt;vector&gt;  
+#include&lt;string.h&gt;  
+#include&lt;queue&gt;  
+#include&lt;stack&gt;  
+#include&lt;set&gt;   
+#include&lt;sstream&gt;  
+#include&lt;time.h&gt;  
+#include&lt;utility&gt;  
+#include&lt;malloc.h&gt;  
+#include&lt;stdexcept&gt;  
+#include&lt;iomanip&gt;  
+#include&lt;iterator&gt;  
+
+using namespace std;
+
+char map[40][40][40];
+int vis[40][40][40];
+int L, R, C;
+
+struct node
+{
+	int z, x, y;
+	int c;
+};
+
+int dir[6][3] = { { 1, 0, 0 }, { -1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 } };
+
+int BFS(int si, int sj, int sk)
+{
+	memset(vis, 0, sizeof(vis));
+
+	queue&lt;node&gt; q;
+	node cur, next;
+
+	cur.z = si, cur.x = sj, cur.y = sk, cur.c = 0;
+
+	vis[si][sj][sk] = 1;
+	
+	q.push(cur);
+
+	while (!q.empty())
+	{
+		cur = q.front();
+		q.pop();
+		for (int i = 0; i &lt; 6; i++)
+		{
+			next.z = cur.z + dir[i][0];
+			next.x = cur.x + dir[i][1];
+			next.y = cur.y + dir[i][2];
+			next.c = cur.c + 1;
+			if (next.z&lt;1 || next.z&gt;L || next.x&lt;1 || next.x&gt;R || next.y&lt;1 || next.y&gt;C || map[next.z][next.x][next.y] == '#')
+				continue;
+			if (map[next.z][next.x][next.y] == 'E')
+				return next.c;
+			if (!vis[next.z][next.x][next.y])
+			{
+				vis[next.z][next.x][next.y] = 1;
+				q.push(next);
+			}
+		}
+	}
+	return 0;
+}
+
+int main()
+{
+	int si, sj, sk;
+	while (cin &gt;&gt; L &gt;&gt; R &gt;&gt; C)
+	{
+		if (L == 0 &amp;&amp; R == 0 &amp;&amp; C == 0)
+			break;
+
+		for (int i = 1; i &lt;= L; i++)
+			for (int j = 1; j &lt;= R; j++)
+				for (int k = 1; k &lt;= C; k++)
+				{
+					cin &gt;&gt; map[i][j][k];
+					if (map[i][j][k] == 'S')
+					{
+						si = i; sj = j; sk = k;
+					}
+				}
+		int ans = BFS(si, sj, sk);
+		if (ans == 0)
+			printf(&quot;Trapped!\n&quot;);
+		else
+			printf(&quot;Escaped in %d minute(s).\n&quot;, ans);
+
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

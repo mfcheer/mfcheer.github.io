@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>当我真正理解了扩展欧几里得定理 · mfcheer</title>
+    <meta name="description" content="首先、扩展欧几里得定理：对于两个不全为0的整数a、b，必存在一组解x,y，使得ax+by==gcd(a,b); void exgcd(long long a, long long b, lon…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-83fbf847ca/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"当我真正理解了扩展欧几里得定理","description":"首先、扩展欧几里得定理：对于两个不全为0的整数a、b，必存在一组解x,y，使得ax+by==gcd(a,b); void exgcd(long long a, long long b, lon…","datePublished":"2015-03-10T10:27:00.000Z","dateModified":"2015-03-10T10:27:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-83fbf847ca/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-83fbf847ca/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="当我真正理解了扩展欧几里得定理 · mfcheer">
+    <meta property="og:description" content="首先、扩展欧几里得定理：对于两个不全为0的整数a、b，必存在一组解x,y，使得ax+by==gcd(a,b); void exgcd(long long a, long long b, lon…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-83fbf847ca/">
+    <meta property="article:published_time" content="2015-03-10T10:27:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="当我真正理解了扩展欧几里得定理 · mfcheer">
+    <meta name="twitter:description" content="首先、扩展欧几里得定理：对于两个不全为0的整数a、b，必存在一组解x,y，使得ax+by==gcd(a,b); void exgcd(long long a, long long b, lon…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">当我真正理解了扩展欧几里得定理</h1>
+                    <div class="post-meta">
+                        <span>2015/03/10 18:27</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1208 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 3 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>首先、扩展欧几里得定理：对于两个不全为0的整数a、b，必存在一组解x,y，使得ax+by==gcd(a,b);</p>
+<pre><code>void exgcd(long long  a, long long b, long long &amp; d, long long&amp; x, long long&amp; y)  
+{  
+    if (!b)  
+    {  
+        d = a;  
+        x = 1;  
+        y = 0;  
+    }  
+    else  
+    {  
+        exgcd(b,a%b,d,y,x);  
+        y -= x *(a/b);  
+    }  
+}  
+</code></pre>
+<p>我个人觉得第一次看到这个程序你会有以上两个不明白的地方（见注释），下面我分别解释</p>
+<p>不明处1：由扩展欧几里得定理：ax+by==gcd(a,b)---式1，而此时b==0，也就是说gcd(a,0)==a。原式变为ax+by==a --&gt;
+x==1,y==0。应该够清楚了吧</p>
+<p>不明处2：这里先说明一下我的一些规则，x,y表示第一次递归时的值，x1,y1表示第二次递归时的值。那么</p>
+<p>gcd(a,b)==gcd(b,a%b)，同时都代入式1，有ax+by==b*x1+(a%b)*y1。将右边变形一下</p>
+<p>b<em>x1+(a%b)<em>y1==b</em>x1+(a-(a/b)<em>b)<em>y1==a</em>y1+b</em>(x1-(a/b)<em>y1)，最终得到ax+by==a</em>y1+b</em>(x1-(a/b)*y1)</p>
+<p>也就是说，上一深度的x等于下一深度的y1，上一深度的y等于下一深度的x1-(a/b)*y1。    需要注意，上面推导时用的除法都是整型除法</p>
+<p>到这里为止，我们便得到了不定式ax+by==gcd(a,b)的一组解，x、y。</p>
+<p>那么对于一般的不定式ax+by==c，它的解应该是什么呢。很简单，x1=x*(c/gcd(a,b)),y1=y*(c/gcd(a,b))。很好理解吧~</p>
+<p>再深入一点，就解出这么一组解其实一般来说是解决不了什么问题的。没有哪个ACM的题这么简单吧。。。比如我们现在要得到所有的解，那么这所有的解究竟是什么呢？</p>
+<p>直接说吧,假设d=gcd(a,b). 那么x=x0+b/d<em>t; y=y0-a/d</em>t;其中t为任意常整数。</p>
+<p>这个是怎么推导出来的，说实话我也不知道，就先这么记着吧！</p>
+<p>好了，说了这么多，光说不练也无济于事</p>
+<p>先做一个最简单的题目，pku 1061青蛙的约会</p>
+<p>先说一下大概题意：有两只青蛙，一只在坐标x，另一直在坐标y，青蛙x一次跳跃可以前进m单位距离，青蛙y一次跳跃可以前进n单位的距离，两青蛙都在同一纬度，该纬度长度为L。两只青蛙同方向同时跳啊跳，问你最少跳多少次，它们才可以相遇，如果不能相遇，输出impossble</p>
+<p>分析：假设跳了T次以后，青蛙1的坐标便是x+m<em>T,青蛙2的坐标为y+n</em>T。它们能够相遇的情况为（x+m<em>T）-(y+n</em>T)==P*L，其中P为某一个整数，变形一下</p>
+<p>得到(n-m)<em>T+P</em>L==x-y
+我们设a=(n-m),b=L,c=x-y,T=x,P=y.于是便得到ax+by==c。激动啊，这不就是上面一样的式子吗~</p>
+<p>直接套用扩展欧几里得函数，得到一组解x,y。由于问题是问最少跳多少次，于是只有x是我们需要的信息。那么再想，x是最小的吗？</p>
+<p>答案是可能不是！那么如何得到最小解呢？  我们考虑x的所有解的式子：
+x=x0+b/d<em>t。x0是我们刚刚求到的，很显然右边是有个单调函数，当t为某一个与x正负性质相反的数时，可以得到最小的x。
+令x的正负性质为正，那么x=x0-b/d</em>t1
+(t1==-t)。令x==0，那么t=x0<em>d/b，最小的x等于x0减去t</em>b/d。这里得到的x可能是负数，如果是负数，我们再为它加上一个b/d即是所求答案了！</p>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;string&gt;
+#include&lt;cmath&gt;
+#include&lt;algorithm&gt;
+usingnamespace std;
+
+__int64 x,y,a,b,c,d;
+__int64 n,m,X,Y,L;
+
+__int64 gcd(__int64 a,__int64 b)
+{
+    __int64 t,d;
+    if(b==0)
+    {
+        x=1;
+        y=0;
+        return a;
+    }
+    d=gcd(b,a%b);
+    t=x;
+    x=y;
+    y=t-(a/b)*y;
+    return d;
+}
+
+int main()
+{
+    while(scanf(&quot;%I64d%I64d%I64d%I64d%I64d&quot;,&amp;X,&amp;Y,&amp;m,&amp;n,&amp;L)==5)
+    {
+        a=n-m;
+        b=L;
+        c=X-Y;
+        d=gcd(a,b);
+        if(c%d!=0)
+        {
+            printf(&quot;Impossible\n&quot;);
+            continue;
+        }
+        x=x*(c/d);
+        y=y*(c/d);
+
+        /*通解：
+        x1=x+b/d*t;
+        y1=y-a/d*t;
+        t为任意整数
+        */
+        //找最小的x1，即求x+b/d*t最小，那么只有t为某一个数时才最小
+        //显然t必须与x正负相反才有最小，那么就看做x-b/d*t,这个式子的最小值便是t=x/(b/d)时，注意这是整型除法
+        __int64 k=x*d/b;
+        k=x-k*b/d;
+        if(k&lt;0)
+            k+=b/d;
+        printf(&quot;%I64d\n&quot;,k);
+    }
+    return0;
+}
+</code></pre>
+<p>转自： <a href="http://www.cnblogs.com/ka200812/archive/2011/09/02/2164404.html" target="_blank" rel="noreferrer"> http://www.cnblogs.com/ka200812/archive/2011/09/02/2164404.html
+</a></p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

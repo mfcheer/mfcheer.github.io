@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>内存分配函数（C语言） · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52568029 C 标准函数库提供了许多函数来实现对堆上内存管理…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-386fd26b28/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"内存分配函数（C语言）","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52568029 C 标准函数库提供了许多函数来实现对堆上内存管理…","datePublished":"2016-09-17T18:10:00.000Z","dateModified":"2016-09-17T18:10:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-386fd26b28/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-386fd26b28/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="内存分配函数（C语言） · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52568029 C 标准函数库提供了许多函数来实现对堆上内存管理…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-386fd26b28/">
+    <meta property="article:published_time" content="2016-09-17T18:10:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="内存分配函数（C语言） · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52568029 C 标准函数库提供了许多函数来实现对堆上内存管理…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">内存分配函数（C语言）</h1>
+                    <div class="post-meta">
+                        <span>2016/09/18 02:10</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1425 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 4 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/52568029" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/52568029</a></p>
+<p>C 标准函数库提供了许多函数来实现对堆上内存管理<br>
+malloc函数：malloc函数可以从堆上获得指定字节的内存空间（必须初始化）<br>
+free函数：释放内存，防止内存泄露<br>
+calloc函数：与 malloc类似，但不需要初始化<br>
+realloc函数：重新分配内存</p>
+<p>头文件stdlib.h</p>
+<h1 id="malloc" tabindex="-1">malloc</h1>
+<p>malloc函数可以从堆上获得指定字节的内存空间，其函数原型如下：</p>
+<p>void * malloc(int n)</p>
+<p>其中，形参n为要求分配的字节数。如果函数执行成功，malloc返回获得内存空间的首地址；如果函数执行失败，那么返回值为NULL。由于malloc函数值的类型为void型指针，因此，可以将其值类型转换后赋给任意类型指针，这样就可以通过操作该类型指针来操作从堆上获得的内存空间。</p>
+<p>需要注意的是,malloc函数分配得到的内存空间是未初始化的。因此，一般在使用该内存空间时，要调用另一个函数memset来将其初始化为全0。memset函数的声明如下：<br>
+void * memset (void * p,int c,int n)<br>
+该函数可以将指定的内存空间按字节单位置为指定的字符c。其中，p为要清零的内存空间的首地址，c为要设定的值，n为被操作的内存空间的字节长度。如果要用memset清0，变量c实参要为0。malloc函数和memset函数的操作语句一般如下：</p>
+<pre><code>int * p=NULL;
+p=(int *)malloc(sizeof(int));
+if(p==NULL)
+    printf(&quot;Can't get memory!\n&quot;);
+memset(p,0,siezeof(int));
+</code></pre>
+<p>通过malloc函数得到的堆内存必须使用memset函数来初始化</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+int main() {
+
+     int * p=NULL;
+     p=(int *)malloc(sizeof(int));
+     if(NULL==p){
+         printf(&quot;Can't get memory!\n&quot;);
+         return -1;
+     }
+
+     printf(&quot;%d\n&quot;,*p);           //输出分配的空间上的值
+     memset(p,0,sizeof(int));     //将p指向的空间清0
+     printf(&quot;%d\n&quot;,*p);           //输出调用memset函数后的结果
+
+     *p=2;
+     printf(&quot;%d\n&quot;,*p);
+     return 0;
+}
+</code></pre>
+<h1 id="free函数" tabindex="-1">free函数</h1>
+<p>从堆上获得的内存空间在程序结束以后，系统不会将其自动释放，需要程序员来自己管理。一个程序结束时，必须保证所有从堆上获得的内存空间已被安全释放，否则，会导致内存泄露。例如上面的demo就会发生内存泄露。</p>
+<p>free函数可以实现释放内存的功能。其函数声明为：</p>
+<p>void free (void * p)</p>
+<p>由于形参为void指针，free函数可以接受任意类型的指针实参。但是，free函数只是释放指针指向的内容，而该指针仍然指向原来指向的地方，此时，指针为野指针，如果此时操作该指针会导致不可预期的错误。安全做法是：在使用free函数释放指针指向的空间之后，将指针的值置为NULL。因此，对于上面的demo，需要在return语句前加入以下两行语句：</p>
+<pre><code>free(p);
+p=NULL;
+</code></pre>
+<h1 id="calloc函数" tabindex="-1">calloc函数</h1>
+<p>calloc函数的功能与malloc函数的功能相似，都是从堆分配内存。其函数声明如下：</p>
+<p>void *calloc(int n,int size)</p>
+<p>函数返回值为void型指针。如果执行成功，函数从堆上获得size X
+n的字节空间，并返回该空间的首地址。如果执行失败，函数返回NULL。该函数与malloc函数的一个显著不同时是，calloc函数得到的内存空间是经过初始化的，其内容全为0。calloc函数适合为数组申请空间，可以将size设置为数组元素的空间长度，将n设置为数组的容量。</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define SIZE 5
+
+int main() {
+     int * p=NULL;
+     int i=0;
+     //为p从堆上分配SIZE个int型空间
+     p=(int *)calloc(SIZE,sizeof(int));
+    if(NULL==p){
+         printf(&quot;Error in calloc.\n&quot;);
+         return -1;
+     }
+
+     //为p指向的SIZE个int型空间赋值
+     for(i=0;i&lt;SIZE;i++)
+         p[i]=i;
+     //输出各个空间的值
+     for(i=0;i&lt;SIZE;i++)
+         printf(&quot;p[%d]=%d\n&quot;,i,p[i]);
+     free(p);
+     p=NULL;
+     return 0;
+}
+</code></pre>
+<h1 id="realloc函数" tabindex="-1">realloc函数</h1>
+<p>realloc函数的功能比malloc函数和calloc函数的功能更为丰富，可以实现内存分配和内存释放的功能，其函数声明如下：</p>
+<p>void * realloc(void * p,int n)</p>
+<p>其中，指针p必须为指向堆内存空间的指针，即由malloc函数、calloc函数或realloc函数分配空间的指针。realloc函数将指针p指向的内存块的大小改变为n字节。如果n小于或等于p之前指向的空间大小，那么。保持原有状态不变。如果n大于原来p之前指向的空间大小，那么，系统将重新为p从堆上分配一块大小为n的内存空间，同时，将原来指向空间的内容依次复制到新的内存空间上，p之前指向的空间被释放。relloc函数分配的空间也是未初始化的。</p>
+<p>注意：使用malloc函数，calloc函数和realloc函数分配的内存空间都要使用free函数或指针参数为NULL的realloc函数来释放。</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main() {
+     int * p=NULL;
+     p=(int *)malloc(sizeof(int));
+     *p=3;
+     printf(&quot;p=%p\n&quot;,p);
+     printf(&quot;*p=%d\n&quot;,*p);
+     p=(int *)realloc(p,sizeof(int));
+     printf(&quot;p=%p\n&quot;,p);
+     printf(&quot;*p=%d\n&quot;,*p);
+
+     p=(int *)realloc(p,3*sizeof(int));
+     printf(&quot;p=%p\n&quot;,p);
+     printf(&quot;*p=%d&quot;,*p);
+    //释放p指向的空间
+     realloc(p,0);
+     p=NULL;
+
+     return 0;
+</code></pre>
+<p>转自： <a href="http://github.thinkingbar.com/allocate-memroy/" target="_blank" rel="noreferrer"> http://github.thinkingbar.com/allocate-memroy/
+</a></p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Linux下TCP/IP及内核参数优化 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：Linux下TCP/IP及内核参数优化">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-ace0aa17b5/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux下TCP/IP及内核参数优化","description":"历史迁移文章：Linux下TCP/IP及内核参数优化","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-ace0aa17b5/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-ace0aa17b5/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Linux下TCP/IP及内核参数优化 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：Linux下TCP/IP及内核参数优化">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-ace0aa17b5/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Linux下TCP/IP及内核参数优化 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：Linux下TCP/IP及内核参数优化">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Linux下TCP/IP及内核参数优化</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1445 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 4 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#具体参数">具体参数</a></li><li><a href="#以上转自">以上转自</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h1 id="linux下tcp/ip及内核参数优化" tabindex="-1">Linux下TCP/IP及内核参数优化</h1>
+<p>Linux下TCP/IP及内核参数优化有多种方式，参数配置得当可以大大提高系统的性能，也可以根据特定场景进行专门的优化，如TIME_WAIT过高，DDOS攻击等等。</p>
+<p>如下配置是写在/etc/sysctl.conf中，可使用sysctl -p生效，</p>
+<p>相关参数仅供参考，具体数值还需要根据机器性能，应用场景等实际情况来做更细微调整。</p>
+<h2 id="具体参数" tabindex="-1">具体参数</h2>
+<p>net.core.netdev_max_backlog = 400000
+该参数决定了，网络设备接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目。
+&lt;!--more--&gt;
+net.core.optmem_max = 10000000
+该参数指定了每个套接字所允许的最大缓冲区的大小</p>
+<p>net.core.rmem_default = 10000000
+指定了接收套接字缓冲区大小的缺省值（以字节为单位）。</p>
+<p>net.core.rmem_max = 10000000
+指定了接收套接字缓冲区大小的最大值（以字节为单位）。</p>
+<p>net.core.somaxconn = 100000
+Linux kernel参数，表示socket监听的backlog(监听队列)上限</p>
+<p>net.core.wmem_default = 11059200
+定义默认的发送窗口大小；对于更大的 BDP 来说，这个大小也应该更大。</p>
+<p>net.core.wmem_max = 11059200
+定义发送窗口的最大大小；对于更大的 BDP 来说，这个大小也应该更大。</p>
+<p>net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.rp_filter = 1
+严谨模式 1 (推荐)
+松散模式 0</p>
+<p>net.ipv4.tcp_congestion_control = bic
+默认推荐设置是 htcp</p>
+<p>net.ipv4.tcp_window_scaling = 0
+关闭tcp_window_scaling
+启用 RFC 1323 定义的 window scaling；要支持超过 64KB 的窗口，必须启用该值。</p>
+<p>net.ipv4.tcp_ecn = 0
+把TCP的直接拥塞通告(tcp_ecn)关掉</p>
+<p>net.ipv4.tcp_sack = 1
+关闭tcp_sack
+启用有选择的应答（Selective Acknowledgment），
+这可以通过有选择地应答乱序接收到的报文来提高性能（这样可以让发送者只发送丢失的报文段）；
+（对于广域网通信来说）这个选项应该启用，但是这会增加对 CPU 的占用。</p>
+<p>net.ipv4.tcp_max_tw_buckets = 10000
+表示系统同时保持TIME_WAIT套接字的最大数量</p>
+<p>net.ipv4.tcp_max_syn_backlog = 8192
+表示SYN队列长度，默认1024，改成8192，可以容纳更多等待连接的网络连接数。</p>
+<p>net.ipv4.tcp_syncookies = 1
+表示开启SYN Cookies。当出现SYN等待队列溢出时，启用cookies来处理，可防范少量SYN攻击，默认为0，表示关闭；</p>
+<p>net.ipv4.tcp_timestamps = 1
+开启TCP时间戳
+以一种比重发超时更精确的方法（请参阅 RFC 1323）来启用对 RTT 的计算；为了实现更好的性能应该启用这个选项。</p>
+<p>net.ipv4.tcp_tw_reuse = 1
+表示开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接，默认为0，表示关闭；</p>
+<p>net.ipv4.tcp_tw_recycle = 1
+表示开启TCP连接中TIME-WAIT sockets的快速回收，默认为0，表示关闭。</p>
+<p>net.ipv4.tcp_fin_timeout = 10
+表示如果套接字由本端要求关闭，这个参数决定了它保持在FIN-WAIT-2状态的时间。</p>
+<p>net.ipv4.tcp_keepalive_time = 1800
+表示当keepalive起用的时候，TCP发送keepalive消息的频度。缺省是2小时，改为30分钟。</p>
+<p>net.ipv4.tcp_keepalive_probes = 3
+如果对方不予应答，探测包的发送次数</p>
+<p>net.ipv4.tcp_keepalive_intvl = 15
+keepalive探测包的发送间隔</p>
+<p>net.ipv4.tcp_mem
+确定 TCP 栈应该如何反映内存使用；每个值的单位都是内存页（通常是 4KB）。
+第一个值是内存使用的下限。
+第二个值是内存压力模式开始对缓冲区使用应用压力的上限。
+第三个值是内存上限。在这个层次上可以将报文丢弃，从而减少对内存的使用。对于较大的 BDP 可以增大这些值（但是要记住，其单位是内存页，而不是字节）。</p>
+<p>net.ipv4.tcp_rmem
+与 tcp_wmem 类似，不过它表示的是为自动调优所使用的接收缓冲区的值。</p>
+<p>net.ipv4.tcp_wmem = 30000000 30000000 30000000
+为自动调优定义每个 socket 使用的内存。
+第一个值是为 socket 的发送缓冲区分配的最少字节数。
+第二个值是默认值（该值会被 wmem_default 覆盖），缓冲区在系统负载不重的情况下可以增长到这个值。
+第三个值是发送缓冲区空间的最大字节数（该值会被 wmem_max 覆盖）。</p>
+<p>net.ipv4.ip_local_port_range = 1024 65000
+表示用于向外连接的端口范围。缺省情况下很小：32768到61000，改为1024到65000。</p>
+<p>net.ipv4.netfilter.ip_conntrack_max=204800
+设置系统对最大跟踪的TCP连接数的限制</p>
+<p>net.ipv4.tcp_slow_start_after_idle = 0
+关闭tcp的连接传输的慢启动，即先休止一段时间，再初始化拥塞窗口。</p>
+<p>net.ipv4.route.gc_timeout = 100
+路由缓存刷新频率，当一个路由失败后多长时间跳到另一个路由，默认是300。</p>
+<p>net.ipv4.tcp_syn_retries = 1
+在内核放弃建立连接之前发送SYN包的数量。</p>
+<p>net.ipv4.icmp_echo_ignore_broadcasts = 1
+避免放大攻击</p>
+<p>net.ipv4.icmp_ignore_bogus_error_responses = 1开启恶意icmp错误消息保护</p>
+<p>net.inet.udp.checksum=1
+防止不正确的udp包的攻击</p>
+<p>net.ipv4.conf.default.accept_source_route = 0
+是否接受含有源路由信息的ip包。参数值为布尔值，1表示接受，0表示不接受。
+在充当网关的linux主机上缺省值为1，在一般的linux主机上缺省值为0。
+从安全性角度出发，建议你关闭该功能。</p>
+<h2 id="以上转自" tabindex="-1">以上转自</h2>
+<p><a href="http://www.cnblogs.com/jking10/p/5472386.html" target="_blank" rel="noreferrer">链接</a></p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

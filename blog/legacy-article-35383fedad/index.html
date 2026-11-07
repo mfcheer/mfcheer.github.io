@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>为什么要做特征工程？ · mfcheer</title>
+    <meta name="description" content="历史迁移文章：为什么要做特征工程？">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-35383fedad/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"为什么要做特征工程？","description":"历史迁移文章：为什么要做特征工程？","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-35383fedad/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-35383fedad/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="为什么要做特征工程？ · mfcheer">
+    <meta property="og:description" content="历史迁移文章：为什么要做特征工程？">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-35383fedad/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="为什么要做特征工程？ · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：为什么要做特征工程？">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">为什么要做特征工程？</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>447 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#1、one-hot编码">1、One-Hot编码</a></li><li><a href="#2、离散化">2、离散化</a></li><li><a href="#3、连续值">3、连续值</a></li><li><a href="#4、特征交叉">4、特征交叉</a></li><li><a href="#5、归一化">5、归一化</a></li><li class="toc-sub"><a href="#5.1-最大最小标准化">5.1 最大最小标准化</a></li><li class="toc-sub"><a href="#5.2-对数函数">5.2 对数函数</a></li><li class="toc-sub"><a href="#5.3-z-score标准化">5.3 z-score标准化</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h1 id="为什么要做特征工程？" tabindex="-1">为什么要做特征工程？</h1>
+<p>“数据和特征决定了机器学习的上限，而模型和算法是在逼近这个上限而已”，所以数据是机器学习的基础。数据来源是各种各样的，文本、语音、视频、图片等，原始的数据必须以特征的形式，加入到模型中，才能进行训练</p>
+<h1 id="特征工程方法" tabindex="-1">特征工程方法</h1>
+<h2 id="1、one-hot编码" tabindex="-1">1、One-Hot编码</h2>
+<p>避免连续值导致模型的“误解”</p>
+<h2 id="2、离散化" tabindex="-1">2、离散化</h2>
+<p>对数据进行分区分桶操作</p>
+<h2 id="3、连续值" tabindex="-1">3、连续值</h2>
+<p>使用属性的连续值，某些模型对连续型的特征处理有比较好的效果</p>
+<h2 id="4、特征交叉" tabindex="-1">4、特征交叉</h2>
+<p>两个甚至多个特征，进行特征组合，形成一组新的特征</p>
+<h2 id="5、归一化" tabindex="-1">5、归一化</h2>
+<p>机器学习中，对数据进行分析之前，都会对数据进行归一化处理，这样做是为了消除部分特征数据对整体结果的影响。一般来说，是通过特定的方法，对数据的区间进行缩放处理，使之达到一个合适值，使各个指标处于同一个数量级。常见的是将数值处理成[0,1]之间的小数</p>
+<h3 id="5.1-最大最小标准化" tabindex="-1">5.1 最大最小标准化</h3>
+<p>通过特征的最大最小值，将每个值处理成[0,1]区间的数字，公式如下
+设最大maxA,最小值为minA，y=(x-minA)/(maxA-minA)</p>
+<h3 id="5.2-对数函数" tabindex="-1">5.2 对数函数</h3>
+<p>y=log10(x)</p>
+<h3 id="5.3-z-score标准化" tabindex="-1">5.3 z-score标准化</h3>
+<p>通过特征的平均值和标准差，进行数据处理，公式为：
+y=(x-μ)/σ 其中x为某一分数，μ为平均数，σ为标准差。
+y的含义就是x与平均值之间的距离，衡量单位是标准差</p>
+<h1 id="6、二值化" tabindex="-1">6、二值化</h1>
+<p>取值为 0,1</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

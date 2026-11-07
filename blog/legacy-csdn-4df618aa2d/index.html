@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu 5336 XYZ and Drops 【BFS模拟】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47177775 题目链接： http://acm.hdu.edu…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-4df618aa2d/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu 5336 XYZ and Drops 【BFS模拟】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47177775 题目链接： http://acm.hdu.edu…","datePublished":"2015-07-31T15:44:00.000Z","dateModified":"2015-07-31T15:44:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-4df618aa2d/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-4df618aa2d/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu 5336 XYZ and Drops 【BFS模拟】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47177775 题目链接： http://acm.hdu.edu…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-4df618aa2d/">
+    <meta property="article:published_time" content="2015-07-31T15:44:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu 5336 XYZ and Drops 【BFS模拟】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47177775 题目链接： http://acm.hdu.edu…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu 5336 XYZ and Drops 【BFS模拟】</h1>
+                    <div class="post-meta">
+                        <span>2015/07/31 23:44</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>606 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47177775" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47177775</a></p>
+<p>题目链接： <a href="http://acm.hdu.edu.cn/showproblem.php?pid=5336" target="_blank" rel="noreferrer"> http://acm.hdu.edu.cn/showproblem.php?pid=5336
+</a></p>
+<p>题意：给你一个r*c的网格，有的网格为空，有的有水，再给出一个爆炸点，从这个点向四周爆出四个水滴，若碰到水则融为一体，若碰到其他水滴直接跑过去互不影响，每秒可跑一格，若水中水滴数量超过4则爆开，问T秒后网格的状态是怎样的。</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;string&gt;
+#include &lt;assert.h&gt;
+#pragma comment(linker,&quot;/STACK:1024000000,1024000000&quot;)
+
+using namespace std;
+
+const int MAXN = 110;
+
+int r, c, n, t;
+int dir[][2] = { { 0,0 },{ 1,0 },{ -1,0 },{ 0,1 },{ 0,-1 } };
+int s[MAXN][MAXN];// 地图，记录水滴的数目
+int ans[MAXN][MAXN];// 记录（i,j）位置的爆裂时间
+
+struct water // 询问的n个水坑
+{
+    int x, y;// 坐标
+    int t;
+}p[MAXN];
+
+struct node// 水滴
+{
+    // 坐标，方向
+    int x, y, dir;
+    int t;
+};
+
+int sx, sy;
+
+bool is_ok(int x, int y)
+{
+    if (x&lt;1 || x&gt;r || y&lt;1 || y&gt;c) return false;
+    return true;
+}
+
+void bfs()
+{
+    queue&lt;node&gt; q;
+    while (!q.empty()) q.pop();
+
+    node tmp;
+    for (int i = 1; i &lt;= 4; i++)
+    {
+        tmp.x = sx;
+        tmp.y = sy;
+        tmp.dir = i;//水滴运动的方向
+        q.push(tmp);
+    }
+
+    node qq,qqq;
+
+    for (int k = 1; k &lt;= t; k++)
+    {
+        int len = q.size();
+        if (len == 0) break;
+        for (int kk = 0; kk &lt; len;kk++)
+        {
+            qq = q.front();
+            q.pop();
+            int x = qq.x; int y = qq.y; int d = qq.dir;
+            int xx = qq.x + dir[d][0];
+            int yy = qq.y + dir[d][1];
+
+            if (is_ok(xx, yy))
+            {
+                if (ans[xx][yy] == k) continue;
+
+                if (s[xx][yy])//有水被吸收
+                {
+                    s[xx][yy]++;
+                    if (s[xx][yy] &gt; 4)
+                    {
+                        if (ans[xx][yy] == 0)
+                        {
+                            ans[xx][yy] = k;
+                            s[xx][yy] = 0;
+                        }
+                        for (int i = 1; i &lt;= 4; i++)
+                        {
+                            tmp.x = xx;
+                            tmp.y = yy;
+                            tmp.dir = i;//水滴运动的方向
+                            q.push(tmp);
+                        }
+                    }
+                }
+                else //没水继续走
+                {
+                    tmp.x = xx;
+                    tmp.y = yy;
+                    tmp.dir = d;//水滴运动的方向
+                    q.push(tmp);
+                }
+            }
+
+        }
+    }
+    return;
+}
+
+int main()
+{
+    while (~scanf(&quot;%d%d%d%d&quot;, &amp;r, &amp;c, &amp;n, &amp;t))
+    {
+        memset(s, 0, sizeof(s));
+        memset(ans, 0, sizeof(ans));
+        int x, y, z;
+
+        for (int i = 1; i &lt;= n; i++)
+        {
+            scanf(&quot;%d%d%d&quot;, &amp;x, &amp;y, &amp;z);
+            p[i].x = x; p[i].y = y;
+            s[x][y] = z;
+        }
+
+        scanf(&quot;%d%d&quot;, &amp;sx, &amp;sy);
+        bfs();
+
+        for (int i = 1; i &lt;= n; i++)
+        {
+            if (ans[p[i].x][p[i].y])
+                printf(&quot;0 %d\n&quot;, ans[p[i].x][p[i].y]);
+            else 
+                printf(&quot;1 %d\n&quot;, s[p[i].x][p[i].y]);
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

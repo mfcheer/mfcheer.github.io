@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>HDU 1429 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42062533 终于过了这道题 做的第一道位压缩 http://…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-c272c0282b/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"HDU 1429","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42062533 终于过了这道题 做的第一道位压缩 http://…","datePublished":"2014-12-21T11:14:00.000Z","dateModified":"2014-12-21T11:14:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-c272c0282b/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-c272c0282b/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"acm,算法","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="HDU 1429 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42062533 终于过了这道题 做的第一道位压缩 http://…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-c272c0282b/">
+    <meta property="article:published_time" content="2014-12-21T11:14:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HDU 1429 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42062533 终于过了这道题 做的第一道位压缩 http://…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">HDU 1429</h1>
+                    <div class="post-meta">
+                        <span>2014/12/21 19:14</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>470 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">acm</span><span class="post-tag">算法</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42062533" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/42062533</a></p>
+<p>终于过了这道题</p>
+<p>做的第一道位压缩</p>
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1429" target="_blank" rel="noreferrer"> http://acm.hdu.edu.cn/showproblem.php?pid=1429
+</a></p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+int n, m, t;
+
+int ans,num;
+
+char s[22];
+
+int sx, sy;
+
+int dir[4][2] = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };//四个方向
+
+int vis[22][22][1025];
+
+struct Q
+{
+    int x;
+    int y;
+    char ele;
+    int step;
+    int nkeys;
+}p[22][22];
+
+int check(int x, int y)
+{
+    if (x&gt;=0 &amp;&amp; x&lt;n &amp;&amp; y&gt;=0 &amp;&amp; y&lt;m)
+        return 1;
+    else
+        return 0;
+}
+
+void bfs()
+{
+    memset(vis,0,sizeof(vis));
+    queue &lt;Q&gt; q;
+    Q qq, qqq;
+    p[sx][sy].step = 0;
+    p[sx][sy].nkeys = 0;
+
+    vis[sx][sy][p[sx][sy].nkeys] = 1;
+
+    q.push(p[sx][sy]);
+
+    while (!q.empty())
+    {
+        qq = q.front();
+        q.pop();
+
+        if (p[qq.x][qq.y].ele == '^' &amp;&amp; qq.step &lt; t)
+        {
+            printf(&quot;%d\n&quot;,qq.step);
+            return ;
+        }
+        else if ( p[qq.x][qq.y].ele == '^' &amp;&amp; qq.step &gt;= t )
+        {
+            printf(&quot;-1\n&quot;);
+            return ;
+        }
+
+        for (int i = 0; i &lt; 4;i++)
+        {
+            int x = qq.x+dir[i][0];
+            int y = qq.y+dir[i][1];
+
+            qqq = qq;
+            qqq.x = x;
+            qqq.y = y;
+
+            if ( check(qqq.x, qqq.y)  &amp;&amp;  p[qqq.x][qqq.y].ele != '*'  &amp;&amp;  !vis[qqq.x][qqq.y][qqq.nkeys])
+            {
+                if (p[qqq.x][qqq.y].ele &gt;= 'a' &amp;&amp; p[qqq.x][qqq.y].ele &lt;= 'j' )
+                {
+                    int key = 1 &lt;&lt; (p[qqq.x][qqq.y].ele - 'a');
+
+                    qqq.nkeys |= key;//拾取钥匙
+                    if (!vis[qqq.x][qqq.y][qqq.nkeys])
+                    {
+                        qqq.step += 1;
+                        vis[qqq.x][qqq.y][qqq.nkeys] = 1;
+                        q.push(qqq);
+                    }
+                }
+                else if (p[qqq.x][qqq.y].ele &gt;= 'A' &amp;&amp; p[qqq.x][qqq.y].ele &lt;= 'J' )
+                {
+                    int key = 1 &lt;&lt; (p[qqq.x][qqq.y].ele - 'A');
+
+                    if ( (qqq.nkeys &amp; key) )//检查手头是否有该门的钥匙
+                    {
+                        qqq.step += 1;
+                        vis[qqq.x][qqq.y][qqq.nkeys] = 1;
+                        q.push(qqq);
+                    }
+                }
+                else 
+                {
+                    qqq.step += 1;
+                    vis[qqq.x][qqq.y][qqq.nkeys] = 1;
+                        q.push(qqq);
+                }
+            }
+        }
+    }
+    printf(&quot;-1\n&quot;);
+    return;
+}
+
+int main()
+{
+    while (scanf(&quot;%d %d %d&quot;, &amp;n, &amp;m, &amp;t) != EOF)
+    {
+        num = 0;
+        sx = sy = 0;
+        for (int i = 0; i &lt; n; i++)
+        {
+            scanf(&quot;%s&quot;,s);
+            for (int j = 0; j &lt; m; j++)
+            {
+                p[i][j].ele = s[j];
+                p[i][j].step = 0 ;
+                p[i][j].nkeys = 0 ;
+                p[i][j].x = i;
+                p[i][j].y = j;
+
+                if (p[i][j].ele == '@')
+                {
+                    sx = i;
+                    sy = j;
+                }
+            }
+        }
+
+        bfs();
+
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

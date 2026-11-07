@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-1325 &amp; poj-1308 Is It A Tree? · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43086419 http://acm.hdu.edu.cn/sh…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-c848e86675/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-1325 & poj-1308 Is It A Tree?","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43086419 http://acm.hdu.edu.cn/sh…","datePublished":"2015-01-24T08:47:00.000Z","dateModified":"2015-01-24T08:47:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-c848e86675/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-c848e86675/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"acm,算法","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-1325 &amp; poj-1308 Is It A Tree? · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43086419 http://acm.hdu.edu.cn/sh…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-c848e86675/">
+    <meta property="article:published_time" content="2015-01-24T08:47:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-1325 &amp; poj-1308 Is It A Tree? · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43086419 http://acm.hdu.edu.cn/sh…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-1325 &amp; poj-1308 Is It A Tree?</h1>
+                    <div class="post-meta">
+                        <span>2015/01/24 16:47</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>712 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">acm</span><span class="post-tag">算法</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/43086419" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/43086419</a></p>
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1325" target="_blank" rel="noreferrer"> http://acm.hdu.edu.cn/showproblem.php?pid=1325
+</a></p>
+<p>题意：</p>
+<p>判断一个图是不是说树</p>
+<p>只有树的根入度为 0 ，其余结点入度均为 1;</p>
+<h1 id="is-it-a-tree?" tabindex="-1">Is It A Tree?</h1>
+<p>** Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 65536/32768 K
+(Java/Others)<br>
+Total Submission(s): 15503    Accepted Submission(s): 3443<br>
+**</p>
+<p>Problem Description</p>
+<p>A tree is a well-known data structure that is either empty (null, void,
+nothing) or is a set of one or more nodes connected by directed edges between
+nodes satisfying the following properties.<br>
+There is exactly one node, called the root, to which no directed edges point.</p>
+<p>Every node except the root has exactly one edge pointing to it.</p>
+<p>There is a unique sequence of directed edges from the root to each node.</p>
+<p>For example, consider the illustrations below, in which nodes are represented
+by circles and edges are represented by lines with arrowheads. The first two
+of these are trees, but the last is not.</p>
+<p><img src="http://acm.hdu.edu.cn/data/images/1325-1.gif" alt="" loading="lazy" referrerpolicy="no-referrer">
+<img src="http://acm.hdu.edu.cn/data/images/1325-2.gif" alt="" loading="lazy" referrerpolicy="no-referrer">
+<img src="http://acm.hdu.edu.cn/data/images/1325-3.gif" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>In this problem you will be given several descriptions of collections of nodes
+connected by directed edges. For each of these you are to determine if the
+collection satisfies the definition of a tree or not.</p>
+<p>Input</p>
+<p>The input will consist of a sequence of descriptions (test cases) followed by
+a pair of negative integers. Each test case will consist of a sequence of edge
+descriptions followed by a pair of zeroes Each edge description will consist
+of a pair of integers; the first integer identifies the node from which the
+edge begins, and the second integer identifies the node to which the edge is
+directed. Node numbers will always be greater than zero.</p>
+<p>Output</p>
+<p>For each test case display the line <code>Case k is a tree.&quot; or the line </code>Case k
+is not a tree.&quot;, where k corresponds to the test case number (they are
+sequentially numbered starting with 1).</p>
+<p>Sample Input</p>
+<p>6 8 5 3 5 2 6 4 5 6 0 0 8 1 7 3 6 2 8 9 7 5 7 4 7 8 7 6 0 0 3 8 6 8 6 4 5 3 5
+6 5 2 0 0 -1 -1</p>
+<p>Sample Output</p>
+<p>Case 1 is a tree. Case 2 is a tree. Case 3 is not a tree.</p>
+<p>Source</p>
+<p><a href="http://acm.hdu.edu.cn/search.php?field=problem&amp;key=North+Central+North+America+1997&amp;source=1&amp;searchmode=source" target="_blank" rel="noreferrer"> North Central North America 1997
+</a></p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;cstdio&gt;  
+#include &lt;string&gt;  
+#include &lt;cstring&gt;  
+#include &lt;cstdlib&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;vector&gt;  
+#include &lt;set&gt;  
+#include &lt;map&gt;  
+
+using namespace std;
+
+#define N 100010
+
+bool used[N*10];
+int queue[N];
+int in[N];
+int fa[N];
+
+int findd(int x)
+{
+	if (fa[x] == -1)
+		return x;
+	else
+		return fa[x] = findd(fa[x]);
+}
+
+void un(int n,int m)
+{
+	int fx = findd(n);
+	int fy = findd(m);
+	if (fx != fy)
+		fa[fy] = fx;
+}
+
+int main()
+{
+	int n, m, cases = 1;
+	memset(used,false,sizeof(used));
+	memset(in,0,sizeof(in));
+	memset(fa,-1,sizeof(fa));
+	bool ok = true; int num = 0;
+
+	while (scanf(&quot;%d %d&quot;, &amp;n, &amp;m) != EOF)
+	{
+		if (n == -1 &amp;&amp; m == -1)
+			break;
+		else if (n == 0 &amp;&amp; m == 0)
+		{
+			int num1 = 0;
+			for (int i = 0; i &lt; num; i++)
+			{
+				if (findd(queue[i]) != findd(queue[0]))
+				{
+					ok = false;
+					break;
+				}
+				if (in[queue[i]] == 0)
+					num1++;
+				if (in[queue[i]] &gt; 1)
+				{
+					ok = false;
+					break;
+				}
+			}
+
+			if (num1 != 1)
+				ok = false;
+			if (num == 0)
+				ok = true;
+
+			if (ok)
+				printf(&quot;Case %d is a tree.\n&quot;,cases++);
+			else
+				printf(&quot;Case %d is not a tree.\n&quot;, cases++);
+
+			memset(used, false, sizeof(used));
+			memset(in, 0, sizeof(in));
+			memset(fa, -1, sizeof(fa));
+			ok = true, num = 0;
+		}
+		else
+		{
+			if (!used[n])
+			{
+				used[n] = true;
+				queue[num++] = n;
+			}
+			if (!used[m])
+			{
+				used[m] = true;
+				queue[num++] = m;
+			}
+			if (findd(n) == findd(m))
+				ok = false;
+			else
+			{
+				in[m]++;
+				un(n,m);
+			}
+		}
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

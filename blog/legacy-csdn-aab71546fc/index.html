@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Codeforces Round · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42175629 http://codeforces.com/co…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-aab71546fc/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Codeforces Round","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42175629 http://codeforces.com/co…","datePublished":"2014-12-26T11:37:00.000Z","dateModified":"2014-12-26T11:37:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-aab71546fc/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-aab71546fc/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"acm,算法,codeforces","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Codeforces Round · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42175629 http://codeforces.com/co…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-aab71546fc/">
+    <meta property="article:published_time" content="2014-12-26T11:37:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Codeforces Round · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42175629 http://codeforces.com/co…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Codeforces Round</h1>
+                    <div class="post-meta">
+                        <span>2014/12/26 19:37</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1738 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 4 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">acm</span><span class="post-tag">算法</span><span class="post-tag">codeforces</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42175629" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/42175629</a></p>
+<p><a href="http://codeforces.com/contest/499" target="_blank" rel="noreferrer"> http://codeforces.com/contest/499 </a></p>
+<p>A</p>
+<p>水</p>
+<p>A. Watching a movie</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>You have decided to watch the best moments of some movie. There are two
+buttons on your player:</p>
+<ol>
+<li>Watch the current minute of the movie. By pressing this button, you watch the current minute of the movie and the player automatically proceeds to the next minute of the movie.</li>
+<li>Skip exactly  <em>x</em> minutes of the movie (  <em>x</em> is some fixed positive integer). If the player is now at the  <em>t</em> -th minute of the movie, then as a result of pressing this button, it proceeds to the minute  ( <em>t</em> + <em>x</em> )  .</li>
+</ol>
+<p>Initially the movie is turned on in the player on the first minute, and you
+want to watch exactly  <em>n</em> best moments of the movie, the  <em>i</em> -th best moment
+starts at the  <em>l</em> <em>i</em> -th minute and ends at the  <em>r</em> <em>i</em> -th minute (more
+formally, the  <em>i</em> -th best moment consists of minutes:  <em>l</em> <em>i</em> , <em>l</em> <em>i</em> +
+1, ..., <em>r</em> <em>i</em> ).</p>
+<p>Determine, what is the minimum number of minutes of the movie you have to
+watch if you want to watch all the best moments?</p>
+<p>Input</p>
+<p>The first line contains two space-separated integers  <em>n</em> ,  <em>x</em> (  1 ≤ <em>n</em> ≤
+50  ,  1 ≤ <em>x</em> ≤ 10  5  ) — the number of the best moments of the movie and
+the value of  <em>x</em> for the second button.</p>
+<p>The following  <em>n</em> lines contain the descriptions of the best moments of the
+movie, the  <em>i</em> -th line of the description contains two integers separated by
+a space  <em>l</em> <em>i</em> ,  <em>r</em> <em>i</em> (  1 ≤ <em>l</em> <em>i</em> ≤ <em>r</em> <em>i</em> ≤ 10  5  ).</p>
+<p>It is guaranteed that for all integers  <em>i</em> from  2  to  <em>n</em> the following
+condition holds:  <em>r</em> <em>i</em> - 1  &lt; <em>l</em> <em>i</em> .</p>
+<p>Output</p>
+<p>Output a single number — the answer to the problem.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>2 3
+5 6
+10 12
+</code></pre>
+<p>output</p>
+<pre><code>6
+</code></pre>
+<p>input</p>
+<pre><code>1 1
+1 100000
+</code></pre>
+<p>output</p>
+<pre><code>100000
+</code></pre>
+<p>Note</p>
+<p>In the first sample, the player was initially standing on the first minute. As
+the minutes from the  1  -st to the  4  -th one don't contain interesting
+moments, we press the second button. Now we can not press the second button
+and skip  3  more minutes, because some of them contain interesting moments.
+Therefore, we watch the movie from the  4  -th to the  6  -th minute, after
+that the current time is  7  . Similarly, we again skip  3  minutes and then
+watch from the  10  -th to the  12  -th minute of the movie. In total, we
+watch  6  minutes of the movie.</p>
+<p>In the second sample, the movie is very interesting, so you'll have to watch
+all  100000  minutes of the movie.</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+struct
+{
+    int s;
+    int e;
+}p[55];
+
+int n,x;
+
+int main()
+{
+    while (scanf(&quot;%d %d&quot;, &amp;n,&amp;x) != EOF)
+    {
+        for (int i = 1; i &lt;= n; i++)
+        {
+            scanf(&quot;%d %d&quot;,&amp;p[i].s,&amp;p[i].e);
+        }
+        int pos = 1;
+        int ans = 0;
+
+        for (int i = 1; i &lt;= n; i++)
+        {
+            ans += ( p[i].s - pos ) % x;
+            ans += p[i].e - p[i].s+1;
+            pos = p[i].e + 1;
+        }
+        printf(&quot;%d\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre>
+<p>B</p>
+<p>水</p>
+<p>B. Lecture</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>You have a new professor of graph theory and he speaks very quickly. You come
+up with the following plan to keep up with his lecture and make notes.</p>
+<p>You know two languages, and the professor is giving the lecture in the first
+one. The words in both languages consist of lowercase English characters, each
+language consists of several words. For each language, all words are distinct,
+i.e. they are spelled differently. Moreover, the words of these languages have
+a one-to-one correspondence, that is, for each word in each language, there
+exists exactly one word in the other language having has the same meaning.</p>
+<p>You can write down every word the professor says in either the first language
+or the second language. Of course, during the lecture you write down each word
+in the language in which the word is shorter. In case of equal lengths of the
+corresponding words you prefer the word of the first language.</p>
+<p>You are given the text of the lecture the professor is going to read. Find out
+how the lecture will be recorded in your notes.</p>
+<p>Input</p>
+<p>The first line contains two integers,  <em>n</em> and  <em>m</em> (  1 ≤ <em>n</em> ≤ 3000  ,  1 ≤
+<em>m</em> ≤ 3000  ) — the number of words in the professor's lecture and the number
+of words in each of these languages.</p>
+<p>The following  <em>m</em> lines contain the words. The  <em>i</em> -th line contains two
+strings  <em>a</em> <em>i</em> ,  <em>b</em> <em>i</em> meaning that the word  <em>a</em> <em>i</em> belongs to the
+first language, the word  <em>b</em> <em>i</em> belongs to the second language, and these
+two words have the same meaning. It is guaranteed that no word occurs in both
+languages, and each word occurs in its language exactly once.</p>
+<p>The next line contains  <em>n</em> space-separated strings  <em>c</em> 1  , <em>c</em> 2  , ...,
+<em>c</em> <em>n</em> — the text of the lecture. It is guaranteed that each of the strings
+<em>c</em> <em>i</em> belongs to the set of strings  { <em>a</em> 1  , <em>a</em> 2  , ... <em>a</em> <em>m</em> }  .</p>
+<p>All the strings in the input are non-empty, each consisting of no more than
+10  lowercase English letters.</p>
+<p>Output</p>
+<p>Output exactly  <em>n</em> words: how you will record the lecture in your notebook.
+Output the words of the lecture in the same order as in the input.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>4 3
+codeforces codesecrof
+contest round
+letter message
+codeforces contest letter contest
+</code></pre>
+<p>output</p>
+<pre><code>codeforces round letter round
+</code></pre>
+<p>input</p>
+<pre><code>5 3
+joll wuqrd
+euzf un
+hbnyiyc rsoqqveh
+hbnyiyc joll joll euzf joll
+</code></pre>
+<p>output</p>
+<pre><code>hbnyiyc joll joll un joll
+
+
+
+
+
+
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;string&gt;
+#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;map&gt;
+
+using namespace std;
+
+struct
+{
+    char s[10000];
+    char e[10000];
+}p[10000];
+
+int main()
+{
+    int n, m;
+    while (scanf(&quot;%d %d&quot;, &amp;n, &amp;m) != EOF)
+    {
+        
+        for (int i = 1; i &lt;= m; i++)
+        {
+            scanf(&quot;%s %s&quot;,p[i].s,p[i].e);
+            int l1 = strlen(p[i].s);
+            int l2 = strlen(p[i].e);
+            if (l1 &gt; l2)
+            {
+                char c[10000];
+                strcpy(c,p[i].s);
+                strcpy(p[i].s, p[i].e);
+                strcpy(p[i].e, c);
+            }
+        }
+        for (int i = 1; i &lt;= n; i++)
+        {
+            char c[10000];
+            scanf(&quot;%s&quot;,c);
+            for (int j = 1; j &lt;= m; j++)
+            {
+                if ( !strcmp(p[j].e, c) || !strcmp(p[j].s, c))
+                {
+                    if (i == n)
+                    {
+                        printf(&quot;%s\n&quot;, p[j].s);
+                    }
+                    else
+                    {
+                        printf(&quot;%s &quot;,p[j].s);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return 0;
+}
+</code></pre>
+<p>C</p>
+<p>C. Crazy Town</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Crazy Town is a plane on which there are  <em>n</em> infinite line roads. Each road
+is defined by the equation  <em>a</em> <em>i</em> <em>x</em> + <em>b</em> <em>i</em> <em>y</em> + <em>c</em> <em>i</em> = 0  , where
+<em>a</em> <em>i</em> and  <em>b</em> <em>i</em> are not both equal to the zero. The roads divide the
+plane into connected regions, possibly of infinite space. Let's call each such
+region a block. We define an intersection as the point where at least two
+different roads intersect.</p>
+<p>Your home is located in one of the blocks. Today you need to get to the
+University, also located in some block. In one step you can move from one
+block to another, if the length of their common border is nonzero (in
+particular, this means that if the blocks are adjacent to one intersection,
+but have no shared nonzero boundary segment, then it are not allowed to move
+from one to another one in one step).</p>
+<p>Determine what is the minimum number of steps you have to perform to get to
+the block containing the university. It is guaranteed that neither your home
+nor the university is located on the road.</p>
+<p>Input</p>
+<p>The first line contains two space-separated integers  <em>x</em> 1  ,  <em>y</em> 1  (  - 10
+6  ≤ <em>x</em> 1  , <em>y</em> 1  ≤ 10  6  ) — the coordinates of your home.</p>
+<p>The second line contains two integers separated by a space  <em>x</em> 2  ,  <em>y</em> 2  (
+- 10  6  ≤ <em>x</em> 2  , <em>y</em> 2  ≤ 10  6  ) — the coordinates of the university you
+are studying at.</p>
+<p>The third line contains an integer  <em>n</em> (  1 ≤ <em>n</em> ≤ 300  ) — the number of
+roads in the city. The following  <em>n</em> lines contain 3 space-separated integers
+(  - 10  6  ≤ <em>a</em> <em>i</em> , <em>b</em> <em>i</em> , <em>c</em> <em>i</em> ≤ 10  6  ;  | <em>a</em> <em>i</em> | + | <em>b</em> <em>i</em>
+|  &gt; 0  ) — the coefficients of the line  <em>a</em> <em>i</em> <em>x</em> + <em>b</em> <em>i</em> <em>y</em> + <em>c</em>
+<em>i</em> = 0  , defining the  <em>i</em> -th road. It is guaranteed that no two roads are
+the same. In addition, neither your home nor the university lie on the road
+(i.e. they do not belong to any one of the lines).</p>
+<p>Output</p>
+<p>Output the answer to the problem.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>1 1
+-1 -1
+2
+0 1 0
+1 0 0
+</code></pre>
+<p>output</p>
+<pre><code>2
+</code></pre>
+<p>input</p>
+<pre><code>1 1
+-1 -1
+3
+1 0 0
+0 1 0
+1 1 -3
+</code></pre>
+<p>output</p>
+<pre><code>2
+</code></pre>
+<p>Note</p>
+<p>Pictures to the samples are presented below (A is the point representing the
+house; B is the point representing the university, different blocks are filled
+with different colors):</p>
+<p><img src="http://espresso.codeforces.com/f97572ac84c56f590ec97fb132cf2185f6286790.png" alt="" loading="lazy" referrerpolicy="no-referrer">
+<img src="http://espresso.codeforces.com/f78b0e061d0f773000df73a4fe26df1f6fd4ddb9.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>带入两点， 判断使两点值符号不同直线有多少个，</p>
+<p>不要直接判断 ，long long 不够存</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt; 
+#include&lt;malloc.h&gt; 
+
+using namespace std;
+
+long long  sx, sy, ex, ey;
+int n;
+
+int main()
+{
+		cin &gt;&gt; sx &gt;&gt; sy;
+		cin &gt;&gt; ex &gt;&gt; ey;
+		cin &gt;&gt; n;
+		int ans = 0;
+		while (n--)
+		{
+			long long a, b, c;
+
+			cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
+			int f1 = (sx * a + sy * b + c) &gt; 0 ? 1 : 0;
+			int f2 = (ex * a + ey * b + c) &gt; 0 ? 1 : 0;
+			if (f1 != f2)
+			{
+				ans++;
+			}
+		}
+		cout &lt;&lt; ans &lt;&lt; endl;
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

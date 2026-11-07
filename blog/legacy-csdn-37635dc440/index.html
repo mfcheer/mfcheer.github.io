@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>uva 11029 【快速幂】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44158189 Leading and Trailing Tim…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-37635dc440/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"uva 11029 【快速幂】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44158189 Leading and Trailing Tim…","datePublished":"2015-03-09T10:48:00.000Z","dateModified":"2015-03-09T10:48:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-37635dc440/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-37635dc440/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="uva 11029 【快速幂】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44158189 Leading and Trailing Tim…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-37635dc440/">
+    <meta property="article:published_time" content="2015-03-09T10:48:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="uva 11029 【快速幂】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44158189 Leading and Trailing Tim…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">uva 11029 【快速幂】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/09 18:48</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>642 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44158189" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44158189</a></p>
+<p>Leading and Trailing</p>
+<p><strong>Time Limit:</strong> 2000  MS <strong>Memory Limit:</strong> 32768  KB <strong>64bit IO Format:</strong> %lld
+&amp; %llu</p>
+<p>Submit  <a href="http://acm.hust.edu.cn/vjudge/contest/view.action?cid=70017#status//E/0" target="_blank" rel="noreferrer"> Status
+</a></p>
+<p>Description</p>
+<p>You are given two integers: <strong>n</strong> and <strong>k</strong> , your task is to find the most
+significant three digits, and least significant three digits of **n k  ** .</p>
+<p>Input</p>
+<p>Input starts with an integer <strong>T (≤ 1000)</strong> , denoting the number of test
+cases.</p>
+<p>Each case starts with a line containing two integers: **n (2 ≤ n &lt; 2  31  ) **
+and **k (1 ≤ k ≤ 10 7  ) ** .</p>
+<p>Output</p>
+<p>For each case, print the case number and the three leading digits (most
+significant) and three trailing digits (least significant). You can assume
+that the input is given such that **n k  ** contains at least six digits.</p>
+<p>Sample Input</p>
+<p>5</p>
+<p>123456 1</p>
+<p>123456 2</p>
+<p>2 31</p>
+<p>2 32</p>
+<p>29 8751919</p>
+<p>Sample Output</p>
+<p>Case 1: 123 456</p>
+<p>Case 2: 152 936</p>
+<p>Case 3: 214 648</p>
+<p>Case 4: 429 296</p>
+<p>Case 5: 665 669</p>
+<p>题意： 求解a^b 的前三位和后三位</p>
+<p>解法： 对于后三位，快速幂取模1000即可；</p>
+<p>前三位要具体进行分析。</p>
+<p>n可以写成n=10^b,这个a是个小数</p>
+<p>所以b=i+d，i是整数部分，d是数部分<br>
+则n=10^(i+d)=10^i * 10^d<br>
+这里很重要，10^i其实有什么用？i是整数，所以10^i一定是1000…………000，然后*10^d，d是一个小于1的小数（别忘了是b的小数部分）<br>
+所以决定n这个大数会出现什么数字的，是10^d，10^i只是给10^d起到往后移动小数点的作用<br>
+所以我们要知道10^d<br>
+另外我们知道0 &lt;=d&lt;1，所以 10^0 &lt;= 10^d &lt; 10^1   即1&lt;=10^d&lt;10</p>
+<p>这样只需要10^d*100然后取整数部分，就能得到一个3位整数，这3个数字正是我们要的答案</p>
+<p>a=10^k , a^n=(10^k)^n=10^k<em>n=10^i * 10^d    ,  这里i是k</em>n的整数部分，d是k*n的小数部分</p>
+<p>要得到k就使用库函数fmod即可    d=fmod(k<em>n , 1) ， 返回k</em>n/1的余数，也就是小数部分</p>
+<p>另外k=log10(a) ， 写在一起就是   d=fmod( log10(a)*n , 1)</p>
+<p>然后就是求  100*10^d=10^(d+2)</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;iterator&gt;
+
+using namespace std;
+
+long long quickpow(long long m, long long n, long long  k)//快速幂
+{
+	long long  b = 1;
+	while (n &gt; 0)
+	{
+		if (n &amp; 1)
+			b = (b*m) % k;
+		n = n &gt;&gt; 1;
+		m = (m*m) % k;
+	}
+	return b;
+}
+
+int t;
+long long a, b , ans1, ans2;
+
+int main()
+{
+	int cases = 1;
+	scanf(&quot;%d&quot;,&amp;t);
+	while (t--)
+	{
+		scanf(&quot;%lld %lld&quot;,&amp;a,&amp;b);
+		long long x = a % 1000;
+		ans1 = (int)pow(10, 2 + fmod (b * log10(a*1.0) ,1 ));//求前三位
+		ans2 = quickpow(x,b,1000);
+		printf(&quot;Case %d: %03lld %03lld\n&quot;, cases++, ans1, ans2);
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

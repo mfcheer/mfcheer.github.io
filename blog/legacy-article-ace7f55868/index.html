@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MySQL中单引号的性能问题 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：MySQL中单引号的性能问题">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-ace7f55868/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"MySQL中单引号的性能问题","description":"历史迁移文章：MySQL中单引号的性能问题","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-ace7f55868/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-ace7f55868/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="MySQL中单引号的性能问题 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：MySQL中单引号的性能问题">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-ace7f55868/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MySQL中单引号的性能问题 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：MySQL中单引号的性能问题">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">MySQL中单引号的性能问题</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>131 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>对于这样一张表</p>
+<pre><code class="hljs">+-------+----------+------+-----+---------+-------+
+| Field | Type     | Null | Key | Default | Extra |
++-------+----------+------+-----+---------+-------+
+| id    | char(16) | NO   | PRI | NULL    |       |
+| name  | char(16) | YES  |     | NULL    |       |
++-------+----------+------+-----+---------+-------+
+</code></pre>
+<p>两个查询语句</p>
+<pre><code class="hljs language-sql"><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> test <span class="hljs-keyword">where</span> id<span class="hljs-operator">=</span><span class="hljs-string">&#x27;1&#x27;</span>;
+<span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> test <span class="hljs-keyword">where</span> id<span class="hljs-operator">=</span><span class="hljs-number">1</span>;
+</code></pre>
+<p>有什么区别吗？答案是有的</p>
+<p><img src="/assets/images/legacy/MarkdownPhotos/photos/22.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>关键在于type上
+&lt;!--more--&gt;</p>
+<pre><code class="hljs">使用字符串类型查找的type是const，用的是索引
+使用数字查找的type是ALL，也就是全表扫描
+</code></pre>
+<p>使用数字的时候没有用到索引，使用单引号的时候用到了索引。所以数据量较大时，在效率上会有很大的差别！
+mysql不会自动把数字转成字符串，而是把每个查询到的结果转成了数字去比较。
+所以平时使用的时候要注意语法规则！</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

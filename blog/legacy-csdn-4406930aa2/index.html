@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Ubuntu的挂起和休眠 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46464053 休眠和挂起有什么区别？ 挂起==Suspend …">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-4406930aa2/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Ubuntu的挂起和休眠","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46464053 休眠和挂起有什么区别？ 挂起==Suspend …","datePublished":"2015-06-11T16:00:00.000Z","dateModified":"2015-06-11T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-4406930aa2/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-4406930aa2/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Ubuntu的挂起和休眠 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46464053 休眠和挂起有什么区别？ 挂起==Suspend …">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-4406930aa2/">
+    <meta property="article:published_time" content="2015-06-11T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ubuntu的挂起和休眠 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46464053 休眠和挂起有什么区别？ 挂起==Suspend …">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Ubuntu的挂起和休眠</h1>
+                    <div class="post-meta">
+                        <span>2015/06/12 00:00</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>268 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46464053" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46464053</a></p>
+<h3 id="休眠和挂起有什么区别？" tabindex="-1">休眠和挂起有什么区别？</h3>
+<p>挂起==Suspend To RAM(STR)<br>
+休眠==Suspend To Disk(STD)</p>
+<p>挂起之后内存还在工作，休眠之后所有设备都停止工作。<br>
+挂起速度比休眠快，恢复的也快。</p>
+<p>挂起是挂起硬盘，把计算机的当前状态全部装载到内存里，即硬盘停止供电，但内存还要供电。优点是恢复快，缺点是要持续供电，断电就得重启了。</p>
+<p>休眠是把系统当前状态保存到硬盘中的一个休眠文件里，然后所有设备全部关闭，你可以安全地关闭电源了，下次重启，会自动调用硬盘里保存的文件，恢复到关机前的状态。<br>
+优点是不需要供电，可休眠很长时间，缺点是恢复速度慢（相对于挂起）。</p>
+<p>挂起恢复时只要几秒钟，很快。休眠恢复时需要十几秒，比挂起慢，但比重启快很多。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

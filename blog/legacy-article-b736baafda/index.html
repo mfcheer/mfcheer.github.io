@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-b736baafda/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变","description":"历史迁移文章：lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-b736baafda/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-b736baafda/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-b736baafda/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.querySelector('.post-body'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>247 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>查看端口占用情况：</p>
+<pre><code class="hljs language-shell">lsof -i:端口号 用于查看某一端口的占用情况，比如查看8000端口使用情况，lsof -i:8000
+</code></pre>
+<p>显示 tcp，udp 的端口和进程等相关情况：</p>
+<pre><code class="hljs">例如查看 8000 端口的情况，使用以下命令：
+netstat -tunlp | grep 8000
+tcp        0      0 0.0.0.0:8000            0.0.0.0:*               LISTEN      26993/nodejs
+</code></pre>
+<p>压缩命令</p>
+<pre><code class="hljs language-shell">单个文件压缩打包 tar czvf my.tar file1
+多个文件压缩打包 tar czvf my.tar file1 file2,...
+单个目录压缩打包 tar czvf my.tar dir1
+多个目录压缩打包 tar czvf my.tar dir1 dir2
+解包至当前目录：tar xzvf my.tar
+</code></pre>
+<p>解压war文件</p>
+<pre><code class="hljs language-shell">jar -xvf name.war
+</code></pre>
+<p>Linux 统计某个字符串出现的次数</p>
+<pre><code class="hljs language-shell">cat filename |grep str |wc -l
+</code></pre>
+<p>定时任务</p>
+<pre><code class="hljs language-shell">crontab -e 
+</code></pre>
+<p>查看文件内容</p>
+<pre><code class="hljs">如果你只想看文件的前5行，可以使用head命令，如： 
+head -5 /etc/passwd 
+如果你想查看文件的后10行，可以使用tail命令，如： 
+tail -10 /etc/passwd 或 tail -n 10 /etc/passwd 
+tail -f /var/log/messages 
+参数-f使tail不停地去读最新的内容，这样有实时监视的效果 用Ctrl＋c来终止！ 
+</code></pre>
+<p>本地文件上传到主机</p>
+<pre><code class="hljs">rz -be
+</code></pre>
+<p>主机文件下载到本地</p>
+<pre><code class="hljs">sz &quot;filename&quot;
+</code></pre>
+<p>&lt;!--more--&gt;
+日志定期清理sh</p>
+<pre><code class="hljs">#!/bin/bash
+log_path=/opt/web/mFangchanIndex #日志路径
+export log_path
+expried_time=7      #此处定义你的日志过期时间，如7天
+find $log_path -type f -mtime +7 -iname &quot;log.*&quot; | xargs rm  1&gt;/dev/null 2&gt;&amp;1
+</code></pre>
+<p>查看进程和删除进程</p>
+<pre><code class="hljs">ps 命令用于查看当前正在运行的进程。
+grep 是搜索
+ps [选项]
+-e 显示所有进程,环境变量
+-f 全格式
+-h 不显示标题
+-l 长格式
+-w 宽输出
+kill 命令用于终止进程
+-9 表示强迫进程立即停止
+
+例子：
+ps -ef | grep java
+ps aux|grep tcp
+kill -9 [PID]
+</code></pre>
+<p>Linux间进行文件传送-scp命令</p>
+<pre><code class="hljs">linux 的 scp 命令可以在 linux 之间复制文件和目录；  
+scp 可以在 2个 linux 主机间复制文件； 
+命令基本格式： 
+scp [可选参数] file_source file_target 
+从本地复制到远程： 
+复制文件： 
+scp local_file remote_ip:remote_file 
+scp /home/space/music/1.mp3 root@www.cumt.edu.cn:/home/root/others/music 
+复制目录：  
+scp -r local_folder remote_username@remote_ip:remote_folder 
+命令执行后需要输入密码； 
+例子： 
+scp -r /home/space/music/ root@www.cumt.edu.cn:/home/root/others/ 
+从远程复制到本地 ，只要将从本地复制到远程的命令的后2个参数调换顺序即可； 
+</code></pre>
+<p>解压 .lzop压缩文件</p>
+<pre><code class="hljs"># lzop -v test # 创建test.lzo压缩文件，输出详细信息，保留test文件不变
+# lzop -Uv test # 创建test.lzo压缩文件，输出详细信息，删除test文件
+# lzop -t test.lzo # 测试test.lzo压缩文件的完整性
+# lzop –info test.lzo # 列出test.lzo中各个文件的文件头
+# lzop -l test.lzo # 列出test.lzo中各个文件的压缩信息
+# lzop –ls test.lzo # 列出test.lzo文件的内容，同ls -l功能
+# cat test | lzop &gt; t.lzo # 压缩标准输入并定向到标准输出
+# lzop -dv test.lzo # 解压test.lzo得到test文件，输出详细信息，保留test.lzo不变
+</code></pre>
+<p>rsync命令</p>
+<pre><code class="hljs">kinit username
+例子：
+rsync -av rec/ work@10.12.90.13:/opt/rec --exclude='logs'
+--exclude='logs'说明 ： 不拷贝logs文件夹
+</code></pre>
+<p>SSH基本的用法</p>
+<pre><code class="hljs">SSH主要用于远程登录。假定你要以用户名user，登录远程主机host，只要一条简单命令就可以了。
+$ ssh user@host
+如果本地用户名与远程用户名一致，登录时可以省略用户名。
+$ ssh host
+SSH的默认端口是22，也就是说，你的登录请求会送进远程主机的22端口。使用p参数，可以修改这个端口。
+$ ssh -p 2222 user@host
+上面这条命令表示，ssh直接连接远程主机的2222端口。
+</code></pre>
+<p>搜索输入过的命令</p>
+<pre><code class="hljs">ctrl+r:搜索某个以前输入过的命令 或者!command
+</code></pre>
+<p>cat合并文件</p>
+<pre><code class="hljs">使用cat合并文件，如cat 1.txt 2.txt 3.txt &gt; 4.txt；
+如果1/2/3.txt中存在多个空行，最终保存到4.txt时，连续的空行会被替换为1行。
+如果我们希望去掉空行，可以使用如下：cat -s 1.txt 2.txt 3.txt &gt; 4.txt
+</code></pre>
+<p>diff命令</p>
+<pre><code class="hljs">在使用diff命令的时候有3种显示，但是如果我们仅仅需要查看2个文件所有不同的记录，
+去掉diff加上的123a124或者&gt;或者&lt;,可以先diff a b &gt; difflog，
+然后使用grep+sed：cat difflog
+</code></pre>
+<p>df -h 查看磁盘使用情况</p>
+<pre><code class="hljs">df -h
+</code></pre>
+<p>nohup 后台运行</p>
+<pre><code class="hljs">nohup command 1&gt;output 2&gt;&amp;1 &amp;
+</code></pre>
+<p>split 将一个大文件分割成很多个小文件</p>
+<pre><code class="hljs language-shell">每3行（-l 3）拆分成一个文件，拆分后的文件名以name开头，以数字作为后缀（-d）后缀长度为1（-a 1）
+split -l 3 test -d -a 1 name
+</code></pre>
+<p>自定义命令，例如mac不支持ll命令</p>
+<pre><code class="hljs language-shell">vim ~/.bash_profile
+输入以下内容
+alias ll=&#x27;ls -lF&#x27;
+保存完成之后
+source ~/.bash_profile
+可以使用ll等命令了
+</code></pre>
+<p>自动拉起后台程序脚本例子</p>
+<pre><code class="hljs language-shell">function monitorService()
+{
+    cnt=$( ps -ef | grep java | grep -v grep | grep service | wc -l )
+    echo $cnt
+    if [ $cnt -eq 0 ]; then
+        msg=&quot;$bin service is not running, start it.&quot;
+        echo $msg
+        #发送短信到负责人
+        sh /opt/server server.sh
+    else
+        echo &quot;$bin service is running.&quot;
+    fi
+}
+</code></pre>
+<p>hadoop 查看文件夹下文件名称，按存储从大到小排列</p>
+<pre><code class="hljs language-shell">hadoop fs -du xxx|sort -n -r  | awk &#x27;/^[0-9]+/ { print int($1/(1024**3)) &quot; [GB]\t&quot; $2 $3}&#x27;
+</code></pre>
+<p>Win10打开Ubuntu的文件夹</p>
+<pre><code class="hljs language-shell">在Shell界面输入命令
+explorer.exe .
+</code></pre>
+<p>Python Lib库加载</p>
+<pre><code class="hljs language-shell">export LD_LIBRARY_PATH=/opt/xxx/ss_lib/so:$LD_LIBRARY_PATH
+</code></pre>
+<p>Python sqlacodegen 生成 ORM文件</p>
+<pre><code class="hljs language-shell">sqlacodegen mysql://db_name:password@ip:port/table
+</code></pre>
+<p>markdown2激活码</p>
+<pre><code class="hljs">邮箱地址：
+Soar360@live.com
+授权秘钥：
+GBPduHjWfJU1mZqcPM3BikjYKF6xKhlKIys3i1MU2eJHqWGImDHzWdD6xhMNLGVpbP2M5SN6bnxn2kSE8qHqNY5QaaRxmO3YSMHxlv2EYpjdwLcPwfeTG7kUdnhKE0vVy4RidP6Y2wZ0q74f47fzsZo45JE2hfQBFi2O9Jldjp1mW8HUpTtLA2a5/sQytXJUQl/QKO0jUQY4pa5CCx20sV1ClOTZtAGngSOJtIOFXK599sBr5aIEFyH0K7H4BoNMiiDMnxt1rD8Vb/ikJdhGMMQr0R4B+L3nWU97eaVPTRKfWGDE8/eAgKzpGwrQQoDh+nzX1xoVQ8NAuH+s4UcSeQ==
+</code></pre>
+<p>kepler 地图可视化</p>
+<pre><code class="hljs">https://kepler.gl/
+
+切换地图为中文，设置map style = mapbox://styles/mapbox/streets-zh-v1  
+</code></pre>
+<p>常用</p>
+<pre><code class="hljs">alias ll='ls -lh'
+alias lll='ls -alFh'
+alias la='ls -Ah'
+alias l='ls -CFh'
+alias srm='sudo rm'
+alias tree=&quot;find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'&quot;
+alias rm='safe_rm.sh'
+alias du=&quot;du -h&quot;
+alias grep=&quot;grep --color=auto&quot;
+alias vim=&quot;vim -p&quot;
+alias vi='vim -p'
+
+ps aux | grep $1 | awk '{print $2}' | xargs kill
+
+current_dir=`pwd`
+rsync -rav --exclude &quot;.git&quot; --exclude=&quot;output&quot; --exclude=&quot;*.pyc&quot; --exclude=&quot;\.*.swp&quot; &quot;${current_dir}&quot; &quot;${user_at_host}:${destination_dir}&quot;
+</code></pre>
+<p>linux安全删除</p>
+<pre><code class="hljs">safe_rm.sh
+TRASH_DIR=&quot;/Users/mengfanqiang/.Trash&quot;
+for i in $*; do
+    mv -f $i $TRASH_DIR
+done
+将safe_rm.sh加入到PATH
+
+alias rm='safe_rm.sh'
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

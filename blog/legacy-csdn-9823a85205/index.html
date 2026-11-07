@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj-1751 Highways · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43196745 http://poj.org/problem?i…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-9823a85205/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj-1751 Highways","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43196745 http://poj.org/problem?i…","datePublished":"2015-01-27T08:50:00.000Z","dateModified":"2015-01-27T08:50:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-9823a85205/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-9823a85205/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj-1751 Highways · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43196745 http://poj.org/problem?i…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-9823a85205/">
+    <meta property="article:published_time" content="2015-01-27T08:50:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj-1751 Highways · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43196745 http://poj.org/problem?i…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj-1751 Highways</h1>
+                    <div class="post-meta">
+                        <span>2015/01/27 16:50</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>324 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/43196745" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/43196745</a></p>
+<p><a href="http://poj.org/problem?id=1751" target="_blank" rel="noreferrer"> http://poj.org/problem?id=1751 </a></p>
+<p>最小生成树简单应用</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+#define INF 10000000
+
+double map[1110][1110],dis[1110];
+int n,m,v[1110],pre[1010],a,b,c,d[1110];
+
+struct node
+{
+    double x,y;
+}p[1010];
+
+double makedis(int i,int j)
+{
+    return sqrt( 1.0*(p[i].x - p[j].x)*(p[i].x - p[j].x) + 1.0*(p[i].y - p[j].y)*(p[i].y - p[j].y));
+}
+
+void prim()
+{
+	int i, j, k;
+	double min, sum = 0;memset(v, 0, sizeof(v));
+
+	for (i = 1; i &lt;= n; i++)
+		{
+		    dis[i] = map[1][i];
+		    pre[i] = 1;
+		}
+
+	v[1] = 1;dis[1] = 0;pre[1]= - 1;
+
+	for (i = 2; i &lt;= n; i++)
+	{
+		k = 1;
+		min = INF;
+		for (j = 1; j &lt;= n; j++)
+			if (!v[j] &amp;&amp; min&gt;dis[j])
+			{
+				k = j;
+				min = dis[j];
+			}
+
+		sum += min;
+		v[k] = 1;
+		if (min !=0 )
+            cout&lt;&lt;pre[k]&lt;&lt;&quot; &quot;&lt;&lt;k&lt;&lt;endl;
+
+		for (j = 1; j &lt;= n; j++)
+			if (!v[j] &amp;&amp; dis[j]&gt;map[k][j])
+				{
+				    dis[j] = map[k][j];
+				    pre[j] = k;
+				}
+	}
+}
+
+int main()
+{
+	scanf(&quot;%d&quot;,&amp;n);
+	{
+        for(int i=1;i&lt;=n;i++)
+            scanf(&quot;%lf%lf&quot;,&amp;p[i].x,&amp;p[i].y);
+
+        for(int i=1;i&lt;=n;i++)
+            for(int j = 1;j&lt;=n;j++)
+        {
+            if (i == j)
+                map[i][j] = 0;
+            else
+                map[i][j] = INF;
+        }
+        for(int i=1;i&lt;=n;i++)
+            for(int j = 1;j&lt;=n;j++)
+            {
+                if (map[i][j] &gt; makedis(i,j))
+                {
+                    map[i][j] = makedis(i,j);
+                    map[j][i] = makedis(i,j);
+                }
+            }
+        scanf(&quot;%d&quot;,&amp;m);
+        while(m--)
+        {
+            scanf(&quot;%d%d&quot;,&amp;a,&amp;b);
+            map[a][b] = map[b][a] = 0;
+        }
+        prim();
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

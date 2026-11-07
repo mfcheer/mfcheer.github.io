@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>C C++之回调函数 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48677835 回调函数就是一个通过函数指针调用的函数。如果你把…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-5323f07e3d/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"C C++之回调函数","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48677835 回调函数就是一个通过函数指针调用的函数。如果你把…","datePublished":"2015-09-23T03:31:00.000Z","dateModified":"2015-09-23T03:31:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-5323f07e3d/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-5323f07e3d/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"函数,指针","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="C C++之回调函数 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48677835 回调函数就是一个通过函数指针调用的函数。如果你把…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-5323f07e3d/">
+    <meta property="article:published_time" content="2015-09-23T03:31:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="C C++之回调函数 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48677835 回调函数就是一个通过函数指针调用的函数。如果你把…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">C C++之回调函数</h1>
+                    <div class="post-meta">
+                        <span>2015/09/23 11:31</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>449 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">函数</span><span class="post-tag">指针</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/48677835" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/48677835</a></p>
+<p>回调函数就是一个通过函数指针调用的函数。如果你把函数的指针（地址）作为参数传递给另一个函数，当这个指针被用来调用其所指向的函数时，我们就说这是回调函数。回调函数不是由该函数的实现方直接调用，而是在特定的事件或条件发生时由另外的一方调用的，用于对该事件或条件进行响应。</p>
+<p>函数指针<br>
+（1）概念：指针是一个变量，是用来指向内存地址的。一个程序运行时，所有和运行相关的物件都是需要加载到内存中，这就决定了程序运行时的任何物件都可以用指针来指向它。函数是存放在内存代码区域内的，它们同样有地址，因此同样可以用指针来存取函数，把这种指向函数入口地址的指针称为函数指针。</p>
+<pre><code>void Invoke(char* s)
+{
+    printf(s);
+}
+int main()
+{
+    void (*fp)(char* s);    //声明一个函数指针(fp)        
+    fp=Invoke;              //将Invoke函数的入口地址赋值给fp
+    fp(&quot;Hello World!\n&quot;);   //函数指针fp实现函数调用
+    return 0;
+}
+</code></pre>
+<p>回调样式例子：</p>
+<pre><code>//定义回调函数
+void PrintfText() 
+{
+    printf(&quot;Hello World!\n&quot;);
+}
+
+//定义实现回调函数的&quot;调用函数&quot;
+void CallPrintfText(void (*callfuct)())
+{
+    callfuct();
+}
+
+//在main函数中实现函数回调
+int main(int argc,char* argv[])
+{
+    CallPrintfText(PrintfText);
+    return 0;
+}
+
+
+//定义带参回调函数
+void PrintfText(char* s) 
+{
+    printf(s);
+}
+
+//定义实现带参回调函数的&quot;调用函数&quot;
+void CallPrintfText(void (*callfuct)(char*),char* s)
+{
+    callfuct(s);
+}
+
+//在main函数中实现带参的函数回调
+int main(int argc,char* argv[])
+{
+    CallPrintfText(PrintfText,&quot;Hello World!\n&quot;);
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

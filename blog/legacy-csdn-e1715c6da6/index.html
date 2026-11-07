@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-1358 Period 【kmp】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44115387 Period ** Time Limit: 20…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-e1715c6da6/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-1358 Period 【kmp】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44115387 Period ** Time Limit: 20…","datePublished":"2015-03-07T04:26:00.000Z","dateModified":"2015-03-07T04:26:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-e1715c6da6/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-e1715c6da6/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-1358 Period 【kmp】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44115387 Period ** Time Limit: 20…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-e1715c6da6/">
+    <meta property="article:published_time" content="2015-03-07T04:26:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-1358 Period 【kmp】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44115387 Period ** Time Limit: 20…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-1358 Period 【kmp】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/07 12:26</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>467 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44115387" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44115387</a></p>
+<h1 id="period" tabindex="-1">Period</h1>
+<p>** Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 65536/32768 K
+(Java/Others)<br>
+Total Submission(s): 3443    Accepted Submission(s): 1727<br>
+**</p>
+<p>Problem Description</p>
+<p>For each prefix of a given string S with N characters (each character has an
+ASCII code between 97 and 126, inclusive), we want to know whether the prefix
+is a periodic string. That is, for each i (2  &lt;= i &lt;= N) we want to know the
+largest K &gt; 1 (if there is one) such that the prefix of S with length i can be
+written as A  K  , that is A concatenated K times, for some string A. Of
+course, we also want to know the period K.</p>
+<p>Input</p>
+<p>The input file consists of several test cases. Each test case consists of two
+lines. The first one contains N (2 &lt;= N &lt;= 1 000 000) – the size of the string
+S. The second line contains the string S. The input file ends with a line,
+having the number zero on it.</p>
+<p>Output</p>
+<p>For each test case, output “Test case #” and the consecutive test case number
+on a single line; then, for each prefix with length i that has a period K &gt; 1,
+output the prefix size i and the period K separated by a single space; the
+prefix sizes must be in increasing order. Print a blank line after each test
+case.</p>
+<p>Sample Input</p>
+<p>3 aaa 12 aabaabaabaab 0</p>
+<p>Sample Output</p>
+<p>Test case #1 2 2 3 3 Test case #2 2 2 6 2 9 3 12 4</p>
+<p>题意： 从字符串第二个位置开始，前面的字符是否是循环的字符串，如果是，输出当前位置及其循环的个数。</p>
+<p>又是kmp的getnext（）函数循环节的考察</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+
+using namespace std;
+
+char  b[1000500];
+int Next[1000500];
+
+void get_next(char b[], int m)
+{
+	int i = 0,j = -1;
+	memset(Next,0,sizeof(Next));
+	Next[0] = -1;
+	while (b[i])
+	{
+		if (j == -1 || b[i] == b[j])
+		{
+			++i;
+			++j;
+			Next[i] = j;
+		}
+		else
+			j = Next[j];
+	}
+}
+
+int main()
+{
+	int cases = 1, n, m, i, j;
+	
+	while (scanf(&quot;%d&quot;,&amp;n)!=EOF &amp;&amp; n)
+	{
+		scanf(&quot;%s&quot;,b);
+		get_next(b, n);
+		printf(&quot;Test case #%d\n&quot;,cases++);
+
+		for (int i = 2; b[i-1]; i++)
+		{
+			int t = Next[i];
+			int s = i - t;
+			if (i % s == 0 &amp;&amp; i/s&gt;1)
+			{
+				printf(&quot;%d %d\n&quot;,i,i/s);
+			}
+		}
+		printf(&quot;\n&quot;);
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

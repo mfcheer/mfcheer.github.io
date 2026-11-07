@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj-3259 Wormholes · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43275051 题目链接： http://poj.org/pro…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-6c494acaf4/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj-3259 Wormholes","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43275051 题目链接： http://poj.org/pro…","datePublished":"2015-01-29T11:20:00.000Z","dateModified":"2015-01-29T11:20:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-6c494acaf4/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-6c494acaf4/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"acm,算法,poj","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj-3259 Wormholes · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43275051 题目链接： http://poj.org/pro…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-6c494acaf4/">
+    <meta property="article:published_time" content="2015-01-29T11:20:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj-3259 Wormholes · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43275051 题目链接： http://poj.org/pro…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj-3259 Wormholes</h1>
+                    <div class="post-meta">
+                        <span>2015/01/29 19:20</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>343 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">acm</span><span class="post-tag">算法</span><span class="post-tag">poj</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/43275051" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/43275051</a></p>
+<p>题目链接： <a href="http://poj.org/problem?id=3259" target="_blank" rel="noreferrer"> http://poj.org/problem?id=3259 </a></p>
+<p>求是否存在负权环。用 bellman 判断。</p>
+<p>有一些农场，这些农场里面有一些田地，田地里面有一些虫洞，田地之间有路，虫洞可以让时间倒流。问这个农民能不能看到他自己，也就是说，有没有可能利用虫洞的时间倒流的性质，让这个人能在这个点出发前回去，这样他就是能看到他自己</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+using namespace std;
+
+const int MAX = 5500;
+const int INF = 1000000;
+
+struct node
+{
+    int from,to,cost;
+}edge[MAX];
+
+int E;
+
+void addedge(int from,int to,int cost)
+{
+    edge[E].from = from;
+    edge[E].to = to;
+    edge[E++].cost = cost;
+}
+int t,n,m,w;
+int d[MAX];
+
+int short_path(int s)
+{
+    for(int i=1;i&lt;=n;i++) d[i] = INF;
+    d[s] = 0;
+    for(int i=1;i&lt;=n;i++)
+        for(int j=1;j&lt;E;j++)
+    {
+        node e = edge[j];
+        if (d[e.to] &gt; d[e.from] + e.cost)
+        {
+            d[e.to] = d[e.from] + e.cost;
+            if (i == n)
+                return 1;
+        }
+    }
+    return 0;
+}
+
+int main ()
+{
+    scanf(&quot;%d&quot;,&amp;t);
+    int a,b,c;
+    while (t--)
+    {
+        E = 1;
+        scanf(&quot;%d%d%d&quot;,&amp;n,&amp;m,&amp;w);
+        for(int i=1;i&lt;=m;i++)
+        {
+            scanf(&quot;%d%d%d&quot;,&amp;a,&amp;b,&amp;c);
+                addedge(a,b,c);
+                addedge(b,a,c);
+        }
+        for(int i=1;i&lt;=w;i++)
+        {
+            scanf(&quot;%d%d%d&quot;,&amp;a,&amp;b,&amp;c);
+                addedge(a,b,-c);
+        }
+        if (short_path(1) == 1)
+            printf(&quot;YES\n&quot;);
+        else
+            printf(&quot;NO\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

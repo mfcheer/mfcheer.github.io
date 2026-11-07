@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>区间DP · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383345 区间动态规划问题一般都是考虑，对于每段区间，他们…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-2d66f46d93/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"区间DP","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383345 区间动态规划问题一般都是考虑，对于每段区间，他们…","datePublished":"2015-06-05T15:37:00.000Z","dateModified":"2015-06-05T15:37:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-2d66f46d93/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-2d66f46d93/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="区间DP · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383345 区间动态规划问题一般都是考虑，对于每段区间，他们…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-2d66f46d93/">
+    <meta property="article:published_time" content="2015-06-05T15:37:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="区间DP · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383345 区间动态规划问题一般都是考虑，对于每段区间，他们…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">区间DP</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 23:37</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>321 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383345" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46383345</a></p>
+<p>区间动态规划问题一般都是考虑，对于每段区间，他们的最优值都是由几段更小区间的最优值得到，是分治思想的一种应用，将一个区间问题不断划分为更小的区间直至一个元素组成的区间，枚举他们的组合，求合并后的最优值。<br>
+1 设F[i,j]（1&lt;=i&lt;=j&lt;=n）表示区间[i,j]内的数字相加的最小代价<br>
+2 最小区间F[i,i]=0（一个数字无法合并)∴代价为0</p>
+<pre><code>     3  每次用变量k（i&lt;=k&lt;=j-1）将区间分为[i,k]和[k+1,j]两段
+
+     4《区间DP模板，代码》
+
+
+
+for (int p = 1; p &lt;= n; p++)//p是区间的长度，作为阶段
+{
+    for (int i = 1; i &lt;= n - p; i++)//i是穷举区间的起点
+    {       
+        int j = i + p;//j为区间的终点
+        for (int k = i + 1; k &lt; j; k++)//状态转移
+            dp[i][j] = min{ dp[i][k] + dp[k + 1][j] + w[i][j] };//这个是看具体的状态转移方程
+
+        或 dp[i][j] = max{ dp[i][k] + dp[k + 1][j] + w[i][j] };//求最大
+
+        或  dp[i][j] = min{ dp[i][k] + dp[k][j] + w[i][j] }//有的是要从k开始不是k+1
+
+    }
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

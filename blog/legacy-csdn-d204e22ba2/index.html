@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj-2031 Building a Space Statio · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43194805 题目链接： 点击打开链接 又是一发 G++ WA…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-d204e22ba2/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj-2031 Building a Space Statio","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43194805 题目链接： 点击打开链接 又是一发 G++ WA…","datePublished":"2015-01-27T06:53:00.000Z","dateModified":"2015-01-27T06:53:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-d204e22ba2/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-d204e22ba2/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"acm,算法","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj-2031 Building a Space Statio · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43194805 题目链接： 点击打开链接 又是一发 G++ WA…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-d204e22ba2/">
+    <meta property="article:published_time" content="2015-01-27T06:53:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj-2031 Building a Space Statio · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43194805 题目链接： 点击打开链接 又是一发 G++ WA…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj-2031 Building a Space Statio</h1>
+                    <div class="post-meta">
+                        <span>2015/01/27 14:53</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>373 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">acm</span><span class="post-tag">算法</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/43194805" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/43194805</a></p>
+<p>题目链接： <a href="http://poj.org/problem?id=2031" target="_blank" rel="noreferrer"> 点击打开链接 </a></p>
+<p>又是一发  G++ WA , C++ AC.</p>
+<p>简单题：给出基站的三围坐标及半径 。若球面距离小于 0 距离为 0 ，否则为 圆心距离减去2个半径</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;string.h&gt;
+
+#define INF 10000000
+
+using namespace std;
+
+double map[110][110],dis[110];
+int v[110];
+
+struct node
+{
+    double x,y,z,r;
+}p[110];
+
+double makedis(int i,int j)
+{
+    double ans = sqrt((p[i].x - p[j].x)*(p[i].x - p[j].x) + (p[i].y - p[j].y)*(p[i].y - p[j].y) + (p[i].z - p[j].z)*(p[i].z - p[j].z));
+    ans -= (p[i].r + p[j].r);
+    if (ans &lt;= 0.0000000001)
+        return 0;
+    else
+        return ans;
+}
+
+double prim(int n)
+{
+    int k;
+    double min,sum=0;
+    memset(v,0,sizeof(v));
+    memset(dis,0,sizeof(dis));
+
+    for(int i=1;i&lt;=n;i++)
+        dis[i]=map[1][i];
+
+    v[1]=1;
+    dis[1]=0;
+
+    for(int i=2;i&lt;=n;i++)
+    {
+        k=-1;
+        min = INF;
+        for(int j=1;j&lt;=n;j++)
+            if(!v[j]&amp;&amp;min&gt;dis[j])
+            {
+                k=j;
+                min=dis[j];
+            }
+
+        sum += min;
+        v[k]=1;
+
+        for(int j=1;j&lt;=n;j++)
+            if(!v[j] &amp;&amp; dis[j]&gt;map[k][j])
+                dis[j]=map[k][j];
+    }
+    return sum;
+}
+
+int main()
+{
+    int n,m;
+    while(cin&gt;&gt;n)
+    {
+        if(n == 0)
+            break;
+
+        for(int i=1;i&lt;=n;i++)
+            for(int j=1;j&lt;=n;j++)
+            {
+                if (i != j)
+                    map[i][j] = INF;
+                else
+                    map[i][j] = 0;
+            }
+        for(int i=1;i&lt;=n;i++)
+           {
+               cin&gt;&gt;p[i].x&gt;&gt;p[i].y&gt;&gt;p[i].z&gt;&gt;p[i].r;
+           }
+        for(int i=1;i&lt;=n;i++)
+            for(int j=1;j&lt;=n;j++)
+            {
+                if (map[i][j] &gt;= makedis(i,j))
+                {
+                    map[i][j]  = makedis(i,j);
+                    map[j][i]  = makedis(i,j);
+                }
+            }
+        printf(&quot;%.3lf\n&quot;,prim(n));
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

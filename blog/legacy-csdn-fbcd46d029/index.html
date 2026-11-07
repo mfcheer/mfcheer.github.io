@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-2087 剪花布条 【kmp】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44105315 剪花布条 ** Time Limit: 1000…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-fbcd46d029/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-2087 剪花布条 【kmp】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44105315 剪花布条 ** Time Limit: 1000…","datePublished":"2015-03-06T13:21:00.000Z","dateModified":"2015-03-06T13:21:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-fbcd46d029/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-fbcd46d029/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-2087 剪花布条 【kmp】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44105315 剪花布条 ** Time Limit: 1000…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-fbcd46d029/">
+    <meta property="article:published_time" content="2015-03-06T13:21:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-2087 剪花布条 【kmp】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44105315 剪花布条 ** Time Limit: 1000…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-2087 剪花布条 【kmp】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/06 21:21</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>486 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44105315" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44105315</a></p>
+<h1 id="剪花布条" tabindex="-1">剪花布条</h1>
+<p>** Time Limit: 1000/1000 MS (Java/Others)    Memory Limit: 32768/32768 K
+(Java/Others)<br>
+Total Submission(s): 10026    Accepted Submission(s): 6482<br>
+**</p>
+<p>Problem Description</p>
+<p>一块花布条，里面有些图案，另有一块直接可用的小饰条，里面也有一些图案。对于给定的花布条和小饰条，计算一下能从花布条中尽可能剪出几块小饰条来呢？</p>
+<p>Input</p>
+<p>输入中含有一些数据，分别是成对出现的花布条和小饰条，其布条都是用可见ASCII字符表示的，可见的ASCII字符有多少个，布条的花纹也有多少种花样。花纹条和小饰条不会超过1000个字符长。如果遇见#字符，则不再进行工作。</p>
+<p>Output</p>
+<p>输出能从花纹布中剪出的最多小饰条个数，如果一块都没有，那就老老实实输出0，每个结果之间应换行。</p>
+<p>Sample Input</p>
+<p>abcde a3 aaaaaa aa #</p>
+<p>Sample Output</p>
+<p>0 3</p>
+<p>Author</p>
+<p>qianneng</p>
+<p>Source</p>
+<p><a href="http://acm.hdu.edu.cn/search.php?field=problem&amp;key=%B6%AC%C1%B7%C8%FD%BE%C5%D6%AE%B6%FE&amp;source=1&amp;searchmode=source" target="_blank" rel="noreferrer"> 冬练三九之二
+</a></p>
+<p>母串最多可分出几个字串</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+char a[100000500], b[10005000];
+int Next[10005000], ans;
+
+void get_next(char b[], int m)
+{
+	int i = 0;
+	Next[0] = -1;
+	int j = -1;
+	while (i&lt;m)
+	{
+		if (j == -1 || b[i] == b[j])
+		{
+			++i;
+			++j;
+			if (b[i] == b[j])
+				Next[i] = Next[j];
+			else
+				Next[i] = j;
+		}
+		else
+			j = Next[j];
+	}
+}
+int KMP(char a[], int n, char b[], int m, int Next[], int pos)
+{
+	int i = pos;
+	int j = 0;
+	while (i&lt;n&amp;&amp;j&lt;m)
+	{
+		if (j == -1 || a[i] == b[j])
+		{
+			++i;
+			++j;
+		}
+		else
+			j = Next[j];
+		if (j == m)
+		{
+			ans++;
+			j = Next[j];
+			i += j;
+		}
+	}
+	return ans;
+
+}
+int main()
+{
+	int test, n, m, i, j;
+	while (scanf(&quot;%s&quot;, a)!=EOF &amp;&amp; a[0] != '#')
+	{
+		scanf(&quot;%s&quot;,b);
+		ans = 0;
+		n = strlen(a);
+		m = strlen(b);
+		get_next(b,m);
+		KMP(a,n,b,m,Next,0);
+		printf(&quot;%d\n&quot;,ans);
+	}
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

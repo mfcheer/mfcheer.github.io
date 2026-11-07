@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Codeforces Round · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41720951 http://codeforces.com/co…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-9017356061/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Codeforces Round","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41720951 http://codeforces.com/co…","datePublished":"2014-12-04T02:47:00.000Z","dateModified":"2014-12-04T02:47:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-9017356061/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-9017356061/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Codeforces Round · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41720951 http://codeforces.com/co…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-9017356061/">
+    <meta property="article:published_time" content="2014-12-04T02:47:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Codeforces Round · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41720951 http://codeforces.com/co…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Codeforces Round</h1>
+                    <div class="post-meta">
+                        <span>2014/12/04 10:47</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1199 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 3 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41720951" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41720951</a></p>
+<p><a href="http://codeforces.com/contest/493" target="_blank" rel="noreferrer"> http://codeforces.com/contest/493 </a></p>
+<p>A 第一次结构体开二维数组。。。</p>
+<p>A. Vasya and Football</p>
+<p>time limit per test</p>
+<p>2 seconds</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Vasya has started watching football games. He has learned that for some fouls
+the players receive yellow cards, and for some fouls they receive red cards. A
+player who receives the second yellow card automatically receives a red card.</p>
+<p>Vasya is watching a recorded football match now and makes notes of all the
+fouls that he would give a card for. Help Vasya determine all the moments in
+time when players would be given red cards if Vasya were the judge. For each
+player, Vasya wants to know only the  first  moment of time when he would
+receive a red card from Vasya.</p>
+<p>Input</p>
+<p>The first line contains the name of the team playing at home. The second line
+contains the name of the team playing away. Both lines are not empty. The
+lengths of both lines do not exceed 20. Each line contains only of large
+English letters. The names of the teams are distinct.</p>
+<p>Next follows number  <em>n</em> (  1 ≤ <em>n</em> ≤ 90  ) — the number of fouls.</p>
+<p>Each of the following  <em>n</em> lines contains information about a foul in the
+following form:</p>
+<ul>
+<li>first goes number  <em>t</em> (  1 ≤ <em>t</em> ≤ 90  ) — the minute when the foul occurs;</li>
+<li>then goes letter &quot;  h  &quot; or letter &quot;  a  &quot; — if the letter is &quot;  h  &quot;, then the card was given to a home team player, otherwise the card was given to an away team player;</li>
+<li>then goes the player's number  <em>m</em> (  1 ≤ <em>m</em> ≤ 99  );</li>
+<li>then goes letter &quot;  y  &quot; or letter &quot;  r  &quot; — if the letter is &quot;  y  &quot;, that means that the yellow card was given, otherwise the red card was given.</li>
+</ul>
+<p>The players from different teams can have the same number. The players within
+one team have distinct numbers. The fouls go chronologically, no two fouls
+happened at the same minute.</p>
+<p>Output</p>
+<p>For each event when a player received his first red card  in a chronological
+order  print a string containing the following information:</p>
+<ul>
+<li>The name of the team to which the player belongs;</li>
+<li>the player's number in his team;</li>
+<li>the minute when he received the card.</li>
+</ul>
+<p>If no player received a card, then you do not need to print anything.</p>
+<p>It is possible case that the program will not print anything to the output (if
+there were no red cards).</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>MC
+CSKA
+9
+28 a 3 y
+62 h 25 y
+66 h 42 y
+70 h 25 y
+77 a 4 y
+79 a 25 y
+82 h 42 r
+89 h 16 y
+90 a 13 r
+</code></pre>
+<p>output</p>
+<pre><code>MC 25 70
+MC 42 82
+CSKA 13 90
+
+
+#include&lt;stdio.h&gt;  
+#include&lt;iostream&gt;  
+#include&lt;math.h&gt;  
+#include&lt;stdlib.h&gt;  
+#include&lt;ctype.h&gt;  
+#include&lt;algorithm&gt;  
+#include&lt;vector&gt;  
+#include&lt;string.h&gt;  
+#include&lt;queue&gt;  
+#include&lt;stack&gt;  
+#include&lt;set&gt;  
+#include&lt;map&gt;  
+#include&lt;sstream&gt;  
+#include&lt;time.h&gt;  
+#include&lt;utility&gt;  
+#include&lt;malloc.h&gt;  
+#include&lt;stdexcept&gt;  
+  
+using namespace std;  
+
+char zhudui[25];
+char kedui[25];
+
+int n;
+
+struct 
+{
+    char dui[25];
+    int num;
+    int vis;
+    int p;
+}p[2][100];
+
+int T,NUM;
+char DUI[2],P[2];
+
+int main ()
+{
+    while (scanf(&quot;%s&quot;,zhudui)!=EOF)
+    {
+        scanf(&quot;%s&quot;,kedui);
+        scanf(&quot;%d&quot;,&amp;n);
+
+        for(int i=0;i&lt;=99;i++)
+        {
+            p[0][i].p = p[1][i].p = 0;
+            p[1][i].vis = p[0][i].vis = 0;
+        }
+
+        for(int i=1;i&lt;=n;i++)
+        {
+            cin&gt;&gt;T&gt;&gt;DUI&gt;&gt;NUM&gt;&gt;P;
+            if (DUI[0] == 'h')
+            {
+                strcpy (p[0][NUM].dui , zhudui);
+
+                if (P[0]=='y')
+                    p[0][NUM].p+=1;
+                else if (P[0] == 'r')
+                    p[0][NUM].p+=2;
+
+                if (p[0][NUM].p&gt;=2 &amp;&amp; p[0][NUM].vis == 0)
+                {
+                    cout&lt;&lt;p[0][NUM].dui&lt;&lt;&quot; &quot;&lt;&lt;NUM&lt;&lt;&quot; &quot;&lt;&lt;T&lt;&lt;endl;
+                    p[0][NUM].vis = 1;
+                }
+            }
+            else if (DUI[0] == 'a')
+            {
+                strcpy (p[1][NUM].dui , kedui);
+
+                if (P[0]=='y')
+                    p[1][NUM].p+=1;
+                else if (P[0] == 'r')
+                    p[1][NUM].p+=2;
+
+                if (p[1][NUM].p&gt;=2 &amp;&amp; p[1][NUM].vis == 0)
+                {
+                    cout&lt;&lt;p[1][NUM].dui&lt;&lt;&quot; &quot;&lt;&lt;NUM&lt;&lt;&quot; &quot;&lt;&lt;T&lt;&lt;endl;
+                    p[1][NUM].vis = 1;
+                }
+            }
+        }
+
+    }
+    return 0;
+}
+</code></pre>
+<p>B 简单题</p>
+<p>B. Vasya and Wrestling</p>
+<p>time limit per test</p>
+<p>2 seconds</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Vasya has become interested in wrestling. In wrestling wrestlers use
+techniques for which they are awarded points by judges. The wrestler who gets
+the most points wins.</p>
+<p>When the numbers of points of both wrestlers are equal, the wrestler whose
+sequence of points is  lexicographically greater  , wins.</p>
+<p>If the sequences of the awarded points coincide, the wrestler who performed
+the last technique wins. Your task is to determine which wrestler won.</p>
+<p>Input</p>
+<p>The first line contains number  <em>n</em> — the number of techniques that the
+wrestlers have used (  1 ≤ <em>n</em> ≤ 2·10  5  ).</p>
+<p>The following  <em>n</em> lines contain integer numbers  <em>a</em> <em>i</em> (  | <em>a</em> <em>i</em> | ≤ 10
+9  ,  <em>a</em> <em>i</em> ≠ 0  ). If  <em>a</em> <em>i</em> is positive, that means that the first
+wrestler performed the technique that was awarded with  <em>a</em> <em>i</em> points. And if
+<em>a</em> <em>i</em> is negative, that means that the second wrestler performed the
+technique that was awarded with  ( - <em>a</em> <em>i</em> )  points.</p>
+<p>The techniques are given in chronological order.</p>
+<p>Output</p>
+<p>If the first wrestler wins, print string &quot;  first  &quot;, otherwise print &quot;
+second  &quot;</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>5
+1
+2
+-3
+-4
+3
+</code></pre>
+<p>output</p>
+<pre><code>second
+</code></pre>
+<p>input</p>
+<pre><code>3
+-1
+-2
+3
+</code></pre>
+<p>output</p>
+<pre><code>first
+</code></pre>
+<p>input</p>
+<pre><code>2
+4
+-4
+</code></pre>
+<p>output</p>
+<pre><code>second
+</code></pre>
+<p>Note</p>
+<p>Sequence  <em>x</em> = <em>x</em> 1  <em>x</em> 2  ... <em>x</em> | <em>x</em> |  is  lexicographically larger
+than sequence  <em>y</em> = <em>y</em> 1  <em>y</em> 2  ... <em>y</em> | <em>y</em> |  , if either  | <em>x</em> |   &gt;
+| <em>y</em> |  and  <em>x</em> 1  = <em>y</em> 1  , <em>x</em> 2  = <em>y</em> 2  , ... , <em>x</em> | <em>y</em> |  = <em>y</em> |
+<em>y</em> |  , or there is such number  <em>r</em> (  <em>r</em> &lt;  | <em>x</em> |  ,  <em>r</em> &lt;  | <em>y</em> |  ),
+that  <em>x</em> 1  = <em>y</em> 1  , <em>x</em> 2  = <em>y</em> 2  ,  ... , <em>x</em> <em>r</em> = <em>y</em> <em>r</em> and  <em>x</em>
+<em>r</em> +  1  &gt; <em>y</em> <em>r</em> +  1  .</p>
+<p>We use notation  | <em>a</em> |  to denote length of sequence  <em>a</em> .</p>
+<pre><code>#include&lt;stdio.h&gt;  
+#include&lt;iostream&gt;  
+#include&lt;math.h&gt;  
+#include&lt;stdlib.h&gt;  
+#include&lt;ctype.h&gt;  
+#include&lt;algorithm&gt;  
+#include&lt;vector&gt;  
+#include&lt;string.h&gt;  
+#include&lt;queue&gt;  
+#include&lt;stack&gt;  
+#include&lt;set&gt;  
+#include&lt;map&gt;  
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;  
+#include&lt;utility&gt;  
+#include&lt;malloc.h&gt;  
+#include&lt;stdexcept&gt;  
+  
+using namespace std;  
+
+long long  a[200010];
+
+int main()
+{
+    int n;
+    while (cin &gt;&gt; n)
+    {
+        long long  sum = 0;
+        vector&lt;int&gt; c, d;
+
+        for (int i = 0; i &lt; n; i++) 
+		{
+            cin &gt;&gt; a[i];
+            sum += a[i];
+            if (a[i] &gt; 0)
+                c.push_back(a[i]);
+            else
+                d.push_back(-a[i]); 
+        }
+
+        if (sum != 0) 
+		{
+            if (sum &gt; 0)
+                cout &lt;&lt; &quot;first&quot; &lt;&lt; endl;
+            else
+                cout &lt;&lt; &quot;second&quot; &lt;&lt; endl;
+            continue;       
+        }
+
+        int l = min(c.size(), d.size());
+
+        bool flag = true;
+        for (int i = 0; i &lt; l; i++) 
+		{
+            if (c[i] == d[i])
+                continue;
+            if (c[i] &lt; d[i]) {
+                cout &lt;&lt; &quot;second&quot; &lt;&lt; endl;      
+            }
+            else {
+                cout &lt;&lt; &quot;first&quot; &lt;&lt; endl;
+            }
+            flag = false;
+            break;
+        }
+        if (!flag)
+            continue;
+        if (c.size() == d.size()) 
+		{
+            if (a[n-1] &gt; 0)
+                cout &lt;&lt; &quot;first&quot; &lt;&lt; endl;
+            else
+                cout &lt;&lt; &quot;second&quot; &lt;&lt; endl;             
+        }
+        else 
+		{
+            if (c.size() &gt; d.size())
+                cout &lt;&lt; &quot;first&quot; &lt;&lt; endl;
+            else
+                cout &lt;&lt; &quot;second&quot; &lt;&lt; endl;     
+        }
+            
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

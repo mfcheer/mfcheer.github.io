@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu 3879 Base Station【最大权闭合图】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48281573 最大权闭合图学习资料： [ http://www…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-3ca3827318/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu 3879 Base Station【最大权闭合图】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48281573 最大权闭合图学习资料： [ http://www…","datePublished":"2015-09-07T17:49:00.000Z","dateModified":"2015-09-07T17:49:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-3ca3827318/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-3ca3827318/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu 3879 Base Station【最大权闭合图】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48281573 最大权闭合图学习资料： [ http://www…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-3ca3827318/">
+    <meta property="article:published_time" content="2015-09-07T17:49:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu 3879 Base Station【最大权闭合图】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48281573 最大权闭合图学习资料： [ http://www…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu 3879 Base Station【最大权闭合图】</h1>
+                    <div class="post-meta">
+                        <span>2015/09/08 01:49</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>622 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/48281573" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/48281573</a></p>
+<h4 id="最大权闭合图学习资料：-[" tabindex="-1">最大权闭合图学习资料： [</h4>
+<p><a href="http://www.cnblogs.com/wuyiqi/archive/2012/03/12/2391960.html" target="_blank" rel="noreferrer">http://www.cnblogs.com/wuyiqi/archive/2012/03/12/2391960.html</a>
+](<a href="http://www.cnblogs.com/wuyiqi/archive/2012/03/12/2391960.html" target="_blank" rel="noreferrer">http://www.cnblogs.com/wuyiqi/archive/2012/03/12/2391960.html</a>)</p>
+<p>最大权 = 正的权值的和-建图后的最小割的容量。</p>
+<hr>
+<p>题目连接： <a href="http://acm.hdu.edu.cn/showproblem.php?pid=3879" target="_blank" rel="noreferrer"> http://acm.hdu.edu.cn/showproblem.php?pid=3879
+</a></p>
+<p>题意：有n个点，m个选择，建造n个点各自需要一定花费，每个选择有一定的获利，会选择两个点。求最大的获利</p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;set&gt;  
+#include &lt;map&gt;  
+#include &lt;string.h&gt;  
+#include &lt;queue&gt;  
+#include &lt;sstream&gt;  
+#include &lt;stdio.h&gt;  
+#include &lt;math.h&gt;  
+#include &lt;stdlib.h&gt;  
+#include &lt;string&gt;
+
+using namespace std;
+
+const int MAXN = 101000;//点数的最大值
+const int MAXM = 4001000;//边数的最大值
+const int INF = 0x3f3f3f3f;
+
+struct Edge
+{
+    int to, next, cap, flow;
+}edge[MAXM];//注意是MAXM
+
+int tol;
+int head[MAXN];
+int gap[MAXN], dep[MAXN], pre[MAXN], cur[MAXN];
+
+void init()
+{
+    tol = 0;
+    memset(head, -1, sizeof(head));
+}
+//加边，单向图三个参数，双向图四个参数
+void addedge(int u, int v, int w, int rw = 0)
+{
+    edge[tol].to = v; edge[tol].cap = w; edge[tol].next = head[u];
+    edge[tol].flow = 0; head[u] = tol++;
+    edge[tol].to = u; edge[tol].cap = rw; edge[tol].next = head[v];
+    edge[tol].flow = 0; head[v] = tol++;
+}
+//输入参数：起点、终点、点的总数
+//点的编号没有影响，只要输入点的总数
+int sap(int start, int end, int N)
+{
+    memset(gap, 0, sizeof(gap));
+    memset(dep, 0, sizeof(dep));
+    memcpy(cur, head, sizeof(head));
+    int u = start;
+    pre[u] = -1;
+    gap[0] = N;
+    int ans = 0;
+    while (dep[start] &lt; N)
+    {
+        if (u == end)
+        {
+            int Min = INF;
+            for (int i = pre[u]; i != -1; i = pre[edge[i ^ 1].to])
+                if (Min &gt; edge[i].cap - edge[i].flow)
+                    Min = edge[i].cap - edge[i].flow;
+            for (int i = pre[u]; i != -1; i = pre[edge[i ^ 1].to])
+            {
+                edge[i].flow += Min;
+                edge[i ^ 1].flow -= Min;
+            }
+            u = start;
+            ans += Min;
+            continue;
+        }
+        bool flag = false;
+        int v;
+        for (int i = cur[u]; i != -1; i = edge[i].next)
+        {
+            v = edge[i].to;
+            if (edge[i].cap - edge[i].flow &amp;&amp; dep[v] + 1 == dep[u])
+            {
+                flag = true;
+                cur[u] = pre[v] = i;
+                break;
+            }
+        }
+        if (flag)
+        {
+            u = v;
+            continue;
+        }
+        int Min = N;
+        for (int i = head[u]; i != -1; i = edge[i].next)
+            if (edge[i].cap - edge[i].flow &amp;&amp; dep[edge[i].to] &lt; Min)
+            {
+                Min = dep[edge[i].to];
+                cur[u] = i;
+            }
+        gap[dep[u]]--;
+        if (!gap[dep[u]])return ans;
+        dep[u] = Min + 1;
+        gap[dep[u]]++;
+        if (u != start) u = edge[pre[u] ^ 1].to;
+    }
+    return ans;
+}
+
+int n, m;
+const int inf = 1e9;
+
+int main()
+{
+    while (scanf(&quot;%d%d&quot;, &amp;n, &amp;m) != EOF)
+    {
+        init();
+        int x;
+        int s = 0, t = n + m + 1;
+        for (int i = 1;i &lt;= n;i++)
+        {
+            scanf(&quot;%d&quot;, &amp;x);
+            addedge(i, t, x);
+        }
+        int a, b, c;
+        int tmp = 0;
+        for (int i = 1;i &lt;= m;i++)
+        {
+            scanf(&quot;%d%d%d&quot;, &amp;a, &amp;b, &amp;c);
+            tmp += c;
+            addedge(s, i + n, c);
+            addedge(i + n, a, inf);
+            addedge(i + n, b, inf);
+        }
+        int ans = tmp - sap(s, t, n + m + 2);
+        printf(&quot;%d\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

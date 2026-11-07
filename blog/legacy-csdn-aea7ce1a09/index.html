@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-1242 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41544247 dfs 可能有多个朋友 所以从angel搜朋友 …">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-aea7ce1a09/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-1242","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41544247 dfs 可能有多个朋友 所以从angel搜朋友 …","datePublished":"2014-11-27T04:13:00.000Z","dateModified":"2014-11-27T04:13:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-aea7ce1a09/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-aea7ce1a09/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-1242 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41544247 dfs 可能有多个朋友 所以从angel搜朋友 …">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-aea7ce1a09/">
+    <meta property="article:published_time" content="2014-11-27T04:13:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-1242 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41544247 dfs 可能有多个朋友 所以从angel搜朋友 …">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-1242</h1>
+                    <div class="post-meta">
+                        <span>2014/11/27 12:13</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>265 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41544247" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41544247</a></p>
+<p>dfs</p>
+<p>可能有多个朋友 所以从angel搜朋友 遇到朋友就停止</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;sstream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+
+using namespace std;
+
+const int MAX = 202;
+
+int n,m,t;
+char p[MAX][MAX];
+int vis[MAX][MAX];
+int dir[4][2] = {{1,0},{-1,0},{0,1},{0,-1}};
+int sx,sy;
+
+void dfs (int x,int y,int ans )
+{
+	if ( p[x][y] == 'r' )
+	{
+		if (t &gt; ans)
+			t = ans;
+		return ;
+	}
+
+	for(int i=0;i&lt;4;i++)
+	{
+		int xx = x + dir[i][0];
+		int yy = y + dir[i][1];
+		if (xx &gt;=0 &amp;&amp; xx&lt;n &amp;&amp; yy&gt;=0 &amp;&amp; yy&lt;m &amp;&amp; !vis[xx][yy] &amp;&amp; p[xx][yy]!='#')
+		{
+			if (p[xx][yy] == '.' || p[xx][yy]=='r' )
+			{
+				vis[xx][yy] = 1;
+				dfs (xx,yy,ans+1);
+				vis[xx][yy] = 0;
+			}
+			else 
+			{
+				vis[xx][yy] = 1;
+				dfs (xx,yy,ans+2);
+				vis[xx][yy] = 0;
+			}
+
+		}
+	}
+}
+
+
+int main ()
+{
+	while (scanf(&quot;%d %d&quot;,&amp;n,&amp;m)!=EOF)
+	{
+		
+		for(int i=0;i&lt;n;i++)
+		{
+			scanf(&quot;%s&quot;,p[i]);
+		}
+
+		for(int i=0;i&lt;n;i++)
+		{
+			for(int j=0;j&lt;m;j++)
+			{
+				if (p[i][j] == 'a')
+				{
+					sx = i;
+					sy = j;
+					break;
+				}
+
+			}
+		}
+
+		int ans = 0;
+		t = INT_MAX;
+
+		dfs (sx,sy,ans);
+
+		if (t != INT_MAX )
+			printf(&quot;%d\n&quot;,t);
+		else 
+			printf(&quot;Poor ANGEL has to stay in the prison all his life.\n&quot;);
+	}
+
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

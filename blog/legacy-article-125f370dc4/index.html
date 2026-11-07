@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>1、类型 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：1、类型">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-125f370dc4/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"1、类型","description":"历史迁移文章：1、类型","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-125f370dc4/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-125f370dc4/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="1、类型 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：1、类型">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-125f370dc4/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="1、类型 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：1、类型">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">1、类型</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>378 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<h1 id="1、类型" tabindex="-1">1、类型</h1>
+<p>null表示的是一个对象的值，而并不是一个字符串。例如声明一个对象的引用，String a = null ;</p>
+<p>&quot;&quot;表示的是一个空字符串，也就是说它的长度为0。例如声明一个字符串String str = &quot;&quot; ;</p>
+<h1 id="2、内存分配" tabindex="-1">2、内存分配</h1>
+<p>String str = null ; 表示声明一个字符串对象的引用，但指向为null，也就是说还没有指向任何的内存空间；</p>
+<p>String str = &quot;&quot;;    表示声明一个字符串类型的引用，其值为&quot;&quot;空字符串，这个str引用指向的是空字符串的内存空间；</p>
+<p>在java中变量和引用变量是存在栈中（stack），而对象（new产生的）都是存放在堆中（heap）：
+&lt;!-- more --&gt;
+就如下：</p>
+<p>String str = new String(&quot;abc&quot;) ;</p>
+<p>ps：=左边的是存放在栈中（stack），=右边是存放在堆中（heap）。</p>
+<h1 id="3、示例程序：" tabindex="-1">3、示例程序：</h1>
+<pre><code class="hljs">public class String_Demo01 {
+    public static void main(String[] args) {        
+        String str1 = new String() ;
+        String str2 = null ;
+        String str3 = &quot;&quot; ;
+        System.out.println(str1==str2);                //内存地址的比较，返回false
+        System.out.println(str1.equals(str2));         //值的比较，返回false
+        System.out.println(str2==str3);                //内存地址的比较，返回false
+        System.out.println(str3.equals(str2));         //值的比较，返回false
+        System.out.println(str1==str3);                //内存地址的比较，返回false
+        System.out.println(str1.equals(str3));         //值的比较，返回true
+    }
+}
+</code></pre>
+<p>通过如上的程序可以得出如下结论：</p>
+<p>字符串对象与null的值不相等，且内存地址也不相等；</p>
+<p>空字符串对象与null的值不相等，且内存地址也不相等；</p>
+<p>创建一个字符串对象的默认值为&quot;&quot;</p>
+<h1 id="4、-null!=a和a!=null" tabindex="-1">4、 null!=a和a!=null</h1>
+<p>java判断null!=a和a!=null实际上没区别。</p>
+<p>建议在判断时，把常量放在前面，
+比如 if(4 == a)，
+这样写的好处是当你不小心少写一个=时，会有错误报告，而不是继续运行</p>
+<pre><code class="hljs">String str = null;
+	if (&quot;hello&quot;.equals(str))
+		System.out.println(&quot;true&quot;);
+	else 
+	    System.out.println(&quot;false&quot;);
+</code></pre>
+<p>输出 false</p>
+<pre><code class="hljs">String str = null;
+    if (str.equals(&quot;hello&quot;))
+	System.out.println(&quot;true&quot;);
+    else 
+	System.out.println(&quot;false&quot;);
+</code></pre>
+<p>错误Exception</p>
+<p>所以在代码中，最好把常量放在前面。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>原理 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：原理">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-d568f99746/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"原理","description":"历史迁移文章：原理","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-d568f99746/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-d568f99746/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="原理 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：原理">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-d568f99746/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="原理 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：原理">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">原理</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>360 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<h1 id="原理" tabindex="-1">原理</h1>
+<p>python中,通过shell命令 commands.getoutput() 调用java</p>
+<h1 id="运行jar常见错误" tabindex="-1">运行jar常见错误</h1>
+<p>linux运行</p>
+<pre><code class="hljs">java -cp hello.jar hello
+java -cp dependencies.jar com.bj.spat.hello
+</code></pre>
+<p>产生错误</p>
+<pre><code class="hljs">Exception in thread &quot;main&quot; java.lang.UnsupportedClassVersionError: hello : Unsupported major.minor version 52.0
+	at java.lang.ClassLoader.defineClass1(Native Method)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:800)
+	at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+	at java.net.URLClassLoader.defineClass(URLClassLoader.java:449)
+	at java.net.URLClassLoader.access$100(URLClassLoader.java:71)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+	at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)
+</code></pre>
+<p>原因是由较高版本的JDK编译的java class文件试图在较低版本的JVM上运行产生的错误。
+&lt;!-- more --&gt;
+1、解决措施就是保证jvm（java命令）和jdk（javac命令）版本一致。如果是linux版本，则在命令行中分别输入java -version和javac-version命令来查看版本是否一致。这里假设都是1.7版本。</p>
+<p>2、如果都一致，但还是解决不了问题，那么你肯定不是直接在命令行中用javac来编译的，而是用类似于eclipse、netbeans这样的编译器来编译的。因为很多编译器都自带javac，而不是采用操作系统中的编译器。如果你的编译器是eclipse的话，那么需要在项目的属性里设置jdk版本，方法是右击项目--&gt;properties--&gt;java compiler --&gt; Enable project specific settings --&gt;将compiler compliance  level设置为1.7，也就是与jvm一致的版本（在命令行中java -version所显示的版本）。</p>
+<p>综上，如果你是用编译器来编译的话，请首先确保编译器自带的jdk版本是否和操作系统中的java版本一致。</p>
+<h1 id="给jar传参数" tabindex="-1">给jar传参数</h1>
+<pre><code class="hljs">java -cp hello.jar hello &quot;参数&quot;
+</code></pre>
+<pre><code class="hljs">public class hello {
+	public static void main(String []args) {
+		 System.out.println(args.length);
+	     for(int i=0;i&lt;args.length;i++)
+	     {
+	         System.out.println(args[i]);
+	     }
+	}
+}
+</code></pre>
+<pre><code class="hljs">java -cp hello.jar hello 123456
+</code></pre>
+<p>输出
+1
+123456</p>
+<h1 id="python代码" tabindex="-1">python代码</h1>
+<pre><code class="hljs">import commands
+import json
+
+if __name__ == &quot;__main__&quot;:
+    id = str(123)
+    command = &quot;java -cp hello.jar hello &quot; + id
+    line = str(commands.getoutput(command))
+    print line
+
+</code></pre>
+<p>运行python
+输出
+1
+123456</p>
+<h1 id="maven依赖包打jar包" tabindex="-1">maven依赖包打jar包</h1>
+<p>1、maven pom中添加：</p>
+<pre><code class="hljs">  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+          &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
+          &lt;!-- &lt;version&gt;2.1&lt;/version&gt; --&gt;
+          &lt;configuration&gt;
+              &lt;descriptorRefs&gt;
+                  &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
+              &lt;/descriptorRefs&gt;
+          &lt;/configuration&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+</code></pre>
+<p>maven build输入命令：</p>
+<pre><code class="hljs">assembly::assembly
+</code></pre>
+<p>或</p>
+<pre><code class="hljs">mvn build： 把工程依赖包打到lib路径下
+dependency:copy-dependencies -DoutputDirectory=lib
+
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

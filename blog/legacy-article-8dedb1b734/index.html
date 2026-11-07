@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>概率论 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：概率论">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-8dedb1b734/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"概率论","description":"历史迁移文章：概率论","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-8dedb1b734/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-8dedb1b734/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="概率论 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：概率论">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-8dedb1b734/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="概率论 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：概率论">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">概率论</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1002 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 3 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#全概率公式">全概率公式</a></li><li><a href="#贝叶斯公式">贝叶斯公式</a></li><li><a href="#常见离散型分布">常见离散型分布</a></li><li class="toc-sub"><a href="#bernoulli分布">Bernoulli分布</a></li><li class="toc-sub"><a href="#二项分布">二项分布</a></li><li class="toc-sub"><a href="#多项分布">多项分布</a></li><li class="toc-sub"><a href="#泊松分布">泊松分布</a></li><li><a href="#常见连续型分布">常见连续型分布</a></li><li class="toc-sub"><a href="#均匀分布">均匀分布</a></li><li class="toc-sub"><a href="#高斯分布">高斯分布</a></li><li class="toc-sub"><a href="#t分布，laplace分布，gamma分布，beta分布">t分布，laplace分布，gamma分布，beta分布</a></li><li><a href="#弱大数定律和中心极限定理">弱大数定律和中心极限定理</a></li><li><a href="#极大似然估计">极大似然估计</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h1 id="概率论" tabindex="-1">概率论</h1>
+<h2 id="全概率公式" tabindex="-1">全概率公式</h2>
+<p>对一复杂事件A的概率求解问题转化为了在不同情况下发生的简单事件的概率的求和问题。如果事件B1、B2、B3…Bn 构成一个完备事件组，即它们两两互不相容，其和为全集；并且P(Bi)大于0，则对任一事件A有 P(A)=P(A|B1)*P(B1) + P(A|B2)*P(B2) + ... + P(A|Bn)*P(Bn).</p>
+<h2 id="贝叶斯公式" tabindex="-1">贝叶斯公式</h2>
+<p>贝叶斯公式用来描述两个条件概率之间的关系，比如 P(A|B) 和 P(B|A)。按照乘法法则：P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)，可以立刻导出。如上公式也可变形为：P(B|A)=P(A|B)*P(B)/P(A)。而其中的P(A)可以由全概率公式展开。得到最终的贝叶斯公式
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/71.jpg" alt="" loading="lazy" referrerpolicy="no-referrer">
+如果B事件是有多个独立子事件构成，那么公式如下：
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/72.jpg" alt="" loading="lazy" referrerpolicy="no-referrer">
+&lt;!--more--&gt;</p>
+<h2 id="常见离散型分布" tabindex="-1">常见离散型分布</h2>
+<h3 id="bernoulli分布" tabindex="-1">Bernoulli分布</h3>
+<p>又名两点分布或者0-1分布。若Bernoulli试验成功，则Bernoulli随机变量X取值为1，否则X为0。记试验成功概率为θ，即P(X=1)=θ,p(X=0)=1-θ。均值μ=θ，方差 =θ(1-θ)</p>
+<h3 id="二项分布" tabindex="-1">二项分布</h3>
+<p>二项分布即重复n次独立的伯努利试验。在每次试验中只有两种可能的结果，而且两种结果发生与否互相对立，并且相互独立，与其它各次试验结果无关，事件发生与否的概率在每一次独立试验中都保持不变，则这一系列试验总称为n重伯努利实验
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/73.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<h3 id="多项分布" tabindex="-1">多项分布</h3>
+<p>把二项分布公式推广至多种状态，就得到了多项分布。例如1出现k1次，2出现k2次，3出现k3次的概率分布情况。
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/74.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<h3 id="泊松分布" tabindex="-1">泊松分布</h3>
+<p>这个分布是S.-D.泊松研究二项分布的渐近公式时提出来的。泊松分布P (λ)中只有一个参数λ ，它既是泊松分布的均值，也是泊松分布的方差。在实际事例中，当一个随机事件，例如某电话交换台收到的呼叫、来到某公共汽车站的乘客、某放射性物质发射出的粒子、显微镜下某区域中的白血球等等，以固定的平均瞬时速率λ(或称密度)随机且独立地出现时，那么这个事件在单位时间（面积或体积）内出现的次数或个数就近似地服从泊松分布。
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/75.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<h2 id="常见连续型分布" tabindex="-1">常见连续型分布</h2>
+<h3 id="均匀分布" tabindex="-1">均匀分布</h3>
+<p>随机变量X在区间[a,b]上均匀分布。
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/76.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<h3 id="高斯分布" tabindex="-1">高斯分布</h3>
+<p>对模型残差或噪声能很好建模。
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/77.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<h3 id="t分布，laplace分布，gamma分布，beta分布" tabindex="-1">t分布，laplace分布，gamma分布，beta分布</h3>
+<p>Laplace分布：相比于高斯分布，Laplace分布更集中有均值附近。
+Gamma分布：a为形状参数，b为比率度参数
+Beta分布：beta分布的支持区间为[0,1]</p>
+<h2 id="弱大数定律和中心极限定理" tabindex="-1">弱大数定律和中心极限定理</h2>
+<p>独立同分布的随机变量序列X1,x2,...,Xn，E(Xi)=u,方差σ2，则样本均值依概率收敛于期望u。即</p>
+<p>中心极限定理：设从均值为μ、方差为σ^2;（有限）的任意一个总体中抽取样本量为n的样本，当n充分大时，样本均值的抽样分布近似服从均值为μ、方差为σ^2/n 的正态分布。</p>
+<h2 id="极大似然估计" tabindex="-1">极大似然估计</h2>
+<p>极大似然估计是建立在这样的思想上：已知某个参数能使这个样本出现的概率最大，我们当然不会再去选择其他小概率的样本，所以干脆就把这个参数作为估计的真实值。</p>
+<p>求极大似然函数估计值的一般步骤：</p>
+<pre><code class="hljs">（1） 写出似然函数，即每个随机实验出现概率相乘，为这个抽样出现的概率。
+（2） 对似然函数取对数，为了方便求导；
+（3） 对参数求导数。
+（4） 令导数=0，即求解极值，由实际情况知，该极值为极大值。解似然方程。
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

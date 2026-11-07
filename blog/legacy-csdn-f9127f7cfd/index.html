@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UVA 11729 COMMANDO WAR【贪心】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383447 11729 Commando War “Wait…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-f9127f7cfd/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"UVA 11729 COMMANDO WAR【贪心】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383447 11729 Commando War “Wait…","datePublished":"2015-06-05T15:47:00.000Z","dateModified":"2015-06-05T15:47:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-f9127f7cfd/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-f9127f7cfd/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="UVA 11729 COMMANDO WAR【贪心】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383447 11729 Commando War “Wait…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-f9127f7cfd/">
+    <meta property="article:published_time" content="2015-06-05T15:47:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UVA 11729 COMMANDO WAR【贪心】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383447 11729 Commando War “Wait…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">UVA 11729 COMMANDO WAR【贪心】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 23:47</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>554 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383447" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46383447</a></p>
+<p>11729 Commando War</p>
+<p>“Waiting for orders we held in the wood, word from the front never came By
+evening the sound of the gunfire was miles away Ah softly we moved through the
+shadows, slip away through the trees Crossing their lines in the mists in the
+fields on our hands and our knees And all that I ever, was able to see The
+fire in the air, glowing red, silhouetting the smoke on the breeze” There is a
+war and it doesn’t look very promising for your country. Now it’s time to act.
+You have a commando squad at your disposal and planning an ambush on an
+important enemy camp located nearby. You have N soldiers in your squad. In
+your master-plan, every single soldier has a unique responsibility and you
+don’t want any of your soldier to know the plan for other soldiers so that
+everyone can focus on his task only. In order to enforce this, you brief every
+individual soldier about his tasks separately and just before sending him to
+the battlefield. You know that every single soldier needs a certain amount of
+time to execute his job. You also know very clearly how much time you need to
+brief every single soldier. Being anxious to finish the total operation as
+soon as possible, you need to find an order of briefing your soldiers that
+will minimize the time necessary for all the soldiers to complete their tasks.
+You may assume that, no soldier has a plan that depends on the tasks of his
+fellows. In other words, once a soldier begins a task, he can finish it
+without the necessity of pausing in between.</p>
+<p>Input</p>
+<p>There will be multiple test cases in the input file. Every test case starts
+with an integer N (1 ≤ N ≤ 1000), denoting the number of soldiers. Each of the
+following N lines describe a soldier with two integers B (1 ≤ B ≤ 10000) &amp; J
+(1 ≤ J ≤ 10000). B seconds are needed to brief the soldier while completing
+his job needs J seconds. The end of input will be denoted by a case with N =
+0. This case should not be processed. Output For each test case, print a line
+in the format, ‘Case X: Y ’, where X is the case number &amp; Y is the total
+number of seconds counted from the start of your first briefing till the
+completion of all jobs.</p>
+<p>Sample Input 3 2 5 3 2 2 1 3 3 3 4 4 5 5 0</p>
+<p>Sample Output</p>
+<p>Case 1: 8</p>
+<p>Case 2: 15<br>
+代码：</p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;cstdio&gt;  
+#include &lt;cstring&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;string&gt;  
+#include &lt;queue&gt;  
+
+using namespace std;
+
+int n;
+
+struct node
+{
+    int b, j;
+}p[2010];
+
+bool cmp(node a, node b)
+{
+    return a.j &gt; b.j;
+}
+
+int main()
+{
+    int cases = 1;
+    while (scanf(&quot;%d&quot;, &amp;n) != EOF)
+    {
+        if (n == 0) break;
+        for (int i = 0; i &lt; n; i++)
+            scanf(&quot;%d%d&quot;,&amp;p[i].b,&amp;p[i].j);
+        sort(p, p + n, cmp);
+        int ans = 0;
+        int tmp = 0;
+        for (int i = 0; i &lt; n;i++)
+        {
+            tmp += p[i].b;
+            ans = max(ans,tmp+p[i].j);
+        }
+        printf(&quot;Case %d: %d\n&quot;,cases++,ans);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

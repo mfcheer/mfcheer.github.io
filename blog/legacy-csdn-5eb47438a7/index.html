@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>LightOJ 1155 - Power Transmission【拆点网络流】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48165021 题目链接： http://www.lightoj…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-5eb47438a7/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"LightOJ 1155 - Power Transmission【拆点网络流】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48165021 题目链接： http://www.lightoj…","datePublished":"2015-09-01T14:18:00.000Z","dateModified":"2015-09-01T14:18:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-5eb47438a7/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-5eb47438a7/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"网络,lightoj,代码","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="LightOJ 1155 - Power Transmission【拆点网络流】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48165021 题目链接： http://www.lightoj…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-5eb47438a7/">
+    <meta property="article:published_time" content="2015-09-01T14:18:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LightOJ 1155 - Power Transmission【拆点网络流】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48165021 题目链接： http://www.lightoj…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">LightOJ 1155 - Power Transmission【拆点网络流】</h1>
+                    <div class="post-meta">
+                        <span>2015/09/01 22:18</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>571 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">网络</span><span class="post-tag">lightoj</span><span class="post-tag">代码</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/48165021" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/48165021</a></p>
+<p>题目链接： <a href="http://www.lightoj.com/volume_showproblem.php?problem=1155" target="_blank" rel="noreferrer"> http://www.lightoj.com/volume_showproblem.php?problem=1155
+</a></p>
+<p>1~N每个点有容量限制，这样就把每个点拆开，容量为限制的容量。</p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;set&gt;  
+#include &lt;map&gt;  
+#include &lt;string.h&gt;  
+#include &lt;queue&gt;  
+#include &lt;sstream&gt;  
+#include &lt;stdio.h&gt;  
+#include &lt;math.h&gt;  
+#include &lt;stdlib.h&gt;  
+
+using namespace std;
+
+const int MAXN = 1010;//点数的最大值
+const int MAXM = 400100;//边数的最大值
+const int INF = 0x3f3f3f3f;
+
+struct Edge
+{
+    int to, next, cap, flow;
+}edge[MAXM];//注意是MAXM
+
+int tol;
+int head[MAXN];
+int gap[MAXN], dep[MAXN], pre[MAXN], cur[MAXN];
+
+void init()
+{
+    tol = 0;
+    memset(head, -1, sizeof(head));
+}
+//加边，单向图三个参数，双向图四个参数
+void addedge(int u, int v, int w, int rw = 0)
+{
+    edge[tol].to = v; edge[tol].cap = w; edge[tol].next = head[u];
+    edge[tol].flow = 0; head[u] = tol++;
+    edge[tol].to = u; edge[tol].cap = rw; edge[tol].next = head[v];
+    edge[tol].flow = 0; head[v] = tol++;
+}
+//输入参数：起点、终点、点的总数
+//点的编号没有影响，只要输入点的总数
+int sap(int start, int end, int N)
+{
+    memset(gap, 0, sizeof(gap));
+    memset(dep, 0, sizeof(dep));
+    memcpy(cur, head, sizeof(head));
+    int u = start;
+    pre[u] = -1;
+    gap[0] = N;
+    int ans = 0;
+    while (dep[start] &lt; N)
+    {
+        if (u == end)
+        {
+            int Min = INF;
+            for (int i = pre[u]; i != -1; i = pre[edge[i ^ 1].to])
+                if (Min &gt; edge[i].cap - edge[i].flow)
+                    Min = edge[i].cap - edge[i].flow;
+            for (int i = pre[u]; i != -1; i = pre[edge[i ^ 1].to])
+            {
+                edge[i].flow += Min;
+                edge[i ^ 1].flow -= Min;
+            }
+            u = start;
+            ans += Min;
+            continue;
+        }
+        bool flag = false;
+        int v;
+        for (int i = cur[u]; i != -1; i = edge[i].next)
+        {
+            v = edge[i].to;
+            if (edge[i].cap - edge[i].flow &amp;&amp; dep[v] + 1 == dep[u])
+            {
+                flag = true;
+                cur[u] = pre[v] = i;
+                break;
+            }
+        }
+        if (flag)
+        {
+            u = v;
+            continue;
+        }
+        int Min = N;
+        for (int i = head[u]; i != -1; i = edge[i].next)
+            if (edge[i].cap - edge[i].flow &amp;&amp; dep[edge[i].to] &lt; Min)
+            {
+                Min = dep[edge[i].to];
+                cur[u] = i;
+            }
+        gap[dep[u]]--;
+        if (!gap[dep[u]])return ans;
+        dep[u] = Min + 1;
+        gap[dep[u]]++;
+        if (u != start) u = edge[pre[u] ^ 1].to;
+    }
+    return ans;
+}
+
+int m, n, s, t;
+int a, b, c;
+
+int store[110];
+
+int main()
+{
+    int T, cases = 1;
+    scanf(&quot;%d&quot;, &amp;T);
+    while (T--)
+    {
+        init();
+        scanf(&quot;%d&quot;, &amp;n);
+        for (int i = 1;i &lt;= n;i++) scanf(&quot;%d&quot;, &amp;store[i]);
+        for (int i = 1;i &lt;= n;i++) addedge(i, i + n, store[i]);
+
+        scanf(&quot;%d&quot;, &amp;m);
+        while (m--)
+        {
+            scanf(&quot;%d%d%d&quot;, &amp;a, &amp;b, &amp;c);
+            addedge(a + n, b, c);
+        }
+        scanf(&quot;%d%d&quot;, &amp;a, &amp;b);
+        while (a--)
+        {
+            scanf(&quot;%d&quot;, &amp;c);
+            addedge(0, c, 11111);
+        }
+        while (b--)
+        {
+            scanf(&quot;%d&quot;, &amp;c);
+            addedge(c + n, 2 * n+1, 11111);
+        }
+        int ans = sap(0, 2 * n + 1, 2 * n + 2);
+        printf(&quot;Case %d: %d\n&quot;, cases++, ans);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

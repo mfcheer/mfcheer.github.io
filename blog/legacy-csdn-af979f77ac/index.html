@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>unique 函数 c++ · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47123227 一 unique函数 作用：从序列中“删除”所有…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-af979f77ac/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"unique 函数 c++","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47123227 一 unique函数 作用：从序列中“删除”所有…","datePublished":"2015-07-29T02:20:00.000Z","dateModified":"2015-07-29T02:20:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-af979f77ac/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-af979f77ac/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="unique 函数 c++ · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47123227 一 unique函数 作用：从序列中“删除”所有…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-af979f77ac/">
+    <meta property="article:published_time" content="2015-07-29T02:20:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="unique 函数 c++ · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47123227 一 unique函数 作用：从序列中“删除”所有…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">unique 函数 c++</h1>
+                    <div class="post-meta">
+                        <span>2015/07/29 10:20</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>575 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47123227" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47123227</a></p>
+<p>一 unique函数<br>
+作用：从序列中“删除”所有相邻的重复元素。<br>
+既然是删除相邻的重复元素，所以要保证序列有序，用之前要把序列排序，调用sort（）函数。</p>
+<p>在STL中unique函数是一个去重函数，
+unique的功能是去除相邻的重复元素(只保留一个),其实它并不真正把重复的元素删除，是把重复的元素移到后面去了，然后依然保存到了原数组中，然后
+返回去重后最后一个元素的地址。</p>
+<p>注意，num的大小并没有改变，依然保存着5个元素；只是这些元素的顺序改变了。调用unique“删除”了相邻的重复值。给“删除”加上引号是因为unique实际上并没有删除任何元素，而是将无重复的元素复制到序列的前段，从而覆盖相邻的重复元素。unique返回的迭代器指向超出无重复的元素范围末端的下一个位置。</p>
+<p>注意：算法不直接修改容器的大小。如果需要添加或删除元素，则必须使用容器操作。<br>
+erase（）函数用来删除元素。</p>
+<p>demo:</p>
+<pre><code>int main()
+{
+    int num[110];
+    int n;
+    scanf(&quot;%d&quot;,&amp;n);
+    for(int i=0;i&lt;n;i++)
+        scanf(&quot;%d&quot;,&amp;num[i]);
+    sort(num,num+n);
+
+    printf(&quot;after sort:\n&quot;);
+    for(int i=0;i&lt;n;i++)
+        printf(&quot;%d &quot;,num[i]); printf(&quot;\n&quot;);
+
+    vector&lt;int&gt; vec; vec.clear();
+    for(int i=0;i&lt;n;i++) vec.push_back(num[i]);
+    vector&lt;int&gt;::iterator it,it1;
+    it = unique(vec.begin(),vec.end());
+
+    unique(num,num+n);
+    printf(&quot;after use unique:\n&quot;);
+    for(int i=0;i&lt;n;i++)
+        printf(&quot;%d &quot;,num[i]); printf(&quot;\n&quot;);
+
+
+    printf(&quot;after erase:\n&quot;);
+    vec.erase(it,vec.end());
+    for(it1 = vec.begin();it1 !=vec.end();it1++)
+       cout&lt;&lt;*it1 &lt;&lt;&quot; &quot;;cout&lt;&lt;endl;
+
+    return 0;
+}
+</code></pre>
+<p>运行结果：<br>
+<img src="https://img-blog.csdn.net/20150729101755196" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>erase函数的原型如下：<br>
+（1）string&amp; erase ( size_t pos = 0, size_t n = npos );<br>
+（2）iterator erase ( iterator position );<br>
+（3）iterator erase ( iterator first, iterator last );<br>
+也就是说有三种用法：<br>
+（1）erase(pos,n); 删除从pos开始的n个字符，比如erase(0,1)就是删除第一个字符<br>
+（2）erase(position);删除position处的一个字符(position是个string类型的迭代器)<br>
+（3）erase(first,last);删除从first到last之间的字符（first和last都是迭代器）</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

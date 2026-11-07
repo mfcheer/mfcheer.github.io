@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>数位DP模板 · mfcheer</title>
+    <meta name="description" content="通常的数位dp可以写成如下形式： int dfs(int i, int s, bool e) { if (i==-1) return s==target_s; if (!e &amp;amp;&amp;amp…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-0c01beb690/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"数位DP模板","description":"通常的数位dp可以写成如下形式： int dfs(int i, int s, bool e) { if (i==-1) return s==target_s; if (!e &amp;&amp…","datePublished":"2015-07-27T08:17:00.000Z","dateModified":"2015-07-27T08:17:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-0c01beb690/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-0c01beb690/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"dp,dfs","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="数位DP模板 · mfcheer">
+    <meta property="og:description" content="通常的数位dp可以写成如下形式： int dfs(int i, int s, bool e) { if (i==-1) return s==target_s; if (!e &amp;amp;&amp;amp…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-0c01beb690/">
+    <meta property="article:published_time" content="2015-07-27T08:17:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="数位DP模板 · mfcheer">
+    <meta name="twitter:description" content="通常的数位dp可以写成如下形式： int dfs(int i, int s, bool e) { if (i==-1) return s==target_s; if (!e &amp;amp;&amp;amp…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">数位DP模板</h1>
+                    <div class="post-meta">
+                        <span>2015/07/27 16:17</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>370 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">dp</span><span class="post-tag">dfs</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>通常的数位dp可以写成如下形式：</p>
+<pre><code>int dfs(int i, int s, bool e) {
+    if (i==-1) return s==target_s;
+    if (!e &amp;&amp; ~f[i][s]) return f[i][s];
+    int res = 0;
+    int u = e?num[i]:9;
+    for (int d = first?1:0; d &lt;= u; ++d)
+        res += dfs(i-1, new_s(s, d), e&amp;&amp;d==u);
+    return e?res:f[i][s]=res;
+}
+</code></pre>
+<p>其中：</p>
+<p>f为记忆化数组；</p>
+<p>i为当前处理串的第i位（权重表示法，也即后面剩下i+1位待填数）；</p>
+<p>s为之前数字的状态（如果要求后面的数满足什么状态，也可以再记一个目标状态t之类，for的时候枚举下t）；</p>
+<p>e表示之前的数是否是上界的前缀（即后面的数能否任意填）。</p>
+<p>for循环枚举数字时，要注意是否能枚举0，以及0对于状态的影响，有的题目前导0和中间的0是等价的，但有的不是，对于后者可以在dfs时再加一个状态变量z，表示前面是否全部是前导0，也可以看是否是首位，然后外面统计时候枚举一下位数。It
+depends.</p>
+<p>于是关键就在怎么设计状态。当然做多了之后状态一眼就可以瞄出来。</p>
+<p>注意：</p>
+<p>不满足区间减法性质的话（如hdu 4376），不能用solve(r)-solve(l-1)，状态设计会更加诡异。</p>
+<p>转自： <a href="http://www.cnblogs.com/jffifa/archive/2012/08/17/2644847.html" target="_blank" rel="noreferrer"> http://www.cnblogs.com/jffifa/archive/2012/08/17/2644847.html
+</a></p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

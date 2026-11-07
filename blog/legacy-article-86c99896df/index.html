@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>布隆过滤器 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：布隆过滤器">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-86c99896df/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"布隆过滤器","description":"历史迁移文章：布隆过滤器","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-86c99896df/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-86c99896df/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="布隆过滤器 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：布隆过滤器">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-86c99896df/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="布隆过滤器 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：布隆过滤器">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">布隆过滤器</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>319 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<h1 id="布隆过滤器" tabindex="-1">布隆过滤器</h1>
+<h1 id="适用范围" tabindex="-1">适用范围</h1>
+<p>可以用来实现数据字典，进行数据的判重，或者集合求交集，网页URL的去重，垃圾邮件的判别，集合重复元素的判别，查询加速（比如基于key-value的存储系统）等。</p>
+<h1 id="原理" tabindex="-1">原理</h1>
+<p>Bloom Filter是一种空间效率很高的随机概率数据结构，它利用位数组很简洁地表示一个集合，并能判断一个元素是否属于这个集合。</p>
+<p>原理：位数组+k个独立hash函数。将hash函数对应的值的位数组置1，查找时如果发现所有hash函数对应位都是1说明存在，很明显这个过程并不保证查找的结果是100%正确的。同时也不支持删除一个已经插入的关键字，因为该关键字对应的位会牵动到其他的关键字。</p>
+<p>一个字节有8个比特位，位图就是利用比特位进行信息存储，节省资源开销的一种方式。这种方法可以用在大数据排序，查询，去重等操作中</p>
+<h1 id="位图" tabindex="-1">位图</h1>
+<p>依赖下面三个元操作</p>
+<pre><code class="hljs">将第n位置为1
+set_bit(char x,int n)
+x |= 1&lt;&lt;n
+将第n位置为0
+clear_bit(char x,int n)
+1 &amp;= ~(1&lt;&lt;n)
+取第n位的值
+get_bit(char x,int n)
+1 &amp; (x&gt;&gt;n)
+</code></pre>
+<h1 id="详细的介绍" tabindex="-1">详细的介绍</h1>
+<p><a href="http://blog.csdn.net/dadoneo/article/details/6847481" target="_blank" rel="noreferrer">http://blog.csdn.net/dadoneo/article/details/6847481</a></p>
+<h1 id="java简单实现" tabindex="-1">Java简单实现</h1>
+<p>&lt;!--more--&gt;</p>
+<pre><code class="hljs">import java.util.*;
+
+public class BloomFilter {
+	
+	int [] seeds;
+	BitSet bitset;
+	
+	public BloomFilter(int bloomfiterSize,int [] seeds){
+		this.seeds = seeds;
+		this.bitset = new BitSet(bloomfiterSize);
+	}
+	
+	void add(String s){
+		for(int i=0;i&lt;seeds.length;i++){
+			int pos = hashFunc(s, seeds[i]);
+			bitset.set(pos, true);
+		}
+	}
+	
+	Boolean isContain(String s){
+		for(int i=0;i&lt;seeds.length;i++){
+			int pos = hashFunc(s, seeds[i]);
+			if(bitset.get(pos) == false){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static int hashFunc(String key, int hashCode){  
+	    int arraySize = 100000007;
+	    for(int i=0;i&lt;key.length();i++){        
+	        int letterValue = key.charAt(i) - 96;
+	        hashCode = ((hashCode &lt;&lt; 5) + letterValue) % arraySize;
+	    }  
+	    return Math.abs(hashCode); 
+	}  
+	
+	public static void main(String[] args){
+		int bloomfiterSize = (int) Math.pow(2, 32);
+		int [] seeds = {1,3,5,7,9,11};
+		
+		BloomFilter bloomFilter = new BloomFilter(bloomfiterSize, seeds);
+		
+		String s1 = &quot;1234567&quot;;
+		String s2 = &quot;12345678&quot;;
+		
+		bloomFilter.add(s1);
+		System.out.println(bloomFilter.isContain(s1));
+		System.out.println(bloomFilter.isContain(s2));
+		bloomFilter.add(s2);
+		System.out.println(bloomFilter.isContain(s2));
+	}
+}
+/*
+true
+false
+true
+*/
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

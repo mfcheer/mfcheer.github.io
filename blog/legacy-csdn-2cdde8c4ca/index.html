@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>DP经典5题 【DP】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383371 1.最大子段和 给定n个整数的序列{ N1, N…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-2cdde8c4ca/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"DP经典5题 【DP】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383371 1.最大子段和 给定n个整数的序列{ N1, N…","datePublished":"2015-06-05T15:38:00.000Z","dateModified":"2015-06-05T15:38:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-2cdde8c4ca/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-2cdde8c4ca/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="DP经典5题 【DP】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383371 1.最大子段和 给定n个整数的序列{ N1, N…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-2cdde8c4ca/">
+    <meta property="article:published_time" content="2015-06-05T15:38:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DP经典5题 【DP】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383371 1.最大子段和 给定n个整数的序列{ N1, N…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">DP经典5题 【DP】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 23:38</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>756 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383371" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46383371</a></p>
+<p>1.最大子段和</p>
+<p>给定n个整数的序列{ N1, N2, …, Nn }，其任意连续子序列可表示为{ Ni, Ni+1, …, Nj }，其中 1 &lt;= i &lt;= j &lt;=
+K。最大连续子序列是所有连续子序中元素和最大的一个， 例如给定序列{ -2, 11, -4, 13, -5, -2 }，其最大连续子序列为{ 11, -4,
+13 }，最大和为20。</p>
+<pre><code>int n, a[100];
+int b = 0, ans = -1e9;
+void solve()
+{
+    for (int i = 0; i &lt; n; i++)
+    {
+        if (b &gt; 0) b += a[i];
+        else b = a[i];
+        ans = max(ans, b);
+    }
+}
+</code></pre>
+<p>2.数塔问题</p>
+<p>要求从顶层走到底层，若每一步只能走到相邻的结点，则经过的结点的数字之和最大是多少？</p>
+<p>自下而上进行状态转移。</p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;stdio.h&gt;  
+#include &lt;math.h&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;string.h&gt;  
+#include &lt;string&gt;  
+#include &lt;sstream&gt;  
+#include &lt;stdlib.h&gt;  
+#include &lt;malloc.h&gt;  
+
+using namespace std;  
+
+int dp[510][510];  
+
+int main ()  
+{  
+    int n;  
+    cin&gt;&gt;n;  
+
+        memset (dp,0,sizeof(dp));  
+        for (int i=1;i&lt;=n;i++)  
+            for (int j=1;j&lt;=i;j++)  
+            cin&gt;&gt;dp[i][j];  
+
+        for (int i=n-1;i&gt;=1;i--)  
+        {  
+            for (int j=1;j&lt;=i;j++)  
+                dp[i][j]+=max (dp[i+1][j],dp[i+1][j+1]);  
+        }  
+        cout&lt;&lt;dp[1][1]&lt;&lt;endl;  
+
+    return 0;  
+}
+</code></pre>
+<p>3.最长上升子序列</p>
+<p>给你一个数组p[MAXN],求最长上升子序列长度（不要和字串搞混）。</p>
+<pre><code>#include&lt;stdio.h&gt;  
+#include&lt;iostream&gt;  
+#include&lt;math.h&gt;  
+#include&lt;stdlib.h&gt;  
+#include&lt;ctype.h&gt;  
+#include&lt;algorithm&gt;  
+#include&lt;vector&gt;  
+#include&lt;string&gt;  
+#include&lt;queue&gt;  
+#include&lt;stack&gt;  
+#include&lt;set&gt;  
+#include&lt;map&gt;  
+
+using namespace std;  
+
+int n,p[1010],dp[1010];  
+
+int main()  
+{  
+    while (scanf(&quot;%d&quot;, &amp;n) != EOF)  
+    {  
+        for (int i = 1; i &lt;= n; i++)  
+            scanf(&quot;%d&quot;,&amp;p[i]);  
+
+        for (int i = 1; i &lt;= n; i++)  
+        {  
+            dp[i] = 1;  
+            for (int j = 1; j &lt; i; j++)  
+            {  
+                if (p[i] &gt; p[j])  
+                    dp[i] = max(dp[i],dp[j] + 1);  
+            }  
+        }  
+        int ans = -1;  
+        for (int i = 1; i &lt;= n; i++)  
+            ans = max(ans,dp[i]);  
+        printf(&quot;%d\n&quot;,ans);  
+    }  
+    return 0;  
+}
+</code></pre>
+<p>4.最长公共子序列(LCS)<br>
+两个数组s[100],t[100];</p>
+<p>状态转移方程:</p>
+<p>if (s[i+1]==t[j+1]) dp[i+1][j+1] = max(dp[i][j]+1,dp[i][j+1],dp[i+1][j])</p>
+<p>else dp[i+1][j+1] = max(dp[i][j+1],dp[i+1][j])</p>
+<pre><code>int s[100], t[100], n, m;
+int dp[110][110];
+void solve()
+{
+    for (int i = 0; i &lt; n; i++)
+        for (int j = 0; j &lt; m; j++)
+        {
+            if (s[i] == t[j])
+                dp[i + 1][j + 1] = max(dp[i][j] + 1, max(dp[i][j + 1], dp[i + 1][j]));
+            else
+                dp[i + 1][j + 1] = max(dp[i][j + 1], dp[i + 1][j]);
+        }
+    int ans = dp[n][m];
+}
+</code></pre>
+<p>5.01背包问题</p>
+<p>有编号分别为a,b,c,d,e的五件物品，它们的重量分别是2,2,6,5,4，它们的价值分别是6,3,5,4,6，现在给你个承重为10的背包，如何让背包里装入的物品具有最大的价值总和？</p>
+<pre><code>#include&lt;stdlib.h&gt;  
+#include&lt;ctype.h&gt;  
+#include&lt;algorithm&gt;  
+#include&lt;vector&gt;  
+#include&lt;string&gt;  
+#include&lt;queue&gt;  
+#include&lt;stack&gt;  
+#include&lt;set&gt;  
+#include&lt;map&gt;  
+#include &lt;string&gt;  
+#include &lt;sstream&gt;  
+
+using namespace std;
+
+int main()
+{
+    int t;
+    scanf(&quot;%d&quot;, &amp;t);
+    int a[1000], c[1000], dp[10000];
+    while (t--)
+    {
+        int n, v;
+        scanf(&quot;%d%d&quot;, &amp;n, &amp;v);
+
+        for (int i = 0; i&lt;n; i++)
+            scanf(&quot;%d&quot;, &amp;a[i]);
+        for (int i = 0; i&lt;n; i++)
+            scanf(&quot;%d&quot;, &amp;c[i]);
+
+        memset(dp, 0, sizeof(dp));
+
+        for (int i = 0; i&lt;n; i++)
+            for (int j = v; j &gt;= 0; j--)
+            {
+                if (j - c[i] &gt;= 0)
+                    dp[j] = max(dp[j], dp[j - c[i]] + a[i]);
+            }
+        printf(&quot;%d\n&quot;, dp[v]);
+    }
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

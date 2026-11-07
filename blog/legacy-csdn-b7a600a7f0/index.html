@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>认识与学习bash · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51019818 变量的显示与设置 变量的显示: echo $[变…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-b7a600a7f0/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"认识与学习bash","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51019818 变量的显示与设置 变量的显示: echo $[变…","datePublished":"2016-03-30T13:55:00.000Z","dateModified":"2016-03-30T13:55:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-b7a600a7f0/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-b7a600a7f0/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="认识与学习bash · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51019818 变量的显示与设置 变量的显示: echo $[变…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-b7a600a7f0/">
+    <meta property="article:published_time" content="2016-03-30T13:55:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="认识与学习bash · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51019818 变量的显示与设置 变量的显示: echo $[变…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">认识与学习bash</h1>
+                    <div class="post-meta">
+                        <span>2016/03/30 21:55</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>418 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/51019818" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/51019818</a></p>
+<h3 id="变量的显示与设置" tabindex="-1">变量的显示与设置</h3>
+<p>变量的显示:<br>
+echo $[变量名]<br>
+<img src="https://img-blog.csdn.net/20160330205504221" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>修改变量名：<br>
+用等号“＝”<br>
+<img src="https://img-blog.csdn.net/20160330205927941" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"><br>
+变量名只能由字母数字组成，且只能字母开头。</p>
+<p>取消变量：<br>
+unset　变量名<br>
+<img src="https://img-blog.csdn.net/20160330211258993" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>环境变量功能：<br>
+env查看环境变量及说明<br>
+<img src="https://img-blog.csdn.net/20160330211916824" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>随机数变量RANDOM<br>
+<img src="https://img-blog.csdn.net/20160330212326169" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"><br>
+set查看所有变量（包括环境变量）<br>
+<img src="https://img-blog.csdn.net/20160330212434669" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>如果想在子进程使用自己定义的环境变量，使用”export　变量名“。</p>
+<p>显示语系变量：locale<br>
+<img src="https://img-blog.csdn.net/20160330213358861" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<h3 id="变量的读取，数组和声明：read-array-declare" tabindex="-1">变量的读取，数组和声明：read array declare</h3>
+<p>read:<br>
+<img src="https://img-blog.csdn.net/20160330214109254" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"><br>
+declare<br>
+<img src="https://img-blog.csdn.net/20160330214323598" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"><br>
+数组：<br>
+<img src="https://img-blog.csdn.net/20160330214908632" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"><br>
+<img src="https://img-blog.csdn.net/20160330214815647" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<h3 id="文件系统及程序的限制关系：ulimit" tabindex="-1">文件系统及程序的限制关系：ulimit</h3>
+<p><img src="https://img-blog.csdn.net/20160330215316352" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<h3 id="命名别名与历史命令" tabindex="-1">命名别名与历史命令</h3>
+<p>创建一个新命令　alias 删除命令　unalias<br>
+<img src="https://img-blog.csdn.net/20160401162149123" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"><br>
+<img src="https://img-blog.csdn.net/20160401162209607" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>历史命令history，之前执行过的命令。<br>
+<img src="https://img-blog.csdn.net/20160401162507561" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"><br>
+！number　执行第number条ｈｉｓｔｏｒｙ命令<br>
+<img src="https://img-blog.csdn.net/20160401162849360" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

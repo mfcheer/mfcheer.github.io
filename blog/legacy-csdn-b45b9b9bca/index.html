@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj-2481 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40889511 题目链接： 点击打开链接 又是树状数组的应用 ，…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-b45b9b9bca/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj-2481","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40889511 题目链接： 点击打开链接 又是树状数组的应用 ，…","datePublished":"2014-11-07T02:39:00.000Z","dateModified":"2014-11-07T02:39:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-b45b9b9bca/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-b45b9b9bca/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"二叉树,acm,poj","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj-2481 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40889511 题目链接： 点击打开链接 又是树状数组的应用 ，…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-b45b9b9bca/">
+    <meta property="article:published_time" content="2014-11-07T02:39:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj-2481 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40889511 题目链接： 点击打开链接 又是树状数组的应用 ，…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj-2481</h1>
+                    <div class="post-meta">
+                        <span>2014/11/07 10:39</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>612 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">二叉树</span><span class="post-tag">acm</span><span class="post-tag">poj</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40889511" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/40889511</a></p>
+<p>题目链接： <a href="http://poj.org/problem?id=2481" target="_blank" rel="noreferrer"> 点击打开链接 </a></p>
+<p>又是树状数组的应用 ，花了好长时间。</p>
+<p>题目大意：</p>
+<p>给你很多线段的头S和尾E，问每一条线段中包含了多少个线段，（S和E相同不计在内）。这题先一看，完全不知道什么方法，感觉非常的难办。</p>
+<p>但是！树状数组可以轻松解决这个问题！！！首先，将她们线段的s和e当做是(s,e)一个点，这样子把所有点画出来，你就会发现一个很神奇的现象，题目要求就会变成：问每一个点的左上角有多少个点？</p>
+<p>！！！这样不就和那题最简单的stars一样吗？？？！！！</p>
+<p>stars那题是问左下角有多少个点，而这题是问左上角，而且点不是有序排好的，所以有些不同，特殊处理一下就可以。</p>
+<p>如果正常做，那个y是递增的，所以sum和update那个方向就会相反了，这个其实没什么所谓，一样的，排序的时候先y由大到小排，y相同时x由小到大排，这样小小的处理，就变成stars那题了！！！</p>
+<p>难点在于处理相同区间，对于相同区间，只是把答案直接拷贝过来，并把其加入树状数组，不可以直接在树状数组中求和。</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+struct q
+{
+	int s;
+	int e ;
+	int id;
+}p[100005];
+
+int a[100005];
+int b[100005];
+int n;
+int maxnum;
+
+bool cmp (q a ,q b)
+{
+	if (a.e == b.e )
+		return a.s &lt; b.s;
+	else 
+		return a.e &gt; b.e;
+}
+
+int lowbit(int i)
+{
+	return i &amp; (-i);
+}
+
+int sum(int i)
+{
+	int ans = 0;
+	while (i&gt;0)
+	{
+		ans += b[i];
+		i-=lowbit(i);
+	}
+	return ans;
+}
+
+void update (int i,int v)
+{
+	while (i &lt;= maxnum + 1)
+	{
+		b[i]+=v;
+		i+=lowbit(i);
+	}
+}
+
+int main ()
+{
+	while (scanf (&quot;%d&quot;,&amp;n), n)
+	{
+		maxnum = -1;
+		memset (b,0,sizeof (b));
+		memset (a,0,sizeof (a));
+
+		for (int i=0;i&lt;n;i++)
+		{
+			scanf(&quot;%d %d&quot;,&amp;p[i].s,&amp;p[i].e);
+			p[i].e++;
+			p[i].s++;
+
+			p[i].id=i;
+			maxnum = max (maxnum,p[i].s);
+		}
+		
+		sort (p,p+n,cmp);
+
+		a[p[0].id]=sum(p[0].s);
+		update(p[0].s,1);
+
+		for (int i=1;i&lt;n;i++)
+		{
+			if (p[i].e == p[i-1].e &amp;&amp; p[i].s == p[i-1].s )
+			{
+				a[p[i].id] = a[p[i-1].id];
+			}
+			else 
+			{
+				a[p[i].id] = sum(p[i].s );
+			}
+			update(p[i].s ,1);
+		}
+
+		printf (&quot;%d&quot;,a[0]);
+		for (int i=1 ;i&lt;n;i++)
+			printf(&quot; %d&quot;,a[i]);
+		printf(&quot;\n&quot;);
+
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

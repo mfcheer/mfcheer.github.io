@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-2063 二分图 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41421077 http://acm.hdu.edu.cn/sh…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-5452531fdd/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-2063 二分图","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41421077 http://acm.hdu.edu.cn/sh…","datePublished":"2014-11-23T14:37:00.000Z","dateModified":"2014-11-23T14:37:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-5452531fdd/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-5452531fdd/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"acm,算法","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-2063 二分图 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41421077 http://acm.hdu.edu.cn/sh…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-5452531fdd/">
+    <meta property="article:published_time" content="2014-11-23T14:37:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-2063 二分图 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41421077 http://acm.hdu.edu.cn/sh…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-2063 二分图</h1>
+                    <div class="post-meta">
+                        <span>2014/11/23 22:37</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>556 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">acm</span><span class="post-tag">算法</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41421077" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41421077</a></p>
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2063" target="_blank" rel="noreferrer"> http://acm.hdu.edu.cn/showproblem.php?pid=2063
+</a></p>
+<h1 id="过山车" tabindex="-1">过山车</h1>
+<p>** Time Limit: 1000/1000 MS (Java/Others)    Memory Limit: 32768/32768 K
+(Java/Others)<br>
+Total Submission(s): 11731    Accepted Submission(s): 5151<br>
+**</p>
+<p>Problem Description</p>
+<p>RPG
+girls今天和大家一起去游乐场玩，终于可以坐上梦寐以求的过山车了。可是，过山车的每一排只有两个座位，而且还有条不成文的规矩，就是每个女生必须找个个男生做partner和她同坐。但是，每个女孩都有各自的想法，举个例子把，Rabbit只愿意和XHD或PQK做partner，Grass只愿意和linle或LL做partner，PrincessSnow愿意和水域浪子或伪酷儿做partner。考虑到经费问题，boss刘决定只让找到partner的人去坐过山车，其他的人，嘿嘿，就站在下面看着吧。聪明的Acmer，你可以帮忙算算最多有多少对组合可以坐上过山车吗？</p>
+<p>Input</p>
+<p>输入数据的第一行是三个整数K , M , N，分别表示可能的组合数目，女生的人数，男生的人数。0 &lt;K&lt;=1000<br>
+1&lt;=N 和M&lt;=500.接下来的K行，每行有两个数，分别表示女生Ai愿意和男生Bj做partner。最后一个0结束输入。</p>
+<p>Output</p>
+<p>对于每组数据，输出一个整数，表示可以坐上过山车的最多组合数。</p>
+<p>Sample Input</p>
+<p>6 3 3 1 1 1 2 1 3 2 1 2 3 3 1 0</p>
+<p>Sample Output</p>
+<p>3</p>
+<p>一天不AC 智商不如猪</p>
+<p>今天学的二分图 ac了这个很久之前就见到的题</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;sstream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+
+using namespace std;
+
+int n,m,k;
+int p[1000][1000];
+int book[1000];
+int match[1000];
+int t,tt;
+int a,b;
+
+int dfs(int u)
+{
+	int i;
+	for(i=1;i&lt;=k;i++)
+	{
+		if(book[i]==0 &amp;&amp; p[u][i] == 1)
+		{
+			book[i] = 1;
+			if(match[i] == 0 || dfs(match[i]))
+			{
+				match[i]=u;
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+
+int main()
+{
+	while (cin&gt;&gt;n &amp;&amp; n!=0)
+	{
+		cin&gt;&gt;m&gt;&gt;k;
+
+		int ans = 0;
+		memset(match,0,sizeof(match));
+		memset(p,0,sizeof(p));
+
+		for(int i=1;i&lt;=n;i++)
+		{
+			cin&gt;&gt;a&gt;&gt;b;
+			p[a][b] = 1;
+		}
+
+		for(int i=1;i&lt;=m;i++)
+		{
+			memset(book,0,sizeof(book));
+			if( dfs(i) )
+				ans ++;
+		}
+		cout&lt;&lt;ans&lt;&lt;endl;
+	}
+
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

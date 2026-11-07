@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>zkw费用流模板 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48219707 模板： 对二分图类型效率高 // hdu 366…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-1d0144d238/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"zkw费用流模板","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48219707 模板： 对二分图类型效率高 // hdu 366…","datePublished":"2015-09-04T19:15:00.000Z","dateModified":"2015-09-04T19:15:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-1d0144d238/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-1d0144d238/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="zkw费用流模板 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48219707 模板： 对二分图类型效率高 // hdu 366…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-1d0144d238/">
+    <meta property="article:published_time" content="2015-09-04T19:15:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="zkw费用流模板 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/48219707 模板： 对二分图类型效率高 // hdu 366…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">zkw费用流模板</h1>
+                    <div class="post-meta">
+                        <span>2015/09/05 03:15</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>599 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/48219707" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/48219707</a></p>
+<p>模板：<br>
+对二分图类型效率高</p>
+<pre><code>// hdu 3667
+#include &lt;iostream&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;set&gt;  
+#include &lt;map&gt;  
+#include &lt;string.h&gt;  
+#include &lt;queue&gt;  
+#include &lt;sstream&gt;  
+#include &lt;stdio.h&gt;  
+#include &lt;math.h&gt;  
+#include &lt;stdlib.h&gt;  
+#include &lt;string&gt;
+
+using namespace std;
+
+const int MAXN = 1000;
+const int MAXM = 200000;
+const int INF = 0x3f3f3f3f;
+struct Edge
+{
+    int to, next, cap, flow, cost;
+    Edge(int _to = 0, int _next = 0, int _cap = 0, int _flow = 0, int _cost = 0) :
+        to(_to), next(_next), cap(_cap), flow(_flow), cost(_cost) {}
+}edge[MAXM];
+
+struct ZKW_MinCostMaxFlow
+{
+    int head[MAXN], tot;
+    int cur[MAXN];
+    int dis[MAXN];
+    bool vis[MAXN];
+    int ss, tt, N;//源点、汇点和点的总个数（编号是0~N-1）,不需要额外赋值，调用会直接赋值
+    int min_cost, max_flow;
+    void init()
+    {
+        tot = 0;
+        memset(head, -1, sizeof(head));
+    }
+    void addedge(int u, int v, int cap, int cost)
+    {
+        edge[tot] = Edge(v, head[u], cap, 0, cost);
+        head[u] = tot++;
+        edge[tot] = Edge(u, head[v], 0, 0, -cost);
+        head[v] = tot++;
+    }
+    int aug(int u, int flow)
+    {
+        if (u == tt)return flow;
+        vis[u] = true;
+        for (int i = cur[u];i != -1;i = edge[i].next)
+        {
+            int v = edge[i].to;
+            if (edge[i].cap &gt; edge[i].flow &amp;&amp; !vis[v] &amp;&amp; dis[u] == dis[v] + edge[i].cost)
+            {
+                int tmp = aug(v, min(flow, edge[i].cap - edge[i].flow));
+                edge[i].flow += tmp;
+                edge[i ^ 1].flow -= tmp;
+                cur[u] = i;
+                if (tmp)return tmp;
+            }
+        }
+        return 0;
+    }
+    bool modify_label()
+    {
+        int d = INF;
+        for (int u = 0;u &lt; N;u++)
+            if (vis[u])
+                for (int i = head[u];i != -1;i = edge[i].next)
+                {
+                    int v = edge[i].to;
+                    if (edge[i].cap&gt;edge[i].flow &amp;&amp; !vis[v])
+                        d = min(d, dis[v] + edge[i].cost - dis[u]);
+                }
+        if (d == INF)return false;
+        for (int i = 0;i &lt; N;i++)
+            if (vis[i])
+            {
+                vis[i] = false;
+                dis[i] += d;
+
+            }
+        return true;
+    }
+    /*
+    * 直接调用获取最小费用和最大流
+    * 输入: start-源点，end-汇点，n-点的总个数（编号从0开始）
+    * 返回值: pair&lt;int,int&gt; 第一个是最小费用，第二个是最大流
+    */
+    pair&lt;int, int&gt; mincostmaxflow(int start, int end, int n)
+    {
+        ss = start, tt = end, N = n;
+        min_cost = max_flow = 0;
+        for (int i = 0;i &lt; n;i++)dis[i] = 0;
+        while (1)
+        {
+            for (int i = 0;i &lt; n;i++)cur[i] = head[i];
+            while (1)
+            {
+                for (int i = 0;i &lt; n;i++)vis[i] = false;
+                int tmp = aug(ss, INF);
+                if (tmp == 0)break;
+                max_flow += tmp;
+                min_cost += tmp*dis[ss];
+            }
+            if (!modify_label())break;
+        }
+        return make_pair(min_cost, max_flow);
+    }
+}solve;
+
+int n, m, k;
+int cnt[10] = { 0,1,3,5,7,9 };
+
+int main()
+{
+    while (~scanf(&quot;%d%d%d&quot;, &amp;n, &amp;m, &amp;k))
+    {
+        solve.init();
+
+        solve.addedge(0, 1, k, 0);
+        solve.addedge(n, n + 1, k, 0);
+
+        int u, v, a, c;
+        for (int i = 1;i &lt;= m;i++)
+        {
+            scanf(&quot;%d%d%d%d&quot;, &amp;u, &amp;v, &amp;a, &amp;c);
+            for (int j = 1;j &lt;= c;j++)
+                solve.addedge(u, v, 1, a*cnt[j]);
+        }
+
+        pair&lt;int, int&gt; tmp = solve.mincostmaxflow(0, n + 1, n + 2);
+        int ans = tmp.second;
+        if (ans &lt; k) puts(&quot;-1&quot;);
+        else printf(&quot;%d\n&quot;, tmp.first);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

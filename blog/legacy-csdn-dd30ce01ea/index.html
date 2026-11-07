@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FZU 2150 求双搜最优解 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42298181 http://acm.fzu.edu.cn/pr…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-dd30ce01ea/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"FZU 2150 求双搜最优解","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42298181 http://acm.fzu.edu.cn/pr…","datePublished":"2014-12-31T10:34:00.000Z","dateModified":"2014-12-31T10:34:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-dd30ce01ea/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-dd30ce01ea/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="FZU 2150 求双搜最优解 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42298181 http://acm.fzu.edu.cn/pr…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-dd30ce01ea/">
+    <meta property="article:published_time" content="2014-12-31T10:34:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FZU 2150 求双搜最优解 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42298181 http://acm.fzu.edu.cn/pr…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">FZU 2150 求双搜最优解</h1>
+                    <div class="post-meta">
+                        <span>2014/12/31 18:34</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>392 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42298181" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/42298181</a></p>
+<p><a href="http://acm.fzu.edu.cn/problem.php?pid=2150" target="_blank" rel="noreferrer"> http://acm.fzu.edu.cn/problem.php?pid=2150
+</a></p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+int t, n, m;
+char b[15][15];
+int dir[4][2] = { { -1, 0 }, { 1, 0 }, { 0, 1 }, { 0, -1 } };
+int vis[15][15];
+int check(int x, int y)
+{
+	if (x &gt;= 0 &amp;&amp; x &lt; n &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; m)
+		return 1;
+	return 0;
+}
+struct node
+{
+	int x;
+	int y;
+	int t;
+}q[150];
+
+queue&lt;node&gt; de;
+int step = 0;
+
+int main()
+{
+	scanf(&quot;%d&quot;,&amp;t);
+	int c = 1;
+	while (t--)
+	{
+		scanf(&quot;%d%d&quot;, &amp;n, &amp;m);
+		for (int i = 0; i &lt; n; i++)
+			scanf(&quot;%s&quot;,b[i]);
+
+		int num = 0;
+		for (int i = 0; i &lt; n; i++)
+			for (int j = 0; j &lt; m; j++)
+			{
+				if (b[i][j] == '#')
+				{
+					q[num].x = i;
+					q[num++].y = j;
+				}
+			}
+
+		int ans = 0x3f3f3f3f;
+		if (num == 2)
+			ans = 0;
+		else 
+		for (int i = 0; i &lt; num; i++)
+		{
+			for (int j = i; j &lt; num; j++)
+			{
+				int sx = q[i].x;
+				int sy = q[i].y;
+				int ex = q[j].x;
+				int ey = q[j].y;
+				{
+
+					while (!de.empty()) de.pop();
+					
+					node qq, qqq;
+					qq.x = sx; qq.y = sy; qq.t = 0;
+					qqq.x = ex; qqq.y = ey; qqq.t = 0;
+
+					de.push(qq);
+					de.push(qqq);
+					memset(vis,0,sizeof(vis));
+
+					vis[sx][sy] = vis[ex][ey] = 1;
+
+					step = 0;
+
+					/////////////////
+					while (!de.empty())
+					{
+						node qq = de.front();
+						de.pop();
+							step = qq.t;
+						for (int i = 0; i &lt; 4; i++)
+						{
+							int x = qq.x + dir[i][0];
+							int y = qq.y + dir[i][1];
+
+							if (!check(x, y) || vis[x][y] || b[x][y] == '.')
+								continue;
+							node qqq;
+							qqq.x = x;
+							qqq.y = y;
+							qqq.t = qq.t + 1;
+							vis[x][y] = 1;
+							de.push(qqq);
+						}
+					}
+					////////////////
+					int ok = 1;
+
+					for (int i = 0; i &lt; n; i++)
+					{
+						for (int j = 0; j &lt; m; j++)
+						{
+							if (vis[i][j] == 0 &amp;&amp; b[i][j] == '#')
+							{
+								ok = 0;
+								break;
+							}
+						}
+					}
+
+					if (ok)
+					{
+						ans = min(ans, step);
+					}
+				}
+			}
+		}
+		if (ans == 0x3f3f3f3f)
+			ans = -1;
+		printf(&quot;Case %d: %d\n&quot;,c++,ans);
+	}
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

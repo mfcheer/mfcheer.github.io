@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>数据库事务 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：数据库事务">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-14e52db38d/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"数据库事务","description":"历史迁移文章：数据库事务","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-14e52db38d/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-14e52db38d/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="数据库事务 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：数据库事务">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-14e52db38d/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="数据库事务 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：数据库事务">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">数据库事务</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1290 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 3 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#事务隔离级别">事务隔离级别</a></li><li><a href="#悲观锁">悲观锁</a></li><li><a href="#乐观锁">乐观锁</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h1 id="数据库事务" tabindex="-1">数据库事务</h1>
+<p>事务是指作为单个逻辑工作单元执行的一系列操作，可以被看作一个单元的一系列SQL语句的集合。要么完全地执行，要么完全地不执行。</p>
+<ul>
+<li>原子性
+事务必须是原子工作单元；对于其数据修改，要么全都执行，要么全都不执行。通常，与某个事务关联的操作具有共同的目标，并且是相互依赖的。如果系统只执行这些操作的一个子集，则可能会破坏事务的总体目标。原子性消除了系统处理操作子集的可能性。</li>
+<li>一致性
+事务将数据库从一种一致状态转变为下一种一致状态。也就是说，事务在完成时，必须使所有的数据都保持一致状态。</li>
+<li>隔离性 由并发事务所作的修改必须与任何其它并发事务所作的修改隔离。事务查看数据时数据所处的状态，要么是另一并发事务修改它之前的状态，要么是另一事务修改它之后的状态，事务不会查看中间状态的数据。换句话说，一个事务的影响在该事务提交前对其他事务都不可见。</li>
+<li>持久性
+事务完成之后，它对于系统的影响是永久性的。该修改即使出现致命的系统故障也将一直保持。</li>
+</ul>
+<p>&lt;!--more--&gt;</p>
+<h1 id="事务隔离" tabindex="-1">事务隔离</h1>
+<p>基于锁实现
+在DBMS中，可以按照锁的粒度把数据库锁分为行级锁(INNODB引擎)、表级锁(MYISAM引擎)和页级锁(BDB引擎 )。</p>
+<ul>
+<li>
+<p>行级锁
+行级锁是Mysql中锁定粒度最细的一种锁，表示只针对当前操作的行进行加锁。行级锁能大大减少数据库操作的冲突。其加锁粒度最小，但加锁的开销也最大。行级锁分为共享锁 和 排他锁。
+开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度也最高。</p>
+</li>
+<li>
+<p>表级锁
+表级锁是MySQL中锁定粒度最大的一种锁，表示对当前操作的整张表加锁，它实现简单，资源消耗较少，被大部分MySQL引擎支持。最常使用的MYISAM与INNODB都支持表级锁定。表级锁定分为表共享读锁（共享锁）与表独占写锁（排他锁）。
+开销小，加锁快；不会出现死锁；锁定粒度大，发出锁冲突的概率最高，并发度最低。</p>
+</li>
+<li>
+<p>页级锁
+页级锁是MySQL中锁定粒度介于行级锁和表级锁中间的一种锁。表级锁速度快，但冲突多，行级冲突少，但速度慢。所以取了折衷的页级，一次锁定相邻的一组记录。
+开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般</p>
+</li>
+</ul>
+<h2 id="事务隔离级别" tabindex="-1">事务隔离级别</h2>
+<p>常见问题</p>
+<ul>
+<li>脏读：一个事务读到另一个事务，尚未提交的修改，就是脏读</li>
+<li>幻读：同样的条件, 第1次和第2次读出来的记录数不一样。幻读的重点在于新增或者删除。</li>
+<li>不可重复读：同样的条件, 你读取过的数据, 再次读取出来发现值不一样了。不可重复读的重点是修改。</li>
+</ul>
+<p>事务的隔离级别有4个，由低到高依次为：</p>
+<ul>
+<li>Read uncommitted（读未提交）</li>
+<li>Read committed（读提交）</li>
+<li>Repeatable read（重复读）</li>
+<li>Serializable（序列化）</li>
+</ul>
+<h1 id="死锁" tabindex="-1">死锁</h1>
+<p>死锁是指两个或多个事务在同一资源上相互占用，并请求锁定对方资源的现象。四个必要条件：互斥、请求和保持、非剥夺、循环等待。
+常见的解决死锁的方法：</p>
+<ul>
+<li>事务中按同一顺序访问对象</li>
+<li>在同一个事务中，尽可能做到一次锁定所需要的所有资源，减少死锁产生概率；</li>
+<li>尝试使用低隔离级别，升级锁定颗粒度，通过表级锁定来减少死锁产生的概率；</li>
+</ul>
+<h2 id="悲观锁" tabindex="-1">悲观锁</h2>
+<p>悲观锁指对数据被意外修改持保守态度，依赖数据库原生支持的锁机制来保证当前事务处理的安全性，防止其他并发事务对目标数据的破坏或破坏其他并发事务数据，将在事务开始执行前或执行中申请锁定，执行完后再释放锁定。这对于长事务来讲，可能会严重影响系统的并发处理能力。自带的数据库事务就是典型的悲观锁。</p>
+<h2 id="乐观锁" tabindex="-1">乐观锁</h2>
+<p>乐观锁（Optimistic Lock），顾名思义，就是很乐观，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是在提交更新的时候会判断一下在此期间别人有没有去更新这个数据。乐观锁适用于读多写少的应用场景，这样可以提高吞吐量。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

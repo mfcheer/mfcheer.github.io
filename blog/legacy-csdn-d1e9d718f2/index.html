@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UVA 11300 SPREADING THE WEALTH 【数学】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383439 Description Problem A Co…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-d1e9d718f2/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"UVA 11300 SPREADING THE WEALTH 【数学】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383439 Description Problem A Co…","datePublished":"2015-06-05T15:46:00.000Z","dateModified":"2015-06-05T15:46:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-d1e9d718f2/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-d1e9d718f2/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="UVA 11300 SPREADING THE WEALTH 【数学】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383439 Description Problem A Co…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-d1e9d718f2/">
+    <meta property="article:published_time" content="2015-06-05T15:46:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UVA 11300 SPREADING THE WEALTH 【数学】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383439 Description Problem A Co…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">UVA 11300 SPREADING THE WEALTH 【数学】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 23:46</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>333 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383439" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46383439</a></p>
+<p>Description</p>
+<p>Problem</p>
+<p>A Communist regime is trying to redistribute wealth in a village. They have
+have decided to sit everyone around a circular table. First, everyone has
+converted all of their properties to coins of equal value, such that the total
+number of coins is divisible by the number of people in the village. Finally,
+each person gives a number of coins to the person on his right and a number
+coins to the person on his left, such that in the end, everyone has the same
+number of coins. Given the number of coins of each person, compute the minimum
+number of coins that must be transferred using this method so that everyone
+has the same number of coins.</p>
+<p>The Input</p>
+<p>There is a number of inputs. Each input begins with n(n&lt;1000001), the number
+of people in the village. n lines follow, giving the number of coins of each
+person in the village, in counterclockwise order around the table. The total
+number of coins will fit inside an unsigned 64 bit integer.</p>
+<p>The Output</p>
+<p>For each input, output the minimum number of coins that must be transferred on
+a single line.</p>
+<p>Sample Input</p>
+<p>3<br>
+100<br>
+100<br>
+100<br>
+4<br>
+1<br>
+2<br>
+5<br>
+4<br>
+Sample Output</p>
+<p>0<br>
+4</p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;cstdio&gt;  
+#include &lt;cstring&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;string&gt;  
+#include &lt;queue&gt;  
+
+using namespace std;
+
+int n;
+long long p[1010000];
+long long c[1010000];
+
+int main()
+{
+    while (scanf(&quot;%d&quot;, &amp;n) != EOF)
+    {
+        long long sum = 0;
+        for (int i = 0; i &lt; n; i++)
+        {
+            scanf(&quot;%lld&quot;, &amp;p[i]);
+            sum += p[i];
+        }
+        long long t = sum / n;
+        c[0] = 0;
+        for (int i = 1; i &lt; n; i++) c[i] = c[i - 1] + p[i] - t;
+        sort(c,c+n);
+        long long tmp = c[n / 2], ans = 0;
+        for (int i = 0; i &lt; n; i++) ans += abs(tmp - c[i]);
+        printf(&quot;%lld\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

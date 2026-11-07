@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>下载配色 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：下载配色">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-773a18e594/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"下载配色","description":"历史迁移文章：下载配色","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-773a18e594/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-773a18e594/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="下载配色 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：下载配色">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-773a18e594/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="下载配色 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：下载配色">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.querySelector('.post-body'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">下载配色</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>77 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<h1 id="下载配色" tabindex="-1">下载配色</h1>
+<p>打开iterm的官方主题配置站  <a href="http://github.com/mbadolato/iTerm2-Color-Schemes%EF%BC%8C%E5%B0%86%E8%B5%84%E6%BA%90%E4%B8%8B%E8%BD%BD%E8%87%B3%E6%9C%AC%E5%9C%B0,%E8%A7%A3%E5%8E%8B%E3%80%82" target="_blank" rel="noreferrer">github.com/mbadolato/iTerm2-Color-Schemes，将资源下载至本地,解压。</a></p>
+<p>打开iTerm2，import导入配置。
+<img src="/assets/images/legacy/MarkdownPhotos/photos/17.png" alt="" loading="lazy" referrerpolicy="no-referrer">
+&lt;!--more--&gt;</p>
+<h1 id="设置" tabindex="-1">设置</h1>
+<p>vim ~/.bash_profile</p>
+<p>添加以下代码</p>
+<pre><code class="hljs">black=$'\[\e[1;30m\]'
+red=$'\[\e[1;31m\]'
+green=$'\[\e[1;32m\]'
+yellow=$'\[\e[1;33m\]'
+blue=$'\[\e[1;34m\]'
+magenta=$'\[\e[1;35m\]'
+cyan=$'\[\e[1;36m\]'
+white=$'\[\e[1;37m\]'
+normal=$'\[\e[m\]'
+PS1=&quot;$white[$white@$green\h$white:$cyan\W$yellow\$git_branch$white]\$ $normal&quot;
+</code></pre>
+<p>配置生效
+source ~/.bash_profile</p>
+<p>结束，然后就可以随意切换啦。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu 1134 Game of Connections 【卡特兰数+大数】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44133703 Game of Connections ** T…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-44507450ce/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu 1134 Game of Connections 【卡特兰数+大数】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44133703 Game of Connections ** T…","datePublished":"2015-03-08T08:14:00.000Z","dateModified":"2015-03-08T08:14:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-44507450ce/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-44507450ce/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu 1134 Game of Connections 【卡特兰数+大数】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44133703 Game of Connections ** T…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-44507450ce/">
+    <meta property="article:published_time" content="2015-03-08T08:14:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu 1134 Game of Connections 【卡特兰数+大数】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44133703 Game of Connections ** T…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu 1134 Game of Connections 【卡特兰数+大数】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/08 16:14</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1503 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 4 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44133703" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44133703</a></p>
+<h1 id="game-of-connections" tabindex="-1">Game of Connections</h1>
+<p>** Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 65536/32768 K
+(Java/Others)<br>
+Total Submission(s): 3327    Accepted Submission(s): 1896<br>
+**</p>
+<p>Problem Description</p>
+<p>This is a small but ancient game. You are supposed to write down the numbers
+1, 2, 3, ... , 2n - 1, 2n consecutively in clockwise order on the ground to
+form a circle, and then, to draw some straight line segments to connect them
+into number pairs. Every number must be connected to exactly one another. And,
+no two segments are allowed to intersect.</p>
+<p>It's still a simple game, isn't it? But after you've written down the 2n
+numbers, can you tell me in how many different ways can you connect the
+numbers into pairs? Life is harder, right?</p>
+<p>Input</p>
+<p>Each line of the input file will be a single positive number n, except the
+last line, which is a number -1. You may assume that 1  &lt;= n &lt;= 100.</p>
+<p>Output</p>
+<p>For each n, print in a single line the number of ways to connect the 2n
+numbers into pairs.</p>
+<p>Sample Input</p>
+<p>2 3 -1</p>
+<p>Sample Output</p>
+<p>2 5</p>
+<p>Source</p>
+<p><a href="http://acm.hdu.edu.cn/search.php?field=problem&amp;key=Asia+2004%2C+Shanghai+%28Mainland+China%29%2C+Preliminary&amp;source=1&amp;searchmode=source" target="_blank" rel="noreferrer"> Asia 2004, Shanghai (Mainland China), Preliminary
+</a></p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;iterator&gt;
+
+using namespace std;
+
+#define MAXN 9999
+#define MAXSIZE 1010
+#define DLEN 4
+
+class BigNum
+{
+private:
+	int a[1000];  //可以控制大数的位数
+	int len;
+public:
+	BigNum(){ len = 1; memset(a, 0, sizeof(a)); }  //构造函数
+	BigNum(const int);     //将一个int类型的变量转化成大数
+	BigNum(const char*);   //将一个字符串类型的变量转化为大数
+	BigNum(const BigNum &amp;); //拷贝构造函数
+	BigNum &amp;operator=(const BigNum &amp;); //重载赋值运算符，大数之间进行赋值运算
+	friend istream&amp; operator&gt;&gt;(istream&amp;, BigNum&amp;); //重载输入运算符
+	friend ostream&amp; operator&lt;&lt;(ostream&amp;, BigNum&amp;); //重载输出运算符
+
+	BigNum operator+(const BigNum &amp;)const;  //重载加法运算符，两个大数之间的相加运算
+	BigNum operator-(const BigNum &amp;)const;  //重载减法运算符，两个大数之间的相减运算
+	BigNum operator*(const BigNum &amp;)const;  //重载乘法运算符，两个大数之间的相乘运算
+	BigNum operator/(const int &amp;)const;     //重载除法运算符，大数对一个整数进行相除运算
+
+	BigNum operator^(const int &amp;)const;     //大数的n次方运算
+	int operator%(const int &amp;)const;        //大数对一个int类型的变量进行取模运算
+	bool operator&gt;(const BigNum &amp;T)const;   //大数和另一个大数的大小比较
+	bool operator&gt;(const int &amp;t)const;      //大数和一个int类型的变量的大小比较
+
+	void print();        //输出大数
+};
+BigNum::BigNum(const int b)   //将一个int类型的变量转化为大数
+{
+	int c, d = b;
+	len = 0;
+	memset(a, 0, sizeof(a));
+	while (d&gt;MAXN)
+	{
+		c = d - (d / (MAXN + 1))*(MAXN + 1);
+		d = d / (MAXN + 1);
+		a[len++] = c;
+	}
+	a[len++] = d;
+}
+BigNum::BigNum(const char *s)  //将一个字符串类型的变量转化为大数
+{
+	int t, k, index, L, i;
+	memset(a, 0, sizeof(a));
+	L = strlen(s);
+	len = L / DLEN;
+	if (L%DLEN)len++;
+	index = 0;
+	for (i = L - 1; i &gt;= 0; i -= DLEN)
+	{
+		t = 0;
+		k = i - DLEN + 1;
+		if (k&lt;0)k = 0;
+		for (int j = k; j &lt;= i; j++)
+			t = t * 10 + s[j] - '0';
+		a[index++] = t;
+	}
+}
+BigNum::BigNum(const BigNum &amp;T) :len(T.len)  //拷贝构造函数
+{
+	int i;
+	memset(a, 0, sizeof(a));
+	for (i = 0; i&lt;len; i++)
+		a[i] = T.a[i];
+}
+BigNum &amp; BigNum::operator=(const BigNum &amp;n)  //重载赋值运算符，大数之间赋值运算
+{
+	int i;
+	len = n.len;
+	memset(a, 0, sizeof(a));
+	for (i = 0; i&lt;len; i++)
+		a[i] = n.a[i];
+	return *this;
+}
+istream&amp; operator&gt;&gt;(istream &amp;in, BigNum &amp;b)
+{
+	char ch[MAXSIZE * 4];
+	int i = -1;
+	in &gt;&gt; ch;
+	int L = strlen(ch);
+	int count = 0, sum = 0;
+	for (i = L - 1; i &gt;= 0;)
+	{
+		sum = 0;
+		int t = 1;
+		for (int j = 0; j&lt;4 &amp;&amp; i &gt;= 0; j++, i--, t *= 10)
+		{
+			sum += (ch[i] - '0')*t;
+		}
+		b.a[count] = sum;
+		count++;
+	}
+	b.len = count++;
+	return in;
+}
+ostream&amp; operator&lt;&lt;(ostream&amp; out, BigNum&amp; b)  //重载输出运算符
+{
+	int i;
+	cout &lt;&lt; b.a[b.len - 1];
+	for (i = b.len - 2; i &gt;= 0; i--)
+	{
+		printf(&quot;%04d&quot;, b.a[i]);
+	}
+	return out;
+}
+BigNum BigNum::operator+(const BigNum &amp;T)const   //两个大数之间的相加运算
+{
+	BigNum t(*this);
+	int i, big;
+	big = T.len&gt;len ? T.len : len;
+	for (i = 0; i&lt;big; i++)
+	{
+		t.a[i] += T.a[i];
+		if (t.a[i]&gt;MAXN)
+		{
+			t.a[i + 1]++;
+			t.a[i] -= MAXN + 1;
+		}
+	}
+	if (t.a[big] != 0)
+		t.len = big + 1;
+	else t.len = big;
+	return t;
+}
+BigNum BigNum::operator-(const BigNum &amp;T)const  //两个大数之间的相减运算
+{
+	int i, j, big;
+	bool flag;
+	BigNum t1, t2;
+	if (*this&gt;T)
+	{
+		t1 = *this;
+		t2 = T;
+		flag = 0;
+	}
+	else
+	{
+		t1 = T;
+		t2 = *this;
+		flag = 1;
+	}
+	big = t1.len;
+	for (i = 0; i&lt;big; i++)
+	{
+		if (t1.a[i]&lt;t2.a[i])
+		{
+			j = i + 1;
+			while (t1.a[j] == 0)
+				j++;
+			t1.a[j--]--;
+			while (j&gt;i)
+				t1.a[j--] += MAXN;
+			t1.a[i] += MAXN + 1 - t2.a[i];
+		}
+		else t1.a[i] -= t2.a[i];
+	}
+	t1.len = big;
+	while (t1.a[t1.len - 1] == 0 &amp;&amp; t1.len&gt;1)
+	{
+		t1.len--;
+		big--;
+	}
+	if (flag)
+		t1.a[big - 1] = 0 - t1.a[big - 1];
+	return t1;
+}
+BigNum BigNum::operator*(const BigNum &amp;T)const  //两个大数之间的相乘
+{
+	BigNum ret;
+	int i, j, up;
+	int temp, temp1;
+	for (i = 0; i&lt;len; i++)
+	{
+		up = 0;
+		for (j = 0; j&lt;T.len; j++)
+		{
+			temp = a[i] * T.a[j] + ret.a[i + j] + up;
+			if (temp&gt;MAXN)
+			{
+				temp1 = temp - temp / (MAXN + 1)*(MAXN + 1);
+				up = temp / (MAXN + 1);
+				ret.a[i + j] = temp1;
+			}
+			else
+			{
+				up = 0;
+				ret.a[i + j] = temp;
+			}
+		}
+		if (up != 0)
+			ret.a[i + j] = up;
+	}
+	ret.len = i + j;
+	while (ret.a[ret.len - 1] == 0 &amp;&amp; ret.len&gt;1)ret.len--;
+	return ret;
+}
+BigNum BigNum::operator/(const int &amp;b)const  //大数对一个整数进行相除运算
+{
+	BigNum ret;
+	int i, down = 0;
+	for (i = len - 1; i &gt;= 0; i--)
+	{
+		ret.a[i] = (a[i] + down*(MAXN + 1)) / b;
+		down = a[i] + down*(MAXN + 1) - ret.a[i] * b;
+	}
+	ret.len = len;
+	while (ret.a[ret.len - 1] == 0 &amp;&amp; ret.len&gt;1)
+		ret.len--;
+	return ret;
+}
+int BigNum::operator%(const int &amp;b)const   //大数对一个 int类型的变量进行取模
+{
+	int i, d = 0;
+	for (i = len - 1; i &gt;= 0; i--)
+		d = ((d*(MAXN + 1)) % b + a[i]) % b;
+	return d;
+}
+BigNum BigNum::operator^(const int &amp;n)const  //大数的n次方运算
+{
+	BigNum t, ret(1);
+	int i;
+	if (n&lt;0)exit(-1);
+	if (n == 0)return 1;
+	if (n == 1)return *this;
+	int m = n;
+	while (m&gt;1)
+	{
+		t = *this;
+		for (i = 1; (i &lt;&lt; 1) &lt;= m; i &lt;&lt;= 1)
+			t = t*t;
+		m -= i;
+		ret = ret*t;
+		if (m == 1)ret = ret*(*this);
+	}
+	return ret;
+}
+bool BigNum::operator&gt;(const BigNum &amp;T)const    //大数和另一个大数的大小比较
+{
+	int ln;
+	if (len&gt;T.len)return true;
+	else if (len == T.len)
+	{
+		ln = len - 1;
+		while (a[ln] == T.a[ln] &amp;&amp; ln &gt;= 0)
+			ln--;
+		if (ln &gt;= 0 &amp;&amp; a[ln]&gt;T.a[ln])
+			return true;
+		else
+			return false;
+	}
+	else
+		return false;
+}
+bool BigNum::operator&gt;(const int &amp;t)const  //大数和一个int类型的变量的大小比较
+{
+	BigNum b(t);
+	return *this&gt;b;
+}
+void BigNum::print()   //输出大数
+{
+	int i;
+	printf(&quot;%d&quot;, a[len - 1]);
+	for (i = len - 2; i &gt;= 0; i--)
+		printf(&quot;%04d&quot;, a[i]);
+	printf(&quot;\n&quot;);
+}
+
+BigNum p[3010];
+
+
+int main()
+{
+	int i, n;
+	p[0] = 1;
+	for (int i = 1; i&lt;= 100; i++)
+		p[i] = p[i - 1] * (4 * i - 2) / (i + 1);
+	
+	while (cin&gt;&gt;n &amp;&amp; n!=-1)
+	{
+		p[n].print();
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UVA 436	Arbitrage (II)【floyd】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47361729 https://uva.onlinejudge.…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-d656e296b3/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"UVA 436\tArbitrage (II)【floyd】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47361729 https://uva.onlinejudge.…","datePublished":"2015-08-08T12:22:00.000Z","dateModified":"2015-08-08T12:22:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-d656e296b3/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-d656e296b3/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="UVA 436	Arbitrage (II)【floyd】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47361729 https://uva.onlinejudge.…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-d656e296b3/">
+    <meta property="article:published_time" content="2015-08-08T12:22:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UVA 436	Arbitrage (II)【floyd】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47361729 https://uva.onlinejudge.…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">UVA 436	Arbitrage (II)【floyd】</h1>
+                    <div class="post-meta">
+                        <span>2015/08/08 20:22</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>250 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47361729" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47361729</a></p>
+<p><a href="https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;problem=377" target="_blank" rel="noreferrer">
+https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;problem=377
+</a></p>
+<p>题意：硬币兑换，能不能兑换一圈使得手中的钱变多。<br>
+floyd传递闭包。</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;math.h&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+int n, m;
+
+map&lt;string, int&gt; MP;
+double a[50][50];
+
+int main()
+{
+    string s,y;
+    double tmp;
+    int cases = 1;
+    while (cin &gt;&gt; n &amp;&amp; n)
+    {
+        memset(a, 0, sizeof(a));
+        MP.clear();
+        for (int i = 1; i &lt;= n; i++)
+        {
+            cin &gt;&gt; s;
+            MP[s] = i;
+        }
+        for (int i = 1; i &lt;= n; i++)
+            a[i][i] = 1.0;
+        cin &gt;&gt; m;
+        for (int i = 1; i &lt;= m; i++)
+        {
+            cin &gt;&gt; s &gt;&gt; tmp &gt;&gt; y;
+            a[MP[s]][MP[y]] = tmp;
+        }
+        for (int k = 1; k &lt;= n; k++)
+            for (int i = 1; i &lt;= n; i++)
+                for (int j = 1; j &lt;= n; j++)
+                {
+                    if (a[i][j] &lt; a[i][k] * a[k][j])
+                        a[i][j] = a[i][k] * a[k][j];
+                }
+        int ok = 0;
+        for (int i = 1; i &lt;= n; i++)
+            if (a[i][i] &gt; 1.0)
+            {
+                ok = 1;
+                break;
+            }
+        printf(&quot;Case %d: &quot;,cases++);
+        if (ok) printf(&quot;Yes\n&quot;);
+        else printf(&quot;No\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

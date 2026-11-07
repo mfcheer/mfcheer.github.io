@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>函数式接口 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：函数式接口">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-6520a827d8/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"函数式接口","description":"历史迁移文章：函数式接口","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-6520a827d8/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-6520a827d8/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="函数式接口 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：函数式接口">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-6520a827d8/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="函数式接口 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：函数式接口">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">函数式接口</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>741 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#中间操作">中间操作</a></li><li><a href="#最终操作">最终操作</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h1 id="函数式接口" tabindex="-1">函数式接口</h1>
+<p>首先它是一个接口，有且只有一个抽象方法
+接口上使用注解 @FunctionalInterface 进行声明，这个注解是非必须的，该注解是提醒编译器去检查该接口是否仅包含一个抽象方法</p>
+<ul>
+<li>函数式接口里是可以包含默认方法，因为默认方法不是抽象方法</li>
+<li>函数式接口里是可以包含静态方法，因为静态方法不能是抽象方法</li>
+</ul>
+<pre><code class="hljs">@FunctionalInterface
+public interface funcInterfaceDemo {
+	public abstract void hello();
+}
+</code></pre>
+<h1 id="lambda表达式" tabindex="-1">Lambda表达式</h1>
+<p>我们能够使用 Lambda 实例化函数式接口
+Lambda表达式由三个部分组成：第一部分为一个括号内用逗号分隔的形式参数，参数是函数式接口里面方法的参数；第二部分为一个箭头符号：-&gt;；第三部分为方法体，可以是表达式和代码块。
+若方法体为代码块，必须用 {} 来包裹起来。</p>
+<p>要使用 Lambda 表达式，需要定义一个函数式接口，这样会让程序充斥着过量的仅为 Lambda 表达式服务的函数式接口。为了减少这样过量的函数式接口，Java 8 在 java.util.function 中增加了不少新的函数式通用接口。</p>
+<ul>
+<li>Function&lt;T, R&gt;：将 T 作为输入，返回 R 作为输出</li>
+<li>Predicate&lt;T&gt; ：将 T 作为输入，返回一个布尔值作为输出</li>
+<li>Consumer&lt;T&gt; ：将 T 作为输入，不返回任何内容</li>
+</ul>
+<pre><code class="hljs">Function&lt;Integer, String&gt; f = (t)-&gt;String.valueOf(t);
+String fString = f.apply(5);
+System.out.println(fString);
+</code></pre>
+<p>&lt;!--more--&gt;</p>
+<h1 id="foreach方法" tabindex="-1">forEach方法</h1>
+<p>使用forEach方法遍历List和Map</p>
+<pre><code class="hljs">public static void main(String args[]) {
+	List&lt;String&gt; rlList = Arrays.asList(&quot;1&quot;,&quot;2&quot;);
+	rlList.forEach(t-&gt;{
+			System.out.println(t);
+	});
+	
+	Map&lt;String, String&gt; items = new HashMap&lt;&gt;();
+	items.put(&quot;1&quot;, &quot;A&quot;);
+	items.put(&quot;2&quot;, &quot;B&quot;);
+	items.forEach((k,v)-&gt;{
+		System.out.println(k + v);
+	});
+}
+</code></pre>
+<h1 id="接口的增强" tabindex="-1">接口的增强</h1>
+<p>在接口中可以添加使用 default 关键字修饰的非抽象方法,还可以在接口中定义静态方法。</p>
+<h1 id="流式操作（stream）" tabindex="-1">流式操作（Stream）</h1>
+<p>通过Stream可以实现对集合（Collection）的并行处理和函数式操作。根据操作返回的结果不同，流式操作分为中间操作和最终操作两种。最终操作返回一特定类型的结果，而中间操作返回流本身，这样就可以将多个操作依次串联起来。根据流的并发性，流又可以分为串行和并行两种。流式操作实现了集合的过滤、排序、映射等功能。</p>
+<p>Stream 和 Collection 集合的区别：Collection 是一种静态的内存数据结构，而 Stream 是有关计算的。前者是主要面向内存，存储在内存中，后者主要是面向 CPU，通过 CPU 实现计算。</p>
+<p>通过 stream.sequential() 返回串行的流，通过 stream.parallel() 返回并行的流。相比较串行的流，并行的流可以很大程度上提高程序的执行效率。</p>
+<h2 id="中间操作" tabindex="-1">中间操作</h2>
+<ul>
+<li>filter()：对元素进行过滤；</li>
+<li>sorted()：对元素排序；</li>
+<li>map()：元素的映射；</li>
+<li>distinct()：去除重复元素；</li>
+<li>subStream()：获取子 Stream 等。</li>
+</ul>
+<p>sorted()排序</p>
+<pre><code class="hljs">List&lt;Integer&gt; rlList = Arrays.asList(1,6,4,2,7,9,3);
+rlList.forEach(t-&gt;{
+	System.out.print(t);
+});
+		
+rlList = rlList.stream().parallel().sorted().collect(Collectors.toList());
+rlList.forEach(t-&gt;{
+	System.out.print(t);
+});
+</code></pre>
+<h2 id="最终操作" tabindex="-1">最终操作</h2>
+<ul>
+<li>forEach()：对每个元素做处理；</li>
+<li>toArray()：把元素导出到数组；</li>
+<li>findFirst()：返回第一个匹配的元素；</li>
+<li>anyMatch()：是否有匹配的元素等。</li>
+</ul>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

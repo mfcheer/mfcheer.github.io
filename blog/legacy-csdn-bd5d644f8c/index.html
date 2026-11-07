@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>HDU 3790 最短路径问题 【求花费最少的最短路径】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383493 最短路径问题 Time Limit: 2000/…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-bd5d644f8c/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"HDU 3790 最短路径问题 【求花费最少的最短路径】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383493 最短路径问题 Time Limit: 2000/…","datePublished":"2015-06-05T15:50:00.000Z","dateModified":"2015-06-05T15:50:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-bd5d644f8c/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-bd5d644f8c/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="HDU 3790 最短路径问题 【求花费最少的最短路径】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383493 最短路径问题 Time Limit: 2000/…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-bd5d644f8c/">
+    <meta property="article:published_time" content="2015-06-05T15:50:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HDU 3790 最短路径问题 【求花费最少的最短路径】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383493 最短路径问题 Time Limit: 2000/…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">HDU 3790 最短路径问题 【求花费最少的最短路径】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 23:50</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>553 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383493" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46383493</a></p>
+<p>最短路径问题<br>
+Time Limit: 2000/1000 MS (Java/Others) Memory Limit: 32768/32768 K
+(Java/Others)<br>
+Total Submission(s): 15413 Accepted Submission(s): 4658</p>
+<p>Problem Description<br>
+给你n个点，m条无向边，每条边都有长度d和花费p，给你起点s终点t，要求输出起点到终点的最短距离及其花费，如果最短距离有多条路线，则输出花费最少的。</p>
+<p>Input<br>
+输入n,m，点的编号是1~n,然后是m行，每行4个数 a,b,d,p，表示a和b之间有一条边，且其长度为d，花费为p。最后一行是两个数
+s,t;起点s，终点。n和m为0时输入结束。<br>
+(1</p>
+<pre><code>#include &lt;stdio.h&gt;  
+#include &lt;iostream&gt;  
+#include &lt;math.h&gt;  
+#include &lt;stdlib.h&gt;  
+#include &lt;ctype.h&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;vector&gt;  
+#include &lt;string.h&gt;  
+#include &lt;queue&gt;  
+#include &lt;stack&gt;  
+#include &lt;set&gt;  
+#include &lt;map&gt;  
+#include &lt;sstream&gt;  
+#include &lt;time.h&gt;  
+#include &lt;malloc.h&gt;  
+
+using namespace std;
+
+/*
+邻接矩阵的dij求最短路径
+源点beg 到其他点最短路径
+*/
+const int MAXN = 1010;
+const int INF = 1e9;
+
+bool vis[MAXN];
+int pre[MAXN];
+
+//beg 起点
+void dijkstra(int cost[][MAXN], int lowcost[], int n, int beg,int val[][MAXN],int lowval[])
+{
+    memset(vis,false,sizeof(vis));
+    for (int i = 1; i &lt;= n; i++)
+    {
+        lowcost[i] = cost[beg][i];
+        lowval[i] = val[beg][i];
+    }
+    lowcost[beg] = 0;
+    lowval[beg] = 0;
+    vis[beg] = true;
+    for (int j = 1; j &lt; n; j++)
+    {
+        int k = -1;
+        int MIN = INF;
+        for (int i = 1; i &lt;= n; i++)
+            if (!vis[i] &amp;&amp; lowcost[i] &lt; MIN)
+            {
+                MIN = lowcost[i];
+                k = i;
+            }
+        if (k == -1) break;
+        vis[k] = true;
+        for (int i = 1; i &lt;= n; i++)
+        {
+            if (!vis[i] &amp;&amp; lowcost[k] + cost[k][i] &lt; lowcost[i])
+            {
+                lowcost[i] = lowcost[k] + cost[k][i];
+                lowval[i] = lowval[k] + val[k][i];
+            }
+            else if (!vis[i] &amp;&amp; lowcost[k] + cost[k][i] == lowcost[i])
+            {
+                lowval[i] = min(lowval[i],lowval[k] + val[k][i]);
+            }
+        }
+    }
+}
+
+int n, m;
+int a, b, c, d;
+int s, t;
+int p[MAXN][MAXN];
+int val[MAXN][MAXN];
+int lowcost[MAXN];
+int lowval[MAXN];
+
+int main()
+{
+    while (scanf(&quot;%d%d&quot;, &amp;n, &amp;m) != EOF)
+    {
+        if (n == 0 &amp;&amp; m == 0)
+            break;
+        for (int i = 1; i &lt;= n; i++)
+            for (int j = 1; j &lt;= n; j++)
+            {
+                if (i != j)
+                {
+                    p[i][j] = INF;
+                    val[i][j] = INF;
+                }
+                else
+                {
+                    p[i][j] = 0;
+                    val[i][j] = 0;
+                }
+            }
+        for (int i = 0; i &lt; m; i++)
+        {
+            scanf(&quot;%d%d%d%d&quot;, &amp;a, &amp;b, &amp;c, &amp;d);
+            {
+                if (p[a][b] &gt; c)
+                {
+                    p[a][b] = p[b][a] = c;
+                    val[a][b] = val[b][a] = d;
+                }
+                else if (p[a][b] == c &amp;&amp; val[a][b] &gt; d)
+                    val[a][b] = val[b][a] = d;
+            }
+        }
+        scanf(&quot;%d%d&quot;,&amp;s,&amp;t);
+        dijkstra(p,lowcost,n,s,val,lowval);
+        printf(&quot;%d %d\n&quot;, lowcost[t],lowval[t]);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

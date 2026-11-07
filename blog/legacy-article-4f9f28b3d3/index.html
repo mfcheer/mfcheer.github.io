@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>设计模式：MVC模式 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：设计模式：MVC模式">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-4f9f28b3d3/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"设计模式：MVC模式","description":"历史迁移文章：设计模式：MVC模式","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-4f9f28b3d3/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-4f9f28b3d3/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="设计模式：MVC模式 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：设计模式：MVC模式">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-4f9f28b3d3/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="设计模式：MVC模式 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：设计模式：MVC模式">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">设计模式：MVC模式</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>849 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#三层体系结构">三层体系结构</a></li><li><a href="#mvc设计思想">MVC设计思想</a></li><li><a href="#三层体系结构内涵">三层体系结构内涵</a></li><li><a href="#mvc设计思想的内涵">MVC设计思想的内涵</a></li><li><a href="#mvc工作流程">MVC工作流程</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h2 id="三层体系结构" tabindex="-1">三层体系结构</h2>
+<p>三层体系结构是在客户端和数据库端之间引入一个“组件层”，并以业务逻辑为核心，将整个项目在逻辑逻辑上分为表现层、业务层、数据访问层。</p>
+<h2 id="mvc设计思想" tabindex="-1">MVC设计思想</h2>
+<p>M代表model V代表view C代表controller。view即为客户所能看到的页面,controller即为控制器，model即为模型。MVC设计思想主要用于表现层，准确来说 MVC 是以页面为核心，将表现层分为模型、视图、控制器三部分，是基于界面开发的指导思想。</p>
+<h2 id="三层体系结构内涵" tabindex="-1">三层体系结构内涵</h2>
+<p>层与层之间：1.上层依赖下层 2.下层不可依赖上层，上层对下层是不可见的。3.层与层之间通过接口联系。</p>
+<p>表现层负责用户界面的交互，表现层不能直接访问数据。业务层负责数据的传递和业务方法的处理，业务层不能直接访问数据库，而是要通过数据访问层提供的接口实现数据的调用。数据访问层负责数据的处理工作，封装了所有与数据库的交互操作。</p>
+<h2 id="mvc设计思想的内涵" tabindex="-1">MVC设计思想的内涵</h2>
+<p>web中引入MVC设计思想是为了实现表现层与业务层的分离，MVC提供了视图与模型分离的机制--控制器。一般把跳转关系的管理、表单数据的封装、国际化、验证等任务交给控制器处理。
+&lt;!--more--&gt;
+controller、view、model并不像三层体系结构那样存在上下层的关系，各层之间是平行的，不是分层模式，而是彼此独立的组件，是相互协作的关系。</p>
+<p>controller接受用户的请求，完成视图与模型的匹配，不负责处理业务信息，只是把用户请求的消息传递给模型，告诉模型的做什么，返回符合要求的视图，起到控制业务流程的作用。一个视图可以对应多个模型，一个模型也可以对应多个视图。</p>
+<p>model是MVC的核心，负责业务流程/状态、业务规则、数据模型的制定。业务流程的处理对其他层是不可见的。model拥有最多的处理任务，其返回的数据是与格式无关的。这样一个model就可以为多个视图提供数据，提高了代码利用率。</p>
+<p>view是用户看到并与之交互的界面。视图向用户显示相关的数据，并能接收用户的输入数据，但是它并不进行任何实际的业务处理。视图可以向模型查询业务状态，但不能改变模型。视图还能接受模型发出的数据更新事件，从而对用户界面进行同步更新。</p>
+<h2 id="mvc工作流程" tabindex="-1">MVC工作流程</h2>
+<p>在 MVC 模式中，Web 用户向服务器提交的所有请求都由控制器接管。接受到请求之后，控制器负责决定应该调用哪个模型来进行处理；然后模型根据用户请求进行相应的业务逻辑处理，并返回数据；最后控制器调用相应的视图来格式化模型返回的数据，并通过视图呈现给用户。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>数据库原理知识--B-树、B+树、B*树 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41241551 B-树 是一种多路搜索树（并不是二叉的）： 1.…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-0558b8080b/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"数据库原理知识--B-树、B+树、B*树","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41241551 B-树 是一种多路搜索树（并不是二叉的）： 1.…","datePublished":"2014-11-18T00:04:00.000Z","dateModified":"2014-11-18T00:04:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-0558b8080b/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-0558b8080b/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"数据库,算法","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="数据库原理知识--B-树、B+树、B*树 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41241551 B-树 是一种多路搜索树（并不是二叉的）： 1.…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-0558b8080b/">
+    <meta property="article:published_time" content="2014-11-18T00:04:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="数据库原理知识--B-树、B+树、B*树 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41241551 B-树 是一种多路搜索树（并不是二叉的）： 1.…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">数据库原理知识--B-树、B+树、B*树</h1>
+                    <div class="post-meta">
+                        <span>2014/11/18 08:04</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1144 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 3 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">数据库</span><span class="post-tag">算法</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41241551" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41241551</a></p>
+<p><strong>B-树</strong></p>
+<p>是一种多路搜索树（并不是二叉的）：</p>
+<p>1.定义任意非叶子结点最多只有M个儿子；且M &gt;2；</p>
+<p>2.根结点的儿子数为[2, M]；</p>
+<p>3.除根结点以外的非叶子结点的儿子数为[M/2, M]；</p>
+<p>4.每个结点存放至少M/2-1（取上整）和至多M-1个关键字；（至少2个关键字）</p>
+<p>5.非叶子结点的关键字个数=指向儿子的指针个数-1；</p>
+<p>6.非叶子结点的关键字：K[1], K[2], …, K[M-1]；且K[i] &lt; K[i+1]；</p>
+<p>7.非叶子结点的指针：P[1], P[2], …,
+P[M]；其中P[1]指向关键字小于K[1]的子树，P[M]指向关键字大于K[M-1]的子树，其它P[i]指向关键字属于(K[i-1], K[i])的子树；</p>
+<p>8.所有叶子结点位于同一层；</p>
+<p>如：（M=3）</p>
+<p>![](https://img-
+<a href="http://blog.csdn.net/20160919081552588?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" target="_blank" rel="noreferrer">blog.csdn.net/20160919081552588?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center</a>)</p>
+<p>B-树的特性：</p>
+<p>1.关键字集合分布在整颗树中；</p>
+<p>2.任何一个关键字出现且只出现在一个结点中；</p>
+<p>3.搜索有可能在非叶子结点结束；</p>
+<p>4.其搜索性能等价于在关键字全集内做一次二分查找；</p>
+<p>5.自动层次控制；</p>
+<p><strong>B+树</strong></p>
+<p>B+树是B-树的变体，也是一种多路搜索树：</p>
+<p>1.其定义基本与B-树同，除了：</p>
+<p>2.非叶子结点的子树指针与关键字个数相同；</p>
+<p>3.非叶子结点的子树指针P[i]，指向关键字值属于[K[i], K[i+1])的子树（B-树是开区间）；</p>
+<p>5.为所有叶子结点增加一个链指针；</p>
+<p>6.所有关键字都在叶子结点出现；</p>
+<p>如：（M=3）</p>
+<p>![](https://img-
+<a href="http://blog.csdn.net/20160919081712887?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" target="_blank" rel="noreferrer">blog.csdn.net/20160919081712887?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center</a>)</p>
+<p>B+的搜索与B-树也基本相同，区别是B+树只有达到叶子结点才命中（B-树可以在非叶子结点命中），其性能也等价于在关键字全集做一次二分查找；</p>
+<p>B+的特性：</p>
+<p>1.所有关键字都出现在叶子结点的链表中（稠密索引），且链表中的关键字恰好是有序的；</p>
+<p>2.不可能在非叶子结点命中；</p>
+<p>3.非叶子结点相当于是叶子结点的索引（稀疏索引），叶子结点相当于是存储（关键字）数据的数据层；</p>
+<p>4.更适合文件索引系统；</p>
+<p><strong>B*树</strong></p>
+<p>是B+树的变体，在B+树的非根和非叶子结点再增加指向兄弟的指针；</p>
+<p>![](https://img-
+<a href="http://blog.csdn.net/20160919081814779?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" target="_blank" rel="noreferrer">blog.csdn.net/20160919081814779?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center</a>)</p>
+<p>B*树定义了非叶子结点关键字个数至少为(2/3)*M，即块的最低使用率为2/3（代替B+树的1/2）；</p>
+<p>B+树的分裂：当一个结点满时，分配一个新的结点，并将原结点中1/2的数据复制到新结点，最后在父结点中增加新结点的指针；B+树的分裂只影响原结点和父结点，而不会影响兄弟结点，所以它不需要指向兄弟的指针；</p>
+<p>B*树的分裂：当一个结点满时，如果它的下一个兄弟结点未满，那么将一部分数据移到兄弟结点中，再在原结点插入关键字，最后修改父结点中兄弟结点的关键字（因为兄弟结点的关键字范围改变了）；如果兄弟也满了，则在原结点与兄弟结点之间增加新结点，并各复制1/3的数据到新结点，最后在父结点增加新结点的指针；</p>
+<p>所以，B*树分配新结点的概率比B+树要低，空间使用率更高；</p>
+<p><strong>小结</strong></p>
+<p>B-树：多路搜索树，每个结点存储M/2到M个关键字，非叶子结点存储指向关键字范围的子结点；</p>
+<p>所有关键字在整颗树中出现，且只出现一次，非叶子结点可以命中；</p>
+<p>B+树：在B-树基础上，为叶子结点增加链表指针，所有关键字都在叶子结点中出现，非叶子结点作为叶子结点的索引；B+树总是到叶子结点才命中；</p>
+<p>B*树：在B+树基础上，为非叶子结点也增加链表指针，将结点的最低利用率从1/2提高到2/3</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

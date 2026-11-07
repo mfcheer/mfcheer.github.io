@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Socket基本API 总结 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46432733 套接字建立过程： srever: 1 socke…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-6f5775181c/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Socket基本API 总结","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46432733 套接字建立过程： srever: 1 socke…","datePublished":"2015-06-09T14:33:00.000Z","dateModified":"2015-06-09T14:33:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-6f5775181c/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-6f5775181c/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Socket基本API 总结 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46432733 套接字建立过程： srever: 1 socke…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-6f5775181c/">
+    <meta property="article:published_time" content="2015-06-09T14:33:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Socket基本API 总结 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46432733 套接字建立过程： srever: 1 socke…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Socket基本API 总结</h1>
+                    <div class="post-meta">
+                        <span>2015/06/09 22:33</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>613 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46432733" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46432733</a></p>
+<p>套接字建立过程：</p>
+<pre><code>srever:
+1 socket创建套接字
+2 bind ip和port
+3 listen
+4 accept
+5 read/write
+6 close
+
+client:
+1 socket
+2 connect
+3 read/write
+4 close
+
+
+int socket(int domain, int type, int protocol);
+//失败返回-1，成功返回文件描述符
+//domain 套接字协议族 type数据类型 protocol通信协议信息
+
+int bind(int sockfd, struct sockaddr *myaddr, socklen_t addrlen);
+
+int listen(int sockfd, int backlog);
+
+int accept(int sockfd, struct sockaddr *addr,socklen_t *addrlen);
+
+int connect(int sockfd, struct,sockaddr *serv_addr, socklen_t, addrlen);
+/*
+成功返回0，失败返回-1
+*/
+</code></pre>
+<p>协议族：<br>
+PF_INET, PF_INET6,PF_LOCAL等</p>
+<p>套接字类型：<br>
+SOCK_STREAM 面向连接<br>
+SOCK_DGRAM 面向消息</p>
+<p>文件描述符：</p>
+<pre><code>int open(const char *path, int flag);
+//path 地址,flag打开方式
+
+int close(int fd);
+//成功返回0，失败返回-1
+
+//写入文件：
+ssize_t write(int fd, const void *buf, size_t, ntypes);
+//失败返回-1，成功返回写入的字节数
+
+//读取文件
+ssize_t read(int fd, void *buf, size_t nbytes);
+//失败返回-1，成功返回接收的字节数
+</code></pre>
+<p>IPv4结构体</p>
+<pre><code>struct sockaddr_in
+{
+    sa_family_t    sin_family; //地址族
+    uint16_t       sin_port;   //端口号
+    struct in_addr sin_addr;   //32位ip
+    char           sin_zero[8];//不使用   
+};
+
+struct in_addr
+{
+    In_addr_t   s_addr;        //32位iPv4地址
+}
+</code></pre>
+<p>地址族： AF_INET,AF_INET6,AF_LOCAL</p>
+<p>字节序转换：</p>
+<pre><code>unsigned short htons(unsigned short);
+unsigned short ntohs(unsigned short);
+unsigned short htonl(unsigned short);
+unsigned short ntohl(unsigned short);
+/*
+h代表主机(host)字节序
+n代表网络(network)字节序
+s是short
+l是long
+*/
+
+in_addr_t inet_addr(const char *string);
+//返回32位大端整数值，失败返回INADDR_NONE
+
+int inet_aton(const char *string, struct in_addr * addr);
+//成功返回1，失败返回0
+//将字符串32位ip地址转换为整数
+
+char *inet_ntoa(struct in_addr adr);
+//成功返回地址值，失败返回-1
+//将整数ip转换为字符串
+</code></pre>
+<p>UDP函数</p>
+<pre><code>ssize_t sendto(int sock, void *buff, size_t ntypes, int flags, struct sockaddr *to, socklen_t addrlen);
+
+ssize_t recvfrom(int sock, void *buff, size_t nbytes, int flags, struct sockaddr *from, socklen_t *addrlen);
+</code></pre>
+<p>断开函数shutdown</p>
+<pre><code>int shutdown(int sock, int howto);
+/*
+第二个参数是断开方式：
+SHUT_RD    断开输入流
+SHUT_WR    断开输出流
+SHUT_RDWR  同时断开O/I流
+*/
+</code></pre>
+<p>IP与域名的转换</p>
+<pre><code>struct hostent * gethostbyname(const char *hostname);
+//通过域名获得ip
+
+struct hostent * gethostbyaddr(const char *addr, socklen_t len, int family);
+//通过ip获得域相关信息
+
+struct hostent
+{
+    char * h_name;       //official name
+    char ** h_aliases;   //alias list 
+    int h_addrtype;      //host address type
+    int h_length;        //address length
+    char ** h_addr_list; //address list
+};
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

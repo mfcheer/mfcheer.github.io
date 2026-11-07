@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj-2479 Maximum sum 【最大字串和】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44081955 Maximum sum Time Limit: …">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-6556285b17/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj-2479 Maximum sum 【最大字串和】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44081955 Maximum sum Time Limit: …","datePublished":"2015-03-05T06:12:00.000Z","dateModified":"2015-03-05T06:12:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-6556285b17/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-6556285b17/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj-2479 Maximum sum 【最大字串和】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44081955 Maximum sum Time Limit: …">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-6556285b17/">
+    <meta property="article:published_time" content="2015-03-05T06:12:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj-2479 Maximum sum 【最大字串和】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44081955 Maximum sum Time Limit: …">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj-2479 Maximum sum 【最大字串和】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/05 14:12</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>382 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44081955" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44081955</a></p>
+<p>Maximum sum</p>
+<table>
+<thead>
+<tr>
+<th><strong>Time Limit:</strong> 1000MS</th>
+<th></th>
+<th><strong>Memory Limit:</strong> 65536K</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Total Submissions:</strong> 34697</td>
+<td></td>
+<td><strong>Accepted:</strong> 10752</td>
+</tr>
+</tbody>
+</table>
+<p>Description</p>
+<p>Given a set of n integers: A={a1, a2,..., an}, we define a function d(A) as
+below:</p>
+<blockquote></blockquote>
+<p><img src="http://poj.org/formula?tex=d%28A%29%3D%5Cmax_%7B1%5Cleq+s_1%5Cleq+t_1%3Cs_2%5Cleq+t_2%5Cleq+n%7D%5Cleft%5C%7B%5Csum_%7Bi%3Ds_1%7D%5E%7Bt_1%7Da_i%2B%5Csum_%7Bj%3Ds_2%7D%5E%7Bt_2%7Da_j%5Cright%5C%7D&amp;driver=1" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>Your task is to calculate d(A).</p>
+<p>Input</p>
+<p>The input consists of T( &lt;=30) test cases. The number of test cases (T) is
+given in the first line of the input.<br>
+Each test case contains two lines. The first line is an integer
+n(2&lt;=n&lt;=50000). The second line contains n integers: a1, a2, ..., an. (|ai| &lt;=
+10000).There is an empty line after each case.</p>
+<p>Output</p>
+<p>Print exactly one line for each test case. The line should contain the integer
+d(A).</p>
+<p>Sample Input</p>
+<pre><code>1
+
+10
+1 -1 2 2 3 -3 4 -4 5 -5
+</code></pre>
+<p>Sample Output</p>
+<pre><code>13
+</code></pre>
+<p>Hint</p>
+<p>In the sample, we choose {2,2,3,-3,4} and {5}, then we can get the answer.</p>
+<p>Huge input,scanf is recommended.</p>
+<p>Source</p>
+<p><a href="http://poj.org/searchproblem?field=source&amp;key=POJ+Contest" target="_blank" rel="noreferrer"> POJ Contest </a>
+,Author:Mathematica@ZSU</p>
+<p>求两段的最大和，前后进行两次dp；</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+
+using namespace std;
+
+int t, n, p[100010], ans[100010];
+
+int main()
+{
+	scanf(&quot;%d&quot;,&amp;t);
+	while (t--)
+	{
+		memset(ans,0,sizeof(ans));
+		scanf(&quot;%d&quot;,&amp;n);
+		int b = 0, sum = -1000000000;
+		for (int i = 0; i &lt; n; i++)
+		{
+			scanf(&quot;%d&quot;, &amp;p[i]);
+			b += p[i];
+			sum = max(b, sum);
+			ans[i] = sum;
+			if (b &lt; 0) 
+				b = 0;	
+		}
+
+		b = 0, sum = -1000000000;
+		int tmp = -1000000000;
+
+		for (int i = n - 1; i &gt;= 1; i--)
+		{
+			b += p[i];
+			sum = max(b, sum);
+			tmp = max(tmp, ans[i - 1] + sum);
+			if (b &lt; 0) 
+				b = 0;
+		}
+		printf(&quot;%d\n&quot;,tmp);
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

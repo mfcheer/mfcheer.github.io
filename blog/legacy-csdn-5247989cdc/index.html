@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-1394 求逆序数 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42213265 http://acm.hdu.edu.cn/sh…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-5247989cdc/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-1394 求逆序数","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42213265 http://acm.hdu.edu.cn/sh…","datePublished":"2014-12-28T05:26:00.000Z","dateModified":"2014-12-28T05:26:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-5247989cdc/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-5247989cdc/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-1394 求逆序数 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42213265 http://acm.hdu.edu.cn/sh…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-5247989cdc/">
+    <meta property="article:published_time" content="2014-12-28T05:26:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-1394 求逆序数 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42213265 http://acm.hdu.edu.cn/sh…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-1394 求逆序数</h1>
+                    <div class="post-meta">
+                        <span>2014/12/28 13:26</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>470 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42213265" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/42213265</a></p>
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1394" target="_blank" rel="noreferrer">http://acm.hdu.edu.cn/showproblem.php?pid=1394</a></p>
+<p>首先建立空树，将 a[i] 逐个插入</p>
+<p>计算一个序列n排列的最小逆序数</p>
+<p>首先用线段树算出出事序列的逆序数，然后找规律推出排列的最小逆序数。</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include &lt;sstream&gt;
+#include &lt;time.h&gt;
+#include &lt;utility&gt; 
+#include &lt;malloc.h&gt; 
+
+using namespace std;
+
+#define Max 5010
+
+int a[5010];
+int n;
+int ans;
+int sum;
+
+struct
+{
+	int left;
+	int right;
+	int num;
+}b[4 * Max];
+
+void build(int left, int right, int i)//建立空树
+{
+	b[i].right = right;
+	b[i].left = left;
+	b[i].num = 0;
+	
+	if (b[i].left == b[i].right)
+		return;
+
+	int mid = (left + right) / 2;
+	build(left, mid, i * 2);
+	build(mid + 1, right, i * 2 + 1);
+}
+
+void update(int value, int i)//更新第value个节点， 从跟节点1开始更新到叶子节点value
+{
+	if (b[i].left == value &amp;&amp; b[i].right == value)
+	{
+		b[i].num = 1;
+		return;
+	}
+	int mid = (b[i].left + b[i].right) / 2;
+	
+	if (value &lt;= mid)
+		update(value, i * 2);//左子树
+	else
+		update(value, i * 2 + 1);//右子树
+
+	b[i].num = b[i * 2].num + b[i * 2 + 1].num;//更新根节点
+}
+
+int query(int id ,int n,int i)//计算有多少个
+{
+	if (id &lt;= b[i].left  &amp;&amp; b[i].right &lt;= n)
+	{
+		return b[i].num;
+	}
+	else
+	{
+		int mid = (b[i].left + b[i].right)/2;
+		int ans1 = 0,ans2 =0;
+		if (id &lt;= mid)
+		{
+			ans1 = query(id, n, i * 2);
+		}
+		if (mid &lt; n)
+		{
+			ans2 = query(id, n, i * 2 + 1);
+		}
+		return ans1 + ans2;
+	}
+}
+
+int main()
+{
+	while (scanf(&quot;%d&quot;,&amp;n)!=EOF)
+	{
+		build(0,n-1,1);
+		ans = 0; sum = 0;
+
+		for (int i = 0; i &lt; n; i++)
+		{
+			scanf(&quot;%d&quot;,&amp;a[i]);
+			sum += query(a[i]+1,n-1,1);//计算比a[i]大的个数
+			update(a[i],1);//更新a[i]
+		}
+
+		ans = sum;
+		//printf(&quot;%d\n&quot;, ans);
+		for (int i = 0; i &lt; n; i++)
+		{
+			sum = sum + (n - a[i] -1) - (a[i]);//当把第一个数移到最后一位，
+			ans = min(sum, ans);               //比他大的有 n - a[i] + 1 个，比他小的有a[i]个（下标从 0 开始）
+		}
+		
+		printf(&quot;%d\n&quot;,ans);
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

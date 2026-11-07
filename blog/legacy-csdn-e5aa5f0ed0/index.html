@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>uva 10689 Yet another Number Sequence【矩阵快速幂】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44566343 Yet another Number Seque…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-e5aa5f0ed0/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"uva 10689 Yet another Number Sequence【矩阵快速幂】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44566343 Yet another Number Seque…","datePublished":"2015-03-23T09:14:00.000Z","dateModified":"2015-03-23T09:14:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-e5aa5f0ed0/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-e5aa5f0ed0/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="uva 10689 Yet another Number Sequence【矩阵快速幂】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44566343 Yet another Number Seque…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-e5aa5f0ed0/">
+    <meta property="article:published_time" content="2015-03-23T09:14:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="uva 10689 Yet another Number Sequence【矩阵快速幂】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44566343 Yet another Number Seque…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">uva 10689 Yet another Number Sequence【矩阵快速幂】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/23 17:14</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>524 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44566343" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44566343</a></p>
+<p>Yet another Number Sequence<br>
+Time Limit:3000MS Memory Limit:0KB 64bit IO Format:%lld &amp; %llu<br>
+Submit</p>
+<p>Status<br>
+Description<br>
+Download as PDF<br>
+Problem B<br>
+Yet another Number Sequence<br>
+Input: standard input<br>
+Output: standard output<br>
+Time Limit: 3 seconds</p>
+<p>Let’s define another number sequence, given by the following function:<br>
+f(0) = a<br>
+f(1) = b<br>
+f(n) = f(n-1) + f(n-2), n &gt; 1<br>
+When a = 0 and b = 1, this sequence gives the Fibonacci Sequence. Changing the
+values of a and b , you can get many different sequences. Given the values of
+a, b, you have to find the last m digits of f(n) .<br>
+Input</p>
+<p>The first line gives the number of test cases, which is less than 10001. Each
+test case consists of a single line containing the integers a b n m. The
+values of a and b range in [0,100], value of n ranges in [0, 1000000000] and
+value of m ranges in [1, 4].</p>
+<p>Output<br>
+For each test case, print the last m digits of f(n). However, you should NOT
+print any leading zero.</p>
+<p>Sample Input Output for Sample Input<br>
+4<br>
+0 1 11 3<br>
+0 1 42 4<br>
+0 1 22 4<br>
+0 1 21 4</p>
+<p>89<br>
+4296<br>
+7711<br>
+946<br>
+Problem setter: Sadrul Habib Chowdhury<br>
+Special Thanks: Derek Kisman, Member of Elite Problem Setters’ Panel</p>
+<p>矩阵快速幂；构建矩阵</p>
+<pre><code>base.m[0][0] = 0;base.m[0][1] = 1;
+base.m[1][0] = 1;base.m[1][1] = 1;
+
+
+
+#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+struct node
+{
+    int m[2][2];
+}ans, base;
+
+int a,b,n,m;
+
+node multi(node a, node b)
+{
+    node tmp;
+    for (int i = 0; i&lt;2; i++)
+        for (int j = 0; j&lt;2; j++)
+        {
+            tmp.m[i][j] = 0;
+            for (int k = 0; k&lt;2; k++)
+            {
+                tmp.m[i][j] += (a.m[i][k] * b.m[k][j]);
+                tmp.m[i][j] %= m;
+            }
+        }
+    return tmp;
+}
+
+void fast_mod(int n)// 求矩阵 base 的  n 次幂 
+{
+    base.m[0][1] = base.m[1][0] = base.m[1][1] = 1;
+    base.m[0][0] = 0;
+    ans.m[0][0] = ans.m[1][1] = 1;// ans 初始化为单位矩阵
+    ans.m[0][1] = ans.m[1][0] = 0;
+    while (n)
+    {
+        if (n &amp; 1) //实现 ans *= t; 其中要先把 ans赋值给 tmp，然后用 ans = tmp * t 
+            ans = multi(ans, base);
+        base = multi(base, base);
+        n &gt;&gt;= 1;
+    }
+}
+
+int main()
+{
+    int t;
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        scanf(&quot;%d%d%d%d&quot;,&amp;a,&amp;b,&amp;n,&amp;m);      
+        m = pow(10, m);
+        if (n == 0)
+        {
+            printf(&quot;%d\n&quot;, (a%m + m) % m);
+            continue;
+        }
+        if (n == 1)
+        {
+            printf(&quot;%d\n&quot;, (b%m + m) % m);
+            continue;
+        }
+        fast_mod(n-1);
+        int tmp = ((ans.m[1][0] * a + ans.m[1][1] * b) % m + m) % m;
+        printf(&quot;%d\n&quot;, tmp);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

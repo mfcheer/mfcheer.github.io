@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>费马小定理 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44593703 费马小定理： 一个素数是p 则对任意的整数a有a…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-fddb79778b/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"费马小定理","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44593703 费马小定理： 一个素数是p 则对任意的整数a有a…","datePublished":"2015-03-24T08:19:00.000Z","dateModified":"2015-03-24T08:19:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-fddb79778b/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-fddb79778b/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="费马小定理 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44593703 费马小定理： 一个素数是p 则对任意的整数a有a…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-fddb79778b/">
+    <meta property="article:published_time" content="2015-03-24T08:19:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="费马小定理 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44593703 费马小定理： 一个素数是p 则对任意的整数a有a…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">费马小定理</h1>
+                    <div class="post-meta">
+                        <span>2015/03/24 16:19</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>154 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44593703" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44593703</a></p>
+<p>费马小定理：<br>
+一个素数是p 则对任意的整数a有a^p=a(mod p);<br>
+公式变形：a^（p-1）=1(mod p);<br>
+威尔逊定理：<br>
+p为素数，则 (p-1)!=-1(mod p);<br>
+费马定理的应用：判断素数，大素数的生成；<br>
+若任意整数b有(b,n)==1,有b^(n-1)=1(mod n)<br>
+n为素数；<br>
+否则，若b有(b,n)==1,有b^(n-1)！=1(mod n)<br>
+n为合数。<br>
+伪素数：<br>
+n为一个奇合数，若b^(n-1)=1(mod n)<br>
+则n称为基于b的伪素数。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

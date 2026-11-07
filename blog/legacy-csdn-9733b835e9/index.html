@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Codeforces Round · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41382453 A. Giga Tower time limit…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-9733b835e9/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Codeforces Round","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41382453 A. Giga Tower time limit…","datePublished":"2014-11-22T07:47:00.000Z","dateModified":"2014-11-22T07:47:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-9733b835e9/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-9733b835e9/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Codeforces Round · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41382453 A. Giga Tower time limit…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-9733b835e9/">
+    <meta property="article:published_time" content="2014-11-22T07:47:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Codeforces Round · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41382453 A. Giga Tower time limit…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Codeforces Round</h1>
+                    <div class="post-meta">
+                        <span>2014/11/22 15:47</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1665 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 4 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41382453" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41382453</a></p>
+<p>A. Giga Tower</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Giga Tower is the tallest and deepest building in Cyberland. There are  17 777
+777 777  floors, numbered from  - 8 888 888 888  to  8 888 888 888  . In
+particular, there is floor  0  between floor  - 1  and floor  1  . Every day,
+thousands of tourists come to this place to enjoy the wonderful view.</p>
+<p>In Cyberland, it is believed that the number &quot;8&quot; is a lucky number (that's why
+Giga Tower has  8 888 888 888  floors above the ground), and, an integer is
+lucky  , if and only if its decimal notation contains at least one digit &quot;8&quot;.
+For example,  8,  - 180, 808  are all  lucky  while  42,  - 10  are not. In
+the Giga Tower, if you write code at a floor with lucky floor number, good
+luck will always be with you (Well, this round is #278, also lucky, huh?).</p>
+<p>Tourist Henry goes to the tower to seek good luck. Now he is at the floor
+numbered  <em>a</em> . He wants to find the minimum  positive  integer  <em>b</em> , such
+that, if he walks  <em>b</em> floors higher, he will arrive at a floor with a  lucky
+number.</p>
+<p>Input</p>
+<p>The only line of input contains an integer  <em>a</em> (  - 10  9  ≤ <em>a</em> ≤ 10  9  ).</p>
+<p>Output</p>
+<p>Print the minimum  <em>b</em> in a line.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>179
+</code></pre>
+<p>output</p>
+<pre><code>1
+</code></pre>
+<p>input</p>
+<pre><code>-1
+</code></pre>
+<p>output</p>
+<pre><code>9
+</code></pre>
+<p>input</p>
+<pre><code>18
+</code></pre>
+<p>output</p>
+<pre><code>10
+
+
+
+
+
+
+
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;iterator&gt;
+#include &lt;deque&gt;
+#include &lt;vector&gt;
+#include &lt;unordered_set&gt;
+#include &lt;unordered_map&gt;
+#include &lt;set&gt;
+#include &lt;valarray&gt;
+#include &lt;list&gt;
+#include &lt;stack&gt;
+#include &lt;array&gt;
+#include &lt;iomanip&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+#include &lt;queue&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;stdio.h&gt;
+
+using namespace std;
+
+long long  n,m,x;
+
+int check (long long a)
+{
+    if( a &lt; 0 )
+             a = -a;
+    while ( a )
+    {
+        if (a % 10 == 8 )
+            return 1 ;
+        a /= 10;
+    }
+    return 0;
+}
+
+int main()
+{
+    while (scanf(&quot;%I64d&quot;,&amp;n)!=EOF)
+    {
+       
+        int ans =0 ;
+        while (true)
+        {
+            ans ++;
+            n++;
+            if (check (n))
+            {
+                printf(&quot;%d\n&quot;,ans);
+                break;
+            }
+        }
+    }
+    return 0;
+}
+</code></pre>
+<p>B暴力</p>
+<p><a href="http://codeforces.com/contest/488/problem/B" target="_blank" rel="noreferrer"> http://codeforces.com/contest/488/problem/B
+</a></p>
+<p>B. Candy Boxes</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>There is an old tradition of keeping  4  boxes of candies in the house in
+Cyberland. The numbers of candies are  special  if their  arithmetic mean  ,
+their  median  and their  range  are all equal. By definition, for a set  {
+<em>x</em> 1  , <em>x</em> 2  , <em>x</em> 3  , <em>x</em> 4  }  (  <em>x</em> 1  ≤ <em>x</em> 2  ≤ <em>x</em> 3  ≤ <em>x</em> 4  )
+arithmetic mean  is
+<img src="http://espresso.codeforces.com/daeb25d0b520beaea095158d4851903f527ffafc.png" alt="" loading="lazy" referrerpolicy="no-referrer">
+,  median  is
+<img src="http://espresso.codeforces.com/7655b731471163052bb5fbb4c5414c495a2ca2e2.png" alt="" loading="lazy" referrerpolicy="no-referrer">
+and  range  is  <em>x</em> 4  - <em>x</em> 1  .  The arithmetic mean and median are not
+necessary integer.  It is well-known that if those three numbers are same,
+boxes will create a &quot;debugging field&quot; and codes in the field will have no
+bugs.</p>
+<p>For example,  1, 1, 3, 3  is the example of  4  numbers meeting the condition
+because their mean, median and range are all equal to  2  .</p>
+<p>Jeff has  4  special boxes of candies. However, something bad has happened!
+Some of the boxes could have been lost and now there are only  <em>n</em> (  0 ≤ <em>n</em>
+≤ 4  ) boxes remaining. The  <em>i</em> -th remaining box contains  <em>a</em> <em>i</em> candies.</p>
+<p>Now Jeff wants to know: is there a possible way to find the number of candies
+of the  4 - <em>n</em> missing boxes, meeting the condition above (the mean, median
+and range are equal)?</p>
+<p>Input</p>
+<p>The first line of input contains an only integer  <em>n</em> (  0 ≤ <em>n</em> ≤ 4  ).</p>
+<p>The next  <em>n</em> lines contain integers  <em>a</em> <em>i</em> , denoting the number of candies
+in the  <em>i</em> -th box (  1 ≤ <em>a</em> <em>i</em> ≤ 500  ).</p>
+<p>Output</p>
+<p>In the first output line, print &quot;  YES  &quot; if a solution exists, or print &quot;  NO
+&quot; if there is no solution.</p>
+<p>If a solution exists, you should output  4 - <em>n</em> more lines, each line
+containing an integer  <em>b</em> , denoting the number of candies in a missing box.</p>
+<p>All your numbers  <em>b</em> must satisfy inequality  1 ≤ <em>b</em> ≤ 10  6  . It is
+guaranteed that if there exists a positive integer solution, you can always
+find such  <em>b</em> 's meeting the condition. If there are multiple answers, you
+are allowed to print any of them.</p>
+<p>Given numbers  <em>a</em> <em>i</em> may follow in any order in the input, not necessary in
+non-decreasing.</p>
+<p><em>a</em> <em>i</em> may have stood at any positions in the original set, not necessary on
+lowest  <em>n</em> first positions  .</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>2
+1
+1
+</code></pre>
+<p>output</p>
+<pre><code>YES
+3
+3
+</code></pre>
+<p>input</p>
+<pre><code>3
+1
+1
+1
+</code></pre>
+<p>output</p>
+<pre><code>NO
+</code></pre>
+<p>input</p>
+<pre><code>4
+1
+2
+2
+3
+</code></pre>
+<p>output</p>
+<pre><code>YES
+</code></pre>
+<p>Note</p>
+<p>For the first sample, the numbers of candies in  4  boxes can be  1, 1, 3, 3
+. The arithmetic mean, the median and the range of them are all  2  .</p>
+<p>For the second sample, it's impossible to find the missing number of candies.</p>
+<p>In the third example no box has been lost and numbers satisfy the condition.</p>
+<p>You may output  <em>b</em> in any order.</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;string.h&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;utility&gt;
+#define inf 0x7fffffff
+
+using namespace std;
+
+const int maxn=100+10;
+
+int main()
+{
+    int n;
+    int an[5];
+    while (scanf(&quot;%d&quot;,&amp;n)!=EOF)
+    {
+        for (int i=1 ;i&lt;=n ;i++) scanf(&quot;%d&quot;,&amp;an[i]);
+        sort(an+1,an+n+1);
+        if (n==0)
+        {
+            printf(&quot;YES\n&quot;);
+            printf(&quot;1\n1\n3\n3\n&quot;);continue;
+        }
+        if (n==1)
+        {
+            int t=2*an[1];
+            printf(&quot;YES\n&quot;);
+            printf(&quot;%d\n%d\n%d\n&quot;,t/2,t/2*3,t/2*3);
+            continue;
+        }
+        if (n==2)
+        {
+            int flag=0;
+            // 1   2
+            int t=2*an[1];
+            int bn[5];
+            bn[1]=an[1],bn[4]=3*bn[1];
+            bn[2]=an[2];
+            bn[3]=4*bn[1]-bn[2];
+            if (bn[2]&gt;=bn[1] &amp;&amp; bn[3]&gt;=bn[2] &amp;&amp; bn[4]&gt;=bn[3] &amp;&amp; bn[4]&lt;=1000000)
+            {
+                flag=1;
+                printf(&quot;YES\n&quot;);
+                printf(&quot;%d\n%d\n&quot;,bn[3],bn[4]);
+                continue;
+            }
+            // 1   3
+            t=2*an[1];
+            bn[1]=an[1];
+            bn[3]=an[2];
+            bn[2]=2*t-bn[3];
+            bn[4]=bn[1]+t;
+            if (bn[2]&gt;=bn[1] &amp;&amp; bn[3]&gt;=bn[2] &amp;&amp; bn[4]&gt;=bn[3] &amp;&amp; bn[4]&lt;=1000000)
+            {
+                flag=1;
+                printf(&quot;YES\n&quot;);
+                printf(&quot;%d\n%d\n&quot;,bn[2],bn[4]);
+                continue;
+            }
+            // 1   4
+            t=2*an[1];
+            bn[1]=an[1];
+            bn[4]=bn[1]+t;
+            if (an[2]==bn[4])
+            {
+                bn[2]=bn[1];
+                bn[3]=bn[4];
+                if (bn[2]&gt;=bn[1] &amp;&amp; bn[3]&gt;=bn[2] &amp;&amp; bn[4]&gt;=bn[3] &amp;&amp; bn[4]&lt;=1000000)
+                {
+                    flag=1;
+                    printf(&quot;YES\n&quot;);
+                    printf(&quot;%d\n%d\n&quot;,bn[2],bn[3]);
+                    continue;
+                }
+            }
+            // 2   3
+            double cn[5];
+            double tt=(double)(an[1]+an[2])/2;
+            cn[2]=an[1] ;cn[3]=an[2] ;
+            cn[1]=tt/2.0;
+            cn[4]=1.5*tt;
+            if (cn[2]&gt;=cn[1] &amp;&amp; cn[3]&gt;=cn[2] &amp;&amp; cn[4]&gt;=cn[3] &amp;&amp; cn[4]&lt;=1000000)
+            {
+                flag=1;
+                printf(&quot;YES\n&quot;);
+                printf(&quot;%.0lf\n%.0lf\n&quot;,cn[3],cn[4]);
+                continue;
+            }
+            // 2   4
+            cn[4]=an[2];
+            cn[2]=an[1];
+            tt=2.0*cn[4]/3.0;
+            cn[1]=tt/2.0;
+            cn[3]=2.0*tt-cn[2];
+            if (cn[2]&gt;=cn[1] &amp;&amp; cn[3]&gt;=cn[2] &amp;&amp; cn[4]&gt;=cn[3] &amp;&amp; cn[4]&lt;=1000000)
+            {
+                flag=1;
+                printf(&quot;YES\n&quot;);
+                printf(&quot;%.0lf\n%.0lf\n&quot;,cn[1],cn[3]);
+                continue;
+            }
+            // 3   4
+            cn[3]=an[1];
+            cn[4]=an[2];
+            tt=2.0*cn[4]/3.0;
+            cn[1]=tt/2.0;
+            cn[2]=2.0*tt-cn[3];
+            if (cn[2]&gt;=cn[1] &amp;&amp; cn[3]&gt;=cn[2] &amp;&amp; cn[4]&gt;=cn[3] &amp;&amp; cn[4]&lt;=1000000)
+            {
+                flag=1;
+                printf(&quot;YES\n&quot;);
+                printf(&quot;%.0lf\n%.0lf\n&quot;,cn[1],cn[2]);
+                continue;
+            }
+            if (!flag) printf(&quot;NO\n&quot;);
+        }
+        if (n==3)
+        {
+            // 1   2  3
+            double cn[5];
+            int flag=0;
+            cn[1]=an[1] ;cn[2]=an[2] ;cn[3]=an[3] ;
+            double tt=2.0*cn[1];
+            cn[4]=1.5*tt;
+            if (cn[2]+cn[3]==2.0*tt)
+            {
+                if (cn[2]&gt;=cn[1] &amp;&amp; cn[3]&gt;=cn[2] &amp;&amp; cn[4]&gt;=cn[3] &amp;&amp; cn[4]&lt;=1000000)
+                {
+                    flag=1;
+                    printf(&quot;YES\n&quot;);
+                    printf(&quot;%.0lf\n&quot;,cn[4]);
+                    continue;
+                }
+            }
+            // 1   2  4
+            cn[1]=an[1] ;cn[2]=an[2] ;cn[4]=an[3];
+            tt=2.0*cn[1];
+            cn[3]=2.0*tt-cn[2];
+            if (2.0*cn[4]==3.0*tt)
+            {
+                if (cn[2]&gt;=cn[1] &amp;&amp; cn[3]&gt;=cn[2] &amp;&amp; cn[4]&gt;=cn[3] &amp;&amp; cn[4]&lt;=1000000)
+                {
+                    flag=1;
+                    printf(&quot;YES\n&quot;);
+                    printf(&quot;%.0lf\n&quot;,cn[3]);
+                    continue;
+                }
+            }
+            // 2   3  4
+            cn[2]=an[1] ;cn[3]=an[2] ;cn[4]=an[3] ;
+            tt=(cn[2]+cn[3])/2.0;
+            cn[1]=tt/2.0;
+            if (cn[4]*2.0==3.0*tt)
+            {
+                if (cn[2]&gt;=cn[1] &amp;&amp; cn[3]&gt;=cn[2] &amp;&amp; cn[4]&gt;=cn[3] &amp;&amp; cn[4]&lt;=1000000)
+                {
+                    flag=1;
+                    printf(&quot;YES\n&quot;);
+                    printf(&quot;%.0lf\n&quot;,cn[1]);
+                    continue;
+                }
+            }
+            // 1   3  4
+            cn[1]=an[1] ;cn[3]=an[2] ;cn[4]=an[3] ;
+            tt=2.0*cn[1];
+            cn[2]=2.0*tt-cn[3];
+            if (2.0*cn[4]==3.0*tt)
+            {
+                if (cn[2]&gt;=cn[1] &amp;&amp; cn[3]&gt;=cn[2] &amp;&amp; cn[4]&gt;=cn[3] &amp;&amp; cn[4]&lt;=1000000)
+                {
+                    flag=1;
+                    printf(&quot;YES\n&quot;);
+                    printf(&quot;%.0lf\n&quot;,cn[2]);
+                    continue;
+                }
+            }
+            if (!flag) printf(&quot;NO\n&quot;);
+        }
+        if (n==4)
+        {
+            double tt=2.0*an[1];
+            int flag=0;
+            if (an[2]+an[3]==2.0*tt &amp;&amp; 2.0*an[4]==3.0*tt)
+            {
+                if (an[2]&gt;=an[1] &amp;&amp; an[3]&gt;=an[2] &amp;&amp; an[4]&gt;=an[3] &amp;&amp; an[4]&lt;=1000000)
+                {
+                    flag=1;
+                    printf(&quot;YES\n&quot;);
+                    continue;
+                }
+            }
+            if (!flag) printf(&quot;NO\n&quot;);
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

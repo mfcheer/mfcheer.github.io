@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>容斥原理 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383261 百度百科： 在计数时，必须注意无一重复，无一遗漏…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-952144c967/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"容斥原理","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383261 百度百科： 在计数时，必须注意无一重复，无一遗漏…","datePublished":"2015-06-05T15:30:00.000Z","dateModified":"2015-06-05T15:30:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-952144c967/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-952144c967/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="容斥原理 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383261 百度百科： 在计数时，必须注意无一重复，无一遗漏…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-952144c967/">
+    <meta property="article:published_time" content="2015-06-05T15:30:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="容斥原理 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383261 百度百科： 在计数时，必须注意无一重复，无一遗漏…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">容斥原理</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 23:30</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>481 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383261" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46383261</a></p>
+<p>百度百科：</p>
+<p>在计数时，必须注意无一重复，无一遗漏。为了使重叠部分不被重复计算，人们研究出一种新的计数方法，这种方法的基本思想是：先不考虑重叠的情况，把包含于某内容中的所有对象的数目先计算出来，然后再把计数时重复计算的数目排斥出去，使得计算的结果既无遗漏又无重复，这种计数的方法称为容斥原理。</p>
+<p>两个集合的容斥关系公式：A∪B = A+B – A∩B (∩：重合的部分）<br>
+三个集合的容斥关系公式：A∪B∪C = A+B+C – A∩B – B∩C – C∩A +A∩B∩C<br>
+详细推理如下：<br>
+1、 等式右边改造 = {[（A+B – A∩B）+C – B∩C] – C∩A }+ A∩B∩C<br>
+2、文氏图分块标记如右图图：1245构成A，2356构成B，4567构成C<br>
+3、等式右边（）里指的是下图的1+2+3+4+5+6六部分：<br>
+那么A∪B∪C还缺部分7。<br>
+4、等式右边[]号里+C（4+5+6+7）后，相当于A∪B∪C多加了4+5+6三部分，<br>
+减去B∩C（即5+6两部分）后，还多加了部分4。<br>
+5、等式右边{}里减去C∩A （即4+5两部分）后，A∪B∪C又多减了部分5，<br>
+则加上A∩B∩C（即5）刚好是A∪B∪C。<br>
+简单应用：</p>
+<p>由0 到9 数字组成排列，要求第一个数大于1，最一个数小于8，一共有几种排列。<br>
+思路：<br>
+求逆问题，第一个数&lt;=1,最后一个数&gt;=8<br>
+由容斥原理，<br>
+则有 事件A（第一个数&lt;=1） = 2<em>9!， 事件B（最后一个数&gt;=8） = 2</em>9!， 事件C（A交B） C= 2<em>2</em>8!<br>
+所以逆问题的结果是 A+B-C<br>
+则问题的答案是 10！-（A+B-C）</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Merkle-Hellman背包密码算法 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49434947 #include &amp;lt;stdio.h&amp;gt;…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-b561336623/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Merkle-Hellman背包密码算法","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49434947 #include &lt;stdio.h&gt;…","datePublished":"2015-10-26T17:00:00.000Z","dateModified":"2015-10-26T17:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-b561336623/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-b561336623/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Merkle-Hellman背包密码算法 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49434947 #include &amp;lt;stdio.h&amp;gt;…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-b561336623/">
+    <meta property="article:published_time" content="2015-10-26T17:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Merkle-Hellman背包密码算法 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49434947 #include &amp;lt;stdio.h&amp;gt;…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Merkle-Hellman背包密码算法</h1>
+                    <div class="post-meta">
+                        <span>2015/10/27 01:00</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>503 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49434947" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/49434947</a></p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;cmath&gt;
+#include &lt;string&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;vector&gt;
+#include &lt;time.h&gt;
+
+using namespace std;
+
+long long gcd(long long a, long long b)
+{
+    if (b == 0) return a;
+    else return gcd(b, a%b);
+}
+
+long long ext_gcd(long long a, long long b, long long &amp;x, long long &amp;y)
+{
+    if (a == 0 &amp;&amp; b == 0) return -1;
+    if (b == 0)
+    {
+        x = 1;
+        y = 0;
+        return a;
+    }
+    long long d = ext_gcd(b, a%b, y, x);
+    y -= a / b*x;
+    return d;
+}
+
+long long mod_reverse(long long a, long long n)
+{
+    long long x, y;
+    long long d = ext_gcd(a, n, x, y);
+    if (d == 1)
+        return (x%n + n) % n;
+    else
+        return -1;
+}
+
+struct Hellman
+{
+    int n;
+    int a[100010];
+    int b[100010];
+    int c[100010];
+    void solve()
+    {
+        cout &lt;&lt; &quot;*******************************&quot; &lt;&lt; endl;
+        printf(&quot;本数据假定递增序列（1,3,5,10）\nM=20，W=7\n明文为13的加密解秘过程\n&quot;);
+        cout &lt;&lt; &quot;*******************************&quot; &lt;&lt; endl&lt;&lt;endl&lt;&lt;endl;
+
+        //scanf(&quot;%d&quot;, &amp;n);//输入长度n
+        int sum = 0;
+        int pos = 1;
+        n = 4;
+
+        //随机生成超递增序列
+        /*
+        while (1)
+        {
+            srand(time(NULL));
+            int tmp = rand() % 1000;
+            if (tmp &gt; sum)
+            {
+                a[pos++] = tmp;//私钥
+                sum += tmp;
+            }
+            if (pos == n + 1) break;
+        }
+        */
+
+        sum = 19;
+        a[1] = 1;
+        a[2] = 3;
+        a[3] = 5;
+        a[4] = 10;
+
+        //随机生成M W
+        int M = double(rand() / RAND_MAX)* (sum + 1001 - sum + 1) + sum + 1;
+        int W = M - 1;
+        /*
+        while (gcd(M, W) != 1)
+        {
+            srand(time(0));
+            int aa = 1;
+            int bb = M - 1;
+            W = rand() / RAND_MAX * (bb - aa) + aa;
+        }
+        */
+
+        M = 20;
+        W = 7;
+
+        //公钥
+        for (int i = 1;i &lt;= n;i++)
+        {
+            b[i] = W * a[i] % M;
+        }
+
+        ///////取明文
+        cout &lt;&lt; &quot;请输入明文：&quot; &lt;&lt; endl;
+        int clear;
+        scanf(&quot;%d&quot;, &amp;clear);
+        int len = 1;
+        int num[100010];
+        int tmp = clear;
+        cout &lt;&lt; &quot;加密：&quot; &lt;&lt; endl;
+        cout &lt;&lt; &quot;start&quot; &lt;&lt; endl;
+        cout &lt;&lt; &quot;..............&quot; &lt;&lt; endl;
+        cout &lt;&lt; &quot;end&quot; &lt;&lt; endl;
+        //获得比特流
+        while (tmp)
+        {
+            if (tmp &amp; 1)
+                num[len++] = 1;
+            else
+                num[len++] = 0;
+            tmp &gt;&gt;= 1;
+        }
+
+
+        //加密c
+        int c = 0;
+        for (int i = 1;i &lt; len;i++)
+            c += num[len - i] * b[i];
+
+        cout &lt;&lt; &quot;加密得到的数字c为：&quot; &lt;&lt; endl;
+            cout &lt;&lt; c &lt;&lt; endl;
+
+        //int d = mod_reverse(W, M) * c % M;
+        int d = 3;
+        c = c*d%M;
+        cout &lt;&lt; &quot;加密得到的转换的c为：&quot; &lt;&lt; endl;
+        cout &lt;&lt; c &lt;&lt; endl;
+        int ans[10010];
+        memset(ans, 0, sizeof(ans));
+
+        for (int i = n;i &gt;= 1;i--)
+        {
+            if (c &gt;= a[i])
+            {
+                ans[i] = 1;
+                c = c - a[i];
+            }
+        }
+        cout &lt;&lt; &quot;解密：&quot;&lt;&lt; endl;
+        int tt = 0;
+        for (int i = 1;i &lt;= n;i++)
+        {
+            printf(&quot;%d&quot;, ans[i]);
+            if (ans[i]) tt += pow(2,n-i);
+        }
+        cout &lt;&lt; &quot;----&quot; &lt;&lt; tt &lt;&lt; endl;
+    }
+}hellman;
+
+int main()
+{
+    hellman.solve();
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

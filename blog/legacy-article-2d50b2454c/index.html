@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>通过JNI调用Fasttext模型 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：通过JNI调用Fasttext模型">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-2d50b2454c/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"通过JNI调用Fasttext模型","description":"历史迁移文章：通过JNI调用Fasttext模型","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-2d50b2454c/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-2d50b2454c/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="通过JNI调用Fasttext模型 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：通过JNI调用Fasttext模型">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-2d50b2454c/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="通过JNI调用Fasttext模型 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：通过JNI调用Fasttext模型">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">通过JNI调用Fasttext模型</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>228 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>fastText是facebook开源的一个词向量与文本分类工具
+<a href="https://github.com/facebookresearch/fastText" target="_blank" rel="noreferrer">https://github.com/facebookresearch/fastText</a></p>
+<p>提供了python和c的接口。
+通过Java使用fastText，搜到了这个项目 <a href="https://github.com/vinhkhuc/JFastText" target="_blank" rel="noreferrer">https://github.com/vinhkhuc/JFastText</a> ，使用起来很方便，性能也不错；但是有一个问题，就是如果模型多次更新，就会产生僵尸进程导致程序挂掉，并引起机器的负载升高。</p>
+<p>所以决定使用JNI的方式调用fastText</p>
+<p>步骤：
+1、编写Java程序</p>
+<pre><code class="hljs language-java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FastTextJNI</span> {
+
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> FastTextJNI ftJNI;
+	
+	<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-variable">LIB_PATH</span> <span class="hljs-operator">=</span> ConstantsConfig.CONFIG_BASE_PATH + <span class="hljs-string">&quot;libfasttext.so&quot;</span>;
+	
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-type">long</span> <span class="hljs-title function_">FastTextJNILoadModel</span><span class="hljs-params">(String fileName)</span>;
+	
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-type">float</span>[] <span class="hljs-title function_">FastTextSentenceVector</span><span class="hljs-params">(<span class="hljs-type">long</span> modelHandle, String words)</span>;
+	
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-type">void</span> <span class="hljs-title function_">FastTextJNIReleaseModel</span><span class="hljs-params">(<span class="hljs-type">long</span> modelHandle)</span>;
+	
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">()</span>{
+		System.load(LIB_PATH);
+		ftJNI = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FastTextJNI</span>();
+	}
+	
+	<span class="hljs-type">public</span> <span class="hljs-title function_">FastTextJNI</span><span class="hljs-params">()</span>{
+	}
+	
+	<span class="hljs-type">public</span> <span class="hljs-title function_">FastTextJNI</span><span class="hljs-params">(String fileName)</span>{
+		FastTextJNILoadModel(fileName);
+	}
+	
+	<span class="hljs-keyword">public</span> <span class="hljs-type">float</span>[] <span class="hljs-title function_">getSentenceVector</span><span class="hljs-params">(<span class="hljs-type">long</span> modelHandle, String words)</span>{
+		<span class="hljs-keyword">return</span> FastTextSentenceVector(modelHandle, words);
+	}
+	
+	<span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">finalize</span><span class="hljs-params">(Long modelHandle)</span>{
+		FastTextJNIReleaseModel(modelHandle);
+		modelHandle = (<span class="hljs-type">long</span>) <span class="hljs-number">0</span>;
+	}
+	
+}
+</code></pre>
+<p>&lt;!--more--&gt;
+2、编译Java程序 javac FastTextJNI.java</p>
+<p>3、继续编译生成c的头文件（给c/c++程序用）
+javah -jni -classpath . FastTextJNI，生成了头文件FastTextJNI.h</p>
+<pre><code class="hljs language-java"><span class="hljs-comment">/* DO NOT EDIT THIS FILE - it is machine generated */</span>
+#include &lt;jni.h&gt;
+<span class="hljs-comment">/* Header for class FastTextJNI */</span>
+
+#ifndef FastTextJNI
+#define FastTextJNI
+#ifdef __cplusplus
+extern <span class="hljs-string">&quot;C&quot;</span> {
+#endif
+
+JNIEXPORT jlong <span class="hljs-type">JNICALL</span> <span class="hljs-title function_">Java_FastTextJNI_FastTextJNILoadModel</span>
+  <span class="hljs-params">(JNIEnv *, jobject, jstring)</span>;
+
+JNIEXPORT jfloatArray <span class="hljs-type">JNICALL</span> <span class="hljs-title function_">Java_FastTextJNI_FastTextSentenceVector</span>
+  <span class="hljs-params">(JNIEnv *, jobject, jlong, jstring)</span>;
+
+JNIEXPORT <span class="hljs-keyword">void</span> <span class="hljs-type">JNICALL</span> <span class="hljs-title function_">Java_FastTextJNI_FastTextJNIReleaseModel</span>
+  <span class="hljs-params">(JNIEnv *, jobject, jlong)</span>;
+
+#ifdef __cplusplus
+}
+#endif
+#endif
+</code></pre>
+<p>4、新建cpp文件，实现jni编译生成的头文件中的函数</p>
+<pre><code class="hljs language-java">#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+
+#include <span class="hljs-string">&quot;FastTextJNI.h&quot;</span>
+#include <span class="hljs-string">&quot;fastText/src/fasttext.h&quot;</span>
+
+using namespace fasttext;
+
+JNIEXPORT jlong <span class="hljs-type">JNICALL</span> <span class="hljs-title function_">Java_FastTextJNI_FastTextJNILoadModel</span>
+  <span class="hljs-params">(JNIEnv *jenv, jobject jobj, jstring jmodelName)</span>
+{
+    const <span class="hljs-type">char</span>* modelName = jenv-&gt;GetStringUTFChars(jmodelName, <span class="hljs-number">0</span>);
+    FastText *fastText = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FastText</span>();
+    fastText-&gt;loadModel(modelName); 
+    <span class="hljs-keyword">if</span>(modelName) 
+    {
+        jenv-&gt;ReleaseStringUTFChars(jmodelName, modelName);
+    }
+    <span class="hljs-keyword">return</span> (jlong)fastText;
+}
+
+JNIEXPORT jfloatArray <span class="hljs-type">JNICALL</span> <span class="hljs-title function_">Java_FastTextJNI_FastTextSentenceVector</span>
+  <span class="hljs-params">(JNIEnv *jenv, jobject jobj, jlong jmodelHandle, jstring jwords)</span>
+{   
+    FastText* fastText = (FastText*)(jmodelHandle);
+ 
+    const <span class="hljs-type">char</span>* words = jenv-&gt;GetStringUTFChars(jwords, <span class="hljs-number">0</span>);
+    <span class="hljs-type">char</span>* wordschar = const_cast&lt;<span class="hljs-type">char</span>*&gt;(words);
+
+    std::<span class="hljs-type">istringstream</span> <span class="hljs-title function_">in</span><span class="hljs-params">(wordschar)</span>;    
+    fasttext::<span class="hljs-type">Vector</span> <span class="hljs-title function_">vec</span><span class="hljs-params">(<span class="hljs-number">20</span>)</span>;
+
+    <span class="hljs-keyword">try</span>{
+    	fastText-&gt;getSentenceVector(in, vec);
+    } <span class="hljs-keyword">catch</span>(std::exception&amp; e) {
+    	std::cout &lt;&lt; e.what() &lt;&lt; std::endl;
+    }
+    <span class="hljs-type">float</span>* data = vec.data_;
+    
+    jfloatArray result;
+    <span class="hljs-type">int</span> <span class="hljs-variable">len</span> <span class="hljs-operator">=</span> <span class="hljs-number">20</span>;
+    result = jenv-&gt;NewFloatArray(len);
+    jenv-&gt;SetFloatArrayRegion(result, <span class="hljs-number">0</span>, len, data);
+    
+    <span class="hljs-keyword">return</span> result;
+}
+
+JNIEXPORT <span class="hljs-keyword">void</span> <span class="hljs-type">JNICALL</span> <span class="hljs-title function_">Java_FastTextJNI_FastTextJNIReleaseModel</span>
+  <span class="hljs-params">(JNIEnv *jenv, jobject jobj, jlong jmodelHandle)</span>
+{
+     <span class="hljs-keyword">if</span>(jmodelHandle)
+    {
+        delete (FastText*)(jmodelHandle);
+    }
+}
+
+</code></pre>
+<p>5、最后编译so库，生成 <a href="http://libfasttext.so" target="_blank" rel="noreferrer">libfasttext.so</a> 文件使用</p>
+<pre><code class="hljs language-java">g++ -fpic -shared a.cpp -o libfasttext.so -I./ -I/opt/soft/jdk/jdk1<span class="hljs-number">.6</span><span class="hljs-number">.0_45</span>/include -I/opt/soft/jdk/jdk1<span class="hljs-number">.6</span><span class="hljs-number">.0_45</span>/include/linux
+</code></pre>
+<p>生成so库之后，执行ldd <a href="http://libfasttext.so" target="_blank" rel="noreferrer">libfasttext.so</a>，如果有关联其他库说明生成库没有问题</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

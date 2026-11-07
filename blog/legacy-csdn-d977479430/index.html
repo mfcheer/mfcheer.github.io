@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu 1251 统计难题 【Trie树】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44228365 trie树，又叫做字典数。 字典数学习资料： h…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-d977479430/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu 1251 统计难题 【Trie树】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44228365 trie树，又叫做字典数。 字典数学习资料： h…","datePublished":"2015-03-12T13:59:00.000Z","dateModified":"2015-03-12T13:59:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-d977479430/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-d977479430/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu 1251 统计难题 【Trie树】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44228365 trie树，又叫做字典数。 字典数学习资料： h…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-d977479430/">
+    <meta property="article:published_time" content="2015-03-12T13:59:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu 1251 统计难题 【Trie树】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44228365 trie树，又叫做字典数。 字典数学习资料： h…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu 1251 统计难题 【Trie树】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/12 21:59</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>489 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44228365" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44228365</a></p>
+<p>trie树，又叫做字典数。</p>
+<p>字典数学习资料： <a href="http://www.cnblogs.com/tanky_woo/archive/2010/09/24/1833717.html" target="_blank" rel="noreferrer"> http://www.cnblogs.com/tanky_woo/archive/2010/09/24/1833717.html
+</a></p>
+<h1 id="统计难题" tabindex="-1">统计难题</h1>
+<p>** Time Limit: 4000/2000 MS (Java/Others)    Memory Limit: 131070/65535 K
+(Java/Others)<br>
+Total Submission(s): 20110    Accepted Submission(s): 8797<br>
+**</p>
+<p>Problem Description</p>
+<p>Ignatius最近遇到一个难题,老师交给他很多单词(只有小写字母组成,不会有重复的单词出现),现在老师要他统计出以某个字符串为前缀的单词数量(单词本身也是自己的前缀).</p>
+<p>Input</p>
+<p>输入数据的第一部分是一张单词表,每行一个单词,单词的长度不超过10,它们代表的是老师交给Ignatius统计的单词,一个空行代表单词表的结束.第二部分是一连串的提问,每行一个提问,每个提问都是一个字符串.</p>
+<p>注意:本题只有一组测试数据,处理到文件结束.</p>
+<p>Output</p>
+<p>对于每个提问,给出以该字符串为前缀的单词的数量.</p>
+<p>Sample Input</p>
+<p>banana band bee absolute acm ba b band abc</p>
+<p>Sample Output</p>
+<p>2 3 1 0</p>
+<pre><code>#include &lt;stdio.h&gt;  
+#include &lt;iostream&gt;  
+#include &lt;string.h&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;math.h&gt;  
+#include &lt;ctype.h&gt;  
+#include &lt;time.h&gt;  
+#include &lt;queue&gt;  
+#include &lt;iterator&gt; 
+
+using namespace std;
+ 
+typedef struct Trie{
+    int v;
+    Trie *next[26];
+}Trie;
+ 
+Trie root;
+ 
+void createTrie(char *str)
+{
+    int len = strlen(str);
+    Trie *p = &amp;root, *q;
+    for(int i=0; i&lt;len; ++i)
+    {
+        int id = str[i]-'a';
+        if(p-&gt;next[id] == NULL)
+        {
+            q = (Trie *)malloc(sizeof(root));
+            q-&gt;v = 1;
+            for(int j=0; j&lt;26; ++j)
+                q-&gt;next[j] = NULL;
+            p-&gt;next[id] = q;
+            p = p-&gt;next[id];
+        }
+        else
+        {
+            p-&gt;next[id]-&gt;v++;
+            p = p-&gt;next[id];
+        }
+    }
+}
+ 
+int findTrie(char *str)
+{
+    int len = strlen(str);
+    Trie *p = &amp;root;
+    for(int i=0; i&lt;len; ++i)
+    {
+        int id = str[i]-'a';
+        p = p-&gt;next[id];
+        if(p == NULL)
+            return 0;
+    }
+    return p-&gt;v;
+}
+ 
+int main()
+{
+    //freopen(&quot;input.txt&quot;, &quot;r&quot;, stdin);
+    char str[15];
+    int i;
+    for(i=0; i&lt;26; ++i)
+        root.next[i] = NULL;
+    while(gets(str) &amp;&amp; str[0]!='\0')
+        createTrie(str);
+    memset(str, 0, sizeof(str));
+    while(scanf(&quot;%s&quot;, str) != EOF)
+    {
+        int ans = findTrie(str);
+        printf(&quot;%d\n&quot;, ans);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

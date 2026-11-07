@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hash冲突处理 · mfcheer</title>
+    <meta name="description" content="对于Hash冲突，我们是怎样来处理冲突的。现在就来介绍一些经典的Hash冲突处理的方法。主要包括 （1）开放地址法 （2）拉链法 （3）再哈希法 （4）建立公共溢出区 （1）开放地址法 基本思…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-7f6e24f754/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hash冲突处理","description":"对于Hash冲突，我们是怎样来处理冲突的。现在就来介绍一些经典的Hash冲突处理的方法。主要包括 （1）开放地址法 （2）拉链法 （3）再哈希法 （4）建立公共溢出区 （1）开放地址法 基本思…","datePublished":"2015-02-07T18:10:00.000Z","dateModified":"2015-02-07T18:10:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-7f6e24f754/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-7f6e24f754/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"hash","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hash冲突处理 · mfcheer">
+    <meta property="og:description" content="对于Hash冲突，我们是怎样来处理冲突的。现在就来介绍一些经典的Hash冲突处理的方法。主要包括 （1）开放地址法 （2）拉链法 （3）再哈希法 （4）建立公共溢出区 （1）开放地址法 基本思…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-7f6e24f754/">
+    <meta property="article:published_time" content="2015-02-07T18:10:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hash冲突处理 · mfcheer">
+    <meta name="twitter:description" content="对于Hash冲突，我们是怎样来处理冲突的。现在就来介绍一些经典的Hash冲突处理的方法。主要包括 （1）开放地址法 （2）拉链法 （3）再哈希法 （4）建立公共溢出区 （1）开放地址法 基本思…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hash冲突处理</h1>
+                    <div class="post-meta">
+                        <span>2015/02/08 02:10</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>779 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">hash</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>对于Hash冲突，我们是怎样来处理冲突的。现在就来介绍一些经典的Hash冲突处理的方法。主要包括</p>
+<p>（1）开放地址法</p>
+<p>（2）拉链法</p>
+<p>（3）再哈希法</p>
+<p>（4）建立公共溢出区</p>
+<p>（1）开放地址法</p>
+<p>基本思想：当发生地址冲突时，按照某种方法继续探测Hash表中其它存储单元，直到找到空位置为止。描述如下</p>
+<p><img src="https://img-blog.csdn.net/20140901163946233" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>其中 <img src="https://img-blog.csdn.net/20140901164038696" alt="" loading="lazy" referrerpolicy="no-referrer"> ， ![](https://img-
+<a href="http://blog.csdn.net/20140901164127961" target="_blank" rel="noreferrer">blog.csdn.net/20140901164127961</a>) 为关键字 ![](https://img-
+<a href="http://blog.csdn.net/20140901163943843" target="_blank" rel="noreferrer">blog.csdn.net/20140901163943843</a>) 的直接Hash地址， ![](https://img-
+<a href="http://blog.csdn.net/20140901164045718" target="_blank" rel="noreferrer">blog.csdn.net/20140901164045718</a>) 为Hash表的长度， ![](https://img-
+<a href="http://blog.csdn.net/20140901164405006" target="_blank" rel="noreferrer">blog.csdn.net/20140901164405006</a>) 为</p>
+<p>每次再探测时的地址增量。  根据 <img src="https://img-blog.csdn.net/20140901164405006" alt="" loading="lazy" referrerpolicy="no-referrer">
+的不同取法，有不同的称呼。</p>
+<p>线性探测再散列 <img src="https://img-blog.csdn.net/20140901164624390" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>二次探测再散列 <img src="https://img-blog.csdn.net/20140901164956693" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>伪随机再散列 <img src="https://img-blog.csdn.net/20140901165212975" alt="" loading="lazy" referrerpolicy="no-referrer"> 伪随机数</p>
+<p>（2）拉链法</p>
+<p>拉链法又叫链地址法，适合处理冲突比较严重的情况。基本思想是把所有关键字为同义词的记录存储在同一个</p>
+<p>线性链  表中。</p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+using namespace std;
+const int N = 35;
+
+struct node
+{
+    int key;    //关键字
+    int len;    //每个节点引出的链表长度
+    bool flag;  //有数据的标志
+    node *next;
+};
+
+node list[N];
+
+void Init(node list[])
+{
+    for(int i=0; i&lt;N; i++)
+    {
+        list[i].len = 0;
+        list[i].flag = 0;
+        list[i].next = NULL;
+    }
+}
+
+void Insert(node list[], int val, int m)
+{
+    int id = val % m;
+    if(!list[id].flag)
+    {
+        list[id].key = val;
+        list[id].flag = 1;
+    }
+    else
+    {
+        node *p = new node();
+        p-&gt;key = val;
+        p-&gt;next = list[id].next;
+        list[id].next = p;
+    }
+}
+
+//输出HashTable
+void Print(node list[], int m)
+{
+    for(int i=0; i&lt;m; i++)
+    {
+        node *p = list[i].next;
+        if(!list[i].flag)
+            printf(&quot;The %dth record is NULL!\n&quot;, i);
+        else
+        {
+            printf(&quot;The %dth record is %d&quot;, i, list[i].key);
+            list[i].len++;
+            while(p)
+            {
+                printf(&quot;-&gt;%d&quot;, p-&gt;key);
+                p = p-&gt;next;
+                list[i].len++;
+            }
+            puts(&quot;&quot;);
+        }
+    }
+}
+
+//计算平均查找长度
+double ASL(node list[], int m)
+{
+    double ans = 0;
+    for(int i=0; i&lt;m; i++)
+        ans += (list[i].len + 1) * list[i].len / 2.0;
+    return ans / m;
+}
+
+int main()
+{
+    int n, m;
+    Init(list);
+    scanf(&quot;%d %d&quot;, &amp;n, &amp;m);
+    for(int i=0; i&lt;n; i++)
+    {
+        int val;
+        scanf(&quot;%d&quot;, &amp;val);
+        Insert(list, val, m);
+    }
+    Print(list, m);
+    printf(&quot;The Average Search Length is %.5lf\n&quot;, ASL(list, m));
+    return 0;
+}
+
+/**
+12 11
+47 7 29 11 16 92 22 8 3 37 89 50
+*/
+</code></pre>
+<p>关于拉链法还可以参考：  <a href="http://www.51nod.com/question/index.html#!questionId=1191" target="_blank" rel="noreferrer"> http://www.51nod.com/question/index.html#!questionId=1191
+</a></p>
+<p>（3）再哈希法</p>
+<p>再哈希法又叫双哈希法，有多个不同的Hash函数，当发生冲突时，使用第二个，第三个，....，等哈希函数</p>
+<p>计算地址，直到无冲突。虽然不易发生聚集，但是增加了计算时间。</p>
+<p>（4）建立公共溢出区</p>
+<p>建立公共溢出区的基本思想是：假设哈希函数的值域是[1,m-1]，则设向量HashTable[0...m-1]为基本</p>
+<p>表，每个分量存放一个记录，另外设向量OverTable[0...v]为溢出表，所有关键字和基本表中关键字为同义</p>
+<p>词的记录，不管它们由哈希函数得到的哈希地址是什么，一旦发生冲突，都填入溢出表。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

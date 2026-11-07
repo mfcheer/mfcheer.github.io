@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Linux基本网络命令 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49913859 ping ping发送ECHO_REQUEST包…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-2efc4113bd/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux基本网络命令","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49913859 ping ping发送ECHO_REQUEST包…","datePublished":"2015-11-18T14:10:00.000Z","dateModified":"2015-11-18T14:10:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-2efc4113bd/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-2efc4113bd/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Linux基本网络命令 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49913859 ping ping发送ECHO_REQUEST包…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-2efc4113bd/">
+    <meta property="article:published_time" content="2015-11-18T14:10:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Linux基本网络命令 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49913859 ping ping发送ECHO_REQUEST包…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Linux基本网络命令</h1>
+                    <div class="post-meta">
+                        <span>2015/11/18 22:10</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>783 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#ping">ping</a></li><li><a href="#whois">whois</a></li><li><a href="#ifconfig">ifconfig</a></li><li><a href="#ifdown-&amp;-ifup">ifdown &amp;amp; ifup</a></li><li><a href="#route">route</a></li><li><a href="#traceroute">traceroute</a></li><li><a href="#hostname">hostname</a></li><li><a href="#host">host</a></li><li><a href="#netstat">netstat</a></li><li><a href="#arp">arp</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49913859" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/49913859</a></p>
+<h2 id="ping" tabindex="-1">ping</h2>
+<p>ping发送ECHO_REQUEST包到你指定的地址。这样你可以很方便确认你的电脑和Internet或是一个指定的IP地址是不是通的。使用 -c
+开关，可以指定发送ECHO_REQUEST包的个数。</p>
+<h2 id="whois" tabindex="-1">whois</h2>
+<p>whois命令输出指定站点的whois记录，可以查看到更多如谁注册和持有这个站点这样的信息。</p>
+<h2 id="ifconfig" tabindex="-1">ifconfig</h2>
+<p>ifconfig用于输出网络接口配置、调优和debug的各种选项。可以快捷地查看IP地址和其它网络接口的信息。键入ifconfig查看所有启用的网络接口的状态，包括它们的名字。可以指定网络接口的名字来只显示这一个接口的信息。</p>
+<h2 id="ifdown-&amp;-ifup" tabindex="-1">ifdown &amp; ifup</h2>
+<p>ifdown和ifup命令和运行ifconfig up，ifconfig
+down的功能一样。给定网络接口的名字可以只禁用或启用这一个接口。需要root权限，所以在Ubuntu上需要使用sudo来运行。</p>
+<h2 id="route" tabindex="-1">route</h2>
+<p>可以使用route命令来配置并查看内核路由表的配置情况。<br>
+例如：<br>
+（1） 添加到主机的路由。<br>
+#route add –host 192.168.1.2 dev eth0:0<br>
+#route add –host 10.20.30.148 gw 10.20.30.40<br>
+（2） 添加到网络的路由。<br>
+#route add –net 10.20.30.40 netmask 255.255.255.248 eth0<br>
+#route add –net 10.20.30.48 netmask 255.255.255.248 gw 10.20.30.41<br>
+#route add –net 192.168.1.0/24 eth1<br>
+（3） 添加默认网关。<br>
+#route add default gw 192.168.1.1<br>
+（4） 查看内核路由表的配置。<br>
+#route<br>
+（5）删除路由。<br>
+#route del –host 192.168.1.2 dev eth0:0<br>
+#route del –host 10.20.30.148 gw 10.20.30.40<br>
+#route del –net 10.20.30.40 netmask 255.255.255.248 eth0<br>
+#route del –net 10.20.30.48 netmask 255.255.255.248 gw 10.20.30.41<br>
+#route del –net 192.168.1.0/24 eth1<br>
+#route del default gw 192.168.1.1<br>
+对于1和2两点可使用下面的语句实现：<br>
+Ifconfig eth0 172.16.19.71 netmask 255.255.255.0<br>
+Route 0.0.0.0 gw 172.16.19.254<br>
+Service network restart</p>
+<h2 id="traceroute" tabindex="-1">traceroute</h2>
+<p>可以使用traceroute命令显示数据包到达目的主机所经过的路由。<br>
+例如：<br>
+#traceroute <a href="http://www.sina.com.cn/" target="_blank" rel="noreferrer"> http://www.sina.com.cn/ </a></p>
+<h2 id="hostname" tabindex="-1">hostname</h2>
+<p>可以使用hostname命令来更改主机名。例如；<br>
+#hostname myhost</p>
+<h2 id="host" tabindex="-1">host</h2>
+<p>host命令用来做DNS查询。如果命令参数是域名，命令会输出关联的IP；如果命令参数是IP，命令则输出关联的域名。</p>
+<h2 id="netstat" tabindex="-1">netstat</h2>
+<p>可以使用netstat命令来显示网络状态信息。<br>
+例如：<br>
+（1） 显示网络接口状态信息。<br>
+#netstat –i<br>
+（2） 显示所有监控中的服务器的Socket和正使用Socket的程序信息。<br>
+#netstat –lpe<br>
+（3） 显示内核路由表信息。<br>
+#netstat –r<br>
+#netstat –nr<br>
+（4） 显示TCP/UDP传输协议的连接状态。<br>
+#netstat –t<br>
+#netstat –u</p>
+<h2 id="arp" tabindex="-1">arp</h2>
+<p>可以使用arp命令来配置并查看arp缓存。例如：<br>
+（1） 查看arp缓存。<br>
+#arp<br>
+（2） 添加一个IP地址和MAC地址的对应记录。<br>
+#arp –s 192.168.33.15 00:60:08:27:CE:B2<br>
+（3） 删除一个IP地址和MAC地址的对应缓存记录。<br>
+#arp –d192.168.33.15</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

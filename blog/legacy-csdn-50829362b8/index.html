@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>LightOJ Math_Basic Math 专题 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46380503 挖个坑。开始板刷lightoj. 1354 ht…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-50829362b8/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"LightOJ Math_Basic Math 专题","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46380503 挖个坑。开始板刷lightoj. 1354 ht…","datePublished":"2015-06-05T10:15:00.000Z","dateModified":"2015-06-05T10:15:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-50829362b8/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-50829362b8/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"十进制,代码","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="LightOJ Math_Basic Math 专题 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46380503 挖个坑。开始板刷lightoj. 1354 ht…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-50829362b8/">
+    <meta property="article:published_time" content="2015-06-05T10:15:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LightOJ Math_Basic Math 专题 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46380503 挖个坑。开始板刷lightoj. 1354 ht…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">LightOJ Math_Basic Math 专题</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 18:15</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>759 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">十进制</span><span class="post-tag">代码</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46380503" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46380503</a></p>
+<p>挖个坑。开始板刷lightoj.</p>
+<p>1354 <a href="http://www.lightoj.com/volume_showproblem.php?problem=1354" target="_blank" rel="noreferrer"> http://www.lightoj.com/volume_showproblem.php?problem=1354
+</a></p>
+<p>2进制与十进制是否相等。</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;map&gt;
+#include &lt;set&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+const int MAXN = 101000;
+
+typedef long long LL;
+
+int cases;
+char s[MAXN];
+LL a, b, c, d, e, num;
+char r;
+
+int main()
+{
+    scanf(&quot;%d&quot;, &amp;cases);
+    for (int i = 1; i &lt;= cases; i++)
+    {
+        scanf(&quot;%lld%c%lld%c%lld%c%lld&quot;, &amp;a, &amp;r, &amp;b, &amp;r, &amp;c, &amp;r, &amp;d);
+
+        scanf(&quot;%s&quot;, s);
+        int ok = 1;
+        ///////////// a
+        e = 0;
+        num = 0;
+        for (int i = 7; i &gt;= 0; i--)
+        {
+            if (s[i] == '1')
+                e += pow(2, num);
+            num++;
+        }
+        if (e != a) ok = 0;
+        //////////////// b
+        e = 0;
+        num = 0;
+        for (int i = 16; i &gt;= 9; i--)
+        {
+            if (s[i] == '1')
+                e += pow(2, num);
+            num++;
+        }
+        if (e != b) ok = 0;
+        ///////////// c
+        e = 0;
+        num = 0;
+        for (int i = 25; i &gt;= 18; i--)
+        {
+            if (s[i] == '1')
+                e += pow(2, num);
+            num++;
+        }
+        if (e != c) ok = 0;
+        /////////// d
+        e = 0;
+        num = 0;
+        for (int i = 34; i &gt;= 27; i--)
+        {
+            if (s[i] == '1')
+                e += pow(2, num);
+            num++;
+        }
+        if (e != d) ok = 0;
+
+        printf(&quot;Case %d: &quot;, i);
+        if (ok) puts(&quot;Yes&quot;);
+        else puts(&quot;No&quot;);
+    }
+    return 0;
+}
+</code></pre>
+<p>1214 <a href="http://www.lightoj.com/volume_showproblem.php?problem=1214" target="_blank" rel="noreferrer"> http://www.lightoj.com/volume_showproblem.php?problem=1214
+</a></p>
+<p>问一个大数是否能被另一个数整除。</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;map&gt;
+#include &lt;set&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+int cases;
+int ok;
+long long b;
+
+string s;
+
+int main()
+{
+    scanf(&quot;%d&quot;, &amp;cases); 
+    for (int i = 1; i &lt;= cases; i++)
+    {
+        cin &gt;&gt; s;
+        scanf(&quot;%lld&quot;,&amp;b);
+
+        long long sum = 0;
+        for (int i = 0; i &lt; s.size(); i++)
+        {
+            if (s[i] == '-') continue;
+            sum = (sum * 10 + s[i]-'0') % b;
+        }
+
+        printf(&quot;Case %d: &quot;, i);
+        if (!sum) puts(&quot;divisible&quot;);
+        else puts(&quot;not divisible&quot;);
+    }
+    return 0;
+}
+</code></pre>
+<p>1116 <a href="http://www.lightoj.com/volume_showproblem.php?problem=1116" target="_blank" rel="noreferrer"> http://www.lightoj.com/volume_showproblem.php?problem=1116
+</a></p>
+<p>问n是否可以分解为一个奇数和一个偶数的乘积<br>
+代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+typedef long long LL;
+
+LL n, m;
+LL ans;
+int cases;
+
+int main()
+{
+    scanf(&quot;%d&quot;, &amp;cases);
+    for (int i = 1; i &lt;= cases; i++)
+    {
+        scanf(&quot;%lld&quot;, &amp;n);
+        printf(&quot;Case %d: &quot;, i);
+        LL tmp = 1;
+
+        while (n % 2 == 0)
+        {
+            n /= 2;
+            tmp *= 2;
+        }
+        if (n % 2 == 1 &amp;&amp; tmp != 1)
+            printf(&quot;%lld %lld\n&quot;, n, tmp);
+        else
+            puts(&quot;Impossible&quot;);
+    }
+    return 0;
+}
+</code></pre>
+<p>1294 <a href="http://www.lightoj.com/volume_showproblem.php?problem=1294" target="_blank" rel="noreferrer"> http://www.lightoj.com/volume_showproblem.php?problem=1294
+</a></p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+typedef long long LL;
+
+LL n, m;
+LL ans;
+int cases;
+
+int main()
+{
+    cin &gt;&gt; cases;
+    for (int i = 1; i &lt;= cases;i++)
+    {
+        cin &gt;&gt; n &gt;&gt; m;
+        int t = n / m / 2;
+        ans = t*m*m;
+        cout &lt;&lt; &quot;Case &quot; &lt;&lt; i &lt;&lt; &quot;: &quot;;
+        cout &lt;&lt; ans &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+<p>1214<br>
+<a href="http://lightoj.com/volume_showproblem.php?problem=1214" target="_blank" rel="noreferrer"> http://lightoj.com/volume_showproblem.php?problem=1214
+</a><br>
+判断大数是否能整除</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;assert.h&gt;
+
+using namespace std;
+
+int t;
+char s[10000000];
+long long n;
+
+int main()
+{
+    scanf(&quot;%d&quot;,&amp;t);
+    int cases = 1;
+    while (t--)
+    {
+        scanf(&quot;%s %lld&quot;,s,&amp;n);
+
+        printf(&quot;Case %d: &quot;,cases++);
+        long long ans = 0;
+        int len = strlen(s);
+        for (int i = 0; i &lt; len; i++)
+        {
+            if (s[i] == '-') continue;
+            ans = (ans * 10 + s[i] - '0') % n;
+        }
+        if (ans == 0)
+            puts(&quot;divisible&quot;);
+        else
+            puts(&quot;not divisible&quot;);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

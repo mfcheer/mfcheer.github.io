@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>高频词 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：高频词">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-6aaae60dde/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"高频词","description":"历史迁移文章：高频词","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-6aaae60dde/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-6aaae60dde/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="高频词 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：高频词">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-6aaae60dde/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="高频词 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：高频词">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">高频词</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>111 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>CountVectorizer是用于产生文本统计类特征的工具。将分词后的多个文章作为输入，词频统计结果作为输出。</p>
+<p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" target="_blank" rel="noreferrer">https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer</a></p>
+<p>&lt;!--more--&gt;</p>
+<p>假设通过jieba分词处理好的数据为  ['hello', 'hello everyone', 'hello china']</p>
+<pre><code class="hljs">from sklearn.feature_extraction.text import CountVectorizer
+
+vectorizer = CountVectorizer(min_df=1, max_features=300)
+
+words_lists = ['hello', 'hello everyone', 'hello china']
+X = vectorizer.fit_transform(words_lists)
+
+# 高频词
+feature_names = vectorizer.get_feature_names()
+print feature_names
+
+# 词频字典
+feature_name_count = vectorizer.vocabulary_
+print feature_name_count
+
+# 高频词汇的01特征矩阵
+print X.A
+
+输出：
+[u'china', u'everyone', u'hello']
+{u'everyone': 1, u'china': 0, u'hello': 2}
+[[0 0 1]
+ [0 1 1]
+ [1 0 1]]
+</code></pre>
+<p>可以看到具体的词频统计结果和01矩阵，01矩阵可以作为特征出入到其它模型中。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

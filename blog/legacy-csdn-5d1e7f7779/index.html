@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>C++primer 17.2 bitset类型 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49561949 bitset类型使得位运算更为容易，定义在头文件…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-5d1e7f7779/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"C++primer 17.2 bitset类型","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49561949 bitset类型使得位运算更为容易，定义在头文件…","datePublished":"2015-11-01T12:56:00.000Z","dateModified":"2015-11-01T12:56:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-5d1e7f7779/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-5d1e7f7779/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"bitset,位运算","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="C++primer 17.2 bitset类型 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49561949 bitset类型使得位运算更为容易，定义在头文件…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-5d1e7f7779/">
+    <meta property="article:published_time" content="2015-11-01T12:56:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="C++primer 17.2 bitset类型 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49561949 bitset类型使得位运算更为容易，定义在头文件…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">C++primer 17.2 bitset类型</h1>
+                    <div class="post-meta">
+                        <span>2015/11/01 20:56</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>533 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">bitset</span><span class="post-tag">位运算</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#定义和初始化bitset">定义和初始化bitset</a></li><li><a href="#bitset操作">bitset操作</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49561949" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/49561949</a></p>
+<p>bitset类型使得位运算更为容易，定义在头文件bitset中</p>
+<h2 id="定义和初始化bitset" tabindex="-1">定义和初始化bitset</h2>
+<p>定义bitset时需声明包含多少位：</p>
+<pre><code>    bitset&lt;32&gt; bits(1u);//定义一个32位第一位为1 其他位为0 的bitset
+</code></pre>
+<p>bitset初始化的方法：</p>
+<pre><code>    bitset&lt;n&gt; b;  n位均为0
+    bitset&lt;n&gt; b(u);  对u的低n位拷贝
+    bitset&lt;n&gt; b(s, pos, m, zero, one);  拷贝字符串s的pos位置开始的m个字符，字符串包含zero和one字符
+    bitset&lt;n&gt; b(cp, pos, m, zero, one);  拷贝数组cp的pos位置开始的m个字符，字符串包含zero和one字符
+</code></pre>
+<p>用unsigned初始化：</p>
+<pre><code>    bitset&lt;13&gt; b1(0xbeef);
+    bitset&lt;20&gt; b2(0xbeef);
+    bitset&lt;128&gt; b3(~0ull);
+    cout &lt;&lt; b1 &lt;&lt; endl;
+    cout &lt;&lt; b2 &lt;&lt; endl;
+    cout &lt;&lt; b3 &lt;&lt; endl;
+</code></pre>
+<p><img src="https://img-blog.csdn.net/20151101203213480" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>从一个string初始化bitset：<br>
+**<em>注意string的下标习惯与bitset恰好相反。</em> **</p>
+<pre><code>     string s = &quot;1111111000001010101110&quot;;
+    bitset&lt;20&gt; b1(&quot;1100&quot;);
+    bitset&lt;20&gt; b2(s,5,4);
+    bitset&lt;20&gt; b3(s,s.size()-4);
+    cout &lt;&lt; b1 &lt;&lt; endl;
+    cout &lt;&lt; b2 &lt;&lt; endl;
+    cout &lt;&lt; b3 &lt;&lt; endl;
+</code></pre>
+<p><img src="https://img-blog.csdn.net/20151101204209539" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<h2 id="bitset操作" tabindex="-1">bitset操作</h2>
+<p>置位操作即为 1，复位操作为 0</p>
+<pre><code>    bitset&lt;32&gt; b; 
+    b.any();  是否存在置位的二进制位
+    b.all();  是否所有置位的二进制位
+    b.none();   是否不存在置位的二进制位
+    b.count();  置位的二进制位个数
+    b.size();  二进制位数
+    b.test(pos);  是否pos置位的二进制置位
+    b.set(pos,v);  pos位置置位v
+    b.set();  默认set为true
+    b.reset(pos);  pos位置复位
+    b.reset();  
+    b.flip(pos);  改变pos位置的状态
+    b.flip();
+    b[pos];  
+    b.to_string();
+    b.to_ullong();
+    b.to_ulong();
+    os &lt;&lt; b;
+    is &gt;&gt; b;
+</code></pre>
+<p>提取bitset的值：</p>
+<pre><code>    bitset&lt;32&gt; b (&quot;1100&quot;);
+    unsigned long long uu = b.to_ullong();
+    cout &lt;&lt; uu &lt;&lt; endl;
+</code></pre>
+<p><img src="https://img-blog.csdn.net/20151101205104144" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>bitset 的 IO 运算：<br>
+输入直至读取的位数达到对应大小，或遇到非法字符，或文件结束。</p>
+<pre><code>    bitset&lt;12&gt; b;
+    cin &gt;&gt; b;
+    cout &lt;&lt; b &lt;&lt; endl;
+</code></pre>
+<p><img src="https://img-blog.csdn.net/20151101205331512" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>bitset的使用：<br>
+和普通位运算基本一致，不过多了一些操作的方法，就不赘述了。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

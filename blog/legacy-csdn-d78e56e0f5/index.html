@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>C语言：位异或运算符^ · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40650683 C语言：位异或运算符^ 位运算符家族中，最常用的…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-d78e56e0f5/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"C语言：位异或运算符^","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40650683 C语言：位异或运算符^ 位运算符家族中，最常用的…","datePublished":"2014-10-31T02:39:00.000Z","dateModified":"2014-10-31T02:39:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-d78e56e0f5/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-d78e56e0f5/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="C语言：位异或运算符^ · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40650683 C语言：位异或运算符^ 位运算符家族中，最常用的…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-d78e56e0f5/">
+    <meta property="article:published_time" content="2014-10-31T02:39:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="C语言：位异或运算符^ · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40650683 C语言：位异或运算符^ 位运算符家族中，最常用的…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">C语言：位异或运算符^</h1>
+                    <div class="post-meta">
+                        <span>2014/10/31 10:39</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>316 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40650683" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/40650683</a></p>
+<p>C语言：位异或运算符^</p>
+<p>位运算符家族中，最常用的，某过于异或运算符。</p>
+<p>异或运算符是指： 参与运算的两个值，如果两个相应位相同，则结果为0，否则为1。即：0^0=0， 1^0=1， 0^1=1， 1^1=0</p>
+<p>例如：10100001^00010001=10110000</p>
+<p>0^0=0,0^1=1    可理解为： 0异或任何数，其结果=任何数</p>
+<p>1^0=1,1^1=0    可理解为： 1异或任何数，其结果=任何数取反<br>
+任何数异或自己，等于把自己置0</p>
+<p>1)按位异或可以用来使某些特定的位翻转，如对数10100001的第1位和第2位翻转，可以将数与00000110进行按位异或运算。<br>
+10100001^00000110=10100111</p>
+<p>用十六进制表示： 0xA1 ^ 0x06 = 0xA7</p>
+<p>(2)通过按位异或运算，可以实现两个值的交换，而不必使用临时变量。例如交换两个整数a，b的值，可通过下列语句实现：</p>
+<p>a=10100001,   b=00000110</p>
+<p>a=a^b； 　　//a=10100111</p>
+<p>b=b^a； 　　//b=10100001</p>
+<p>a=a^b； 　　//a=00000110</p>
+<p>(3)异或运算符的特点是：数a两次异或同一个数b（a=a^b^b）仍然为原值a.</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

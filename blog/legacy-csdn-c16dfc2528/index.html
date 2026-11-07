@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UVA 534	Frogger 【最小瓶颈树】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47361077 https://uva.onlinejudge.…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-c16dfc2528/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"UVA 534\tFrogger 【最小瓶颈树】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47361077 https://uva.onlinejudge.…","datePublished":"2015-08-08T10:49:00.000Z","dateModified":"2015-08-08T10:49:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-c16dfc2528/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-c16dfc2528/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="UVA 534	Frogger 【最小瓶颈树】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47361077 https://uva.onlinejudge.…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-c16dfc2528/">
+    <meta property="article:published_time" content="2015-08-08T10:49:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UVA 534	Frogger 【最小瓶颈树】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47361077 https://uva.onlinejudge.…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">UVA 534	Frogger 【最小瓶颈树】</h1>
+                    <div class="post-meta">
+                        <span>2015/08/08 18:49</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>320 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47361077" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47361077</a></p>
+<p><a href="https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;problem=475" target="_blank" rel="noreferrer">
+https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;problem=475
+</a></p>
+<p>题意：求点1到2所有路径上最大边的最小值。</p>
+<p>解法：Kruskal按边值排序。直到1，2联通。</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;math.h&gt;
+
+using namespace std;
+
+const int MAXN = 410000;//点
+const int MAXM = 410000;//边
+
+struct Edge
+{
+    int u, v;
+    double w;
+}edge[MAXM];
+
+
+bool cmp(Edge a, Edge b)
+{
+    return a.w &lt; b.w;
+}
+
+int tol;
+
+void addedge(int u, int v, double w)
+{
+    edge[tol].u = u;
+    edge[tol].v = v;
+    edge[tol++].w = w;
+}
+
+int f[MAXN];//并查集使用
+int find(int x)
+{
+    if (f[x] == -1) return x;
+    else return f[x] = find(f[x]);
+}
+
+struct node
+{
+    int x, y;
+}pos[MAXN];
+
+double get_dis(node a, node b)
+{
+    int x = a.x - b.x;
+    int y = a.y - b.y;
+    return sqrt(x*x + y*y);
+}
+
+int main()
+{
+    int cases = 1;
+    int n;
+    while (~scanf(&quot;%d&quot;, &amp;n) &amp;&amp; n)
+    {
+        tol = 0;
+        memset(f, -1, sizeof(-1));
+        for (int i = 0; i &lt; n; i++)
+        {
+            scanf(&quot;%d %d&quot;, &amp;pos[i].x, &amp;pos[i].y);
+            for (int j = 0; j &lt; i; j++)
+                addedge(i, j, get_dis(pos[i], pos[j]));
+        }
+        sort(edge, edge + tol, cmp);
+        for (int i = 0; i &lt; tol; i++)
+        {
+            int u = edge[i].u;
+            int v = edge[i].v;
+            int t1 = find(u);
+            int t2 = find(v);
+            if (t1 != t2) f[t1] = t2;
+            if (find(1) == find(0))
+            {
+                printf(&quot;Scenario #%d\nFrog Distance = %.3lf\n\n&quot;, cases++, edge[i].w);
+                break;
+            }
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

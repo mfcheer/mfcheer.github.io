@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Java异常机制 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：Java异常机制">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-d47f5b2c5a/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Java异常机制","description":"历史迁移文章：Java异常机制","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-d47f5b2c5a/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-d47f5b2c5a/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Java异常机制 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：Java异常机制">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-d47f5b2c5a/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Java异常机制 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：Java异常机制">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Java异常机制</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>423 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#概念">概念</a></li><li><a href="#异常分层">异常分层</a></li><li><a href="#多个catch代码块">多个catch代码块</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h2 id="概念" tabindex="-1">概念</h2>
+<p>异常 是在程序执行期间发生的破坏正常的程序指令流的事件。异常处理是 Java 编程的一项基础技术。您将代码包装在一个 try 代码块中（这表示 “尝试此代码并让我知道它是否导致了异常”），并使用它捕获 (catch) 各种类型的异常。</p>
+<h2 id="异常分层" tabindex="-1">异常分层</h2>
+<p>异常分层结构</p>
+<p><img src="/assets/images/legacy/MarkdownPhotos/photos1/79.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>Java 语言包含一个完整的异常分层结构，它由许多类型的异常组成，这些异常划分为两大主要类别：</p>
+<ul>
+<li>已检查的异常已由编译器检查（表示编译器确定它们已在您代码中的某处处理过）。一般而言，这些异常是 java.lang.Exception 的直接子类。</li>
+<li>未检查的异常（也称为运行时异常）未由编译器检查。这些是 java.lang.RuntimeException 的子类。</li>
+</ul>
+<p>程序导致异常时，您可以说它抛出了 异常。已检查的异常可由任何方法在方法名中包含 throws 关键字来声明。后跟该方法可能在执行期间抛出的异常的逗号分隔列表。如果代码调用的一个方法指定它抛出一种或多种类型的异常，您必须对它进行一定的处理，或者向方法名中添加一个 throws 来传递该异常类型。</p>
+<h2 id="多个catch代码块" tabindex="-1">多个catch代码块</h2>
+<p>可以拥有多个 catch代码块，但必须采用某种特定方式来搭建它们。如果所有异常都是其他异常的子类，那么子类会按照 catch 代码块的顺序放在父类前面。
+&lt;!--more--&gt;</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

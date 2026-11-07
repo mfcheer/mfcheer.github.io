@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Redis内存回收:LRU算法 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49999467 LRU算法(最近最久未使用算法) LRU算法作为…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-6e38845dca/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Redis内存回收:LRU算法","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49999467 LRU算法(最近最久未使用算法) LRU算法作为…","datePublished":"2015-11-23T11:01:00.000Z","dateModified":"2015-11-23T11:01:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-6e38845dca/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-6e38845dca/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"redis,内存,内存管理,算法","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Redis内存回收:LRU算法 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49999467 LRU算法(最近最久未使用算法) LRU算法作为…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-6e38845dca/">
+    <meta property="article:published_time" content="2015-11-23T11:01:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Redis内存回收:LRU算法 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49999467 LRU算法(最近最久未使用算法) LRU算法作为…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Redis内存回收:LRU算法</h1>
+                    <div class="post-meta">
+                        <span>2015/11/23 19:01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>585 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">redis</span><span class="post-tag">内存</span><span class="post-tag">内存管理</span><span class="post-tag">算法</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#lru算法(最近最久未使用算法)">LRU算法(最近最久未使用算法)</a></li><li><a href="#lru算法演示">LRU算法演示</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49999467" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/49999467</a></p>
+<h2 id="lru算法(最近最久未使用算法)" tabindex="-1">LRU算法(最近最久未使用算法)</h2>
+<p>LRU算法作为内存管理的一种有效算法,其含义是在内存有限的情况下，当内存容量不足时，为了保证程序的运行，这时就不得不淘汰内存中的一些对象，释放这些对象占用的空间，那么选择淘汰哪些对象呢？LRU算法就提供了一种策略，告诉我们选择最近一段时间内，最久未使用的对象将其淘汰，至于为什么要选择最久未使用的，可以想想，最近一段时间内使用的东西，我们是不是可能一会又要用到呢~，而很长一段时间内都没有使用过的东西，也许永远都不会再使用</p>
+<p>在操作系统中LRU算法淘汰的不是内存中的对象，而是页,当内存中数据不足时，通过LRU算法，选择一页(一般是4KB)将其交换到虚拟内存区(Swap区)</p>
+<h2 id="lru算法演示" tabindex="-1">LRU算法演示</h2>
+<p><img src="https://img-blog.csdn.net/20160911155045785" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>算法实现应该采用怎样的数据结构</p>
+<p>队列,FIFO，LRU算法最为精典的实现，HashMap+Double LinkedList，时间复杂度为O(1)</p>
+<pre><code>struct Node
+{
+    Node(int _key,int _value){key = _key;value = _value;pre = next = NULL;}
+    int key;
+    int value;
+    Node*pre;
+    Node*next;
+};
+class LRUCache{
+public:
+    // @param capacity, an integer
+    LRUCache(int capacity) {
+        // write your code here
+        this-&gt;capacity = capacity;
+        size = 0;
+        head = NULL;
+        tail = NULL;
+    }
+
+    // @return an integer
+    int get(int key) {
+        // write your code here
+        if(m.find(key)==m.end())
+        {
+            return -1;
+        }
+        else
+        {
+            Node* n = m[key];
+            int ret = n-&gt;value;
+            if(head!=n)
+            {
+                if(n==tail)
+                    tail = tail-&gt;pre;
+                Node*pre = n-&gt;pre;
+                if(n-&gt;next!=NULL)
+                    n-&gt;next-&gt;pre = pre;
+                pre-&gt;next = n-&gt;next;
+                n-&gt;next = head;
+                head-&gt;pre = n;
+                head = n;
+            }
+            return ret;
+        }
+    }
+
+    // @param key, an integer
+    // @param value, an integer
+    // @return nothing
+    void set(int key, int value) {
+        // write your code here
+        if(head==NULL)
+        {
+            head = new Node(key,value);
+            tail = head;
+            size++;
+            m[key] = head;
+            return;
+        }
+        if(m.find(key)==m.end())
+        {
+            Node*n = new Node(key,value);
+            n-&gt;next = head;
+            head-&gt;pre = n;
+            head = n;
+            m[key] = n;
+            size++;
+        }
+        else
+        {
+            Node*n = m[key];
+            if(head!=n)
+            {
+                if(n==tail)
+                    tail = tail-&gt;pre;
+                Node*pre = n-&gt;pre;
+                pre-&gt;next = n-&gt;next;
+                if(n-&gt;next!=NULL)
+                    n-&gt;next-&gt;pre = pre;
+                n-&gt;next = head;
+                head-&gt;pre = n;
+                head = n;
+                m[key] = n;
+            }
+            head-&gt;value = value;
+        }
+        if(size&gt;capacity)
+        {
+            Node*todel = tail;
+            int keyToDel = todel-&gt;key;
+            tail = tail-&gt;pre;
+            tail-&gt;next = NULL;
+            delete todel;
+            m.erase(m.find(keyToDel));
+            size--;
+        }
+
+    }
+
+    private:
+        int capacity;
+        int size;
+        Node*head;
+        Node*tail;
+        unordered_map&lt;int,Node*&gt; m;
+};
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

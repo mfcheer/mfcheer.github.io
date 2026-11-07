@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Java虚拟机运行时数据区 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：Java虚拟机运行时数据区">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-37e40e1224/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Java虚拟机运行时数据区","description":"历史迁移文章：Java虚拟机运行时数据区","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-37e40e1224/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-37e40e1224/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Java虚拟机运行时数据区 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：Java虚拟机运行时数据区">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-37e40e1224/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Java虚拟机运行时数据区 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：Java虚拟机运行时数据区">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Java虚拟机运行时数据区</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>913 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#程序计数器">程序计数器</a></li><li><a href="#虚拟机栈">虚拟机栈</a></li><li><a href="#本地方法栈">本地方法栈</a></li><li><a href="#java堆">Java堆</a></li><li><a href="#方法区">方法区</a></li><li class="toc-sub"><a href="#运行时常量池">运行时常量池</a></li><li><a href="#栈设置">栈设置</a></li><li><a href="#堆设置">堆设置</a></li><li><a href="#收集器设置">收集器设置</a></li><li><a href="#垃圾回收统计信息">垃圾回收统计信息</a></li><li><a href="#并行收集器设置">并行收集器设置</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h1 id="java虚拟机运行时数据区" tabindex="-1">Java虚拟机运行时数据区</h1>
+<p>包括如下几部分
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/83.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<h2 id="程序计数器" tabindex="-1">程序计数器</h2>
+<p>线程私有内存。用于保存当前正常执行的程序的内存地址。Java虚拟机的多线程就是通过线程轮流切换并分配处理器时间来实现的，为了线程切换后能恢复到正确的位置，每条线程都需要一个独立的程序计数器，互不影响，该区域为“线程私有”。</p>
+<h2 id="虚拟机栈" tabindex="-1">虚拟机栈</h2>
+<p>线程私有内存，用于存储局部变量表，操作栈，方法返回值。局部变量表放着基本数据类型，还有对象的引用。</p>
+<h2 id="本地方法栈" tabindex="-1">本地方法栈</h2>
+<p>与虚拟机栈一样，只不过服务的是Native方法，也就是调用C、C++代码时。</p>
+<h2 id="java堆" tabindex="-1">Java堆</h2>
+<p>所有线程共享区域,对象实例几乎都在这分配内存。垃圾回收区域就在此。可细分为新生代和老年代，再可细分为Eden区，From Survivor
+区，To Survivor区。用来存储程序中的一些对象，比如你用new关键字创建的对象，它就会被存储在堆内存中，但是这个对象在堆内存中的首地址会存储在栈中。</p>
+<h2 id="方法区" tabindex="-1">方法区</h2>
+<p>所有线程共享区域。储存虚拟机加载的类信息，常量，静态变量，编译后的代码。</p>
+<h3 id="运行时常量池" tabindex="-1">运行时常量池</h3>
+<p>属于方法区的一部分,代表运行时每个class文件中的常量表。包括几种常量：编译时的数字常量、方法或者域的引用。</p>
+<h1 id="常用jvm参数" tabindex="-1">常用JVM参数</h1>
+<h2 id="栈设置" tabindex="-1">栈设置</h2>
+<ul>
+<li>-Xss256K:每个线程的栈大小</li>
+</ul>
+<h2 id="堆设置" tabindex="-1">堆设置</h2>
+<ul>
+<li>-Xms:初始堆大小</li>
+<li>-Xmx:最大堆大小</li>
+<li>-XX:NewSize=n:设置年轻代大小</li>
+<li>-XX:NewRatio=n:设置年轻代和年老代的比值。如:为3，表示年轻代与年老代比值为1：3，年轻代占整个年轻代年老代和的1/4</li>
+<li>-XX:SurvivorRatio=n:年轻代中Eden区与两个Survivor区的比值。注意Survivor区有两个。如：3，表示Eden：Survivor=3：2，一个Survivor区占整个年轻代的1/5</li>
+<li>-XX:MaxPermSize=n:设置持久代大小</li>
+</ul>
+<h2 id="收集器设置" tabindex="-1">收集器设置</h2>
+<ul>
+<li>-XX:+UseSerialGC:设置串行收集器</li>
+<li>-XX:+UseParallelGC:设置并行收集器</li>
+<li>-XX:+UseParalledlOldGC:设置并行年老代收集器</li>
+<li>-XX:+UseConcMarkSweepGC:设置并发收集器</li>
+</ul>
+<h2 id="垃圾回收统计信息" tabindex="-1">垃圾回收统计信息</h2>
+<ul>
+<li>-XX:+PrintGC</li>
+<li>-XX:+PrintGCDetails</li>
+<li>-XX:+PrintGCTimeStamps</li>
+<li>-Xloggc:filename</li>
+</ul>
+<h2 id="并行收集器设置" tabindex="-1">并行收集器设置</h2>
+<ul>
+<li>-XX:ParallelGCThreads=n:设置并行收集器收集时使用的CPU数。并行收集线程数。</li>
+<li>-XX:MaxGCPauseMillis=n:设置并行收集最大暂停时间</li>
+<li>-XX:GCTimeRatio=n:设置垃圾回收时间占程序运行时间的百分比。公式为1/(1+n)</li>
+<li>-XX:+CMSIncrementalMode:设置为增量模式。适用于单CPU情况。</li>
+<li>-XX:ParallelGCThreads=n:设置并发收集器年轻代收集方式为并行收集时，使用的CPU数。并行收集线程数。</li>
+</ul>
+<h1 id="java-new一个对象的过程" tabindex="-1">Java new一个对象的过程</h1>
+<ul>
+<li>检测类是否被加载</li>
+<li>为新生对象分配内存</li>
+<li>将分配到的内存空间都初始化为零值（不包括对象头）</li>
+<li>对对象进行必要的设置（例如这个对象是哪个类的实例、如何才能找到类的元数据信息、对象的哈希码、对象的GC分代年龄等信息。这些信息存放在对象的对象头之中）</li>
+<li>执行init方法（构造方法）</li>
+</ul>
+<h1 id="java-内存分配原则" tabindex="-1">Java 内存分配原则</h1>
+<ul>
+<li>对象优先分配在Eden区</li>
+<li>大对象直接进入年老带</li>
+<li>长期存活对象进入年老带</li>
+<li>动态对象年龄判断</li>
+<li>空间分配担保</li>
+</ul>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

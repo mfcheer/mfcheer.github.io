@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>登录到MySQL · mfcheer</title>
+    <meta name="description" content="历史迁移文章：登录到MySQL">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-6e1024a079/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"登录到MySQL","description":"历史迁移文章：登录到MySQL","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-6e1024a079/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-6e1024a079/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="登录到MySQL · mfcheer">
+    <meta property="og:description" content="历史迁移文章：登录到MySQL">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-6e1024a079/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="登录到MySQL · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：登录到MySQL">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">登录到MySQL</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>982 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>下面是网上找的资料：<a href="http://www.cnblogs.com/mr-wid/archive/2013/05/09/3068229.html" target="_blank" rel="noreferrer">http://www.cnblogs.com/mr-wid/archive/2013/05/09/3068229.html</a></p>
+<p>复制过来，用到的时候翻出来看看</p>
+<hr>
+<p>MySQL 为关系型数据库(Relational Database Management System), 这种所谓的&quot;关系型&quot;可以理解为&quot;表格&quot;的概念, 一个关系型数据库由一个或数个表格组成</p>
+<h1 id="登录到mysql" tabindex="-1">登录到MySQL</h1>
+<p>当 MySQL 服务已经运行时, 我们可以通过MySQL自带的客户端工具登录到MySQL数据库中, 首先打开命令提示符, 输入以下格式的命名:</p>
+<pre><code class="hljs">mysql -h 主机名 -u 用户名 -p
+-h : 该命令用于指定客户端所要登录的MySQL主机名, 登录当前机器该参数可以省略;
+-u : 所要登录的用户名;
+-p : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。
+</code></pre>
+<p>以登录刚刚安装在本机的MySQL数据库为例, 在命令行下输入 mysql -u root -p 按回车确认</p>
+<p>然后命令提示符会一直以 mysql&gt; 加一个闪烁的光标等待命令的输入</p>
+<p>例子：</p>
+<pre><code class="hljs">mysql -h10.16.44.210 -P3350 -uuser -ppassword
+</code></pre>
+<p>&lt;!--more--&gt;</p>
+<h1 id="创建一个数据库" tabindex="-1">创建一个数据库</h1>
+<p>使用 create database 语句可完成对数据库的创建, 创建命令的格式如下:</p>
+<p>create database 数据库名 [其他选项];</p>
+<p>例如我们需要创建一个名为 samp_db 的数据库, 在命令行下执行以下命令:</p>
+<p>create database samp_db character set gbk;</p>
+<p>为了便于在命令提示符下显示中文, 在创建时通过 character set gbk 将数据库字符编码指定为 gbk。创建成功时会得到 Query OK, 1 row affected(0.02 sec) 的响应。</p>
+<p>提示: 可以使用 show databases; 命令查看已经创建了哪些数据库。</p>
+<h1 id="选择所要操作的数据库" tabindex="-1">选择所要操作的数据库</h1>
+<p>要对一个数据库进行操作, 必须先选择该数据库</p>
+<p>登录后使用 use 语句指定, 命令: use 数据库名;</p>
+<p>use 语句可以不加分号, 执行 use samp_db 来选择刚刚创建的数据库, 选择成功后会提示: Database changed</p>
+<h1 id="创建数据库表" tabindex="-1">创建数据库表</h1>
+<p>使用 create table 语句可完成对表的创建, create table 的常见形式:</p>
+<p>create table 表名称(列声明);</p>
+<p>以创建 students 表为例, 表中将存放 学号(id)、姓名(name)、性别(sex)、年龄(age)、联系电话(tel) 这些内容:</p>
+<pre><code>create table students
+（
+	id int unsigned not null auto_increment primary key,
+	name char(8) not null,
+	sex char(4) not null,
+	age tinyint unsigned not null,
+	tel char(13) null default &quot;-&quot;
+);
+</code></pre>
+<h1 id="向表中插入数据" tabindex="-1">向表中插入数据</h1>
+<p>insert 语句可以用来将一行或多行数据插到数据库表中, 使用的一般形式如下:</p>
+<p>insert [into] 表名 [(列名1, 列名2, 列名3, ...)] values (值1, 值2, 值3, ...);</p>
+<p>其中 [] 内的内容是可选的, 例如, 要给 samp_db 数据库中的 students 表插入一条记录, 执行语句:</p>
+<p>insert into students values(NULL, &quot;王刚&quot;, &quot;男&quot;, 20, &quot;13811371377&quot;);</p>
+<p>按回车键确认后若提示 Query Ok, 1 row affected (0.05 sec) 表示数据插入成功。
+alter table 语句用于创建后对表的修改, 基础用法如下:</p>
+<h1 id="添加列" tabindex="-1">添加列</h1>
+<p>基本形式: alter table 表名 add 列名 列数据类型 [after 插入位置];</p>
+<p>示例:</p>
+<p>在表的最后追加列 address: alter table students add address char(60);</p>
+<p>在名为 age 的列后插入列 birthday: alter table students add birthday date after age;</p>
+<h1 id="修改列" tabindex="-1">修改列</h1>
+<p>基本形式: alter table 表名 change 列名称 列新名称 新数据类型;</p>
+<p>示例:</p>
+<p>将表 tel 列改名为 telphone: alter table students change tel telphone char(13) default &quot;-&quot;;</p>
+<p>将 name 列的数据类型改为 char(16): alter table students change name name char(16) not null;</p>
+<h1 id="删除列" tabindex="-1">删除列</h1>
+<p>基本形式: alter table 表名 drop 列名称;</p>
+<p>示例:</p>
+<p>删除 birthday 列: alter table students drop birthday;</p>
+<h1 id="重命名表" tabindex="-1">重命名表</h1>
+<p>基本形式: alter table 表名 rename 新表名;</p>
+<p>示例:</p>
+<p>重命名 students 表为 workmates: alter table students rename workmates;</p>
+<h1 id="删除整张表" tabindex="-1">删除整张表</h1>
+<p>基本形式: drop table 表名;</p>
+<p>示例: 删除 workmates 表: drop table workmates;</p>
+<h1 id="清空表" tabindex="-1">清空表</h1>
+<p>truncate table 表名;</p>
+<h1 id="删除整个数据库" tabindex="-1">删除整个数据库</h1>
+<p>基本形式: drop database 数据库名;</p>
+<p>示例: 删除 samp_db 数据库: drop database samp_db;</p>
+<h1 id="导出数据" tabindex="-1">导出数据</h1>
+<p>mysqldump -uusername -ppassword -hhost -Pport database table --skip-lock-tables &gt; table.sql</p>
+<h1 id="导入数据" tabindex="-1">导入数据</h1>
+<p>mysqldump -uusername -ppassword -hhost -Pport database &lt; table.sql</p>
+<h1 id="可视化管理工具" tabindex="-1">可视化管理工具</h1>
+<p>MySQL Workbench</p>
+<h1 id="查看端口" tabindex="-1">查看端口</h1>
+<p>启动，并进入mysql后，输入命令：show global variables like 'port'</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

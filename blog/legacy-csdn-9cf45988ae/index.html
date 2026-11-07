@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>LightOJ 1341 - Aladdin and the Flying Carpet【合数分解】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46535889 题目链接： http://lightoj.com…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-9cf45988ae/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"LightOJ 1341 - Aladdin and the Flying Carpet【合数分解】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46535889 题目链接： http://lightoj.com…","datePublished":"2015-06-17T09:15:00.000Z","dateModified":"2015-06-17T09:15:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-9cf45988ae/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-9cf45988ae/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="LightOJ 1341 - Aladdin and the Flying Carpet【合数分解】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46535889 题目链接： http://lightoj.com…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-9cf45988ae/">
+    <meta property="article:published_time" content="2015-06-17T09:15:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LightOJ 1341 - Aladdin and the Flying Carpet【合数分解】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46535889 题目链接： http://lightoj.com…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">LightOJ 1341 - Aladdin and the Flying Carpet【合数分解】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/17 17:15</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>375 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46535889" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46535889</a></p>
+<p>题目链接： <a href="http://lightoj.com/volume_showproblem.php?problem=1341" target="_blank" rel="noreferrer"> http://lightoj.com/volume_showproblem.php?problem=1341
+</a></p>
+<p>题意：<br>
+给出整数 a 和 b ，求区间[b, a] 内的 a 的约数对的个数，a 的约数对（比如[2, 3] 与 [3, 2] 为同一对）。</p>
+<p>解法：<br>
+主要利用公式:<br>
+一个整数ｎ可以表示为若干素数乘积：　n = p1^a1 * p2^a2*…<em>pm^am;<br>
+则 n 的正因数的个数可以表示为： num = (a1+1) _</em>(a2+1)…_ (am+1);</p>
+<p>代码：</p>
+<pre><code> #include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;assert.h&gt;
+
+using namespace std;
+
+long long n, m;
+
+const int MAXN = 1000010;
+
+bool notprime[MAXN];//值为false表示素数，值为true表示非素数
+int prime[MAXN + 1];
+
+void getPrime()
+{
+    memset(notprime, false, sizeof(notprime));
+    notprime[0] = notprime[1] = true;
+    memset(prime, 0, sizeof(prime));
+    for (int i = 2; i &lt;= MAXN; i++)
+    {
+        if (!notprime[i])prime[++prime[0]] = i;
+        for (int j = 1; j &lt;= prime[0] &amp;&amp; prime[j] &lt;= MAXN / i; j++)
+        {
+            notprime[prime[j] * i] = true;
+            if (i%prime[j] == 0) break;
+        }
+    }
+}
+
+int getFactors()
+{
+    int ans = 1;
+    int fatCnt = 0;
+    long long tmp = n;
+    if (n / m &lt; m) return 0;
+    for (int i = 1; prime[i] &lt;= tmp / prime[i]; i++)
+    {
+        int c = 0;
+        while (tmp%prime[i] == 0)
+        {
+            c++;
+            tmp /= prime[i];
+        }
+        ans *= (c + 1);
+    }
+    if (tmp &gt; 1)
+        ans &lt;&lt;= 1;
+    ans &gt;&gt;= 1;
+    for (int i = 1; i &lt; m; i++)
+        if (n % i == 0)
+            ans--;
+
+    return ans;
+}
+
+int main()
+{
+    getPrime();
+    int t;
+    scanf(&quot;%d&quot;, &amp;t);
+    for (int cases = 1; cases &lt;= t; cases++)
+    {
+        scanf(&quot;%lld%lld&quot;, &amp;n, &amp;m);
+        printf(&quot;Case %d: %d\n&quot;, cases, getFactors());
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

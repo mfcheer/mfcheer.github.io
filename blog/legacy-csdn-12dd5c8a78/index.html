@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Good Bye 2014 A B C · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42287993 A. New Year Transportati…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-12dd5c8a78/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Good Bye 2014 A B C","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42287993 A. New Year Transportati…","datePublished":"2014-12-30T20:48:00.000Z","dateModified":"2014-12-30T20:48:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-12dd5c8a78/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-12dd5c8a78/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"acm,算法,codeforces","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Good Bye 2014 A B C · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42287993 A. New Year Transportati…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-12dd5c8a78/">
+    <meta property="article:published_time" content="2014-12-30T20:48:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Good Bye 2014 A B C · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42287993 A. New Year Transportati…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Good Bye 2014 A B C</h1>
+                    <div class="post-meta">
+                        <span>2014/12/31 04:48</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1777 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 4 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">acm</span><span class="post-tag">算法</span><span class="post-tag">codeforces</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42287993" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/42287993</a></p>
+<p>A. New Year Transportation</p>
+<p>time limit per test</p>
+<p>2 seconds</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>New Year is coming in Line World! In this world, there are  <em>n</em> cells numbered
+by integers from  1  to  <em>n</em> , as a  1 × <em>n</em> board. People live in cells.
+However, it was hard to move between distinct cells, because of the difficulty
+of escaping the cell. People wanted to meet people who live in other cells.</p>
+<p>So, user tncks0121 has made a transportation system to move between these
+cells, to celebrate the New Year. First, he thought of  <em>n</em> - 1  positive
+integers  <em>a</em> 1  , <em>a</em> 2  , ..., <em>a</em> <em>n</em> - 1  . For every integer  <em>i</em> where
+1 ≤ <em>i</em> ≤ <em>n</em> - 1  the condition  1 ≤ <em>a</em> <em>i</em> ≤ <em>n</em> - <em>i</em> holds. Next, he
+made  <em>n</em> - 1  portals, numbered by integers from 1 to  <em>n</em> - 1  . The  <em>i</em>
+-th (  1 ≤ <em>i</em> ≤ <em>n</em> - 1  ) portal connects cell  <em>i</em> and cell  ( <em>i</em> + <em>a</em>
+<em>i</em> )  , and one can travel from cell  <em>i</em> to cell  ( <em>i</em> + <em>a</em> <em>i</em> )  using
+the  <em>i</em> -th portal. Unfortunately, one cannot use the portal backwards, which
+means one cannot move from cell  ( <em>i</em> + <em>a</em> <em>i</em> )  to cell  <em>i</em> using the
+<em>i</em> -th portal. It is easy to see that because of condition  1 ≤ <em>a</em> <em>i</em> ≤ <em>n</em>
+- <em>i</em> one can't leave the Line World using portals.</p>
+<p>Currently, I am standing at cell  1  , and I want to go to cell  <em>t</em> .
+However, I don't know whether it is possible to go there. Please determine
+whether I can go to cell  <em>t</em> by only using the construted transportation
+system.</p>
+<p>Input</p>
+<p>The first line contains two space-separated integers  <em>n</em> (  3 ≤ <em>n</em> ≤ 3 × 10
+4  ) and  <em>t</em> (  2 ≤ <em>t</em> ≤ <em>n</em> ) — the number of cells, and the index of the
+cell which I want to go to.</p>
+<p>The second line contains  <em>n</em> - 1  space-separated integers  <em>a</em> 1  , <em>a</em> 2  ,
+..., <em>a</em> <em>n</em> - 1  (  1 ≤ <em>a</em> <em>i</em> ≤ <em>n</em> - <em>i</em> ). It is guaranteed, that using
+the given transportation system, one cannot leave the Line World.</p>
+<p>Output</p>
+<p>If I can go to cell  <em>t</em> using the transportation system, print &quot;  YES  &quot;.
+Otherwise, print &quot;  NO  &quot;.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>8 4
+1 2 1 2 1 2 1
+</code></pre>
+<p>output</p>
+<pre><code>YES
+</code></pre>
+<p>input</p>
+<pre><code>8 5
+1 2 1 2 1 1 1
+</code></pre>
+<p>output</p>
+<pre><code>NO
+</code></pre>
+<p>Note</p>
+<p>In the first sample, the visited cells are:  1, 2, 4  ; so we can successfully
+visit the cell  4  .</p>
+<p>In the second sample, the possible cells to visit are:  1, 2, 4, 6, 7, 8  ; so
+we can't visit the cell  5  , which we want to visit.</p>
+<p>A 水题</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+int n, t;
+
+int p[30010];
+
+int main()
+{
+    while (cin &gt;&gt; n &gt;&gt; t)
+    {
+        for (int i = 1; i &lt;= n-1; i++)
+            cin &gt;&gt; p[i];
+
+        int pos = 1;
+
+        for (int i = 1; i &lt;= n-1;i++)
+        {
+            if (pos &gt;= t)
+                break;
+            pos += p[pos];
+        }
+        if (pos == t)
+            cout &lt;&lt; &quot;YES&quot; &lt;&lt; endl;
+        else
+            cout &lt;&lt; &quot;NO&quot; &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+<p>B. New Year Permutation</p>
+<p>time limit per test</p>
+<p>2 seconds</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>User ainta has a permutation  <em>p</em> 1  , <em>p</em> 2  , ..., <em>p</em> <em>n</em> . As the New Year
+is coming, he wants to make his permutation as pretty as possible.</p>
+<p>Permutation  <em>a</em> 1  , <em>a</em> 2  , ..., <em>a</em> <em>n</em> is  prettier  than permutation
+<em>b</em> 1  , <em>b</em> 2  , ..., <em>b</em> <em>n</em> , if and only if there exists an integer  <em>k</em> (
+1 ≤ <em>k</em> ≤ <em>n</em> ) where  <em>a</em> 1  = <em>b</em> 1  , <em>a</em> 2  = <em>b</em> 2  , ..., <em>a</em> <em>k</em> - 1  =
+<em>b</em> <em>k</em> - 1  and  <em>a</em> <em>k</em> &lt; <em>b</em> <em>k</em> all holds.</p>
+<p>As known, permutation  <em>p</em> is so sensitive that it could be only modified by
+swapping two distinct elements. But swapping two elements is harder than you
+think. Given an  <em>n</em> × <em>n</em> binary matrix  <em>A</em> , user ainta can swap the values
+of  <em>p</em> <em>i</em> and  <em>p</em> <em>j</em> (  1 ≤ <em>i</em> , <em>j</em> ≤ <em>n</em> ,  <em>i</em> ≠ <em>j</em> ) if and only if
+<em>A</em> <em>i</em> , <em>j</em> = 1  .</p>
+<p>Given the permutation  <em>p</em> and the matrix  <em>A</em> , user ainta wants to know the
+prettiest permutation that he can obtain.</p>
+<p>Input</p>
+<p>The first line contains an integer  <em>n</em> (  1 ≤ <em>n</em> ≤ 300  ) — the size of the
+permutation  <em>p</em> .</p>
+<p>The second line contains  <em>n</em> space-separated integers  <em>p</em> 1  , <em>p</em> 2  , ...,
+<em>p</em> <em>n</em> — the permutation  <em>p</em> that user ainta has. Each integer between  1
+and  <em>n</em> occurs exactly once in the given permutation.</p>
+<p>Next  <em>n</em> lines describe the matrix  <em>A</em> . The  <em>i</em> -th line contains  <em>n</em>
+characters '  0  ' or '  1  ' and describes the  <em>i</em> -th row of  <em>A</em> . The
+<em>j</em> -th character of the  <em>i</em> -th line  <em>A</em> <em>i</em> , <em>j</em> is the element on the
+intersection of the  <em>i</em> -th row and the  <em>j</em> -th column of A. It is
+guaranteed that, for all integers  <em>i</em> , <em>j</em> where  1 ≤ <em>i</em> &lt; <em>j</em> ≤ <em>n</em> ,  <em>A</em>
+<em>i</em> , <em>j</em> = <em>A</em> <em>j</em> , <em>i</em> holds. Also, for all integers  <em>i</em> where  1 ≤ <em>i</em> ≤
+<em>n</em> ,  <em>A</em> <em>i</em> , <em>i</em> = 0  holds.</p>
+<p>Output</p>
+<p>In the first and only line, print  <em>n</em> space-separated integers, describing
+the prettiest permutation that can be obtained.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>7
+5 2 4 3 6 7 1
+0001001
+0000000
+0000010
+1000001
+0000000
+0010000
+1001000
+</code></pre>
+<p>output</p>
+<pre><code>1 2 4 3 6 7 5
+</code></pre>
+<p>input</p>
+<pre><code>5
+4 2 1 5 3
+00100
+00011
+10010
+01101
+01010
+</code></pre>
+<p>output</p>
+<pre><code>1 2 3 4 5
+</code></pre>
+<p>Note</p>
+<p>In the first sample, the swap needed to obtain the prettiest permutation is:
+( <em>p</em> 1  , <em>p</em> 7  )  .</p>
+<p>In the second sample, the swaps needed to obtain the prettiest permutation is
+( <em>p</em> 1  , <em>p</em> 3  ), ( <em>p</em> 4  , <em>p</em> 5  ), ( <em>p</em> 3  , <em>p</em> 4  )  .</p>
+<p><img src="http://espresso.codeforces.com/9b5f3d9ddb6b034c5fdb75722cfa3acc418fe643.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>A  permutation  <em>p</em> is a sequence of integers  <em>p</em> 1  , <em>p</em> 2  , ..., <em>p</em> <em>n</em>
+, consisting of  <em>n</em> distinct positive integers, each of them doesn't exceed
+<em>n</em> . The  <em>i</em> -th element of the permutation  <em>p</em> is denoted as  <em>p</em> <em>i</em> .
+The size of the permutation  <em>p</em> is denoted as  <em>n</em> .</p>
+<p>B 弗洛伊德算法 ，并查集也可以做 ，有时间敲一下。</p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;stdio.h&gt;  
+#include &lt;math.h&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;string.h&gt;  
+
+using namespace std;
+
+int p[305];
+int b[305][305];
+
+int n;
+
+int main()
+{
+    while (cin &gt;&gt; n)
+    {
+        for (int i = 1; i &lt;= n; i++)
+            cin &gt;&gt; p[i];
+        getchar();
+        for (int i = 1; i &lt;= n; i++)
+        {
+            for (int j = 1; j &lt;= n; j++)
+            {
+                char c = getchar();
+                b[i][j] = (c == '1');
+            }
+            getchar();
+        }
+
+        for (int k = 1; k &lt;= n;k++)
+            for (int  i= 1; i &lt;= n; i++)
+                for (int j = 1; j &lt;= n; j++)
+                {
+                    if (b[i][k] &amp; b[k][j])
+                    {
+                        b[i][j] = b[j][i] = 1;
+                    }
+                }
+
+        for (int i = 1; i &lt;= n; i++)
+            for (int j = i + 1; j &lt;= n; j++)
+            {
+                if (b[i][j] )
+                {
+                    if (p[i] &gt; p[j])
+                    {
+                        swap(p[i],p[j]);
+                    }
+                }
+            }
+        for (int i = 1; i &lt;= n; i++)
+            cout &lt;&lt; p[i] &lt;&lt; &quot; &quot;;
+    }
+    return 0;
+}
+</code></pre>
+<p>C. New Year Book Reading</p>
+<p>New Year is coming, and Jaehyun decided to read many books during 2015, unlike
+this year. He has  <em>n</em> books numbered by integers from 1 to  <em>n</em> . The weight
+of the  <em>i</em> -th (  1 ≤ <em>i</em> ≤ <em>n</em> ) book is  <em>w</em> <em>i</em> .</p>
+<p>As Jaehyun's house is not large enough to have a bookshelf, he keeps the  <em>n</em>
+books by stacking them vertically. When he wants to read a certain book  <em>x</em> ,
+he follows the steps described below.</p>
+<ol>
+<li>He  lifts  all the books above book  <em>x</em> .</li>
+<li>He pushes book  <em>x</em> out of the stack.</li>
+<li>He puts down the lifted books without changing their order.</li>
+<li>After reading book  <em>x</em> , he puts book  <em>x</em> on the top of the stack.</li>
+</ol>
+<p><img src="http://espresso.codeforces.com/16bdcfb1c75c6e60439f74c69133b7baaa9d8b13.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>He decided to read books for  <em>m</em> days. In the  <em>j</em> -th (  1 ≤ <em>j</em> ≤ <em>m</em> )
+day, he will read the book that is numbered with integer  <em>b</em> <em>j</em> (  1 ≤ <em>b</em>
+<em>j</em> ≤ <em>n</em> ). To read the book, he has to use the process described in the
+paragraph above. It is possible that he decides to re-read the same book
+several times.</p>
+<p>After making this plan, he realized that the total weight of books he should
+lift  during  <em>m</em> days would be too heavy. So, he decided to change the order
+of the stacked books before the New Year comes, and minimize the total weight.
+You may assume that books can be stacked in any possible order. Note that book
+that he is going to read on certain step isn't considered as  lifted  on that
+step. Can you help him?</p>
+<p>Input</p>
+<p>The first line contains two space-separated integers  <em>n</em> (  2 ≤ <em>n</em> ≤ 500  )
+and  <em>m</em> (  1 ≤ <em>m</em> ≤ 1000  ) — the number of books, and the number of days
+for which Jaehyun would read books.</p>
+<p>The second line contains  <em>n</em> space-separated integers  <em>w</em> 1  , <em>w</em> 2  , ...,
+<em>w</em> <em>n</em> (  1 ≤ <em>w</em> <em>i</em> ≤ 100  ) — the weight of each book.</p>
+<p>The third line contains  <em>m</em> space separated integers  <em>b</em> 1  , <em>b</em> 2  , ...,
+<em>b</em> <em>m</em> (  1 ≤ <em>b</em> <em>j</em> ≤ <em>n</em> ) — the order of books that he would read. Note
+that he can read the same book more than once.</p>
+<p>Output</p>
+<p>Print the minimum total weight of books he should  lift  , which can be
+achieved by rearranging the order of stacked books.</p>
+<p>Sample test(s)</p>
+<p>Input</p>
+<pre><code>3 5
+1 2 3
+1 3 2 3 1
+</code></pre>
+<p>Output</p>
+<pre><code>12
+</code></pre>
+<p>Note</p>
+<p>Here's a picture depicting the example. Each vertical column presents the
+stacked books.</p>
+<p><img src="http://espresso.codeforces.com/e0d6b73c8901945918e014ebece081e75529eb5c.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>贪心后模拟。</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+int n, m;
+int p[510];
+int q[1010], qq[1010];
+int vis[1010];
+
+int main()
+{
+    while (cin &gt;&gt; n &gt;&gt; m)
+    {
+        for (int i = 1; i &lt;= n; i++)
+        {
+            cin &gt;&gt; p[i];
+        }
+
+        memset(vis,0,sizeof(vis));
+        
+        int pos = 1;
+        for (int i = 1; i &lt;= m; i++)
+        {
+            int jjq;
+            cin &gt;&gt; jjq;
+            q[i] = jjq;
+            if (!vis[jjq])
+            {
+                qq[pos++] = jjq;
+                vis[jjq] = 1;
+            }
+        }
+
+        long long ans = 0;
+        for (int i = 1; i &lt;= m; i++)
+        {
+            int tt = q[i];
+            for (int j = 1; j &lt;= n; j++)
+            {
+                if (qq[j] != tt)
+                {
+                    ans += p[qq[j]];
+                }
+                else 
+                {
+                    for (int k = j; k &gt; 1 ; k--)
+                    {
+                        qq[k] = qq[k-1];
+                    }
+                    qq[1] = tt;
+                    break;
+                }
+            }
+        }
+
+        cout &lt;&lt; ans &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

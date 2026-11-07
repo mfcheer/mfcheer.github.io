@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj-1661 Help Jimmy 【DP】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44058587 Help Jimmy Time Limit: 1…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-7d0c94fb8a/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj-1661 Help Jimmy 【DP】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44058587 Help Jimmy Time Limit: 1…","datePublished":"2015-03-04T04:36:00.000Z","dateModified":"2015-03-04T04:36:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-7d0c94fb8a/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-7d0c94fb8a/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj-1661 Help Jimmy 【DP】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44058587 Help Jimmy Time Limit: 1…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-7d0c94fb8a/">
+    <meta property="article:published_time" content="2015-03-04T04:36:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj-1661 Help Jimmy 【DP】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44058587 Help Jimmy Time Limit: 1…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj-1661 Help Jimmy 【DP】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/04 12:36</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>810 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44058587" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44058587</a></p>
+<p>Help Jimmy</p>
+<table>
+<thead>
+<tr>
+<th><strong>Time Limit:</strong> 1000MS</th>
+<th></th>
+<th><strong>Memory Limit:</strong> 10000K</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Total Submissions:</strong> 8955</td>
+<td></td>
+<td><strong>Accepted:</strong> 2871</td>
+</tr>
+</tbody>
+</table>
+<p>Description</p>
+<p>&quot;Help Jimmy&quot; 是在下图所示的场景上完成的游戏。<br>
+<img src="http://poj.org/images/1661_1.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"><br>
+场景中包括多个长度和高度各不相同的平台。地面是最低的平台，高度为零，长度无限。</p>
+<p>Jimmy老鼠在时刻0从高于所有平台的某处开始下落，它的下落速度始终为1米/秒。当Jimmy落到某个平台上时，游戏者选择让它向左还是向右跑，它跑动的速度也是1米/秒。当Jimmy跑到平台的边缘时，开始继续下落。Jimmy每次下落的高度不能超过MAX米，不然就会摔死，游戏也会结束。</p>
+<p>设计一个程序，计算Jimmy到底地面时可能的最早时间。</p>
+<p>Input</p>
+<p>第一行是测试数据的组数t（0  &lt;= t &lt;=
+20）。每组测试数据的第一行是四个整数N，X，Y，MAX，用空格分隔。N是平台的数目（不包括地面），X和Y是Jimmy开始下落的位置的横竖坐标，MAX是一次下落的最大高度。接下来的N行每行描述一个平台，包括三个整数，X1[i]，X2[i]和H[i]。H[i]表示平台的高度，X1[i]和X2[i]表示平台左右端点的横坐标。1
+&lt;= N &lt;= 1000，-20000 &lt;= X, X1[i], X2[i] &lt;= 20000，0 &lt; H[i] &lt; Y &lt;= 20000（i =
+1..N）。所有坐标的单位都是米。</p>
+<p>Jimmy的大小和平台的厚度均忽略不计。如果Jimmy恰好落在某个平台的边缘，被视为落在平台上。所有的平台均不重叠或相连。测试数据保证问题一定有解。</p>
+<p>Output</p>
+<p>对输入的每组测试数据，输出一个整数，Jimmy到底地面时可能的最早时间。</p>
+<p>Sample Input</p>
+<pre><code>1
+3 8 17 20
+0 10 8
+0 10 13
+4 14 3
+</code></pre>
+<p>Sample Output</p>
+<pre><code>23
+
+
+
+
+
+#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+
+using namespace std;
+
+int n, x, y, MAX, t, i, j, ok;
+
+struct node
+{
+	int l, r, h;
+}p[1010];
+
+bool cmp(node a, node b)//低到高排序
+{
+	return a.h &lt;= b.h;
+}
+
+int dp[1010][2];
+
+int main()
+{
+	cin &gt;&gt; t;
+	while (t--)
+	{
+		cin &gt;&gt; n &gt;&gt; x &gt;&gt; y &gt;&gt; MAX;
+		for (i = 0; i &lt; n; i++)
+			cin &gt;&gt; p[i].l &gt;&gt; p[i].r &gt;&gt; p[i].h;
+		sort(p,p+n,cmp);
+		p[n].l = x; p[n].r = x; p[n].h = y;
+		dp[0][0] = dp[0][1] =  p[0].h;
+		//从下向上DP,dp[i][0] 左侧最短时间 / dp[i][1] 右侧最短时间
+		for (i = 1; i &lt;= n; i++)
+		{
+			dp[i][0] = dp[i][1] = 100000000;
+			ok = 0;
+			for (j = i-1; j &gt;=0 ; j--)
+				if (p[i].l &gt;= p[j].l &amp;&amp; p[i].l &lt;= p[j].r)//左	
+				{
+					ok = 1; break;
+				}
+			if (ok)
+			{
+				if (p[i].h - p[j].h &lt;= MAX)
+					dp[i][0] = min(dp[j][0] + p[i].l - p[j].l, dp[j][1] + p[j].r - p[i].l) + p[i].h - p[j].h;
+			}
+			else if (p[i].h &lt;= MAX)
+					dp[i][0]  = p[i].h;
+			ok = 0;
+			for (j = i-1; j &gt;=0 ; j--)
+				if (p[i].r &gt;= p[j].l &amp;&amp; p[i].r &lt;= p[j].r)//右
+				{
+					ok = 1;
+					break;
+				}
+			if (ok)
+			{
+				if (p[i].h - p[j].h &lt;= MAX)
+					dp[i][1] = min(dp[j][0] + p[i].r - p[j].l, dp[j][1] + p[j].r - p[i].r) + p[i].h - p[j].h;
+			}
+			else if(p[i].h &lt;= MAX)
+				dp[i][1] = p[i].h;	
+		}
+		cout &lt;&lt; dp[n][0] &lt;&lt; endl;
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

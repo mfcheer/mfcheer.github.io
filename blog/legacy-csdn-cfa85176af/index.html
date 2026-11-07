@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UVA 707 - Robbery【记忆化搜索】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47400047 题目链接： https://uva.online…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-cfa85176af/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"UVA 707 - Robbery【记忆化搜索】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47400047 题目链接： https://uva.online…","datePublished":"2015-08-10T08:05:00.000Z","dateModified":"2015-08-10T08:05:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-cfa85176af/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-cfa85176af/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="UVA 707 - Robbery【记忆化搜索】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47400047 题目链接： https://uva.online…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-cfa85176af/">
+    <meta property="article:published_time" content="2015-08-10T08:05:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UVA 707 - Robbery【记忆化搜索】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47400047 题目链接： https://uva.online…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">UVA 707 - Robbery【记忆化搜索】</h1>
+                    <div class="post-meta">
+                        <span>2015/08/10 16:05</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>591 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47400047" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47400047</a></p>
+<p>题目链接：<br>
+<a href="https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;category=599&amp;problem=648&amp;mosmsg=Submission+received+with+ID+14106133" target="_blank" rel="noreferrer">
+https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;category=599&amp;problem=648&amp;mosmsg=Submission+received+with+ID+14106133
+</a></p>
+<p>题意：<br>
+在一个w *
+h的图上，t个时刻，然后给你一些信息，知道某些时刻没有小偷的矩阵，问哪些时刻可以唯一确定小偷所在的位置，和确定小偷是否已经逃走，如果没逃走，但是也没有时刻可以可以确定小偷位置，输出不知道</p>
+<p>解法：记忆化搜索<br>
+dp[i][j][t]=1 表示t时刻ij可能出现劫犯<br>
+dp[i][j][t]=0 表示t时刻ij不可能出现劫犯</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;math.h&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+int dir[][2] = { {0,0},{1,0},{-1,0},{0,1}, {0,-1} };
+int W, H, T;
+bool is_ok(int x, int y)
+{
+    if (x &gt;= 1 &amp;&amp; x &lt;= W &amp;&amp; y &gt;= 1 &amp;&amp; y &lt;= H) return true;
+    return false;
+}
+int n;
+int dp[110][110][110]; //dp[i][j][t]=1 表示t时刻ij可能出现劫犯 
+                     //dp[i][j][t]=0 表示t时刻ij不可能出现劫犯 
+
+vector&lt;pair&lt;int, int&gt; &gt; ans[110];
+
+int dfs(int x, int y, int t)
+{
+    if (dp[x][y][t] != -1) 
+        return dp[x][y][t];
+
+    if (t == T)
+    {
+        dp[x][y][t] = 1;
+        return 1;
+    }
+    dp[x][y][t] = 0;
+
+    for (int i = 0; i &lt; 5; i++)
+    {
+        int xx = x + dir[i][0];
+        int yy = y + dir[i][1];
+        if (!is_ok(xx, yy)) continue;
+        if (dfs(xx, yy, t + 1))
+            dp[x][y][t] = 1;
+    }
+    return dp[x][y][t];
+}
+
+int main()
+{
+    int cases = 1;
+    while (~scanf(&quot;%d%d%d&quot;, &amp;W, &amp;H, &amp;T) &amp;&amp; W)
+    {
+        memset(dp, -1, sizeof(dp));
+        for (int i = 0; i &lt;= 105;i++) ans[i].clear();
+
+        scanf(&quot;%d&quot;,&amp;n);
+        int t, x, xx, y, yy;
+        for (int ii = 1; ii &lt;= n; ii++)
+        {
+            scanf(&quot;%d%d%d%d%d&quot;, &amp;t, &amp;x, &amp;y, &amp;xx, &amp;yy);
+            for (int i = x; i &lt;= xx; i++)
+                for (int j = y; j &lt;= yy; j++)
+                    dp[i][j][t] = 0;
+        }
+
+        for (int i = 1; i &lt;= W; i++)
+            for (int j = 1; j &lt;= H; j++)
+                dfs(i, j, 1);
+
+        printf(&quot;Robbery #%d:\n&quot;, cases++);
+
+        int ok;
+        int res = 1;
+        for (int k = 1; k &lt;= T; k++)
+        {
+            ok = 0;
+            for (int i = 1; i &lt;= W; i++)
+            {
+                for (int j = 1; j &lt;= H; j++)
+                {
+                    if (dp[i][j][k] == 1)
+                    {
+                        ans[k].push_back((make_pair(i, j)));
+                        ok = 1;
+                    }
+                }
+            }
+            if (!ok)
+            {
+                res = 0;
+                break;
+            }
+        }
+        if (!res)
+        {
+            puts(&quot;The robber has escaped.&quot;);
+            printf(&quot;\n&quot;);
+            continue;
+        }
+        for (int i = 1; i &lt;= T; i++)
+        {
+            if (ans[i].size() == 1)
+            {
+                printf(&quot;Time step %d: The robber has been at %d,%d.\n&quot;,i,ans[i][0].first,ans[i][0].second);
+                res = 0;
+            }
+        }
+        if (res)
+            puts(&quot;Nothing known.&quot;);
+        printf(&quot;\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

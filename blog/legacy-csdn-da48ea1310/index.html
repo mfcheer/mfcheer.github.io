@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Nagle算法 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52104848 纳格算法是以减少数据包发送量来增进TCP/IP网…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-da48ea1310/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Nagle算法","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52104848 纳格算法是以减少数据包发送量来增进TCP/IP网…","datePublished":"2016-08-03T08:26:00.000Z","dateModified":"2016-08-03T08:26:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-da48ea1310/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-da48ea1310/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Nagle算法 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52104848 纳格算法是以减少数据包发送量来增进TCP/IP网…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-da48ea1310/">
+    <meta property="article:published_time" content="2016-08-03T08:26:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Nagle算法 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52104848 纳格算法是以减少数据包发送量来增进TCP/IP网…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Nagle算法</h1>
+                    <div class="post-meta">
+                        <span>2016/08/03 16:26</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>381 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/52104848" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/52104848</a></p>
+<p>纳格算法是以减少数据包发送量来增进TCP/IP网络的性能。它是由约翰．纳格任职于Ford Aerospace时命名。</p>
+<p>纳格的文件描述了他所谓的“小数据包问题”－某个应用程序不断地提交小单位的数据，且某些常只占1字节大小。因为TCP数据包具有40字节的标头信息（TCP与IPv4各占20字节），这导致了41字节大小的数据包只有1字节的可用信息，造成庞大的浪费。这种状况常常发生于Telnet工作阶段－大部分的键盘操作会产生1字节的数据并马上提交。更糟的是，在慢速的网络连接下，这类的数据包会大量地在同一时点传输，造成壅塞碰撞（Congestion
+Collapse）。</p>
+<p>纳格算法的工作方式是合并（coalescing）一定数量的输出数据后一次提交。特别的是，只要有已提交的数据包尚未确认，发送者会持续缓冲数据包，直到累积一定数量的数据才提交。</p>
+<p>算法过程：</p>
+<pre><code>if有新資料要傳送
+   if訊窗大小&gt;= MSS and可傳送的資料&gt;= MSS
+     立刻傳送完整MSS大小的segment
+   else
+    if管線中有尚未確認的資料
+      在下一個確認（ACK）封包收到前，將資料排進緩衝區佇列
+    else
+      立即傳送資料  
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

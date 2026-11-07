@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SpringBoot-MyBatis-Web开发笔记 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：SpringBoot-MyBatis-Web开发笔记">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-18a3da30c0/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"SpringBoot-MyBatis-Web开发笔记","description":"历史迁移文章：SpringBoot-MyBatis-Web开发笔记","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-18a3da30c0/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-18a3da30c0/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="SpringBoot-MyBatis-Web开发笔记 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：SpringBoot-MyBatis-Web开发笔记">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-18a3da30c0/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SpringBoot-MyBatis-Web开发笔记 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：SpringBoot-MyBatis-Web开发笔记">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.querySelector('.post-body'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">SpringBoot-MyBatis-Web开发笔记</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>69 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#mysql表">Mysql表</a></li><li><a href="#application.yml">application.yml</a></li><li><a href="#maven-pom.xml">Maven pom.xml</a></li><li><a href="#mybatis注解方式">mybatis注解方式</a></li><li><a href="#对外接口">对外接口</a></li><li><a href="#测试url">测试url</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>一直使用公司的http和ORM框架开发web服务，所以想试试Spring。
+使用SpringBoot+MyBatis的代码Demo，详细代码：<a href="https://github.com/mfcheer/springboot-mybatis-Demo" target="_blank" rel="noreferrer">Demo代码地址</a></p>
+<h2 id="mysql表" tabindex="-1">Mysql表</h2>
+<pre><code class="hljs">CREATE TABLE `message_board` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `text` varchar(256) NOT NULL,
+  `username` varchar(64) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `modify_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+</code></pre>
+<h2 id="application.yml" tabindex="-1">application.yml</h2>
+<pre><code class="hljs">spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mfcheer?uuseUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  configuration:
+   map-underscore-to-camel-case: true
+
+logging:
+  level:
+   com.hehe.mapper: debug
+
+</code></pre>
+<h2 id="maven-pom.xml" tabindex="-1">Maven pom.xml</h2>
+<pre><code class="hljs">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;com.mfcheer.learn&lt;/groupId&gt;
+  &lt;artifactId&gt;springboot&lt;/artifactId&gt;
+  &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+  
+  &lt;parent&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+      &lt;version&gt;2.0.4.RELEASE&lt;/version&gt;
+  &lt;/parent&gt;
+    
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+        &lt;artifactId&gt;jackson-core&lt;/artifactId&gt;
+        &lt;version&gt;2.9.1&lt;/version&gt;&lt;!--$NO-MVN-MAN-VER$--&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+        &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+        &lt;version&gt;2.9.1&lt;/version&gt;&lt;!--$NO-MVN-MAN-VER$--&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+        &lt;artifactId&gt;jackson-annotations&lt;/artifactId&gt;
+        &lt;version&gt;2.9.1&lt;/version&gt;&lt;!--$NO-MVN-MAN-VER$--&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+        &lt;version&gt;1.2.0&lt;/version&gt;
+    &lt;/dependency&gt;
+  	&lt;dependency&gt;
+    	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+  	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-boot-starter-tomcat&lt;/artifactId&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+      &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
+      &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
+      &lt;version&gt;3.4.6&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;mysql&lt;/groupId&gt;
+      &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt; 
+      &lt;groupId&gt;com.alibaba&lt;/groupId&gt; 
+      &lt;artifactId&gt;fastjson&lt;/artifactId&gt; 
+      &lt;version&gt;1.2.40&lt;/version&gt; 
+    &lt;/dependency&gt; 
+  &lt;/dependencies&gt;
+  
+  &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+  &lt;/build&gt;
+  
+&lt;/project&gt;
+</code></pre>
+<p>&lt;!--more--&gt;</p>
+<h2 id="mybatis注解方式" tabindex="-1">mybatis注解方式</h2>
+<p>例子</p>
+<pre><code class="hljs">package dao;
+
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import entity.MessageBoard;
+
+public interface MessageBoardDao {
+	
+	@Select(&quot;select * from message_board where id = #{id}&quot;)
+	public MessageBoard queryMessage(@Param(&quot;id&quot;)int id);
+
+	@Update(&quot;update message_board set text=#{text}, username=#{username} where id=#{id}&quot;)
+	public void updateMessage(int id, String text, String username);
+
+}
+</code></pre>
+<h2 id="对外接口" tabindex="-1">对外接口</h2>
+<pre><code class="hljs">@RestController
+@RequestMapping(&quot;/message&quot;)
+public class MessageBoardController {
+	
+	@Autowired
+	MessageBoardDao messageBoardDao;
+
+	@RequestMapping(&quot;/hello&quot;)
+	public String hello() {
+		return &quot;res Hello!!!&quot;;
+	}
+	
+	@GetMapping(&quot;/hello&quot;)
+	public String gethello() {
+		return &quot;get Hello!!!&quot;;
+	}
+	
+	@RequestMapping(&quot;/detail&quot;)
+	public String detail(HttpServletRequest request) {
+		String id = request.getParameter(&quot;id&quot;);
+		MessageBoard messageBoard = messageBoardDao.queryMessage(Integer.valueOf(id));
+		if (messageBoard == null) {
+			messageBoard = new MessageBoard();
+		}
+		
+		String jsonString = JSON.toJSONString(messageBoard);
+		return jsonString;
+	}
+	
+	@RequestMapping(&quot;/update&quot;)
+	public String update(HttpServletRequest request) {
+		String id = request.getParameter(&quot;id&quot;);
+		String text = request.getParameter(&quot;text&quot;);
+		String username = request.getParameter(&quot;username&quot;);
+		messageBoardDao.updateMessage(Integer.valueOf(id), text, username);
+		return &quot;ok&quot;;
+	}
+	
+}
+</code></pre>
+<h2 id="测试url" tabindex="-1">测试url</h2>
+<pre><code class="hljs">url：http://localhost:8080/message/detail?id=1
+返回数据：{&quot;id&quot;:1,&quot;text&quot;:&quot;test2&quot;,&quot;username&quot;:&quot;mengfanqiang&quot;}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

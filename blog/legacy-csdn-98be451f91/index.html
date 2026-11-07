@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-1515 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41787843 dfs 题意：给你两个字符串，问：第一个字符串按…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-98be451f91/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-1515","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41787843 dfs 题意：给你两个字符串，问：第一个字符串按…","datePublished":"2014-12-07T07:23:00.000Z","dateModified":"2014-12-07T07:23:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-98be451f91/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-98be451f91/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-1515 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41787843 dfs 题意：给你两个字符串，问：第一个字符串按…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-98be451f91/">
+    <meta property="article:published_time" content="2014-12-07T07:23:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-1515 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41787843 dfs 题意：给你两个字符串，问：第一个字符串按…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-1515</h1>
+                    <div class="post-meta">
+                        <span>2014/12/07 15:23</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>326 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41787843" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41787843</a></p>
+<p>dfs</p>
+<p>题意：给你两个字符串，问：第一个字符串按入栈出栈规则，能否达到第二个字符串，输出所有的方法，i表示入栈，o表示出栈。</p>
+<p>用dfs模拟第一个字符串入栈出栈过程:</p>
+<p>1. 当前字符入栈，就向下一层递归，即搜向下一个字符</p>
+<p>2. 栈顶元素出栈，对新的栈顶元素判断</p>
+<p>注意回溯的条件</p>
+<pre><code>#include&lt;stdio.h&gt;    
+#include&lt;iostream&gt;    
+#include&lt;math.h&gt;    
+#include&lt;stdlib.h&gt;    
+#include&lt;ctype.h&gt;    
+#include&lt;algorithm&gt;    
+#include&lt;vector&gt;    
+#include&lt;string.h&gt;    
+#include&lt;queue&gt;    
+#include&lt;stack&gt;    
+#include&lt;set&gt;    
+#include&lt;map&gt;    
+#include&lt;sstream&gt;    
+#include&lt;time.h&gt;    
+#include&lt;utility&gt;    
+#include&lt;malloc.h&gt;    
+#include&lt;stdexcept&gt;    
+
+using namespace std;
+
+char a[1000], b[1000];
+char str1[1000], str2[1000];
+char ans[1000];
+
+stack&lt;char&gt; q;
+
+int l1,l2;
+
+void dfs(int cur1,int cur2,int k)
+{
+	if (cur2 == l1)
+	{
+		for(int i=0;i &lt; k;i++)
+		{
+			cout&lt;&lt;ans[i]&lt;&lt;&quot; &quot;;
+		}
+		cout&lt;&lt;endl;
+		return ;
+	}
+
+	if (cur1 &lt; l1)
+	{
+		ans[k] = 'i';
+		q.push(a[cur1]);
+		dfs (cur1+1,cur2,k+1);
+		q.pop();
+	}
+
+	if (!q.empty() &amp;&amp; q.top() == b[cur2])
+	{
+		ans[k] = 'o';
+		char c = q.top();
+		q.pop();
+		dfs(cur1,cur2+1,k+1);
+		q.push( c );
+	}
+}
+
+int main()
+{
+	while (scanf(&quot;%s %s&quot;,a,b)!=EOF)
+	{
+		while (!q.empty())
+		{
+			q.pop();
+		}
+		int ok = 1;
+
+		l1 = strlen(a);
+	    l2 = strlen(b);
+
+		if (l1 != l2)
+		{
+			ok = 0;
+		}
+		
+		strcpy(str1,a);
+		strcpy(str2,b);
+
+		sort(str1, str1 + l1);
+		sort(str2, str2 + l2);
+
+		if (strcmp(str1, str2) != 0)
+			ok = 0;
+		if (!ok)
+		{
+			printf(&quot;[\n]\n&quot;);
+		}
+		else
+		{
+			printf(&quot;[\n&quot;);
+			
+			dfs(0,0,0);
+
+			printf(&quot;]\n&quot;);
+		}
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-4513 吉哥系列故事——完美队形II 【Manacher】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44103569 吉哥系列故事——完美队形II ** Time L…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-ea2f12c2f7/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-4513 吉哥系列故事——完美队形II 【Manacher】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44103569 吉哥系列故事——完美队形II ** Time L…","datePublished":"2015-03-06T11:29:00.000Z","dateModified":"2015-03-06T11:29:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-ea2f12c2f7/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-ea2f12c2f7/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-4513 吉哥系列故事——完美队形II 【Manacher】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44103569 吉哥系列故事——完美队形II ** Time L…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-ea2f12c2f7/">
+    <meta property="article:published_time" content="2015-03-06T11:29:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-4513 吉哥系列故事——完美队形II 【Manacher】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44103569 吉哥系列故事——完美队形II ** Time L…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-4513 吉哥系列故事——完美队形II 【Manacher】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/06 19:29</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>914 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44103569" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44103569</a></p>
+<h1 id="吉哥系列故事——完美队形ii" tabindex="-1">吉哥系列故事——完美队形II</h1>
+<p>** Time Limit: 3000/1000 MS (Java/Others)    Memory Limit: 65535/32768 K
+(Java/Others)<br>
+Total Submission(s): 1159    Accepted Submission(s): 429<br>
+**</p>
+<p>Problem Description</p>
+<p>吉哥又想出了一个新的完美队形游戏！<br>
+假设有n个人按顺序站在他的面前，他们的身高分别是h[1], h[2] ...
+h[n]，吉哥希望从中挑出一些人，让这些人形成一个新的队形，新的队形若满足以下三点要求，则就是新的完美队形：</p>
+<p>1、挑出的人保持原队形的相对顺序不变，且必须都是在原队形中连续的；<br>
+2、左右对称，假设有m个人形成新的队形，则第1个人和第m个人身高相同，第2个人和第m-1个人身高相同，依此类推，当然如果m是奇数，中间那个人可以任意；<br>
+3、从左到中间那个人，身高需保证不下降，如果用H表示新队形的高度，则H[1]  &lt;= H[2] &lt;= H[3] .... &lt;= H[mid]。</p>
+<p>现在吉哥想知道：最多能选出多少人组成新的完美队形呢？</p>
+<p>Input</p>
+<p>输入数据第一行包含一个整数T，表示总共有T组测试数据(T &lt;= 20)；<br>
+每组数据首先是一个整数n(1 &lt;= n &lt;= 100000)，表示原先队形的人数，接下来一行输入n个整数，表示原队形从左到右站的人的身高（50 &lt;= h
+&lt;= 250，不排除特别矮小和高大的）。</p>
+<p>Output</p>
+<p>请输出能组成完美队形的最多人数，每组输出占一行。</p>
+<p>Sample Input</p>
+<p>2 3 51 52 51 4 51 52 52 51</p>
+<p>Sample Output</p>
+<p>3 4</p>
+<p>Source</p>
+<p><a href="http://acm.hdu.edu.cn/search.php?field=problem&amp;key=2013%CC%DA%D1%B6%B1%E0%B3%CC%C2%ED%C0%AD%CB%C9%B3%F5%C8%FC%B5%DA%B6%FE%B3%A1%A3%A83%D4%C222%C8%D5%A3%A9&amp;source=1&amp;searchmode=source" target="_blank" rel="noreferrer"> 2013腾讯编程马拉松初赛第二场（3月22日）
+</a></p>
+<p>manacher 简单变形</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+
+using namespace std;
+
+const int MAXN = 2000100;
+int n, t, ans;
+int s[MAXN];
+int ma[MAXN * 2];
+int mp[MAXN];
+
+void manacher()
+{
+	int l = 0;
+	ma[l++] = 99999999;
+	ma[l++] = 1000000000;
+	for (int i = 0; i &lt; n; i++)
+	{
+		ma[l++] = s[i];
+		ma[l++] = 1000000000;
+	}
+	ma[l] = 88888888;
+	int mx = 0, id = 0;
+	for (int i = 0; i &lt; l; i++)
+	{
+		mp[i] = mx&gt;i ? min(mp[2 * id - i], mx - i) : 1;
+
+		int m = ma[i];
+		while (ma[i + mp[i]] == ma[i - mp[i]] &amp;&amp; ma[i-mp[i]] &lt;= ma[i-mp[i]+2]) mp[i]++;	
+		if (i + mp[i] &gt; mx)
+		{
+			mx = i + mp[i];
+			id = i;
+		}
+	}
+}
+
+int main()
+{
+	scanf(&quot;%d&quot;, &amp;t);
+	while (t--)
+	{
+		ans = 0;
+		memset(s, 0, sizeof(s));
+		memset(mp, 0, sizeof(mp));
+		scanf(&quot;%d&quot;, &amp;n);
+		for (int i = 0; i &lt; n; i++)
+			scanf(&quot;%d&quot;, &amp;s[i]);
+		manacher();
+		for (int i = 0; i &lt; n*2+1;i++)
+		ans = max(ans, mp[i] - 1);
+		printf(&quot;%d\n&quot;, ans);
+	}
+	return 0;
+}
+
+
+
+
+
+
+
+#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+
+using namespace std;
+
+const int MAXN = 2000100;
+int n, t, ans;
+int s[MAXN];
+int ma[MAXN * 2];
+int mp[MAXN];
+
+void manacher()
+{
+	int l = 0;
+	ma[l++] = 99999999;
+	ma[l++] = 1000000000;
+	for (int i = 0; i &lt; n; i++)
+	{
+		ma[l++] = s[i];
+		ma[l++] = 1000000000;
+	}
+	ma[l] = 88888888;
+	int mx = 0, id = 0;
+	for (int i = 0; i &lt; l; i++)
+	{
+		mp[i] = mx&gt;i ? min(mp[2 * id - i], mx - i) : 1;
+
+		int m = ma[i];
+		while (ma[i + mp[i]] == ma[i - mp[i]])
+		{
+			if (ma[i + mp[i]] == 1000000000)
+			{
+				mp[i]++;
+				continue;
+			}
+			if (m &gt;= ma[i + mp[i]])
+			{
+				m = ma[i + mp[i]];
+				mp[i]++;//两行的顺序不能反，因为这里WA了几发
+			}
+			else
+				break;
+		}
+		if (i + mp[i] &gt; mx)
+		{
+			mx = i + mp[i];
+			id = i;
+		}
+		
+	}
+}
+
+int main()
+{
+	scanf(&quot;%d&quot;, &amp;t);
+	while (t--)
+	{
+		ans = 0;
+		memset(s, 0, sizeof(s));
+		memset(mp, 0, sizeof(mp));
+		scanf(&quot;%d&quot;, &amp;n);
+		for (int i = 0; i &lt; n; i++)
+			scanf(&quot;%d&quot;, &amp;s[i]);
+		manacher();
+		for (int i = 0; i &lt; n*2+1;i++)
+		ans = max(ans, mp[i] - 1);
+		printf(&quot;%d\n&quot;, ans);
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

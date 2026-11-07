@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>CART算法概念 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：CART算法概念">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-aaec55bc51/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"CART算法概念","description":"历史迁移文章：CART算法概念","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-aaec55bc51/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-aaec55bc51/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="CART算法概念 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：CART算法概念">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-aaec55bc51/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CART算法概念 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：CART算法概念">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">CART算法概念</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>331 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<h1 id="cart算法概念" tabindex="-1">CART算法概念</h1>
+<p>Classification And Regression Tree，即分类回归树算法。它是决策树的一种实现。</p>
+<p>CART是一种二分的分割技术，把当前的样本划分成两个子样本，每个非叶子节点都有两个分支，生成的决策树是二叉树。</p>
+<h1 id="cart算法流程" tabindex="-1">CART算法流程</h1>
+<p>使用基尼系数判断样本集的“不纯度”，尽可能“纯”就是尽量让一个分裂子集中待分类项属于同一类别。基尼系数越低越好。</p>
+<p>基尼系数的公式：
+其中，C样本分类的数量。Pi表示属于i类的概率。
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/90.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>下面举例CART中基尼系数的计算，图片来自网络。
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/86.png" alt="" loading="lazy" referrerpolicy="no-referrer">
+属性有3个，分别是有房情况，婚姻状况和年收入。房和婚姻是离散值，收入是连续值，是否贷款是分类结果。</p>
+<p><img src="/assets/images/legacy/MarkdownPhotos/photos1/87.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>下面是婚姻状况属性，有三种情况。
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/88.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>最后是收入属性，它是连续值，连续值的计算使用分裂点的方法，选择基尼系数最小的点作为决策树的划分。
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/89.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<p>根据这样的分裂规则CART算法就能完成建树过程。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

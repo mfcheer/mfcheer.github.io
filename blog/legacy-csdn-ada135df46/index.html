@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Codeforces Round · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41865791 http://codeforces.com/co…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-ada135df46/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Codeforces Round","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41865791 http://codeforces.com/co…","datePublished":"2014-12-11T06:02:00.000Z","dateModified":"2014-12-11T06:02:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-ada135df46/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-ada135df46/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Codeforces Round · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41865791 http://codeforces.com/co…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-ada135df46/">
+    <meta property="article:published_time" content="2014-12-11T06:02:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Codeforces Round · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41865791 http://codeforces.com/co…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Codeforces Round</h1>
+                    <div class="post-meta">
+                        <span>2014/12/11 14:02</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1355 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 3 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41865791" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41865791</a></p>
+<p><a href="http://codeforces.com/contest/474" target="_blank" rel="noreferrer"> http://codeforces.com/contest/474 </a></p>
+<p>A 水题 枚举每个字符即可</p>
+<p>A. Keyboard</p>
+<p>time limit per test</p>
+<p>2 seconds</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Our good friend Mole is trying to code a big message. He is typing on an
+unusual keyboard with characters arranged in following way:</p>
+<pre><code>qwertyuiop
+asdfghjkl;
+zxcvbnm,./
+</code></pre>
+<p>Unfortunately Mole is blind, so sometimes it is problem for him to put his
+hands accurately. He accidentally moved both his hands with one position to
+the left or to the right. That means that now he presses not a button he
+wants, but one neighboring button (left or right, as specified in input).</p>
+<p>We have a sequence of characters he has typed and we want to find the original
+message.</p>
+<p>Input</p>
+<p>First line of the input contains one letter describing direction of shifting (
+'L'  or  'R'  respectively for left or right).</p>
+<p>Second line contains a sequence of characters written by Mole. The size of
+this sequence will be no more than  100  . Sequence contains only symbols that
+appear on Mole's keyboard. It doesn't contain spaces as there is no space on
+Mole's keyboard.</p>
+<p>It is guaranteed that even though Mole hands are moved, he is still pressing
+buttons on keyboard and not hitting outside it.</p>
+<p>Output</p>
+<p>Print a line that contains the original message.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>R
+s;;upimrrfod;pbr
+</code></pre>
+<p>output</p>
+<pre><code>allyouneedislove
+
+
+
+
+
+#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+#include&lt;stdexcept&gt;
+#include&lt;iomanip&gt;
+#include&lt;iterator&gt;
+
+using namespace std;
+
+int n,m;
+char a[3];
+char b[10000];
+
+char p[10000] = {&quot;qwertyuiopasdfghjkl;zxcvbnm,./&quot;};
+
+int main ()
+{
+    scanf(&quot;%s&quot;,a);
+    scanf(&quot;%s&quot;,b);
+    int l = strlen(b);
+    if (a[0] == 'L')
+    {
+        for(int i=0;i&lt;l;i++)
+        {
+            for(int j=0;j&lt;30;j++)
+            {
+                if (p[j] == b[i])
+                {
+                    printf(&quot;%c&quot;,p[j+1]);
+                    continue;
+                }
+            }
+        }
+        printf(&quot;\n&quot;);
+    }
+    else if (a[0] == 'R')
+    {
+        for(int i=0;i&lt;l;i++)
+        {
+            for(int j=0;j&lt;30;j++)
+            {
+                if (p[j] == b[i])
+                {
+                    printf(&quot;%c&quot;,p[j-1]);
+                    continue;
+                }
+            }
+        }
+        printf(&quot;\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+<p>B. Worms</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>It is lunch time for Mole. His friend, Marmot, prepared him a nice game for
+lunch.</p>
+<p>Marmot brought Mole  <em>n</em> ordered piles of worms such that  <em>i</em> -th pile
+contains  <em>a</em> <em>i</em> worms. He labeled all these worms with consecutive integers:
+worms in first pile are labeled with numbers  1  to  <em>a</em> 1  , worms in second
+pile are labeled with numbers  <em>a</em> 1  + 1  to  <em>a</em> 1  + <em>a</em> 2  and so on. See
+the example for a better understanding.</p>
+<p>Mole can't eat all the worms (Marmot brought a lot) and, as we all know, Mole
+is blind, so Marmot tells him the labels of the best juicy worms. Marmot will
+only give Mole a worm if Mole says correctly in which pile this worm is
+contained.</p>
+<p>Poor Mole asks for your help. For all juicy worms said by Marmot, tell Mole
+the correct answers.</p>
+<p>Input</p>
+<p>The first line contains a single integer  <em>n</em> (  1 ≤ <em>n</em> ≤ 10  5  ), the
+number of piles.</p>
+<p>The second line contains  <em>n</em> integers  <em>a</em> 1  , <em>a</em> 2  , ..., <em>a</em> <em>n</em> (  1 ≤
+<em>a</em> <em>i</em> ≤ 10  3  ,  <em>a</em> 1  + <em>a</em> 2  + ... + <em>a</em> <em>n</em> ≤ 10  6  ), where  <em>a</em>
+<em>i</em> is the number of worms in the  <em>i</em> -th pile.</p>
+<p>The third line contains single integer  <em>m</em> (  1 ≤ <em>m</em> ≤ 10  5  ), the number
+of juicy worms said by Marmot.</p>
+<p>The fourth line contains  <em>m</em> integers  <em>q</em> 1  , <em>q</em> 2  , ..., <em>q</em> <em>m</em> (  1 ≤
+<em>q</em> <em>i</em> ≤ <em>a</em> 1  + <em>a</em> 2  + ... + <em>a</em> <em>n</em> ), the labels of the juicy worms.</p>
+<p>Output</p>
+<p>Print  <em>m</em> lines to the standard output. The  <em>i</em> -th line should contain an
+integer, representing the number of the pile where the worm labeled with the
+number  <em>q</em> <em>i</em> is.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>5
+2 7 3 4 9
+3
+1 25 11
+</code></pre>
+<p>output</p>
+<pre><code>1
+5
+3
+</code></pre>
+<p>Note</p>
+<p>For the sample input:</p>
+<ul>
+<li>
+<p>The worms with labels from [  1  ,  2  ] are in the first pile.</p>
+</li>
+<li>
+<p>The worms with labels from [  3  ,  9  ] are in the second pile.</p>
+</li>
+<li>
+<p>The worms with labels from [  10  ,  12  ] are in the third pile.</p>
+</li>
+<li>
+<p>The worms with labels from [  13  ,  16  ] are in the fourth pile.</p>
+</li>
+<li>
+<p>The worms with labels from [  17  ,  25  ] are in the fifth pile.</p>
+<p>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+#include&lt;stdexcept&gt;
+#include&lt;iomanip&gt;
+#include&lt;iterator&gt;</p>
+<p>using namespace std;</p>
+<p>int n,m;</p>
+<p>long long  a[1100000];
+long long p[1100000];
+int b;</p>
+<p>int main ()
+{
+while (scanf(&quot;%d&quot;,&amp;n)!=EOF)
+{
+for(int i=0;i&lt;n;i++)
+scanf(&quot;%I64d&quot;,&amp;a[i]);</p>
+<pre><code>    long long  sum = 0;
+    for(int i=0;i&lt;n;i++)
+    {
+        for(int j = sum ;j&lt;sum + a[i];j++)
+            p[j] = i;
+
+        sum+=a[i];
+    }
+
+    scanf(&quot;%d&quot;,&amp;m);
+    while (m--)
+    {
+        scanf(&quot;%d&quot;,&amp;b);
+        printf(&quot;%I64d\n&quot;,p[b-1]+1);
+    }
+
+}
+return 0;
+</code></pre>
+<p>}</p>
+</li>
+</ul>
+<p>D题 dp</p>
+<p>D. Flowers</p>
+<p>time limit per test</p>
+<p>1.5 seconds</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>We saw the little game Marmot made for Mole's lunch. Now it's Marmot's dinner
+time and, as we all know, Marmot eats flowers. At every dinner he eats some
+red and white flowers. Therefore a dinner can be represented as a sequence of
+several flowers, some of them white and some of them red.</p>
+<p>But, for a dinner to be tasty, there is a rule: Marmot wants to eat white
+flowers only in groups of size  <em>k</em> .</p>
+<p>Now Marmot wonders in how many ways he can eat between  <em>a</em> and  <em>b</em> flowers.
+As the number of ways could be very large, print it modulo  1000000007  (  10
+9  + 7  ).</p>
+<p>Input</p>
+<p>Input contains several test cases.</p>
+<p>The first line contains two integers  <em>t</em> and  <em>k</em> (  1 ≤ <em>t</em> , <em>k</em> ≤ 10  5
+), where  <em>t</em> represents the number of test cases.</p>
+<p>The next  <em>t</em> lines contain two integers  <em>a</em> <em>i</em> and  <em>b</em> <em>i</em> (  1 ≤ <em>a</em> <em>i</em>
+≤ <em>b</em> <em>i</em> ≤ 10  5  ), describing the  <em>i</em> -th test.</p>
+<p>Output</p>
+<p>Print  <em>t</em> lines to the standard output. The  <em>i</em> -th line should contain the
+number of ways in which Marmot can eat between  <em>a</em> <em>i</em> and  <em>b</em> <em>i</em> flowers
+at dinner modulo  1000000007  (  10  9  + 7  ).</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>3 2
+1 3
+2 3
+4 4
+</code></pre>
+<p>output</p>
+<pre><code>6
+5
+5
+</code></pre>
+<p>Note</p>
+<ul>
+<li>For  <em>K</em> =  2  and length  1  Marmot can eat (  <em>R</em> ).</li>
+<li>For  <em>K</em> =  2  and length  2  Marmot can eat (  <em>RR</em> ) and (  <em>WW</em> ).</li>
+<li>For  <em>K</em> =  2  and length  3  Marmot can eat (  <em>RRR</em> ), (  <em>RWW</em> ) and (  <em>WWR</em> ).</li>
+<li>For  <em>K</em> =  2  and length  4  Marmot can eat, for example, (  <em>WWWW</em> ) or (  <em>RWWR</em> ), but for example he can't eat (  <em>WWWR</em> ).</li>
+<li></li>
+</ul>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+#include&lt;stdexcept&gt;
+#include&lt;iomanip&gt;
+#include&lt;iterator&gt;
+
+using namespace std;
+
+int n,m;
+int k,t;
+
+int a,b;
+int mod = 1000000007;
+long long ans[100010];
+
+int main ()
+{
+    while (scanf(&quot;%d %d&quot;,&amp;t,&amp;k)!=EOF)
+    {
+        for(int i=1;i&lt;k;i++)
+            ans[i] = 1;
+        ans[k] = 2;
+
+        for(int i=k+1;i&lt;=100002;i++)
+            ans[i] = (ans[i-1] + ans[i-k]) % mod;
+
+        for(int i=2;i&lt;=100002;i++)
+            ans[i] = (ans[i] + ans[i-1]) % mod;
+
+        for(int i=0;i&lt;t;i++)
+        {
+            scanf(&quot;%d %d&quot;,&amp;a,&amp;b);
+            long long  anss = (ans[b] - ans[a-1])%mod;
+            if (anss &lt; 0)
+                    anss += mod;
+            printf(&quot;%I64d\n&quot;,anss);
+        }
+
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

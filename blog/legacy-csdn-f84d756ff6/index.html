@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>奇怪的排序 【简单题】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44156865 奇怪的排序 Time Limit: 1 Sec …">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-f84d756ff6/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"奇怪的排序 【简单题】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44156865 奇怪的排序 Time Limit: 1 Sec …","datePublished":"2015-03-09T08:53:00.000Z","dateModified":"2015-03-09T08:53:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-f84d756ff6/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-f84d756ff6/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="奇怪的排序 【简单题】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44156865 奇怪的排序 Time Limit: 1 Sec …">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-f84d756ff6/">
+    <meta property="article:published_time" content="2015-03-09T08:53:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="奇怪的排序 【简单题】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44156865 奇怪的排序 Time Limit: 1 Sec …">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">奇怪的排序 【简单题】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/09 16:53</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>547 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#奇怪的排序">奇怪的排序</a></li><li><a href="#description">Description</a></li><li><a href="#input">Input</a></li><li><a href="#output">Output</a></li><li><a href="#sample-input">Sample Input</a></li><li><a href="#sample-output">Sample Output</a></li><li><a href="#hint">HINT</a></li><li><a href="#source">Source</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44156865" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44156865</a></p>
+<h2 id="奇怪的排序" tabindex="-1">奇怪的排序</h2>
+<p>Time Limit:  1 Sec  Memory Limit:  128 MB<br>
+Submit:  60  Solved:  39<br>
+[ <a href="http://www.homeforaoge.com/submitpage.php?id=1002" target="_blank" rel="noreferrer"> Submit </a> ][ <a href="http://www.homeforaoge.com/problemstatus.php?id=1002" target="_blank" rel="noreferrer"> Status
+</a> ][ <a href="http://www.homeforaoge.com/bbs.php?pid=1002" target="_blank" rel="noreferrer"> Web Board
+</a> ]</p>
+<h2 id="description" tabindex="-1">Description</h2>
+<p>最近，Dr. Kong
+新设计一个机器人Bill。这台机器人很聪明，会做许多事情。惟独对自然数的理解与人类不一样,它是从右往左读数。比如，它看到123时，会理解成321。让它比较23与15哪一个大，它说15大。原因是它的大脑会以为是32与51在进行比较。再比如让它比较29与30，它说29大。</p>
+<p>给定Bill两个自然数A和B，让它将 [A，B] 区间中的所有数按从小到大排序出来。你会认为它如何排序？</p>
+<h2 id="input" tabindex="-1">Input</h2>
+<p>第一行： <strong>N</strong> 表示有多少组测试数据。</p>
+<p>接下来有N行，    每一行有两个正整数A B  表示待排序元素的区间范围。</p>
+<h2 id="output" tabindex="-1">Output</h2>
+<p>对于每一行测试数据，输出一行，为所有排好序的元素，元素之间有一个空格。</p>
+<h2 id="sample-input" tabindex="-1">Sample Input</h2>
+<pre><code> 2
+
+
+8 15
+
+
+22 39
+</code></pre>
+<h2 id="sample-output" tabindex="-1">Sample Output</h2>
+<pre><code>10 8 9 11 12 13 14 15
+
+
+30 31 22 32 23 33 24 34 25 35 26 36 27 37 28 38 29 39
+</code></pre>
+<h2 id="hint" tabindex="-1">HINT</h2>
+<p>2&lt;=N&lt;=5      1&lt;=A&lt;=B&lt;=200000  B-A&lt;=50。</p>
+<h2 id="source" tabindex="-1">Source</h2>
+<p><a href="http://www.homeforaoge.com/problemset.php?search=%E7%AC%AC%E4%BA%94%E5%B1%8A%E6%B2%B3%E5%8D%97%E7%9C%81%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B" target="_blank" rel="noreferrer"> 第五届河南省大学生程序设计竞赛
+</a></p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+ 
+using namespace std;
+ 
+int t, x;
+int n, m;
+char q[100000];
+ 
+struct node
+{
+    int x;
+    int rx;
+}p[10000000];
+ 
+bool cmp(node a,node b)
+{
+    return a.rx &lt;= b.rx;
+}
+ 
+int main()
+{
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+        for (int i = n; i &lt;= m; i++)
+        {
+            p[i].x = i;
+            sprintf(q,&quot;%d&quot;,i);
+            int len = strlen(q);
+            p[i].rx = 0;
+            for (int j = len - 1; j &gt;= 0; j--)
+            {
+                p[i].rx += pow(10,j) * (int )(q[j] - '0');
+            }
+        }
+        sort(p + n, p + m + 1,cmp);
+        for (int i = n; i &lt;= m; i++)
+        {
+            printf(&quot;%d&quot;, p[i].x);
+            if (i != m)
+                printf(&quot; &quot;);
+            else
+                printf(&quot;\n&quot;);
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

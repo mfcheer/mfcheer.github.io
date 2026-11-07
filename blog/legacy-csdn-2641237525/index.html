@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>数据结构 课设二 唯一地确定一棵二叉树 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40866187 唯一地确定一棵二叉树 【问题描述】 如果给出了遍…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-2641237525/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"数据结构 课设二 唯一地确定一棵二叉树","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40866187 唯一地确定一棵二叉树 【问题描述】 如果给出了遍…","datePublished":"2014-11-06T11:25:00.000Z","dateModified":"2014-11-06T11:25:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-2641237525/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-2641237525/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="数据结构 课设二 唯一地确定一棵二叉树 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40866187 唯一地确定一棵二叉树 【问题描述】 如果给出了遍…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-2641237525/">
+    <meta property="article:published_time" content="2014-11-06T11:25:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="数据结构 课设二 唯一地确定一棵二叉树 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40866187 唯一地确定一棵二叉树 【问题描述】 如果给出了遍…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">数据结构 课设二 唯一地确定一棵二叉树</h1>
+                    <div class="post-meta">
+                        <span>2014/11/06 19:25</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>613 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40866187" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/40866187</a></p>
+<p>唯一地确定一棵二叉树</p>
+<p>【问题描述】<br>
+如果给出了遍历二叉树的前序序列和中序序列，则可以构造出唯<br>
+一的一棵二叉树。试编写实现上述功能的程序。</p>
+<p>【基本要求】<br>
+已知一棵二叉树的前序和中序序列，试设计完成下列任务的一个<br>
+算法：<br>
+（1）构造一棵二叉树；<br>
+（2）以凹入表形式输出二叉树。<br>
+（3）证明构造正确（即分别以前序和中序遍历该树，将得到的结</p>
+<p>果与给出的序列进行比较）。</p>
+<p>【测试数据】<br>
+前序序列为ABDEGCFHIJ，中序序列为DBGEAHFIJC。</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;malloc.h&gt;
+#include&lt;string.h&gt;
+
+typedef struct Node
+{
+    char data;
+    struct Node *leftChild;
+    struct Node *rightChild;
+}BiTreeNode;
+
+void Initiate(BiTreeNode **root)
+{
+	*root=(BiTreeNode *)malloc(sizeof(BiTreeNode));
+	(*root)-&gt;leftChild=NULL;
+	(*root)-&gt;rightChild=NULL;
+}
+BiTreeNode *InsertLeftNode(BiTreeNode *curr,char x)
+{
+	BiTreeNode *s,*t;
+	if(curr==NULL) return NULL;
+	t=curr-&gt;leftChild;
+	s=(BiTreeNode *)malloc(sizeof(BiTreeNode));
+	s-&gt;data=x;
+	s-&gt;leftChild=t;
+	s-&gt;rightChild=NULL;
+	curr-&gt;leftChild=s;
+	return curr-&gt;leftChild;
+}
+BiTreeNode *InsertRightNode(BiTreeNode *curr,char x)
+{
+	BiTreeNode *s,*t;
+	if(curr==NULL) return NULL;
+	t=curr-&gt;rightChild;
+	s=(BiTreeNode *)malloc(sizeof(BiTreeNode));
+	s-&gt;data=x;
+	s-&gt;rightChild=t;
+	s-&gt;leftChild=NULL;
+	curr-&gt;rightChild=s;
+	return curr-&gt;rightChild;
+}
+void PrintBiTree(BiTreeNode *bt,int n)
+{
+	int i;
+	if(bt==NULL) return;
+	PrintBiTree(bt-&gt;rightChild,n+1);
+	for(i=0;i&lt;n-1;i++) printf(&quot;   &quot;);
+	if(n&gt;0)
+	{
+		printf(&quot;---&quot;);
+		printf(&quot;%c\n&quot;,bt-&gt;data);
+	}
+	PrintBiTree(bt-&gt;leftChild,n+1);
+}
+void Visit(char item)
+{
+	printf(&quot;%c   &quot;,item);
+}
+void PreOrder(BiTreeNode *t,void Visit(char item))
+{
+	if(t!=NULL)
+	{
+		Visit(t-&gt;data);
+		PreOrder(t-&gt;leftChild,Visit);
+		PreOrder(t-&gt;rightChild,Visit);
+	}
+}
+void InOrder(BiTreeNode *t,void Visit(char item))
+{
+	if(t!=NULL)
+	{
+		InOrder(t-&gt;leftChild,Visit);
+		Visit(t-&gt;data);
+		InOrder(t-&gt;rightChild,Visit);
+	}
+}
+int Search(char str[],char t)
+{
+	int i=0;
+	while(str[i]!=t)
+		i++;
+	return i;
+}
+int SearchLeft(int Num[],int t)
+{
+	int i;
+	i=t;
+	while(Num[i]!=1&amp;&amp;i&gt;=0)
+		i--;
+	if(Num[i]==1)
+		return i;
+	else return -1;
+}
+int SearchRight(int Num[],int t)
+{
+	int i;
+	i=t;
+	while(Num[i]!=1&amp;&amp;i&lt;=10000)
+		i++;
+	if(Num[i]==1)
+		return i;
+	else return -1;
+}
+
+int main()
+{
+    int i;
+	BiTreeNode *q[10000];
+	BiTreeNode *root;
+	int left,right,temp;
+
+	int Num[10000]={0};
+	char strA[10000];
+	char strB[10000];
+	char point;
+	int n;
+
+	printf(&quot;请输入前序遍历:&quot;);
+
+	scanf(&quot;%s&quot;,strA);
+
+	printf(&quot;请输入中序遍历:&quot;);
+	scanf(&quot;%s&quot;,strB);
+
+	n=strlen(strA);
+	Initiate(&amp;root);
+
+	for(i=0;i&lt;n;i++)
+	{
+		point=strA[i];
+		temp=Search(strB,point);
+		left=SearchLeft(Num,temp);
+		right=SearchRight(Num,temp);
+		if(left==-1&amp;&amp;right==-1)
+		{
+			q[temp]=InsertLeftNode(root,point);
+			Num[temp]=1;
+		}
+		else if(left!=-1&amp;&amp;q[left]-&gt;rightChild==NULL)
+		{
+			q[temp]=InsertRightNode(q[left],point);
+			Num[temp]=1;
+		}
+		else if(right!=-1&amp;&amp;q[right]-&gt;leftChild==NULL)
+		{
+			q[temp]=InsertLeftNode(q[right],point);
+			Num[temp]=1;
+		}
+	}
+	PrintBiTree(root,0);
+
+	printf(&quot;前序遍历: \n\n&quot;);
+	PreOrder(root-&gt;leftChild,Visit);
+
+	printf(&quot;\n中序遍历:\n&quot;);
+	InOrder(root-&gt;leftChild,Visit);
+
+	printf(&quot;\n\n                  by :192132 孟凡强\n&quot;);
+
+	return 0;
+
+
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

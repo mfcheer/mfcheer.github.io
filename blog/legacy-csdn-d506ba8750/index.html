@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>BNU 13288 Bi-shoe and Phi-shoe 【素数筛选】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44156609 A - Bi-shoe and Phi-shoe…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-d506ba8750/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"BNU 13288 Bi-shoe and Phi-shoe 【素数筛选】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44156609 A - Bi-shoe and Phi-shoe…","datePublished":"2015-03-09T08:38:00.000Z","dateModified":"2015-03-09T08:38:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-d506ba8750/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-d506ba8750/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="BNU 13288 Bi-shoe and Phi-shoe 【素数筛选】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44156609 A - Bi-shoe and Phi-shoe…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-d506ba8750/">
+    <meta property="article:published_time" content="2015-03-09T08:38:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BNU 13288 Bi-shoe and Phi-shoe 【素数筛选】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44156609 A - Bi-shoe and Phi-shoe…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">BNU 13288 Bi-shoe and Phi-shoe 【素数筛选】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/09 16:38</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>586 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44156609" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44156609</a></p>
+<p>A -  Bi-shoe and Phi-shoe</p>
+<hr>
+<p>**<br>
+**</p>
+<p>Time Limit:  2000  MS <strong>Memory Limit:</strong> 32768  KB <strong>64bit IO Format:</strong> %lld  &amp;
+%llu</p>
+<p>Submit  <a href="http://acm.hust.edu.cn/vjudge/contest/view.action?cid=70017#status//A/0" target="_blank" rel="noreferrer"> Status
+</a></p>
+<p>Description</p>
+<p>Bamboo Pole-vault is a massively popular sport in Xzhiland. And Master Phi-
+shoe is a very popular coach for his success. He needs some bamboos for his
+students, so he asked his assistant Bi-Shoe to go to the market and buy them.
+Plenty of Bamboos of all possible integer lengths (yes!) are available in the
+market. According to Xzhila tradition,</p>
+<p>Score of a bamboo = <strong>Φ (bamboo's length)</strong></p>
+<p>(Xzhilans are really fond of number theory). For your information, <strong>Φ (n)</strong> =
+numbers less than <strong>n</strong> which are relatively prime (having no common divisor
+other than 1) to <strong>n</strong> . So, score of a bamboo of length 9 is 6 as 1, 2, 4, 5,
+7, 8 are relatively prime to 9.</p>
+<p>The assistant Bi-shoe has to buy one bamboo for each student. As a twist, each
+pole-vault student of Phi-shoe has a lucky number. Bi-shoe wants to buy
+bamboos such that each of them gets a bamboo with a score greater than or
+equal to his/her lucky number. Bi-shoe wants to minimize the total amount of
+money spent for buying the bamboos. One unit of bamboo costs 1 Xukha. Help
+him.</p>
+<p>Input</p>
+<p>Input starts with an integer <strong>T (≤ 100)</strong> , denoting the number of test
+cases.</p>
+<p>Each case starts with a line containing an integer <strong>n (1 ≤ n ≤ 10000)</strong>
+denoting the number of students of Phi-shoe. The next line contains <strong>n</strong>
+space separated integers denoting the lucky numbers for the students. Each
+lucky number will lie in the range **[1, 10 6  ] ** .</p>
+<p>Output</p>
+<p>For each case, print the case number and the minimum possible money spent for
+buying the bamboos. See the samples for details.</p>
+<p>Sample Input</p>
+<p>3</p>
+<p>5</p>
+<p>1 2 3 4 5</p>
+<p>6</p>
+<p>10 11 12 13 14 15</p>
+<p>2</p>
+<p>1 1</p>
+<p>Sample Output</p>
+<p>Case 1: 22 Xukha</p>
+<p>Case 2: 88 Xukha</p>
+<p>Case 3: 4 Xukha</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;iterator&gt;
+
+using namespace std;
+
+const int MAXN = 1000100;
+int n, m, t;
+int prime[MAXN], ph[MAXN], p[MAXN], q[MAXN];
+
+void solve(int n)
+{
+	memset(prime,0,sizeof(prime));
+	memset(p,0,sizeof(p));
+	memset(ph,0,sizeof(ph));
+	int t = 0;
+
+	for (int i = 2; i &lt;= n; i++)
+	{
+		if (p[i] == 0)
+			prime[++t] = i;
+		for (int j = i * 2; j &lt;= n; j+=i)
+		{
+			p[j] = 1;
+		}
+	}
+	t = 1;
+	for (int i = 1; i &lt;= n; i++)
+	{
+		while (i &gt;= prime[t])
+		{
+			t++;
+		}
+		if (i &lt; prime[t])
+			ph[i] = prime[t];
+	}
+}
+/*
+int phi[MAXN];
+
+void Phi(int n)
+{
+	for (int i = 0; i &lt;= n; i++)
+		phi[i] = 0;
+	phi[1] = 1;
+	for (int i = 2; i &lt;= n; i++)
+	{
+		if (!phi[i])
+		{
+			for (int j = i; j &lt;= n; j += i)
+			{
+				if (!phi[j]) phi[j] = j;
+				phi[j] = phi[j] / i*(i-1);
+			}
+		}
+	}
+}
+*/
+int main()
+{
+	int cases = 1;
+	solve(1001000);
+	scanf(&quot;%d&quot;,&amp;t);
+	while (t--)
+	{
+		long long ans = 0;
+		scanf(&quot;%d&quot;,&amp;n);
+		for (int i = 0; i &lt; n; i++)
+			scanf(&quot;%d&quot;, &amp;q[i]);
+
+		sort(q,q+n);
+
+		for (int i = 0; i &lt; n; i++)
+			ans += ph[q[i]];
+		printf(&quot;Case %d: %lld Xukha\n&quot;,cases++,ans);
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

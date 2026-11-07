@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Java - 继承（基础） · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49474241 继承： 增强代码复用性，使类和类之间产生关系，为…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-2a5e466425/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Java - 继承（基础）","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49474241 继承： 增强代码复用性，使类和类之间产生关系，为…","datePublished":"2015-10-28T13:00:00.000Z","dateModified":"2015-10-28T13:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-2a5e466425/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-2a5e466425/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"java,继承,class","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Java - 继承（基础） · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49474241 继承： 增强代码复用性，使类和类之间产生关系，为…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-2a5e466425/">
+    <meta property="article:published_time" content="2015-10-28T13:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Java - 继承（基础） · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/49474241 继承： 增强代码复用性，使类和类之间产生关系，为…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Java - 继承（基础）</h1>
+                    <div class="post-meta">
+                        <span>2015/10/28 21:00</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>632 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">java</span><span class="post-tag">继承</span><span class="post-tag">class</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/49474241" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/49474241</a></p>
+<h3 id="继承：" tabindex="-1">继承：</h3>
+<p>增强代码复用性，使类和类之间产生关系，为多肽提供前提。<br>
+extends 关键字<br>
+使用类的继承时，查看体系顶层类，了解功能，创建子类对象完善功能的使用。</p>
+<h4 id="什么时候用继承？" tabindex="-1">什么时候用继承？</h4>
+<p>类与类之间存在所属关系，定义继承。比如xx（狗）是yy（犬科动物）的一种。</p>
+<h4 id="java支持单继承，对c++多继承进行改良，支持多重继承。" tabindex="-1">java支持单继承，对c++多继承进行改良，支持多重继承。</h4>
+<p>单继承 ：一个子类只能有一个父类。</p>
+<pre><code>class C extends A
+{
+
+}
+</code></pre>
+<p>多继承 ：一个子类可以有多个父类。(java不允许，进行改良)<br>
+不直接支持愿意，会产生调用不确定性。</p>
+<p>多重继承：比如B继承C，A继承B。</p>
+<h4 id="子父类变量间的关系" tabindex="-1">子父类变量间的关系</h4>
+<p>成员特点体现：<br>
+1 , 成员变量<br>
+若变量同名，则优先调用子类中变量。<br>
+同名时，用super区分父类。<br>
+和this用法相似。<br>
+this：代表本类对象引用<br>
+super：代表父类空间<br>
+子类不能直接访问父类私有变量内容。</p>
+<p>2，成员函数<br>
+若函数同名，则优先调用子类中函数。这种现象称为覆盖操作。<br>
+函数两个特性：<br>
+1） 重载：同一类中<br>
+2） 覆盖：子类中<br>
+覆盖注意事项：<br>
+1），覆盖时，子类权限必须大于等于父类权限才可以引发覆盖。<br>
+public &gt;无&gt; private<br>
+2），static方法只能被static覆盖。</p>
+<p>3，构造函数<br>
+子类构造对象时，访问子类构造函数时，父类也运行了。<br>
+子类构造函数第一行有隐式语句，super()，调用父类的（空参数）构造函数。<br>
+子类所以构造函数都会调用父类的空参数构造函数。<br>
+<img src="https://img-blog.csdn.net/20151029170805357" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"><br>
+小例子：</p>
+<pre><code>package if_i_can_do;
+import java.util.*;
+
+class Person
+{
+    String name;
+    int age;
+    int num = 5;
+    private int money = 1000000;
+    void speak0()
+    {
+        System.out.println(&quot;peo!&quot;);
+    }
+}
+
+class Student extends Person
+{
+    private int num = 4;
+    Student(){}
+    void speak()
+    {
+        System.out.println(&quot;stu!&quot;);
+        System.out.println(num + &quot;   &quot; + num);//若变量同名，则优先调用子类中变量。
+        System.out.println(this.num + &quot;   &quot; + super.num);//同名时，用super区分父类。
+        //System.out.println(super.money); error:子类不能直接访问父类私有变量内容。
+    }
+}
+
+class Worker extends Person
+{
+    Worker(){}
+    void speak0()
+    {
+        System.out.println(&quot;66666!&quot;);
+    }
+    void speak()
+    {
+        System.out.println(&quot;work!&quot;);
+    }
+}
+
+
+public class mfcheer 
+{
+     public static void main(String[] args) 
+     {
+         Student s1 = new Student();
+         s1.speak0();
+         s1.speak();
+
+         Worker w1 = new Worker();
+         w1.speak0();
+         w1.speak();
+     }  
+
+}
+</code></pre>
+<p>运行结果：</p>
+<p><img src="https://img-blog.csdn.net/20151028210126027" alt="这里写图片描述" loading="lazy" referrerpolicy="no-referrer"></p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

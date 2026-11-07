@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hau 3037 Saving Beans【Lucas定理】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50518527 题目链接： http://acm.hdu.edu…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-7d271f535d/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hau 3037 Saving Beans【Lucas定理】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50518527 题目链接： http://acm.hdu.edu…","datePublished":"2016-01-14T08:26:00.000Z","dateModified":"2016-01-14T08:26:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-7d271f535d/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-7d271f535d/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hau 3037 Saving Beans【Lucas定理】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50518527 题目链接： http://acm.hdu.edu…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-7d271f535d/">
+    <meta property="article:published_time" content="2016-01-14T08:26:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hau 3037 Saving Beans【Lucas定理】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50518527 题目链接： http://acm.hdu.edu…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hau 3037 Saving Beans【Lucas定理】</h1>
+                    <div class="post-meta">
+                        <span>2016/01/14 16:26</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>199 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/50518527" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/50518527</a></p>
+<p>题目链接：<br>
+<a href="http://acm.hdu.edu.cn/showproblem.php?pid=3037" target="_blank" rel="noreferrer"> http://acm.hdu.edu.cn/showproblem.php?pid=3037
+</a></p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;cstdio&gt;
+
+using namespace std;
+
+long long pow(long long a, long long b, long long c)
+{
+    long long tmp = 1;
+    while (b)
+    {
+        if (b &amp; 1) tmp = (tmp*a) % c;
+        a = (a*a) % c;
+        b &gt;&gt;= 1;
+    }
+    return tmp;
+}
+
+long long fac[100005];
+
+void get_fac(long long p)
+{
+    fac[0] = 1;
+    for (int i = 1;i &lt;= p;i++)
+        fac[i] = (fac[i-1] * i) % p;
+}
+
+long long Lucas(long long n, long long m, long long p)
+{
+    long long tmp = 1;
+    while (n &amp;&amp; m)
+    {
+        long long a = n%p,b = m%p;
+        if (a &lt; b) return 0;
+        tmp = (tmp * fac[a] * pow(fac[b] * fac[a - b] % p, p - 2, p)) % p;
+
+        n /= p;
+        m /= p;
+    }
+    return tmp;
+}
+
+int main()
+{
+    long long n, m, p;
+    int T;
+    scanf(&quot;%d&quot;, &amp;T);
+    while (T--)
+    {
+        scanf(&quot;%lld%lld%lld&quot;, &amp;n, &amp;m, &amp;p);
+        get_fac(p);
+        printf(&quot;%lld\n&quot;, Lucas(n + m, m, p));
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

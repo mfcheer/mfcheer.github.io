@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>我是好人 【欧几里得定理的性质】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44314659 Description 众所周知，我是好人！ 所…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-af82c609f6/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我是好人 【欧几里得定理的性质】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44314659 Description 众所周知，我是好人！ 所…","datePublished":"2015-03-16T13:59:00.000Z","dateModified":"2015-03-16T13:59:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-af82c609f6/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-af82c609f6/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"代码","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="我是好人 【欧几里得定理的性质】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44314659 Description 众所周知，我是好人！ 所…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-af82c609f6/">
+    <meta property="article:published_time" content="2015-03-16T13:59:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="我是好人 【欧几里得定理的性质】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44314659 Description 众所周知，我是好人！ 所…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">我是好人 【欧几里得定理的性质】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/16 21:59</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>444 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">代码</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44314659" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44314659</a></p>
+<p>Description<br>
+众所周知，我是好人！</p>
+<p>所以不会出太难的题，题意很简单 给你两个数n和m，问你有多少对正整数对最大公约数是n，最小公倍数是m</p>
+<p>最后友情提供解题代码（我真是太好人了）</p>
+<p>void solve()</p>
+<p>{</p>
+<p>long long n, m;</p>
+<p>scanf(“%lld%lld”, &amp;n, &amp;m);</p>
+<p>int ans = 0;</p>
+<p>for (long long i = 1; i &lt;= m; i++)</p>
+<p>{</p>
+<pre><code>  for (long long j = i; j &lt;= m; j++)
+
+  {
+
+       if (gcd(i, j) == n &amp;&amp; lcm(i, j) == m) ans++;
+
+  }
+</code></pre>
+<p>}</p>
+<p>printf(“%d\n”, ans);</p>
+<p>}</p>
+<p>祝大家AC愉快！最好AK，送某扬兑现诺言^_^</p>
+<p>Input<br>
+输入第1行是一个整数T，表示共T组数据。 接下来是T组数据，每组数据占1行，每一行有2个整数n，m（1 &lt;= n, m &lt;=
+10000000000），两个数由一个空格隔开。</p>
+<p>Output<br>
+结果输出T行，对应T组数据。（T&lt;=100）<br>
+每行输出这样的正整数对有多少对（看我多好人，不用你们输出所有整数对）</p>
+<p>Sample Input<br>
+3<br>
+1 1<br>
+7 10086<br>
+4 16<br>
+Sample Output<br>
+1<br>
+0<br>
+1</p>
+<p>解法：<br>
+一个非常重要的转化：求(x, y) = k, 1 &lt;= x, y &lt;= n的对数等于求(x, y) = 1, 1 &lt;= x, y &lt;= n/k的对数</p>
+<pre><code>#include &lt;stdio.h&gt;    
+#include &lt;iostream&gt;    
+#include &lt;math.h&gt;    
+#include &lt;stdlib.h&gt;    
+#include &lt;ctype.h&gt;    
+#include &lt;algorithm&gt;    
+#include &lt;vector&gt;    
+#include &lt;string.h&gt;    
+#include &lt;queue&gt;    
+#include &lt;stack&gt;    
+#include &lt;set&gt;     
+#include &lt;sstream&gt;    
+#include &lt;time.h&gt;    
+#include &lt;utility&gt;    
+#include &lt;malloc.h&gt;    
+#include &lt;stdexcept&gt;    
+#include &lt;iomanip&gt;    
+#include &lt;iterator&gt;  
+
+using namespace std;
+
+long long gcd(long long a, long long b)
+{
+    if (b == 0)
+        return a;
+    else
+        return gcd(b,a%b);
+}
+
+void solve(long long N)
+{
+    int ans = 0;
+    for (long long i = 1; i &lt;= sqrt(N*1.0); i++)
+    {
+        if (N%i == 0)
+        {
+            long long j = N / i;
+            if (gcd(i, j) == 1)
+                ans++;
+        }
+    }
+    printf(&quot;%d\n&quot;,ans);
+}
+
+int main()
+{
+    int t;
+    long long n, m;
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        scanf(&quot;%lld%lld&quot;,&amp;n,&amp;m);
+        if (m % n != 0)
+        {
+            printf(&quot;0\n&quot;);
+            continue;
+        }
+        long long tmp = m / n;
+        solve(tmp);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

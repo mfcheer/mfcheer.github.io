@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Codeforces Round · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50086655 题目链接： http://codeforces.…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-1757609a1d/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Codeforces Round","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50086655 题目链接： http://codeforces.…","datePublished":"2015-11-28T11:58:00.000Z","dateModified":"2015-11-28T11:58:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-1757609a1d/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-1757609a1d/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Codeforces Round · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50086655 题目链接： http://codeforces.…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-1757609a1d/">
+    <meta property="article:published_time" content="2015-11-28T11:58:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Codeforces Round · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50086655 题目链接： http://codeforces.…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Codeforces Round</h1>
+                    <div class="post-meta">
+                        <span>2015/11/28 19:58</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>431 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/50086655" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/50086655</a></p>
+<p>题目链接： <a href="http://codeforces.com/contest/602/problem/C" target="_blank" rel="noreferrer"> http://codeforces.com/contest/602/problem/C
+</a></p>
+<p>题意：给你一个完全图，edge是铁路或公路，火车只走铁路，汽车只公路。求使得火车汽车都从１到达n点所需的最短时间，并且两车途中不得同时到达同一点（除了n点）。</p>
+<p>解法：由于是完全图，一定有火车或汽车直接由１到n 。求另一车的最短路径即可。</p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;string&gt;
+#include &lt;string.h&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+const int MAXV = 4010;
+const int inf = 10000000;
+
+int map[MAXV][MAXV];
+int d[MAXV];
+bool vis[MAXV];
+int n,m;
+
+void dijkstra(int s)
+{
+    for(int i=1;i&lt;=n;i++)
+    {
+        vis[i] = false;
+        d[i] = map[s][i];
+    }
+    d[1] = 0;
+    while (1)
+    {
+        int min=inf,v = -1;
+        for(int i=1;i&lt;=n;i++)
+            if(!vis[i] &amp;&amp; d[i]&lt;min)
+            {
+                v=i;
+                min=d[i];
+            }
+        if(v == -1)
+            break;
+        vis[v]=1;
+        for(int i=1;i&lt;=n;i++)
+            if(!vis[i] &amp;&amp; d[i] &gt; d[v] + map[v][i])
+                d[i]=map[v][i]+d[v];
+    }
+}
+
+int m1[510][510];
+int m2[510][510];
+int ans1,ans2;
+
+int main()
+{
+    scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+    for(int i=1;i&lt;=n;i++)
+        for(int j=1;j&lt;=n;j++)
+            {
+                if (i!=j)
+                    m1[i][j] = m2[i][j] = inf;
+                else
+                    m1[i][j] = m2[i][j] = 0;
+            }
+
+    int u,v;
+    for(int i=1;i&lt;=m;i++)
+    {
+        scanf(&quot;%d%d&quot;,&amp;u,&amp;v);
+        m1[u][v] = m1[v][u] = 1;
+    }
+
+    for(int i=1;i&lt;=n;i++)
+        for(int j=1;j&lt;=n;j++)
+    {
+        if (m1[i][j] == inf)
+                m2[i][j] = m2[j][i] = 1;
+    }
+
+    ans1 = ans2 = -1;
+    int ans = 1;
+
+    if (m1[1][n] == 1)
+    {
+        for(int i=1;i&lt;=n;i++)
+            for(int j=1;j&lt;=n;j++)
+            map[i][j] = m2[i][j];
+        dijkstra(1);
+        if (d[n] == inf) ans = -1;
+        else ans = d[n];
+    }
+    else
+    {
+        for(int i=1;i&lt;=n;i++)
+            for(int j=1;j&lt;=n;j++)
+            map[i][j] = m1[i][j];
+        dijkstra(1);
+        if (d[n] == inf) ans = -1;
+        else ans = d[n];
+    }
+
+    cout&lt;&lt;ans&lt;&lt;endl;
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

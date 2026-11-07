@@ -25,6 +25,15 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="alternate" type="application/atom+xml" title="mfcheer 的文章" href="/atom.xml">
     <link rel="stylesheet" href="/styles.css?v={{CSS_VERSION}}">
+    <style>
+        .blog-list-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .blog-list-tools .bloglist-sub { margin: 0; }
+        .blog-search input { box-sizing: border-box; width: 210px; max-width: 100%; padding: 7px 11px; border: 1px solid var(--muted); border-radius: 8px; background: transparent; color: var(--text); font: inherit; font-size: 13px; }
+        .blog-search input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .blog-search-status { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+        .blog-search-status:empty { display: none; }
+        .card-bloglist [hidden] { display: none; }
+    </style>
 </head>
 <body>
     <div class="page-bg"></div>
@@ -59,7 +68,13 @@
                         <span>↗</span>
                     </a>
                 </div>
-                <p class="bloglist-sub">共 {{POST_COUNT}} 篇 · 按时间倒序</p>
+                <div class="blog-list-tools">
+                    <p class="bloglist-sub">共 {{POST_COUNT}} 篇 · 按时间倒序</p>
+                    <div class="blog-search">
+                        <input id="blogSearch" type="search" placeholder="搜索文章" aria-label="搜索文章标题、摘要或标签" autocomplete="off">
+                    </div>
+                </div>
+                <p class="blog-search-status" id="blogSearchStatus" role="status" aria-live="polite"></p>
                 {{POST_LIST_HTML}}
             </section>
         </main>
@@ -71,5 +86,35 @@
     </div>
 
     <script src="/script.js?v={{JS_VERSION}}"></script>
+    <script>
+        (() => {
+            const input = document.getElementById('blogSearch');
+            const status = document.getElementById('blogSearchStatus');
+            const groups = [...document.querySelectorAll('.post-group')].map(group => ({
+                group,
+                year: group.previousElementSibling,
+                items: [...group.querySelectorAll('.post-item')].map(item => ({
+                    element: item,
+                    text: item.textContent.toLocaleLowerCase()
+                }))
+            }));
+            input.addEventListener('input', () => {
+                const query = input.value.trim().toLocaleLowerCase();
+                let matches = 0;
+                groups.forEach(({ group, year, items }) => {
+                    let groupMatches = 0;
+                    items.forEach(({ element, text }) => {
+                        const visible = !query || text.includes(query);
+                        element.hidden = !visible;
+                        if (visible) groupMatches++;
+                    });
+                    group.hidden = groupMatches === 0;
+                    if (year && year.classList.contains('post-year')) year.hidden = groupMatches === 0;
+                    matches += groupMatches;
+                });
+                status.textContent = query ? (matches ? `找到 ${matches} 篇文章` : '没有找到相关文章，请换个关键词。') : '';
+            });
+        })();
+    </script>
 </body>
 </html>

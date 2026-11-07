@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>数的划分问题 【DP】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383393 问题： 把一个整数n分成k份，每份都不为0，有几…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-17bc791b39/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"数的划分问题 【DP】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383393 问题： 把一个整数n分成k份，每份都不为0，有几…","datePublished":"2015-06-05T15:39:00.000Z","dateModified":"2015-06-05T15:39:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-17bc791b39/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-17bc791b39/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="数的划分问题 【DP】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383393 问题： 把一个整数n分成k份，每份都不为0，有几…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-17bc791b39/">
+    <meta property="article:published_time" content="2015-06-05T15:39:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="数的划分问题 【DP】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383393 问题： 把一个整数n分成k份，每份都不为0，有几…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">数的划分问题 【DP】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 23:39</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>202 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383393" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46383393</a></p>
+<p>问题：</p>
+<p>把一个整数n分成k份，每份都不为0，有几种分法？</p>
+<p>分析:</p>
+<p>情况分为两类</p>
+<p>一、</p>
+<p>每份中不包含1的方法，为保证每份&gt;=2，先拿出K个1到每一份，然后把剩下的n-k分为k份，分法有dp[n-k][k]</p>
+<p>二、</p>
+<p>至少有一份包含1，拿出1个当为一份。剩下的n-1个分为k-1份，分法有dp[n-1][k-1].</p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;cstdio&gt;  
+#include &lt;cstring&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;string&gt;  
+#include &lt;queue&gt;  
+
+using namespace std;
+
+int n, k;
+int dp[222][10];
+
+int main()
+{
+    while (cin &gt;&gt; n &gt;&gt; k)
+    {
+        dp[0][0] = 1;
+        for (int i = 1; i &lt;= n; i++)
+        {
+            for (int j = 1; j &lt;= k; j++)
+            {
+                if (i &gt;= j) dp[i][j] = dp[i - j][j] + dp[i - 1][j - 1];
+            }
+        }
+        cout &lt;&lt; dp[n][k] &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

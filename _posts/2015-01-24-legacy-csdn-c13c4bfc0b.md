@@ -1,0 +1,180 @@
+---
+title: Never Say Never
+date: 2015-01-24 12:39:49
+tags: []
+categories: ['CSDN备份']
+copyright: true
+slug: legacy-csdn-c13c4bfc0b
+---
+
+版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43084463
+
+See I never thought that I could walk through fire
+
+I never thought that I could take the burn
+
+I never had the strength to take it higher
+
+Until I reached the point of no return
+
+And there's just no turning back
+
+When your hearts under attack
+
+Gonna give everything I have
+
+It's my destiny  
+
+I will never say never! (I will fight)
+
+I will fight till forever! (make it right)
+
+Whenever you knock me down
+
+I will not stay on the ground
+
+Pick it up
+
+Pick it up
+
+Pick it up
+
+Pick it up up up
+
+And never say never （and never say never ，and never say never ，and never say
+never）
+
+I never thought that I could feel this power
+
+I never thought that I could feel this free
+
+I'm strong enough to climb the highest tower
+
+And I'm fast enough to run across the sea
+
+And there's just no turning back
+
+When your hearts under attack
+
+Gonna give everything I have
+
+It's my destiny
+
+I will never say never! (I will fight)
+
+I will fight till forever! (make it right)
+
+Whenever you knock me down
+
+I will not stay on the ground
+
+Pick it up
+
+Pick it up
+
+Pick it up
+
+Pick it up up up
+
+And never say never
+
+Here we go!
+
+Guess who?
+
+JSmith and Jb!
+
+I gotcha lil bro
+
+I can handle him
+
+Hold up, aight?
+
+I can handle him
+
+Now he's bigger than me
+
+Taller than me
+
+And he's older than me
+
+And stronger than me
+
+And his arms a little bit longer than me
+
+But he ain't on a JB song with me!
+
+I be trying a chill
+
+They be trying to side with the thrill
+
+No pun intended, was raised by the power of Will
+
+Like Luke with the force, when push comes to shove
+
+Like Cobe with the 4th, ice water with blood
+
+I gotta be the best, and yes
+
+We're the flyest
+
+Like David and Goliath
+
+I conquered the giant
+
+So now I got the world in my hand
+
+I was born from two stars
+
+So the moon's where I land
+
+I will never say never!(I will fight)
+
+I will fight till forever!(make it right)
+
+Whenever you knock me down
+
+I will not stay on the ground
+
+Pick it up
+
+Pick it up
+
+Pick it up
+
+Pick it up, up, up
+
+And never say never
+
+I will never say never!(I will fight)
+
+I will fight till forever!(make it right)
+
+Whenever you knock me down
+
+I will not stay on the ground
+
+Pick it up
+
+Pick it up
+
+Pick it up
+
+Pick it up, up, up
+
+And never say never
+
+Never say never
+
+Never say never
+
+Never say never
+
+Never say never
+
+Never say never
+
+And never say never
+
+  
+

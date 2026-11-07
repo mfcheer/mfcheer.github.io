@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj-3264 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43031805 http://poj.org/problem?i…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-0eaf3b3c30/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj-3264","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43031805 http://poj.org/problem?i…","datePublished":"2015-01-22T15:08:00.000Z","dateModified":"2015-01-22T15:08:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-0eaf3b3c30/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-0eaf3b3c30/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj-3264 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43031805 http://poj.org/problem?i…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-0eaf3b3c30/">
+    <meta property="article:published_time" content="2015-01-22T15:08:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj-3264 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43031805 http://poj.org/problem?i…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj-3264</h1>
+                    <div class="post-meta">
+                        <span>2015/01/22 23:08</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>306 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/43031805" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/43031805</a></p>
+<p><a href="http://poj.org/problem?id=3264" target="_blank" rel="noreferrer"> http://poj.org/problem?id=3264 </a></p>
+<p>基础线段树</p>
+<p>求区间最大值与最小值的差</p>
+<pre><code>//poj 3264
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;string&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdlib&gt;
+#include &lt;algorithm&gt;
+
+
+using namespace std;
+
+#define ll(ind) (ind&lt;&lt;1)
+#define rr(ind) (ind&lt;&lt;1|1)
+#define Mid(a,b) (a+((b-a)&gt;&gt;1))
+
+const int N = 50100;
+
+int a[N];
+int MAX,MIN;
+
+struct node
+{
+	int left, right;
+	int Max, Min;
+ 	int mid()
+	{
+		return Mid(left, right);
+	}
+};
+
+struct segtree
+{
+	node tree[N*4];
+
+	void build(int left ,int right,int ind)
+	{
+	    tree[ind].left = left;
+	    tree[ind].right = right;
+	    if (left == right)
+        {
+            tree[ind].Max = tree[ind].Min = a[left];
+        }
+        else
+        {
+            int mid = tree[ind].mid();
+            build(left,mid,ll(ind));
+            build(mid+1,right,rr(ind));
+            tree[ind].Max = max(tree[ll(ind)].Max,tree[rr(ind)].Max);
+            tree[ind].Min = min(tree[ll(ind)].Min,tree[rr(ind)].Min);
+        }
+	}
+	void query(int st,int ed,int ind)
+	{
+	    int left = tree[ind].left;
+	    int right = tree[ind].right;
+	    int mid = tree[ind].mid();
+	    if (st == left &amp;&amp; ed == right)
+        {
+            MAX = max(MAX,tree[ind].Max);
+            MIN = min(MIN,tree[ind].Min);
+        }
+        else if (ed&lt;=mid)
+            query(st,ed,ll(ind));
+        else if (st&gt;mid)
+            query(st,ed,rr(ind));
+        else
+        {
+            query(st,mid,ll(ind));
+            query(mid+1,ed,rr(ind));
+        }
+
+	}
+}seg;
+
+int main()
+{
+	int n, q, b, c;
+	while (scanf(&quot;%d %d&quot;, &amp;n, &amp;q) != EOF)
+	{
+		for (int i = 1; i &lt;= n; i++)
+		{
+			scanf(&quot;%d&quot;,&amp;a[i]);
+		}
+		seg.build(1,n,1);
+		while (q--)
+		{
+			MAX = -1000000000;
+			MIN = 1000000000;
+			scanf(&quot;%d %d&quot;,&amp;b,&amp;c);
+			seg.query(b, c, 1);
+			printf(&quot;%d\n&quot;,MAX - MIN);
+		}
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

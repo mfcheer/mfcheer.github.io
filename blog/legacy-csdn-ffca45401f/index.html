@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Linux生产者消费者模型--基于线程条件变量 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52521087 生产者消费者模型 生产者和消费者之间用中间类似一…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-ffca45401f/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux生产者消费者模型--基于线程条件变量","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52521087 生产者消费者模型 生产者和消费者之间用中间类似一…","datePublished":"2016-09-12T18:01:00.000Z","dateModified":"2016-09-12T18:01:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-ffca45401f/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-ffca45401f/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Linux生产者消费者模型--基于线程条件变量 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52521087 生产者消费者模型 生产者和消费者之间用中间类似一…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-ffca45401f/">
+    <meta property="article:published_time" content="2016-09-12T18:01:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Linux生产者消费者模型--基于线程条件变量 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52521087 生产者消费者模型 生产者和消费者之间用中间类似一…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Linux生产者消费者模型--基于线程条件变量</h1>
+                    <div class="post-meta">
+                        <span>2016/09/13 02:01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>866 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#生产者消费者模型">生产者消费者模型</a></li><li><a href="#c代码：">C代码：</a></li><li><a href="#pthread-api:">pthread API:</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/52521087" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/52521087</a></p>
+<h2 id="生产者消费者模型" tabindex="-1">生产者消费者模型</h2>
+<p>生产者和消费者之间用中间类似一个队列一样的东西串起来。这个队列可以想像成一个存放产品的“仓库”，生产者只需要关心这个“仓库”，并不需要关心具体的消费者，对于生产者而言甚至都不知道有这些消费者存在。对于消费者而言他也不需要关心具体的生产者，到底有多少生产者也不是他关心的事情，他只要关心这个“仓库”中还有没有东西。这种模型是一种松耦合模型。</p>
+<h2 id="c代码：" tabindex="-1">C代码：</h2>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;pthread.h&gt;
+
+#define BUFFER_SIZE 4
+#define OVER -1
+
+struct producers
+{
+    int buffer[BUFFER_SIZE];
+    pthread_mutex_t lock;
+    int readpos,writepos;
+    pthread_cond_t notempty;
+    pthread_cond_t notfull;
+};
+
+void init(struct producers *b)
+{
+    pthread_mutex_init(&amp;b-&gt;lock,NULL);
+    pthread_cond_init(&amp;b-&gt;notempty,NULL);
+    pthread_cond_init(&amp;b-&gt;notfull,NULL);
+    b-&gt;readpos = 0;
+    b-&gt;writepos = 0;
+}
+
+
+void put(struct producers *b, int data)
+{
+    pthread_mutex_lock(&amp;b-&gt;lock);
+    while ((b-&gt;writepos + 1)%BUFFER_SIZE == b-&gt;readpos)
+    {
+        pthread_cond_wait(&amp;b-&gt;notfull,&amp;b-&gt;lock);
+    }
+    b-&gt;buffer[b-&gt;writepos] = data;
+    b-&gt;writepos++;
+    if(b-&gt;writepos &gt;= BUFFER_SIZE)
+        b-&gt;writepos = 0;
+    pthread_cond_signal(&amp;b-&gt;notempty);
+    pthread_mutex_unlock(&amp;b-&gt;lock);
+}
+
+int get(struct producers *b)
+{
+    int data;
+    pthread_mutex_lock(&amp;b-&gt;lock);
+    while (b-&gt;writepos == b-&gt;readpos)
+    {
+        pthread_cond_wait(&amp;b-&gt;notempty,&amp;b-&gt;lock);
+    }
+    data = b-&gt;buffer[b-&gt;readpos];
+    b-&gt;readpos++;
+    if(b-&gt;readpos &gt;= BUFFER_SIZE)
+        b-&gt;readpos = 0;
+    pthread_cond_signal(&amp;b-&gt;notfull);
+    pthread_mutex_unlock(&amp;b-&gt;lock);
+
+    return data;
+}
+
+struct producers buffer;
+
+void *producer(void *data)
+{
+    int n;
+    for(n=0;n&lt;10;n++)
+    {
+        printf(&quot;Producer: %d--\n&quot;,n);
+        put(&amp;buffer,n);
+    }
+    put(&amp;buffer,OVER);
+}
+
+void *consumer(void *data)
+{
+    int d;
+    while (1)
+    {
+        d = get(&amp;buffer);
+        if (d == OVER)
+            break;
+        printf(&quot;Consumer: %d--\n&quot;,d);
+    }
+}
+
+int main()
+{
+    pthread_t tha,thb;
+    void *retval;
+
+    init(&amp;buffer);
+
+    pthread_create(&amp;tha,NULL,producer,0);
+    pthread_create(&amp;thb,NULL,consumer,0);
+
+    pthread_join(tha,&amp;retval);
+    pthread_join(thb,&amp;retval);
+
+    return 0;
+}
+</code></pre>
+<h2 id="pthread-api:" tabindex="-1">pthread API:</h2>
+<p>数据类型<br>
+pthread_t：线程句柄<br>
+pthread_attr_t：线程属性<br>
+线程操纵函数（简介起见，省略参数）<br>
+pthread_create()：创建一个线程<br>
+pthread_exit()：终止当前线程<br>
+pthread_cancel()：中断另外一个线程的运行<br>
+pthread_join()：阻塞当前的线程，直到另外一个线程运行结束<br>
+pthread_attr_init()：初始化线程的属性<br>
+pthread_attr_setdetachstate()：设置脱离状态的属性（决定这个线程在终止时是否可以被结合）<br>
+pthread_attr_getdetachstate()：获取脱离状态的属性<br>
+pthread_attr_destroy()：删除线程的属性<br>
+pthread_kill()：向线程发送一个信号</p>
+<p>同步函数<br>
+用于 mutex 和条件变量<br>
+pthread_mutex_init() 初始化互斥锁<br>
+pthread_mutex_destroy() 删除互斥锁<br>
+pthread_mutex_lock()：占有互斥锁（阻塞操作）<br>
+pthread_mutex_trylock()：试图占有互斥锁（不阻塞操作）。当互斥锁空闲时将占有该锁；否则立即返回<br>
+pthread_mutex_unlock(): 释放互斥锁<br>
+pthread_cond_init()：初始化条件变量<br>
+pthread_cond_destroy()：销毁条件变量<br>
+pthread_cond_wait(): 等待条件变量的特殊条件发生<br>
+pthread_cond_signal(): 唤醒第一个调用pthread_cond_wait()而进入睡眠的线程<br>
+Thread-local storage（或者以Pthreads术语，称作 线程特有数据）:<br>
+pthread_key_create(): 分配用于标识进程中线程特定数据的键<br>
+pthread_setspecific(): 为指定线程特定数据键设置线程特定绑定<br>
+pthread_getspecific(): 获取调用线程的键绑定，并将该绑定存储在 value 指向的位置中<br>
+pthread_key_delete(): 销毁现有线程特定数据键</p>
+<p>与一起工作的工具函数<br>
+pthread_equal(): 对两个线程的线程标识号进行比较<br>
+pthread_detach(): 分离线程<br>
+pthread_self(): 查询线程自身线程标识号</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

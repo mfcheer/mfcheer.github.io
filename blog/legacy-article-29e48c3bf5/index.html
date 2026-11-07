@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ID3概念 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：ID3概念">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-29e48c3bf5/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"ID3概念","description":"历史迁移文章：ID3概念","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-29e48c3bf5/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-29e48c3bf5/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="ID3概念 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：ID3概念">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-29e48c3bf5/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ID3概念 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：ID3概念">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">ID3概念</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>286 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#信息熵">信息熵</a></li><li><a href="#信息增益">信息增益</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h1 id="id3概念" tabindex="-1">ID3概念</h1>
+<p>即Iterative Dichotomiser 3，迭代二叉树3代。该算法是以信息论为基础，以信息熵和信息增益为衡量标准。</p>
+<h2 id="信息熵" tabindex="-1">信息熵</h2>
+<p>描述信息的混乱程度，熵越大，表示信息越混乱。
+信息熵的计算公式：其中P(Xi)表示类别Xi在样本出现的概率。
+<img src="/assets/images/legacy/MarkdownPhotos/photos2/1.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<h2 id="信息增益" tabindex="-1">信息增益</h2>
+<p>用于度量属性A降低样本集合X熵的贡献大小。信息增益越大，越适于对X分类。
+Gain(A, X) = H(X) - Sum(|Xv| / |X| * H(Xv))  {v: A的所有可能值}，Xv表示A中所有为v的值；|Xv|表示A中所有为v的值的数量；</p>
+<h1 id="算法流程" tabindex="-1">算法流程</h1>
+<p>ID3算法就是在每次需要分裂时，计算每个属性的增益率，然后选择增益率最大的属性进行分裂。</p>
+<h1 id="c4.5算法" tabindex="-1">C4.5算法</h1>
+<p>它是对ID3算法的改进，改进如下</p>
+<ul>
+<li>1）用信息增益率来选择属性</li>
+<li>2）在决策树的构造过程中对树进行剪枝</li>
+<li>3）对非离散数据也能处理</li>
+<li>4）能够对不完整数据进行处理</li>
+</ul>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

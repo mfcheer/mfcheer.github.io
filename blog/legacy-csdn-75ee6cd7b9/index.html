@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj-1611 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40209551 寻找根节点为 0 的节点的个数 #include…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-75ee6cd7b9/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj-1611","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40209551 寻找根节点为 0 的节点的个数 #include…","datePublished":"2014-10-18T03:07:00.000Z","dateModified":"2014-10-18T03:07:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-75ee6cd7b9/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-75ee6cd7b9/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj-1611 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40209551 寻找根节点为 0 的节点的个数 #include…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-75ee6cd7b9/">
+    <meta property="article:published_time" content="2014-10-18T03:07:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj-1611 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40209551 寻找根节点为 0 的节点的个数 #include…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj-1611</h1>
+                    <div class="post-meta">
+                        <span>2014/10/18 11:07</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>189 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40209551" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/40209551</a></p>
+<p>寻找根节点为 0  的节点的个数</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;string.h&gt;
+
+using namespace std;
+
+int p[30005];
+int rankk[30005];
+
+int findd (int x)
+{
+    if (x == p[x])
+        return x;
+    else return  p[x]=findd(p[x]);
+}
+
+void un(int x, int y)
+{
+    int a,b;
+	a = findd(x);
+	b = findd(y);
+	if (a == b)
+		return;
+	if (rankk[a] &gt; rankk[b])
+		p[b] = a;
+	else {
+		p[a] = b;
+		if (rankk[a] == rankk[b])
+			rankk[b]++;
+	}
+}
+
+int main()
+{
+    int n,m;
+    while (scanf(&quot;%d%d&quot;,&amp;n,&amp;m) &amp;&amp; (n || m) )
+    {
+            for (int i=0;i&lt;n;i++)
+        {
+            p[i]=i;
+            rankk[i]=0;
+        }
+        int num;
+        int k,kk;
+
+        for (int i=0;i&lt;m;i++)
+        {
+            scanf (&quot;%d&quot;,&amp;num);
+
+            if (num&gt;=1)
+            scanf (&quot;%d&quot;,&amp;k);
+
+            for (int j=1;j&lt;num;j++)
+            {
+                scanf(&quot;%d&quot;,&amp;kk);
+                un(k,kk);
+            }
+
+        }
+
+        int ans = 1 ;
+
+        for (int i=1;i&lt;n;i++)
+        {
+            if ( findd(i) == findd(0) )
+                ans++;
+        }
+
+        printf(&quot;%d\n&quot;,ans);
+    }
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Hive Shell · mfcheer</title>
+    <meta name="description" content="历史迁移文章：Hive Shell">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-09537799b4/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Hive Shell","description":"历史迁移文章：Hive Shell","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-09537799b4/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-09537799b4/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Hive Shell · mfcheer">
+    <meta property="og:description" content="历史迁移文章：Hive Shell">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-09537799b4/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Hive Shell · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：Hive Shell">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Hive Shell</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>344 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#创建表">创建表</a></li><li class="toc-sub"><a href="#内部表">内部表</a></li><li class="toc-sub"><a href="#外部表">外部表</a></li><li><a href="#分区">分区</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>Hive是Hadoop中一个类SQL的数据仓库。支持查询操作。</p>
+<h1 id="hive-shell" tabindex="-1">Hive Shell</h1>
+<p>hive -f file 命令可以运行脚本文件
+hive -e &quot;sql&quot; 命令可以运行语句</p>
+<h2 id="创建表" tabindex="-1">创建表</h2>
+<h3 id="内部表" tabindex="-1">内部表</h3>
+<p>create table test(r1 string, r2 string) ;
+创建一个内部表时，hive会在hdfs上创建一个相应的表目录，该表目录位于hive配置文件中参数 ${hive.metastore.warehouse.dir}  指定的数据仓库目录下，所有的表数据（不包括外部表数据）都保存在这个目录中。如该参数默认值是 /user/hive/warehouse，则创建test表会创建hdfs目录/user/hive/warehouse/test</p>
+<h3 id="外部表" tabindex="-1">外部表</h3>
+<p>external 关键字可以让用户创建一个外部表，在建表的同时需要指定一个location，为已存在的hdfs目录。与Hive 创建内部表时会在hdfs上创建数据仓库表目录不同，创建外部表时不会创建表目录，而是直接使用指定的location作为表目录。这种方式下，在删除表的时候，只删除元数据，不删除实际数据。而内部表删除表时将所有数据均删除。此外，创建外部表的同时可以指定分隔符。</p>
+<pre><code class="hljs">CREATE EXTERNAL TABLE `test`(
+ `r1` string, 
+ `r2` string, 
+ `r3` string, 
+ `r4` string, 
+ `r5` string)
+PARTITIONED BY ( 
+ `dt` string)
+ROW FORMAT DELIMITED 
+ FIELDS TERMINATED BY '\t'
+ LINES TERMINATED BY '\n' 
+LOCATION
+ '/home/work/mfcheer/test';
+</code></pre>
+<h1 id="与传统数据库相比" tabindex="-1">与传统数据库相比</h1>
+<p>不支持更新和删除操作</p>
+<h2 id="分区" tabindex="-1">分区</h2>
+<p>通过分区可以增加数据分片的查询速度</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

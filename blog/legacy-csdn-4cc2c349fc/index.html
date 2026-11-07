@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>wustoj 1593 Count Zeros【线段树】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51243730 题目： http://acm.wust.edu.…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-4cc2c349fc/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"wustoj 1593 Count Zeros【线段树】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51243730 题目： http://acm.wust.edu.…","datePublished":"2016-04-25T09:17:00.000Z","dateModified":"2016-04-25T09:17:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-4cc2c349fc/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-4cc2c349fc/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="wustoj 1593 Count Zeros【线段树】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51243730 题目： http://acm.wust.edu.…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-4cc2c349fc/">
+    <meta property="article:published_time" content="2016-04-25T09:17:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="wustoj 1593 Count Zeros【线段树】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51243730 题目： http://acm.wust.edu.…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">wustoj 1593 Count Zeros【线段树】</h1>
+                    <div class="post-meta">
+                        <span>2016/04/25 17:17</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>665 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/51243730" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/51243730</a></p>
+<p>题目： <a href="http://acm.wust.edu.cn/problem.php?id=1593&amp;soj=0" target="_blank" rel="noreferrer"> http://acm.wust.edu.cn/problem.php?id=1593&amp;soj=0
+</a></p>
+<p>解法：线段树维护因子2 5存在的个数。并判断是不是存在0</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;cstdlib&gt;
+#include &lt;algorithm&gt;
+#include &lt;queue&gt;
+#include &lt;stack&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;vector&gt;
+
+const int N = 200010;
+
+using namespace std;
+
+int m, n;
+int a[N];
+
+struct node
+{
+    int left;
+    int right;
+    int sum2, sum5;
+    bool is;
+};
+
+struct segtree
+{
+    node tree[N * 4];
+
+    void buildtree(int left, int right, int ind)
+    {
+        tree[ind].left = left;
+        tree[ind].right = right;
+        tree[ind].sum2 = tree[ind].sum5 = 0;
+        tree[ind].is = false;
+
+        if (left == right)
+        {
+            if (a[left] == 0)
+            {
+                tree[ind].is = true;
+                return;
+            }
+
+            int tmp1 = a[left];
+            while (tmp1 != 0 &amp;&amp; tmp1 % 2 == 0)
+            {
+                tree[ind].sum2++;
+                tmp1 /= 2;
+            }
+
+            tmp1 = a[left];
+            while (tmp1 != 0 &amp;&amp; tmp1 % 5 == 0)
+            {
+                tree[ind].sum5++;
+                tmp1 /= 5;
+            }
+        }
+        else
+        {
+            int mid = (tree[ind].left + tree[ind].right) / 2;
+
+            buildtree(left, mid, 2*(ind));
+            buildtree(mid + 1, right,2*(ind) + 1);
+
+            tree[ind].sum2 = (tree[2*(ind)].sum2 + tree[2*(ind) + 1].sum2);
+            tree[ind].sum5 = (tree[2*(ind)].sum5 + tree[2*(ind) + 1].sum5);
+            tree[ind].is = (tree[2*(ind)].is || tree[2*(ind) + 1].is);
+        }
+    }
+
+    void update(int pos, int ind, int val)
+    {
+        if (tree[ind].left == tree[ind].right)
+        {
+            if (val == 0)
+                tree[ind].is = true;
+            else
+                tree[ind].is = false;
+
+            int tmp1;
+            tree[ind].sum2 = 0;
+            tmp1 = val;
+            while (tmp1 != 0 &amp;&amp; tmp1 % 2 == 0)
+            {
+                tree[ind].sum2++;
+                tmp1 /= 2;
+            }
+
+            tree[ind].sum5 = 0;
+            tmp1 = val;
+            while (tmp1 != 0 &amp;&amp; tmp1 % 5 == 0)
+            {
+                tree[ind].sum5++;
+                tmp1 /= 5;
+            }
+        }
+        else
+        {
+            int mid = (tree[ind].left + tree[ind].right)/2;
+            if (pos &lt;= mid)
+                update(pos, 2*(ind), val);
+            else
+                update(pos, 2*(ind) + 1, val);
+            tree[ind].sum2 = (tree[2*(ind)].sum2 + tree[2*(ind)+1].sum2);
+            tree[ind].sum5 = (tree[2*(ind)].sum5 + tree[2*(ind) + 1].sum5);
+            tree[ind].is = (tree[2*(ind)].is || tree[2*(ind) + 1].is);
+        }
+    }
+
+    int query2(int st, int ed, int ind)
+    {
+        int left = tree[ind].left;
+        int right = tree[ind].right;
+
+        if (st &lt;= left &amp;&amp; right &lt;= ed)
+        {
+            return tree[ind].sum2;
+        }
+        else
+        {
+            int mid = (tree[ind].left + tree[ind].right) / 2;
+            int sum1 = 0;
+            int sum2 = 0;
+            if (st &lt;= mid)
+                sum1 = query2(st, ed, 2*(ind));
+            if (ed &gt; mid)
+                sum2 = query2(st, ed, 2*(ind) + 1);
+            return (sum1 + sum2);
+        }
+    }
+    int query5(int st, int ed, int ind)
+    {
+        int left = tree[ind].left;
+        int right = tree[ind].right;
+
+        if (st &lt;= left &amp;&amp; right &lt;= ed)
+            return tree[ind].sum5;
+        else
+        {
+            int mid = (tree[ind].left + tree[ind].right) / 2;
+            int sum1 = 0;
+            int sum2 = 0;
+            if (st &lt;= mid)
+                sum1 = query5(st, ed, 2*(ind));
+            if (ed &gt; mid)
+                sum2 = query5(st, ed, 2*(ind) + 1);
+            return (sum1 + sum2);
+        }
+    }
+    bool query0(int st, int ed, int ind)
+    {
+        int left = tree[ind].left;
+        int right = tree[ind].right;
+
+        if (st &lt;= left &amp;&amp; right &lt;= ed)
+        {
+            if (tree[ind].is == false)
+                return false;
+            else
+                return true;
+        }
+        else
+        {
+            int mid = (tree[ind].left + tree[ind].right) / 2;
+            int sum1 = 0;
+            int sum2 = 0;
+            if (st &lt;= mid)
+                sum1 = query0(st, ed, 2*(ind));
+            if (ed &gt; mid)
+                sum2 = query0(st, ed, 2*(ind) + 1);
+            return (sum1 || sum2);
+        }
+    }
+}seg;
+
+int main()
+{
+    while (scanf(&quot;%d %d&quot;, &amp;n, &amp;m) != EOF)
+    {
+        for (int i = 1; i &lt;= n; i++)
+            scanf(&quot;%d&quot;, &amp;a[i]);
+
+        seg.buildtree(1, n, 1);
+
+        int opr, c, d;
+        while (m--)
+        {
+            scanf(&quot;%d&quot;, &amp;opr);
+            scanf(&quot;%d %d&quot;, &amp;c, &amp;d);
+            if (opr == 0)
+            {
+                int s2, s5;
+                bool s0 = seg.query0(c, d, 1);
+                s2 = seg.query2(c, d, 1);
+                s5 = seg.query5(c, d, 1);
+
+                int ans = min(s2, s5);
+                if (s0)
+                    ans = 1;
+                printf(&quot;%d\n&quot;, ans);
+            }
+            else if (opr == 1)
+            {
+                seg.update(c, 1, d);
+            }
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

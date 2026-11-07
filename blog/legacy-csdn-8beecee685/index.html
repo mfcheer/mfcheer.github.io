@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>快速乘法计算模幂 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44280737 一般的快速模幂可能会产生整数溢出的情况 ，可以用…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-8beecee685/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"快速乘法计算模幂","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44280737 一般的快速模幂可能会产生整数溢出的情况 ，可以用…","datePublished":"2015-03-15T13:01:00.000Z","dateModified":"2015-03-15T13:01:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-8beecee685/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-8beecee685/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="快速乘法计算模幂 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44280737 一般的快速模幂可能会产生整数溢出的情况 ，可以用…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-8beecee685/">
+    <meta property="article:published_time" content="2015-03-15T13:01:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="快速乘法计算模幂 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44280737 一般的快速模幂可能会产生整数溢出的情况 ，可以用…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">快速乘法计算模幂</h1>
+                    <div class="post-meta">
+                        <span>2015/03/15 21:01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>192 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44280737" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44280737</a></p>
+<p>一般的快速模幂可能会产生整数溢出的情况 ，可以用快速乘法解决此问题 。</p>
+<p>模板如下：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+long long mult_mod(long long a, long long b, long long c)
+{
+	a %= c;
+	b %= c;
+	long long ret = 0;
+	long long tmp = a;
+	while (b)
+	{
+		if (b &amp; 1)
+		{
+			ret += tmp;
+			if (ret &gt; c)ret -= c;//直接取模慢很多
+		}
+		tmp &lt;&lt;= 1;
+		if (tmp &gt; c)tmp -= c;
+		b &gt;&gt;= 1;
+	}
+	return ret;
+}
+long long pow_mod(long long a, long long n, long long mod)
+{
+	long long ret = 1;
+	long long temp = a%mod;
+	while (n)
+	{
+		if (n &amp; 1)ret = mult_mod(ret, temp, mod);
+		temp = mult_mod(temp, temp, mod);
+		n &gt;&gt;= 1;
+	}
+	return ret;
+}
+
+int main()
+{
+	long long a, n, mod;
+	while (scanf(&quot;%lld%lld%lld&quot;, &amp;a, &amp;n, &amp;mod) != EOF)
+	{
+		printf(&quot;%lld\n&quot;,pow_mod(a,n,mod));//a^n%mod
+	}
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

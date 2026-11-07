@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>poj 1061 青蛙的约会 【扩展欧几里得】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44178903 青蛙的约会 Time Limit: 1000MS…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-ca9b0c56be/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"poj 1061 青蛙的约会 【扩展欧几里得】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44178903 青蛙的约会 Time Limit: 1000MS…","datePublished":"2015-03-10T10:26:00.000Z","dateModified":"2015-03-10T10:26:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-ca9b0c56be/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-ca9b0c56be/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="poj 1061 青蛙的约会 【扩展欧几里得】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44178903 青蛙的约会 Time Limit: 1000MS…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-ca9b0c56be/">
+    <meta property="article:published_time" content="2015-03-10T10:26:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="poj 1061 青蛙的约会 【扩展欧几里得】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44178903 青蛙的约会 Time Limit: 1000MS…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">poj 1061 青蛙的约会 【扩展欧几里得】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/10 18:26</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>686 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44178903" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44178903</a></p>
+<p>青蛙的约会</p>
+<table>
+<thead>
+<tr>
+<th><strong>Time Limit:</strong> 1000MS</th>
+<th></th>
+<th><strong>Memory Limit:</strong> 10000K</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Total Submissions:</strong> 93841</td>
+<td></td>
+<td><strong>Accepted:</strong> 17330</td>
+</tr>
+</tbody>
+</table>
+<p>Description</p>
+<p>两只青蛙在网上相识了，它们聊得很开心，于是觉得很有必要见一面。它们很高兴地发现它们住在同一条纬度线上，于是它们约定各自朝西跳，直到碰面为止。可是它们出发之前忘记了一件很重要的事情，既没有问清楚对方的特征，也没有约定见面的具体位置。不过青蛙们都是很乐观的，它们觉得只要一直朝着某个方向跳下去，总能碰到对方的。但是除非这两只青蛙在同一时间跳到同一点上，不然是永远都不可能碰面的。为了帮助这两只乐观的青蛙，你被要求写一个程序来判断这两只青蛙是否能够碰面，会在什么时候碰面。<br>
+我们把这两只青蛙分别叫做青蛙A和青蛙B，并且规定纬度线上东经0度处为原点，由东往西为正方向，单位长度1米，这样我们就得到了一条首尾相接的数轴。设青蛙A的出发点坐标是x，青蛙B的出发点坐标是y。青蛙A一次能跳m米，青蛙B一次能跳n米，两只青蛙跳一次所花费的时间相同。纬度线总长L米。现在要你求出它们跳了几次以后才会碰面。</p>
+<p>Input</p>
+<p>输入只包括一行5个整数x，y，m，n，L，其中x≠y  &lt; 2000000000，0 &lt; m、n &lt; 2000000000，0 &lt; L &lt;
+2100000000。</p>
+<p>Output</p>
+<p>输出碰面所需要的跳跃次数，如果永远不可能碰面则输出一行&quot;Impossible&quot;</p>
+<p>Sample Input</p>
+<pre><code>1 2 3 4 5
+</code></pre>
+<p>Sample Output</p>
+<pre><code>4
+</code></pre>
+<p>Source</p>
+<p><a href="http://poj.org/searchproblem?field=source&amp;key=%E6%B5%99%E6%B1%9F" target="_blank" rel="noreferrer"> 浙江 </a></p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;iterator&gt;
+
+using namespace std;
+
+long long X, x, Y, y, m, n, l, d;
+
+void exgcd(long long  a, long long b, long long &amp; d, long long&amp; x, long long&amp; y)
+{
+	if (!b)
+	{
+		d = a;
+		x = 1;
+		y = 0;
+	}
+	else
+	{
+		exgcd(b,a%b,d,y,x);
+		y -= x *(a/b);
+	}
+}
+
+long long gcd(long long a, long long b)
+{
+	if (b == 0)
+		return a;
+	else
+		return gcd(b,a%b);
+}
+
+int main()
+{
+	long long a, b, c, t;
+	while (scanf(&quot;%lld%lld%lld%lld%lld&quot;, &amp;X, &amp;Y, &amp;m, &amp;n, &amp;l) != EOF)
+	{
+		a = n - m;
+		b = l;
+		c = X - Y;
+		exgcd(a, b, d, x, y);
+		long long t = gcd(a,b);
+		if (c % t != 0)
+		{
+			printf(&quot;Impossible\n&quot;);
+			continue;
+		}
+		/*
+		通解：x = x0 + b/t * k;
+			　y = y0 - a/t * k;
+		*/
+		x = x *(c / t);//一组解
+		y = y *(c / t);
+		
+		//x0 = x + b / t * k; 任意解
+		//找到k 使得 x0 最小
+		
+		long long ans = x*t / b;
+		ans = x - ans*b / t;
+		if (ans &lt; 0)
+			ans += b / t;
+		printf(&quot;%lld\n&quot;,ans);
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

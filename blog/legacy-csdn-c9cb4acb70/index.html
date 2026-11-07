@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>C++ volatile关键字 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44006713 volatile的介绍 直接处理硬件的程序常常包…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-c9cb4acb70/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"C++ volatile关键字","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44006713 volatile的介绍 直接处理硬件的程序常常包…","datePublished":"2015-03-01T13:33:00.000Z","dateModified":"2015-03-01T13:33:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-c9cb4acb70/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-c9cb4acb70/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="C++ volatile关键字 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44006713 volatile的介绍 直接处理硬件的程序常常包…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-c9cb4acb70/">
+    <meta property="article:published_time" content="2015-03-01T13:33:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="C++ volatile关键字 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44006713 volatile的介绍 直接处理硬件的程序常常包…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">C++ volatile关键字</h1>
+                    <div class="post-meta">
+                        <span>2015/03/01 21:33</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>435 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44006713" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44006713</a></p>
+<h1 id="volatile的介绍" tabindex="-1">volatile的介绍</h1>
+<h1 id="直接处理硬件的程序常常包含该关键字，它们的值由程序之外的过程控制。" tabindex="-1">直接处理硬件的程序常常包含该关键字，它们的值由程序之外的过程控制。</h1>
+<p>volatile告诉编译器编译不对该对象进行优化，volatile
+变量是随时可能发生变化的，与volatile变量有关的运算，不要进行编译优化，以免出错，（VC++
+在产生release版可执行码时会进行编译优化，加volatile关键字的变量有关的运算，将不进行编译优化。）。</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+void main()
+{
+	volatile int i = 10;
+	int a = i;
+
+	printf(&quot;i = %d\n&quot;, a);
+	__asm {
+		mov dword ptr[ebp - 4], 20h
+	}
+
+	int b = i;
+	printf(&quot;i = %d\n&quot;, b);
+}
+</code></pre>
+<p>输出：10,32</p>
+<p>volatile的主要作用是：提示编译器该对象的值有可能在编译器未监测的情况下被改变。
+表示用volatile定义的变量会在程序外被改变,每次都必须从内存中读取，而不能把他放在cache或寄存器中重复使用。</p>
+<p>volatile类似于大家所熟知的const也是一个类型修饰符。volatile是给编译器的指示来说明对它所修饰的对象不应该执行优化。volatile的作用就是用来进行多线程编程。在单线程中那就是只能起到限制编译器优化的作用。</p>
+<p>volatile用在如下的几个地方：</p>
+<ol>
+<li>中断服务程序中修改的供其它程序检测的变量需要加volatile；</li>
+<li>多任务环境下各任务间共享的标志应该加volatile；</li>
+<li>存储器映射的硬件寄存器通常也要加volatile说明，因为每次对它的读写都可能由不同意义；</li>
+</ol>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>sizeof 计算原则 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50829983 sizeof()计算类大小的一些基本原则： (1…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-67130ef3db/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"sizeof 计算原则","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50829983 sizeof()计算类大小的一些基本原则： (1…","datePublished":"2016-03-08T11:55:00.000Z","dateModified":"2016-03-08T11:55:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-67130ef3db/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-67130ef3db/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="sizeof 计算原则 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50829983 sizeof()计算类大小的一些基本原则： (1…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-67130ef3db/">
+    <meta property="article:published_time" content="2016-03-08T11:55:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="sizeof 计算原则 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50829983 sizeof()计算类大小的一些基本原则： (1…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">sizeof 计算原则</h1>
+                    <div class="post-meta">
+                        <span>2016/03/08 19:55</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>349 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#sizeof()计算类大小的一些基本原则：">sizeof()计算类大小的一些基本原则：</a></li><li><a href="#例子：">例子：</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/50829983" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/50829983</a></p>
+<h2 id="sizeof()计算类大小的一些基本原则：" tabindex="-1">sizeof()计算类大小的一些基本原则：</h2>
+<pre><code>   (1)类的大小为类的非静态成员数据的类型大小之和，也就是说静态成员数据不作考虑；
+
+   (2)类的总大小也遵守类似class字节对齐的，调整规则；(参考５分钟搞定内存字节对齐)
+
+   (3)成员函数都是不会被计算的；
+
+   (4)如果是子类，那么父类中的成员也会被计算；
+
+   (5)虚函数由于要维护虚函数表，所以要占据一个指针大小，也就是4字节。
+</code></pre>
+<p>总结即：一个类中，虚函数、成员函数（包括静态与非静态）和静态数据成员都不占用类对象的存储空间。</p>
+<p>当我们声明该类型的实例时，必须在内存中占有一定得空间，否则无法使用这些实例。至于占多少内存，由编译器决定。在Visual
+Studio中，每个空类型的实例占用1字节的空间。</p>
+<h2 id="例子：" tabindex="-1">例子：</h2>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+class A
+{
+
+};
+
+class B
+{
+public:
+    int x;
+};
+
+class C
+{
+    static int x;
+};
+
+class D
+{
+    static int x() {};
+};
+
+class E
+{
+    virtual int x() {};
+};
+
+class F
+{
+    int x() {};
+};
+
+int main()
+{
+    cout &lt;&lt; sizeof(A) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(B) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(C) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(D) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(E) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(F) &lt;&lt; endl;
+    return 0;
+}
+/*
+输出：
+1
+4
+1
+1
+4
+1
+*/
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

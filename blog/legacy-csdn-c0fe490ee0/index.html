@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-1372 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40627317 广度优先搜索模板题 #include &amp;lt;s…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-c0fe490ee0/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-1372","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40627317 广度优先搜索模板题 #include &lt;s…","datePublished":"2014-10-30T13:01:00.000Z","dateModified":"2014-10-30T13:01:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-c0fe490ee0/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-c0fe490ee0/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"搜索,iostream,algorithm","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-1372 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40627317 广度优先搜索模板题 #include &amp;lt;s…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-c0fe490ee0/">
+    <meta property="article:published_time" content="2014-10-30T13:01:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-1372 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40627317 广度优先搜索模板题 #include &amp;lt;s…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-1372</h1>
+                    <div class="post-meta">
+                        <span>2014/10/30 21:01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>242 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">搜索</span><span class="post-tag">iostream</span><span class="post-tag">algorithm</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40627317" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/40627317</a></p>
+<p>广度优先搜索模板题</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;math.h&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+char A[5],B[5];
+
+struct node
+{
+    int x;
+    int y;
+    int num;
+}s,e,p,pp;
+
+int vis[10][10];
+
+int x[10]={1,2,-1,-2,1,2,-1,-2};
+int y[10]={2,1,2,1,-2,-1,-2,-1};
+
+int main ()
+{
+    while (scanf(&quot;%s %s&quot;,A,B)!=EOF)
+    {
+
+        queue&lt;node&gt; q;
+
+        memset (vis,0,sizeof(vis));
+
+        s.x=A[0]-'a'+1;
+        s.y=A[1]-'0';
+        e.x=B[0]-'a'+1;
+        e.y=B[1]-'0';
+
+        vis[s.x][s.y]=1;
+
+        q.push(s);
+
+        while (!q.empty())
+        {
+            p=q.front();
+            q.pop();
+
+            if (p.x == e.x &amp;&amp; p.y == e.y)
+                break;
+
+            for (int i =0;i&lt;8;i++)
+            {
+                if (p.x+x[i] &gt;= 1 &amp;&amp; p.x+x[i] &lt;= 8 &amp;&amp; p.y+y[i] &gt;= 1 &amp;&amp; p.y+y[i] &lt;= 8 &amp;&amp; !vis[p.x+x[i]][p.y+y[i]])
+                {
+                    pp.x=p.x+x[i];
+                    pp.y=p.y+y[i];
+                    vis[pp.x][pp.y]=vis[p.x][p.y]+1;
+                    q.push(pp);
+                }
+            }
+        }
+        printf(&quot;To get from %s to %s takes %d knight moves.\n&quot;,A,B,vis[e.x][e.y]-1);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

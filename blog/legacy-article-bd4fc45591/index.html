@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Go-并发基础组件 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：Go-并发基础组件">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-bd4fc45591/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Go-并发基础组件","description":"历史迁移文章：Go-并发基础组件","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-bd4fc45591/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-bd4fc45591/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Go-并发基础组件 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：Go-并发基础组件">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-bd4fc45591/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Go-并发基础组件 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：Go-并发基础组件">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Go-并发基础组件</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>925 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#go语言的csp模型">Go语言的CSP模型</a></li><li><a href="#goroutine">goroutine</a></li><li class="toc-sub"><a href="#并发中的闭包">并发中的闭包</a></li><li><a href="#sync包">sync包</a></li><li class="toc-sub"><a href="#waitgroup">WaitGroup</a></li><li class="toc-sub"><a href="#互斥锁与读写锁">互斥锁与读写锁</a></li><li class="toc-sub"><a href="#cond">cond</a></li><li class="toc-sub"><a href="#once">once</a></li><li class="toc-sub"><a href="#sync.pool池">sync.Pool池</a></li><li><a href="#channel">channel</a></li><li><a href="#select语句">select语句</a></li><li><a href="#gomaxprocs控制">GOMAXPROCS控制</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h2 id="go语言的csp模型" tabindex="-1">Go语言的CSP模型</h2>
+<p>CSP 是 Communicating Sequential Process 的简称，中文可以叫做通信顺序进程，是一种并发编程模型。
+Go 通过 channel 实现 CSP 通信模型，主要用于 goroutine 之间的消息传递和事件通知。</p>
+<h2 id="goroutine" tabindex="-1">goroutine</h2>
+<p>goroutine上下文切换的耗时，相较于Linux线程上下文之间切换 降低90%(1.46us-&gt;0.225us)，且消耗的内存少，8G内存即可创建百万级别的协程</p>
+<h3 id="并发中的闭包" tabindex="-1">并发中的闭包</h3>
+<pre><code class="hljs language-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
+	<span class="hljs-keyword">var</span> wg sync.WaitGroup
+	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++ {
+		wg.Add(<span class="hljs-number">1</span>)
+		<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> {
+			fmt.Println(i)
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+}
+</code></pre>
+<p>输出结果：5 5 5 5 5
+为什么呢？ for循环内每次都会调用一个goroutine，但是调用的goroutine启动的速度远比循环要慢，可以把i认为处于主函数的goroutine中。因此当循环中的goroutine开始执行的时候，i的值已经被赋为5，所以打印的值都是共享的i也就是5</p>
+<p>解决：</p>
+<pre><code class="hljs language-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+	<span class="hljs-keyword">var</span> wg sync.WaitGroup
+	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++ {
+		wg.Add(<span class="hljs-number">1</span>)
+		<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(i <span class="hljs-type">int</span>)</span></span> {
+			fmt.Println(i)
+			wg.Done()
+		}(i)
+	}
+	wg.Wait()
+}
+</code></pre>
+<h2 id="sync包" tabindex="-1">sync包</h2>
+<h3 id="waitgroup" tabindex="-1">WaitGroup</h3>
+<h3 id="互斥锁与读写锁" tabindex="-1">互斥锁与读写锁</h3>
+<ul>
+<li>sync.Mutex互斥锁</li>
+<li>sync.RWMutex读写锁</li>
+</ul>
+<p>将程序对资源的访问分为读操作和写操作，这样它的效率就比Mutex要高些。
+1、当有人还在占用写锁时，不允计有人读数据
+2、多个人（线程）读取数据（拥有读锁）时，互不影响不会造成阻塞</p>
+<p>RWMutex 里提供了两种锁：
+读锁：调用 RLock 方法开启锁，调用 RUnlock 释放锁
+写锁：调用 Lock 方法开启锁，调用 Unlock 释放锁（和 Mutex类似）</p>
+<p>例子：</p>
+<pre><code class="hljs language-go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">&quot;fmt&quot;</span>
+	<span class="hljs-string">&quot;sync&quot;</span>
+	<span class="hljs-string">&quot;time&quot;</span>
+)
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+	lock := &amp;sync.RWMutex{}
+	lock.Lock()
+
+	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">4</span>; i++ {
+		<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(i <span class="hljs-type">int</span>)</span></span> {
+			fmt.Printf(<span class="hljs-string">&quot;第 %d 个协程准备开始... \n&quot;</span>, i)
+			lock.RLock()
+			fmt.Printf(<span class="hljs-string">&quot;第 %d 个协程获得读锁, sleep 1s 后，释放锁\n&quot;</span>, i)
+			time.Sleep(time.Second)
+			lock.RUnlock()
+		}(i)
+	}
+
+	time.Sleep(time.Second * <span class="hljs-number">2</span>)
+
+	fmt.Println(<span class="hljs-string">&quot;准备释放写锁，读锁不再阻塞&quot;</span>)
+	<span class="hljs-comment">// 写锁一释放，读锁就自由了</span>
+	lock.Unlock()
+
+	<span class="hljs-comment">// 由于会等到读锁全部释放，才能获得写锁</span>
+	<span class="hljs-comment">// 因为这里一定会在上面 4 个协程全部完成才能往下走</span>
+	lock.Lock()
+	fmt.Println(<span class="hljs-string">&quot;程序退出...&quot;</span>)
+	lock.Unlock()
+}
+<span class="hljs-comment">/*
+第 1 个协程准备开始... 
+第 0 个协程准备开始... 
+第 3 个协程准备开始... 
+第 2 个协程准备开始... 
+准备释放写锁，读锁不再阻塞
+第 2 个协程获得读锁, sleep 1s 后，释放锁
+第 3 个协程获得读锁, sleep 1s 后，释放锁
+第 1 个协程获得读锁, sleep 1s 后，释放锁
+第 0 个协程获得读锁, sleep 1s 后，释放锁
+程序退出...
+*/</span>
+</code></pre>
+<h3 id="cond" tabindex="-1">cond</h3>
+<p>用途：goroutine 的集合点，或等待或发布一个event。一个cond 是&gt;=2个goroutine之间的任意信号。当条件还没有达成的时候，后续的 goroutine 都会被阻塞。一旦条件达成，被阻塞的 goroutine 会被唤醒。</p>
+<p>Cond 的初始化需要传入一个 Locker 接口的实例（通常传入 Mutex 和 RWMutex）如：c := sync.NewCond(&amp;sync.Mutex{})</p>
+<p>Wait、Signal 和 Broadcast</p>
+<p>调用Wait方法的 goroutine 会被放到 Cond 的等待队列中并阻塞，直到被 Signal 或者 Broadcast 方法唤醒。调用 Wait 方法的时候一定要持有锁 c.L 。c.Wait 并不会阻塞，只是挂起了当前的 goroutine，并允许其他goroutine继续在os上运行
+Signal 和 Broadcast两种方式发送信号给其他的goroutine，Signal 是唤醒其中一个，Broadcast唤醒全部</p>
+<pre><code class="hljs language-go"><span class="hljs-keyword">package</span> main
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">&quot;fmt&quot;</span>
+    <span class="hljs-string">&quot;sync&quot;</span>
+    <span class="hljs-string">&quot;time&quot;</span>
+)
+
+<span class="hljs-keyword">var</span> m sync.Mutex
+<span class="hljs-keyword">var</span> c = sync.NewCond(&amp;m)
+<span class="hljs-keyword">var</span> n = <span class="hljs-number">5</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">syncCondtest</span><span class="hljs-params">(i <span class="hljs-type">int</span>, running <span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)</span></span> {
+	c.L.Lock()
+	fmt.Printf(<span class="hljs-string">&quot;goroutine:%d wait\n&quot;</span>, i)
+	running &lt;- i
+	c.Wait()
+	c.L.Unlock()
+	fmt.Printf(<span class="hljs-string">&quot;goroutine:%d quit \n&quot;</span>, i)
+}
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+	running := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>, <span class="hljs-number">5</span>)
+	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; n; i++ {
+		<span class="hljs-keyword">go</span> syncCondtest(i, running)
+	}
+
+	<span class="hljs-comment">//wait all goroutine running if no goroutine running c.Signal do nothing</span>
+	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; n; i++ {
+		&lt;-running
+	}
+    
+	fmt.Println(<span class="hljs-string">&quot;one goroutine runnningn&quot;</span>)
+	c.Signal()
+    time.Sleep(<span class="hljs-number">1</span> * time.Second)
+
+    fmt.Println(<span class="hljs-string">&quot;all goroutine runnningn&quot;</span>)
+	c.Broadcast()
+    
+    time.Sleep(<span class="hljs-number">1</span> * time.Second)
+<span class="hljs-comment">/*
+goroutine:4 wait
+goroutine:1 wait
+goroutine:0 wait
+goroutine:2 wait
+goroutine:3 wait
+one goroutine runnningn
+goroutine:4 quit 
+all goroutine runnningn
+goroutine:1 quit 
+goroutine:3 quit 
+goroutine:2 quit 
+goroutine:0 quit
+*/</span>
+}
+</code></pre>
+<h3 id="once" tabindex="-1">once</h3>
+<p>sync.Once</p>
+<p>var one sync.Once
+<a href="http://one.Do" target="_blank" rel="noreferrer">one.Do</a>(xxx)保证传入的xxx只会调用一次，one再次使用是无效的，因为one保证的是Do方法只被调用一次</p>
+<h3 id="sync.pool池" tabindex="-1">sync.Pool池</h3>
+<p>池是用来做缓存进行 存取 对象的池子，较少GC带来的损耗，避免重复的创建、销毁
+通过Get方法获取对象，Put方法存入对象</p>
+<p>初始化 Pool时，需要设置好 New 函数。当调用 Get 方法时，如果池子里缓存了对象，就直接返回缓存的对象。如果没有存货，则调用 New 函数创建一个新的对象。</p>
+<p>下面的例子：</p>
+<pre><code class="hljs language-go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">&quot;fmt&quot;</span>
+    <span class="hljs-string">&quot;sync&quot;</span>
+)
+
+<span class="hljs-keyword">var</span> pool *sync.Pool
+
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> {
+    Name <span class="hljs-type">string</span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">initPool</span><span class="hljs-params">()</span></span> {
+    pool = &amp;sync.Pool {
+        New: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span><span class="hljs-keyword">interface</span>{} {
+            fmt.Println(<span class="hljs-string">&quot;Creating a new Person&quot;</span>)
+            <span class="hljs-keyword">return</span> &amp;Person{Name: <span class="hljs-string">&quot;None&quot;</span>}
+        },
+    }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+    initPool()
+
+    p := pool.Get().(*Person) <span class="hljs-comment">// A</span>
+    fmt.Println(<span class="hljs-string">&quot;首次从 pool 里获取：&quot;</span>, p)
+
+    p.Name = <span class="hljs-string">&quot;first&quot;</span>
+    fmt.Printf(<span class="hljs-string">&quot;设置 p.Name = %s\n&quot;</span>, p.Name)
+
+    pool.Put(p)
+
+    fmt.Println(<span class="hljs-string">&quot;Pool 里已有一个对象，调用 Get: &quot;</span>, pool.Get().(*Person)) <span class="hljs-comment">// B</span>
+    fmt.Println(<span class="hljs-string">&quot;Pool 没有对象了，调用 Get: &quot;</span>, pool.Get().(*Person)) <span class="hljs-comment">// C</span>
+}
+<span class="hljs-comment">/*
+Creating a new Person
+首次从 pool 里获取： &amp;{None}
+设置 p.Name = first
+Pool 里已有一个对象，调用 Get:  &amp;{first}
+Creating a new Person
+Pool 没有对象了，调用 Get:  &amp;{None}
+
+运行结束，执行耗时：1毫秒
+*/</span>
+</code></pre>
+<p>A、C处获取对象时，池中已为空，所以获取到的是New的新对象</p>
+<h2 id="channel" tabindex="-1">channel</h2>
+<p>充当goroutine之间通信的管道</p>
+<p>channel 是阻塞的，当从空的channel读取数据时如果 channel为空，则会等待有数据写入channel
+下面的例子：main的goroutine并不会退出导致而创建的匿名goroutine无法写入内容，反而会阻塞等待写入</p>
+<pre><code class="hljs language-go"><span class="hljs-keyword">package</span> main
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">&quot;fmt&quot;</span>
+)
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+    stringStream := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">string</span>)
+    <span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span>{
+        stringStream &lt;- <span class="hljs-string">&quot;hello&quot;</span>
+    }()
+
+     fmt.Println(&lt;-stringStream)
+}
+</code></pre>
+<h2 id="select语句" tabindex="-1">select语句</h2>
+<p>当select 的 case中多个channel 可用时，Go会随机选取其中一个进行读取
+如果没有channel可用，我们可以选取超时机制避免阻塞</p>
+<pre><code class="hljs language-go"><span class="hljs-keyword">var</span> c &lt;- <span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>
+<span class="hljs-keyword">select</span> {
+	<span class="hljs-keyword">case</span> &lt;-c: xxx
+	<span class="hljs-keyword">case</span> time.After(<span class="hljs-number">1</span> * time.Second): xxx
+}
+</code></pre>
+<p>或者使用default</p>
+<pre><code class="hljs language-go"><span class="hljs-keyword">var</span> c &lt;- <span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>
+<span class="hljs-keyword">select</span> {
+	<span class="hljs-keyword">case</span> &lt;-c: xxx
+	<span class="hljs-keyword">default</span>: xxx
+}
+</code></pre>
+<h2 id="gomaxprocs控制" tabindex="-1">GOMAXPROCS控制</h2>
+<p>runtime的GOMAXPROCS函数，控制使用的CPU核数。
+<a href="https://zhuanlan.zhihu.com/p/111346689" target="_blank" rel="noreferrer">Go 为什么这么“快”</a>  中讲解了Go的GPM模型</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>哪些内存需要回收 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：哪些内存需要回收">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-78f792b096/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"哪些内存需要回收","description":"历史迁移文章：哪些内存需要回收","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-78f792b096/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-78f792b096/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="哪些内存需要回收 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：哪些内存需要回收">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-78f792b096/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="哪些内存需要回收 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：哪些内存需要回收">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">哪些内存需要回收</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1303 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 3 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#判断对象存活">判断对象存活</a></li><li><a href="#java堆内存">Java堆内存</a></li><li class="toc-sub"><a href="#新生代（young-generation）">新生代（Young Generation）</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<h1 id="哪些内存需要回收" tabindex="-1">哪些内存需要回收</h1>
+<p>如果一个对象已经没有引用指向它了，那么就认为这个对象是一个垃圾对象，需要被回收掉，将内存空间释放给其它对象.</p>
+<h2 id="判断对象存活" tabindex="-1">判断对象存活</h2>
+<ul>
+<li>
+<p>引用计数器
+创建一个对象的时候，JVM就会同时为这个对象分配一个引用计数器，每当有一个新的引用指向这个对象的时候，引用计数器加1，而当有一个引用脱离了这个对象的时候，引用计数器就减1。这样，在JVM进行垃圾回收操作的时候，通过判断一个对象的引用计数器是否为0便可以获知这个对象是否为一个垃圾对象。这种方式实现起来比较简单，但是有一个很严重的问题，就是不能处理循环引用问题。具体而言，就是当内存中存在循环引用时，这些循环引用的对象的引用计数器均不为0，也就是说这些对象均不能被判定为垃圾对象。但是也有可能这些循环引用作为一个整体是一个垃圾，这样的话，JVM无法对这一块内存进行回收，从而造成了内存的浪费。</p>
+</li>
+<li>
+<p>可达性分析
+在创建一个对象的时候，会有一个由该对象指向一个称之为GC ROOT的对象的链接，如果在JVM进行垃圾回收操作时，某个对象有到GC ROOT的链接，即该对象是可达的，那么这个对象就不能被当作垃圾处理，否则如果某个对象到GC ROOT是不可达的，则认为该对象是一个垃圾对象，应该被回收掉。</p>
+</li>
+</ul>
+<h1 id="如何垃圾回收" tabindex="-1">如何垃圾回收</h1>
+<ul>
+<li>标记清除算法
+标记--清除策略，这种策略是说在进行GC操作时，将垃圾对象加上标记，然后将有标记的对象进行清除，从而达到释放垃圾对象的内存空间的目的。这种方式的优点是实现比较简单，但其缺点也是很严重的。因为采用这种方式进行垃圾回收后，得到的内存空间是零散的，所以经过几轮GC后，内存的碎片化会非常严重</li>
+<li>复制算法
+首先将一片内存区域一分为二，然后先在其中一片区域中创建对象，等到需要进行垃圾垃圾回收操作时，将不是垃圾的对象复制到另一片内存区域，然后将这一片区域清空。经过复制后，所有的非垃圾对象都被重新排列到一片连续的内存区域中了，所以几乎不存在碎片化问题，然而该策略的缺陷在于一开始就需要将一片内存一分为二，交替使用，这样的话，内存利用率只有50%，利用率太低。</li>
+<li>分代回收
+大部分的对象的存活周期很短，只有一小部分对象的存活周期比较长。所以基于这样一个观察，JVM将一片内存区域分为两部分：新生代和年老代，其中新生代又按照8:1:1的比例分为生成区、From Survivor区 和 To Survivor区。创建一个对象时，先将这个对象放入新生代区，当进行GC操作时，将没有引用的对象清除，还幸存的对象放入From Survivor区，如果From Survivor区存放不下，再将对象移到年老代。其中这个算法的核心在于：每次进行GC操作时，都自动会对对象的生存期有一个记录机制，经过几轮GC操作后仍然存活的对象被认为是那些生存周期比较长的对象，而被加入年老代。采用这种方式进行GC操作既能避免内存的碎片化问题，又能拥有比较好的内存利用率。</li>
+</ul>
+<h1 id="垃圾回收回收的过程" tabindex="-1">垃圾回收回收的过程</h1>
+<h2 id="java堆内存" tabindex="-1">Java堆内存</h2>
+<p>堆内存以下2个主要区域：</p>
+<h3 id="新生代（young-generation）" tabindex="-1">新生代（Young Generation）</h3>
+<ul>
+<li>Eden空间，当一个实例被创建了，首先会被存储在堆内存年轻代的 Eden 区中。</li>
+<li>S0 Survivor空间（S0 Survivor space，存在时间长的实例将会从Eden空间移动到S0 Survivor空间）</li>
+<li>S1 Survivor空间 （存在时间更长的实例将会从S0 Survivor空间移动到S1 Survivor空间）</li>
+</ul>
+<p>Eden区和Survivor区默认大小比例是8：1</p>
+<ul>
+<li>老年代（Old Generation）
+是堆内存中的第二块逻辑区。当垃圾回收器执行 Minor GC 周期时，在 S1 Survivor 区中的存活实例将会被晋升到老年代，而未被引用的对象被标记为回收。
+老年代 GC（Major GC）：相对于 Java 垃圾回收过程，老年代是实例生命周期的最后阶段。Major GC 扫描老年代的垃圾回收过程。如果实例不再被引用，那么它们会被标记为回收，否则它们会继续留在老年代中。</li>
+</ul>
+<p><img src="/assets/images/legacy/MarkdownPhotos/photos/12.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>小Z的袜子【莫队算法】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50598165 [2009国家集训队]小Z的袜子(hose) T…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-c2454f2601/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"小Z的袜子【莫队算法】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50598165 [2009国家集训队]小Z的袜子(hose) T…","datePublished":"2016-01-27T18:39:00.000Z","dateModified":"2016-01-27T18:39:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-c2454f2601/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-c2454f2601/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="小Z的袜子【莫队算法】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50598165 [2009国家集训队]小Z的袜子(hose) T…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-c2454f2601/">
+    <meta property="article:published_time" content="2016-01-27T18:39:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="小Z的袜子【莫队算法】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50598165 [2009国家集训队]小Z的袜子(hose) T…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">小Z的袜子【莫队算法】</h1>
+                    <div class="post-meta">
+                        <span>2016/01/28 02:39</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1088 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 3 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/50598165" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/50598165</a></p>
+<p>[2009国家集训队]小Z的袜子(hose)</p>
+<p>Time Limit: 20 Sec Memory Limit: 259 MB<br>
+Submit: 5259 Solved: 2426<br>
+[Submit][Status][Discuss]<br>
+Description</p>
+<p>作为一个生活散漫的人，小Z每天早上都要耗费很久从一堆五颜六色的袜子中找出一双来穿。终于有一天，小Z再也无法忍受这恼人的找袜子过程，于是他决定听天由命……<br>
+具体来说，小Z把这N只袜子从1到N编号，然后从编号L到R(L
+尽管小Z并不在意两只袜子是不是完整的一双，甚至不在意两只袜子是否一左一右，他却很在意袜子的颜色，毕竟穿两只不同色的袜子会很尴尬。<br>
+你的任务便是告诉小Z，他有多大的概率抽到两只颜色相同的袜子。当然，小Z希望这个概率尽量高，所以他可能会询问多个(L,R)以方便自己选择。</p>
+<p>Input</p>
+<p>输入文件第一行包含两个正整数N和M。N为袜子的数量，M为小Z所提的询问的数量。接下来一行包含N个正整数Ci，其中Ci表示第i只袜子的颜色，相同的颜色用相同的数字表示。再接下来M行，每行两个正整数L，R表示一个询问。</p>
+<p>Output</p>
+<p>包含M行，对于每个询问在一行中输出分数A/B表示从该询问的区间[L,R]中随机抽出两只袜子颜色相同的概率。若该概率为0则输出0/1，否则输出的A/B必须为最简分数。（详见样例）</p>
+<p>Sample Input</p>
+<p>6 4</p>
+<p>1 2 3 3 3 2</p>
+<p>2 6</p>
+<p>1 3</p>
+<p>3 5</p>
+<p>1 6</p>
+<p>Sample Output</p>
+<p>2/5</p>
+<p>0/1</p>
+<p>1/1</p>
+<p>4/15</p>
+<p>【样例解释】</p>
+<p>询问1：共C(5,2)=10种可能，其中抽出两个2有1种可能，抽出两个3有3种可能，概率为(1+3)/10=4/10=2/5。</p>
+<p>询问2：共C(3,2)=3种可能，无法抽到颜色相同的袜子，概率为0/3=0/1。</p>
+<p>询问3：共C(3,2)=3种可能，均为抽出两个3，概率为3/3=1/1。</p>
+<p>注：上述C(a, b)表示组合数，组合数C(a, b)等价于在a个不同的物品中选取b个的选取方案数。</p>
+<p>【数据规模和约定】</p>
+<p>30%的数据中 N,M ≤ 5000；</p>
+<p>60%的数据中 N,M ≤ 25000；</p>
+<p>100%的数据中 N,M ≤ 50000，1 ≤ L &lt; R ≤ N，Ci ≤ N。</p>
+<p>莫队算法：<br>
+分块的思想，时间复杂度为nsqrt(n)，适用于无修改的区间查询，将长度为n的区间分为sqrt(n)块，如果知道了[L,R]的答案可以在O(1)的时间内知道[L-1,R]，[L,R-1]，[L+1,R]，[L,R+1]的答案。首先按照查询的区间对询问进行排序。</p>
+<p>代码：</p>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;cmath&gt;
+
+using namespace std;
+
+int c[50010], pos[50010];;
+int n, m;
+long long ans, aa, bb, cc, s[50010];
+
+long long gcd(long long a, long long b)
+{
+    if (b == 0) return a;
+    else return gcd(b ,a%b);
+}
+
+struct Query
+{
+    int L, R;
+    int num;
+
+    long long ans1, ans2;
+
+}q[50010];
+
+bool cmp1(Query a, Query b)
+{
+    if (pos[a.L] == pos[b.L])
+        return a.R &lt; b.R;
+    else
+        return a.L &lt; b.L;
+}
+
+
+bool cmp2(Query a, Query b)
+{
+    return a.num &lt; b.num;
+}
+
+void update(int p, int add)
+{
+    ans -= s[c[p]] * s[c[p]];
+    s[c[p]] += add;
+    ans += s[c[p]] * s[c[p]];
+}
+
+int main()
+{
+    while (scanf(&quot;%d%d&quot;, &amp;n, &amp;m) != EOF)
+    {
+        int SQ = sqrt(n);
+        ans = 0;
+        memset(s, 0, sizeof(s));
+
+        for (int i = 1;i &lt;= n;i++)
+        {
+            scanf(&quot;%d&quot;, &amp;c[i]);
+            pos[i] = (i - 1) / SQ + 1;
+        }
+
+        for (int i = 1;i &lt;= m;i++)
+        {
+            scanf(&quot;%d%d&quot;, &amp;q[i].L, &amp;q[i].R);
+            q[i].num = i;
+        }
+
+        sort(q + 1, q + 1 + m,cmp1);
+
+        int pl = 1, pr = 0;
+
+        for (int i = 1;i &lt;= m;i++)
+        {
+            if (q[i].L == q[i].R)
+            {
+                q[i].ans1 = 0;
+                q[i].ans2 = 1;
+                continue;
+            }
+
+            if (pr &lt; q[i].R)
+            {
+                for (int j = pr + 1;j &lt;= q[i].R;j++)
+                    update(j, 1);
+            }
+            else
+            {
+                for (int j = pr ;j &gt; q[i].R;j--)
+                    update(j, -1);
+            }
+            pr = q[i].R;
+            if (pl &lt; q[i].L)
+            {
+                for (int j = pl;j &lt; q[i].L;j++)
+                    update(j,-1);
+            }
+            else
+            {
+                for (int j = pl - 1;j &gt;= q[i].L;j--)
+                    update(j, 1);
+            }
+            pl = q[i].L;
+
+            aa = ans - (q[i].R - q[i].L + 1);
+            bb = (long long)(q[i].R - q[i].L + 1)*(q[i].R - q[i].L);
+
+            long long tmp = gcd(aa, bb);
+            aa /= tmp;
+            bb /= tmp;
+            q[i].ans1 = aa;
+            q[i].ans2 = bb;
+        }
+
+        sort(q + 1, q + 1 + m, cmp2);
+
+        for (int i = 1;i &lt;= m;i++)
+            printf(&quot;%lld/%lld\n&quot;, q[i].ans1, q[i].ans2);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

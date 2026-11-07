@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Codeforces Round · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41928881 http://codeforces.com/co…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-572c149b96/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Codeforces Round","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41928881 http://codeforces.com/co…","datePublished":"2014-12-14T13:18:00.000Z","dateModified":"2014-12-14T13:18:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-572c149b96/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-572c149b96/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Codeforces Round · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41928881 http://codeforces.com/co…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-572c149b96/">
+    <meta property="article:published_time" content="2014-12-14T13:18:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Codeforces Round · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41928881 http://codeforces.com/co…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Codeforces Round</h1>
+                    <div class="post-meta">
+                        <span>2014/12/14 21:18</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>368 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41928881" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41928881</a></p>
+<p><a href="http://codeforces.com/contest/466/problem/C" target="_blank" rel="noreferrer"> http://codeforces.com/contest/466/problem/C
+</a></p>
+<p>C. Number of Ways</p>
+<p>time limit per test</p>
+<p>2 seconds</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>You've got array  <em>a</em> [1], <em>a</em> [2], ..., <em>a</em> [ <em>n</em> ]  , consisting of  <em>n</em>
+integers. Count the number of ways to split all the elements of the array into
+three contiguous parts so that the sum of elements in each part is the same.</p>
+<p>More formally, you need to find the number of such pairs of indices  <em>i</em> , <em>j</em>
+(2 ≤ <em>i</em> ≤ <em>j</em> ≤ <em>n</em> - 1)  , that
+<img src="http://espresso.codeforces.com/669a2f09a3b9e143f54b1f1d9fd6b7dddf403680.png" alt="" loading="lazy" referrerpolicy="no-referrer">
+.</p>
+<p>Input</p>
+<p>The first line contains integer  <em>n</em> (1 ≤ <em>n</em> ≤ 5·10  5  )  , showing how many
+numbers are in the array. The second line contains  <em>n</em> integers  <em>a</em> [1]  ,
+<em>a</em> [2]  , ...,  <em>a</em> [ <em>n</em> ]  (| <em>a</em> [ <em>i</em> ]| ≤  10  9  )  — the elements of
+array  <em>a</em> .</p>
+<p>Output</p>
+<p>Print a single integer — the number of ways to split the array into three
+parts with the same sum.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>5
+1 2 3 0 3
+</code></pre>
+<p>output</p>
+<pre><code>2
+</code></pre>
+<p>input</p>
+<pre><code>4
+0 1 -1 0
+</code></pre>
+<p>output</p>
+<pre><code>1
+</code></pre>
+<p>input</p>
+<pre><code>2
+4 1
+</code></pre>
+<p>output</p>
+<pre><code>0
+
+
+
+
+
+
+
+#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+long long sum[500005];
+
+int main()
+{
+    sum[0]=0;
+    int n;
+    while(cin&gt;&gt;n)
+    {
+        memset(sum, 0, sizeof(sum));
+        for(int i=1;i&lt;=n;++i)
+        {
+            cin&gt;&gt;sum[i];
+            sum[i]+=sum[i-1];
+        }
+        long long aver;
+        if(sum[n]==0)
+        {
+            long long k = 0;
+            for (int i = 1; i &lt;= n; ++i)
+            {
+                if (sum [i] == 0)
+                {
+                    k++;
+                }
+            }
+            cout &lt;&lt;(k-1)*(k-2)/2 &lt;&lt;endl;
+            continue;
+        }
+        if(sum[n]%3==0 )
+        {
+            aver=sum[n]/3;
+        }
+        else
+        {
+            cout&lt;&lt;0&lt;&lt;endl;
+            continue;
+        }
+
+        long long pc=0, ss=0;
+
+        for(int i=1;i&lt;=n;++i)
+        {
+            if (sum[i] == aver)
+                pc++;
+            if (sum[i] == aver *2)
+                ss += pc;
+        }
+            cout&lt;&lt;ss*pc&lt;&lt;endl;
+    }
+    return 0;
+}
+</code></pre>
+<p>赛后懂了。。。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

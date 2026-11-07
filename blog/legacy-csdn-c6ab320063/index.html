@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UVA 10968 - KuPellaKeS 【BFS】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47993793 题目： In ancient times, ma…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-c6ab320063/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"UVA 10968 - KuPellaKeS 【BFS】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47993793 题目： In ancient times, ma…","datePublished":"2015-08-25T18:15:00.000Z","dateModified":"2015-08-25T18:15:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-c6ab320063/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-c6ab320063/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="UVA 10968 - KuPellaKeS 【BFS】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47993793 题目： In ancient times, ma…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-c6ab320063/">
+    <meta property="article:published_time" content="2015-08-25T18:15:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UVA 10968 - KuPellaKeS 【BFS】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47993793 题目： In ancient times, ma…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">UVA 10968 - KuPellaKeS 【BFS】</h1>
+                    <div class="post-meta">
+                        <span>2015/08/26 02:15</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>543 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47993793" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47993793</a></p>
+<p>题目：<br>
+In ancient times, many territories were under the control of a powerful king
+called Basm. Basm is<br>
+well-known in history because of his strange works and as a result, there are
+many history-lovers who<br>
+wish to know more about him. Koorosh is one of them and he has worked hard to
+find a way to know<br>
+more about Basms works.<br>
+Recently, he managed to invent a Time MachineTM and traveled to the past to
+Basm time in order<br>
+to be able to see and study his weird works thoroughly. Unfortunately, he has
+been caught by royal<br>
+guard soldiers of Basm and is now in his prison. Basm ordered him to solve a
+problem if he wants to stay<br>
+alive. King Basm wants to change the structure of roads of his newly captured
+territory, KuPellaKes<br>
+in such a way that each city has an even number of neighboring cities. Now, he
+wants to know the<br>
+minimum number of roads that should be destroyed in order to satisfy this
+condition. Note that each<br>
+city must have at least one neighbor city after the road destruction process.
+Also, It should be noted<br>
+that in the given territory at most two cites of KuPellaKes have an odd number
+of neighboring cities<br>
+and there is at most one road between two cities. Also, there is no road from
+a city to itself.</p>
+<p>题意：<br>
+给定一个图，要求把这个图删掉一些边后，使得他所以有点度数为不等于0的偶数，保证图一开始最多只有最多2个奇数度数结点。求最小删边数</p>
+<p>解法：求奇数点间的距离。奇数点为 0 个，答案为0。</p>
+<p>代码：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+#include &lt;map&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+int n, m;
+vector&lt;int&gt; g[1010];
+int du[1010];
+int cnt[1010];
+int st, ed;
+
+bool solve()
+{
+    st = ed = 0;
+    for (int i = 1; i &lt;= n; i++)
+    {
+        if (du[i] == 0 || du[i] == 1) return false;
+        if (du[i] % 2 == 1)
+        {
+            if (st == 0) st = i;
+            else ed = i;
+        }
+    }
+
+    if (st == 0)
+    {
+        printf(&quot;0\n&quot;);
+        return true;
+    }
+
+    memset(cnt, -1, sizeof(cnt));
+    queue&lt;int&gt; q;
+    while (!q.empty()) q.pop();
+    q.push(st);
+    cnt[st] = 0;
+
+    while (!q.empty())
+    {
+        int tp = q.front();q.pop();
+        if (tp == ed)
+        {
+            printf(&quot;%d\n&quot;,cnt[tp]);
+            return true;
+        }
+        for (int i = 0; i &lt; g[tp].size(); i++)
+        {
+            int tt = g[tp][i];
+            if (du[tt] == 2) continue;
+            if (cnt[tt] != -1) continue;
+            cnt[tt] = cnt[tp] + 1;
+            q.push(tt);
+        }
+    }
+    return false;
+}
+
+int main()
+{
+    while (~scanf(&quot;%d%d&quot;, &amp;n, &amp;m) &amp;&amp; n)
+    {
+        memset(du,0,sizeof(du));
+        for (int i = 0; i &lt;= n; i++) g[i].clear();
+        int a, b;
+        while (m--)
+        {
+            scanf(&quot;%d%d&quot;, &amp;a, &amp;b);
+            du[a]++; du[b]++;
+            g[a].push_back(b);
+            g[b].push_back(a);
+        }
+        if (!solve()) printf(&quot;Poor Koorosh\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

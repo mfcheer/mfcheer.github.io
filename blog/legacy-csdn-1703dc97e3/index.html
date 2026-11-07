@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu 1671&amp;&amp;poj 3630 Phone List 【字典树】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46465815 题目链接： http://acm.acmcode…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-1703dc97e3/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu 1671&&poj 3630 Phone List 【字典树】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46465815 题目链接： http://acm.acmcode…","datePublished":"2015-06-11T18:23:00.000Z","dateModified":"2015-06-11T18:23:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-1703dc97e3/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-1703dc97e3/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"内存,代码,插入","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu 1671&amp;&amp;poj 3630 Phone List 【字典树】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46465815 题目链接： http://acm.acmcode…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-1703dc97e3/">
+    <meta property="article:published_time" content="2015-06-11T18:23:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu 1671&amp;&amp;poj 3630 Phone List 【字典树】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46465815 题目链接： http://acm.acmcode…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu 1671&amp;&amp;poj 3630 Phone List 【字典树】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/12 02:23</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>337 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">内存</span><span class="post-tag">代码</span><span class="post-tag">插入</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46465815" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46465815</a></p>
+<p>题目链接： <a href="http://acm.acmcoder.com/showproblem.php?pid=1671" target="_blank" rel="noreferrer"> http://acm.acmcoder.com/showproblem.php?pid=1671
+</a><br>
+题意：问是否存在一个串是另一个串的前缀。<br>
+解法：建字典树，插入的串的结尾设置标志位，如果以后访问到，则存在一个串是另一个串的前缀。注意释放内存，不然超内存；（太弱，释放内存调了好久。。。<br>
+代码：</p>
+<pre><code>#include &lt;stdio.h&gt;  
+#include &lt;iostream&gt;  
+#include &lt;string.h&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;math.h&gt;  
+#include &lt;ctype.h&gt;  
+#include &lt;time.h&gt;  
+#include &lt;queue&gt;  
+#include &lt;iterator&gt; 
+
+using namespace std;
+
+typedef struct Trie
+{
+    int vis;
+    Trie *next[10];
+}Trie;
+
+Trie *root;
+int ok;
+
+void createTrie(char str[])
+{
+    if (ok) return;
+    int len = strlen(str);
+    Trie *p = root, *q;
+    int id;
+    for (int i = 0; i&lt;len; ++i)
+    {
+        id = str[i] - '0';
+        if (p-&gt;next[id] == NULL)
+        {
+            q = new Trie;
+            for (int j = 0; j&lt;10; ++j)
+                q-&gt;next[j] = NULL;
+
+            p-&gt;next[id] = q;
+            p-&gt;next[id]-&gt;vis = 1;
+            if (i == len-1)
+                p-&gt;next[id]-&gt;vis = -1;
+            p = p-&gt;next[id];
+        }
+        else
+        {
+            if (p-&gt;next[id]-&gt;vis == -1 || str[i + 1] == '\0')
+            {
+                ok = 1;
+                return;
+            }
+            if (i == len - 1)
+                p-&gt;next[id]-&gt;vis = -1;
+            p = p-&gt;next[id];
+        }
+    }
+}
+
+void free_memory(Trie *p)
+{
+    for (int i = 0; i &lt; 10; i++)
+    {
+        if (p-&gt;next[i] != NULL)
+            free_memory(p-&gt;next[i]);
+    }
+    free(p);
+}
+
+char str[1001000];
+int t, n;
+
+int main()
+{
+    scanf(&quot;%d&quot;,&amp;t);
+    while (t--)
+    {
+        ok = 0;
+        root = new Trie;
+        for (int i = 0; i &lt; 10; i++)
+        {
+            root-&gt;next[i] = NULL;
+            root-&gt;vis = 0;
+        }
+        scanf(&quot;%d&quot;, &amp;n);
+        for (int i = 1; i &lt;= n; i++)
+        {
+            scanf(&quot;%s&quot;, str); 
+            createTrie(str);
+        }
+        if (!ok)    puts(&quot;YES&quot;);
+        else puts(&quot;NO&quot;);
+        free_memory(root);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu 5319 Painter · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47110829 题目链接： http://acm.hdu.edu…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-3d56a032c6/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu 5319 Painter","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47110829 题目链接： http://acm.hdu.edu…","datePublished":"2015-07-28T12:29:00.000Z","dateModified":"2015-07-28T12:29:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-3d56a032c6/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-3d56a032c6/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu 5319 Painter · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47110829 题目链接： http://acm.hdu.edu…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-3d56a032c6/">
+    <meta property="article:published_time" content="2015-07-28T12:29:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu 5319 Painter · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47110829 题目链接： http://acm.hdu.edu…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu 5319 Painter</h1>
+                    <div class="post-meta">
+                        <span>2015/07/28 20:29</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>279 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47110829" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47110829</a></p>
+<p>题目链接： <a href="http://acm.hdu.edu.cn/showproblem.php?pid=5319" target="_blank" rel="noreferrer"> http://acm.hdu.edu.cn/showproblem.php?pid=5319
+</a></p>
+<p>题意：给你一个正方形，一把刷子，两种刷色法。<br>
+‘ \‘ 表示沿对角刷成红色，“/” 表示沿对角刷成蓝色。蓝色红色交叉形成绿色；<br>
+问最少刷几次形成如图图案。</p>
+<p>解法：从上到下未被刷过就直接刷。</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;assert.h&gt;
+
+using namespace std;
+
+#define maxn 156
+char maps[maxn][maxn];
+
+int main()
+{
+    int T, n, i, j;
+    scanf(&quot;%d&quot;, &amp;T);
+
+    while(T--)
+    {
+        scanf(&quot;%d&quot;, &amp;n);
+        int ans = 0;
+        memset(maps, 0, sizeof(maps));
+        for(i=1; i&lt;=n; i++)
+        {
+            scanf(&quot;%s&quot;, maps[i]+1);
+            for(j=1; maps[i][j]; j++)
+            {
+                if( (maps[i][j] == 'B'||maps[i][j] == 'G') &amp;&amp; maps[i-1][j+1] != 'B' &amp;&amp; maps[i-1][j+1] != 'G')
+                    ans ++;
+                if( (maps[i][j] == 'R'||maps[i][j] == 'G') &amp;&amp; maps[i-1][j-1] != 'R' &amp;&amp; maps[i-1][j-1] != 'G')
+                    ans ++;
+            }
+        }
+
+        printf(&quot;%d\n&quot;, ans);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

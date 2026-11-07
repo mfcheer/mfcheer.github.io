@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-4027 Can you answer these queries? · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43063261 题目链接： http://acm.hdu.edu…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-95d5e6715b/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-4027 Can you answer these queries?","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43063261 题目链接： http://acm.hdu.edu…","datePublished":"2015-01-23T13:28:00.000Z","dateModified":"2015-01-23T13:28:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-95d5e6715b/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-95d5e6715b/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"acm,算法,线段树","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-4027 Can you answer these queries? · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43063261 题目链接： http://acm.hdu.edu…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-95d5e6715b/">
+    <meta property="article:published_time" content="2015-01-23T13:28:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-4027 Can you answer these queries? · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/43063261 题目链接： http://acm.hdu.edu…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-4027 Can you answer these queries?</h1>
+                    <div class="post-meta">
+                        <span>2015/01/23 21:28</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>456 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">acm</span><span class="post-tag">算法</span><span class="post-tag">线段树</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/43063261" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/43063261</a></p>
+<p>题目链接： <a href="http://acm.hdu.edu.cn/showproblem.php?pid=4027" target="_blank" rel="noreferrer"> http://acm.hdu.edu.cn/showproblem.php?pid=4027
+</a></p>
+<p>修改操作是把区间内的所有数开根号</p>
+<p>另一个操作是区间求和操作</p>
+<p>2  的 63 次开方6,7 根号也就变为了 1 。</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;cstdio&gt;
+#include &lt;string&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdlib&gt;
+#include &lt;algorithm&gt;
+#include &lt;stack&gt;
+#include &lt;set&gt;
+#include &lt;queue&gt;
+#include &lt;map&gt;
+
+using namespace std;
+
+#define ll(ind) (ind&lt;&lt;1)
+#define rr(ind) (ind&lt;&lt;1|1)
+#define Mid(a,b) (a+((b-a)&gt;&gt;1))
+typedef __int64 LL;
+
+const int N = 5020000;
+
+LL a[N];
+int n, m, b, c, d;
+
+struct node
+{
+	int left, right;
+	int mid() { return Mid(left, right); }
+	LL num;
+};
+
+struct segtree
+{
+	node tree[N * 4];
+	void build(int left, int right, int ind)
+	{
+		tree[ind].left = left;
+		tree[ind].right = right;
+		tree[ind].num = 0;
+
+		if (left == right)
+		{
+			tree[ind].num = a[left];
+		}
+		else
+		{
+			int mid = tree[ind].mid();
+			build(left, mid, ll(ind));
+			build(mid + 1, right, rr(ind));
+			tree[ind].num = tree[ll(ind)].num + tree[rr(ind)].num;
+		}
+	}
+
+	void update(int st, int ed, int ind)
+	{
+		int left = tree[ind].left;
+		int right = tree[ind].right;
+		if (left == st &amp;&amp; right == ed &amp;&amp; tree[ind].num == (right - left + 1))
+			return;
+		if (left == right)
+		{
+			tree[ind].num = sqrt(tree[ind].num * 1.0);
+			return;
+		}
+		int mid = tree[ind].mid();
+		if (ed &lt;= mid)
+			update(st, ed, ll(ind));
+		else if (st &gt; mid)
+			update(st, ed, rr(ind));
+		else
+		{
+			update(st, mid, ll(ind));
+			update(mid + 1, ed, rr(ind));
+		}
+		tree[ind].num = tree[ll(ind)].num + tree[rr(ind)].num;
+	}
+
+	LL query(int st, int ed, int ind)
+	{
+		int left = tree[ind].left;
+		int right = tree[ind].right;
+		if (left == st &amp;&amp; right == ed)
+		{
+			return tree[ind].num;
+		}
+		else
+		{
+			LL ans = 0;
+			int mid = tree[ind].mid();
+			if (ed &lt;= mid)
+				ans = query(st, ed, ll(ind));
+			else if (st &gt; mid)
+				ans = query(st, ed, rr(ind));
+			else
+			{
+				ans += query(st, mid, ll(ind));
+				ans += query(mid + 1, ed, rr(ind));
+			}
+			return ans;
+		}
+
+	}
+}seg;
+
+int main()
+{
+	int cases = 1;
+	while (scanf(&quot;%d&quot;, &amp;n) != EOF)
+	{
+		for (int i = 1; i &lt;= n; i++)
+			scanf(&quot;%I64d&quot;, &amp;a[i]);
+		seg.build(1, n, 1);
+		scanf(&quot;%d&quot;, &amp;m);
+		printf(&quot;Case #%d:\n&quot;, cases++);
+		while (m--)
+		{
+			scanf(&quot;%d %d %d&quot;, &amp;b, &amp;c, &amp;d);
+			if (c &gt; d)//坑
+				swap(c, d);
+			if (b == 0)
+			{
+				seg.update(c, d, 1);
+			}
+			else
+			{
+				seg.query(c, d, 1);
+				printf(&quot;%I64d\n&quot;, seg.query(c, d, 1));
+			}
+		}
+		printf(&quot;\n&quot;);
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

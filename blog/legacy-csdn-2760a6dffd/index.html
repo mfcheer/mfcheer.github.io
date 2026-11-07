@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>利用1~7的随机数，产生一个1~10的随机数 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40357517 必须是等概率的。 int rand10() { …">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-2760a6dffd/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"利用1~7的随机数，产生一个1~10的随机数","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40357517 必须是等概率的。 int rand10() { …","datePublished":"2014-10-21T15:42:00.000Z","dateModified":"2014-10-21T15:42:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-2760a6dffd/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-2760a6dffd/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="利用1~7的随机数，产生一个1~10的随机数 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40357517 必须是等概率的。 int rand10() { …">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-2760a6dffd/">
+    <meta property="article:published_time" content="2014-10-21T15:42:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="利用1~7的随机数，产生一个1~10的随机数 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/40357517 必须是等概率的。 int rand10() { …">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">利用1~7的随机数，产生一个1~10的随机数</h1>
+                    <div class="post-meta">
+                        <span>2014/10/21 23:42</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>520 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#"></a></li><li><a href="#必须是等概率的。">必须是等概率的。</a></li><li class="toc-sub"><a href="#[">[</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/40357517" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/40357517</a></p>
+<h2 id="" tabindex="-1"></h2>
+<h2 id="必须是等概率的。" tabindex="-1">必须是等概率的。</h2>
+<pre><code>int rand10()
+{
+    int i = rand7() - 1;
+    int j = rand7() - 1;
+    int num = rand7()*i + j;
+    if ( num &gt;= 40 ) return rand10();
+    else return num%10 + 1;
+}
+</code></pre>
+<h3 id="[" tabindex="-1">[</h3>
+<p>](<a href="https://github.com/ybai62868/Interview/blob/master/rand7%5C(%5C)-%3Erand10%5C(%5C).md#%E8%BF%99%E9%A2%98%E4%B8%80%E5%BC%80%E5%A7%8B%E6%88%91%E5%81%9A%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E4%BB%A5%E4%B8%BA%E7%9B%B4%E6%8E%A5%E5%AF%B9%E8%BF%99%E4%B8%AArand7%E4%B9%989%E7%84%B6%E5%90%8E%E9%99%A4%E4%BB%A57%E5%86%8D%E5%8A%A0%E4%B8%80%E5%8F%91%E7%8E%B0%E8%BF%99%E7%A7%8D%E6%96%B9%E6%B3%95%E5%B9%B6%E4%B8%8D%E8%83%BD%E4%BF%9D%E8%AF%81rand10%E6%98%AF%E7%AD%89%E6%A6%82%E4%BA%A7%E7%94%9F%E7%9A%84" target="_blank" rel="noreferrer">https://github.com/ybai62868/Interview/blob/master/rand7\(\)-&gt;rand10\(\).md#这题一开始我做的时候我以为直接对这个rand7乘9然后除以7再加一发现这种方法并不能保证rand10是等概产生的</a>)
+这题一开始我做的时候，我以为直接对这个rand7()乘9然后除以7再加一，，，发现这种方法并不能保证rand10()是等概产生的。</p>
+<p>具体的过程是由于我们要得到的是[1,10]的随机数，那么我们可以先对这个区间减去1，得到[0,9]的随机数，然后我们现在的目标就是怎么把这个[0,9]的随机</p>
+<p>数生成出来。那怎么得到这个[0,9]的随机数呢，我们发现这个随机数是对一个大于等于10的数字mod10后产生的结果，那么，既然我们知道这个的话，我们就</p>
+<p>可以先将rand7()-1,得到[0,6]的随机数，然后将[0,6]的随机数都乘上7得到0,7,14,21,28,35,42.
+然后可以对这个7个数字都加上一个rand7()-1,得到一个</p>
+<p>[0,48]的数字，得到这个[0,48]的的数字后，我们在每次产生大于等于40的数字后，我们就可以再次调用rand10(),那么实际上就是一个[0,39]的数字</p>
+<p>对这个区间中的数字mod10，我们就可以得到4个[0,9]的数字，这个区间的数字刚刚好就是我们想要的了。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

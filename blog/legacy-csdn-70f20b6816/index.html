@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>uva-11624 Fire! · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42275651 Problem B: Fire! Joe wor…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-70f20b6816/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"uva-11624 Fire!","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42275651 Problem B: Fire! Joe wor…","datePublished":"2014-12-30T14:22:00.000Z","dateModified":"2014-12-30T14:22:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-70f20b6816/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-70f20b6816/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="uva-11624 Fire! · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42275651 Problem B: Fire! Joe wor…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-70f20b6816/">
+    <meta property="article:published_time" content="2014-12-30T14:22:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="uva-11624 Fire! · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42275651 Problem B: Fire! Joe wor…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">uva-11624 Fire!</h1>
+                    <div class="post-meta">
+                        <span>2014/12/30 22:22</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>688 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#"></a></li><li><a href="#problem-b:-fire!">Problem B: Fire!</a></li><li class="toc-sub"><a href="#input-specification">Input Specification</a></li><li class="toc-sub"><a href="#sample-input">Sample Input</a></li><li class="toc-sub"><a href="#output-specification">Output Specification</a></li><li class="toc-sub"><a href="#output-for-sample-input">Output for Sample Input</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42275651" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/42275651</a></p>
+<h2 id="" tabindex="-1"></h2>
+<h2 id="problem-b:-fire!" tabindex="-1">Problem B: Fire!</h2>
+<p><img src="http://uva.onlinejudge.org/external/116/p11624.png" alt="" loading="lazy" referrerpolicy="no-referrer"> Joe works in a maze.
+Unfortunately, portions of the maze have caught on fire, and the owner of the
+maze neglected to create a fire escape plan. Help Joe escape the maze.</p>
+<p>Given Joe's location in the maze and which squares of the maze are on fire,
+you must determine whether Joe can exit the maze before the fire reaches him,
+and how fast he can do it.</p>
+<p>Joe and the fire each move one square per minute, vertically or horizontally
+(not diagonally). The fire spreads all four directions from each square that
+is on fire. Joe may exit the maze from any square that borders the edge of the
+maze. Neither Joe nor the fire may enter a square that is occupied by a wall.</p>
+<h3 id="input-specification" tabindex="-1">Input Specification</h3>
+<p>The first line of input contains a single integer, the number of test cases to
+follow. The first line of each test case contains the two integers  R  and  C
+, separated by spaces, with 1 &lt;=  R  ,  C  &lt;= 1000. The following  R  lines
+of the test case each contain one row of the maze. Each of these lines
+contains exactly  C  characters, and each of these characters is one of:</p>
+<ul>
+<li><code>#</code> , a wall</li>
+<li><code>.</code> , a passable square</li>
+<li><code>J</code> , Joe's initial position in the maze, which is a passable square</li>
+<li><code>F</code> , a square that is on fire</li>
+</ul>
+<p>There will be exactly one  <code>J</code> in each test case.</p>
+<h3 id="sample-input" tabindex="-1">Sample Input</h3>
+<pre><code>2
+4 4
+####
+#JF#
+#..#
+#..#
+3 3
+###
+#J.
+#.F
+</code></pre>
+<h3 id="output-specification" tabindex="-1">Output Specification</h3>
+<p>For each test case, output a single line containing  <code>IMPOSSIBLE</code> if Joe
+cannot exit the maze before the fire reaches him, or an integer giving the
+earliest time Joe can safely exit the maze, in minutes.</p>
+<h3 id="output-for-sample-input" tabindex="-1">Output for Sample Input</h3>
+<pre><code>3
+IMPOSSIBLE
+
+
+
+
+
+//3
+#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+#define MAX 1010
+using namespace std;
+
+int n,m;
+int t;
+
+int dir[4][2] = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+
+char p[MAX][MAX];
+
+int check(int x, int y)
+{
+	if (x &gt;= 0 &amp;&amp; x &lt; n &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; m)
+		return 1;
+	return 0;
+}
+
+int a[MAX][MAX];
+queue&lt;pair&lt;int,int&gt; &gt; q;
+
+void bfs1()
+{
+	while (!q.empty())
+		q.pop();
+	memset(a,-1,sizeof(a));
+	for (int i = 0; i &lt; n; i++)
+		for (int j = 0; j &lt; m; j++)
+		{
+			if (p[i][j] == 'F')
+			{
+				a[i][j] = 0;
+				q.push(make_pair(i,j));
+			}
+		}
+
+	while (!q.empty())
+	{
+		pair&lt;int, int&gt; tmp;
+		tmp = q.front();
+		q.pop();
+
+		for (int i = 0; i &lt; 4; i++)
+		{
+			int x = tmp.first + dir[i][0];
+			int y = tmp.second + dir[i][1];
+			if ( check(x, y) == 0 || a[x][y] != -1 || p[x][y] == '#')
+				continue;
+			a[x][y] = a[tmp.first][tmp.second] + 1;
+			q.push(make_pair(x,y));
+		}
+	}
+}
+
+int b[MAX][MAX]; 
+
+void bfs()
+{
+	while (!q.empty())
+		q.pop();
+
+	memset(b,-1,sizeof(b));
+	for (int i = 0; i &lt; n; i++)
+		for (int j = 0; j &lt; m; j++)
+		{
+			if (p[i][j] == 'J')
+			{
+				q.push(make_pair(i, j));
+				b[i][j] = 0;
+				break;
+			}
+		}
+
+	while (!q.empty())
+	{
+		pair&lt;int,int&gt; tmp;
+		tmp = q.front();
+		q.pop();
+
+		if ( tmp.first == 0 || tmp.first == n-1 || tmp.second == 0 || tmp.second == m-1)
+		{
+			printf(&quot;%d\n&quot;,b[tmp.first][tmp.second] + 1);
+			return;
+		}
+
+		for (int i = 0; i &lt; 4; i++)
+		{
+			int x = tmp.first + dir[i][0];
+			int y = tmp.second + dir[i][1];
+			if (check(x, y) == 0 || b[x][y]!=-1 || p[x][y] == '#')
+				continue;
+			if (a[x][y] != -1 &amp;&amp; b[tmp.first][tmp.second] + 1 &gt;= a[x][y])
+				continue;
+
+			b[x][y] = b[tmp.first][tmp.second] + 1;
+			q.push(make_pair(x, y));
+		}
+	}
+
+	printf(&quot;IMPOSSIBLE\n&quot;);
+	return;
+}
+
+int main()
+{
+	scanf(&quot;%d&quot;,&amp;t);
+	while (t--)
+	{
+		scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
+		for (int i = 0; i &lt; n; i++)
+			scanf(&quot;%s&quot;,p[i]);
+
+		bfs1();
+		bfs();
+
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Codeforces Round · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47273501 C. Arthur and Table time…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-314db34eec/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Codeforces Round","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47273501 C. Arthur and Table time…","datePublished":"2015-08-04T02:49:00.000Z","dateModified":"2015-08-04T02:49:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-314db34eec/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-314db34eec/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Codeforces Round · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47273501 C. Arthur and Table time…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-314db34eec/">
+    <meta property="article:published_time" content="2015-08-04T02:49:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Codeforces Round · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47273501 C. Arthur and Table time…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Codeforces Round</h1>
+                    <div class="post-meta">
+                        <span>2015/08/04 10:49</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>777 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47273501" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47273501</a></p>
+<p>C. Arthur and Table</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Arthur has bought a beautiful big table into his new flat. When he came home,
+Arthur noticed that the new table is unstable.</p>
+<p>In total the table Arthur bought has  <em>n</em> legs, the length of the  <em>i</em> -th leg
+is  <em>l</em> <em>i</em> .</p>
+<p>Arthur decided to make the table stable and remove some legs. For each of them
+Arthur determined number  <em>d</em> <em>i</em> — the amount of energy that he spends to
+remove the  <em>i</em> -th leg.</p>
+<p>A table with  <em>k</em> legs is assumed to be stable if there are more than half
+legs of the maximum length. For example, to make a table with  5  legs stable,
+you need to make sure it has at least three (out of these five) legs of the
+maximum length. Also, a table with one leg is always stable and a table with
+two legs is stable if and only if they have the same lengths.</p>
+<p>Your task is to help Arthur and count the minimum number of energy units
+Arthur should spend on making the table stable.</p>
+<p>Input</p>
+<p>The first line of the input contains integer  <em>n</em> (  1 ≤ <em>n</em> ≤ 10  5  ) — the
+initial number of legs in the table Arthur bought.</p>
+<p>The second line of the input contains a sequence of  <em>n</em> integers  <em>l</em> <em>i</em> (
+1 ≤ <em>l</em> <em>i</em> ≤ 10  5  ), where  <em>l</em> <em>i</em> is equal to the length of the  <em>i</em> -th
+leg of the table.</p>
+<p>The third line of the input contains a sequence of  <em>n</em> integers  <em>d</em> <em>i</em> (  1
+≤ <em>d</em> <em>i</em> ≤ 200  ), where  <em>d</em> <em>i</em> is the number of energy units that Arthur
+spends on removing the  <em>i</em> -th leg off the table.</p>
+<p>Output</p>
+<p>Print a single integer — the minimum number of energy units that Arthur needs
+to spend in order to make the table stable.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>2
+1 5
+3 2
+</code></pre>
+<p>output</p>
+<pre><code>2
+</code></pre>
+<p>input</p>
+<pre><code>3
+2 4 4
+1 1 1
+</code></pre>
+<p>output</p>
+<pre><code>0
+</code></pre>
+<p>input</p>
+<pre><code>6
+2 2 1 1 3 3
+4 3 5 5 2 1
+</code></pre>
+<p>output</p>
+<pre><code>8
+</code></pre>
+<p>题意：</p>
+<p>给你一张桌子，有n条腿，告诉每条腿的长度（l）以及砍掉这条腿的花费（d），当最长腿的数量超过总数量的1/2，那么合法。问如何使得花费最小达到合法情况。</p>
+<p>解法：</p>
+<p>分别枚举以当前长度为最长的长度，砍去所有长度大于它的。删去长度小于它且花费最少的。</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;assert.h&gt;
+
+using namespace std;
+
+const int MAXN = 100010;
+
+int n;
+int cnt[100010];
+int val[100010];
+int cost[210];
+
+struct node
+{
+	int L;
+	int D;
+}a[MAXN], aa[MAXN];
+
+bool cmp1(node a, node b)
+{
+	if (a.L != b.L)
+		return a.L &lt; b.L;
+	return a.D &lt; b.D;
+}
+
+
+int main()
+{
+	while (cin &gt;&gt; n)
+	{
+		memset(cnt, 0, sizeof(cnt));
+		memset(val, 0, sizeof(val));
+		memset(cost, 0, sizeof(cost));
+
+		for (int i = 1; i &lt;= n; i++)
+		{
+			cin &gt;&gt; a[i].L;
+			cnt[a[i].L]++;
+		}
+		for (int i = 1; i &lt;= n; i++)
+			cin &gt;&gt; a[i].D;
+			
+		sort(a + 1, a + 1 + n, cmp1);
+
+		int sum = 0;
+		for (int i = n; i &gt;= 1; i--)
+		{
+			sum += a[i].D;
+			if (a[i].L != a[i - 1].L)
+			{
+				val[a[i - 1].L] = sum;// 比a[i-1].l 长的桌腿的权值和是多少
+			}
+		}
+
+		int ans = val[a[1].L];
+		cost[a[1].D]++;
+		
+		for (int i = 2; i &lt;= n;i++)
+		{
+			if (a[i].L != a[i - 1].L)
+			{
+
+				int tmp = val[a[i].L];
+				int num_k = i - cnt[a[i].L];
+
+				if (num_k &gt; 0)
+				{
+					for (int k = 1; k &lt;= 200; k++)
+					{
+						if (cost[k])
+						{
+							if (cost[k] &gt;= num_k)
+							{
+								tmp += k * num_k;
+								num_k = 0;
+								break;
+							}
+							else
+							{
+								tmp += k * cost[k];
+								num_k -= cost[k];
+							}
+						}
+					}
+				}
+				ans = min(ans, tmp);
+			}
+			cost[a[i].D]++;
+		}
+
+		cout &lt;&lt; ans &lt;&lt; endl;
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

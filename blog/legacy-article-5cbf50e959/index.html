@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Java：HttpServletRequest对象 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：Java：HttpServletRequest对象">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-5cbf50e959/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Java：HttpServletRequest对象","description":"历史迁移文章：Java：HttpServletRequest对象","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-5cbf50e959/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-5cbf50e959/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Java：HttpServletRequest对象 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：Java：HttpServletRequest对象">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-5cbf50e959/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Java：HttpServletRequest对象 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：Java：HttpServletRequest对象">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Java：HttpServletRequest对象</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>182 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#httpservletrequest常用方法">HttpServletRequest常用方法</a></li><li><a href="#请求重定向和请求转发的区别">请求重定向和请求转发的区别</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>HttpServletRequest对象代表客户端的请求，当客户端通过HTTP协议访问服务器时，HTTP请求头中的所有信息都封装在这个对象中，通过这个对象的方法，可以获得请求信息。</p>
+<h2 id="httpservletrequest常用方法" tabindex="-1">HttpServletRequest常用方法</h2>
+<pre><code class="hljs">getRequestURL方法返回客户端发出请求时的完整URL。
+getRequestURI方法返回请求行中的资源名部分。
+getQueryString 方法返回请求行中的参数部分。
+getPathInfo方法返回请求URL中的额外路径信息。额外路径信息是请求URL中的位于Servlet的路径之后和查询参数之前的内容，它以“/”开头。
+getRemoteAddr方法返回发出请求的客户机的IP地址。
+getRemoteHost方法返回发出请求的客户机的完整主机名。
+getRemotePort方法返回客户机所使用的网络端口号。
+getLocalAddr方法返回WEB服务器的IP地址。
+getLocalName方法返回WEB服务器的主机名。
+getHeader(string name)方法:String 
+getHeaders(String name)方法:Enumeration 
+getHeaderNames()方法
+
+获得客户机请求参数:
+getParameter(String)方法(常用)
+getParameterValues(String name)方法(常用)
+getParameterNames()方法(不常用)
+getParameterMap()方法(编写框架时常用)
+
+参数放入request域对象：
+setAttribute(String name,Object o)方法，将数据作为request对象的一个属性存放到request对象中，例如：request.setAttribute(&quot;data&quot;, data);
+getAttribute(String name)方法，获取request对象的name属性的属性值，例如：request.getAttribute(&quot;data&quot;)
+removeAttribute(String name)方法，移除request对象的name属性，例如：request.removeAttribute(&quot;data&quot;)
+getAttributeNames方法，获取request对象的所有属性名，返回的是一个，例如：Enumeration&lt;String&gt; attrNames = request.getAttributeNames();
+</code></pre>
+<h2 id="请求重定向和请求转发的区别" tabindex="-1">请求重定向和请求转发的区别</h2>
+<ul>
+<li>一个web资源收到客户端请求后，通知服务器去调用另外一个web资源进行处理，称之为请求转发/307。</li>
+<li>一个web资源收到客户端请求后，通知浏览器去访问另外一个web资源进行处理，称之为请求重定向/302。</li>
+</ul>
+<p>参考:<a href="http://www.cnblogs.com/xdp-gacl/p/3798347.html" target="_blank" rel="noreferrer">http://www.cnblogs.com/xdp-gacl/p/3798347.html</a>
+&lt;!--more--&gt;</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

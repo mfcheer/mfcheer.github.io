@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>求二叉树节点的最大距离 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47179983 距离即为节点间的边数。 code: struct…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-7be41f74a6/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"求二叉树节点的最大距离","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47179983 距离即为节点间的边数。 code: struct…","datePublished":"2015-07-31T17:46:00.000Z","dateModified":"2015-07-31T17:46:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-7be41f74a6/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-7be41f74a6/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"二叉树","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="求二叉树节点的最大距离 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47179983 距离即为节点间的边数。 code: struct…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-7be41f74a6/">
+    <meta property="article:published_time" content="2015-07-31T17:46:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="求二叉树节点的最大距离 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/47179983 距离即为节点间的边数。 code: struct…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">求二叉树节点的最大距离</h1>
+                    <div class="post-meta">
+                        <span>2015/08/01 01:46</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>145 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">二叉树</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/47179983" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/47179983</a></p>
+<p>距离即为节点间的边数。</p>
+<p>code:</p>
+<pre><code>struct Node
+{
+    Node* left;
+    Node* right;
+    int nmaxleft;
+    int nmaxright;
+    int vhvalue;
+};
+
+int ans;//答案
+
+int findmaxval(Node* root)
+{
+    if (root == NULL) return;
+    if (root-&gt;left == NULL) return root-&gt;nmaxleft = 0;
+    if (root-&gt;right == NULL) return root-&gt;nmaxright = 0;
+    if (root-&gt;left != NULL) findmaxval(root-&gt;left);
+    if (root-&gt;right != NULL) findmaxval(root-&gt;right);
+    if (root-&gt;left != NULL)
+    {
+        int tmp = 0;
+        if (root-&gt;left-&gt;nmaxleft &gt; root-&gt;left-&gt;nmaxright)
+            tmp = root-&gt;left-&gt;nmaxleft;
+        else
+            tmp = root-&gt;left-&gt;nmaxright;
+        root-&gt;nmaxleft = tmp + 1;
+    }
+    if (root-&gt;right != NULL)
+    {
+        int tmp = 0;
+        if (root-&gt;right-&gt;nmaxleft &gt; root-&gt;right-&gt;nmaxright)
+            tmp = root-&gt;right-&gt;nmaxleft;
+        else
+            tmp = root-&gt;right-&gt;nmaxright;
+        root-&gt;nmaxright = tmp + 1;
+    }
+
+    ans = max(ans, root-&gt;nmaxleft + root-&gt;nmaxright);
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

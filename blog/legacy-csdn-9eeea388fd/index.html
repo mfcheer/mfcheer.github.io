@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu-1711 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41257907 kmp 学习资料： [ http://blog.…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-9eeea388fd/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu-1711","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41257907 kmp 学习资料： [ http://blog.…","datePublished":"2014-11-18T14:39:00.000Z","dateModified":"2014-11-18T14:39:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-9eeea388fd/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-9eeea388fd/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"kmp,acm,算法","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu-1711 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41257907 kmp 学习资料： [ http://blog.…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-9eeea388fd/">
+    <meta property="article:published_time" content="2014-11-18T14:39:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu-1711 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41257907 kmp 学习资料： [ http://blog.…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu-1711</h1>
+                    <div class="post-meta">
+                        <span>2014/11/18 22:39</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>510 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">kmp</span><span class="post-tag">acm</span><span class="post-tag">算法</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41257907" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41257907</a></p>
+<h1 id="kmp-学习资料：-[-http://blog.csdn.net/v_july_v/article/details/7041827" tabindex="-1">kmp 学习资料： [ <a href="http://blog.csdn.net/v_july_v/article/details/7041827" target="_blank" rel="noreferrer">http://blog.csdn.net/v_july_v/article/details/7041827</a></h1>
+<p>](<a href="http://blog.csdn.net/v_july_v/article/details/7041827" target="_blank" rel="noreferrer">http://blog.csdn.net/v_july_v/article/details/7041827</a>)</p>
+<h1 id="" tabindex="-1"></h1>
+<h1 id="number-sequence" tabindex="-1">Number Sequence</h1>
+<p>** Time Limit: 10000/5000 MS (Java/Others)    Memory Limit: 32768/32768 K
+(Java/Others)<br>
+Total Submission(s): 12419    Accepted Submission(s): 5661<br>
+**</p>
+<p>Problem Description</p>
+<p>Given two sequences of numbers : a[1], a[2], ...... , a[N], and b[1], b[2],
+...... , b[M] (1  &lt;= M &lt;= 10000, 1 &lt;= N &lt;= 1000000). Your task is to find a
+number K which make a[K] = b[1], a[K + 1] = b[2], ...... , a[K + M - 1] =
+b[M]. If there are more than one K exist, output the smallest one.</p>
+<p>Input</p>
+<p>The first line of input is a number T which indicate the number of cases. Each
+case contains three lines. The first line is two numbers N and M (1 &lt;= M &lt;=
+10000, 1 &lt;= N &lt;= 1000000). The second line contains N integers which indicate
+a[1], a[2], ...... , a[N]. The third line contains M integers which indicate
+b[1], b[2], ...... , b[M]. All integers are in the range of [-1000000,
+1000000].</p>
+<p>Output</p>
+<p>For each test case, you should output one line which only contain K described
+above. If no such K exists, output -1 instead.</p>
+<p>Sample Input</p>
+<p>2 13 5 1 2 1 2 3 1 2 3 1 3 2 1 2 1 2 3 1 3 13 5 1 2 1 2 3 1 2 3 1 3 2 1 2 1 2
+3 2 1</p>
+<p>Sample Output</p>
+<p>6 -1</p>
+<p>Source</p>
+<p><a href="http://acm.hdu.edu.cn/search.php?field=problem&amp;key=HDU+2007-Spring+Programming+Contest&amp;source=1&amp;searchmode=source" target="_blank" rel="noreferrer"> HDU 2007-Spring Programming Contest
+</a></p>
+<p>kmp 模板题  求字串在母串第一次出现的位置</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+int a[1000005],b[10005];
+int next[10005];
+
+void get_next(int b[],int m)
+{
+	int i=0;
+	next[0]=-1;
+	int j=-1;
+	while(i&lt;m)
+	{
+	 if(j==-1||b[i]==b[j])
+	 {
+		++i;
+		++j;
+	  if(b[i]==b[j])
+	  next[i]=next[j];
+	  else
+	  next[i]=j;
+	}
+	else
+	j=next[j];
+   }
+}
+int KMP(int a[],int n,int b[],int m,int next[],int pos)
+{
+	int i=pos;
+	int j=0;
+	while(i&lt;n&amp;&amp;j&lt;m)
+	{
+	if(j==-1||a[i]==b[j])
+	{
+		++i;
+		++j;
+	}
+	else
+	j=next[j];
+    }
+   if(j&gt;=m)
+   return i-j+1;
+   else
+   return -1;
+}
+int main()
+{
+	int test,n,m,i,j;
+	scanf(&quot;%d&quot;,&amp;test);
+	while(test--)
+	{
+	 scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
+	 for(i=0;i&lt;n;++i)
+	 scanf(&quot;%d&quot;,&amp;a[i]);
+	 for(j=0;j&lt;m;++j)
+	 scanf(&quot;%d&quot;,&amp;b[j]);
+	 get_next(b,m);
+	 cout&lt;&lt;KMP(a,n,b,m,next,0)&lt;&lt;endl;
+	}
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

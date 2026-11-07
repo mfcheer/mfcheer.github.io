@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Codeforces Round · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51051053 题目： http://codeforces.co…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-3f697df9b6/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Codeforces Round","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51051053 题目： http://codeforces.co…","datePublished":"2016-04-03T09:10:00.000Z","dateModified":"2016-04-03T09:10:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-3f697df9b6/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-3f697df9b6/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"codeforces","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Codeforces Round · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51051053 题目： http://codeforces.co…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-3f697df9b6/">
+    <meta property="article:published_time" content="2016-04-03T09:10:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Codeforces Round · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/51051053 题目： http://codeforces.co…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Codeforces Round</h1>
+                    <div class="post-meta">
+                        <span>2016/04/03 17:10</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>606 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">codeforces</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/51051053" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/51051053</a></p>
+<p>题目： <a href="http://codeforces.com/contest/659/problems" target="_blank" rel="noreferrer"> http://codeforces.com/contest/659/problems
+</a><br>
+A:</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+int n, a, b;
+
+int main()
+{
+    while (cin &gt;&gt; n &gt;&gt; a &gt;&gt; b)
+    {
+        int ans;
+        ans = (a + b + n * 1000) % (n);
+        if (ans == 0) ans = n;
+        cout &lt;&lt; ans &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+<p>B:</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+vector &lt;pair&lt;int, string&gt;&gt; a[10010];
+
+
+int n, m;
+int main()
+{
+    while (cin &gt;&gt; n &gt;&gt; m)
+    {
+
+        string tmp;
+        int num, val;
+        for (int i = 1;i &lt;= n;i++)
+        {
+            cin &gt;&gt; tmp &gt;&gt; num &gt;&gt; val;
+            num--;
+            val = -val;
+            a[num].push_back(make_pair(val, tmp));
+        }
+
+
+        for (int i = 0;i &lt; m;i++)
+        {
+
+            sort(a[i].begin(), a[i].end());
+            if (a[i].size() &gt; 2 &amp;&amp; a[i][1].first == a[i][2].first) 
+                puts(&quot;?&quot;);
+            else
+                cout &lt;&lt; a[i][0].second &lt;&lt;&quot; &quot;&lt;&lt; a[i][1].second &lt;&lt; endl;
+        }
+    }
+    return 0;
+}
+</code></pre>
+<p>C:</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;set&gt;
+
+using namespace std;
+
+int n, m;
+set&lt;int&gt; S;
+vector&lt;int&gt; ans;
+
+int main()
+{
+    while (cin &gt;&gt; n &gt;&gt; m)
+    {
+        ans.clear();
+        S.clear();
+        set&lt;int&gt;::iterator pos;
+        vector&lt;int&gt;::iterator it;
+
+        int tmp;
+        for (int i = 1;i &lt;= n;i++)
+        {
+            cin &gt;&gt; tmp;
+            S.insert(tmp);
+        }
+
+        tmp = 1;
+        while (m)
+        {
+            if (m &lt; tmp) break;
+            if (S.count(tmp) == 0)
+            {
+                m -= tmp;
+                ans.push_back(tmp);
+                S.insert(tmp);
+                tmp++;
+            }
+            else
+                tmp++;
+        }
+        cout &lt;&lt; ans.size() &lt;&lt; endl;
+        for (it = ans.begin();it != ans.end();it++)
+            cout &lt;&lt; *it &lt;&lt; &quot; &quot;;
+        cout &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+<p>D:</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;set&gt;
+
+using namespace std;
+
+int n;
+
+struct
+{
+    int x, y;
+}a[1010];
+
+int main()
+{
+    while (scanf(&quot;%d&quot;, &amp;n) != EOF)
+    {
+        memset(b, 0, sizeof(b));
+
+        for (int i = 0;i &lt;= n;i++)
+        {
+            scanf(&quot;%d %d&quot;, &amp;a[i].x, &amp;a[i].y);
+        }
+
+        int ans = 0;
+        for (int i = 0;i &lt; n;i++)
+        {
+            int t1 = i + 1;
+            int t2 = i + 2;
+            if (t2 == n + 1) t2 = 0;
+
+            if (a[i].x &lt; a[i + 1].x &amp;&amp; a[i].y == a[i + 1].y)//右
+            {
+                if (a[t1].x == a[t2].x &amp;&amp; a[t1].y &lt; a[t2].y)//↑
+                    ans++;
+            }
+            else if (a[i].x &gt; a[i + 1].x &amp;&amp; a[i].y == a[i + 1].y)//左
+            {
+                if (a[t1].x == a[t2].x &amp;&amp; a[t1].y &gt; a[t2].y)//下
+                    ans++;
+            }
+            else if (a[i].x == a[i + 1].x &amp;&amp; a[i].y &lt; a[i + 1].y)//上
+            {
+                if (a[t1].x &gt; a[t2].x &amp;&amp; a[t1].y == a[t2].y)//左
+                    ans++;
+            }
+            else if (a[i].x == a[i + 1].x &amp;&amp; a[i].y &gt; a[i + 1].y)//下
+            {
+                if (a[t1].x &lt; a[t2].x &amp;&amp; a[t1].y == a[t2].y)//右
+                    ans++;
+            }
+        }
+        printf(&quot;%d\n&quot;, ans);
+    }
+    return 0;
+}
+</code></pre>
+<p>E:</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;set&gt;
+
+using namespace std;
+
+const int MAXN = 200010;
+
+vector&lt;int&gt; g[MAXN];
+
+int n, m, nnode, nedge;
+int vis[MAXN];
+
+void dfs(int u)
+{
+    vis[u] = 1;
+    nnode++;
+    for (int i = 0;i &lt; g[u].size();i++)
+    {
+        int v = g[u][i];
+        nedge++;
+        if (!vis[v])
+            dfs(v);
+    }
+
+}
+
+int main()
+{
+    while (scanf(&quot;%d %d&quot;, &amp;n, &amp;m) != EOF)
+    {
+        memset(vis, 0, sizeof vis);
+        for (int i = 0;i &lt;= n;i++)
+            g[i].clear();
+        int u, v;
+        for (int i = 1;i &lt;= m;i++)
+        {
+            scanf(&quot;%d %d&quot;, &amp;u, &amp;v);
+            g[u].push_back(v);
+            g[v].push_back(u);
+        }
+
+        int ans = 0;
+        for (int i = 1;i &lt;= n;i++)
+        {
+            if (!vis[i])
+            {
+                nnode = nedge = 0;
+                dfs(i);
+                if (nedge / 2 == nnode - 1)
+                    ans++;
+            }
+        }
+
+        printf(&quot;%d\n&quot;, ans);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

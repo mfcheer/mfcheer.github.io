@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>kruskal 【MST】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44730343 const int MAXN = 110;//点…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-23a608f99b/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"kruskal 【MST】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44730343 const int MAXN = 110;//点…","datePublished":"2015-03-29T12:20:00.000Z","dateModified":"2015-03-29T12:20:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-23a608f99b/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-23a608f99b/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="kruskal 【MST】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44730343 const int MAXN = 110;//点…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-23a608f99b/">
+    <meta property="article:published_time" content="2015-03-29T12:20:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="kruskal 【MST】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44730343 const int MAXN = 110;//点…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">kruskal 【MST】</h1>
+                    <div class="post-meta">
+                        <span>2015/03/29 20:20</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>177 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44730343" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44730343</a></p>
+<pre><code>const int MAXN = 110;//点
+const int MAXM = 10000;//边
+
+int f[MAXN];//并查集使用
+
+struct Edge
+{
+    int u, v, w;
+}edge[MAXN];
+
+int tol;//边数 初始化 0
+
+void addedge(int u,int v,int w)
+{
+    edge[tol].u = u;
+    edge[tol].v = v;
+    edge[tol++].w = w;
+}
+
+bool cmp(Edge a,Edge b)
+{
+    return a.w &lt; b.w;
+}
+
+int find(int x)
+{
+    if (f[x] == -1)
+        return x;
+    else
+        return f[x] = find(f[x]);
+}
+
+int kruskal(int n)
+{
+    memset(f,-1,sizeof(f));
+    sort(edge, edge+tol, cmp);
+    int cnt = 0;
+    int ans = 0;
+    for (int i = 0; i &lt; tol; i++)
+    {
+        int u = edge[i].u;
+        int v = edge[i].v;
+        int w = edge[i].w;
+        int t1 = find(u);
+        int t2 = find(v);
+        if (t1 != t2)
+        {
+            ans += w;
+            f[t1] = t2;
+            cnt++;
+        }
+        if (cnt == n - 1)
+            break;
+    }
+    if (cnt &lt; n - 1) return -1;//不连通
+    else return ans;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

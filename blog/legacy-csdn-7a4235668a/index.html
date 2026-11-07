@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>bnu-44582 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42193079 昨天北师大新生赛的题，本弱做一做。。。 贪心题，…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-7a4235668a/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"bnu-44582","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42193079 昨天北师大新生赛的题，本弱做一做。。。 贪心题，…","datePublished":"2014-12-27T06:59:00.000Z","dateModified":"2014-12-27T06:59:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-7a4235668a/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-7a4235668a/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="bnu-44582 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42193079 昨天北师大新生赛的题，本弱做一做。。。 贪心题，…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-7a4235668a/">
+    <meta property="article:published_time" content="2014-12-27T06:59:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="bnu-44582 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/42193079 昨天北师大新生赛的题，本弱做一做。。。 贪心题，…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">bnu-44582</h1>
+                    <div class="post-meta">
+                        <span>2014/12/27 14:59</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1054 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 3 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/42193079" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/42193079</a></p>
+<p>昨天北师大新生赛的题，本弱做一做。。。</p>
+<p>贪心题，按照结束时间排序进行贪心。</p>
+<p><a href="http://www.bnuoj.com/v3/problem_show.php?pid=44582" target="_blank" rel="noreferrer"> http://www.bnuoj.com/v3/problem_show.php?pid=44582
+</a></p>
+<h2 id="mlx的疯狂睡眠" tabindex="-1">MLX的疯狂睡眠</h2>
+<p>Time Limit: 1000ms</p>
+<p>Memory Limit: 65536KB</p>
+<p>64-bit integer IO format:  %lld  Java class name:  Main</p>
+<p><a href="http://www.bnuoj.com/v3/problem_show.php?pid=44581" target="_blank" rel="noreferrer"> Prev </a></p>
+<p><a href="http://www.bnuoj.com/v3/problem_show.php?pid=44582#" target="_blank" rel="noreferrer"> Submit </a> <a href="http://www.bnuoj.com/v3/status.php?showpid=44582" target="_blank" rel="noreferrer"> Status
+</a> <a href="http://www.bnuoj.com/v3/problem_stat.php?pid=44582" target="_blank" rel="noreferrer"> Statistics
+</a> <a href="http://www.bnuoj.com/v3/discuss.php?pid=44582" target="_blank" rel="noreferrer"> Discuss
+</a></p>
+<p><a href="http://www.bnuoj.com/v3/problem_show.php?pid=44583" target="_blank" rel="noreferrer"> Next </a></p>
+<p>Type:</p>
+<p>None</p>
+<p>None  Graph Theory  2-SAT  Articulation/Bridge/Biconnected Component
+Cycles/Topological Sorting/Strongly Connected Component  Shortest Path
+Bellman Ford  Dijkstra/Floyd Warshall  Euler Trail/Circuit  Heavy-Light
+Decomposition  Minimum Spanning Tree  Stable Marriage Problem  Trees  Directed
+Minimum Spanning Tree  Flow/Matching  Graph Matching  Bipartite Matching
+Hopcroft–Karp Bipartite Matching  Weighted Bipartite Matching/Hungarian
+Algorithm  Flow  Max Flow/Min Cut  Min Cost Max Flow  DFS-like  Backtracking
+with Pruning/Branch and Bound  Basic Recursion  IDA* Search  Parsing/Grammar
+Breadth First Search/Depth First Search  Advanced Search Techniques  Binary
+Search/Bisection  Ternary Search  Geometry  Basic Geometry  Computational
+Geometry  Convex Hull  Pick's Theorem  Game Theory  Green Hackenbush/Colon
+Principle/Fusion Principle  Nim  Sprague-Grundy Number  Matrix  Gaussian
+Elimination  Matrix Exponentiation  Data Structures  Basic Data Structures
+Binary Indexed Tree  Binary Search Tree  Hashing  Orthogonal Range Search
+Range Minimum Query/Lowest Common Ancestor  Segment Tree/Interval Tree  Trie
+Tree  Sorting  Disjoint Set  String  Aho Corasick  Knuth-Morris-Pratt  Suffix
+Array/Suffix Tree  Math  Basic Math  Big Integer Arithmetic  Number Theory
+Chinese Remainder Theorem  Extended Euclid  Inclusion/Exclusion  Modular
+Arithmetic  Combinatorics  Group Theory/Burnside's lemma  Counting
+Probability/Expected Value  Others  Tricky  Hardest  Unusual  Brute Force
+Implementation  Constructive Algorithms  Two Pointer  Bitmask  Beginner
+Discrete Logarithm/Shank's Baby-step Giant-step Algorithm  Greedy  Divide and
+Conquer  Dynamic Programming  Tag it!</p>
+<p>在一个寝室中，有早上6点多起床跑自习室或者图书馆，晚上11点多回寝室洗洗直接睡觉的神牛（真是神一般的存在）；也有早上11点多起来直接吃饭，下午玩一会累了又sleep的睡神；也有白天一直陪妹子，大晚上和寝室程序猴子作伴的泡神；也有早上不知道何时起，从下午到第二天早些时候（确实早啊！）一直code的神码手····那么现在问题来了，寝室本来是一个非常友好的team，但是为了证明自己的睡眠行为是大学最完美的，他们决定来一场惊天地的辩论····MLX作为寝室的一员，突然做出一个疯狂的决定：统计出寝室每一个成员的睡眠时间段（每一个成员可能有多个睡眠时间段），然后将亲自实践每一个成员睡眠方式，然后再决定谁的更好。聪明的您可能会想这样一个问题：如果MLX从进入一个睡眠段开始到结束中途不醒，MLX那一天最多能睡多少次？</p>
+<p>现在将问题进一步抽象为：一天内有n个睡眠区间，每一个睡眠区间分别为距离当天0点的第Si秒开始，第Ti秒结束。对于每一次睡眠，MLX都可以参与或者不参与，如果选择了，那么MLX就必须将本次睡眠进行到底。此外，参与睡眠的时间不能重复（即使是刚开始的瞬间和结束的瞬间的重复也是不允许的），请问MLX最多能参与多少次睡眠？</p>
+<h3 id="input" tabindex="-1">Input</h3>
+<p>第一行输入T，表示T组测试数据。</p>
+<p>每一组的第一行输入n，表示有n个睡眠区间（1&lt;= n &lt;=10^5 ）</p>
+<p>接下来n行，每一行输入两个整数Si，Ti（空格隔开），表示睡眠区间的开始和结束时间（1&lt;= Si&lt; Ti&lt; 24*3600）</p>
+<h3 id="output" tabindex="-1">Output</h3>
+<p>MLX最多参与的睡眠次数</p>
+<h3 id="sample-input" tabindex="-1">Sample Input</h3>
+<pre><code>1
+5
+1 3
+2 5
+4 7
+6 9
+8 10
+</code></pre>
+<h3 id="sample-output" tabindex="-1">Sample Output</h3>
+<pre><code>3
+</code></pre>
+<h3 id="hint" tabindex="-1">Hint</h3>
+<p>参与的睡眠编号依次是（1,3,5）</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;iostream&gt;
+#include&lt;math.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;string.h&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;set&gt;
+#include&lt;map&gt;
+#include&lt;sstream&gt;
+#include&lt;time.h&gt;
+#include&lt;utility&gt;
+#include&lt;malloc.h&gt;
+
+using namespace std;
+
+int n;
+
+struct Q
+{
+	int s;
+	int e;
+}p[100010];
+
+bool cmp(Q a, Q b)
+{
+	return a.e &lt; b.e;
+}
+
+int cases;
+
+int main()
+{
+	cin &gt;&gt; cases;
+
+	while (cases--)
+	{
+		cin &gt;&gt; n;
+		for (int i = 1; i &lt;= n; i++)
+			cin &gt;&gt; p[i].s &gt;&gt; p[i].e;
+
+		sort(p+1,p+1+n,cmp);
+
+		int ans = 1;
+		int t = p[1].e;
+
+		for (int i = 2; i &lt;= n; i++)
+		{
+			if (t &lt; p[i].s)
+			{
+				ans++; 
+				t = p[i].e;
+			}
+		}
+		cout &lt;&lt; ans &lt;&lt; endl;
+	}
+	return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>hdu 1281 棋盘游戏【二分匹配】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46537185 题目链接： http://acm.hdu.edu…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-7e992f0c3b/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"hdu 1281 棋盘游戏【二分匹配】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46537185 题目链接： http://acm.hdu.edu…","datePublished":"2015-06-17T11:12:00.000Z","dateModified":"2015-06-17T11:12:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-7e992f0c3b/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-7e992f0c3b/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="hdu 1281 棋盘游戏【二分匹配】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46537185 题目链接： http://acm.hdu.edu…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-7e992f0c3b/">
+    <meta property="article:published_time" content="2015-06-17T11:12:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hdu 1281 棋盘游戏【二分匹配】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46537185 题目链接： http://acm.hdu.edu…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">hdu 1281 棋盘游戏【二分匹配】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/17 19:12</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>486 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46537185" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46537185</a></p>
+<p>题目链接： <a href="http://acm.hdu.edu.cn/showproblem.php?pid=1281" target="_blank" rel="noreferrer"> http://acm.hdu.edu.cn/showproblem.php?pid=1281
+</a></p>
+<p>题意：中文题目，不描述了。</p>
+<p>解法：棋盘的行x看成二分图左边的点，列y看成二分图右边的点，那么就把可以放车的位置看成是一条边，而二分图的最大匹配中x互不相同，y互不相同，所以每个匹配都是不同行不同列，所以最大匹配就是最多可以放的车的数量。而要判断有多少个点是必须放的，只要在得出最大匹配后，每次去掉一个匹配，再去运算看得出的结果是否与原来的最大匹配数相同，若相同就不是必须的，若不相同就是必须的。</p>
+<p>代码：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctime&gt;
+#include &lt;math.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;complex&gt;
+#include &lt;string&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;list&gt;
+#include &lt;bitset&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;time.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#include &lt;assert.h&gt;
+
+using namespace std;
+
+struct node
+{
+    int x;
+    int y;
+}it[10010];
+
+int p[510][510];
+int n, m, k;
+int a, b;
+
+int book[510];
+int match[510];
+
+bool dfs(int u)
+{
+    for (int i = 1; i &lt;= m; i++)
+    {
+        if (book[i] == 0 &amp;&amp; p[u][i] == 1)
+        {
+            book[i] = 1;
+            if (match[i] == 0 || dfs(match[i]))
+            {
+                match[i] = u;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+int main()
+{
+    int ca = 1;
+    while (scanf(&quot;%d%d%d&quot;, &amp;n, &amp;m, &amp;k) != EOF)
+    {
+        memset(p, 0, sizeof(p));
+        memset(match, 0, sizeof(match));
+        for (int i = 0; i &lt; k; i++)
+        {
+            scanf(&quot;%d%d&quot;, &amp;a, &amp;b);
+            it[i].x = a;
+            it[i].y = b;
+            p[a][b] = 1;
+        }
+        int ans = 0;
+        for (int i = 1; i &lt;= n; i++)
+        {
+            memset(book, 0, sizeof(book));
+            if (dfs(i))
+                ans++;
+        }
+        int tmp = 0;
+        for (int j = 0; j &lt; k; j++)
+        {
+            p[it[j].x][it[j].y] = 0;
+            int ans1 = 0;
+            memset(match, 0, sizeof(match));
+            for (int i = 1; i &lt;= n; i++)
+            {
+                memset(book, 0, sizeof(book));
+                if (dfs(i))
+                    ans1++;
+            }
+            if (ans1 != ans)
+                tmp++;
+            p[it[j].x][it[j].y] = 1;
+        }
+        printf(&quot;Board %d have %d important blanks for %d chessmen.\n&quot;, ca++,tmp,ans);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

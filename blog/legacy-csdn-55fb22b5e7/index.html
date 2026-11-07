@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Codeforces Round · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41673007 http://codeforces.com/co…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-55fb22b5e7/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Codeforces Round","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41673007 http://codeforces.com/co…","datePublished":"2014-12-01T23:25:00.000Z","dateModified":"2014-12-01T23:25:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-55fb22b5e7/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-55fb22b5e7/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"codeforces,算法,acm","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="Codeforces Round · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41673007 http://codeforces.com/co…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-55fb22b5e7/">
+    <meta property="article:published_time" content="2014-12-01T23:25:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Codeforces Round · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/41673007 http://codeforces.com/co…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">Codeforces Round</h1>
+                    <div class="post-meta">
+                        <span>2014/12/02 07:25</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>1119 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 3 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">codeforces</span><span class="post-tag">算法</span><span class="post-tag">acm</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/41673007" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/41673007</a></p>
+<p><a href="http://codeforces.com/contest/492" target="_blank" rel="noreferrer"> http://codeforces.com/contest/492 </a></p>
+<p>A 水题</p>
+<p>A. Vanya and Cubes</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Vanya got  <em>n</em> cubes. He decided to build a pyramid from them. Vanya wants to
+build the pyramid as follows: the top level of the pyramid must consist of  1
+cube, the second level must consist of  1 + 2 = 3  cubes, the third level must
+have  1 + 2 + 3 = 6  cubes, and so on. Thus, the  <em>i</em> -th level of the pyramid
+must have  1 + 2 + ... + ( <em>i</em> - 1) + <em>i</em> cubes.</p>
+<p>Vanya wants to know what is the maximum height of the pyramid that he can make
+using the given cubes.</p>
+<p>Input</p>
+<p>The first line contains integer  <em>n</em> (  1 ≤ <em>n</em> ≤ 10  4  ) — the number of
+cubes given to Vanya.</p>
+<p>Output</p>
+<p>Print the maximum possible height of the pyramid in the single line.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>1
+</code></pre>
+<p>output</p>
+<pre><code>1
+</code></pre>
+<p>input</p>
+<pre><code>25
+</code></pre>
+<p>output</p>
+<pre><code>4
+</code></pre>
+<p>Note</p>
+<p>Illustration to the second sample:</p>
+<p><img src="http://espresso.codeforces.com/8689e0e8028c02e92fc5af8b267317c0dce734ce.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;iterator&gt;
+#include &lt;deque&gt;
+#include &lt;vector&gt;
+#include &lt;unordered_set&gt;
+#include &lt;unordered_map&gt;
+#include &lt;set&gt;
+#include &lt;valarray&gt;
+#include &lt;list&gt;
+#include &lt;stack&gt;
+#include &lt;array&gt;
+#include &lt;iomanip&gt;
+#include &lt;map&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;stdio.h&gt;
+
+using namespace std;
+
+int n,m;
+
+int a[1000];
+
+int main ()
+{
+    a[1] = 1;
+    for(int i=1;i&lt;=999;i++)
+        a[i] = a[i-1]+i;
+    while (cin&gt;&gt;n)
+    {
+        int i =1;
+        int ans = 0;
+        while (n-a[i] &gt;=0)
+        {
+            n-=a[i];
+            i++;
+            ans++;
+        }
+        cout&lt;&lt;ans&lt;&lt;endl;
+    }
+    return 0;
+}
+</code></pre>
+<p>B 简单贪心</p>
+<p>B. Vanya and Lanterns</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Vanya walks late at night along a straight street of length  <em>l</em> , lit by  <em>n</em>
+lanterns. Consider the coordinate system with the beginning of the street
+corresponding to the point  0  , and its end corresponding to the point  <em>l</em> .
+Then the  <em>i</em> -th lantern is at the point  <em>a</em> <em>i</em> . The lantern lights all
+points of the street that are at the distance of at most  <em>d</em> from it, where
+<em>d</em> is some positive number, common for all lanterns.</p>
+<p>Vanya wonders: what is the minimum light radius  <em>d</em> should the lanterns have
+to light the whole street?</p>
+<p>Input</p>
+<p>The first line contains two integers  <em>n</em> ,  <em>l</em> (  1 ≤ <em>n</em> ≤ 1000  ,  1 ≤ <em>l</em>
+≤ 10  9  ) — the number of lanterns and the length of the street respectively.</p>
+<p>The next line contains  <em>n</em> integers  <em>a</em> <em>i</em> (  0 ≤ <em>a</em> <em>i</em> ≤ <em>l</em> ). Multiple
+lanterns can be located at the same point. The lanterns may be located at the
+ends of the street.</p>
+<p>Output</p>
+<p>Print the minimum light radius  <em>d</em> , needed to light the whole street. The
+answer will be considered correct if its absolute or relative error doesn't
+exceed  10  - 9  .</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>7 15
+15 5 3 7 9 14 0
+</code></pre>
+<p>output</p>
+<pre><code>2.5000000000
+</code></pre>
+<p>input</p>
+<pre><code>2 5
+2 5
+</code></pre>
+<p>output</p>
+<pre><code>2.0000000000
+</code></pre>
+<p>Note</p>
+<p>Consider the second sample. At  <em>d</em> = 2  the first lantern will light the
+segment  [0, 4]  of the street, and the second lantern will light segment  [3,
+5]  . Thus, the whole street will be lit.</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;iterator&gt;
+#include &lt;deque&gt;
+#include &lt;vector&gt;
+#include &lt;unordered_set&gt;
+#include &lt;unordered_map&gt;
+#include &lt;set&gt;
+#include &lt;valarray&gt;
+#include &lt;list&gt;
+#include &lt;stack&gt;
+#include &lt;array&gt;
+#include &lt;iomanip&gt;
+#include &lt;map&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;stdio.h&gt;
+
+using namespace std;
+
+int n,l;
+double a[1010];
+
+int main ()
+{
+    while (cin&gt;&gt;n&gt;&gt;l)
+    {
+          for(int i=1;i&lt;=n;i++)
+                cin&gt;&gt;a[i];
+          sort(a+1,a+1+n);
+
+          double ans = a[1] ;
+
+          for(int i=1;i&lt;=n-1;i++)
+          {
+              ans = max (ans,(a[i+1]-a[i])*1.0/2);
+          }
+
+          ans = max(ans,l-a[n]);
+
+          printf(&quot;%.10lf\n&quot;,ans);
+    }
+    return 0;
+}
+</code></pre>
+<p>C 按照bi升序排列 注意不要超时即可</p>
+<p>C. Vanya and Exams</p>
+<p>time limit per test</p>
+<p>1 second</p>
+<p>memory limit per test</p>
+<p>256 megabytes</p>
+<p>input</p>
+<p>standard input</p>
+<p>output</p>
+<p>standard output</p>
+<p>Vanya wants to pass  <em>n</em> exams and get the academic scholarship. He will get
+the scholarship if the average grade mark for all the exams is at least  <em>avg</em>
+. The exam grade cannot exceed  <em>r</em> . Vanya has passed the exams and got grade
+<em>a</em> <em>i</em> for the  <em>i</em> -th exam. To increase the grade for the  <em>i</em> -th exam by
+1 point, Vanya must write  <em>b</em> <em>i</em> essays. He can raise the exam grade
+multiple times.</p>
+<p>What is the minimum number of essays that Vanya needs to write to get
+scholarship?</p>
+<p>Input</p>
+<p>The first line contains three integers  <em>n</em> ,  <em>r</em> ,  <em>avg</em> (  1 ≤ <em>n</em> ≤ 10  5
+,  1 ≤ <em>r</em> ≤ 10  9  ,  1 ≤ <em>avg</em> ≤ <em>min</em> ( <em>r</em> , 10  6  )  ) — the number of
+exams, the maximum grade and the required grade point average, respectively.</p>
+<p>Each of the following  <em>n</em> lines contains space-separated integers  <em>a</em> <em>i</em>
+and  <em>b</em> <em>i</em> (  1 ≤ <em>a</em> <em>i</em> ≤ <em>r</em> ,  1 ≤ <em>b</em> <em>i</em> ≤ 10  6  ).</p>
+<p>Output</p>
+<p>In the first line print the minimum number of essays.</p>
+<p>Sample test(s)</p>
+<p>input</p>
+<pre><code>5 5 4
+5 2
+4 7
+3 1
+3 2
+2 5
+</code></pre>
+<p>output</p>
+<pre><code>4
+</code></pre>
+<p>input</p>
+<pre><code>2 5 4
+5 2
+5 2
+</code></pre>
+<p>output</p>
+<pre><code>0
+</code></pre>
+<p>Note</p>
+<p>In the first sample Vanya can write 2 essays for the 3rd exam to raise his
+grade by 2 points and 2 essays for the 4th exam to raise his grade by 1 point.</p>
+<p>In the second sample, Vanya doesn't need to write any essays as his general
+point average already is above average.</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;iterator&gt;
+#include &lt;deque&gt;
+#include &lt;vector&gt;
+#include &lt;unordered_set&gt;
+#include &lt;unordered_map&gt;
+#include &lt;set&gt;
+#include &lt;valarray&gt;
+#include &lt;list&gt;
+#include &lt;stack&gt;
+#include &lt;array&gt;
+#include &lt;iomanip&gt;
+#include &lt;map&gt;
+#include &lt;string.h&gt;
+#include &lt;queue&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+#include &lt;fstream&gt;
+#include &lt;stdio.h&gt;
+
+using namespace std;
+
+int n;
+long long r;
+long long avg,AVE;
+
+struct q
+{
+    int a;
+    int b;
+}p[100010];
+
+bool cmp(q aa,q bb)
+{
+    return aa.b &lt; bb.b;
+}
+
+int main ()
+{
+    while (cin&gt;&gt;n&gt;&gt;r&gt;&gt;avg)
+    {
+        AVE= 0;
+        for(int i=1;i&lt;=n;i++)
+        {
+            cin&gt;&gt;p[i].a&gt;&gt;p[i].b;
+            AVE+=p[i].a;
+        }
+
+        if (AVE &gt;= avg*n)
+        {
+            cout&lt;&lt;0&lt;&lt;endl;
+            return 0;
+        }
+
+        sort(p+1,p+1+n,cmp);
+
+        long long  ans = 0;
+
+        int i = 1;
+        while ( AVE &lt; avg*n )
+        {
+            ans += p[i].b * min ( r -p[i].a,n*avg - AVE );
+            
+            AVE += min(r -p[i].a,n*avg - AVE);
+
+            i++;
+        }
+
+        cout&lt;&lt;ans&lt;&lt;endl;
+                    
+    }
+
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

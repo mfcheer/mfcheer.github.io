@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>信息论与编码 上机 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383595 香农： #include &amp;lt;stdio.h…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-ccb1b5002c/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"信息论与编码 上机","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383595 香农： #include &lt;stdio.h…","datePublished":"2015-06-05T16:07:00.000Z","dateModified":"2015-06-05T16:07:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-ccb1b5002c/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-ccb1b5002c/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="信息论与编码 上机 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383595 香农： #include &amp;lt;stdio.h…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-ccb1b5002c/">
+    <meta property="article:published_time" content="2015-06-05T16:07:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="信息论与编码 上机 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383595 香农： #include &amp;lt;stdio.h…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">信息论与编码 上机</h1>
+                    <div class="post-meta">
+                        <span>2015/06/06 00:07</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>948 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383595" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46383595</a></p>
+<p>香农：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;bitset&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;map&gt;
+#include &lt;set&gt;
+
+using namespace std;
+
+const int MAXN = 11000;
+
+double p[MAXN], sump[MAXN], li[MAXN];
+int n, LI[MAXN];
+char code[MAXN][100];
+bool cmp(double a, double b)
+{
+    return a &gt; b;
+}
+void init()
+{
+    cout &lt;&lt; &quot;请依次输入信源符号的概率：&quot;;
+    memset(p, 0, sizeof(p));
+    memset(sump, 0, sizeof(sump));
+    for (int i = 1; i &lt;= n; i++)
+        cin &gt;&gt; p[i];
+    sort(p + 1, p + 1 + n, cmp);
+    for (int i = 2; i &lt;= n; i++)
+        sump[i] = sump[i - 1] + p[i - 1];
+}
+
+void solve()
+{
+    for (int i = 1; i &lt;= n; i++)
+    {
+        li[i] = (-1)*(log10(p[i]) / log10(2));
+        LI[i] = ceil(li[i]);
+    }
+
+    for (int i = 1; i &lt;= n; i++)
+    {
+        for (int j = 0; j &lt; LI[i]; j++)
+        {
+            sump[i] *= 2;
+
+            if (sump[i] - 1 &gt;= 0)
+            {
+                code[i][j] = '1';
+                sump[i] -= 1;
+            }
+            else
+                code[i][j] = '0';
+        }
+    }
+    cout &lt;&lt; &quot;编码为：&quot; &lt;&lt; endl;
+    for (int i = 1; i &lt;= n; i++)
+        cout &lt;&lt; code[i] &lt;&lt; &quot; &quot;;
+    cout &lt;&lt; endl;
+}
+
+int main()
+{
+    cout &lt;&lt; &quot;请输入信源符号个数n：&quot;;
+    cin &gt;&gt; n;
+    {
+        init();
+        solve();
+    }
+    return 0;
+}
+/*
+测试数据：
+7
+0.20 0.19 0.18 0.17 015 0.10 0.01
+*/
+</code></pre>
+<p>费诺：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;bitset&gt;
+#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;time.h&gt;
+#include &lt;queue&gt;
+#include &lt;map&gt;
+#include &lt;set&gt;
+#include &lt;iomanip&gt;
+
+using namespace std;
+
+int n;
+double p[10000];
+string *code;
+
+void fano(int a, int b)     
+{
+    if ((b - a) &gt;= 1)       
+    {
+        double sum = 0;
+        for (int i = a; i &lt;= b; i++)
+            sum += p[i];
+        double s1 = 0, *s = new double[10];
+        for (int i = a; i &lt;= b; i++)
+        {
+            s1 += p[i]; s[i] = fabs(2 * s1 - sum) / sum;
+        }
+        double min = s[a];  int c;
+        for (int i = a; i &lt;= b; i++)
+            if (s[i] &lt;= min)
+            {
+                min = s[i];     c = i;      
+            }
+        for (int i = a; i &lt;= b; i++)
+        {
+            if (i &lt;= c) code[i] += &quot;0&quot;; 
+            else code[i] += &quot;1&quot;;        
+        }
+
+        if (c == a)
+            fano(c + 1, b);
+        else if (c == b - 1)
+            fano(a, c);
+        else
+        {
+            fano(a, c); fano(c + 1, b);
+        }
+    }
+}
+void init()
+{
+    cout &lt;&lt; &quot;请输入信源符号个数n：&quot;;
+    cin &gt;&gt; n;
+    code = new string[n];
+    cout &lt;&lt; &quot;请依次输入信源符号的概率：&quot;;
+    for (int i = 0; i&lt;n; i++) cin &gt;&gt; p[i];
+    for (int i = 0; i&lt;n - 1; i++)
+        for (int j = i + 1; j&lt;n; j++)
+            if (p[i] &lt; p[j])
+            {
+                double temp = p[i]; p[i] = p[j]; p[j] = temp;
+            }
+}
+
+void solve()
+{
+    fano(0, n - 1);
+    cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; setw(8) &lt;&lt; &quot;概率&quot; &lt;&lt; setw(8) &lt;&lt; &quot;码字&quot;  &lt;&lt; endl;
+    for (int i = 0; i&lt;n; i++)
+        cout &lt;&lt; setw(8) &lt;&lt; p[i] &lt;&lt; setw(8) &lt;&lt; code[i] &lt;&lt; setw(8) &lt;&lt; endl;
+    delete[]code;
+}
+
+int main()
+{
+    init();
+    solve();
+    return 0;
+}
+
+/*
+测试数据：
+6
+0.32 0.22 0.18 0.16 0.08 0.04
+8
+0.25 0.25 0.125 0.125 0.0625 0.0625 0.0625 0.0625
+*/
+</code></pre>
+<p>尾随后缀：</p>
+<pre><code>//代码：
+#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;string.h&gt;
+#include &lt;string&gt;
+#include &lt;queue&gt;
+#include &lt;stack&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;sstream&gt;
+#include &lt;time.h&gt;
+
+using namespace std;
+
+int n, ok, num;
+char s[100000][100], tmp[100];
+char F[100000][100];
+set&lt;string&gt; Ftmp;
+
+void input()
+{
+    puts(&quot;请输入码字的个数：&quot;);
+    cin &gt;&gt; n;
+    puts(&quot;请输入码字：&quot;);
+    for (int i = 1; i &lt;= n; i++)
+        scanf(&quot;%s&quot;, s[i]);
+}
+
+void Sort()
+{
+    for (int i = 1; i &lt;= n; i++)
+    {
+        for (int j = i; j &lt;= n; j++)
+        {
+            int len1 = strlen(s[i]);
+            int len2 = strlen(s[j]);
+            if (len1 &gt; len2)
+            {
+                strcpy(tmp, s[i]);
+                strcpy(s[i], s[j]);
+                strcpy(s[j], tmp);
+            }
+        }
+    }
+}
+
+bool isok(char a[], char b[])
+{
+    int len1 = strlen(a);
+    int len2 = strlen(b);
+    for (int i = 0; i &lt; len1; i++)
+    {
+        if (a[i] != b[i])
+            return false;
+    }
+    return true;
+}
+
+void init()
+{
+    Ftmp.clear();
+    ok = 0;
+    num = 0;
+    for (int i = 1; i &lt; n; i++)
+    {
+        for (int j = i + 1; j &lt;= n; j++)
+        {
+            int len1 = strlen(s[i]);
+            int len2 = strlen(s[j]);
+            if (isok(s[i], s[j]))
+            {
+                strcpy(tmp, s[j] + len1);
+                strcpy(F[num++], tmp);
+            }
+        }
+    }
+    for (int i = 0; i &lt; num; i++)
+        Ftmp.insert(F[i]);
+}
+
+void solve()
+{
+    int pos = 0;
+    for (int i = 0; i &lt; num; i++)
+    {
+        for (int j = 1; j &lt;= n; j++)
+        {
+            int len1 = strlen(F[i]);
+            int len2 = strlen(s[j]);
+            if (len1 &lt; len2)
+            {
+                if (isok(F[i], s[j]))
+                {
+                    strcpy(tmp, s[j] + len1);
+                    strcpy(F[num++], tmp);
+
+                    int size = Ftmp.size();
+                    Ftmp.insert(tmp);
+                    if (Ftmp.size() == size)
+                        num -= 1;
+                }
+
+            }
+        }
+    }
+}
+
+void test()
+{
+    puts(&quot;检验结果：&quot;);
+    int ok = 0;
+    for (int i = 0; i &lt; num; i++)
+    {
+        if (ok) break;
+        for (int j = 1; j &lt;= n; j++)
+        {
+            if (!strcmp(F[i], s[j]))
+            {
+                puts(&quot;非唯一可译码&quot;);
+                ok = 1;
+                break;
+            }
+        }
+    }
+    if (!ok) puts(&quot;是唯一可译码&quot;);
+    printf(&quot;\n&quot;);
+    puts(&quot;尾随后缀集合是：&quot;);
+    for (int i = 0; i &lt; num; i++)
+        Ftmp.insert(F[i]);
+    set&lt;string&gt; ::iterator it;
+    for (it = Ftmp.begin(); it != Ftmp.end(); it++)
+        cout &lt;&lt; *it &lt;&lt; &quot; &quot;; cout &lt;&lt; endl;
+
+}
+
+int main()
+{
+    input();
+    Sort();
+    init();
+    solve();
+    test();
+    return 0;
+}
+
+
+//测试数据
+/*
+6
+0 10 1100 1110 1011 1101
+
+5
+110 11 100 00 10
+*/
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

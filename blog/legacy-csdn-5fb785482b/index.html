@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>字符串循环左移 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46547793 题目描述： 给定一个字符串S[0…N-1]，要求…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-5fb785482b/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"字符串循环左移","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46547793 题目描述： 给定一个字符串S[0…N-1]，要求…","datePublished":"2015-06-18T06:38:00.000Z","dateModified":"2015-06-18T06:38:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-5fb785482b/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-5fb785482b/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"字符","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="字符串循环左移 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46547793 题目描述： 给定一个字符串S[0…N-1]，要求…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-5fb785482b/">
+    <meta property="article:published_time" content="2015-06-18T06:38:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="字符串循环左移 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46547793 题目描述： 给定一个字符串S[0…N-1]，要求…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">字符串循环左移</h1>
+                    <div class="post-meta">
+                        <span>2015/06/18 14:38</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>297 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">字符</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46547793" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46547793</a></p>
+<p>题目描述：<br>
+给定一个字符串S[0…N-1]，要求把S的前k<br>
+个字符移动到S的尾部，如把字符串“abcdef”<br>
+前面的2个字符‘a’、‘b’移动到字符串的尾部，<br>
+得到新字符串“cdefab”：即字符串循环左移k。<br>
+多说一句：循环左移k位等价于循环右移n-k位。</p>
+<p>算法要求：<br>
+ 时间复杂度为 O(n)，空间复杂度为 O(1)。</p>
+<p>问题分析：<br>
+ 暴力移位法<br>
+每次循环左移1位，调用k次即可<br>
+时间复杂度O(kN)，空间复杂度O(1)<br>
+ 三次拷贝<br>
+S[0…k] → T[0…k]<br>
+S[k+1…N-1] → S[0…N-k-1]<br>
+T[0…k] →S[N-k…N-1]<br>
+时间复杂度O(N)，空间复杂度O(k)</p>
+<p>优雅一点的算法:<br>
+ (X’Y’)’=YX<br>
+ 如：abcdef<br>
+ X=ab X’=ba<br>
+ Y=cdef Y’=fedc<br>
+ (X’Y’)’=(bafedc)’=cdefab<br>
+ 时间复杂度O(N)，空间复杂度O(1)</p>
+<p>代码：</p>
+<pre><code>void reverse(char* s,int from,int to)
+{
+    while (from &lt; to)
+    {
+        char t = s[from];
+        s[from++] = s[to];
+        s[to--] = t;
+    }
+}
+
+void leftrotatestring(char* s, int n, int m)
+{
+    m %= n;
+    reverse(s,0,m-1);
+    reverse(s, m, n - 1);
+    reverse(s, 0, n - 1);
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

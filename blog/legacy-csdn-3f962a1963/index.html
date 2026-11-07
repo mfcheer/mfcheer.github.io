@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UVA 11401 TRIANGLE COUNTING 【加法原理】 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383409 Description Problem G Tr…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-3f962a1963/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"UVA 11401 TRIANGLE COUNTING 【加法原理】","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383409 Description Problem G Tr…","datePublished":"2015-06-05T15:40:00.000Z","dateModified":"2015-06-05T15:40:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-3f962a1963/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-3f962a1963/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="UVA 11401 TRIANGLE COUNTING 【加法原理】 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383409 Description Problem G Tr…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-3f962a1963/">
+    <meta property="article:published_time" content="2015-06-05T15:40:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UVA 11401 TRIANGLE COUNTING 【加法原理】 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/46383409 Description Problem G Tr…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">UVA 11401 TRIANGLE COUNTING 【加法原理】</h1>
+                    <div class="post-meta">
+                        <span>2015/06/05 23:40</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>227 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/46383409" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/46383409</a></p>
+<p>Description</p>
+<p>Problem G<br>
+Triangle Counting</p>
+<p>Input: Standard Input</p>
+<p>Output: Standard Output</p>
+<p>You are given n rods of length 1, 2…, n. You have to pick any 3 of them &amp;
+build a triangle. How many distinct triangles can you make? Note that, two
+triangles will be considered different if they have at least 1 pair of arms
+with different length.</p>
+<p>Input</p>
+<p>The input for each case will have only a single positive integer n
+(3&lt;=n&lt;=1000000). The end of input will be indicated by a case with n&lt;3. This
+case should not be processed.</p>
+<p>Output</p>
+<p>For each test case, print the number of distinct triangles you can make.</p>
+<p>Sample Input Output for Sample Input</p>
+<p>5<br>
+8</p>
+<p>0</p>
+<p>3<br>
+22</p>
+<p>Problemsetter: Mohammad Mahmudur Rahman</p>
+<p>f[i] 是以i为最大边的三角形的个数。<br>
+代码：</p>
+<pre><code>#include &lt;iostream&gt;  
+#include &lt;cstdio&gt;  
+#include &lt;cstring&gt;  
+#include &lt;algorithm&gt;  
+#include &lt;string&gt;  
+#include &lt;queue&gt;  
+#include &lt;stack&gt;
+
+using namespace std;
+
+int n;
+long long f[1000010];
+
+int main()
+{
+    f[3] = 0;
+    for (long long x = 4; x &lt;= 1000000; x++)
+        f[x] = f[x - 1] + ((x - 1)*(x - 2) / 2 - (x - 1) / 2) / 2;
+
+    while (scanf(&quot;%d&quot;, &amp;n) != EOF)
+    {
+        if (n &lt; 3) break;
+        printf(&quot;%lld\n&quot;,f[n]);
+    }
+    return 0;
+}
+</code></pre>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

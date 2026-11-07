@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ROC曲线 · mfcheer</title>
+    <meta name="description" content="历史迁移文章：ROC曲线">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-article-7292eb133c/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"ROC曲线","description":"历史迁移文章：ROC曲线","datePublished":"2017-12-31T16:00:00.000Z","dateModified":"2017-12-31T16:00:00.000Z","url":"https://mfcheer.github.io/blog/legacy-article-7292eb133c/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-article-7292eb133c/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"历史文章","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="ROC曲线 · mfcheer">
+    <meta property="og:description" content="历史迁移文章：ROC曲线">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-article-7292eb133c/">
+    <meta property="article:published_time" content="2017-12-31T16:00:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ROC曲线 · mfcheer">
+    <meta name="twitter:description" content="历史迁移文章：ROC曲线">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">ROC曲线</h1>
+                    <div class="post-meta">
+                        <span>2018/01/01</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>717 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 2 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    
+                </header>
+                <div class="post-body">
+<h1 id="roc曲线" tabindex="-1">ROC曲线</h1>
+<p>Receiver Operating Characteristic curve（受试者工作特征曲线）</p>
+<p>我们将二分类器的所有可能取值，做一个方格图如下：
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/81.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
+<ul>
+<li>TP —— True Positive （真正, TP）被模型预测为正的正样本（原来为正预测为正）</li>
+<li>TN —— True Negative（真负 , TN）被模型预测为负的负样本（原来为负预测为负）</li>
+<li>FP ——False Positive （假正, FP）被模型预测为正的负样本（原来为负预测为正）</li>
+<li>FN—— False Negative（假负 , FN）被模型预测为负的正样本 （原来为正预测为负）</li>
+</ul>
+<p>TP + TN + FP + FN = 样本总数。
+两个指标，准确率和召回率</p>
+<ul>
+<li>准确率 P = TP/(TP + FP)</li>
+<li>召回率 R = TP/(TP + FN)</li>
+</ul>
+<p>下图为ROC曲线图：
+<img src="/assets/images/legacy/MarkdownPhotos/photos1/82.png" alt="" loading="lazy" referrerpolicy="no-referrer">
+图像的横轴是False Positive rate值（不是FP值），也就是实际为负并且预测错误的个数占总的负值的比例；图像的纵轴是True Positive rate值（不是TP值），也就是实际为正值并且预测正确的个数占总的正值的比例。</p>
+<h2 id="roc曲线中的“四点一线”" tabindex="-1">ROC曲线中的“四点一线”</h2>
+<ul>
+<li>第一个点，(0,1)，即FPR=0, TPR=1，这意味着FN（false negative）=0，并且FP（false positive）=0。这是一个完美的分类器，它将所有的样本都正确分类。</li>
+<li>第二个点，(1,0)，即FPR=1，TPR=0，类似地分析可以发现这是一个最糟糕的分类器，因为它成功避开了所有的正确答案。</li>
+<li>第三个点，(0,0)，即FPR=TPR=0，即FP（false positive）=TP（true positive）=0，可以发现该分类器预测所有的样本都为负样本（negative）。</li>
+<li>第四个点（1,1），分类器实际上预测所有的样本都为正样本。</li>
+</ul>
+<p>对于ROC曲线，我们可以这样理解，对于二分类问题，曲线的每一个点都代表一个阈值，分类器给每个样本一个得分，得分大于阈值的我们认为是正样本，小于阈值的我们认为是负样本。</p>
+<ul>
+<li>若学习器A的ROC曲线将另外一个学习器B的曲线完全包住，则A的性能一定比B好</li>
+<li>AUC值等于0.5时，我们可以认为分类器不起作用</li>
+</ul>
+<h1 id="auc值" tabindex="-1">AUC值</h1>
+<p>Area Under Curve score (曲线下面积值)，也就是ROC曲线之下与坐标轴围成的面积。
+AUC值是一个概率值，当你随机挑选一个正样本以及一个负样本，当前的分类算法根据计算得到的Score值将这个正样本排在负样本前面的概率就是AUC值。AUC值越大，当前的分类算法越有可能将正样本排在负样本前面，即能够更好的分类。</p>
+<h1 id="下面是觉得不错的相关文章" tabindex="-1">下面是觉得不错的相关文章</h1>
+<p><a href="https://zhuanlan.zhihu.com/p/52930683" target="_blank" rel="noreferrer">乱弹机器学习评估指标AUC</a></p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

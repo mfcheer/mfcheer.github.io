@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SWAR算法：计算Hamming Weight · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52491045 Hamming Weight 即汉明重量，指的是…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-297e3c7dfb/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"SWAR算法：计算Hamming Weight","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52491045 Hamming Weight 即汉明重量，指的是…","datePublished":"2016-09-09T14:40:00.000Z","dateModified":"2016-09-09T14:40:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-297e3c7dfb/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-297e3c7dfb/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="SWAR算法：计算Hamming Weight · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52491045 Hamming Weight 即汉明重量，指的是…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-297e3c7dfb/">
+    <meta property="article:published_time" content="2016-09-09T14:40:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SWAR算法：计算Hamming Weight · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/52491045 Hamming Weight 即汉明重量，指的是…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">SWAR算法：计算Hamming Weight</h1>
+                    <div class="post-meta">
+                        <span>2016/09/09 22:40</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>375 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#hamming-weight">Hamming Weight</a></li><li><a href="#swar算法">SWAR算法</a></li></ul></nav>
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/52491045" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/52491045</a></p>
+<h2 id="hamming-weight" tabindex="-1">Hamming Weight</h2>
+<p>即汉明重量，指的是一个位数组中非0二进制位的数量。<br>
+比如a[] = {1,0,1,0,0,1,1,0}统计非0数目为4。</p>
+<p>比较常规的方法，按位统计，算法复杂度O（n）。<br>
+redis里实现用到了两种算法：</p>
+<p>1 查表法 比如<br>
+0000 0001 ： 1<br>
+0110 0001 ： 3<br>
+……<br>
+1111 1111 ： 8</p>
+<h2 id="swar算法" tabindex="-1">SWAR算法</h2>
+<p>代码：</p>
+<pre><code>// 计算32位二进制的汉明重量
+int32_t swar(int32_t i)
+{    
+    i = (i &amp; 0x55555555) + ((i &gt;&gt; 1) &amp; 0x55555555);
+    i = (i &amp; 0x33333333) + ((i &gt;&gt; 2) &amp; 0x33333333);
+    i = (i &amp; 0x0F0F0F0F) + ((i &gt;&gt; 4) &amp; 0x0F0F0F0F);
+    i = (i * (0x01010101) &gt;&gt; 24);
+    return i
+}
+</code></pre>
+<p>第一步：<br>
+计算出来的值i的二进制可以按每2个二进制位为一组进行分组，各组的十进制表示的就是该组的汉明重量。</p>
+<p>第二步：<br>
+计算出来的值i的二进制可以按每4个二进制位为一组进行分组，各组的十进制表示的就是该组的汉明重量。</p>
+<p>第三步：<br>
+计算出来的值i的二进制可以按每8个二进制位为一组进行分组，各组的十进制表示的就是该组的汉明重量。</p>
+<p>第四步：<br>
+i *
+(0x01010101)计算出汉明重量并记录在二进制的高八位，&gt;&gt;24语句则通过右移运算，将汉明重量移到最低八位，最后二进制对应的的十进制数就是汉明重量。</p>
+<p>算法时间复杂度是O（1）的。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

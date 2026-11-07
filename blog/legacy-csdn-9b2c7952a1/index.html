@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>中国剩余定理 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44678937 前面许多人讲过一些性质与证明，我来讲一讲解法，也…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-9b2c7952a1/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"中国剩余定理","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44678937 前面许多人讲过一些性质与证明，我来讲一讲解法，也…","datePublished":"2015-03-27T08:42:00.000Z","dateModified":"2015-03-27T08:42:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-9b2c7952a1/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-9b2c7952a1/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="中国剩余定理 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44678937 前面许多人讲过一些性质与证明，我来讲一讲解法，也…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-9b2c7952a1/">
+    <meta property="article:published_time" content="2015-03-27T08:42:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="中国剩余定理 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/44678937 前面许多人讲过一些性质与证明，我来讲一讲解法，也…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">中国剩余定理</h1>
+                    <div class="post-meta">
+                        <span>2015/03/27 16:42</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>396 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/44678937" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/44678937</a></p>
+<p>前面许多人讲过一些性质与证明，我来讲一讲解法，也是为了以后自己回过头来看。<br>
+中国剩余定理介绍<br>
+在《孙子算经》中有这样一个问题：“今有物不知其数，三三数之剩二（除以3余2），五五数之剩三（除以5余3），七七数之剩二（除以7余2），问物几何？”这个问题称为“孙子问题”，该问题的一般解法国际上称为“中国剩余定理”。具体解法分三步：</p>
+<p>找出三个数：从3和5的公倍数中找出被7除余1的最小数15，从3和7的公倍数中找出被5除余1 的最小数21，最后从5和7的公倍数中找出除3余1的最小数70。<br>
+用15乘以2（2为最终结果除以7的余数），用21乘以3（3为最终结果除以5的余数），同理，用70乘以2（2为最终结果除以3的余数），然后把三个乘积相加（15<em>2+21</em>3+70*2）得到和233。<br>
+用233除以3，5，7三个数的最小公倍数105，得到余数23，即233%105=23。这个余数23就是符合条件的最小数。</p>
+<p>具体的求解公式：<br>
+假如：<br>
+x= b1(mod m1)<br>
+x= b2(mod m2)<br>
+……..<br>
+x= bn(mod mn)<br>
+(m1<em>m2 …mn)^(-1)为(m1</em>m2 …mn)的逆元<br>
+则x = b1*（m2<em>m3</em>… <em>mn）</em> （m2<em>m3</em>… <em>mn）^(-1) + b2</em> （m1<em>m3</em>… <em>mn）</em> （m1<em>m3</em>…
+<em>mn）^(-1)+….+bn</em> （m1<em>m2</em>… <em>mn-1）</em> （m1<em>m2</em>…*mn-1）^(-1)</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>K-means聚类算法 · mfcheer</title>
+    <meta name="description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50958963 K-means算法是一种无监督的机器学习算法。无…">
+    <link rel="canonical" href="https://mfcheer.github.io/blog/legacy-csdn-a958f21ee6/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"K-means聚类算法","description":"版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50958963 K-means算法是一种无监督的机器学习算法。无…","datePublished":"2016-03-22T14:02:00.000Z","dateModified":"2016-03-22T14:02:00.000Z","url":"https://mfcheer.github.io/blog/legacy-csdn-a958f21ee6/","mainEntityOfPage":"https://mfcheer.github.io/blog/legacy-csdn-a958f21ee6/","image":"https://mfcheer.github.io/assets/share-card.png","keywords":"机器学习,算法","author":{"@type":"Person","name":"mfcheer","url":"https://mfcheer.github.io/"}}</script>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mfcheer">
+    <meta property="og:title" content="K-means聚类算法 · mfcheer">
+    <meta property="og:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50958963 K-means算法是一种无监督的机器学习算法。无…">
+    <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
+    <meta property="og:url" content="https://mfcheer.github.io/blog/legacy-csdn-a958f21ee6/">
+    <meta property="article:published_time" content="2016-03-22T14:02:00.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="K-means聚类算法 · mfcheer">
+    <meta name="twitter:description" content="版权声明：转载请注明出处。 https://blog.csdn.net/u014427196/article/details/50958963 K-means算法是一种无监督的机器学习算法。无…">
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="container container-post">
+        <header class="topbar">
+            <a class="brand" href="/">mfcheer</a>
+            <div class="topbar-right">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/#about">关于</a></li>
+                        <li><a href="/blog/">文章</a></li>
+                        <li><a href="/#media">书影音</a></li>
+                        <li><a href="/#moments">说说</a></li>
+                        <li><a href="/#guestbook">留言</a></li>
+                        <li><a href="/#projects">作品</a></li>
+                        <li><a href="/#activity">动态</a></li>
+                        <li><a href="/#contact">联系</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle-btn" id="themeToggle" type="button" title="切换深色/浅色模式" aria-label="切换主题" aria-pressed="false">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <article class="glass card-post">
+                <header class="post-head">
+                    <h1 class="post-title">K-means聚类算法</h1>
+                    <div class="post-meta">
+                        <span>2016/03/22 22:02</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>302 字</span>
+                        <span class="post-meta-dot" aria-hidden="true">·</span>
+                        <span>约 1 分钟</span>
+                    </div>
+                    <div class="post-tags"><span class="post-tag">机器学习</span><span class="post-tag">算法</span></div>
+                    
+                </header>
+                <div class="post-body">
+<p>版权声明：转载请注明出处。 <a href="https://blog.csdn.net/u014427196/article/details/50958963" target="_blank" rel="noreferrer">https://blog.csdn.net/u014427196/article/details/50958963</a></p>
+<p>K-means算法是一种无监督的机器学习算法。无监督学习即事先不知道要寻找的内容。全自动分类，将相似对象归到同一个簇中。用户预先给的K个簇，每个簇通过“质心”来描述。</p>
+<p>伪代码：</p>
+<pre><code>创建K个点作为起始质心（一般随机选择）
+任意一个点所属簇的结果发生改变时
+    对数据集中每个点
+        对每个质心
+            计算数据与质心间的距离
+        将数据划分到与它最近的簇
+    对于每个簇，重新计算质心（所有点的均值）
+</code></pre>
+<p>求距离的方法，欧氏距离。</p>
+<p>聚类效果的度量。一般计算SEE（误差平方和），SEE越小表示数据点越接近他们的质心。</p>
+<p>一般误差原因：k的选取。</p>
+<p>改进: 二分 K-均值算法<br>
+首先将所有点作为一个簇，然后将该簇一分为二。之后选择一个簇继续划分，选择哪个取决于是否可以最大程度降低SEE的值。直到取得合适的K值为止。</p>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-back" href="/blog/">← 全部文章</a>
+                </div>
+            </article>
+
+            <section class="glass card-comments">
+                <div class="activity-head">
+                    <h2>留言</h2>
+                </div>
+                <div class="giscus-box" id="giscusBox"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>© <span id="copyrightYear">2026</span> mfcheer · 39°54'N 116°23'E</span>
+            <a href="#" class="back-to-top">回到顶部 ↑</a>
+        </footer>
+    </div>
+
+    <script src="/script.js?v=1.3.5"></script>
+</body>
+</html>
