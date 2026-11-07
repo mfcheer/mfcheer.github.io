@@ -2018,6 +2018,13 @@ html[data-theme="dark"] .post-body {
     border-color: rgba(0, 113, 227, 0.4);
 }
 
+/* 代码块顶部预留工具条空间：语言标签和复制按钮悬浮在自家横条里，
+   不与首行代码重叠（首行再长也只是横向滚动，不会被盖住）。
+   特意放在文件末尾以覆盖 .post-body pre 的等特异性内边距 */
+.code-block pre {
+    padding-top: 42px;
+}
+
 /* 任务列表（- [ ] / - [x]）复选框 */
 .post-body input[type='checkbox'] {
     accent-color: var(--accent);
