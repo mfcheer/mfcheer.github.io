@@ -29,7 +29,7 @@ const TPL_DIR = path.join(ROOT, 'templates');
 import anchor from 'markdown-it-anchor';
 import taskLists from 'markdown-it-task-lists';
 
-const VERSIONS = { css: '1.3.10', js: '1.3.5' };
+const VERSIONS = { css: '1.3.11', js: '1.3.6' };
 
 // ---------- 工具 ----------
 const esc = (s) =>
@@ -230,7 +230,32 @@ const latest = posts.length ? posts[0].atomDate : new Date().toISOString();
 
 // ---------- 文章页 ----------
 const postTpl = fs.readFileSync(path.join(TPL_DIR, 'post.html'), 'utf8');
-for (const p of posts) {
+for (let i = 0; i < posts.length; i++) {
+    const p = posts[i];
+    const prev = posts[i + 1]; // 早一篇（上一篇）
+    const next = posts[i - 1]; // 晚一篇（下一篇）
+
+    const prevHtml = prev
+        ? `<a class="post-nav-card post-nav-prev" href="/blog/${prev.slug}/">
+              <span class="post-nav-sub">← 上一篇</span>
+              <span class="post-nav-title">${esc(prev.title)}</span>
+          </a>`
+        : `<div class="post-nav-card post-nav-empty" aria-hidden="true"></div>`;
+
+    const nextHtml = next
+        ? `<a class="post-nav-card post-nav-next" href="/blog/${next.slug}/">
+              <span class="post-nav-sub">下一篇 →</span>
+              <span class="post-nav-title">${esc(next.title)}</span>
+          </a>`
+        : `<div class="post-nav-card post-nav-empty" aria-hidden="true"></div>`;
+
+    const postNavHtml = (prev || next)
+        ? `<nav class="post-nav" aria-label="文章翻页导航">
+              ${prevHtml}
+              ${nextHtml}
+          </nav>`
+        : '';
+
     const pageUrl = `${SITE}/blog/${p.slug}/`;
     const ogImage = `${SITE}/assets/share-card.png`;
     const jsonld = JSON.stringify({
@@ -261,6 +286,7 @@ for (const p of posts) {
         READING_MINUTES: String(p.minutes),
         TAGS_HTML: tagsHtml,
         TOC_HTML: p.tocHtml,
+        POST_NAV_HTML: postNavHtml,
         KATEX: p.hasMath ? KATEX_HEAD : '',
         CONTENT: p.html,
         CSS_VERSION: VERSIONS.css,

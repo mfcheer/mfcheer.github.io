@@ -27,10 +27,11 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+    <link rel="stylesheet" href="/styles.css?v=1.3.11">
 
 </head>
 <body>
+    <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
     <div class="page-bg"></div>
     <div class="container container-post">
         <header class="topbar">
@@ -175,6 +176,16 @@ ar1[10000]，ar1放在BSS段，只记录共有10000*4个字节需要初始化为
 <p>此外，临时数据及需要再次使用的代码在运行时放入栈区中，生命周期短。全局数据和静态数据可能在整个程序执行过程中都需要访问，因此单独存储管理。堆区由用户自由分配，以便管理。</p>
 
                 </div>
+<nav class="post-nav" aria-label="文章翻页导航">
+              <a class="post-nav-card post-nav-prev" href="/blog/legacy-csdn-c30f9f2348/">
+              <span class="post-nav-sub">← 上一篇</span>
+              <span class="post-nav-title">bellman_ford 模板</span>
+          </a>
+              <a class="post-nav-card post-nav-next" href="/blog/legacy-csdn-6e38845dca/">
+              <span class="post-nav-sub">下一篇 →</span>
+              <span class="post-nav-title">Redis内存回收:LRU算法</span>
+          </a>
+          </nav>
                 <div class="post-foot">
                     <a class="post-back" href="/blog/">← 全部文章</a>
                 </div>
@@ -194,6 +205,6 @@ ar1[10000]，ar1放在BSS段，只记录共有10000*4个字节需要初始化为
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.5"></script>
+    <script src="/script.js?v=1.3.6"></script>
 </body>
 </html>

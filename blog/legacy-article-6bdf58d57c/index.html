@@ -27,10 +27,11 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.10">
+    <link rel="stylesheet" href="/styles.css?v=1.3.11">
 
 </head>
 <body>
+    <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
     <div class="page-bg"></div>
     <div class="container container-post">
         <header class="topbar">
@@ -125,6 +126,16 @@ MyBatis容易掌握，而Hibernate门槛较高。</p>
 脱管态(Detached)：存在持久化标识OID，但没有与当前session关联，脱管状态改变hibernate不能检测到</p>
 
                 </div>
+<nav class="post-nav" aria-label="文章翻页导航">
+              <a class="post-nav-card post-nav-prev" href="/blog/legacy-article-6c6ca17d6b/">
+              <span class="post-nav-sub">← 上一篇</span>
+              <span class="post-nav-title">全量同步</span>
+          </a>
+              <a class="post-nav-card post-nav-next" href="/blog/legacy-article-6aaae60dde/">
+              <span class="post-nav-sub">下一篇 →</span>
+              <span class="post-nav-title">高频词</span>
+          </a>
+          </nav>
                 <div class="post-foot">
                     <a class="post-back" href="/blog/">← 全部文章</a>
                 </div>
@@ -144,6 +155,6 @@ MyBatis容易掌握，而Hibernate门槛较高。</p>
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.5"></script>
+    <script src="/script.js?v=1.3.6"></script>
 </body>
 </html>

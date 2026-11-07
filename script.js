@@ -123,10 +123,41 @@ loadGitHubChart();
     if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 })();
 
-// 文章页增强：代码块加复制按钮/语言标签 + TOC 滚动高亮（仅 .post-body 存在时生效）
+// 文章页增强：代码块加复制按钮/语言标签 + TOC 滚动高亮 + 阅读进度条（仅 .post-body 存在时生效）
 (function () {
     const postBody = document.querySelector('.post-body');
     if (!postBody) return;
+
+    // 阅读进度条
+    let progressBar = document.getElementById('readingProgress');
+    if (!progressBar) {
+        progressBar = document.createElement('div');
+        progressBar.id = 'readingProgress';
+        progressBar.className = 'reading-progress';
+        progressBar.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(progressBar);
+    }
+    let progressTicking = false;
+    const updateProgress = () => {
+        const rect = postBody.getBoundingClientRect();
+        const winH = window.innerHeight;
+        const total = rect.height - winH * 0.4;
+        const current = -rect.top;
+        let pct = 0;
+        if (total > 0) {
+            pct = Math.min(100, Math.max(0, (current / total) * 100));
+        }
+        progressBar.style.width = pct.toFixed(1) + '%';
+        progressBar.style.opacity = pct > 0 ? '1' : '0';
+        progressTicking = false;
+    };
+    window.addEventListener('scroll', () => {
+        if (!progressTicking) {
+            requestAnimationFrame(updateProgress);
+            progressTicking = true;
+        }
+    }, { passive: true });
+    updateProgress();
 
     // Clipboard API 仅在 HTTPS 等安全上下文可用，HTTP 环境降级 execCommand
     async function copyText(text) {
@@ -258,6 +289,7 @@ const BARCA_ESPN_ID = '83';
 
 async function loadBarcaSchedule() {
     const wrap = document.getElementById('barcaSchedule');
+    const section = document.getElementById('barca');
     if (!wrap) return;
     try {
         const res = await fetch(
@@ -337,6 +369,7 @@ async function loadBarcaSchedule() {
             wrap.append(row);
         });
         wrap.hidden = false;
+        if (section) section.hidden = false;
     } catch (e) {
         // 接口失败或网络异常：保持隐藏，不打扰
     }
