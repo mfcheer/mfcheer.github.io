@@ -123,6 +123,68 @@ loadGitHubChart();
     if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 })();
 
+// 文章页增强：代码块加复制按钮/语言标签 + TOC 滚动高亮（仅 .post-body 存在时生效）
+(function () {
+    const postBody = document.querySelector('.post-body');
+    if (!postBody) return;
+
+    postBody.querySelectorAll('pre').forEach((pre) => {
+        const code = pre.querySelector('code');
+        if (!code || pre.parentElement.classList.contains('code-block')) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block';
+        pre.before(wrapper);
+        wrapper.appendChild(pre);
+
+        const langMatch = (code.className || '').match(/language-([\w+-]+)/);
+        if (langMatch) {
+            const lang = document.createElement('span');
+            lang.className = 'code-lang';
+            lang.textContent = langMatch[1];
+            wrapper.appendChild(lang);
+        }
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'copy-btn';
+        btn.textContent = '复制';
+        btn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(code.innerText);
+                btn.textContent = '已复制';
+                btn.classList.add('copied');
+            } catch (e) {
+                btn.textContent = '复制失败';
+            }
+            setTimeout(() => {
+                btn.textContent = '复制';
+                btn.classList.remove('copied');
+            }, 1500);
+        });
+        wrapper.appendChild(btn);
+    });
+
+    const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+    if (tocLinks.length && 'IntersectionObserver' in window) {
+        const map = new Map();
+        tocLinks.forEach((a) => {
+            const id = decodeURIComponent((a.getAttribute('href') || '').slice(1));
+            const target = id && document.getElementById(id);
+            if (target) map.set(target, a);
+        });
+        const setActive = (link) => {
+            tocLinks.forEach((a) => a.classList.toggle('active', a === link));
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) setActive(map.get(entry.target));
+            });
+        }, { rootMargin: '-80px 0px -55% 0px' });
+        map.forEach((_, target) => observer.observe(target));
+    }
+})();
+
 // 小红书名片弹层：点图标打开，点遮罩/×/Esc 关闭；焦点陷阱 + 关闭后焦点归还
 (function () {
     const btn = document.getElementById('xhsBtn');

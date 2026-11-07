@@ -27,7 +27,10 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.6">
+    <link rel="stylesheet" href="/styles.css?v=1.3.8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.querySelector('.post-body'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
 </head>
 <body>
     <div class="page-bg"></div>
@@ -60,28 +63,37 @@
                     <div class="post-meta">
                         <span>2026/09/12 22:30</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>326 字</span>
+                        <span>504 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 1 分钟</span>
                     </div>
                     <div class="post-tags"><span class="post-tag">动漫</span><span class="post-tag">龙珠</span></div>
+                    <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#为什么是龙珠">为什么是龙珠</a></li><li><a href="#一个不严谨的战斗力模型">一个不严谨的战斗力模型</a></li><li><a href="#最近还在追吗">最近还在追吗</a></li></ul></nav>
                 </header>
                 <div class="post-body">
+<p><img src="/assets/images/dragon-ball-power.jpg" alt="超级赛亚人变身瞬间" loading="lazy" referrerpolicy="no-referrer"></p>
 <p>不是技术文，聊聊动漫。</p>
 <p>小学放学冲回家，书包一甩就开电视——那时候的快乐很简单，悟空能不能赶上集气结束。二十多年过去，加班回家路上还是会戴起耳机重听那首《魔诃不思议大冒险》，DNA 动了。</p>
-<h2>为什么是龙珠</h2>
+<h2 id="为什么是龙珠" tabindex="-1">为什么是龙珠</h2>
 <p>后来也追过很多热血番，但龙珠在我心里的位置很难被替代：</p>
 <ul>
 <li><strong>纯粹</strong>。悟空想要的就是变强和变强，没有黑深残，没有圣母，干干净净；</li>
-<li><strong>败者的尊严</strong>。贝吉塔一辈子活在&quot;永远的第二名&quot;里，却从未认输——成年后再看，这才是龙珠最狠的一条线；</li>
-<li><strong>留白式的燃</strong>。那美克星的五分钟撑了几十集，气氛拉满时的&quot;悟空变身&quot;，没有一句废话。</li>
+<li><strong>败者的尊严</strong>。贝吉塔一辈子活在「永远的第二名」里，却从未认输——成年后再看，这才是龙珠最狠的一条线；</li>
+<li><strong>留白式的燃</strong>。那美克星的五分钟撑了几十集，气氛拉满时的「悟空变身」，没有一句废话。</li>
 </ul>
-<h2>最近还在追吗</h2>
+<h2 id="一个不严谨的战斗力模型" tabindex="-1">一个不严谨的战斗力模型</h2>
+<p>龙珠迷都知道「战五渣」的梗——拉蒂兹落地时用战斗力探测器测出农民战五。既然如此，不如给悟空的战斗力建个模：</p>
+<p>$$
+P(t) = 5 \cdot e^{0.9t}
+$$</p>
+<p>其中 $P(t)$ 是悟空在 $t$ 年的战斗力，$5$ 是著名的初始值。看起来温和，但指数曲线的可怕之处在于：**前十年看不出区别，某一天突然就超赛了。**和很多成长型事情的规律一样，包括写代码。</p>
+<p>当然，真实情况更夸张——弗利萨篇之后就只能用对数坐标画了。</p>
+<h2 id="最近还在追吗" tabindex="-1">最近还在追吗</h2>
 <p>《龙珠大魔》补完了，短篇体量，设定回收得很开心。剧场版里最爱的还是布罗利——战斗作画的天花板，影院里全场跟着气功波一起屏息的感觉，找回了小时候的电视机前。</p>
 <blockquote>
 <p>战斗力只是数字，想变强的心才是超赛变身的条件。</p>
 </blockquote>
-<p>下一个二十年，大概还会为同一个人喊&quot;卡卡罗特&quot;吧。</p>
+<p>下一个二十年，大概还会为同一个人喊「卡卡罗特」吧。</p>
 
                 </div>
                 <div class="post-foot">
@@ -103,6 +115,6 @@
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.3"></script>
+    <script src="/script.js?v=1.3.4"></script>
 </body>
 </html>
