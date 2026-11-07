@@ -1944,3 +1944,65 @@ html[data-theme="dark"] .post-body {
         -webkit-box-orient: vertical;
     }
 }
+
+/* ============================================================
+   TOPBAR 移动端两行布局（≤600px）
+   8 个导航项在窄屏下挤不进单行胶囊（390px 视口需约 280px，
+   可用仅约 230px），溢出后被 body 的 overflow-x:hidden 裁掉，
+   产生挤压与互相覆盖。改为两行：
+   第一行 = 品牌 + 主题按钮；第二行 = 导航整行横向滑动
+   （不换行：换行会让 sticky 顶栏过高）。topbar-right 用
+   display: contents 解散为直接 flex 项，纯 CSS 重排不改 HTML。
+   ============================================================ */
+@media (max-width: 600px) {
+    .topbar {
+        flex-wrap: wrap;
+        row-gap: 7px;
+        border-radius: 18px;
+        padding-top: 9px;
+        padding-bottom: 7px;
+    }
+
+    .topbar-right {
+        display: contents;
+    }
+
+    .topbar .brand {
+        order: 1;
+    }
+
+    .topbar .theme-toggle-btn {
+        order: 2;
+        margin-left: auto;
+    }
+
+    .topbar nav {
+        order: 3;
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    /* 导航整行横滑：负 margin 抵消顶栏内边距，滚动到边缘仍留呼吸位 */
+    .topbar .nav-links {
+        flex-wrap: nowrap;
+        gap: 16px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -14px;
+        padding: 2px 14px;
+    }
+
+    .topbar .nav-links::-webkit-scrollbar {
+        display: none;
+    }
+
+    .topbar .nav-links li {
+        flex-shrink: 0;
+    }
+}
+
+/* 锚点跳转补偿：sticky 顶栏（桌面约 64px、移动端两行约 90px）会盖住目标区顶部 */
+section[id] {
+    scroll-margin-top: 84px;
+}
