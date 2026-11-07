@@ -1,11 +1,24 @@
 {
   "updatedAt": "2026-11-07",
-  "count": 5,
+  "count": 4,
   "posts": [
+    {
+      "title": "单曲循环 Spylent 的第 N 周",
+      "url": "/blog/spylent-on-loop/",
+      "dateText": "2026/11/01 23:40",
+      "year": 2026,
+      "tags": [
+        "音乐",
+        "说唱"
+      ],
+      "summary": "写代码的背景音、通勤的耳返、睡前的白噪音，都是同一个名字。聊聊我为什么一直在单曲循环 Spylent。",
+      "readingMinutes": 1,
+      "wordCount": 283
+    },
     {
       "title": "诺坎普的黄昏",
       "url": "/blog/camp-nou/",
-      "dateText": "2026/10/24 15:10",
+      "dateText": "2026/10/24 23:10",
       "year": 2026,
       "tags": [
         "生活",
@@ -16,55 +29,30 @@
       "wordCount": 325
     },
     {
-      "title": "广告计费系统如何做到不丢不重",
-      "url": "/blog/exactly-once-billing/",
-      "dateText": "2026/06/30 11:00",
+      "title": "龙珠：我的热血启蒙",
+      "url": "/blog/dragon-ball/",
+      "dateText": "2026/09/12 22:30",
       "year": 2026,
       "tags": [
-        "广告",
-        "分布式"
+        "动漫",
+        "龙珠"
       ],
-      "summary": "计费系统的钱丢一分都是事故。从埋点到扣费，梳理 exactly-once 的完整实现路径：唯一 ID、幂等落库、对账兜底。",
+      "summary": "从守在电视机前等龟派气功的小学生，到现在加班夜里还会翻出剧场版的社畜。聊聊龙珠为什么能燃二十多年。",
       "readingMinutes": 1,
-      "wordCount": 436
+      "wordCount": 326
     },
     {
-      "title": "Go 服务的优雅退出：从信号到连接排空",
-      "url": "/blog/graceful-shutdown/",
-      "dateText": "2026/02/18 13:40",
+      "title": "我的巴萨球衣收藏",
+      "url": "/blog/barca-jerseys/",
+      "dateText": "2026/08/30 21:00",
       "year": 2026,
       "tags": [
-        "Go",
-        "后端"
+        "足球",
+        "巴萨"
       ],
-      "summary": "kill -15 之后到底发生了什么？把优雅退出的完整链路梳理一遍：信号处理、健康检查摘流、连接排空和超时兜底。",
+      "summary": "从第一件 10 号开始，衣柜里的红蓝越挂越多。球衣不只是衣服，是每个赛季的记忆存档。",
       "readingMinutes": 1,
-      "wordCount": 306
-    },
-    {
-      "title": "任务调度平台设计要点",
-      "url": "/blog/task-scheduler/",
-      "dateText": "2025/11/03 12:15",
-      "year": 2025,
-      "tags": [
-        "后端",
-        "架构"
-      ],
-      "summary": "从 0 到 1 搭一个任务调度平台，真正难的从来不是\"定时触发\"，而是失败处理、幂等和可观测性。沉淀几个设计要点。",
-      "readingMinutes": 1,
-      "wordCount": 464
-    },
-    {
-      "title": "开博：为什么开始写博客",
-      "url": "/blog/hello-blog/",
-      "dateText": "2025/08/12 14:30",
-      "year": 2025,
-      "tags": [
-        "随笔"
-      ],
-      "summary": "工作五年，输出的欲望第一次压过了惰性。这个博客会用最土的办法构建——Markdown 进，静态页出，不多不少。",
-      "readingMinutes": 1,
-      "wordCount": 331
+      "wordCount": 302
     }
   ]
 }
