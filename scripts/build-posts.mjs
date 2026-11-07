@@ -193,9 +193,19 @@ for (const file of files) {
     const hasMath = /\$\$[\s\S]+?\$\$|\$[^\s$][^$\n]*?\$/.test(content);
     const words = countWords(content);
     const tags = Array.isArray(data.tags) ? data.tags.map((t) => String(t).trim()).filter(Boolean) : [];
-    const y = date.getFullYear();
-    const pad = (n) => String(n).padStart(2, '0');
-    const dateText = `${y}/${pad(date.getMonth() + 1)}/${pad(date.getDate())}${hasTime ? ` ${pad(date.getHours())}:${pad(date.getMinutes())}` : ''}`;
+    // 统一按东八区格式化：本地与 GitHub Actions（UTC）构建产物保持一致
+    const cnParts = new Intl.DateTimeFormat('zh-CN', {
+        timeZone: 'Asia/Shanghai',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hourCycle: 'h23'
+    }).formatToParts(date);
+    const part = (type) => cnParts.find((p) => p.type === type).value;
+    const y = Number(part('year'));
+    const dateText = `${y}/${part('month')}/${part('day')}${hasTime ? ` ${part('hour')}:${part('minute')}` : ''}`;
 
     posts.push({
         title,
