@@ -529,7 +529,7 @@ async function loadBarcaSchedule() {
 loadBarcaSchedule();
 
 // Moments (说说) — 静态数据驱动（由 GitHub Actions 自动从 Issues 同步至 data/moments.json）
-const MOMENTS_STATIC_URL = '/data/moments.json?v=1.3.14';
+const MOMENTS_STATIC_URL = '/data/moments.json?v=1.3.15';
 const MOMENTS_API_URL =
     'https://api.github.com/repos/mfcheer/mfcheer.github.io/issues?state=open&per_page=30&sort=created&direction=desc';
 const MOMENTS_CACHE_KEY = 'momentsData_v2';
@@ -925,7 +925,13 @@ async function loadMoments() {
             if (apiRes.ok) {
                 const issues = await apiRes.json();
                 const list = (Array.isArray(issues) ? issues : [])
-                    .filter((it) => it && !it.pull_request)
+                    .filter((it) => {
+                        if (!it || it.pull_request) return false;
+                        const isOwner =
+                            it.author_association === "OWNER" ||
+                            (it.user && it.user.login && it.user.login.toLowerCase() === "mfcheer");
+                        return Boolean(isOwner);
+                    })
                     .map((it) => {
                         const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
                         const { text, images } = parseMomentContent(rawContent, it.title);
@@ -1078,3 +1084,465 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+// ============================================================
+// 说说站内发布与博主认证浮层 (Moment Publish & Auth Modal)
+// ============================================================
+const MOMENT_AUTH_TOKEN_KEY = "mfcheer_moment_auth_token";
+const MOMENT_AUTH_USER_KEY = "mfcheer_moment_auth_user";
+
+let momentModalBackdrop = null;
+let selectedMomentFiles = [];
+let selectedMomentTags = new Set();
+
+function getMomentAuth() {
+    try {
+        const token = localStorage.getItem(MOMENT_AUTH_TOKEN_KEY);
+        const userRaw = localStorage.getItem(MOMENT_AUTH_USER_KEY);
+        const user = userRaw ? JSON.parse(userRaw) : null;
+        return token ? { token, user } : null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function setMomentAuth(token, user) {
+    try {
+        localStorage.setItem(MOMENT_AUTH_TOKEN_KEY, token);
+        if (user) {
+            localStorage.setItem(MOMENT_AUTH_USER_KEY, JSON.stringify(user));
+        }
+    } catch (e) {}
+}
+
+function clearMomentAuth() {
+    try {
+        localStorage.removeItem(MOMENT_AUTH_TOKEN_KEY);
+        localStorage.removeItem(MOMENT_AUTH_USER_KEY);
+    } catch (e) {}
+}
+
+function showMomentToast(msg, isSuccess = true) {
+    let toast = document.getElementById("momentToast");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "momentToast";
+        toast.className = "moment-toast";
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add("is-show");
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => {
+        toast.classList.remove("is-show");
+    }, 3200);
+}
+
+function createMomentModal() {
+    if (momentModalBackdrop) return;
+
+    momentModalBackdrop = document.createElement("div");
+    momentModalBackdrop.id = "momentModal";
+    momentModalBackdrop.className = "moment-modal-backdrop";
+    momentModalBackdrop.setAttribute("role", "dialog");
+    momentModalBackdrop.setAttribute("aria-modal", "true");
+
+    const card = document.createElement("div");
+    card.className = "moment-modal-card";
+    card.id = "momentModalCard";
+
+    momentModalBackdrop.appendChild(card);
+    document.body.appendChild(momentModalBackdrop);
+
+    momentModalBackdrop.addEventListener("click", (e) => {
+        if (e.target === momentModalBackdrop) {
+            closeMomentModal();
+        }
+    });
+
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && momentModalBackdrop.classList.contains("is-open")) {
+            closeMomentModal();
+        }
+    });
+}
+
+function closeMomentModal() {
+    if (!momentModalBackdrop) return;
+    momentModalBackdrop.classList.remove("is-open");
+    document.body.classList.remove("lightbox-open");
+    selectedMomentFiles = [];
+    selectedMomentTags.clear();
+}
+
+function openMomentModal() {
+    createMomentModal();
+    renderMomentModalContent();
+    momentModalBackdrop.classList.add("is-open");
+    document.body.classList.add("lightbox-open");
+}
+
+function renderMomentModalContent() {
+    const card = document.getElementById("momentModalCard");
+    if (!card) return;
+    card.innerHTML = "";
+
+    const auth = getMomentAuth();
+
+    if (!auth || !auth.token) {
+        // 渲染未登录 / 认证视图
+        card.innerHTML = `
+            <div class="moment-modal-header">
+                <div class="moment-modal-title-wrap">
+                    <span class="moment-modal-icon">🔐</span>
+                    <h3 class="moment-modal-title">博主身份认证</h3>
+                </div>
+                <button class="moment-modal-close" type="button" aria-label="关闭">&times;</button>
+            </div>
+            <div class="moment-modal-body">
+                <p class="moment-auth-desc">说说发布为博主专属功能。请输入你的 GitHub Personal Access Token，密钥仅保存在当前设备本地浏览器，不上传任何第三方服务器。</p>
+                <div class="moment-form-group">
+                    <label for="momentTokenInput" class="moment-form-label">GitHub Token</label>
+                    <input type="password" id="momentTokenInput" class="moment-input" placeholder="ghp_xxxxxxxxxxxx 或 github_pat_..." autocomplete="off" spellcheck="false">
+                </div>
+                <div class="moment-auth-tips">
+                    <span>💡 需包含 <code>repo</code> 或 <code>issues</code> 权限。</span>
+                    <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=mfcheer-blog-moments" target="_blank" rel="noreferrer" class="moment-auth-link">前往生成 Token ↗</a>
+                </div>
+                <div class="moment-modal-status" id="momentAuthStatus" style="display:none;"></div>
+                <div class="moment-modal-footer">
+                    <div class="moment-modal-btns">
+                        <button type="button" class="moment-btn moment-btn-cancel" id="momentAuthCancelBtn">取消</button>
+                        <button type="button" class="moment-btn moment-btn-primary" id="momentAuthSubmitBtn">验证并登录</button>
+                    </div>
+                </div>
+                <p class="moment-visitor-note">普通访客读者如有互动需求，欢迎前往页面下方「留言区」交流探讨。</p>
+            </div>
+        `;
+
+        const closeBtn = card.querySelector(".moment-modal-close");
+        const cancelBtn = card.querySelector("#momentAuthCancelBtn");
+        const submitBtn = card.querySelector("#momentAuthSubmitBtn");
+        const tokenInput = card.querySelector("#momentTokenInput");
+        const statusEl = card.querySelector("#momentAuthStatus");
+
+        closeBtn.addEventListener("click", closeMomentModal);
+        cancelBtn.addEventListener("click", closeMomentModal);
+
+        submitBtn.addEventListener("click", async () => {
+            const token = (tokenInput.value || "").trim();
+            if (!token) {
+                statusEl.className = "moment-modal-status is-error";
+                statusEl.textContent = "请输入 GitHub Token";
+                statusEl.style.display = "block";
+                tokenInput.focus();
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "正在验证…";
+            statusEl.className = "moment-modal-status is-loading";
+            statusEl.textContent = "正在验证博主身份…";
+            statusEl.style.display = "block";
+
+            try {
+                const res = await fetch("https://api.github.com/user", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Accept": "application/vnd.github+json"
+                    }
+                });
+                if (!res.ok) {
+                    throw new Error(res.status === 401 ? "Token 无效或已过期" : `验证失败 (HTTP ${res.status})`);
+                }
+                const user = await res.json();
+                if (!user || !user.login || user.login.toLowerCase() !== "mfcheer") {
+                    throw new Error(`当前 Token 账号 (@${user ? user.login : "未知"}) 不是博主本人，无权发布说说`);
+                }
+
+                setMomentAuth(token, user);
+                showMomentToast("博主身份认证成功！");
+                renderMomentModalContent();
+            } catch (err) {
+                statusEl.className = "moment-modal-status is-error";
+                statusEl.textContent = err.message || "网络异常，验证失败";
+                statusEl.style.display = "block";
+                submitBtn.disabled = false;
+                submitBtn.textContent = "验证并登录";
+            }
+        });
+
+        setTimeout(() => tokenInput.focus(), 100);
+        return;
+    }
+
+    // 渲染已认证发布视图
+    const user = auth.user || { login: "mfcheer", avatar_url: "avatar.jpg" };
+    card.innerHTML = `
+        <div class="moment-modal-header">
+            <div class="moment-user-badge">
+                <img class="moment-modal-avatar" src="${user.avatar_url || "avatar.jpg"}" alt="${user.login || "mfcheer"}">
+                <div class="moment-user-info">
+                    <span class="moment-user-name">${user.login || "mfcheer"}</span>
+                    <span class="moment-user-tag">博主已认证</span>
+                </div>
+            </div>
+            <button class="moment-modal-close" type="button" aria-label="关闭">&times;</button>
+        </div>
+        <div class="moment-modal-body">
+            <textarea id="momentTextInput" class="moment-textarea" placeholder="记录这一刻的想法、生活随想或灵感..." rows="4"></textarea>
+            
+            <div class="moment-img-picker-wrap">
+                <div class="moment-img-previews" id="momentImgPreviews"></div>
+                <label class="moment-add-img-btn" id="momentAddImgBtn" title="添加配图">
+                    <input type="file" id="momentFileInput" accept="image/*" multiple hidden>
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    <span>添加图片</span>
+                </label>
+            </div>
+
+            <div class="moment-tags-picker">
+                <span class="moment-tags-label">标签：</span>
+                <div class="moment-tag-chips" id="momentTagChips">
+                    <button type="button" class="moment-chip" data-tag="生活">#生活</button>
+                    <button type="button" class="moment-chip" data-tag="技术">#技术</button>
+                    <button type="button" class="moment-chip" data-tag="随笔">#随笔</button>
+                    <button type="button" class="moment-chip" data-tag="折腾">#折腾</button>
+                    <button type="button" class="moment-chip" data-tag="思考">#思考</button>
+                </div>
+            </div>
+
+            <div class="moment-modal-status" id="momentPublishStatus" style="display:none;"></div>
+
+            <div class="moment-modal-footer">
+                <button type="button" class="moment-logout-link" id="momentLogoutBtn" title="退出身份并清除本地保存的 Token">退出登录</button>
+                <div class="moment-modal-btns">
+                    <button type="button" class="moment-btn moment-btn-cancel" id="momentPublishCancelBtn">取消</button>
+                    <button type="button" class="moment-btn moment-btn-primary" id="momentSubmitBtn">发布说说</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    const closeBtn = card.querySelector(".moment-modal-close");
+    const cancelBtn = card.querySelector("#momentPublishCancelBtn");
+    const submitBtn = card.querySelector("#momentSubmitBtn");
+    const textInput = card.querySelector("#momentTextInput");
+    const fileInput = card.querySelector("#momentFileInput");
+    const previewsWrap = card.querySelector("#momentImgPreviews");
+    const statusEl = card.querySelector("#momentPublishStatus");
+    const logoutBtn = card.querySelector("#momentLogoutBtn");
+    const tagChips = card.querySelectorAll(".moment-chip");
+
+    closeBtn.addEventListener("click", closeMomentModal);
+    cancelBtn.addEventListener("click", closeMomentModal);
+
+    logoutBtn.addEventListener("click", () => {
+        if (confirm("确定退出博主身份并清除本地保存的 Token 吗？")) {
+            clearMomentAuth();
+            showMomentToast("已退出博主身份");
+            renderMomentModalContent();
+        }
+    });
+
+    tagChips.forEach((chip) => {
+        chip.addEventListener("click", () => {
+            const tag = chip.dataset.tag;
+            if (selectedMomentTags.has(tag)) {
+                selectedMomentTags.delete(tag);
+                chip.classList.remove("is-selected");
+            } else {
+                selectedMomentTags.add(tag);
+                chip.classList.add("is-selected");
+            }
+        });
+    });
+
+    fileInput.addEventListener("change", async () => {
+        const files = Array.from(fileInput.files || []);
+        if (!files.length) return;
+        for (const file of files) {
+            if (selectedMomentFiles.length >= 9) {
+                alert("最多支持上传 9 张配图");
+                break;
+            }
+            try {
+                const { dataUrl, base64 } = await compressMomentImage(file);
+                selectedMomentFiles.push({ file, dataUrl, base64 });
+            } catch (e) {
+                console.warn("图片解析压缩失败:", e);
+            }
+        }
+        fileInput.value = "";
+        renderSelectedPreviews(previewsWrap);
+    });
+
+    submitBtn.addEventListener("click", async () => {
+        const text = (textInput.value || "").trim();
+        if (!text && !selectedMomentFiles.length) {
+            statusEl.className = "moment-modal-status is-error";
+            statusEl.textContent = "请输入说说内容或选择配图";
+            statusEl.style.display = "block";
+            textInput.focus();
+            return;
+        }
+
+        submitBtn.disabled = true;
+        statusEl.className = "moment-modal-status is-loading";
+        statusEl.style.display = "block";
+
+        try {
+            const uploadedImageUrls = [];
+            for (let i = 0; i < selectedMomentFiles.length; i++) {
+                statusEl.textContent = `正在上传第 ${i + 1}/${selectedMomentFiles.length} 张配图…`;
+                const item = selectedMomentFiles[i];
+                const filename = `m-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+                const uploadedPath = await uploadMomentImage(auth.token, filename, item.base64);
+                uploadedImageUrls.push({ src: uploadedPath, alt: "Image" });
+            }
+
+            statusEl.textContent = "正在发布说说…";
+            let issueBody = text;
+            if (uploadedImageUrls.length) {
+                const imgMarkdown = uploadedImageUrls
+                    .map((img) => `<img src="${img.src}" alt="${img.alt}">`)
+                    .join("\n\n");
+                issueBody = issueBody ? `${issueBody}\n\n${imgMarkdown}` : imgMarkdown;
+            }
+
+            const now = new Date();
+            const dateStr = formatMomentDate(now.toISOString());
+            const labels = ["moment", ...Array.from(selectedMomentTags)];
+
+            await createMomentIssue(auth.token, `✨ 说说 · ${dateStr}`, issueBody, labels);
+
+            // 乐观 UI 呈现：即刻插在说说列表首位
+            const newMoment = {
+                date: dateStr,
+                text: text,
+                name: user.login || "mfcheer",
+                avatar: user.avatar_url || "avatar.jpg",
+                labels: Array.from(selectedMomentTags),
+                images: uploadedImageUrls
+            };
+            momentsAll.unshift(newMoment);
+            writeMomentsCache(momentsAll);
+            renderMomentsState();
+
+            closeMomentModal();
+            showMomentToast("🎉 说说发布成功！已在页面实时展示。");
+        } catch (err) {
+            statusEl.className = "moment-modal-status is-error";
+            statusEl.textContent = err.message || "发布失败，请重试";
+            statusEl.style.display = "block";
+            submitBtn.disabled = false;
+        }
+    });
+
+    setTimeout(() => textInput.focus(), 100);
+}
+
+function compressMomentImage(file, maxDimension = 1600, quality = 0.82) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+                if (width > maxDimension || height > maxDimension) {
+                    if (width > height) {
+                        height = Math.round((height * maxDimension) / width);
+                        width = maxDimension;
+                    } else {
+                        width = Math.round((width * maxDimension) / height);
+                        height = maxDimension;
+                    }
+                }
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+                const dataUrl = canvas.toDataURL("image/jpeg", quality);
+                const base64 = dataUrl.split(",")[1];
+                resolve({ dataUrl, base64 });
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+function renderSelectedPreviews(container) {
+    if (!container) return;
+    container.innerHTML = "";
+    selectedMomentFiles.forEach((item, index) => {
+        const wrap = document.createElement("div");
+        wrap.className = "moment-thumb-item";
+        wrap.innerHTML = `
+            <img class="moment-thumb-img" src="${item.dataUrl}" alt="预览">
+            <button class="moment-thumb-del" type="button" title="删除图片">&times;</button>
+        `;
+        wrap.querySelector(".moment-thumb-del").addEventListener("click", (e) => {
+            e.stopPropagation();
+            selectedMomentFiles.splice(index, 1);
+            renderSelectedPreviews(container);
+        });
+        container.appendChild(wrap);
+    });
+}
+
+async function uploadMomentImage(token, filename, base64Content) {
+    const url = `https://api.github.com/repos/mfcheer/mfcheer.github.io/contents/assets/moments/${filename}`;
+    const res = await fetch(url, {
+        method: "PUT",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/vnd.github+json"
+        },
+        body: JSON.stringify({
+            message: `feat(moments): 上传说说配图 ${filename}`,
+            content: base64Content
+        })
+    });
+    if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || `图片上传失败 (${res.status})`);
+    }
+    return `assets/moments/${filename}`;
+}
+
+async function createMomentIssue(token, title, body, labels) {
+    const url = "https://api.github.com/repos/mfcheer/mfcheer.github.io/issues";
+    const res = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/vnd.github+json"
+        },
+        body: JSON.stringify({
+            title,
+            body,
+            labels
+        })
+    });
+    if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || `创建 Issue 失败 (${res.status})`);
+    }
+    return await res.json();
+}
+
+// 绑定全局写一条按钮点击事件
+document.addEventListener("click", (e) => {
+    const trigger = e.target.closest(".moment-write-trigger, #momentWriteBtn");
+    if (trigger) {
+        e.preventDefault();
+        openMomentModal();
+    }
+});

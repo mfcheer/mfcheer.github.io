@@ -213,7 +213,14 @@ async function main() {
     let list = [];
     if (Array.isArray(issues)) {
         list = issues
-            .filter((it) => it && !it.pull_request)
+            .filter((it) => {
+                if (!it || it.pull_request) return false;
+                // 仅同步博主本人（mfcheer / OWNER）发布的说说，防止陌生人提交 Issue 注入内容
+                const isOwner =
+                    it.author_association === "OWNER" ||
+                    (it.user && it.user.login && it.user.login.toLowerCase() === "mfcheer");
+                return Boolean(isOwner);
+            })
             .map((it) => {
                 const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
                 const { text, images } = parseMomentContent(rawContent, it.title);

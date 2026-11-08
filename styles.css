@@ -2747,3 +2747,468 @@ html[data-theme="dark"] .post-nav-card:hover {
 section[id] {
     scroll-margin-top: 84px;
 }
+
+button.activity-badge {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+}
+
+/* ============================================================
+   MOMENT PUBLISH MODAL (说说发布与博主认证弹窗)
+   ============================================================ */
+.moment-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0.22s ease;
+}
+
+.moment-modal-backdrop.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.moment-modal-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: var(--shadow-hover);
+    overflow: hidden;
+    transform: scale(0.96) translateY(8px);
+    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.moment-modal-backdrop.is-open .moment-modal-card {
+    transform: scale(1) translateY(0);
+}
+
+.moment-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid var(--line-subtle);
+}
+
+.moment-modal-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.moment-modal-icon {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.moment-modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.moment-modal-close {
+    background: var(--surface-subtle);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.moment-modal-close:hover {
+    background: var(--line);
+    color: var(--text);
+}
+
+.moment-modal-body {
+    padding: 20px 22px 22px;
+}
+
+/* 认证视图 */
+.moment-auth-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.moment-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.moment-form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.moment-input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-family: inherit;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.moment-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.moment-auth-tips {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.moment-auth-tips code {
+    background: var(--surface-subtle);
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.moment-auth-link {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.moment-auth-link:hover {
+    text-decoration: underline;
+}
+
+.moment-visitor-note {
+    font-size: 11.5px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+}
+
+/* 发布视图 */
+.moment-user-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.moment-modal-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    object-fit: cover;
+}
+
+.moment-user-info {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.moment-user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.moment-user-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    font-weight: 500;
+}
+
+.moment-textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.6;
+    font-family: inherit;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    margin-bottom: 12px;
+}
+
+.moment-textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+/* 配图选择与预览区 */
+.moment-img-picker-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.moment-img-previews {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.moment-thumb-item {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--surface-subtle);
+}
+
+.moment-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.moment-thumb-del {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.moment-thumb-del:hover {
+    background: #e03131;
+}
+
+.moment-add-img-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 12px;
+    border-radius: 8px;
+    border: 1px dashed var(--line);
+    background: var(--surface-subtle);
+    color: var(--text-secondary);
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.moment-add-img-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-bg);
+}
+
+/* 标签胶囊区 */
+.moment-tags-picker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.moment-tags-label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.moment-tag-chips {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.moment-chip {
+    font-size: 11.5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface-subtle);
+    color: var(--muted);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+.moment-chip:hover {
+    border-color: rgba(0, 113, 227, 0.4);
+    color: var(--accent);
+}
+
+.moment-chip.is-selected {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+}
+
+/* 提示状态 */
+.moment-modal-status {
+    font-size: 12.5px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+}
+
+.moment-modal-status.is-error {
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.25);
+    color: #ff3b30;
+}
+
+.moment-modal-status.is-loading {
+    background: var(--accent-bg);
+    border: 1px solid rgba(0, 113, 227, 0.2);
+    color: var(--accent);
+}
+
+/* 底部操作区 */
+.moment-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 4px;
+}
+
+.moment-logout-link {
+    font-size: 12px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: 4px 0;
+}
+
+.moment-logout-link:hover {
+    color: #ff3b30;
+}
+
+.moment-modal-btns {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.moment-btn {
+    font-size: 13px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface-subtle);
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    transition: all 0.18s ease;
+}
+
+.moment-btn-cancel:hover {
+    background: var(--line);
+}
+
+.moment-btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+}
+
+.moment-btn-primary:hover:not(:disabled) {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.moment-btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 顶部轻提示 Toast */
+.moment-toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    z-index: 10000;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-hover);
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.moment-toast.is-show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
