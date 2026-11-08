@@ -25,21 +25,6 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="alternate" type="application/atom+xml" title="mfcheer 的文章" href="/atom.xml">
     <link rel="stylesheet" href="/styles.css?v={{CSS_VERSION}}">
-    <style>
-        .blog-list-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-        .blog-list-tools .bloglist-sub { margin: 0; }
-        .blog-search input { box-sizing: border-box; width: 210px; max-width: 100%; padding: 7px 11px; border: 1px solid var(--muted); border-radius: 8px; background: transparent; color: var(--text); font: inherit; font-size: 13px; }
-        .blog-search input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-        .blog-search-status { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
-        .blog-search-status:empty { display: none; }
-        .card-bloglist [hidden] { display: none; }
-        .blog-years { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; font-size: 13px; }
-        .blog-years span { color: var(--muted); margin-right: 2px; }
-        .blog-years a { padding: 5px 11px; border: 1px solid var(--line); border-radius: 999px; color: var(--text-secondary); text-decoration: none; }
-        .blog-years a:hover { color: var(--accent); border-color: var(--accent); }
-        .blog-years a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-        .post-year { scroll-margin-top: 20px; }
-    </style>
 </head>
 <body>
     <button class="float-top-btn" id="floatTopBtn" type="button" title="回到顶部" aria-label="回到顶部">
@@ -79,11 +64,23 @@
                 </div>
                 <div class="blog-list-tools">
                     <p class="bloglist-sub">共 {{POST_COUNT}} 篇 · 多写于学生时代的算法与技术探索，原汁保留。</p>
-                    <div class="blog-search">
-                        <input id="blogSearch" type="search" placeholder="搜索文章" aria-label="搜索文章标题、摘要或标签" autocomplete="off">
+                    <div class="blog-search-wrap">
+                        <div class="blog-search">
+                            <svg class="blog-search-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input id="blogSearch" type="text" placeholder="搜索文章 (按 / 聚焦)" aria-label="搜索文章标题、摘要或标签" autocomplete="off" spellcheck="false">
+                            <button id="blogSearchClear" class="blog-search-clear" type="button" aria-label="清空搜索" title="清空搜索 (Esc)" hidden>
+                                <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <p class="blog-search-status" id="blogSearchStatus" role="status" aria-live="polite"></p>
+                <div class="blog-search-status" id="blogSearchStatus" role="status" aria-live="polite"></div>
                 <nav class="blog-years" aria-label="按年份跳转">
                     <span>跳转至</span>
                     {{YEAR_LINKS}}
@@ -99,35 +96,134 @@
     </div>
 
     <script src="/script.js?v={{JS_VERSION}}"></script>
-    <script>
+<script>
         (() => {
             const input = document.getElementById('blogSearch');
+            const clearBtn = document.getElementById('blogSearchClear');
             const status = document.getElementById('blogSearchStatus');
-            const groups = [...document.querySelectorAll('.post-group')].map(group => ({
+            if (!input || !status) return;
+
+            const escapeHtml = (str) =>
+                String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+            const highlightText = (text, query) => {
+                if (!query) return escapeHtml(text);
+                const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${escaped})`, 'gi');
+                const parts = text.split(regex);
+                return parts
+                    .map((part) =>
+                        part.toLocaleLowerCase() === query.toLocaleLowerCase()
+                            ? `<mark class="search-highlight">${escapeHtml(part)}</mark>`
+                            : escapeHtml(part)
+                    )
+                    .join('');
+            };
+
+            const groups = [...document.querySelectorAll('.post-group')].map((group) => ({
                 group,
                 year: group.previousElementSibling,
                 yearLink: document.querySelector(`.blog-years a[href="#${group.previousElementSibling.id}"]`),
-                items: [...group.querySelectorAll('.post-item')].map(item => ({
-                    element: item,
-                    text: item.textContent.toLocaleLowerCase()
-                }))
+                items: [...group.querySelectorAll('.post-item')].map((item) => {
+                    const titleEl = item.querySelector('.post-item-title');
+                    const summaryEl = item.querySelector('.post-item-summary');
+                    const rawTitle = titleEl ? titleEl.textContent : '';
+                    const rawSummary = summaryEl ? summaryEl.textContent : '';
+                    return {
+                        element: item,
+                        titleEl,
+                        summaryEl,
+                        rawTitle,
+                        rawSummary,
+                        text: item.textContent.toLocaleLowerCase()
+                    };
+                })
             }));
-            input.addEventListener('input', () => {
-                const query = input.value.trim().toLocaleLowerCase();
+
+            const doSearch = () => {
+                const query = input.value.trim();
+                const queryLower = query.toLocaleLowerCase();
+                if (clearBtn) {
+                    clearBtn.hidden = !query;
+                }
+
                 let matches = 0;
                 groups.forEach(({ group, year, yearLink, items }) => {
                     let groupMatches = 0;
-                    items.forEach(({ element, text }) => {
-                        const visible = !query || text.includes(query);
+                    items.forEach(({ element, titleEl, summaryEl, rawTitle, rawSummary, text }) => {
+                        const visible = !queryLower || text.includes(queryLower);
                         element.hidden = !visible;
-                        if (visible) groupMatches++;
+                        if (visible) {
+                            groupMatches++;
+                            if (query) {
+                                if (titleEl) titleEl.innerHTML = highlightText(rawTitle, query);
+                                if (summaryEl) summaryEl.innerHTML = highlightText(rawSummary, query);
+                            } else {
+                                if (titleEl) titleEl.textContent = rawTitle;
+                                if (summaryEl) summaryEl.textContent = rawSummary;
+                            }
+                        } else {
+                            if (titleEl) titleEl.textContent = rawTitle;
+                            if (summaryEl) summaryEl.textContent = rawSummary;
+                        }
                     });
                     group.hidden = groupMatches === 0;
                     if (year && year.classList.contains('post-year')) year.hidden = groupMatches === 0;
                     if (yearLink) yearLink.hidden = groupMatches === 0;
                     matches += groupMatches;
                 });
-                status.textContent = query ? (matches ? `找到 ${matches} 篇文章` : '没有找到相关文章，请换个关键词。') : '';
+
+                if (query) {
+                    if (matches > 0) {
+                        status.innerHTML = `找到 <strong>${matches}</strong> 篇文章`;
+                    } else {
+                        status.innerHTML = `
+                            <div class="blog-search-empty">
+                                <span>未找到与「<strong>${escapeHtml(query)}</strong>」相关的文章</span>
+                                <button type="button" class="blog-search-reset-btn" id="blogSearchReset">清空搜索</button>
+                            </div>
+                        `;
+                        const resetBtn = document.getElementById('blogSearchReset');
+                        if (resetBtn) {
+                            resetBtn.addEventListener('click', () => {
+                                input.value = '';
+                                doSearch();
+                                input.focus();
+                            });
+                        }
+                    }
+                } else {
+                    status.innerHTML = '';
+                }
+            };
+
+            input.addEventListener('input', doSearch);
+
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    input.value = '';
+                    doSearch();
+                    input.focus();
+                });
+            }
+
+            // 快捷键支持：按 Esc 清空或失焦；按 / 或 Cmd+K 聚焦搜索框
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && document.activeElement === input) {
+                    if (input.value) {
+                        input.value = '';
+                        doSearch();
+                    } else {
+                        input.blur();
+                    }
+                } else if (
+                    (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) && !document.activeElement.isContentEditable) ||
+                    ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k')
+                ) {
+                    e.preventDefault();
+                    input.focus();
+                    input.select();
+                }
             });
         })();
     </script>
