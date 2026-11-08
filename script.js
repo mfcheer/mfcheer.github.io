@@ -123,6 +123,107 @@ loadGitHubChart();
     if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 })();
 
+// 全局图片点击放大预览（Lightbox），支持文章正文与说说配图
+let siteLightbox = null;
+let siteLightboxImg = null;
+let siteLightboxCaption = null;
+let siteLastActiveElement = null;
+
+function closeLightbox() {
+    if (!siteLightbox || !siteLightbox.classList.contains('is-open')) return;
+    siteLightbox.classList.remove('is-open');
+    document.body.classList.remove('lightbox-open');
+    if (siteLastActiveElement && typeof siteLastActiveElement.focus === 'function') {
+        siteLastActiveElement.focus();
+    }
+}
+
+function createLightbox() {
+    if (siteLightbox) return;
+    siteLightbox = document.createElement('div');
+    siteLightbox.id = 'siteLightbox';
+    siteLightbox.className = 'post-lightbox';
+    siteLightbox.setAttribute('role', 'dialog');
+    siteLightbox.setAttribute('aria-modal', 'true');
+    siteLightbox.setAttribute('aria-label', '图片预览');
+    siteLightbox.setAttribute('tabindex', '-1');
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'post-lightbox-close';
+    closeBtn.setAttribute('title', '关闭预览 (Esc)');
+    closeBtn.setAttribute('aria-label', '关闭预览 (Esc)');
+    closeBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+
+    siteLightboxImg = document.createElement('img');
+    siteLightboxImg.className = 'post-lightbox-img';
+    siteLightboxImg.alt = '';
+
+    siteLightboxCaption = document.createElement('div');
+    siteLightboxCaption.className = 'post-lightbox-caption';
+
+    siteLightbox.append(closeBtn, siteLightboxImg, siteLightboxCaption);
+    document.body.appendChild(siteLightbox);
+
+    siteLightbox.addEventListener('click', () => {
+        closeLightbox();
+    });
+
+    closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeLightbox();
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && siteLightbox.classList.contains('is-open')) {
+            closeLightbox();
+        }
+    });
+}
+
+function openLightbox(img) {
+    createLightbox();
+    siteLastActiveElement = img;
+    siteLightboxImg.src = img.currentSrc || img.src;
+    const caption = (img.alt || '').trim();
+    if (caption && caption !== '这里写图片描述' && caption !== '说说配图' && caption !== 'Image') {
+        siteLightboxCaption.textContent = caption;
+        siteLightboxCaption.style.display = 'block';
+    } else {
+        siteLightboxCaption.textContent = '';
+        siteLightboxCaption.style.display = 'none';
+    }
+    document.body.classList.add('lightbox-open');
+    siteLightbox.classList.add('is-open');
+    siteLightbox.focus();
+}
+
+function bindZoomableImage(img) {
+    if (!img) return;
+    img.classList.add('zoomable-img');
+    const altText = (img.alt || '').trim();
+    const hasMeaningfulAlt = altText && altText !== '这里写图片描述' && altText !== '说说配图' && altText !== 'Image';
+    img.setAttribute('title', hasMeaningfulAlt ? `${altText}（点击放大）` : '点击放大图片');
+    img.setAttribute('tabindex', '0');
+    img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', hasMeaningfulAlt ? `放大图片：${altText}` : '点击放大图片');
+
+    img.addEventListener('click', (e) => {
+        const parentLink = img.closest('a');
+        if (parentLink) {
+            e.preventDefault();
+        }
+        openLightbox(img);
+    });
+
+    img.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openLightbox(img);
+        }
+    });
+}
+
 // 文章页增强：代码块加复制按钮/语言标签 + TOC 滚动高亮 + 阅读进度条（仅 .post-body 存在时生效）
 (function () {
     const postBody = document.querySelector('.post-body');
@@ -236,104 +337,7 @@ loadGitHubChart();
 
     // 图片点击放大预览（Lightbox）
     const postImages = postBody.querySelectorAll("img");
-    if (postImages.length) {
-        let lightbox = null;
-        let lightboxImg = null;
-        let lightboxCaption = null;
-        let lastActiveElement = null;
-
-        const closeLightbox = () => {
-            if (!lightbox || !lightbox.classList.contains("is-open")) return;
-            lightbox.classList.remove("is-open");
-            document.body.classList.remove("lightbox-open");
-            if (lastActiveElement && typeof lastActiveElement.focus === "function") {
-                lastActiveElement.focus();
-            }
-        };
-
-        const createLightbox = () => {
-            if (lightbox) return;
-            lightbox = document.createElement("div");
-            lightbox.id = "postLightbox";
-            lightbox.className = "post-lightbox";
-            lightbox.setAttribute("role", "dialog");
-            lightbox.setAttribute("aria-modal", "true");
-            lightbox.setAttribute("aria-label", "图片预览");
-            lightbox.setAttribute("tabindex", "-1");
-
-            const closeBtn = document.createElement("button");
-            closeBtn.type = "button";
-            closeBtn.className = "post-lightbox-close";
-            closeBtn.setAttribute("title", "关闭预览 (Esc)");
-            closeBtn.setAttribute("aria-label", "关闭预览 (Esc)");
-            closeBtn.innerHTML = "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" stroke=\"currentColor\" stroke-width=\"2.2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"></line><line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"></line></svg>";
-
-            lightboxImg = document.createElement("img");
-            lightboxImg.className = "post-lightbox-img";
-            lightboxImg.alt = "";
-
-            lightboxCaption = document.createElement("div");
-            lightboxCaption.className = "post-lightbox-caption";
-
-            lightbox.append(closeBtn, lightboxImg, lightboxCaption);
-            document.body.appendChild(lightbox);
-
-            lightbox.addEventListener("click", () => {
-                closeLightbox();
-            });
-
-            closeBtn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                closeLightbox();
-            });
-
-            window.addEventListener("keydown", (e) => {
-                if (e.key === "Escape" && lightbox.classList.contains("is-open")) {
-                    closeLightbox();
-                }
-            });
-        };
-
-        const openLightbox = (img) => {
-            createLightbox();
-            lastActiveElement = img;
-            lightboxImg.src = img.currentSrc || img.src;
-            const caption = (img.alt || "").trim();
-            if (caption && caption !== "这里写图片描述") {
-                lightboxCaption.textContent = caption;
-                lightboxCaption.style.display = "block";
-            } else {
-                lightboxCaption.textContent = "";
-                lightboxCaption.style.display = "none";
-            }
-            document.body.classList.add("lightbox-open");
-            lightbox.classList.add("is-open");
-            lightbox.focus();
-        };
-
-        postImages.forEach((img) => {
-            img.classList.add("zoomable-img");
-            img.setAttribute("title", img.alt ? `${img.alt}（点击放大）` : "点击放大图片");
-            img.setAttribute("tabindex", "0");
-            img.setAttribute("role", "button");
-            img.setAttribute("aria-label", img.alt ? `放大图片：${img.alt}` : "点击放大图片");
-
-            img.addEventListener("click", (e) => {
-                const parentLink = img.closest("a");
-                if (parentLink) {
-                    e.preventDefault();
-                }
-                openLightbox(img);
-            });
-
-            img.addEventListener("keydown", (e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    openLightbox(img);
-                }
-            });
-        });
-    }
+    postImages.forEach(bindZoomableImage);
 })();
 
 // 全局/文章页悬浮回到顶部按钮（滚动超过阈值淡入，点击平滑滚回顶部）
@@ -533,6 +537,78 @@ const MOMENTS_ETAG_KEY = 'momentsEtag';
 const MOMENTS_TIME_KEY = 'momentsTime';
 const MOMENTS_TTL = 30 * 1000; // 仅 30 秒内直接用缓存；过期后带 ETag 条件请求重新验证（304 不计入 API 限流，近乎实时）
 
+/**
+ * 解析说说内容：
+ * 1. 自动过滤 Issue 模板自带的表单标记（如 ### 想说的话）
+ * 2. 提取并分离图片（支持 HTML <img> 标签、Markdown ![](url) 语法、独立附件链接）
+ * 3. 返回纯文本内容 text 与图片附件数组 images [{ src, alt }]
+ */
+function parseMomentContent(raw, fallbackTitle = '') {
+    if (!raw) return { text: '', images: [] };
+    let clean = raw.replace(/^#{1,4}\s*想说的话\s*[\r\n]*/gm, '').trim();
+
+    const images = [];
+    const seenSrcs = new Set();
+    const addImage = (src, alt = '') => {
+        const trimmedSrc = (src || '').trim();
+        if (!trimmedSrc || !/^https?:\/\//i.test(trimmedSrc)) return;
+        if (!seenSrcs.has(trimmedSrc)) {
+            seenSrcs.add(trimmedSrc);
+            images.push({
+                src: trimmedSrc,
+                alt: (alt || '').trim()
+            });
+        }
+    };
+
+    // 1. 匹配 HTML img 标签
+    clean = clean.replace(/<img\b([^>]*?)\/?>/gi, (_, attrs) => {
+        const srcMatch = attrs.match(/src=["'](https?:\/\/[^"'\s]+)["']/i);
+        const altMatch = attrs.match(/alt=["']([^"'*]*)["']/i);
+        if (srcMatch) {
+            addImage(srcMatch[1], altMatch ? altMatch[1] : '');
+            return '';
+        }
+        return '';
+    });
+
+    // 2. 匹配 Markdown 图片语法: ![alt](url)
+    clean = clean.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s\)]+)\)/gi, (_, alt, src) => {
+        addImage(src, alt);
+        return '';
+    });
+
+    // 3. 匹配单独成行的 GitHub 附件链接
+    clean = clean.replace(/^(https?:\/\/(?:github\.com\/user-attachments\/assets\/|user-images\.githubusercontent\.com\/)[^\s]+)$/gmi, (_, src) => {
+        addImage(src, '');
+        return '';
+    });
+
+    // 4. 清理多余空行与首尾空白
+    clean = clean.replace(/\n{3,}/g, '\n\n').trim();
+
+    // 5. 若正文完全为图片，且有自定义标题（非系统模板标题），可用标题作为说说文本兜底
+    if (!clean && (!images.length || (fallbackTitle && fallbackTitle !== '✨ 说说'))) {
+        if (fallbackTitle && fallbackTitle !== '✨ 说说') {
+            clean = fallbackTitle.trim();
+        }
+    }
+
+    return { text: clean, images };
+}
+
+function normalizeMomentItem(it) {
+    if (!it) return null;
+    if (Array.isArray(it.images)) return it;
+    const raw = typeof it.text === 'string' ? it.text : '';
+    const parsed = parseMomentContent(raw);
+    return {
+        ...it,
+        text: parsed.text,
+        images: parsed.images
+    };
+}
+
 function formatMomentDate(isoString) {
     try {
         return new Intl.DateTimeFormat('zh-CN', {
@@ -653,40 +729,85 @@ function renderMomentsState(state = 'ok') {
         date.textContent = m.date;
         head.append(date);
 
-        const text = document.createElement('p');
-        text.className = 'moment-text';
-        // 正文中的 URL 自动转为可点击链接；仅用 createElement/textContent，防 XSS
-        const URL_RE = /(https?:\/\/[^\s]+)/g;
-        const TRAILING_PUNCT_RE = /[.,;:!?)\]}'"\u3001\u3002\uFF0C\uFF1F\uFF01\uFF1B\uFF1A\uFF09\u3011\u300B\u201D\u2019]+$/;
-        let cursor = 0;
-        let match;
-        while ((match = URL_RE.exec(m.text)) !== null) {
-            let url = match[0];
-            const punctMatch = url.match(TRAILING_PUNCT_RE);
-            const punct = punctMatch ? punctMatch[0] : '';
-            if (punct) {
-                url = url.slice(0, -punct.length);
+        item.append(head);
+
+        // 兼容处理：若条目缺少 images 字段，尝试即时从 text 解析提取
+        let momentText = m.text || '';
+        let momentImages = Array.isArray(m.images) ? m.images : [];
+        if ((!m.images || !m.images.length) && momentText) {
+            const parsed = parseMomentContent(momentText);
+            if (parsed.images.length || parsed.text !== momentText) {
+                momentText = parsed.text;
+                momentImages = parsed.images;
             }
-            if (match.index > cursor) {
-                text.append(document.createTextNode(m.text.slice(cursor, match.index)));
-            }
-            const link = document.createElement('a');
-            link.href = url;
-            link.target = '_blank';
-            link.rel = 'noreferrer';
-            link.textContent = url;
-            text.append(link);
-            if (punct) {
-                text.append(document.createTextNode(punct));
-            }
-            cursor = match.index + match[0].length;
         }
-        if (cursor === 0) {
-            text.textContent = m.text; // 无 URL，直接整段赋值
-        } else if (cursor < m.text.length) {
-            text.append(document.createTextNode(m.text.slice(cursor)));
+
+        if (momentText) {
+            const text = document.createElement('p');
+            text.className = 'moment-text';
+            // 正文中的 URL 自动转为可点击链接；仅用 createElement/textContent，防 XSS
+            const URL_RE = /(https?:\/\/[^\s]+)/g;
+            const TRAILING_PUNCT_RE = /[.,;:!?)\]}'"\u3001\u3002\uFF0C\uFF1F\uFF01\uFF1B\uFF1A\uFF09\u3011\u300B\u201D\u2019]+$/;
+            let cursor = 0;
+            let match;
+            while ((match = URL_RE.exec(momentText)) !== null) {
+                let url = match[0];
+                const punctMatch = url.match(TRAILING_PUNCT_RE);
+                const punct = punctMatch ? punctMatch[0] : '';
+                if (punct) {
+                    url = url.slice(0, -punct.length);
+                }
+                if (match.index > cursor) {
+                    text.append(document.createTextNode(momentText.slice(cursor, match.index)));
+                }
+                const link = document.createElement('a');
+                link.href = url;
+                link.target = '_blank';
+                link.rel = 'noreferrer';
+                link.textContent = url;
+                text.append(link);
+                if (punct) {
+                    text.append(document.createTextNode(punct));
+                }
+                cursor = match.index + match[0].length;
+            }
+            if (cursor === 0) {
+                text.textContent = momentText; // 无 URL，直接整段赋值
+            } else if (cursor < momentText.length) {
+                text.append(document.createTextNode(momentText.slice(cursor)));
+            }
+            item.append(text);
         }
-        item.append(head, text);
+
+        if (momentImages && momentImages.length) {
+            const gallery = document.createElement('div');
+            gallery.className = 'moment-gallery';
+            gallery.dataset.count = Math.min(momentImages.length, 9);
+
+            momentImages.forEach((imgObj) => {
+                const imgWrap = document.createElement('div');
+                imgWrap.className = 'moment-img-wrap';
+
+                const img = document.createElement('img');
+                img.className = 'moment-img zoomable-img';
+                img.src = imgObj.src;
+                img.alt = imgObj.alt || '说说配图';
+                img.loading = 'lazy';
+                img.referrerPolicy = 'no-referrer';
+
+                img.addEventListener('error', () => {
+                    imgWrap.style.display = 'none';
+                });
+
+                bindZoomableImage(img);
+
+                imgWrap.append(img);
+                gallery.append(imgWrap);
+            });
+
+            item.append(gallery);
+        }
+
         listEl.append(item);
     });
 }
@@ -703,7 +824,7 @@ function readMomentsCache() {
             localStorage.removeItem(MOMENTS_TIME_KEY);
             return null;
         }
-        return list;
+        return list.map(normalizeMomentItem).filter(Boolean);
     } catch (e) {
         return null;
     }
@@ -752,17 +873,22 @@ async function loadMoments() {
             const issues = await res.json();
             const list = (Array.isArray(issues) ? issues : [])
                 .filter((it) => it && !it.pull_request) // Issues API 会混入 PR，需排除
-                .map((it) => ({
-                    date: formatMomentDate(it.created_at),
-                    text: ((it.body || '').trim() || (it.title || '')).trim(),
-                    name: it.user && it.user.login,
-                    avatar: it.user && it.user.avatar_url,
-                    // 标签用于前端筛选；排除发布模板自带的系统标签 moment
-                    labels: (Array.isArray(it.labels) ? it.labels : [])
-                        .map((l) => l && l.name)
-                        .filter((n) => typeof n === 'string' && n && n !== 'moment')
-                }))
-                .filter((m) => m.text);
+                .map((it) => {
+                    const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
+                    const { text, images } = parseMomentContent(rawContent, it.title);
+                    return {
+                        date: formatMomentDate(it.created_at),
+                        text,
+                        images,
+                        name: it.user && it.user.login,
+                        avatar: it.user && it.user.avatar_url,
+                        // 标签用于前端筛选；排除发布模板自带的系统标签 moment
+                        labels: (Array.isArray(it.labels) ? it.labels : [])
+                            .map((l) => l && l.name)
+                            .filter((n) => typeof n === 'string' && n && n !== 'moment')
+                    };
+                })
+                .filter((m) => m.text || (m.images && m.images.length));
             momentsAll = list;
             renderMomentsState();
             writeMomentsCache(list, res.headers.get('ETag') || undefined);
