@@ -1296,23 +1296,12 @@ function renderMomentModalContent() {
                 <div class="moment-modal-status" id="momentAuthStatus" style="display:none;"></div>
 
                 <div class="moment-manual-token-section">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-                        <button type="button" class="moment-manual-token-toggle" id="momentManualTokenToggle">或使用 Token 备用验证 ▾</button>
-                        <button type="button" class="moment-manual-token-toggle" id="momentOAuthConfigToggle" style="text-decoration:none; opacity:0.75;" title="配置 OAuth Client ID 或代理地址">OAuth 设置 ⚙️</button>
-                    </div>
-
-                    <div id="momentManualTokenWrap" style="display:none; margin-top:10px;">
-                        <div class="moment-form-group">
-                            <label for="momentTokenInput" class="moment-form-label">GitHub Personal Access Token</label>
-                            <input type="password" id="momentTokenInput" class="moment-input" placeholder="ghp_xxxxxxxxxxxx 或 github_pat_..." autocomplete="off" spellcheck="false">
-                        </div>
-                        <div class="moment-auth-tips">
-                            <span>💡 需包含 <code>repo</code> 权限。</span>
-                            <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=mfcheer-blog-moments" target="_blank" rel="noreferrer" class="moment-auth-link">前往生成 Token ↗</a>
-                        </div>
-                        <div class="moment-modal-btns" style="margin-top:12px; justify-content:flex-end;">
-                            <button type="button" class="moment-btn moment-btn-primary" id="momentAuthSubmitBtn">验证并登录</button>
-                        </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                        <a href="https://github.com/mfcheer/mfcheer.github.io/issues/new?template=moment.yml" target="_blank" rel="noreferrer" class="moment-manual-token-toggle" id="momentIssueFallbackLink" style="display:inline-flex; align-items:center; gap:4px; margin:0; text-decoration:underline;">
+                            <span>或直接前往 GitHub 提 Issue 发布</span>
+                            <span>↗</span>
+                        </a>
+                        <button type="button" class="moment-manual-token-toggle" id="momentOAuthConfigToggle" style="text-decoration:none; opacity:0.75; margin:0;" title="配置 OAuth Client ID 或代理地址">OAuth 设置 ⚙️</button>
                     </div>
                 </div>
 
@@ -1322,21 +1311,17 @@ function renderMomentModalContent() {
 
         const closeBtn = card.querySelector(".moment-modal-close");
         const oauthBtn = card.querySelector("#momentGithubOAuthBtn");
-        const tokenToggleBtn = card.querySelector("#momentManualTokenToggle");
         const oauthConfigBtn = card.querySelector("#momentOAuthConfigToggle");
-        const tokenWrap = card.querySelector("#momentManualTokenWrap");
-        const submitBtn = card.querySelector("#momentAuthSubmitBtn");
-        const tokenInput = card.querySelector("#momentTokenInput");
+        const issueFallbackLink = card.querySelector("#momentIssueFallbackLink");
         const statusEl = card.querySelector("#momentAuthStatus");
 
         closeBtn.addEventListener("click", closeMomentModal);
 
-        tokenToggleBtn.addEventListener("click", () => {
-            const isHidden = tokenWrap.style.display === "none";
-            tokenWrap.style.display = isHidden ? "block" : "none";
-            tokenToggleBtn.textContent = isHidden ? "收起 Token 验证 ▴" : "或使用 Token 备用验证 ▾";
-            if (isHidden) tokenInput.focus();
-        });
+        if (issueFallbackLink) {
+            issueFallbackLink.addEventListener("click", () => {
+                closeMomentModal();
+            });
+        }
 
         oauthConfigBtn.addEventListener("click", () => {
             const config = getOAuthConfig();
@@ -1357,8 +1342,8 @@ function renderMomentModalContent() {
                 const inputId = prompt(
                     "【初次使用 GitHub 授权登录】\n" +
                     "请填入你的 GitHub OAuth App Client ID（只需填一次，保存在当前设备）：\n\n" +
-                    "💡 如未创建，可点取消并点击下方的「或使用 Token 备用验证」直接登录；\n" +
-                    "也可前往 GitHub 开发者设置 1 分钟免费创建 OAuth App。"
+                    "💡 如未配置，可点取消并点击「直接前往 GitHub 提 Issue 发布」；\n" +
+                    "也可配置 Client ID 与 Worker 代理体验全自动一键授权。"
                 );
                 if (!inputId || !inputId.trim()) {
                     return;
@@ -1371,49 +1356,6 @@ function renderMomentModalContent() {
             const redirectUri = window.location.origin + window.location.pathname;
             const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(config.clientId)}&scope=public_repo&redirect_uri=${encodeURIComponent(redirectUri)}`;
             window.location.href = authUrl;
-        });
-
-        submitBtn.addEventListener("click", async () => {
-            const token = (tokenInput.value || "").trim();
-            if (!token) {
-                statusEl.className = "moment-modal-status is-error";
-                statusEl.textContent = "请输入 GitHub Token";
-                statusEl.style.display = "block";
-                tokenInput.focus();
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = "正在验证…";
-            statusEl.className = "moment-modal-status is-loading";
-            statusEl.textContent = "正在验证博主身份…";
-            statusEl.style.display = "block";
-
-            try {
-                const res = await fetch("https://api.github.com/user", {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Accept": "application/vnd.github+json"
-                    }
-                });
-                if (!res.ok) {
-                    throw new Error(res.status === 401 ? "Token 无效或已过期" : `验证失败 (HTTP ${res.status})`);
-                }
-                const user = await res.json();
-                if (!user || !user.login || user.login.toLowerCase() !== "mfcheer") {
-                    throw new Error(`当前 Token 账号 (@${user ? user.login : "未知"}) 不是博主本人，无权发布说说`);
-                }
-
-                setMomentAuth(token, user);
-                showMomentToast("博主身份认证成功！");
-                renderMomentModalContent();
-            } catch (err) {
-                statusEl.className = "moment-modal-status is-error";
-                statusEl.textContent = err.message || "网络异常，验证失败";
-                statusEl.style.display = "block";
-                submitBtn.disabled = false;
-                submitBtn.textContent = "验证并登录";
-            }
         });
 
         return;
