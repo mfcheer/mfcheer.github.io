@@ -815,11 +815,18 @@ function readMomentsCache() {
     try {
         const raw = localStorage.getItem(MOMENTS_CACHE_KEY);
         const list = raw ? JSON.parse(raw) : null;
-        // 兼容旧版缓存：旧条目缺少 name 字段（无头像/昵称），视为无效，
-        // 同时清除配套的 ETag/时间戳，避免 If-None-Match 命中 304 后永远沿用旧格式
+        // 兼容旧版缓存：旧条目缺少 name 字段（无头像/昵称），视为无效
         if (!Array.isArray(list) || list.some((m) => !m || typeof m.name !== 'string')) {
             localStorage.removeItem(MOMENTS_CACHE_KEY);
-            localStorage.removeItem(MOMENTS_ETAG_KEY);
+            localStorage.removeItem(MOMENTS_TIME_KEY);
+            return null;
+        }
+        // 如果旧缓存里的配图仍是未本地化的 github 远程链接，清除缓存强制拉取同源静态 moments.json
+        const hasLegacyRemoteImg = list.some((m) =>
+            Array.isArray(m.images) && m.images.some((img) => img && img.src && img.src.includes('github.com/user-attachments'))
+        );
+        if (hasLegacyRemoteImg) {
+            localStorage.removeItem(MOMENTS_CACHE_KEY);
             localStorage.removeItem(MOMENTS_TIME_KEY);
             return null;
         }

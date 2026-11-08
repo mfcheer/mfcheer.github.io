@@ -2,7 +2,7 @@
 
 /**
  * sync-moments.mjs
- * 从 GitHub Issues 同步说说数据并保存为静态文件 data/moments.json
+ * 从 GitHub Issues 同步说说数据、自动下载并本地化配图，保存为纯静态文件 data/moments.json
  * 
  * 运行方式：
  *   node scripts/sync-moments.mjs
@@ -14,10 +14,12 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import crypto from 'node:crypto';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const MOMENTS_FILE = path.join(ROOT, 'data', 'moments.json');
+const MOMENTS_ASSETS_DIR = path.join(ROOT, 'assets', 'moments');
 
 const REPO = 'mfcheer/mfcheer.github.io';
 const API_URL = `https://api.github.com/repos/${REPO}/issues?state=open&per_page=100&sort=created&direction=desc`;
@@ -98,6 +100,89 @@ function parseMomentContent(raw, fallbackTitle = '') {
     return { text: clean, images };
 }
 
+/**
+ * 将远程配图下载到仓库本地 assets/moments/ 目录下，实现国内同源极速访问
+ */
+async function downloadAndLocalizeImage(src) {
+    if (!src || !/^https?:\/\//i.test(src)) {
+        return src; // 已经是本地相对路径，直接复用
+    }
+
+    try {
+        await fs.mkdir(MOMENTS_ASSETS_DIR, { recursive: true });
+
+        // 提取或生成稳定的文件名
+        let filenameBase = '';
+        const ghMatch = src.match(/user-attachments\/assets\/([0-9a-fA-F-]+)/);
+        if (ghMatch) {
+            filenameBase = ghMatch[1].toLowerCase();
+        } else {
+            filenameBase = crypto.createHash('md5').update(src).digest('hex').slice(0, 16);
+        }
+
+        // 检查本地是否已有已下载的对应文件
+        const existingFiles = await fs.readdir(MOMENTS_ASSETS_DIR).catch(() => []);
+        const matched = existingFiles.find((f) => f.startsWith(filenameBase + '.'));
+        if (matched) {
+            const stat = await fs.stat(path.join(MOMENTS_ASSETS_DIR, matched)).catch(() => null);
+            if (stat && stat.size > 0) {
+                console.log(`[Cache Hit] 配图已存在: assets/moments/${matched}`);
+                return `assets/moments/${matched}`;
+            }
+        }
+
+        console.log(`[Downloading] 正在下载说说配图: ${src}`);
+        const res = await fetch(src, {
+            redirect: 'follow',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+            }
+        });
+
+        if (!res.ok) {
+            console.warn(`下载图片失败 (HTTP ${res.status}): ${src}`);
+            return src; // 降级返回原 URL
+        }
+
+        const contentType = res.headers.get('content-type') || '';
+        let ext = '.jpg';
+        if (contentType.includes('png')) ext = '.png';
+        else if (contentType.includes('webp')) ext = '.webp';
+        else if (contentType.includes('gif')) ext = '.gif';
+        else if (contentType.includes('svg')) ext = '.svg';
+        else if (contentType.includes('jpeg')) ext = '.jpg';
+        else {
+            const urlPath = new URL(src).pathname;
+            const extMatch = urlPath.match(/\.(jpe?g|png|webp|gif|svg)$/i);
+            if (extMatch) ext = '.' + extMatch[1].toLowerCase();
+        }
+
+        const filename = `${filenameBase}${ext}`;
+        const targetPath = path.join(MOMENTS_ASSETS_DIR, filename);
+
+        const arrayBuffer = await res.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        await fs.writeFile(targetPath, buffer);
+        console.log(`[Saved] 配图已本地化: assets/moments/${filename} (${(buffer.length / 1024).toFixed(1)} KB)`);
+
+        return `assets/moments/${filename}`;
+    } catch (err) {
+        console.warn(`下载配图异常: ${src}`, err.message);
+        return src; // 降级返回原 URL
+    }
+}
+
+async function localizeAllMoments(list) {
+    for (const m of list) {
+        if (m.images && m.images.length) {
+            for (const img of m.images) {
+                img.src = await downloadAndLocalizeImage(img.src);
+            }
+        }
+    }
+    return list;
+}
+
 async function main() {
     const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
     const headers = {
@@ -109,46 +194,58 @@ async function main() {
     }
 
     console.log(`正在从 GitHub 拉取说说数据: ${API_URL}`);
-    const res = await fetch(API_URL, { headers });
-
-    if (!res.ok) {
-        if (res.status === 403) {
-            console.warn('GitHub API 触发匿名限流 (403 Rate Limited)');
+    let issues = null;
+    try {
+        const res = await fetch(API_URL, { headers });
+        if (res.ok) {
+            issues = await res.json();
         } else {
-            console.warn(`请求失败: HTTP ${res.status}`);
+            if (res.status === 403) {
+                console.warn('GitHub API 触发匿名限流 (403 Rate Limited)');
+            } else {
+                console.warn(`请求失败: HTTP ${res.status}`);
+            }
         }
-        // 如果本地已存在 moments.json，保留现有数据
+    } catch (e) {
+        console.warn('拉取 GitHub Issues 网络异常:', e.message);
+    }
+
+    let list = [];
+    if (Array.isArray(issues)) {
+        list = issues
+            .filter((it) => it && !it.pull_request)
+            .map((it) => {
+                const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
+                const { text, images } = parseMomentContent(rawContent, it.title);
+                return {
+                    date: formatMomentDate(it.created_at),
+                    text,
+                    name: it.user && it.user.login,
+                    avatar: it.user && it.user.avatar_url,
+                    labels: (Array.isArray(it.labels) ? it.labels : [])
+                        .map((l) => l && l.name)
+                        .filter((n) => typeof n === 'string' && n && n !== 'moment'),
+                    images
+                };
+            })
+            .filter((m) => m.text || (m.images && m.images.length));
+    } else {
+        // 读取现有 moments.json
         try {
-            await fs.access(MOMENTS_FILE);
-            console.log(`保留现有 ${MOMENTS_FILE} 静态数据。`);
-            return;
+            const raw = await fs.readFile(MOMENTS_FILE, 'utf-8');
+            list = JSON.parse(raw);
+            console.log(`使用现有 ${MOMENTS_FILE} 中的数据继续本地化。`);
         } catch {
             throw new Error(`无法获取说说数据，且未找到现有 ${MOMENTS_FILE}`);
         }
     }
 
-    const issues = await res.json();
-    const list = (Array.isArray(issues) ? issues : [])
-        .filter((it) => it && !it.pull_request)
-        .map((it) => {
-            const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
-            const { text, images } = parseMomentContent(rawContent, it.title);
-            return {
-                date: formatMomentDate(it.created_at),
-                text,
-                name: it.user && it.user.login,
-                avatar: it.user && it.user.avatar_url,
-                labels: (Array.isArray(it.labels) ? it.labels : [])
-                    .map((l) => l && l.name)
-                    .filter((n) => typeof n === 'string' && n && n !== 'moment'),
-                images
-            };
-        })
-        .filter((m) => m.text || (m.images && m.images.length));
+    // 自动下载所有外部配图到本地 assets/moments/
+    list = await localizeAllMoments(list);
 
     await fs.mkdir(path.dirname(MOMENTS_FILE), { recursive: true });
     await fs.writeFile(MOMENTS_FILE, JSON.stringify(list, null, 2) + '\n', 'utf-8');
-    console.log(`成功同步 ${list.length} 条说说至 ${MOMENTS_FILE}`);
+    console.log(`成功同步并本地化 ${list.length} 条说说至 ${MOMENTS_FILE}`);
 }
 
 main().catch((err) => {

@@ -38,7 +38,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add blog atom.xml sitemap.xml data/blog-index.json data/moments.json
+          git add blog atom.xml sitemap.xml data/blog-index.json data/moments.json assets/moments/
           if git diff --cached --quiet; then
             echo "没有需要回写的生成物"
           else
