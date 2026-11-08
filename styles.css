@@ -1045,11 +1045,28 @@ html[data-theme="dark"] .media-stars {
 /* ============================================================
    MOMENTS (说说)
    ============================================================ */
-.card-moments h2 {
+.card-moments h2,
+.card-momentslist h2 {
     font-size: 18px;
     font-weight: 600;
     letter-spacing: -0.015em;
     color: var(--text);
+}
+
+/* 说说独立列表页 */
+.card-momentslist {
+    padding: 26px 24px;
+}
+
+.moments-list-tools {
+    margin: 6px 0 14px;
+}
+
+.momentslist-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.6;
 }
 
 .head-title-wrap {
@@ -1454,7 +1471,8 @@ html[data-theme="dark"] .media-stars {
     .card-projects h2,
     .card-activity h2,
     .card-contact h2,
-    .card-moments h2 {
+    .card-moments h2,
+    .card-momentslist h2 {
         font-size: 17px;
     }
 
@@ -2628,7 +2646,8 @@ html[data-theme="dark"] .post-nav-card:hover {
         font-size: 22px;
     }
 
-    .card-bloglist {
+    .card-bloglist,
+    .card-momentslist {
         padding: 22px 18px;
     }
 

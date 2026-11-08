@@ -29,7 +29,7 @@ const TPL_DIR = path.join(ROOT, 'templates');
 import anchor from 'markdown-it-anchor';
 import taskLists from 'markdown-it-task-lists';
 
-const VERSIONS = { css: '1.3.17', js: '1.3.13' };
+const VERSIONS = { css: '1.3.18', js: '1.3.14' };
 
 // ---------- 工具 ----------
 const esc = (s) =>
@@ -361,6 +361,7 @@ fs.writeFileSync(
 const sitemapUrls = [
     { loc: `${SITE}/`, lastmod: today, priority: '1.0' },
     { loc: `${SITE}/blog/`, lastmod: today, priority: '0.9' },
+    { loc: `${SITE}/moments/`, lastmod: today, priority: '0.9' },
     ...posts.map((p) => ({ loc: `${SITE}/blog/${p.slug}/`, lastmod: p.atomDate.slice(0, 10), priority: '0.8' }))
 ];
 fs.writeFileSync(

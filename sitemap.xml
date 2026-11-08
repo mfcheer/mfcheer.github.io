@@ -13,6 +13,12 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://mfcheer.github.io/moments/</loc>
+    <lastmod>2026-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://mfcheer.github.io/blog/legacy-article-030e869a99/</loc>
     <lastmod>2017-12-31</lastmod>
     <changefreq>weekly</changefreq>

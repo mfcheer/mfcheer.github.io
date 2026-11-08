@@ -529,7 +529,7 @@ async function loadBarcaSchedule() {
 loadBarcaSchedule();
 
 // Moments (说说) — 静态数据驱动（由 GitHub Actions 自动从 Issues 同步至 data/moments.json）
-const MOMENTS_STATIC_URL = 'data/moments.json?v=1.3.13';
+const MOMENTS_STATIC_URL = '/data/moments.json?v=1.3.14';
 const MOMENTS_API_URL =
     'https://api.github.com/repos/mfcheer/mfcheer.github.io/issues?state=open&per_page=30&sort=created&direction=desc';
 const MOMENTS_CACHE_KEY = 'momentsData_v2';
@@ -682,6 +682,12 @@ function renderMomentsState(state = 'ok') {
         return;
     }
 
+    // 首页「查看更多」按钮状态联动（无数据或出错时隐藏）
+    const moreLink = document.querySelector('.card-moments .moment-all');
+    if (moreLink) {
+        moreLink.style.display = (!momentsAll.length || state === 'error') ? 'none' : '';
+    }
+
     if (!momentsAll.length) {
         const empty = document.createElement('p');
         empty.className = 'moment-empty';
@@ -714,7 +720,13 @@ function renderMomentsState(state = 'ok') {
         return;
     }
 
-    list.forEach((m, itemIndex) => {
+    // 若容器指定了 data-limit（如首页限制显示最近 10 条），在非筛选状态下截取前 N 条
+    const limit = parseInt(listEl.dataset.limit, 10);
+    const displayList = (!Number.isNaN(limit) && limit > 0 && !momentsFilter)
+        ? list.slice(0, limit)
+        : list;
+
+    displayList.forEach((m, itemIndex) => {
         const item = document.createElement('div');
         item.className = 'moment-item';
 
@@ -952,7 +964,7 @@ async function renderMediaStats() {
     const statsEl = document.getElementById('mediaStats');
     if (!statsEl) return;
     try {
-        const res = await fetch('data/media-stats.json', { cache: 'no-cache' });
+        const res = await fetch('/data/media-stats.json', { cache: 'no-cache' });
         if (!res.ok) return;
         const stats = await res.json();
         const parts = [];
