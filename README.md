@@ -31,6 +31,34 @@ Hexo 式写作体验：`_posts/` 里写 Markdown，push 后 GitHub Actions（`.g
 - **模板**：`templates/post.html` 与 `templates/blog-list.html`；页面里的 CSS/JS 版本号用 `{{CSS_VERSION}}` / `{{JS_VERSION}}` 占位符，由 `scripts/build-posts.mjs` 顶部的 `VERSIONS` 统一维护；
 - **文章页评论**：giscus 直接挂载（`data-mapping=pathname`，每篇文章一个 Discussion）。
 
+## 💬 说说模块（Moments）
+
+采用 GitHub Issues 作为轻量级 CMS，支持标签筛选与多图九宫格自适应排版。
+
+- **页面展示**：
+  - **首页说说板块**：限制仅展示最近 10 条，支持同源极速呈现；
+  - **独立说说列表页**（`/moments/`）：展示全量说说，去除搜索与归档导航，专注纯粹时间流记录；
+  - **配图自动本地化**：同步脚本自动将 GitHub 附件下载至 `assets/moments/` 同源托管并无损压缩（体积缩减约 90%），解决移动端及国内网络海外附件加载缓慢甚至破损的问题。
+- **安全与白名单防注入**：
+  - 同步脚本 `scripts/sync-moments.mjs` 与工作流增加作者身份强校验：仅拉取博主本人（`user.login === "mfcheer"` 且身份为 `OWNER`）的 Issue；
+  - 陌生访客或恶意机器人创建的带 `moment` 标签的 Issue 会在构建与前端呈现时被静默丢弃，彻底杜绝数据注入。
+- **站内发布与 GitHub OAuth 一键授权登录**：
+  - 点击「写一条」呼出站内弹窗，支持使用 GitHub 账号一键授权登录（免密），登录后可直接在站内选图、输入内容并发布（零延迟乐观更新）；
+  - 同时提供「或直接前往 GitHub 提 Issue 发布 ↗」直达链接，兼容传统方式；
+  - **默认 OAuth 配置**：
+    - **GitHub OAuth App**：`mfcheer-moments`
+    - **Client ID**：`Ov23liE0fZ4oEnXsPCjR`
+    - **Authorization callback URL**：`https://mfcheer.github.io/`
+    - **Cloudflare Worker 代理服务地址**：`https://mfcheer-moments.mfcheer-meng.workers.dev/`
+    - **Worker 脚本源码**：[`scripts/oauth-gatekeeper-worker.js`](scripts/oauth-gatekeeper-worker.js)
+  - **Cloudflare Worker 部署与配置方法**：
+    1. 登录 [Cloudflare 控制台](https://dash.cloudflare.com/) -> 点击左侧 **Workers 和 Pages** -> 点击 **创建** -> **创建 Worker**（命名为 `mfcheer-moments`）-> 点击 **部署**；
+    2. 点击 **编辑代码**，清空后将仓库中 `scripts/oauth-gatekeeper-worker.js` 的全部代码粘贴进去，点击 **部署**；
+    3. 进入 Worker 详情页的 **设置 (Settings) -> 变量和机密 (Variables and Secrets)**，在环境变量中添加：
+       - `CLIENT_ID`：填入 GitHub OAuth App 的 Client ID（`Ov23liE0fZ4oEnXsPCjR`）
+       - `CLIENT_SECRET`：填入在 GitHub OAuth App 页面生成的 Client Secret 密钥字符串
+    4. 点击 **保存并部署 (Save and deploy)**，代理服务即生效完成。
+
 ## 📀 书影音数据维护（AI 智能体必读）
 
 首页「书影音」板块的数据**不是自动同步的**，由 AI 智能体在用户提出「更新书影音」时手动抓取并提交。无定时任务、无后端，全靠维护流程。数据分两层：

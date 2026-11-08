@@ -1094,8 +1094,8 @@ const GITHUB_OAUTH_PROXY_KEY = "mfcheer_github_oauth_proxy";
 
 function getOAuthConfig() {
     return {
-        clientId: localStorage.getItem(GITHUB_OAUTH_CLIENT_ID_KEY) || "Ov23liXXXXXXXXXX",
-        proxy: localStorage.getItem(GITHUB_OAUTH_PROXY_KEY) || "https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"
+        clientId: localStorage.getItem(GITHUB_OAUTH_CLIENT_ID_KEY) || "Ov23liE0fZ4oEnXsPCjR",
+        proxy: localStorage.getItem(GITHUB_OAUTH_PROXY_KEY) || "https://mfcheer-moments.mfcheer-meng.workers.dev"
     };
 }
 
