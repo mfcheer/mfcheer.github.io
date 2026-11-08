@@ -4,11 +4,11 @@
  * 缓存策略：
  * 1. 同源核心资源（HTML/CSS/JS/本地图片/JSON）：Stale-While-Revalidate，0ms 极速呈现，后台静默拉取更新。
  * 2. 外部媒体（ESPN队徽、GitHub贡献图、GitHub头像）：Stale-While-Revalidate，专属 IMAGE_CACHE。
- * 3. 外部动态接口（GitHub Issues 说说、ESPN 赛程）：Network-First，带超时竞态（3.5s），断网退回缓存。
+ * 3. 动态数据接口（GitHub Issues、说说静态数据 data/moments.json、ESPN 赛程）：Network-First，带超时竞态（2.5s），断网退回缓存。
  * 4. 实时交互（Giscus 留言系统）：Network-Only，不干扰正常使用。
  */
 
-const CACHE_VERSION = 'v1.5.1';
+const CACHE_VERSION = 'v1.5.2';
 const STATIC_CACHE = `mfcheer-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `mfcheer-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `mfcheer-images-${CACHE_VERSION}`;
@@ -17,8 +17,8 @@ const PRECACHE_ASSETS = [
     './',
     './index.html',
     './blog/index.html',
-    './styles.css?v=1.3.16',
-    './script.js?v=1.3.12',
+    './styles.css?v=1.3.17',
+    './script.js?v=1.3.13',
     './manifest.json',
     './favicon.ico',
     './favicon-32x32.png',
@@ -30,7 +30,6 @@ const PRECACHE_ASSETS = [
     './assets/projects/tripnote.png',
     './data/media-stats.json',
     './data/blog-index.json',
-    './data/moments.json',
     './404.html'
 ];
 
@@ -84,14 +83,15 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // 2. 外部动态接口：Network-First（网络优先，3.5s 超时后退回缓存）
-    // 包含：GitHub Issues（说说）与 ESPN 赛程
+    // 2. 外部动态接口与同源动态数据：Network-First（网络优先，2.5s 超时后退回缓存）
+    // 包含：GitHub Issues、ESPN 赛程、以及同源的说说静态数据 data/moments.json
     const isDynamicApi =
         (url.hostname === 'api.github.com' && url.pathname.includes('/issues')) ||
-        (url.hostname.includes('espn.com') && url.pathname.includes('/schedule'));
+        (url.hostname.includes('espn.com') && url.pathname.includes('/schedule')) ||
+        (url.origin === self.location.origin && url.pathname.includes('/data/moments.json'));
 
     if (isDynamicApi) {
-        event.respondWith(networkFirstWithTimeout(request, DYNAMIC_CACHE, 3500));
+        event.respondWith(networkFirstWithTimeout(request, DYNAMIC_CACHE, 2500));
         return;
     }
 
@@ -142,7 +142,7 @@ self.addEventListener('fetch', (event) => {
 /**
  * Network-First 策略（带超时限制与缓存降级）
  */
-async function networkFirstWithTimeout(request, cacheName, timeoutMs = 3500) {
+async function networkFirstWithTimeout(request, cacheName, timeoutMs = 2500) {
     const cache = await caches.open(cacheName);
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -178,8 +178,6 @@ async function networkFirstWithTimeout(request, cacheName, timeoutMs = 3500) {
  * Stale-While-Revalidate 策略（缓存优先，后台同步更新）
  * 注意：match 不使用 ignoreSearch——URL 里的 ?v= 版本参数参与匹配，
  * 文件更新 bump query 后旧缓存自然失配，浏览器转而走网络拿新版。
- * （此前 ignoreSearch:true 导致版本参数被忽略、旧 CSS/JS 永不过期，
- *  与网络优先的 HTML 组合成新旧错配，曾造成弹层加载即显示且无法关闭）
  */
 async function staleWhileRevalidate(request, cacheName) {
     const cache = await caches.open(cacheName);
@@ -194,5 +192,9 @@ async function staleWhileRevalidate(request, cacheName) {
         })
         .catch(() => null);
 
-    return cachedResponse || (await fetchPromise);
+    const res = cachedResponse || (await fetchPromise);
+    if (!res) {
+        return fetch(request).catch(() => new Response('', { status: 404, statusText: 'Not Found' }));
+    }
+    return res;
 }

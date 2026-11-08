@@ -529,11 +529,11 @@ async function loadBarcaSchedule() {
 loadBarcaSchedule();
 
 // Moments (说说) — 静态数据驱动（由 GitHub Actions 自动从 Issues 同步至 data/moments.json）
-const MOMENTS_STATIC_URL = 'data/moments.json';
+const MOMENTS_STATIC_URL = 'data/moments.json?v=1.3.13';
 const MOMENTS_API_URL =
     'https://api.github.com/repos/mfcheer/mfcheer.github.io/issues?state=open&per_page=30&sort=created&direction=desc';
-const MOMENTS_CACHE_KEY = 'momentsData';
-const MOMENTS_TIME_KEY = 'momentsTime';
+const MOMENTS_CACHE_KEY = 'momentsData_v2';
+const MOMENTS_TIME_KEY = 'momentsTime_v2';
 const MOMENTS_TTL = 60 * 1000; // 本地缓存 1 分钟，配合 Service Worker Stale-While-Revalidate 实现 0ms 秒开
 
 /**
@@ -598,13 +598,34 @@ function parseMomentContent(raw, fallbackTitle = '') {
 
 function normalizeMomentItem(it) {
     if (!it) return null;
-    if (Array.isArray(it.images)) return it;
-    const raw = typeof it.text === 'string' ? it.text : '';
-    const parsed = parseMomentContent(raw);
+    let images = Array.isArray(it.images) ? it.images : [];
+    let text = typeof it.text === 'string' ? it.text : '';
+    if (!images.length && text) {
+        const parsed = parseMomentContent(text);
+        if (parsed.images.length || parsed.text !== text) {
+            text = parsed.text;
+            images = parsed.images;
+        }
+    }
+    // 关键保底：自动将任何 GitHub 附件链接重写为本地同源 assets/moments/ 静态路径
+    // 即使手机端读到旧缓存或 API 动态回退结果，也能在国内网络与移动端顺畅秒开
+    images = images.map((img) => {
+        if (!img || !img.src) return null;
+        let src = String(img.src).trim();
+        const ghMatch = src.match(/user-attachments\/assets\/([0-9a-fA-F-]+)/i);
+        if (ghMatch) {
+            src = `assets/moments/${ghMatch[1].toLowerCase()}.jpg`;
+        }
+        return {
+            ...img,
+            src
+        };
+    }).filter(Boolean);
+
     return {
         ...it,
-        text: parsed.text,
-        images: parsed.images
+        text,
+        images
     };
 }
 
@@ -693,7 +714,7 @@ function renderMomentsState(state = 'ok') {
         return;
     }
 
-    list.forEach((m) => {
+    list.forEach((m, itemIndex) => {
         const item = document.createElement('div');
         item.className = 'moment-item';
 
@@ -789,12 +810,26 @@ function renderMomentsState(state = 'ok') {
 
                 const img = document.createElement('img');
                 img.className = 'moment-img zoomable-img';
-                img.src = imgObj.src;
+                const rawSrc = (imgObj.src || '').trim();
+                // 确保相对路径能正确解析为站点根相对路径
+                img.src = rawSrc.startsWith('http') || rawSrc.startsWith('/') ? rawSrc : '/' + rawSrc;
                 img.alt = imgObj.alt || '说说配图';
-                img.loading = 'lazy';
+                // 前部说说采用 eager 加载，避免移动端 WebKit 0 盒模型下 lazy 观察器不触发的问题
+                img.loading = itemIndex < 3 ? 'eager' : 'lazy';
+                img.decoding = 'async';
                 img.referrerPolicy = 'no-referrer';
 
+                let retried = false;
                 img.addEventListener('error', () => {
+                    // 若本地静态路径加载失败，回退尝试原始 GitHub 附件 URL
+                    if (!retried && rawSrc && !rawSrc.startsWith('http')) {
+                        const ghUuid = rawSrc.match(/([0-9a-fA-F-]+)\.\w+$/);
+                        if (ghUuid) {
+                            retried = true;
+                            img.src = `https://github.com/user-attachments/assets/${ghUuid[1]}`;
+                            return;
+                        }
+                    }
                     imgWrap.style.display = 'none';
                 });
 
@@ -813,19 +848,14 @@ function renderMomentsState(state = 'ok') {
 
 function readMomentsCache() {
     try {
+        // 清理旧版本缓存键，避免残留脏数据影响
+        localStorage.removeItem('momentsData');
+        localStorage.removeItem('momentsTime');
+        localStorage.removeItem('momentsEtag');
+
         const raw = localStorage.getItem(MOMENTS_CACHE_KEY);
         const list = raw ? JSON.parse(raw) : null;
-        // 兼容旧版缓存：旧条目缺少 name 字段（无头像/昵称），视为无效
         if (!Array.isArray(list) || list.some((m) => !m || typeof m.name !== 'string')) {
-            localStorage.removeItem(MOMENTS_CACHE_KEY);
-            localStorage.removeItem(MOMENTS_TIME_KEY);
-            return null;
-        }
-        // 如果旧缓存里的配图仍是未本地化的 github 远程链接，清除缓存强制拉取同源静态 moments.json
-        const hasLegacyRemoteImg = list.some((m) =>
-            Array.isArray(m.images) && m.images.some((img) => img && img.src && img.src.includes('github.com/user-attachments'))
-        );
-        if (hasLegacyRemoteImg) {
             localStorage.removeItem(MOMENTS_CACHE_KEY);
             localStorage.removeItem(MOMENTS_TIME_KEY);
             return null;

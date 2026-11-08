@@ -1243,6 +1243,8 @@ html[data-theme="dark"] .media-stars {
 
 .moment-gallery[data-count="1"] .moment-img-wrap {
     max-height: 380px;
+    min-height: 120px;
+    min-width: 120px;
     display: inline-flex;
     justify-content: flex-start;
     width: fit-content;
