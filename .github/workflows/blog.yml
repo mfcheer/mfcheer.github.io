@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  issues: read
 
 concurrency:
   group: build-blog
@@ -28,14 +29,19 @@ jobs:
 
       - run: node scripts/build-posts.mjs
 
+      - name: Sync latest moments
+        run: node scripts/sync-moments.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Commit generated pages
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add blog atom.xml sitemap.xml data/blog-index.json
+          git add blog atom.xml sitemap.xml data/blog-index.json data/moments.json
           if git diff --cached --quiet; then
             echo "没有需要回写的生成物"
           else
-            git commit -m "build: 重新生成博客页面 [skip ci]"
+            git commit -m "build: 重新生成博客页面与说说数据 [skip ci]"
             git push
           fi

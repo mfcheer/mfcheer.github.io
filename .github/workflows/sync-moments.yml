@@ -1,0 +1,43 @@
+name: Sync Moments
+
+# 当 Issue 有变动时自动抓取并静态化到 data/moments.json，避免前端直连 GitHub API 遭遇限流
+on:
+  issues:
+    types: [opened, edited, deleted, closed, reopened, labeled, unlabeled]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: sync-moments
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Run sync moments
+        run: node scripts/sync-moments.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push updated moments
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/moments.json
+          if git diff --cached --quiet; then
+            echo "说说数据未发生变动"
+          else
+            git commit -m "chore(moments): 自动同步最新说说数据 [skip ci]"
+            git push
+          fi

@@ -528,14 +528,13 @@ async function loadBarcaSchedule() {
 
 loadBarcaSchedule();
 
-// Moments (说说) — GitHub Issues as CMS
-// 发布方式：在本仓库创建 Issue（正文优先，标题兜底），所有 Open 状态的 Issue 均展示（自动排除 PR）
+// Moments (说说) — 静态数据驱动（由 GitHub Actions 自动从 Issues 同步至 data/moments.json）
+const MOMENTS_STATIC_URL = 'data/moments.json';
 const MOMENTS_API_URL =
-    'https://api.github.com/repos/mfcheer/mfcheer.github.io/issues?state=open&per_page=20&sort=created&direction=desc';
+    'https://api.github.com/repos/mfcheer/mfcheer.github.io/issues?state=open&per_page=30&sort=created&direction=desc';
 const MOMENTS_CACHE_KEY = 'momentsData';
-const MOMENTS_ETAG_KEY = 'momentsEtag';
 const MOMENTS_TIME_KEY = 'momentsTime';
-const MOMENTS_TTL = 30 * 1000; // 仅 30 秒内直接用缓存；过期后带 ETag 条件请求重新验证（304 不计入 API 限流，近乎实时）
+const MOMENTS_TTL = 60 * 1000; // 本地缓存 1 分钟，配合 Service Worker Stale-While-Revalidate 实现 0ms 秒开
 
 /**
  * 解析说说内容：
@@ -648,7 +647,7 @@ function renderMomentsState(state = 'ok') {
     if (state === 'error') {
         const err = document.createElement('p');
         err.className = 'moment-empty';
-        err.textContent = '说说加载失败了（可能是 GitHub 接口限流）';
+        err.textContent = '说说加载失败了，请稍后重试';
         const retry = document.createElement('button');
         retry.type = 'button';
         retry.className = 'moment-retry';
@@ -830,13 +829,10 @@ function readMomentsCache() {
     }
 }
 
-function writeMomentsCache(list, etag) {
+function writeMomentsCache(list) {
     try {
         localStorage.setItem(MOMENTS_CACHE_KEY, JSON.stringify(list));
         localStorage.setItem(MOMENTS_TIME_KEY, String(Date.now()));
-        if (etag) {
-            localStorage.setItem(MOMENTS_ETAG_KEY, etag);
-        }
     } catch (e) {
         // 隐私模式等存储异常时忽略，不影响展示
     }
@@ -854,50 +850,58 @@ async function loadMoments() {
     }
     if (cached) {
         momentsAll = cached;
-        renderMomentsState(); // 先渲染旧数据，请求成功后再更新
+        renderMomentsState(); // 优先展示缓存，后台静默拉取更新
     }
 
     try {
-        const headers = {};
-        const etag = localStorage.getItem(MOMENTS_ETAG_KEY);
-        if (etag) {
-            headers['If-None-Match'] = etag; // 条件请求：304 响应不计入 GitHub API 限流
-        }
-        const res = await fetch(MOMENTS_API_URL, { headers, cache: 'no-store' });
-
-        if (res.status === 304 && cached) {
-            writeMomentsCache(cached, etag);
-            return;
-        }
+        // 1. 优先拉取同源静态 JSON（0 限流风险、国内极速访问、支持 PWA 离线）
+        const res = await fetch(MOMENTS_STATIC_URL, { cache: 'no-cache' });
         if (res.ok) {
-            const issues = await res.json();
-            const list = (Array.isArray(issues) ? issues : [])
-                .filter((it) => it && !it.pull_request) // Issues API 会混入 PR，需排除
-                .map((it) => {
-                    const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
-                    const { text, images } = parseMomentContent(rawContent, it.title);
-                    return {
-                        date: formatMomentDate(it.created_at),
-                        text,
-                        images,
-                        name: it.user && it.user.login,
-                        avatar: it.user && it.user.avatar_url,
-                        // 标签用于前端筛选；排除发布模板自带的系统标签 moment
-                        labels: (Array.isArray(it.labels) ? it.labels : [])
-                            .map((l) => l && l.name)
-                            .filter((n) => typeof n === 'string' && n && n !== 'moment')
-                    };
-                })
-                .filter((m) => m.text || (m.images && m.images.length));
-            momentsAll = list;
-            renderMomentsState();
-            writeMomentsCache(list, res.headers.get('ETag') || undefined);
-            return;
+            const list = await res.json();
+            if (Array.isArray(list)) {
+                momentsAll = list.map(normalizeMomentItem).filter(Boolean);
+                renderMomentsState();
+                writeMomentsCache(momentsAll);
+                return;
+            }
         }
-        // 403 限流或其他错误：保留已渲染的旧缓存；无缓存则显示失败态
     } catch (e) {
-        // 网络异常：保留已渲染的旧缓存；无缓存则显示失败态
+        // 静态文件网络异常时静默降级
     }
+
+    // 2. 降级容灾：若静态文件拉取失败且无本地有效缓存，尝试请求 GitHub Issues API
+    if (!cached || !cached.length) {
+        try {
+            const apiRes = await fetch(MOMENTS_API_URL, { cache: 'no-store' });
+            if (apiRes.ok) {
+                const issues = await apiRes.json();
+                const list = (Array.isArray(issues) ? issues : [])
+                    .filter((it) => it && !it.pull_request)
+                    .map((it) => {
+                        const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
+                        const { text, images } = parseMomentContent(rawContent, it.title);
+                        return {
+                            date: formatMomentDate(it.created_at),
+                            text,
+                            images,
+                            name: it.user && it.user.login,
+                            avatar: it.user && it.user.avatar_url,
+                            labels: (Array.isArray(it.labels) ? it.labels : [])
+                                .map((l) => l && l.name)
+                                .filter((n) => typeof n === 'string' && n && n !== 'moment')
+                        };
+                    })
+                    .filter((m) => m.text || (m.images && m.images.length));
+                momentsAll = list;
+                renderMomentsState();
+                writeMomentsCache(list);
+                return;
+            }
+        } catch (e) {
+            // API 请求亦失败
+        }
+    }
+
     if (!cached) {
         renderMomentsState('error');
     }
