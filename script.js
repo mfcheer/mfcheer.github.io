@@ -744,18 +744,6 @@ function renderMomentsState(state = 'ok') {
             name.textContent = m.name; // 仅用 textContent，防 XSS
             head.append(avatar, name);
         }
-        // 标签胶囊：点击进入筛选（发布模板自带的 moment 标签已在数据层排除）
-        (m.labels || []).forEach((label) => {
-            const tag = document.createElement('button');
-            tag.type = 'button';
-            tag.className = 'moment-tag';
-            tag.textContent = `#${label}`;
-            tag.addEventListener('click', () => {
-                momentsFilter = label;
-                renderMomentsState();
-            });
-            head.append(tag);
-        });
         const date = document.createElement('span');
         date.className = 'moment-date';
         date.textContent = m.date;
@@ -852,6 +840,26 @@ function renderMomentsState(state = 'ok') {
             });
 
             item.append(gallery);
+        }
+
+        // 标签胶囊区：放在正文/配图下方，独立 flex-wrap 排版，点击进入筛选
+        const momentTags = Array.isArray(m.labels) ? m.labels.filter(Boolean) : [];
+        if (momentTags.length) {
+            const tagsWrap = document.createElement('div');
+            tagsWrap.className = 'moment-tags';
+            momentTags.forEach((label) => {
+                const tag = document.createElement('button');
+                tag.type = 'button';
+                tag.className = 'moment-tag';
+                tag.textContent = `#${label}`;
+                tag.title = `筛选 #${label} 的说说`;
+                tag.addEventListener('click', () => {
+                    momentsFilter = label;
+                    renderMomentsState();
+                });
+                tagsWrap.append(tag);
+            });
+            item.append(tagsWrap);
         }
 
         listEl.append(item);
