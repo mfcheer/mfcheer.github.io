@@ -3212,3 +3212,55 @@ button.activity-badge {
     visibility: visible;
     transform: translateX(-50%) translateY(0);
 }
+
+.moment-btn-github {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: 12px;
+    background: #24292f;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.1s ease;
+    margin: 8px 0 14px;
+}
+
+.moment-btn-github:hover {
+    background: #1b1f23;
+}
+
+[data-theme="dark"] .moment-btn-github {
+    background: #2b3137;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .moment-btn-github:hover {
+    background: #32383f;
+}
+
+.moment-gh-icon {
+    flex-shrink: 0;
+}
+
+.moment-manual-token-toggle {
+    display: block;
+    margin: 0 auto 10px;
+    background: none;
+    border: none;
+    font-size: 11.5px;
+    color: var(--muted);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.moment-manual-token-toggle:hover {
+    color: var(--accent);
+}
