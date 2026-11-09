@@ -728,7 +728,8 @@ function recognizeMomentMediaUrl(rawUrl) {
             return {
                 kind: 'music', platform: 'netease', title: '网易云音乐', sub: '单曲 · 内嵌播放器',
                 url: rawUrl,
-                directEmbed: `https://music.163.com/outchain/player?type=2&id=${id}&auto=0&height=86`,
+                // 官方参数组合：外框 86px + 内容 height=66（86 参数会被忽略导致 614px 大播放器被裁剪）
+                directEmbed: `https://music.163.com/outchain/player?type=2&id=${id}&auto=0&height=66`,
                 embedHeight: 86
             };
         }
@@ -736,7 +737,7 @@ function recognizeMomentMediaUrl(rawUrl) {
             return {
                 kind: 'music', platform: 'netease', title: '网易云歌单', sub: '歌单 · 点击展开播放器',
                 url: rawUrl,
-                embed: `https://music.163.com/outchain/player?type=0&id=${id}&auto=0&height=430`,
+                embed: `https://music.163.com/outchain/player?type=0&id=${id}&auto=0&height=330`,
                 tall: true
             };
         }
@@ -744,7 +745,7 @@ function recognizeMomentMediaUrl(rawUrl) {
             return {
                 kind: 'music', platform: 'netease', title: '网易云专辑', sub: '专辑 · 点击展开播放器',
                 url: rawUrl,
-                embed: `https://music.163.com/outchain/player?type=1&id=${id}&auto=0&height=430`,
+                embed: `https://music.163.com/outchain/player?type=1&id=${id}&auto=0&height=330`,
                 tall: true
             };
         }

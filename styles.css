@@ -1339,7 +1339,7 @@ html[data-theme="dark"] .media-stars {
 
 .moment-media-player.is-tall {
     aspect-ratio: auto;
-    height: 430px;
+    height: 450px; /* 官方歌单/专辑外链规格：外框 450px + 内容 height=330 */
 }
 
 .moment-media-player iframe {
