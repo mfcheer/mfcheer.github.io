@@ -1349,7 +1349,9 @@ function syncGiscusTheme(theme) {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker
-            .register('/sw.js') // 绝对路径：文章页在 /blog/<slug>/ 子目录下也能正确注册
+            // updateViaCache:'none'：sw.js 自身绕过 HTTP 缓存。GitHub Pages 给 sw.js 也是 max-age=600，
+            // 默认情况下部署后 10 分钟内浏览器不会检查新 SW，导致新版迟迟不生效。
+            .register('/sw.js', { updateViaCache: 'none' })
             .then((reg) => {
                 reg.onupdatefound = () => {
                     const installingWorker = reg.installing;
@@ -1366,6 +1368,17 @@ if ('serviceWorker' in navigator) {
                 console.warn('[PWA] ServiceWorker 注册失败:', err);
             });
     });
+
+    // 新 SW 接管（skipWaiting + claim）后自动刷新一次，页面立即用上新资源；
+    // 仅在页面本就有 controller 时挂监听，避免首次注册也触发刷新造成死循环。
+    if (navigator.serviceWorker.controller) {
+        let swRefreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (swRefreshing) return;
+            swRefreshing = true;
+            window.location.reload();
+        });
+    }
 }
 
 // ============================================================

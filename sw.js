@@ -8,7 +8,7 @@
  * 4. 实时交互（Giscus 留言系统）：Network-Only，不干扰正常使用。
  */
 
-const CACHE_VERSION = 'v1.5.27';
+const CACHE_VERSION = 'v1.5.28';
 const STATIC_CACHE = `mfcheer-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `mfcheer-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `mfcheer-images-${CACHE_VERSION}`;
@@ -20,7 +20,7 @@ const PRECACHE_ASSETS = [
     './moments/index.html',
     './gallery/index.html',
     './styles.css?v=1.3.27',
-    './script.js?v=1.3.27',
+    './script.js?v=1.3.28',
     './gallery.js?v=1.2.2',
     './manifest.json',
     './favicon.ico',
@@ -117,7 +117,9 @@ self.addEventListener('fetch', (event) => {
         // 页面导航请求（如访问 / 或刷新）
         if (request.mode === 'navigate') {
             event.respondWith(
-                fetch(request)
+                // cache:'no-cache'：强制与源站 revalidate。GitHub Pages 对 HTML 下发 max-age=600，
+                // 默认 fetch 会命中浏览器 HTTP 缓存，导致部署后 10 分钟内普通刷新一直拿到旧页面。
+                fetch(request, { cache: 'no-cache' })
                     .then((networkRes) => {
                         if (networkRes && networkRes.ok) {
                             const copy = networkRes.clone();
