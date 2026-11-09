@@ -90,6 +90,14 @@ function extractImages(raw) {
 }
 
 async function readLocalOrDownload(src) {
+    // 本站绝对 URL → 仓库内相对路径：站内上传的图片在 Issue 创建前已提交进仓库，
+    // 直接读 checkout 的本地文件，避免「Issue 触发同步早于 Pages 部署」导致的 404 竞态
+    try {
+        const u = new URL(src);
+        if (u.hostname === 'mfcheer.github.io' && /^\/assets\//i.test(u.pathname)) {
+            src = decodeURIComponent(u.pathname).slice(1);
+        }
+    } catch { /* 非 URL 字符串，按原逻辑处理 */ }
     // 本地文件路径（seed 导入模式）或仓库内相对路径：直接读文件
     if (/^assets\//i.test(src) || !/^https?:\/\//i.test(src)) {
         const local = path.isAbsolute(src) ? src : path.join(ROOT, src);
