@@ -11,8 +11,10 @@ permissions:
   issues: read
 
 concurrency:
+  # 一条说说会触发多个 Issue 事件（opened + labeled 等），只保留最新实例，
+  # 旧实例的数据会被最新实例的全量重拉覆盖，取消不丢数据
   group: sync-moments
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   sync:
@@ -40,5 +42,11 @@ jobs:
             echo "说说数据与配图未发生变动"
           else
             git commit -m "chore(moments): 自动同步最新说说数据与本地配图 [skip ci]"
-            git push
+            # 站内发布是「传图推 main + 建 Issue」双路并发，push 时远端常被
+            # Build Blog 抢先推进；fetch + rebase 重放本地提交后再推，根治
+            # fetch first rejected。若远端已包含相同数据，rebase 会丢弃空
+            # 提交，推送变成 no-op，同样成功
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
           fi

@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: build-blog
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -43,5 +43,9 @@ jobs:
             echo "没有需要回写的生成物"
           else
             git commit -m "build: 重新生成博客页面与说说数据 [skip ci]"
-            git push
+            # 与 Sync Moments 存在推 main 竞争：fetch + rebase 重放后再推，
+            # 避免远端被同步 workflow 抢先推进导致 fetch first rejected
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
           fi
