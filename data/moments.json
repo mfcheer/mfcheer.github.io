@@ -1,5 +1,24 @@
 [
   {
+    "date": "2026/11/09 17:53",
+    "text": "### 照片\n\n### 相册简介（可选）\n\n_No response_",
+    "name": "mfcheer",
+    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
+    "labels": [
+      "gallery"
+    ],
+    "images": [
+      {
+        "src": "assets/moments/55043154-c137-4efe-8e63-c070f9277330.jpg",
+        "alt": "Image"
+      },
+      {
+        "src": "assets/moments/c4f725bb-8755-4de9-a92c-2315fe9bc410.jpg",
+        "alt": "Image"
+      }
+    ]
+  },
+  {
     "date": "2026/11/09 15:26",
     "text": "国产 AI 和美国的差距真的越来越接近了吗\n会不会像新能源汽车一样，我们一直在提升车的速度、行驶里程、座舱、智驾。结果特斯拉直接会飞了",
     "name": "mfcheer",
