@@ -1917,7 +1917,7 @@ async function uploadMomentImage(token, filename, base64Content, dir = "moments"
             "Accept": "application/vnd.github+json"
         },
         body: JSON.stringify({
-            message: `feat(${dir}): 上传配图 ${filename}`,
+            message: `feat(${dir}): 上传配图 ${filename} [skip ci]`,
             content: base64Content
         })
     });

@@ -134,8 +134,9 @@ async function writeIfChanged(file, content) {
  * 返回 { file, thumb, lqip, w, h, takenAt, bytes }（takenAt = 上传时间）
  */
 async function processImage(src, id, createdAtFallback) {
-    const { buffer } = await readLocalOrDownload(src);
-    if (!buffer) return null;
+    const fetched = await readLocalOrDownload(src);
+    if (!fetched || !fetched.buffer) return null;
+    const { buffer } = fetched;
 
     const isGif = buffer.length > 3 && buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46; // GIF8
     const meta = await sharp(buffer, { animated: isGif }).metadata().catch(() => null);
@@ -288,6 +289,18 @@ async function main() {
     for (const batch of batches) {
         const albumName = batch.album || null; // null = 之后按月份归组
         for (const img of batch.images) {
+            // 保留站内上传的原始配图文件，防止清理逻辑误删原图导致 Issue 图片 404 与重新构建丢失
+            try {
+                const u = new URL(img.src);
+                if (u.hostname === 'mfcheer.github.io' && /^\/assets\/gallery\//i.test(u.pathname)) {
+                    keptSources.add(path.basename(decodeURIComponent(u.pathname)));
+                }
+            } catch {
+                if (/^assets\/gallery\//i.test(img.src)) {
+                    keptSources.add(path.basename(img.src));
+                }
+            }
+
             const id = img.key;
             try {
                 let photo;
@@ -367,10 +380,14 @@ async function main() {
     const changed = await writeIfChanged(GALLERY_FILE, json);
 
     // 清理不再被引用的产物（Issue 删除/关闭后其照片自动下架）
+    // 注意：豁免站内上传的原图（gallery-*），防止并发或重构时误删原始资产
     const existing = await fs.readdir(GALLERY_ASSETS_DIR).catch(() => []);
     let removed = 0;
     for (const f of existing) {
-        if (!keptSources.has(f)) { await fs.rm(path.join(GALLERY_ASSETS_DIR, f)); removed++; }
+        if (!keptSources.has(f) && !/^gallery-\d+/i.test(f)) {
+            await fs.rm(path.join(GALLERY_ASSETS_DIR, f));
+            removed++;
+        }
     }
     if (removed) console.log(`[Cleanup] 清理下架产物 ${removed} 个`);
 
