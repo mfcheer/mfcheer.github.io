@@ -785,9 +785,18 @@ const MOMENT_MEDIA_ICONS = {
     music: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6.2l10-2v11"/><circle cx="6.3" cy="18" r="2.7"/><circle cx="16.3" cy="15.2" r="2.7"/></svg>'
 };
 
+// 触屏设备检测：网易云外链播放器按 UA 出内容，移动端 UA 拿到的是
+// 0 字节空响应（实测），内嵌 iframe 必然空白，只能降级为链接卡片
+const IS_TOUCH_DEVICE = typeof window.matchMedia === 'function'
+    && window.matchMedia('(hover: none)').matches;
+
 // 根据识别结果构建 DOM：单曲类直接内嵌小播放器；视频/歌单为
 // 可点击卡片（有 embed 的原位展开播放器，无 embed 的新窗口打开）
 function buildMomentMediaCard(media) {
+    // 网易云系（单曲/歌单/专辑）在触屏设备上降级为「打开收听」链接卡片
+    if ((media.directEmbed || media.embed) && media.platform === 'netease' && IS_TOUCH_DEVICE) {
+        media = { ...media, sub: '打开收听', directEmbed: undefined, embed: undefined, tall: false };
+    }
     if (media.directEmbed) {
         const wrap = document.createElement('div');
         wrap.className = 'moment-music-embed';
