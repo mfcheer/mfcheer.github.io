@@ -2893,12 +2893,30 @@ section[id] {
     scroll-margin-top: 84px;
 }
 
-button.activity-badge {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
+/* 相册上传按钮（站内发布入口） */
+.gallery-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    color: var(--accent);
     font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.gallery-upload-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.gallery-upload-btn:active {
+    transform: translateY(0);
 }
 
 /* ============================================================

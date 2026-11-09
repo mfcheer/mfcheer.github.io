@@ -154,7 +154,8 @@
 
     const teardownSentinel = () => {
         if (sentinelIO) sentinelIO.disconnect();
-        if (fadeIO) fadeIO.disconnect();
+        // 注意：不能动 fadeIO——最后一批相册刚被 observeFade 挂上观察，
+        // disconnect 会连它们一起取消，导致相册永远停在 opacity:0（盲点）。
         if (sentinel) sentinel.hidden = true;
         sentinel = sentinelIO = null;
     };
@@ -217,6 +218,12 @@
         }
 
         renderNextAlbums();
+
+        // 安全网：无论 IO 环境如何（无头测试、异常渲染循环），
+        // 2 秒后强制显示所有仍未淡入的相册，物理杜绝「占位盲点」。
+        setTimeout(() => {
+            document.querySelectorAll('.gallery-album:not(.g-inview)').forEach((el) => el.classList.add('g-inview'));
+        }, 2000);
     }
 
     // 响应式重排
