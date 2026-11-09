@@ -40,13 +40,19 @@
     const GAP = 6;
 
     function targetHeight(containerW) {
-        if (containerW >= 760) return 240;
-        if (containerW >= 520) return 200;
-        return 140;
+        if (containerW >= 760) return 320;
+        if (containerW >= 520) return 260;
+        return 220;
+    }
+
+    function maxItemsPerRow(containerW) {
+        if (containerW >= 760) return 3;
+        return 2;
     }
 
     function buildRows(photos, containerW) {
         const th = targetHeight(containerW);
+        const maxItems = maxItemsPerRow(containerW);
         const rows = [];
         let row = [];
         let ratioSum = 0;
@@ -54,7 +60,7 @@
             const r = p.ratio || (p.w && p.h ? p.w / p.h : 1.5);
             row.push(p);
             ratioSum += r;
-            if (ratioSum >= containerW / th) {
+            if (ratioSum >= containerW / th || row.length >= maxItems) {
                 rows.push({ photos: row, ratioSum });
                 row = [];
                 ratioSum = 0;
@@ -98,19 +104,25 @@
         for (const rowData of rows) {
             const n = rowData.photos.length;
             const gapTotal = GAP * (n - 1);
-            let rowH = (W - gapTotal) / rowData.ratioSum;
-            // 最后一行（或整行只有一张图）不强行拉满：限制最大行高
-            if (rowData.isLast || n === 1) {
-                rowH = Math.min(rowH, targetHeight(W) * 1.35);
+            const naturalH = (W - gapTotal) / rowData.ratioSum;
+            const th = targetHeight(W);
+
+            // 最后一行（或不足一整行的单图）避免被过度拉伸横向填满，保持自然比例居左
+            const isUnfilled = rowData.isLast && naturalH > th * 1.35;
+            let rowH = isUnfilled ? th : naturalH;
+            if (n === 1 && rowH > th * 1.35) {
+                rowH = th * 1.35;
             }
-            rowH = Math.max(80, Math.round(rowH));
+            rowH = Math.max(100, Math.round(rowH));
 
             const rowEl = document.createElement('div');
             rowEl.className = 'g-row';
             rowEl.style.height = rowH + 'px';
 
             rowData.photos.forEach((p, idx) => {
-                const itemW = Math.floor((W - gapTotal) * (p.ratio / rowData.ratioSum));
+                const itemW = isUnfilled
+                    ? Math.round(rowH * (p.ratio || (p.w && p.h ? p.w / p.h : 1.5)))
+                    : Math.floor((W - gapTotal) * (p.ratio / rowData.ratioSum));
                 const itemEl = document.createElement('button');
                 itemEl.type = 'button';
                 itemEl.className = 'g-item';
