@@ -79,29 +79,18 @@
         return all;
     }
 
-    function renderAlbum(album) {
-        const albumEl = document.createElement('section');
-        albumEl.className = 'gallery-album';
-
-        // 墙面零文字：不渲染相册名/张数，相册信息注入每张照片供 hover 角标与灯箱使用
-        const wall = document.createElement('div');
-        wall.className = 'gallery-wall';
-        wall.dataset.photos = JSON.stringify(album.photos.map((p) => ({ ...p, album: album.title })));
-        albumEl.appendChild(wall);
-
-        return albumEl;
-    }
-
-    function layoutWall(wall) {
+    function layoutWall(wall, append = false) {
         let photos;
         try { photos = JSON.parse(wall.dataset.photos); } catch { return; }
         const W = wall.clientWidth;
         if (!W || !photos.length) return;
 
-        wall.innerHTML = '';
+        const startRow = append ? wall.children.length : 0;
+        if (!append) wall.innerHTML = '';
         const rows = buildRows(photos, W);
+        if (sentinel) sentinel.hidden = visibleRows >= rows.length;
 
-        for (const rowData of rows) {
+        for (const rowData of rows.slice(startRow, visibleRows)) {
             const n = rowData.photos.length;
             const gapTotal = GAP * (n - 1);
             const naturalH = (W - gapTotal) / rowData.ratioSum;
@@ -154,48 +143,22 @@
         }
     }
 
-    // ---------------- 渲染：分批无感加载 ----------------
-    // 每批渲染 ALBUM_BATCH 个相册；滑到接近底部时自动续渲染下一批（哨兵提前 600px 触发），用户无感。
-    // Justified 装箱按相册独立、按顺序贪心填行，前缀稳定，分批渲染不影响已有行的布局。
-
-    const ALBUM_BATCH = 2;
-    let renderedAlbums = 0;
-    let fadeIO = null;      // 相册淡入观察器
-    let sentinel = null;    // 无限加载哨兵（列表容器后的静态元素）
+    // ---------------- 连续照片墙：按完整行分批加载 ----------------
+    // 先合并所有相册再装箱，跨相册和加载批次都不会留下半行空白。
+    const ROW_BATCH = 8;
+    let visibleRows = ROW_BATCH;
+    let sentinel = null;
     let sentinelIO = null;
 
-    const teardownSentinel = () => {
-        if (sentinelIO) sentinelIO.disconnect();
-        // 注意：不能动 fadeIO——最后一批相册刚被 observeFade 挂上观察，
-        // disconnect 会连它们一起取消，导致相册永远停在 opacity:0（盲点）。
-        if (sentinel) sentinel.hidden = true;
-        sentinel = sentinelIO = null;
-    };
-
-    function observeFade(el) {
-        if (fadeIO) fadeIO.observe(el);
-        else el.classList.add('g-inview'); // 无动效环境直接显示
-    }
-
-    const renderNextAlbums = () => {
-        if (sentinel) sentinel.hidden = true; // 先藏哨兵，保证追加的相册都在其之前
-        const batch = albums.slice(renderedAlbums, renderedAlbums + ALBUM_BATCH);
-        for (const album of batch) {
-            const el = renderAlbum(album);
-            listEl.appendChild(el); // 先挂载再布局，layoutWall 依赖 clientWidth
-            el.querySelectorAll('.gallery-wall').forEach(layoutWall);
-            observeFade(el);
-            renderedAlbums++;
-        }
-        if (sentinel && renderedAlbums < albums.length) sentinel.hidden = false;
-        else teardownSentinel();
-    };
-
     function render() {
+        if (sentinelIO) sentinelIO.disconnect();
+        sentinelIO = null;
+        sentinel = document.getElementById('gallerySentinel');
+        if (sentinel) sentinel.hidden = true;
         listEl.innerHTML = '';
-        teardownSentinel();
-        renderedAlbums = 0;
-        if (!albums.length) {
+        visibleRows = ROW_BATCH;
+        const photos = collectAllPhotos();
+        if (!photos.length) {
             listEl.innerHTML =
                 '<div class="gallery-empty">' +
                 '<p>相册还没有照片。</p>' +
@@ -204,38 +167,23 @@
             return;
         }
 
-        // 滚动淡入（尊重系统减少动效设置）
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
-            fadeIO = new IntersectionObserver((entries) => {
-                entries.forEach((en) => {
-                    if (en.isIntersecting) {
-                        en.target.classList.add('g-inview');
-                        fadeIO.unobserve(en.target);
-                    }
-                });
-            }, { rootMargin: '0px 0px -8% 0px' });
+        const wall = document.createElement('div');
+        wall.className = 'gallery-wall';
+        wall.dataset.photos = JSON.stringify(photos);
+        listEl.appendChild(wall);
+        if (sentinel && 'IntersectionObserver' in window) {
+            sentinelIO = new IntersectionObserver((entries) => {
+                if (entries.some((en) => en.isIntersecting) && !sentinel.hidden) {
+                    visibleRows += ROW_BATCH;
+                    layoutWall(wall, true);
+                }
+            }, { rootMargin: '600px 0px' });
+            sentinelIO.observe(sentinel);
         } else {
-            fadeIO = null;
+            // 不支持观察器时全部展示，图片依然由浏览器延迟加载。
+            visibleRows = Infinity;
         }
-
-        if (albums.length > ALBUM_BATCH && 'IntersectionObserver' in window) {
-            sentinel = document.getElementById('gallerySentinel');
-            if (sentinel) {
-                sentinel.hidden = false;
-                sentinelIO = new IntersectionObserver((entries) => {
-                    if (entries.some((en) => en.isIntersecting)) renderNextAlbums();
-                }, { rootMargin: '600px 0px' });
-                sentinelIO.observe(sentinel);
-            }
-        }
-
-        renderNextAlbums();
-
-        // 安全网：无论 IO 环境如何（无头测试、异常渲染循环），
-        // 2 秒后强制显示所有仍未淡入的相册，物理杜绝「占位盲点」。
-        setTimeout(() => {
-            document.querySelectorAll('.gallery-album:not(.g-inview)').forEach((el) => el.classList.add('g-inview'));
-        }, 2000);
+        layoutWall(wall);
     }
 
     // 响应式重排
