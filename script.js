@@ -1361,7 +1361,10 @@ function renderMomentModalContent() {
             }
 
             // 跳转 GitHub 授权
-            const redirectUri = window.location.origin + window.location.pathname;
+            // 固定回调到首页：GitHub OAuth App 注册的回调地址是站点根路径，
+            // 必须精确匹配；回调由首页的 checkOAuthCallback 接住（token 存
+            // localStorage，同源全站共享，/moments/ 发起授权后同样生效）
+            const redirectUri = window.location.origin + "/";
             const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(config.clientId)}&scope=public_repo&redirect_uri=${encodeURIComponent(redirectUri)}`;
             window.location.href = authUrl;
         });
