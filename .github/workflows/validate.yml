@@ -1,0 +1,26 @@
+name: Validate Build Pipeline
+on:
+  pull_request:
+permissions:
+  contents: read
+  issues: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Validate workflow YAML
+        run: |
+          node_modules/.bin/js-yaml .github/workflows/site.yml > /dev/null
+          node_modules/.bin/js-yaml .github/workflows/validate.yml > /dev/null
+      - name: Verify real builds in a temporary copy
+        run: npm run test:build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

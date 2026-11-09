@@ -145,7 +145,7 @@ async function downloadAndLocalizeImage(src) {
 
         if (!res.ok) {
             console.warn(`下载图片失败 (HTTP ${res.status}): ${src}`);
-            return src; // 降级返回原 URL
+            throw new Error(`下载图片失败 HTTP ${res.status}`);
         }
 
         const contentType = res.headers.get('content-type') || '';
@@ -171,6 +171,7 @@ async function downloadAndLocalizeImage(src) {
 
         return `assets/moments/${filename}`;
     } catch (err) {
+        if (process.env.STRICT_BUILD === '1') throw err;
         console.warn(`下载配图异常: ${src}`, err.message);
         return src; // 降级返回原 URL
     }
@@ -198,8 +199,8 @@ async function main() {
     }
 
     console.log(`正在从 GitHub 拉取说说数据: ${API_URL}`);
-    let issues = null;
-    try {
+    let issues = process.env.ISSUES_SNAPSHOT ? JSON.parse(await fs.readFile(process.env.ISSUES_SNAPSHOT, 'utf8')) : null;
+    if (!issues) try {
         // 分页拉取全部（GitHub 单页上限 100 条），说说超过一页时也不丢数据；
         // 任一页失败都抛错 → issues 保持 null → 降级读上次成功生成的全量 JSON，避免静默截断
         const MAX_PAGES = 50; // 安全阀：50 页 × 100 条，防异常循环
@@ -222,6 +223,7 @@ async function main() {
         }
         issues = all;
     } catch (e) {
+        if (process.env.STRICT_BUILD === '1') throw e;
         // HTTP 错误已在上方 warn，这里仅记录网络层异常
         if (!/^HTTP /.test(e.message || '')) {
             console.warn('拉取 GitHub Issues 网络异常:', e.message);

@@ -22,7 +22,7 @@ python3 -m http.server 8000
 
 ## ✍️ 博客模块
 
-Hexo 式写作体验：`_posts/` 里写 Markdown，push 后 GitHub Actions（`.github/workflows/blog.yml`）自动构建静态页并回写 `main`（提交带 `[skip ci]` 防循环）。
+Hexo 式写作体验：`_posts/` 里写 Markdown，push 后统一流程（`.github/workflows/site.yml`）比较输入，只在文章或模板变化时构建静态页；完整站点发布成功后回写 `main`（提交带 `[skip ci]` 防循环）。
 
 - **写作**：在 `_posts/` 新建 `YYYY-MM-DD-slug.md`，front matter 支持 `title` / `date`（建议引号字符串，按北京时间解析）/ `tags` / `summary` / `slug` / `draft: true`（草稿不发布）；
 - **图片**：放 `assets/images/`，正文引用 `/assets/images/xxx.png`；Obsidian 的双中括号图片嵌入与相对路径引用，构建时会自动转换为标准语法；
@@ -65,7 +65,7 @@ Hexo 式写作体验：`_posts/` 里写 Markdown，push 后 GitHub Actions（`.g
 Justified 行式照片墙（Google Photos 同款布局），独立页面 `/gallery/`，首页导航「相册」进入。
 
 - **发布**：在相册页点「上传照片」即可站内完成（GitHub 授权登录 → 选相册/简介 → 多图压缩上传到 `assets/gallery/` → 自动创建带 `gallery` 标签的 Issue，授权成功自动跳回相册页）；也可建一个带 `gallery` 标签的 Issue（[📷 相册模板](.github/ISSUE_TEMPLATE/gallery.yml)），标题写相册名（如 `2026.10 川西`），照片直接拖进正文，可一次拖任意多张；
-- **流水线**：Issue 变动触发 `.github/workflows/gallery.yml` → `scripts/build-gallery.mjs` 下载附件 → sharp 压缩为全图 1600w（q82）+ 墙面缩略图 480w + LQIP 微缩占位 → 记录上传时间（Issue 创建时间，东八区呈现）→ 生成 `data/gallery.json`（含宽高比，前端运行时 Justified 装箱）→ 回写 `main`（`[skip ci]` 防循环）；
+- **流水线**：Issue 变动触发 `.github/workflows/site.yml` → `scripts/build-gallery.mjs` 下载附件 → sharp 压缩为全图 1600w（q82）+ 墙面缩略图 480w + LQIP 微缩占位 → 记录上传时间（Issue 创建时间，东八区呈现）→ 生成 `data/gallery.json`（含宽高比，前端运行时 Justified 装箱）→ 回写 `main`（`[skip ci]` 防循环）；
 - **分组**：Issue 标题即相册名；标题为空时按上传月份自动分组；相册内按上传时间倒序（最新上传在最前）；
 - **大数据量兼容**：同步脚本自动翻页拉取全部 Issue（单页上限 100 条，上限 50 页），任一页失败直接终止同步（不静默截断）；前端相册分批渲染（每批 2 个相册），滚动接近底部时无感续渲染（提前 600px 预加载），灯箱始终可浏览全量照片（含未渲染相册）；
 - **展示**：相册 = 名称 + 张数 + Justified 照片墙（保持极简）；轻打磨细节——相册滚动淡入（`prefers-reduced-motion` 时关闭）、照片 hover 显示上传日期角标（仅支持 hover 的设备）。Issue 的「相册简介（可选）」字段会存入 `gallery.json`（`description`），当前版本不在页面展示，供后续使用；
@@ -124,10 +124,40 @@ node scripts/build-posts.mjs
 
 ## ⚠️ 缓存更新规则（AI 智能体必读）
 
-本站主体（首页、文章页等）都是**纯静态直出**——`git push` 即部署（博客页由 Actions 预构建后入库，见「博客模块」一节）。但手机端（PWA）有一个 Service Worker（`sw.js`）缓存层，更新 CSS/JS 时必须三处同步，否则手机用户会拿到新旧错配的页面（历史事故：弹层加载即显示且无法关闭）：
+本站主体（首页、文章页等）都是**纯静态直出**——统一 Actions 流程组装完整站点后部署（见下面「分模块构建与统一发布」）。但手机端（PWA）有一个 Service Worker（`sw.js`）缓存层，更新 CSS/JS 时必须三处同步，否则手机用户会拿到新旧错配的页面（历史事故：弹层加载即显示且无法关闭）：
 
 1. **改了 `styles.css` / `script.js`** → 同步 bump `index.html` 里对应引用的 `?v=` 版本号；
 2. **同步更新 `sw.js`**：`CACHE_VERSION` 递增 + `PRECACHE_ASSETS` 列表里的版本号改成最新；
 3. 不要给 `staleWhileRevalidate` 的 `cache.match` 加回 `ignoreSearch: true`——版本参数 `?v=` 必须参与匹配，否则 query 更新对 SW 缓存无效。
 
 推送后用户端生效需**刷新两次**（第一次触发 SW 更新，第二次拿到新资源）。
+
+
+## 分模块构建与统一发布
+
+唯一入口为 `.github/workflows/site.yml`，处理 main 推送、本人相册/说说 Issue 变更和手动执行。旧的三条流程已合并，避免各自回写与重复发布。
+
+| 改动 | 构建行为 |
+|---|---|
+| `_posts/`、博客模板、博客脚本 | 只重建文章、列表、RSS、站点地图和首页文章索引 |
+| 相册 Issue 或相册脚本 | 只重建相册数据与图片，已有图片复用缓存 |
+| 说说 Issue 或说说脚本 | 只同步说说数据与图片 |
+| CSS、JS、首页、其他静态文件 | 直接组装发布，不运行三个内容构建 |
+| 依赖变更、首次迁移或手动 `full` | 全量构建 |
+| 无实质变化的重复事件 | 不构建、不重复部署 |
+
+每次启动后读取 main 最新版本和两类 Issue 的完整分页快照，比较内容摘要；这只是读取元数据，不重新处理所有图片。摘要不依赖事件顺序，因此即使 GitHub 替换排队任务，也能在下一次执行中发现两个模块的全部变化。状态 `.build-state.json` 与生成物一起保存在 main，仅在发布成功后回写。构建或部署失败均不推进已成功状态，可直接重跑失败任务。
+
+完整发布目录 `_site/` 每次重新组装：复用未变化的文章和数据，复制公共页面、图片、CSS/JS；排除源码、测试、工作流、内部状态。统一流程串行执行直到发布和回写完成；新事件不会取消正在发布的版本，后续执行读取最新源码。发布期间的新提交由下一次执行处理；回写先 rebase，冲突则明确失败，不强推。文章删除、改名或转草稿会清理旧页面。相册下架清理派生图片，说说下架更新 JSON，历史说说图片暂保留。
+
+严格构建模式下，Issue 任一页读取失败、图片处理失败或本地引用缺图都会停止发布，避免部分数据上线。站点仍由 Pages 整体部署，这次改造减少无关构建，并不改变 Pages 服务自身的排队或超时。
+
+### 首次启用与回退
+
+1. 先在独立分支运行 `npm ci && npm test`，完成本地整站验证。
+2. 仓库 Settings → Pages → Build and deployment → Source 选择 **GitHub Actions**，再把新流程合入 main。不要在仍使用旧分支发布方式时直接合并，否则可能重复发布。
+3. 第一次运行会全量构建并记录基线；后续按模块变化执行。检查 Actions 发布成功及线上相册、说说、文章后，再认定上线完成。
+4. 手动运行 **Build and Publish Site** 并勾选 `full` 可强制全量重建；失败时可以重跑失败任务。不要自动无限重试。
+5. 若需恢复旧流程，回退本次改造提交，并把 Pages Source 改回原来的分支发布方式（main / root）。现有生成物继续保留在 main，可作为回退基础。
+
+`npm run build:site` 会读取真实公开 Issue、生成 `_site/` 并更新本地构建状态；本地运行不代表发布成功。只做开发验证时请在临时副本运行，不要手动提交本地验证生成的状态。
