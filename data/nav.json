@@ -1,7 +1,6 @@
 {
   "_comment": "全站导航「单一配置源」。修改后运行 node scripts/build-nav.mjs 同步到所有页面，若博客模板变化需再跑 node scripts/build-posts.mjs 重新生成博客页，并按 README 缓存规则 bump sw.js 的 CACHE_VERSION。",
   "items": [
-    { "label": "关于", "home": "#about", "sub": "/#about" },
     { "label": "说说", "home": "#moments", "sub": "/moments/" },
     { "label": "文章", "home": "/blog/", "sub": "/blog/" },
     { "label": "相册", "home": "/gallery/", "sub": "/gallery/" },
