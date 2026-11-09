@@ -1249,6 +1249,122 @@ html[data-theme="dark"] .media-stars {
     text-decoration: underline;
 }
 
+/* 说说富媒体卡片：视频/音乐平台链接识别 */
+.moment-media-cards {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.moment-media-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface-card);
+    color: var(--text);
+    text-decoration: none;
+    font: inherit;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.moment-media-card:hover {
+    background: var(--surface-hover);
+    border-color: rgba(0, 113, 227, 0.28);
+    transform: translateY(-1px);
+}
+
+.mm-icon {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-bg);
+    color: var(--accent);
+}
+
+.mm-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.mm-body {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+}
+
+.mm-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.mm-sub {
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mm-arrow {
+    color: var(--muted);
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+/* 视频/歌单点击后原位展开的播放器：视频 16:9，歌单固定高度 */
+.moment-media-player {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: #000;
+}
+
+.moment-media-player.is-tall {
+    aspect-ratio: auto;
+    height: 430px;
+}
+
+.moment-media-player iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* 网易云/Spotify 单曲：直接内嵌的小播放器条 */
+.moment-music-embed {
+    width: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--surface-card);
+}
+
+.moment-music-embed iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+}
+
 /* 说说配图图集（Gallery） */
 .moment-gallery {
     display: grid;

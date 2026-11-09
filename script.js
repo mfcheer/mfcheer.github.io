@@ -648,6 +648,208 @@ function formatMomentDate(isoString) {
 let momentsAll = []; // 全量说说数据
 let momentsFilter = null; // 当前筛选的标签；null = 显示全部
 
+// ============================================================
+// 说说富媒体卡片：视频/音乐平台链接识别
+// ============================================================
+
+// 单条说说最多渲染的富媒体卡片数，超出退回普通链接
+const MOMENT_MEDIA_CARD_MAX = 4;
+
+// 识别已知平台链接，返回卡片描述；未识别返回 null（走普通链接）。
+// 安全约束：iframe src 一律由校验后的 ID 拼接，绝不透传用户文本
+function recognizeMomentMediaUrl(rawUrl) {
+    let u;
+    try {
+        u = new URL(rawUrl);
+    } catch (e) {
+        return null;
+    }
+    if (!/^https?:$/.test(u.protocol)) return null;
+    const host = u.hostname.toLowerCase();
+    const bareHost = host.replace(/^www\./, '');
+
+    // —— 哔哩哔哩：BV 号可提取 → 支持点击原位播放 ——
+    if (bareHost === 'bilibili.com' || host === 'm.bilibili.com') {
+        const bv = u.pathname.match(/\/video\/(BV[a-zA-Z0-9]{6,20})/);
+        if (bv) {
+            return {
+                kind: 'video', platform: 'bilibili', title: '哔哩哔哩',
+                sub: '视频 · 点击原位播放', url: rawUrl,
+                embed: `https://player.bilibili.com/player.html?bvid=${encodeURIComponent(bv[1])}&autoplay=0`
+            };
+        }
+        return { kind: 'video', platform: 'bilibili', title: '哔哩哔哩', sub: '视频 · 打开观看', url: rawUrl };
+    }
+    if (host === 'b23.tv') {
+        // 短链需服务端跳转才能拿到 BV 号，客户端只做链接卡片
+        return { kind: 'video', platform: 'bilibili', title: '哔哩哔哩', sub: '视频短链 · 打开观看', url: rawUrl };
+    }
+
+    // —— YouTube：视频 ID 校验后拼接 embed ——
+    if (bareHost === 'youtube.com' || host === 'm.youtube.com') {
+        const v = u.searchParams.get('v');
+        if (v && /^[\w-]{4,20}$/.test(v)) {
+            return {
+                kind: 'video', platform: 'youtube', title: 'YouTube',
+                sub: '视频 · 点击原位播放', url: rawUrl,
+                embed: `https://www.youtube-nocookie.com/embed/${v}`
+            };
+        }
+        return { kind: 'video', platform: 'youtube', title: 'YouTube', sub: '视频 · 打开观看', url: rawUrl };
+    }
+    if (host === 'youtu.be') {
+        const v = u.pathname.match(/^\/([\w-]{4,20})/);
+        if (v) {
+            return {
+                kind: 'video', platform: 'youtube', title: 'YouTube',
+                sub: '视频 · 点击原位播放', url: rawUrl,
+                embed: `https://www.youtube-nocookie.com/embed/${v[1]}`
+            };
+        }
+    }
+
+    // —— 网易云音乐：兼容 /#/song?id= 哈希路由与 /song?id= 直连两种形态 ——
+    if (host === 'music.163.com' || host.endsWith('.music.163.com')) {
+        let path = u.pathname;
+        let params = u.searchParams;
+        if (u.hash && u.hash.length > 1) {
+            const h = u.hash.slice(1);
+            const qi = h.indexOf('?');
+            if (qi >= 0) {
+                path = h.slice(0, qi);
+                params = new URLSearchParams(h.slice(qi + 1));
+            } else {
+                path = h;
+            }
+        }
+        const id = params.get('id');
+        const idOk = id && /^\d{1,15}$/.test(id);
+        if (idOk && /\/song\b/.test(path)) {
+            return {
+                kind: 'music', platform: 'netease', title: '网易云音乐', sub: '单曲 · 内嵌播放器',
+                url: rawUrl,
+                directEmbed: `https://music.163.com/outchain/player?type=2&id=${id}&auto=0&height=86`,
+                embedHeight: 86
+            };
+        }
+        if (idOk && /\/playlist\b/.test(path)) {
+            return {
+                kind: 'music', platform: 'netease', title: '网易云歌单', sub: '歌单 · 点击展开播放器',
+                url: rawUrl,
+                embed: `https://music.163.com/outchain/player?type=0&id=${id}&auto=0&height=430`,
+                tall: true
+            };
+        }
+        if (idOk && /\/album\b/.test(path)) {
+            return {
+                kind: 'music', platform: 'netease', title: '网易云专辑', sub: '专辑 · 点击展开播放器',
+                url: rawUrl,
+                embed: `https://music.163.com/outchain/player?type=1&id=${id}&auto=0&height=430`,
+                tall: true
+            };
+        }
+        return { kind: 'music', platform: 'netease', title: '网易云音乐', sub: '打开收听', url: rawUrl };
+    }
+
+    // —— Spotify：单曲直接内嵌官方播放器 ——
+    if (host === 'open.spotify.com') {
+        const t = u.pathname.match(/^\/(?:intl-[a-z]{2,5}\/)?(track|album|playlist)\/([a-zA-Z0-9]{10,30})/);
+        if (t && t[1] === 'track') {
+            return {
+                kind: 'music', platform: 'spotify', title: 'Spotify', sub: '单曲 · 内嵌播放器',
+                url: rawUrl,
+                directEmbed: `https://open.spotify.com/embed/track/${t[2]}`,
+                embedHeight: 152
+            };
+        }
+        if (t) {
+            return { kind: 'music', platform: 'spotify', title: 'Spotify', sub: t[1] === 'album' ? '专辑 · 打开收听' : '歌单 · 打开收听', url: rawUrl };
+        }
+        return { kind: 'music', platform: 'spotify', title: 'Spotify', sub: '打开收听', url: rawUrl };
+    }
+
+    // —— 其他音乐平台：链接卡片 ——
+    if (host === 'y.qq.com' || host === 'i.y.qq.com') {
+        return { kind: 'music', platform: 'qqmusic', title: 'QQ音乐', sub: '打开收听', url: rawUrl };
+    }
+    if (host === 'music.apple.com') {
+        return { kind: 'music', platform: 'applemusic', title: 'Apple Music', sub: '打开收听', url: rawUrl };
+    }
+
+    return null;
+}
+
+// 富媒体卡片的平台图标（常量 SVG，非用户数据）
+const MOMENT_MEDIA_ICONS = {
+    video: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m10 9.3 5.2 2.7-5.2 2.7z" fill="currentColor" stroke="none"/></svg>',
+    music: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6.2l10-2v11"/><circle cx="6.3" cy="18" r="2.7"/><circle cx="16.3" cy="15.2" r="2.7"/></svg>'
+};
+
+// 根据识别结果构建 DOM：单曲类直接内嵌小播放器；视频/歌单为
+// 可点击卡片（有 embed 的原位展开播放器，无 embed 的新窗口打开）
+function buildMomentMediaCard(media) {
+    if (media.directEmbed) {
+        const wrap = document.createElement('div');
+        wrap.className = 'moment-music-embed';
+        const iframe = document.createElement('iframe');
+        iframe.src = media.directEmbed;
+        iframe.height = media.embedHeight || 86;
+        iframe.loading = 'lazy';
+        iframe.title = media.title;
+        iframe.setAttribute('allow', 'autoplay; encrypted-media');
+        wrap.append(iframe);
+        return wrap;
+    }
+
+    const isLinkOut = !media.embed;
+    const card = document.createElement(isLinkOut ? 'a' : 'button');
+    card.className = 'moment-media-card';
+    card.title = media.url;
+    if (isLinkOut) {
+        card.href = media.url;
+        card.target = '_blank';
+        card.rel = 'noreferrer';
+    } else {
+        card.type = 'button';
+    }
+
+    const icon = document.createElement('span');
+    icon.className = 'mm-icon';
+    icon.innerHTML = MOMENT_MEDIA_ICONS[media.kind] || MOMENT_MEDIA_ICONS.video;
+    card.append(icon);
+
+    const body = document.createElement('span');
+    body.className = 'mm-body';
+    const titleEl = document.createElement('span');
+    titleEl.className = 'mm-title';
+    titleEl.textContent = media.title;
+    const subEl = document.createElement('span');
+    subEl.className = 'mm-sub';
+    subEl.textContent = media.sub;
+    body.append(titleEl, subEl);
+    card.append(body);
+
+    const arrow = document.createElement('span');
+    arrow.className = 'mm-arrow';
+    arrow.textContent = isLinkOut ? '↗' : '▶';
+    card.append(arrow);
+
+    if (!isLinkOut) {
+        card.addEventListener('click', () => {
+            const player = document.createElement('div');
+            player.className = media.tall ? 'moment-media-player is-tall' : 'moment-media-player';
+            const iframe = document.createElement('iframe');
+            iframe.src = media.embed;
+            iframe.title = media.title;
+            iframe.loading = 'lazy';
+            iframe.setAttribute('allow', 'fullscreen; autoplay; encrypted-media');
+            player.append(iframe);
+            card.replaceWith(player);
+        });
+    }
+    return card;
+}
+
 function renderMomentsState(state = 'ok') {
     const listEl = document.getElementById('momentList');
     const countEl = document.getElementById('momentCount');
@@ -765,9 +967,12 @@ function renderMomentsState(state = 'ok') {
         if (momentText) {
             const text = document.createElement('p');
             text.className = 'moment-text';
-            // 正文中的 URL 自动转为可点击链接；仅用 createElement/textContent，防 XSS
+            // 正文中的 URL 自动转为可点击链接；已知视频/音乐平台的链接
+            // 不进文本流，改为在正文下方渲染富媒体卡片；
+            // 仅用 createElement/textContent，防 XSS
             const URL_RE = /(https?:\/\/[^\s]+)/g;
             const TRAILING_PUNCT_RE = /[.,;:!?)\]}'"\u3001\u3002\uFF0C\uFF1F\uFF01\uFF1B\uFF1A\uFF09\u3011\u300B\u201D\u2019]+$/;
+            const mediaCards = [];
             let cursor = 0;
             let match;
             while ((match = URL_RE.exec(momentText)) !== null) {
@@ -780,23 +985,40 @@ function renderMomentsState(state = 'ok') {
                 if (match.index > cursor) {
                     text.append(document.createTextNode(momentText.slice(cursor, match.index)));
                 }
-                const link = document.createElement('a');
-                link.href = url;
-                link.target = '_blank';
-                link.rel = 'noreferrer';
-                link.textContent = url;
-                text.append(link);
+                // 已识别平台的媒体链接且未超卡片数上限 → 消费为卡片；
+                // 否则退回普通超链接
+                const media = mediaCards.length < MOMENT_MEDIA_CARD_MAX
+                    ? recognizeMomentMediaUrl(url)
+                    : null;
+                if (media) {
+                    mediaCards.push(media);
+                } else {
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.target = '_blank';
+                    link.rel = 'noreferrer';
+                    link.textContent = url;
+                    text.append(link);
+                }
                 if (punct) {
                     text.append(document.createTextNode(punct));
                 }
                 cursor = match.index + match[0].length;
             }
-            if (cursor === 0) {
-                text.textContent = momentText; // 无 URL，直接整段赋值
-            } else if (cursor < momentText.length) {
+            if (cursor < momentText.length) {
                 text.append(document.createTextNode(momentText.slice(cursor)));
             }
-            item.append(text);
+            if (text.childNodes.length) {
+                item.append(text);
+            }
+            if (mediaCards.length) {
+                const cardsWrap = document.createElement('div');
+                cardsWrap.className = 'moment-media-cards';
+                mediaCards.forEach((media) => {
+                    cardsWrap.append(buildMomentMediaCard(media));
+                });
+                item.append(cardsWrap);
+            }
         }
 
         if (momentImages && momentImages.length) {
@@ -1462,6 +1684,11 @@ function renderMomentModalContent() {
                 alert("最多支持上传 9 张配图");
                 break;
             }
+            // GIF 保留原始数据不压缩，但限制体积防止超 GitHub 接口上限
+            if (file.type === "image/gif" && file.size > 15 * 1024 * 1024) {
+                alert(`动图太大（${(file.size / 1024 / 1024).toFixed(1)}MB），请压缩到 15MB 以内再上传`);
+                continue;
+            }
             try {
                 const { dataUrl, base64 } = await compressMomentImage(file);
                 selectedMomentFiles.push({ file, dataUrl, base64 });
@@ -1492,7 +1719,8 @@ function renderMomentModalContent() {
             for (let i = 0; i < selectedMomentFiles.length; i++) {
                 statusEl.textContent = `正在上传第 ${i + 1}/${selectedMomentFiles.length} 张配图…`;
                 const item = selectedMomentFiles[i];
-                const filename = `m-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+                const ext = item.file && item.file.type === "image/gif" ? "gif" : "jpg";
+                const filename = `m-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
                 const uploadedPath = await uploadMomentImage(auth.token, filename, item.base64);
                 uploadedImageUrls.push({ src: uploadedPath, alt: "Image" });
             }
@@ -1539,6 +1767,19 @@ function renderMomentModalContent() {
 }
 
 function compressMomentImage(file, maxDimension = 1600, quality = 0.82) {
+    // GIF 直接保留原始数据：Canvas 重绘会丢帧变静图；
+    // 动图重压缩收益低，读原样 base64 上传即可
+    if (file.type === "image/gif") {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const dataUrl = e.target.result;
+                resolve({ dataUrl, base64: dataUrl.split(",")[1] });
+            };
+            reader.onerror = () => reject(new Error("GIF 读取失败"));
+            reader.readAsDataURL(file);
+        });
+    }
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => {
