@@ -1,6 +1,6 @@
 name: 📷 相册
 description: 上传一批照片到个人主页相册墙，提交后自动压缩并展示
-title: ""
+title: "📷 相册"
 labels: [gallery]
 body:
   - type: markdown
