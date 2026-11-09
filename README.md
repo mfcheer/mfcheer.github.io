@@ -59,6 +59,18 @@ Hexo 式写作体验：`_posts/` 里写 Markdown，push 后 GitHub Actions（`.g
        - `CLIENT_SECRET`：填入在 GitHub OAuth App 页面生成的 Client Secret 密钥字符串
     4. 点击 **保存并部署 (Save and deploy)**，代理服务即生效完成。
 
+## 📀 相册模块（Gallery）
+
+Justified 行式照片墙（Google Photos 同款布局），独立页面 `/gallery/`，首页导航「相册」进入。
+
+- **发布**：建一个带 `gallery` 标签的 Issue（[📷 相册模板](.github/ISSUE_TEMPLATE/gallery.yml)），标题写相册名（如 `2026.10 川西`），照片直接拖进正文，可一次拖任意多张；
+- **流水线**：Issue 变动触发 `.github/workflows/gallery.yml` → `scripts/build-gallery.mjs` 下载附件 → sharp 压缩为全图 1600w（q82）+ 墙面缩略图 480w + LQIP 微缩占位 → 读取 EXIF 拍摄时间 → 生成 `data/gallery.json`（含宽高比，前端运行时 Justified 装箱）→ 回写 `main`（`[skip ci]` 防循环）；
+- **分组**：Issue 标题即相册名；标题为空时按拍摄月份自动分组；相册内按拍摄时间排序；
+- **产物（不手改）**：`data/gallery.json`、`assets/gallery/{id}.jpg` / `{id}_s.jpg`；
+- **下架**：删除/关闭 Issue 后，下次同步自动清理对应产物；
+- **安全**：仅同步博主本人（OWNER）的 Issue，陌生 Issue 静默丢弃（与说说模块同一套防注入）；
+- **本地导入模式**（开发用）：`node scripts/build-gallery.mjs --seed-dir ./some-images`，绕过 API 直接从本地目录导入。
+
 ## 📀 书影音数据维护（AI 智能体必读）
 
 首页「书影音」板块的数据**不是自动同步的**，由 AI 智能体在用户提出「更新书影音」时手动抓取并提交。无定时任务、无后端，全靠维护流程。数据分两层：

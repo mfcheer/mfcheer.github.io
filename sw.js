@@ -8,7 +8,7 @@
  * 4. 实时交互（Giscus 留言系统）：Network-Only，不干扰正常使用。
  */
 
-const CACHE_VERSION = 'v1.5.13';
+const CACHE_VERSION = 'v1.5.14';
 const STATIC_CACHE = `mfcheer-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `mfcheer-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `mfcheer-images-${CACHE_VERSION}`;
@@ -18,8 +18,10 @@ const PRECACHE_ASSETS = [
     './index.html',
     './blog/index.html',
     './moments/index.html',
-    './styles.css?v=1.3.24',
+    './gallery/index.html',
+    './styles.css?v=1.3.25',
     './script.js?v=1.3.23',
+    './gallery.js?v=1.0.0',
     './manifest.json',
     './favicon.ico',
     './favicon-32x32.png',
@@ -31,6 +33,7 @@ const PRECACHE_ASSETS = [
     './assets/projects/tripnote.png',
     './data/media-stats.json',
     './data/blog-index.json',
+    './data/gallery.json',
     './404.html'
 ];
 
@@ -89,7 +92,8 @@ self.addEventListener('fetch', (event) => {
     const isDynamicApi =
         (url.hostname === 'api.github.com' && url.pathname.includes('/issues')) ||
         (url.hostname.includes('espn.com') && url.pathname.includes('/schedule')) ||
-        (url.origin === self.location.origin && url.pathname.includes('/data/moments.json'));
+        (url.origin === self.location.origin && url.pathname.includes('/data/moments.json')) ||
+        (url.origin === self.location.origin && url.pathname.includes('/data/gallery.json'));
 
     if (isDynamicApi) {
         event.respondWith(networkFirstWithTimeout(request, DYNAMIC_CACHE, 2500));

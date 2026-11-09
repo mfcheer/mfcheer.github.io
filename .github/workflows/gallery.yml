@@ -1,0 +1,51 @@
+name: Sync Gallery
+
+# 当相册 Issue 有变动时自动抓取、压缩配图并静态化到 data/gallery.json，
+# 图片统一压缩后入库 assets/gallery/，实现国内同源极速访问
+on:
+  issues:
+    types: [opened, edited, deleted, closed, reopened, labeled, unlabeled]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  # 一个相册 Issue 会触发多个事件（opened + labeled 等），只保留最新实例
+  group: sync-gallery
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    if: github.event_name != 'issues' || github.event.issue.user.login == 'mfcheer'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run build gallery
+        run: node scripts/build-gallery.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push updated gallery
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/gallery.json assets/gallery/
+          if git diff --cached --quiet; then
+            echo "相册数据未发生变动"
+          else
+            git commit -m "chore(gallery): 自动同步相册照片与数据 [skip ci]"
+            # 与 sync-moments 相同：rebase 重放本地提交后再推，规避 push 竞争
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          fi

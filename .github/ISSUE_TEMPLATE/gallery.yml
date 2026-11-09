@@ -1,0 +1,19 @@
+name: 📷 相册
+description: 上传一批照片到个人主页相册墙，提交后自动压缩并展示
+title: ""
+labels: [gallery]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **发布方法**：先把标题改成相册名（如 `2026.10 川西`），然后把照片直接拖进下方输入框，
+        可以一次拖任意多张。提交后约 1 分钟内照片会自动压缩并出现在 [相册页](https://mfcheer.github.io/gallery/)。
+        删除或关闭本 Issue 即可下架这批照片。
+  - type: textarea
+    id: photos
+    attributes:
+      label: 照片
+      description: 直接把图片文件拖拽/粘贴到这个输入框里（可多张），无需写文字。
+      placeholder: 把照片拖到这里
+    validations:
+      required: true
