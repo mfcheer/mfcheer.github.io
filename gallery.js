@@ -350,6 +350,7 @@
         galleryUploadBusy = false;
         galleryUploadBackdrop.remove();
         galleryUploadBackdrop = null;
+        document.body.classList.remove('lightbox-open');
     }
 
     function renderGalleryUploadPreviews(previewsEl) {
@@ -372,6 +373,13 @@
 
     function renderGalleryUploadModal() {
         ensureGalleryUploadModal();
+        // CSS 默认 opacity:0 + visibility:hidden，必须加 is-open 才可见（与说说弹窗同机制）。
+        // 此前漏加导致弹窗在 DOM 中但不可见，表现为「点击无反应」。
+        // rAF：先以隐藏态入 DOM，下一帧加类以触发淡入过渡。
+        requestAnimationFrame(() => {
+            if (galleryUploadBackdrop) galleryUploadBackdrop.classList.add('is-open');
+        });
+        document.body.classList.add('lightbox-open');
         const card = document.getElementById('galleryUploadCard');
         const auth = typeof getMomentAuth === 'function' ? getMomentAuth() : null;
 
