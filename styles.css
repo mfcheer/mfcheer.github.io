@@ -3667,8 +3667,9 @@ button.activity-badge {
    相册 · 轻打磨：滚动淡入 + hover 日期角标（保持原版 Justified 布局）
    ============================================================ */
 
-/* 相册淡入 */
+/* 相册淡入 + 呼吸感分组（无文字分隔，靠间距暗示） */
 .gallery-album {
+    margin-top: 44px;
     opacity: 0;
     transform: translateY(14px);
     transition: opacity 0.35s ease, transform 0.35s ease;
@@ -3679,9 +3680,19 @@ button.activity-badge {
     transform: none;
 }
 
+.gallery-album:first-child {
+    margin-top: 0;
+}
+
+@media (max-width: 600px) {
+    .gallery-album {
+        margin-top: 34px;
+    }
+}
+
 /* hover 日期角标（仅支持 hover 的设备显示） */
 .g-item::after {
-    content: attr(data-date);
+    content: attr(data-info);
     position: absolute;
     right: 8px;
     bottom: 8px;

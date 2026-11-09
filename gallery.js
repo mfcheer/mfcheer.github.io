@@ -12,7 +12,7 @@
     const listEl = document.getElementById('galleryList');
     if (!listEl) return; // 非相册页直接退出
 
-    const countEl = document.getElementById('galleryCount');
+    // 页面不再展示统计数字（设计决定：墙面零文字）
 
     // ---------------- 数据 ----------------
 
@@ -77,21 +77,10 @@
         const albumEl = document.createElement('section');
         albumEl.className = 'gallery-album';
 
-        // 相册头部：名称 + 张数（保持原版简洁）
-        const head = document.createElement('div');
-        head.className = 'gallery-album-head';
-        const title = document.createElement('h3');
-        title.textContent = album.title;
-        const count = document.createElement('span');
-        count.className = 'gallery-album-count';
-        count.textContent = album.count + ' 张';
-        head.appendChild(title);
-        head.appendChild(count);
-        albumEl.appendChild(head);
-
+        // 墙面零文字：不渲染相册名/张数，相册信息注入每张照片供 hover 角标与灯箱使用
         const wall = document.createElement('div');
         wall.className = 'gallery-wall';
-        wall.dataset.photos = JSON.stringify(album.photos);
+        wall.dataset.photos = JSON.stringify(album.photos.map((p) => ({ ...p, album: album.title })));
         albumEl.appendChild(wall);
 
         return albumEl;
@@ -128,8 +117,8 @@
                 itemEl.style.width = itemW + 'px';
                 itemEl.style.backgroundImage = p.lqip ? 'url("' + p.lqip + '")' : 'none';
                 itemEl.setAttribute('aria-label', (p.date ? p.date + ' ' : '') + '查看照片');
-                // hover 日期角标（有拍摄时间才显示）
-                if (p.date) itemEl.dataset.date = p.date.slice(0, 10);
+                // hover 角标：拍摄日期 · 所属相册
+                if (p.album) itemEl.dataset.info = (p.date ? p.date.slice(0, 10) + ' · ' : '') + p.album;
 
                 const img = document.createElement('img');
                 img.src = rootUrl(p.thumb);
@@ -155,9 +144,6 @@
 
     function render() {
         listEl.innerHTML = '';
-        const total = albums.reduce((s, a) => s + a.count, 0);
-        if (countEl) countEl.textContent = total ? total + ' 张照片' : '';
-
         if (!albums.length) {
             listEl.innerHTML =
                 '<div class="gallery-empty">' +
@@ -213,7 +199,7 @@
         lbImg.classList.remove('lb-loaded');
         lbImg.src = rootUrl(p.src);
         lbImg.alt = p.date || '';
-        lbCaption.textContent = p.date || albumTitleOf(p) || '';
+        lbCaption.textContent = [p.album, p.date && p.date.slice(0, 10)].filter(Boolean).join(' · ');
         lbCounter.textContent = (lbIdx + 1) + ' / ' + lbPhotos.length;
         // 预加载相邻图
         [lbIdx + 1, lbIdx - 1].forEach((i) => {
@@ -221,8 +207,6 @@
             if (np) { const im = new Image(); im.src = np.src; }
         });
     }
-
-    function albumTitleOf() { return ''; }
 
     function openLightbox(photos, idx) {
         lbPhotos = photos;
