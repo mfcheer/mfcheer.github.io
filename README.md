@@ -71,6 +71,21 @@ Justified 行式照片墙（Google Photos 同款布局），独立页面 `/galle
 - **安全**：仅同步博主本人（OWNER）的 Issue，陌生 Issue 静默丢弃（与说说模块同一套防注入）；
 - **本地导入模式**（开发用）：`node scripts/build-gallery.mjs --seed-dir ./some-images`，绕过 API 直接从本地目录导入。
 
+## 🧭 导航修改规则（AI 智能体必读）
+
+全站导航的「单一配置源」是 **`data/nav.json`**（每项含 `label`、`home` 主页锚点形态、`sub` 子页路径形态）。**不要直接手改任何页面的 `<ul class="nav-links">`**，统一走：
+
+```bash
+# 1. 编辑 data/nav.json
+# 2. 一键同步到 5 处（index.html / moments / gallery / 两个博客模板）
+node scripts/build-nav.mjs
+# 3. 若博客模板被更新，重新生成博客页
+node scripts/build-posts.mjs
+# 4. 按「缓存更新规则」bump sw.js 的 CACHE_VERSION
+```
+
+子页中与自身路径一致的导航项会自动加 `aria-current="page"`。
+
 ## 📀 书影音数据维护（AI 智能体必读）
 
 首页「书影音」板块的数据**不是自动同步的**，由 AI 智能体在用户提出「更新书影音」时手动抓取并提交。无定时任务、无后端，全靠维护流程。数据分两层：
