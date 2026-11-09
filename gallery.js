@@ -301,6 +301,246 @@
     // 全图加载淡入
     lbImg.addEventListener('load', () => lbImg.classList.add('lb-loaded'));
 
+    // ---------------- 站内上传发布 ----------------
+    // 与说说同链路：OAuth 登录 → 压缩 → contents API 传 assets/gallery/ → 创建 gallery 标签 Issue，
+    // 同步流水线（build-gallery.mjs）随后自动拉取处理。Issue 格式与 GitHub 模板一致：
+    // 标题「📷 相册 {名}」，正文「### 相册简介」段 + 图片行（extractImages/extractDescription 解析）。
+
+    const GALLERY_MAX_IMAGES = 30;
+    let galleryUploadBackdrop = null;
+    let galleryUploadFiles = []; // [{ file, dataUrl }]
+    let galleryUploadBusy = false;
+
+    function fileToRawBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result).split(',')[1]);
+            reader.onerror = () => reject(new Error('读取文件失败'));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function ensureGalleryUploadModal() {
+        if (galleryUploadBackdrop) return;
+        galleryUploadBackdrop = document.createElement('div');
+        galleryUploadBackdrop.className = 'moment-modal-backdrop';
+        galleryUploadBackdrop.innerHTML = '<div class="moment-modal-card" id="galleryUploadCard" role="dialog" aria-modal="true" aria-label="上传照片"></div>';
+        document.body.appendChild(galleryUploadBackdrop);
+        galleryUploadBackdrop.addEventListener('click', (e) => {
+            if (e.target === galleryUploadBackdrop && !galleryUploadBusy) closeGalleryUploadModal();
+        });
+        document.addEventListener('keydown', galleryUploadEscHandler);
+    }
+
+    function galleryUploadEscHandler(e) {
+        if (e.key === 'Escape' && !galleryUploadBusy) closeGalleryUploadModal();
+    }
+
+    function closeGalleryUploadModal() {
+        if (!galleryUploadBackdrop) return;
+        document.removeEventListener('keydown', galleryUploadEscHandler);
+        galleryUploadFiles = [];
+        galleryUploadBusy = false;
+        galleryUploadBackdrop.remove();
+        galleryUploadBackdrop = null;
+    }
+
+    function renderGalleryUploadPreviews(previewsEl) {
+        if (!previewsEl) return;
+        previewsEl.innerHTML = '';
+        galleryUploadFiles.forEach((item, index) => {
+            const wrap = document.createElement('div');
+            wrap.className = 'moment-thumb-item';
+            wrap.innerHTML = `
+                <img class="moment-thumb-img" src="${item.dataUrl}" alt="预览">
+                <button class="moment-thumb-del" type="button" title="移除照片">&times;</button>
+            `;
+            wrap.querySelector('.moment-thumb-del').addEventListener('click', () => {
+                galleryUploadFiles.splice(index, 1);
+                renderGalleryUploadPreviews(previewsEl);
+            });
+            previewsEl.appendChild(wrap);
+        });
+    }
+
+    function renderGalleryUploadModal() {
+        ensureGalleryUploadModal();
+        const card = document.getElementById('galleryUploadCard');
+        const auth = typeof getMomentAuth === 'function' ? getMomentAuth() : null;
+
+        // 未认证视图：引导授权（记录回跳意图，授权成功后由首页 checkOAuthCallback 送回本页）
+        if (!auth || !auth.token) {
+            card.innerHTML = `
+                <div class="moment-modal-header">
+                    <div class="moment-user-info"><span class="moment-user-name">上传照片到相册</span></div>
+                    <button class="moment-modal-close" type="button" aria-label="关闭">&times;</button>
+                </div>
+                <div class="moment-modal-body">
+                    <p style="margin:0 0 14px;font-size:14px;opacity:.75;line-height:1.7;">发布需要验证博主身份（@mfcheer）。使用 GitHub 授权登录后即可在本页完成选图与上传，无需跳转 GitHub 网站。</p>
+                    <div class="moment-modal-status" id="galleryAuthStatus" style="display:none;"></div>
+                    <div class="moment-modal-btns" style="justify-content:center;gap:10px;">
+                        <button type="button" class="moment-btn moment-btn-primary" id="galleryOauthBtn">GitHub 授权登录</button>
+                    </div>
+                    <p style="margin:14px 0 0;text-align:center;font-size:12.5px;opacity:.6;">
+                        授权不可用时也可 <a href="https://github.com/mfcheer/mfcheer.github.io/issues/new?template=gallery.yml&labels=gallery" target="_blank" rel="noreferrer">前往 GitHub 提交相册 Issue ↗</a>
+                    </p>
+                </div>
+            `;
+            card.querySelector('.moment-modal-close').addEventListener('click', closeGalleryUploadModal);
+            card.querySelector('#galleryOauthBtn').addEventListener('click', () => {
+                sessionStorage.setItem('mfcheer_post_auth_return', '/gallery/');
+                const config = getOAuthConfig();
+                if (!config.clientId || config.clientId.includes('XXXX')) {
+                    const inputId = prompt('【初次使用 GitHub 授权登录】\n请填入你的 GitHub OAuth App Client ID（只需填一次，保存在当前设备）：');
+                    if (!inputId || !inputId.trim()) { sessionStorage.removeItem('mfcheer_post_auth_return'); return; }
+                    localStorage.setItem('mfcheer_github_oauth_client_id', inputId.trim());
+                    config.clientId = inputId.trim();
+                }
+                if (!config.proxy) {
+                    const proxy = prompt('【需要 OAuth 代理服务】\n请填入你的 OAuth Gatekeeper/Proxy 代理地址（用于安全换取 Token）：');
+                    if (!proxy || !proxy.trim()) { sessionStorage.removeItem('mfcheer_post_auth_return'); return; }
+                    localStorage.setItem('mfcheer_github_oauth_proxy', proxy.trim());
+                    config.proxy = proxy.trim();
+                }
+                const redirectUri = window.location.origin + '/';
+                window.location.href = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(config.clientId)}&scope=public_repo&redirect_uri=${encodeURIComponent(redirectUri)}`;
+            });
+            return;
+        }
+
+        // 已认证视图：相册选择 + 简介 + 多图上传
+        const user = auth.user || { login: 'mfcheer', avatar_url: 'avatar.jpg' };
+        const albumOptions = albums.map((a) => `<option value="${a.title.replace(/"/g, '&quot;')}"></option>`).join('');
+        card.innerHTML = `
+            <div class="moment-modal-header">
+                <div class="moment-user-badge">
+                    <img class="moment-modal-avatar" src="${user.avatar_url || 'avatar.jpg'}" alt="${user.login || 'mfcheer'}">
+                    <div class="moment-user-info">
+                        <span class="moment-user-name">${user.login || 'mfcheer'}</span>
+                        <span class="moment-user-tag">博主已认证</span>
+                    </div>
+                </div>
+                <button class="moment-modal-close" type="button" aria-label="关闭">&times;</button>
+            </div>
+            <div class="moment-modal-body">
+                <input id="galleryAlbumName" class="moment-textarea" list="galleryAlbumOptions" style="min-height:0;height:42px;padding:10px 14px;resize:none;margin-bottom:10px;" maxlength="40" placeholder="相册名称（留空则自动按月份分组）">
+                <datalist id="galleryAlbumOptions">${albumOptions}</datalist>
+                <textarea id="galleryAlbumDesc" class="moment-textarea" rows="2" maxlength="200" placeholder="相册简介（可选，最多 200 字）"></textarea>
+
+                <div class="moment-img-picker-wrap">
+                    <div class="moment-img-previews" id="galleryImgPreviews"></div>
+                    <label class="moment-add-img-btn" id="galleryAddImgBtn" title="添加照片">
+                        <input type="file" id="galleryFileInput" accept="image/*" multiple hidden>
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        <span>添加照片（最多 ${GALLERY_MAX_IMAGES} 张）</span>
+                    </label>
+                </div>
+
+                <div class="moment-modal-status" id="galleryUploadStatus" style="display:none;"></div>
+
+                <div class="moment-modal-footer">
+                    <button type="button" class="moment-logout-link" id="galleryLogoutBtn" title="退出身份并清除本地保存的 Token">退出登录</button>
+                    <div class="moment-modal-btns">
+                        <button type="button" class="moment-btn moment-btn-cancel" id="galleryUploadCancelBtn">取消</button>
+                        <button type="button" class="moment-btn moment-btn-primary" id="gallerySubmitBtn">上传并发布</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const closeBtn = card.querySelector('.moment-modal-close');
+        const fileInput = card.querySelector('#galleryFileInput');
+        const previewsEl = card.querySelector('#galleryImgPreviews');
+        const statusEl = card.querySelector('#galleryUploadStatus');
+        const submitBtn = card.querySelector('#gallerySubmitBtn');
+
+        closeBtn.addEventListener('click', () => { if (!galleryUploadBusy) closeGalleryUploadModal(); });
+        card.querySelector('#galleryUploadCancelBtn').addEventListener('click', () => { if (!galleryUploadBusy) closeGalleryUploadModal(); });
+        card.querySelector('#galleryLogoutBtn').addEventListener('click', () => {
+            if (galleryUploadBusy) return;
+            if (confirm('确定退出博主身份并清除本地保存的 Token 吗？')) {
+                clearMomentAuth();
+                showMomentToast('已退出博主身份');
+                renderGalleryUploadModal();
+            }
+        });
+
+        fileInput.addEventListener('change', () => {
+            const picked = Array.from(fileInput.files || []);
+            fileInput.value = '';
+            for (const f of picked) {
+                if (!f.type.startsWith('image/')) continue;
+                if (galleryUploadFiles.length >= GALLERY_MAX_IMAGES) {
+                    statusEl.className = 'moment-modal-status is-error';
+                    statusEl.style.display = 'block';
+                    statusEl.textContent = `一次最多上传 ${GALLERY_MAX_IMAGES} 张照片`;
+                    break;
+                }
+                galleryUploadFiles.push({ file: f, dataUrl: URL.createObjectURL(f) });
+            }
+            renderGalleryUploadPreviews(previewsEl);
+        });
+
+        submitBtn.addEventListener('click', () => submitGalleryUpload(card, statusEl, submitBtn));
+    }
+
+    async function submitGalleryUpload(card, statusEl, submitBtn) {
+        if (galleryUploadBusy) return;
+        const setErr = (msg) => {
+            statusEl.className = 'moment-modal-status is-error';
+            statusEl.style.display = 'block';
+            statusEl.textContent = msg;
+        };
+        const albumName = (card.querySelector('#galleryAlbumName').value || '').trim().slice(0, 40);
+        const desc = (card.querySelector('#galleryAlbumDesc').value || '').trim().slice(0, 200);
+        if (!galleryUploadFiles.length) { setErr('请至少选择一张照片'); return; }
+
+        const auth = getMomentAuth();
+        if (!auth || !auth.token) { renderGalleryUploadModal(); return; }
+
+        galleryUploadBusy = true;
+        submitBtn.disabled = true;
+        statusEl.className = 'moment-modal-status is-loading';
+        statusEl.style.display = 'block';
+        statusEl.textContent = '准备上传…';
+
+        const uploadedSrcs = [];
+        try {
+            for (let i = 0; i < galleryUploadFiles.length; i++) {
+                statusEl.textContent = `正在上传第 ${i + 1}/${galleryUploadFiles.length} 张…`;
+                const f = galleryUploadFiles[i].file;
+                let filename, base64;
+                if (f.type === 'image/gif') {
+                    if (f.size > 15 * 1024 * 1024) throw new Error(`动图 ${f.name} 超过 15MB，请压缩后再试`);
+                    filename = `gallery-${Date.now()}-${i}.gif`;
+                    base64 = await fileToRawBase64(f);
+                } else {
+                    const result = await compressMomentImage(f, 1600, 0.82);
+                    filename = `gallery-${Date.now()}-${i}.jpg`;
+                    base64 = result.base64;
+                }
+                const rel = await uploadMomentImage(auth.token, filename, base64, 'gallery');
+                uploadedSrcs.push(`${window.location.origin}/${rel}`);
+            }
+
+            statusEl.textContent = '正在创建相册…';
+            const body = (desc ? `### 相册简介\n${desc}\n\n` : '') + uploadedSrcs.map((u) => `![photo](${u})`).join('\n');
+            await createMomentIssue(auth.token, `📷 相册 ${albumName}`.trim(), body, ['gallery']);
+
+            statusEl.className = 'moment-modal-status';
+            statusEl.textContent = '✓ 已提交！同步流水线约 1-2 分钟后展示，可以关闭本页';
+            showMomentToast('🎉 相册已提交');
+            setTimeout(closeGalleryUploadModal, 1800);
+        } catch (e) {
+            galleryUploadBusy = false;
+            submitBtn.disabled = false;
+            setErr(e.message || '发布失败，请重试');
+        }
+    }
+
+    const galleryUploadBtn = document.getElementById('galleryUploadBtn');
+    if (galleryUploadBtn) galleryUploadBtn.addEventListener('click', renderGalleryUploadModal);
+
     // ---------------- 启动 ----------------
 
     loadGallery();

@@ -64,7 +64,7 @@ Hexo 式写作体验：`_posts/` 里写 Markdown，push 后 GitHub Actions（`.g
 
 Justified 行式照片墙（Google Photos 同款布局），独立页面 `/gallery/`，首页导航「相册」进入。
 
-- **发布**：建一个带 `gallery` 标签的 Issue（[📷 相册模板](.github/ISSUE_TEMPLATE/gallery.yml)），标题写相册名（如 `2026.10 川西`），照片直接拖进正文，可一次拖任意多张；
+- **发布**：在相册页点「上传照片」即可站内完成（GitHub 授权登录 → 选相册/简介 → 多图压缩上传到 `assets/gallery/` → 自动创建带 `gallery` 标签的 Issue，授权成功自动跳回相册页）；也可建一个带 `gallery` 标签的 Issue（[📷 相册模板](.github/ISSUE_TEMPLATE/gallery.yml)），标题写相册名（如 `2026.10 川西`），照片直接拖进正文，可一次拖任意多张；
 - **流水线**：Issue 变动触发 `.github/workflows/gallery.yml` → `scripts/build-gallery.mjs` 下载附件 → sharp 压缩为全图 1600w（q82）+ 墙面缩略图 480w + LQIP 微缩占位 → 记录上传时间（Issue 创建时间，东八区呈现）→ 生成 `data/gallery.json`（含宽高比，前端运行时 Justified 装箱）→ 回写 `main`（`[skip ci]` 防循环）；
 - **分组**：Issue 标题即相册名；标题为空时按上传月份自动分组；相册内按上传时间倒序（最新上传在最前）；
 - **大数据量兼容**：同步脚本自动翻页拉取全部 Issue（单页上限 100 条，上限 50 页），任一页失败直接终止同步（不静默截断）；前端相册分批渲染（每批 2 个相册），滚动接近底部时无感续渲染（提前 600px 预加载），灯箱始终可浏览全量照片（含未渲染相册）；

@@ -1437,6 +1437,15 @@ async function checkOAuthCallback() {
         }
 
         setMomentAuth(token, user);
+
+        // 若授权前来自相册页（站内上传发起的授权），成功后直接跳回相册页继续上传
+        const postAuthReturn = sessionStorage.getItem("mfcheer_post_auth_return");
+        if (postAuthReturn && postAuthReturn.startsWith("/")) {
+            sessionStorage.removeItem("mfcheer_post_auth_return");
+            window.location.replace(postAuthReturn);
+            return;
+        }
+
         showMomentToast("🎉 欢迎回来，博主 mfcheer！已成功登录。");
         renderMomentModalContent();
     } catch (e) {
@@ -1885,8 +1894,8 @@ function renderSelectedPreviews(container) {
     });
 }
 
-async function uploadMomentImage(token, filename, base64Content) {
-    const url = `https://api.github.com/repos/mfcheer/mfcheer.github.io/contents/assets/moments/${filename}`;
+async function uploadMomentImage(token, filename, base64Content, dir = "moments") {
+    const url = `https://api.github.com/repos/mfcheer/mfcheer.github.io/contents/assets/${dir}/${filename}`;
     const res = await fetch(url, {
         method: "PUT",
         headers: {
@@ -1895,7 +1904,7 @@ async function uploadMomentImage(token, filename, base64Content) {
             "Accept": "application/vnd.github+json"
         },
         body: JSON.stringify({
-            message: `feat(moments): 上传说说配图 ${filename}`,
+            message: `feat(${dir}): 上传配图 ${filename}`,
             content: base64Content
         })
     });
@@ -1903,7 +1912,7 @@ async function uploadMomentImage(token, filename, base64Content) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.message || `图片上传失败 (${res.status})`);
     }
-    return `assets/moments/${filename}`;
+    return `assets/${dir}/${filename}`;
 }
 
 async function createMomentIssue(token, title, body, labels) {
