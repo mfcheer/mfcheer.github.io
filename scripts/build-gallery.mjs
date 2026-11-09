@@ -247,12 +247,28 @@ async function main() {
     const keptSources = new Set();
 
     if (seedDir) {
-        const files = (await fs.readdir(seedDir)).filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f));
-        batches = [{
-            album: '本地导入',
-            images: files.map((f) => ({ src: path.join(seedDir, f), fallbackDate: null, key: f.replace(/\.[^.]+$/, '') }))
-        }];
-        console.log(`[Seed] 本地目录导入模式: ${seedDir}，共 ${files.length} 张`);
+        const entries = await fs.readdir(seedDir, { withFileTypes: true });
+        const subDirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort();
+        if (subDirs.length > 0) {
+            // 子目录模式：每个子目录 = 一个相册（目录名即相册标题）
+            for (const sub of subDirs) {
+                const dir = path.join(seedDir, sub);
+                const files = (await fs.readdir(dir)).filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f));
+                if (!files.length) continue;
+                batches.push({
+                    album: sub,
+                    images: files.map((f) => ({ src: path.join(dir, f), fallbackDate: null, key: `${sub}-${f.replace(/\.[^.]+$/, '')}` }))
+                });
+            }
+            console.log(`[Seed] 子目录相册模式: ${subDirs.join(' / ')}`);
+        } else {
+            const files = (await fs.readdir(seedDir)).filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f));
+            batches = [{
+                album: '本地导入',
+                images: files.map((f) => ({ src: path.join(seedDir, f), fallbackDate: null, key: f.replace(/\.[^.]+$/, '') }))
+            }];
+            console.log(`[Seed] 本地目录导入模式: ${seedDir}，共 ${files.length} 张`);
+        }
     } else {
         const issues = await fetchIssues();
         console.log(`拉取到 ${issues.length} 个 gallery 相册 Issue`);
