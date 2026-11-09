@@ -3442,14 +3442,6 @@ section[id] {
     font-size: 12px;
 }
 
-.gallery-album {
-    margin-top: 26px;
-}
-
-.gallery-album:first-child {
-    margin-top: 0;
-}
-
 .gallery-album-head {
     display: flex;
     align-items: baseline;
@@ -3668,9 +3660,9 @@ section[id] {
    相册 · 轻打磨：滚动淡入 + hover 日期角标（保持原版 Justified 布局）
    ============================================================ */
 
-/* 相册淡入 + 呼吸感分组（无文字分隔，靠间距暗示） */
+/* 相册淡入（组间隔与照片间距一致，紧凑无缝） */
 .gallery-album {
-    margin-top: 44px;
+    margin-top: 6px;
     opacity: 0;
     transform: translateY(14px);
     transition: opacity 0.35s ease, transform 0.35s ease;
@@ -3687,7 +3679,7 @@ section[id] {
 
 @media (max-width: 600px) {
     .gallery-album {
-        margin-top: 34px;
+        margin-top: 6px;
     }
 }
 
