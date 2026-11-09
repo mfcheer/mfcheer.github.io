@@ -247,78 +247,13 @@
         }, 150);
     });
 
-    // ---------------- 灯箱 ----------------
-
-    const lb = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lbImg');
-    const lbCaption = document.getElementById('lbCaption');
-    const lbCounter = document.getElementById('lbCounter');
-    let lbPhotos = [];
-    let lbIdx = 0;
-    let lastFocus = null;
-
-    function showLb() {
-        const p = lbPhotos[lbIdx];
-        if (!p) return;
-        lbImg.classList.remove('lb-loaded');
-        lbImg.src = rootUrl(p.src);
-        lbImg.alt = p.date || '';
-        lbCaption.textContent = [p.album, p.date && p.date.slice(0, 10)].filter(Boolean).join(' · ');
-        lbCounter.textContent = (lbIdx + 1) + ' / ' + lbPhotos.length;
-        // 预加载相邻图
-        [lbIdx + 1, lbIdx - 1].forEach((i) => {
-            const np = lbPhotos[i];
-            if (np) { const im = new Image(); im.src = np.src; }
-        });
-    }
-
+    // 相册与文章、说说共用灯箱。
     function openLightbox(photos, idx) {
-        lbPhotos = photos;
-        lbIdx = idx;
-        lastFocus = document.activeElement;
-        lb.hidden = false;
-        document.body.style.overflow = 'hidden';
-        showLb();
-        document.getElementById('lbClose').focus();
+        openSitePhotos(photos.map(p => ({
+            src: rootUrl(p.src),
+            caption: [p.album, p.date && p.date.slice(0, 10)].filter(Boolean).join(' · ')
+        })), idx);
     }
-
-    function closeLightbox() {
-        lb.hidden = true;
-        lbImg.src = '';
-        document.body.style.overflow = '';
-        if (lastFocus && lastFocus.focus) lastFocus.focus();
-    }
-
-    function step(dir) {
-        if (!lbPhotos.length) return;
-        lbIdx = (lbIdx + dir + lbPhotos.length) % lbPhotos.length;
-        showLb();
-    }
-
-    document.getElementById('lbClose').addEventListener('click', closeLightbox);
-    document.getElementById('lbPrev').addEventListener('click', () => step(-1));
-    document.getElementById('lbNext').addEventListener('click', () => step(1));
-    lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
-
-    document.addEventListener('keydown', (e) => {
-        if (lb.hidden) return;
-        if (e.key === 'Escape') closeLightbox();
-        else if (e.key === 'ArrowLeft') step(-1);
-        else if (e.key === 'ArrowRight') step(1);
-    });
-
-    // 触屏滑动切换
-    let touchX = null;
-    lb.addEventListener('touchstart', (e) => { touchX = e.changedTouches[0].clientX; }, { passive: true });
-    lb.addEventListener('touchend', (e) => {
-        if (touchX === null) return;
-        const dx = e.changedTouches[0].clientX - touchX;
-        if (Math.abs(dx) > 50) step(dx > 0 ? -1 : 1);
-        touchX = null;
-    }, { passive: true });
-
-    // 全图加载淡入
-    lbImg.addEventListener('load', () => lbImg.classList.add('lb-loaded'));
 
     // ---------------- 站内上传发布 ----------------
     // 与说说同链路：OAuth 登录 → 压缩 → contents API 传 assets/gallery/ → 创建 gallery 标签 Issue，
@@ -329,6 +264,7 @@
     let galleryUploadBackdrop = null;
     let galleryUploadFiles = []; // [{ file, dataUrl }]
     let galleryUploadBusy = false;
+    const galleryDraft = createSiteDraft('gallery');
 
     function fileToRawBase64(file) {
         return new Promise((resolve, reject) => {
@@ -356,13 +292,13 @@
     }
 
     function closeGalleryUploadModal() {
-        if (!galleryUploadBackdrop) return;
+        if (!galleryUploadBackdrop || galleryUploadBusy) return;
+        galleryDraft.open = false;
         document.removeEventListener('keydown', galleryUploadEscHandler);
-        galleryUploadFiles = [];
-        galleryUploadBusy = false;
         galleryUploadBackdrop.remove();
         galleryUploadBackdrop = null;
         document.body.classList.remove('lightbox-open');
+        applySiteUpdate();
     }
 
     function renderGalleryUploadPreviews(previewsEl) {
@@ -376,14 +312,21 @@
                 <button class="moment-thumb-del" type="button" title="移除照片">&times;</button>
             `;
             wrap.querySelector('.moment-thumb-del').addEventListener('click', () => {
+                if (galleryUploadBusy) return;
+                URL.revokeObjectURL(galleryUploadFiles[index].dataUrl);
                 galleryUploadFiles.splice(index, 1);
+                galleryDraft.saveFiles(galleryUploadFiles);
                 renderGalleryUploadPreviews(previewsEl);
             });
             previewsEl.appendChild(wrap);
         });
     }
 
-    function renderGalleryUploadModal() {
+    async function renderGalleryUploadModal() {
+        if (galleryUploadBusy) return;
+        galleryDraft.open = true;
+        await galleryDraft.ready;
+        galleryUploadFiles = galleryDraft.files;
         ensureGalleryUploadModal();
         // CSS 默认 opacity:0 + visibility:hidden，必须加 is-open 才可见（与说说弹窗同机制）。
         // 此前漏加导致弹窗在 DOM 中但不可见，表现为「点击无反应」。
@@ -450,6 +393,7 @@
                 <button class="moment-modal-close" type="button" aria-label="关闭">&times;</button>
             </div>
             <div class="moment-modal-body">
+                <p class="draft-hint">草稿保存在当前浏览器，关闭后可继续编辑；发布成功后自动清空。</p>
                 <input id="galleryAlbumName" class="moment-textarea" list="galleryAlbumOptions" style="min-height:0;height:42px;padding:10px 14px;resize:none;margin-bottom:10px;" maxlength="40" placeholder="相册名称（留空则自动按月份分组）">
                 <datalist id="galleryAlbumOptions">${albumOptions}</datalist>
                 <textarea id="galleryAlbumDesc" class="moment-textarea" rows="2" maxlength="200" placeholder="相册简介（可选，最多 200 字）"></textarea>
@@ -468,7 +412,8 @@
                 <div class="moment-modal-footer">
                     <button type="button" class="moment-logout-link" id="galleryLogoutBtn" title="退出身份并清除本地保存的 Token">退出登录</button>
                     <div class="moment-modal-btns">
-                        <button type="button" class="moment-btn moment-btn-cancel" id="galleryUploadCancelBtn">取消</button>
+                        <button type="button" class="moment-btn moment-btn-cancel" id="galleryDiscardBtn">清空草稿</button>
+                        <button type="button" class="moment-btn moment-btn-cancel" id="galleryUploadCancelBtn">保存并关闭</button>
                         <button type="button" class="moment-btn moment-btn-primary" id="gallerySubmitBtn">上传并发布</button>
                     </div>
                 </div>
@@ -481,6 +426,25 @@
         const statusEl = card.querySelector('#galleryUploadStatus');
         const submitBtn = card.querySelector('#gallerySubmitBtn');
 
+        const nameInput = card.querySelector('#galleryAlbumName');
+        const descInput = card.querySelector('#galleryAlbumDesc');
+        nameInput.value = galleryDraft.fields.name || '';
+        descInput.value = galleryDraft.fields.desc || '';
+        const saveDraft = () => galleryDraft.saveFields({ name: nameInput.value, desc: descInput.value });
+        nameInput.addEventListener('input', saveDraft);
+        descInput.addEventListener('input', saveDraft);
+        renderGalleryUploadPreviews(previewsEl);
+        card.querySelector('#galleryDiscardBtn').onclick = async () => {
+            if (galleryUploadBusy || !confirm('清空这份相册草稿的文字和图片？')) return;
+            galleryUploadBusy = true;
+            setEditorBusy(galleryDraft, card, true);
+            galleryUploadFiles.forEach(item => URL.revokeObjectURL(item.dataUrl));
+            await galleryDraft.clear();
+            galleryUploadFiles = [];
+            galleryUploadBusy = false;
+            setEditorBusy(galleryDraft, card, false);
+            renderGalleryUploadModal();
+        };
         closeBtn.addEventListener('click', () => { if (!galleryUploadBusy) closeGalleryUploadModal(); });
         card.querySelector('#galleryUploadCancelBtn').addEventListener('click', () => { if (!galleryUploadBusy) closeGalleryUploadModal(); });
         card.querySelector('#galleryLogoutBtn').addEventListener('click', () => {
@@ -493,6 +457,7 @@
         });
 
         fileInput.addEventListener('change', () => {
+            if (galleryUploadBusy) return;
             const picked = Array.from(fileInput.files || []);
             fileInput.value = '';
             for (const f of picked) {
@@ -505,6 +470,7 @@
                 }
                 galleryUploadFiles.push({ file: f, dataUrl: URL.createObjectURL(f) });
             }
+            galleryDraft.saveFiles(galleryUploadFiles);
             renderGalleryUploadPreviews(previewsEl);
         });
 
@@ -526,7 +492,7 @@
         if (!auth || !auth.token) { renderGalleryUploadModal(); return; }
 
         galleryUploadBusy = true;
-        submitBtn.disabled = true;
+        setEditorBusy(galleryDraft, card, true);
         statusEl.className = 'moment-modal-status is-loading';
         statusEl.style.display = 'block';
         statusEl.textContent = '准备上传…';
@@ -556,11 +522,16 @@
 
             statusEl.className = 'moment-modal-status';
             statusEl.textContent = '✓ 已提交！同步流水线约 1-2 分钟后展示，可以关闭本页';
-            showMomentToast('🎉 相册已提交');
-            setTimeout(closeGalleryUploadModal, 1800);
+            showMomentToast('🎉 相册已提交，照片同步后显示（约 1–2 分钟）');
+            galleryUploadFiles.forEach(item => URL.revokeObjectURL(item.dataUrl));
+            await galleryDraft.clear();
+            galleryUploadFiles = [];
+            galleryUploadBusy = false;
+            setEditorBusy(galleryDraft, card, false);
+            closeGalleryUploadModal();
         } catch (e) {
             galleryUploadBusy = false;
-            submitBtn.disabled = false;
+            setEditorBusy(galleryDraft, card, false);
             // token 失效（401 Bad credentials）：自动清除本地凭据，引导重新授权
             if (e.status === 401 || e.message === 'Bad credentials') {
                 clearMomentAuth();

@@ -29,7 +29,7 @@ const TPL_DIR = path.join(ROOT, 'templates');
 import anchor from 'markdown-it-anchor';
 import taskLists from 'markdown-it-task-lists';
 
-const VERSIONS = { css: '1.3.28', js: '1.3.30' };
+const VERSIONS = { css: '1.3.29', js: '1.3.31' };
 
 // ---------- 工具 ----------
 const esc = (s) =>

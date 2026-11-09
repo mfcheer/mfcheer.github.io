@@ -123,19 +123,52 @@ loadGitHubChart();
     if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 })();
 
-// 全局图片点击放大预览（Lightbox），支持文章正文与说说配图
+// 全站共用多图浏览：文章按篇、说说按条、相册按当前照片列表分组。
 let siteLightbox = null;
 let siteLightboxImg = null;
 let siteLightboxCaption = null;
 let siteLastActiveElement = null;
+let sitePhotos = [];
+let sitePhotoIndex = 0;
+let siteImageRequest = 0;
 
 function closeLightbox() {
     if (!siteLightbox || !siteLightbox.classList.contains('is-open')) return;
     siteLightbox.classList.remove('is-open');
+    siteImageRequest++;
+    siteLightboxImg.removeAttribute('src');
     document.body.classList.remove('lightbox-open');
-    if (siteLastActiveElement && typeof siteLastActiveElement.focus === 'function') {
-        siteLastActiveElement.focus();
-    }
+    siteLastActiveElement?.focus?.();
+}
+
+function showSitePhoto() {
+    const photo = sitePhotos[sitePhotoIndex];
+    const request = ++siteImageRequest;
+    const status = siteLightbox.querySelector('.site-photo-status');
+    status.textContent = '正在加载图片…';
+    siteLightboxImg.hidden = true;
+    siteLightboxImg.onload = () => {
+        if (request !== siteImageRequest) return;
+        siteLightboxImg.hidden = false;
+        status.textContent = '';
+    };
+    siteLightboxImg.onerror = () => {
+        if (request === siteImageRequest) status.textContent = '图片加载失败，请点击重试';
+    };
+    siteLightboxImg.alt = photo.caption || '图片';
+    siteLightboxImg.src = photo.src;
+    siteLightboxCaption.textContent = photo.caption || '';
+    siteLightbox.querySelector('.site-photo-counter').textContent = `${sitePhotoIndex + 1} / ${sitePhotos.length}`;
+    siteLightbox.querySelectorAll('.site-photo-nav').forEach(btn => { btn.hidden = sitePhotos.length < 2; });
+    [-1, 1].forEach(dir => {
+        const next = sitePhotos[(sitePhotoIndex + dir + sitePhotos.length) % sitePhotos.length];
+        if (sitePhotos.length > 1) { const img = new Image(); img.src = next.src; }
+    });
+}
+
+function stepSitePhoto(dir) {
+    sitePhotoIndex = (sitePhotoIndex + dir + sitePhotos.length) % sitePhotos.length;
+    showSitePhoto();
 }
 
 function createLightbox() {
@@ -146,56 +179,68 @@ function createLightbox() {
     siteLightbox.setAttribute('role', 'dialog');
     siteLightbox.setAttribute('aria-modal', 'true');
     siteLightbox.setAttribute('aria-label', '图片预览');
-    siteLightbox.setAttribute('tabindex', '-1');
-
-    const closeBtn = document.createElement('button');
-    closeBtn.type = 'button';
-    closeBtn.className = 'post-lightbox-close';
-    closeBtn.setAttribute('title', '关闭预览 (Esc)');
-    closeBtn.setAttribute('aria-label', '关闭预览 (Esc)');
-    closeBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-
-    siteLightboxImg = document.createElement('img');
-    siteLightboxImg.className = 'post-lightbox-img';
-    siteLightboxImg.alt = '';
-
-    siteLightboxCaption = document.createElement('div');
-    siteLightboxCaption.className = 'post-lightbox-caption';
-
-    siteLightbox.append(closeBtn, siteLightboxImg, siteLightboxCaption);
+    siteLightbox.innerHTML = `
+        <button class="post-lightbox-close" aria-label="关闭预览 (Esc)">×</button>
+        <button class="site-photo-nav site-photo-prev" aria-label="上一张">‹</button>
+        <img class="post-lightbox-img" alt="">
+        <button class="site-photo-nav site-photo-next" aria-label="下一张">›</button>
+        <button class="site-photo-status" aria-live="polite"></button>
+        <div class="post-lightbox-caption"></div>
+        <div class="site-photo-counter" aria-live="polite"></div>`;
     document.body.appendChild(siteLightbox);
-
-    siteLightbox.addEventListener('click', () => {
-        closeLightbox();
-    });
-
-    closeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        closeLightbox();
-    });
-
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && siteLightbox.classList.contains('is-open')) {
-            closeLightbox();
+    siteLightboxImg = siteLightbox.querySelector('img');
+    siteLightboxCaption = siteLightbox.querySelector('.post-lightbox-caption');
+    siteLightbox.querySelector('.post-lightbox-close').onclick = closeLightbox;
+    siteLightbox.querySelector('.site-photo-prev').onclick = () => stepSitePhoto(-1);
+    siteLightbox.querySelector('.site-photo-next').onclick = () => stepSitePhoto(1);
+    siteLightbox.querySelector('.site-photo-status').onclick = showSitePhoto;
+    siteLightbox.onclick = e => { if (e.target === siteLightbox) closeLightbox(); };
+    window.addEventListener('keydown', e => {
+        if (!siteLightbox.classList.contains('is-open')) return;
+        if (e.key === 'Escape') { e.preventDefault(); closeLightbox(); }
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            e.preventDefault(); stepSitePhoto(e.key === 'ArrowLeft' ? -1 : 1);
         }
+        if (e.key === 'Tab') {
+            const buttons = [...siteLightbox.querySelectorAll('button')].filter(b => !b.hidden && b.getClientRects().length);
+            const i = buttons.indexOf(document.activeElement);
+            e.preventDefault(); buttons[(i + (e.shiftKey ? -1 : 1) + buttons.length) % buttons.length].focus();
+        }
+    });
+    let touch = null;
+    siteLightbox.addEventListener('touchstart', e => {
+        touch = e.touches.length === 1 ? [e.touches[0].clientX, e.touches[0].clientY] : null;
+    }, { passive: true });
+    siteLightbox.addEventListener('touchend', e => {
+        if (!touch) return;
+        const dx = e.changedTouches[0].clientX - touch[0], dy = e.changedTouches[0].clientY - touch[1];
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) stepSitePhoto(dx > 0 ? -1 : 1);
+        touch = null;
+    }, { passive: true });
+    siteLightbox.addEventListener('touchcancel', () => { touch = null; });
+}
+
+function openSitePhotos(photos, index = 0, trigger = document.activeElement) {
+    if (!photos.length) return;
+    createLightbox();
+    sitePhotos = photos;
+    sitePhotoIndex = Math.max(0, Math.min(index, photos.length - 1));
+    siteLastActiveElement = trigger;
+    document.body.classList.add('lightbox-open');
+    siteLightbox.classList.add('is-open');
+    showSitePhoto();
+    requestAnimationFrame(() => {
+        if (siteLightbox.classList.contains('is-open')) siteLightbox.querySelector('.post-lightbox-close').focus();
     });
 }
 
 function openLightbox(img) {
-    createLightbox();
-    siteLastActiveElement = img;
-    siteLightboxImg.src = img.currentSrc || img.src;
-    const caption = (img.alt || '').trim();
-    if (caption && caption !== '这里写图片描述' && caption !== '说说配图' && caption !== 'Image') {
-        siteLightboxCaption.textContent = caption;
-        siteLightboxCaption.style.display = 'block';
-    } else {
-        siteLightboxCaption.textContent = '';
-        siteLightboxCaption.style.display = 'none';
-    }
-    document.body.classList.add('lightbox-open');
-    siteLightbox.classList.add('is-open');
-    siteLightbox.focus();
+    const group = img.closest('.moment-item, .post-body');
+    const images = group ? [...group.querySelectorAll('img.zoomable-img')] : [img];
+    openSitePhotos(images.map(image => ({
+        src: image.currentSrc || image.src,
+        caption: ['这里写图片描述', '说说配图', 'Image'].includes(image.alt) ? '' : image.alt
+    })), images.indexOf(img), img);
 }
 
 function bindZoomableImage(img) {
@@ -1372,14 +1417,89 @@ if ('serviceWorker' in navigator) {
     // 新 SW 接管（skipWaiting + claim）后自动刷新一次，页面立即用上新资源；
     // 仅在页面本就有 controller 时挂监听，避免首次注册也触发刷新造成死循环。
     if (navigator.serviceWorker.controller) {
-        let swRefreshing = false;
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-            if (swRefreshing) return;
-            swRefreshing = true;
-            window.location.reload();
-        });
+        navigator.serviceWorker.addEventListener('controllerchange', requestSiteUpdate);
     }
 }
+
+// 草稿正文同步保存；图片使用 IndexedDB，避免 localStorage 容量限制。
+const siteEditors = new Set();
+let sitePendingUpdate = false;
+let siteReloading = false;
+function siteEditing() { return [...siteEditors].some(editor => editor.open || editor.busy || editor.saving || !editor.textSaved || (!editor.imageSaved && editor.files.length)); }
+function applySiteUpdate() {
+    if (!sitePendingUpdate || siteReloading || siteEditing()) return;
+    siteReloading = true;
+    window.location.reload();
+}
+function requestSiteUpdate() {
+    sitePendingUpdate = true;
+    if (siteEditing()) showMomentToast('新版本已就绪，关闭编辑窗口后更新；草稿会保留');
+    applySiteUpdate();
+}
+function createSiteDraft(name) {
+    const key = `mfcheer_draft_${name}`;
+    const editor = { fields: {}, files: [], busy: false, open: false, saving: false, imageSaved: true, textSaved: true };
+    siteEditors.add(editor);
+    try {
+        const saved = JSON.parse(localStorage.getItem(key) || '{}');
+        if (saved && typeof saved === 'object' && !Array.isArray(saved)) editor.fields = saved;
+    } catch (_) {}
+    const dbReady = new Promise((resolve, reject) => {
+        const req = indexedDB.open('mfcheer-publish-drafts', 1);
+        req.onupgradeneeded = () => req.result.createObjectStore('drafts');
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+    editor.ready = dbReady.then(db => new Promise((resolve, reject) => {
+        const tx = db.transaction('drafts');
+        const req = tx.objectStore('drafts').get(name);
+        req.onsuccess = () => {
+            editor.files = (req.result || []).map(item => ({ ...item,
+                dataUrl: item.dataUrl?.startsWith('blob:') ? URL.createObjectURL(item.file) : item.dataUrl }));
+            resolve();
+        };
+        req.onerror = () => reject(req.error);
+    })).catch(() => { editor.imageSaved = false; });
+    let queue = editor.ready;
+    editor.saveFields = fields => {
+        editor.fields = fields;
+        try { localStorage.setItem(key, JSON.stringify(fields)); editor.textSaved = true; }
+        catch (_) { editor.textSaved = false; showMomentToast('浏览器无法保存文字草稿，请勿刷新或离开页面'); }
+    };
+    editor.saveFiles = files => {
+        editor.files = files;
+        const snapshot = files.map(item => ({ ...item }));
+        editor.saving = true;
+        queue = queue.then(async () => {
+            const db = await dbReady;
+            await new Promise((resolve, reject) => {
+                const tx = db.transaction('drafts', 'readwrite');
+                tx.objectStore('drafts').put(snapshot, name);
+                tx.oncomplete = resolve;
+                tx.onerror = tx.onabort = () => reject(tx.error);
+            });
+            editor.imageSaved = true;
+        }).catch(() => {
+            editor.imageSaved = false;
+            showMomentToast('图片草稿保存失败，关闭窗口可保留，刷新或离开会丢失图片');
+        });
+        const current = queue;
+        queue.finally(() => { if (current === queue) { editor.saving = false; applySiteUpdate(); } });
+        return queue;
+    };
+    editor.clear = () => { editor.saveFields({}); return editor.saveFiles([]); };
+    return editor;
+}
+function setEditorBusy(editor, card, busy) {
+    editor.busy = busy;
+    card.setAttribute('aria-busy', String(busy));
+    card.querySelectorAll('button, input, textarea').forEach(el => { el.disabled = busy; });
+}
+window.addEventListener('beforeunload', e => {
+    if ([...siteEditors].some(editor => editor.busy || editor.saving || !editor.textSaved || (!editor.imageSaved && editor.files.length))) {
+        e.preventDefault(); e.returnValue = '';
+    }
+});
 
 // ============================================================
 // 说说站内发布与博主认证浮层 (Moment Publish & Auth Modal)
@@ -1406,7 +1526,7 @@ async function checkOAuthCallback() {
         const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
         window.history.replaceState({}, document.title, cleanUrl);
 
-        openMomentModal();
+        await openMomentModal();
         const statusEl = document.getElementById("momentAuthStatus");
         if (statusEl) {
             statusEl.className = "moment-modal-status is-loading";
@@ -1483,6 +1603,7 @@ const MOMENT_AUTH_USER_KEY = "mfcheer_moment_auth_user";
 let momentModalBackdrop = null;
 let selectedMomentFiles = [];
 let selectedMomentTags = new Set();
+const momentDraft = createSiteDraft("moment");
 
 function getMomentAuth() {
     try {
@@ -1557,14 +1678,19 @@ function createMomentModal() {
 }
 
 function closeMomentModal() {
-    if (!momentModalBackdrop) return;
+    if (!momentModalBackdrop || momentDraft.busy) return;
+    momentDraft.open = false;
     momentModalBackdrop.classList.remove("is-open");
     document.body.classList.remove("lightbox-open");
-    selectedMomentFiles = [];
-    selectedMomentTags.clear();
+    applySiteUpdate();
 }
 
-function openMomentModal() {
+async function openMomentModal() {
+    if (momentDraft.open || momentDraft.busy) return;
+    momentDraft.open = true;
+    await momentDraft.ready;
+    selectedMomentFiles = momentDraft.files;
+    selectedMomentTags = new Set(Array.isArray(momentDraft.fields.tags) ? momentDraft.fields.tags : []);
     createMomentModal();
     renderMomentModalContent();
     momentModalBackdrop.classList.add("is-open");
@@ -1683,6 +1809,7 @@ function renderMomentModalContent() {
             <button class="moment-modal-close" type="button" aria-label="关闭">&times;</button>
         </div>
         <div class="moment-modal-body">
+            <p class="draft-hint">草稿保存在当前浏览器，关闭后可继续编辑；发布成功后自动清空。</p>
             <textarea id="momentTextInput" class="moment-textarea" placeholder="记录这一刻的想法、生活随想或灵感..." rows="4"></textarea>
             
             <div class="moment-img-picker-wrap">
@@ -1710,7 +1837,8 @@ function renderMomentModalContent() {
             <div class="moment-modal-footer">
                 <button type="button" class="moment-logout-link" id="momentLogoutBtn" title="退出身份并清除本地保存的 Token">退出登录</button>
                 <div class="moment-modal-btns">
-                    <button type="button" class="moment-btn moment-btn-cancel" id="momentPublishCancelBtn">取消</button>
+                    <button type="button" class="moment-btn moment-btn-cancel" id="momentDiscardBtn">清空草稿</button>
+                    <button type="button" class="moment-btn moment-btn-cancel" id="momentPublishCancelBtn">保存并关闭</button>
                     <button type="button" class="moment-btn moment-btn-primary" id="momentSubmitBtn">发布说说</button>
                 </div>
             </div>
@@ -1727,6 +1855,19 @@ function renderMomentModalContent() {
     const logoutBtn = card.querySelector("#momentLogoutBtn");
     const tagChips = card.querySelectorAll(".moment-chip");
 
+    textInput.value = momentDraft.fields.text || "";
+    const saveDraft = () => momentDraft.saveFields({ text: textInput.value, tags: [...selectedMomentTags] });
+    textInput.addEventListener("input", saveDraft);
+    tagChips.forEach(chip => chip.classList.toggle("is-selected", selectedMomentTags.has(chip.dataset.tag)));
+    renderSelectedPreviews(previewsWrap);
+    card.querySelector("#momentDiscardBtn").onclick = async () => {
+        if (momentDraft.busy || !confirm("清空这份草稿的文字、标签和图片？")) return;
+        setEditorBusy(momentDraft, card, true);
+        await momentDraft.clear();
+        selectedMomentFiles = []; selectedMomentTags.clear();
+        setEditorBusy(momentDraft, card, false);
+        renderMomentModalContent();
+    };
     closeBtn.addEventListener("click", closeMomentModal);
     cancelBtn.addEventListener("click", closeMomentModal);
 
@@ -1748,12 +1889,15 @@ function renderMomentModalContent() {
                 selectedMomentTags.add(tag);
                 chip.classList.add("is-selected");
             }
+            saveDraft();
         });
     });
 
     fileInput.addEventListener("change", async () => {
+        if (momentDraft.busy) return;
         const files = Array.from(fileInput.files || []);
         if (!files.length) return;
+        setEditorBusy(momentDraft, card, true);
         for (const file of files) {
             if (selectedMomentFiles.length >= 9) {
                 alert("最多支持上传 9 张配图");
@@ -1768,14 +1912,17 @@ function renderMomentModalContent() {
                 const { dataUrl, base64 } = await compressMomentImage(file);
                 selectedMomentFiles.push({ file, dataUrl, base64 });
             } catch (e) {
-                console.warn("图片解析压缩失败:", e);
+                showMomentToast(`图片 ${file.name} 处理失败，请重新选择`);
             }
         }
         fileInput.value = "";
+        await momentDraft.saveFiles(selectedMomentFiles);
+        setEditorBusy(momentDraft, card, false);
         renderSelectedPreviews(previewsWrap);
     });
 
     submitBtn.addEventListener("click", async () => {
+        if (momentDraft.busy) return;
         const text = (textInput.value || "").trim();
         if (!text && !selectedMomentFiles.length) {
             statusEl.className = "moment-modal-status is-error";
@@ -1785,7 +1932,7 @@ function renderMomentModalContent() {
             return;
         }
 
-        submitBtn.disabled = true;
+        setEditorBusy(momentDraft, card, true);
         statusEl.className = "moment-modal-status is-loading";
         statusEl.style.display = "block";
 
@@ -1828,13 +1975,16 @@ function renderMomentModalContent() {
             writeMomentsCache(momentsAll);
             renderMomentsState();
 
+            await momentDraft.clear();
+            selectedMomentFiles = []; selectedMomentTags.clear();
+            setEditorBusy(momentDraft, card, false);
             closeMomentModal();
             showMomentToast("🎉 说说发布成功！已在页面实时展示。");
         } catch (err) {
             statusEl.className = "moment-modal-status is-error";
             statusEl.textContent = err.message || "发布失败，请重试";
             statusEl.style.display = "block";
-            submitBtn.disabled = false;
+            setEditorBusy(momentDraft, card, false);
         }
     });
 
@@ -1900,7 +2050,9 @@ function renderSelectedPreviews(container) {
         `;
         wrap.querySelector(".moment-thumb-del").addEventListener("click", (e) => {
             e.stopPropagation();
+            if (momentDraft.busy) return;
             selectedMomentFiles.splice(index, 1);
+            momentDraft.saveFiles(selectedMomentFiles);
             renderSelectedPreviews(container);
         });
         container.appendChild(wrap);

@@ -3721,3 +3721,29 @@ section[id] {
         transition: none;
     }
 }
+
+/* 全站多图预览与编辑状态 */
+.post-lightbox, .post-lightbox-img { cursor: default; }
+.post-lightbox-img[hidden], .site-photo-nav[hidden] { display: none; }
+.site-photo-nav { position: absolute; top: 48%; z-index: 2001; width: 44px; height: 48px; border: 1px solid #ffffff55; border-radius: 12px; background: #111a; color: white; font-size: 32px; cursor: pointer; }
+.site-photo-prev { left: max(12px, env(safe-area-inset-left)); }
+.site-photo-next { right: max(12px, env(safe-area-inset-right)); }
+.site-photo-counter { color: white; font-size: 13px; margin-top: 10px; }
+.site-photo-status { color: white; background: transparent; border: 0; cursor: pointer; }
+.site-photo-status:empty { display: none; }
+.post-lightbox-caption:empty { display: none; }
+.moment-modal-card[aria-busy="true"] { cursor: progress; }
+.moment-modal-card button:disabled { opacity: .5; cursor: wait; }
+.moment-modal-btns { flex-wrap: wrap; }
+@media (max-width: 600px) {
+    .site-photo-nav { top: auto; bottom: calc(24px + env(safe-area-inset-bottom)); }
+    .post-lightbox-img { max-height: 72vh; }
+}
+
+.draft-hint { font-size: 12px; opacity: .7; line-height: 1.6; margin: 0 0 12px; }
+@media (max-width: 600px) {
+    .moment-modal-footer { flex-direction: column; align-items: stretch; gap: 12px; }
+    .moment-modal-footer .moment-modal-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+    .moment-modal-footer .moment-btn-primary { grid-column: 1 / -1; }
+    .moment-modal-footer .moment-logout-link { align-self: flex-start; white-space: nowrap; }
+}
