@@ -545,8 +545,10 @@
         }
     }
 
-    const galleryUploadBtn = document.getElementById('galleryUploadBtn');
-    if (galleryUploadBtn) galleryUploadBtn.addEventListener('click', renderGalleryUploadModal);
+    // 事件委托绑定：即使按钮元素被后续 DOM 操作替换，点击依然可达
+    document.addEventListener('click', (e) => {
+        if (e.target.closest && e.target.closest('#galleryUploadBtn')) renderGalleryUploadModal();
+    });
 
     // ---------------- 启动 ----------------
 

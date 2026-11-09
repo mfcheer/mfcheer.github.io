@@ -666,6 +666,15 @@ html[data-theme="dark"] .fcb-tooltip {
     color: var(--accent);
 }
 
+/* button 形态的 activity-badge：去除浏览器默认按钮外观，保持纯文字链样式 */
+button.activity-badge {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+}
+
 .gh-chart-container {
     width: 100%;
     max-width: 100%;
@@ -2891,32 +2900,6 @@ html[data-theme="dark"] .post-nav-card:hover {
 /* 锚点跳转补偿：sticky 顶栏（桌面约 64px、移动端两行约 90px）会盖住目标区顶部 */
 section[id] {
     scroll-margin-top: 84px;
-}
-
-/* 相册上传按钮（站内发布入口） */
-.gallery-upload-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--accent) 8%, transparent);
-    color: var(--accent);
-    font: inherit;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
-}
-
-.gallery-upload-btn:hover {
-    background: var(--accent);
-    color: #fff;
-    transform: translateY(-1px);
-}
-
-.gallery-upload-btn:active {
-    transform: translateY(0);
 }
 
 /* ============================================================
