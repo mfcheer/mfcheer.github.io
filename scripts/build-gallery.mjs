@@ -182,10 +182,20 @@ async function fetchIssues() {
     const headers = { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'mfcheer-gallery-syncer' };
     if (token) headers['Authorization'] = `Bearer ${token}`;
 
-    const res = await fetch(API_URL, { headers });
-    if (!res.ok) throw new Error(`GitHub API 请求失败 HTTP ${res.status}`);
-    const issues = await res.json();
-    return (Array.isArray(issues) ? issues : [])
+    // 分页拉取全部（GitHub 单页上限 100 条），相册 Issue 超过一页时也不丢数据；
+    // 任一页失败直接抛错终止，避免静默截断
+    const MAX_PAGES = 50; // 安全阀：50 页 × 100 条，防异常循环
+    const sep = API_URL.includes('?') ? '&' : '?';
+    const all = [];
+    for (let page = 1; page <= MAX_PAGES; page++) {
+        const res = await fetch(`${API_URL}${sep}page=${page}`, { headers });
+        if (!res.ok) throw new Error(`GitHub API 请求失败 HTTP ${res.status}`);
+        const batch = await res.json();
+        if (!Array.isArray(batch) || !batch.length) break;
+        all.push(...batch);
+        if (batch.length < 100) break; // 末页
+    }
+    return all
         .filter((it) => !it.pull_request)
         .filter((it) => it.author_association === 'OWNER' || (it.user && it.user.login && it.user.login.toLowerCase() === OWNER_LOGIN));
 }

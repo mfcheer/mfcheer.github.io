@@ -932,13 +932,50 @@ function renderMomentsState(state = 'ok') {
         return;
     }
 
-    // 若容器指定了 data-limit（如首页限制显示最近 10 条），在非筛选状态下截取前 N 条
+    // 首页容器带 data-limit（只展示最近 N 条，不做滚动加载）；
+    // 列表页全量展示：分批渲染 + 无感无限加载（滑到接近底部自动追加下一批）
     const limit = parseInt(listEl.dataset.limit, 10);
-    const displayList = (!Number.isNaN(limit) && limit > 0 && !momentsFilter)
-        ? list.slice(0, limit)
-        : list;
+    const hasLimit = !Number.isNaN(limit) && limit > 0 && !momentsFilter;
+    const PAGE_SIZE = hasLimit ? limit : 8;
+    let rendered = 0;
+    let sentinel = null;
+    let sentinelIO = null;
 
-    displayList.forEach((m, itemIndex) => {
+    const teardownSentinel = () => {
+        if (sentinelIO) sentinelIO.disconnect();
+        if (sentinel) sentinel.remove();
+        sentinel = sentinelIO = null;
+    };
+
+    const renderBatch = () => {
+        if (sentinel) sentinel.remove(); // 先摘下哨兵，保证追加的条目都在其之前
+        const batch = list.slice(rendered, rendered + PAGE_SIZE);
+        batch.forEach((m, i) => listEl.append(buildMomentItem(m, rendered + i)));
+        rendered += batch.length;
+        if (rendered < list.length && sentinel) listEl.append(sentinel);
+        else teardownSentinel();
+    };
+
+    if (!hasLimit && list.length > PAGE_SIZE) {
+        sentinel = document.createElement('div');
+        sentinel.className = 'moment-sentinel';
+        if ('IntersectionObserver' in window) {
+            sentinelIO = new IntersectionObserver((entries) => {
+                if (entries.some((en) => en.isIntersecting)) renderBatch();
+            }, { rootMargin: '600px 0px' }); // 提前 600px 预加载，滚动中无感接续
+            sentinelIO.observe(sentinel);
+        } else {
+            // 极旧浏览器降级：滚动事件兜底
+            const onScroll = () => {
+                if (!sentinel) { window.removeEventListener('scroll', onScroll); return; }
+                if (sentinel.getBoundingClientRect().top < window.innerHeight + 600) renderBatch();
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+        }
+    }
+
+    // 单条说说的 DOM 构建（原内联逻辑提取，供分批追加复用；itemIndex 为全局序号，前 3 张图 eager 加载）
+    function buildMomentItem(m, itemIndex) {
         const item = document.createElement('div');
         item.className = 'moment-item';
 
@@ -1094,8 +1131,8 @@ function renderMomentsState(state = 'ok') {
             item.append(tagsWrap);
         }
 
-        listEl.append(item);
-    });
+        return item;
+    }
 }
 
 function readMomentsCache() {

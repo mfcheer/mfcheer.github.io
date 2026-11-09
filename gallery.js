@@ -64,12 +64,12 @@
         return rows;
     }
 
-    /** 收集全部相册的照片，供灯箱全局浏览 */
+    /** 全站照片流（含尚未渲染的相册），供灯箱全局浏览 */
     function collectAllPhotos() {
         const all = [];
-        document.querySelectorAll('.gallery-wall').forEach((w) => {
-            try { all.push(...JSON.parse(w.dataset.photos || '[]')); } catch {}
-        });
+        for (const a of albums) {
+            for (const p of a.photos) all.push(Object.assign({}, p, { album: a.title }));
+        }
         return all;
     }
 
@@ -142,8 +142,46 @@
         }
     }
 
+    // ---------------- 渲染：分批无感加载 ----------------
+    // 每批渲染 ALBUM_BATCH 个相册；滑到接近底部时自动续渲染下一批（哨兵提前 600px 触发），用户无感。
+    // Justified 装箱按相册独立、按顺序贪心填行，前缀稳定，分批渲染不影响已有行的布局。
+
+    const ALBUM_BATCH = 2;
+    let renderedAlbums = 0;
+    let fadeIO = null;      // 相册淡入观察器
+    let sentinel = null;    // 无限加载哨兵（列表容器后的静态元素）
+    let sentinelIO = null;
+
+    const teardownSentinel = () => {
+        if (sentinelIO) sentinelIO.disconnect();
+        if (fadeIO) fadeIO.disconnect();
+        if (sentinel) sentinel.hidden = true;
+        sentinel = sentinelIO = null;
+    };
+
+    function observeFade(el) {
+        if (fadeIO) fadeIO.observe(el);
+        else el.classList.add('g-inview'); // 无动效环境直接显示
+    }
+
+    const renderNextAlbums = () => {
+        if (sentinel) sentinel.hidden = true; // 先藏哨兵，保证追加的相册都在其之前
+        const batch = albums.slice(renderedAlbums, renderedAlbums + ALBUM_BATCH);
+        for (const album of batch) {
+            const el = renderAlbum(album);
+            listEl.appendChild(el); // 先挂载再布局，layoutWall 依赖 clientWidth
+            el.querySelectorAll('.gallery-wall').forEach(layoutWall);
+            observeFade(el);
+            renderedAlbums++;
+        }
+        if (sentinel && renderedAlbums < albums.length) sentinel.hidden = false;
+        else teardownSentinel();
+    };
+
     function render() {
         listEl.innerHTML = '';
+        teardownSentinel();
+        renderedAlbums = 0;
         if (!albums.length) {
             listEl.innerHTML =
                 '<div class="gallery-empty">' +
@@ -152,26 +190,33 @@
                 '</div>';
             return;
         }
-        for (const album of albums) {
-            const el = renderAlbum(album);
-            listEl.appendChild(el); // 先挂载再布局，layoutWall 依赖 clientWidth
-            el.querySelectorAll('.gallery-wall').forEach(layoutWall);
-        }
 
         // 滚动淡入（尊重系统减少动效设置）
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
-            const io = new IntersectionObserver((entries) => {
+            fadeIO = new IntersectionObserver((entries) => {
                 entries.forEach((en) => {
                     if (en.isIntersecting) {
                         en.target.classList.add('g-inview');
-                        io.unobserve(en.target);
+                        fadeIO.unobserve(en.target);
                     }
                 });
             }, { rootMargin: '0px 0px -8% 0px' });
-            listEl.querySelectorAll('.gallery-album').forEach((el) => io.observe(el));
         } else {
-            listEl.querySelectorAll('.gallery-album').forEach((el) => el.classList.add('g-inview'));
+            fadeIO = null;
         }
+
+        if (albums.length > ALBUM_BATCH && 'IntersectionObserver' in window) {
+            sentinel = document.getElementById('gallerySentinel');
+            if (sentinel) {
+                sentinel.hidden = false;
+                sentinelIO = new IntersectionObserver((entries) => {
+                    if (entries.some((en) => en.isIntersecting)) renderNextAlbums();
+                }, { rootMargin: '600px 0px' });
+                sentinelIO.observe(sentinel);
+            }
+        }
+
+        renderNextAlbums();
     }
 
     // 响应式重排

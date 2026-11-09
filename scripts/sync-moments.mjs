@@ -200,18 +200,32 @@ async function main() {
     console.log(`正在从 GitHub 拉取说说数据: ${API_URL}`);
     let issues = null;
     try {
-        const res = await fetch(API_URL, { headers });
-        if (res.ok) {
-            issues = await res.json();
-        } else {
-            if (res.status === 403) {
-                console.warn('GitHub API 触发匿名限流 (403 Rate Limited)');
-            } else {
-                console.warn(`请求失败: HTTP ${res.status}`);
+        // 分页拉取全部（GitHub 单页上限 100 条），说说超过一页时也不丢数据；
+        // 任一页失败都抛错 → issues 保持 null → 降级读上次成功生成的全量 JSON，避免静默截断
+        const MAX_PAGES = 50; // 安全阀：50 页 × 100 条，防异常循环
+        const sep = API_URL.includes('?') ? '&' : '?';
+        const all = [];
+        for (let page = 1; page <= MAX_PAGES; page++) {
+            const res = await fetch(`${API_URL}${sep}page=${page}`, { headers });
+            if (!res.ok) {
+                if (res.status === 403) {
+                    console.warn('GitHub API 触发匿名限流 (403 Rate Limited)');
+                } else {
+                    console.warn(`请求失败: HTTP ${res.status}`);
+                }
+                throw new Error(`HTTP ${res.status}`);
             }
+            const batch = await res.json();
+            if (!Array.isArray(batch) || !batch.length) break;
+            all.push(...batch);
+            if (batch.length < 100) break; // 末页
         }
+        issues = all;
     } catch (e) {
-        console.warn('拉取 GitHub Issues 网络异常:', e.message);
+        // HTTP 错误已在上方 warn，这里仅记录网络层异常
+        if (!/^HTTP /.test(e.message || '')) {
+            console.warn('拉取 GitHub Issues 网络异常:', e.message);
+        }
     }
 
     let list = [];
