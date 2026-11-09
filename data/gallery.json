@@ -1,22 +1,40 @@
 {
-  "updated_at": "2026-11-09 22:37:23",
-  "total": 10,
+  "updated_at": "2026-11-09 22:41:41",
+  "total": 12,
   "albums": [
     {
       "title": "2026·11",
-      "count": 4,
+      "count": 6,
       "description": null,
       "range": "2026.11",
       "cover": {
-        "src": "assets/gallery/296e9bd9b639f276.jpg",
-        "thumb": "assets/gallery/296e9bd9b639f276_s.jpg",
-        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAVABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQFAv/EAB8QAAICAgIDAQAAAAAAAAAAAAECAxEABAUhEiRBMf/EABcBAAMBAAAAAAAAAAAAAAAAAAABAgP/xAAYEQEBAAMAAAAAAAAAAAAAAAAAAQIRMf/aAAwDAQACEQMRAD8Afm2IYVDTuIwegT9zK8jqqB7MZB/KbI88G3seJmYOVsCx3i8nGyA2zKoPYwuRaVu3S7qsNmIMFQk35UCPmGGadin/2Q==",
+        "src": "assets/gallery/bdab446f2b226a73.jpg",
+        "thumb": "assets/gallery/bdab446f2b226a73_s.jpg",
+        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAVABADASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAQBAgMF/8QAIRAAAQQBBAMBAAAAAAAAAAAAAQACAxEhBBIxMhRBcZH/xAAWAQEBAQAAAAAAAAAAAAAAAAADAQL/xAAaEQACAgMAAAAAAAAAAAAAAAAAAgEREiEx/9oADAMBAAIRAxEAPwBpp0kuWz9cEEUtJHQsALXbnAUPq5B08hcXGZtA2B7UwwvlFiaqPU4P4s09FyQX8iUsJ3u5A5VRqZSDbryDn4hCZuAxGz//2Q==",
         "w": 1200,
         "h": 1600,
         "ratio": 0.75,
-        "date": "2026-11-09 22:33:56"
+        "date": "2026-11-09 22:41:19"
       },
       "photos": [
+        {
+          "src": "assets/gallery/bdab446f2b226a73.jpg",
+          "thumb": "assets/gallery/bdab446f2b226a73_s.jpg",
+          "w": 1200,
+          "h": 1600,
+          "ratio": 0.75,
+          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAVABADASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAQBAgMF/8QAIRAAAQQBBAMBAAAAAAAAAAAAAQACAxEhBBIxMhRBcZH/xAAWAQEBAQAAAAAAAAAAAAAAAAADAQL/xAAaEQACAgMAAAAAAAAAAAAAAAAAAgEREiEx/9oADAMBAAIRAxEAPwBpp0kuWz9cEEUtJHQsALXbnAUPq5B08hcXGZtA2B7UwwvlFiaqPU4P4s09FyQX8iUsJ3u5A5VRqZSDbryDn4hCZuAxGz//2Q==",
+          "date": "2026-11-09 22:41:19"
+        },
+        {
+          "src": "assets/gallery/9aa6b9934cac13a6.jpg",
+          "thumb": "assets/gallery/9aa6b9934cac13a6_s.jpg",
+          "w": 1200,
+          "h": 1600,
+          "ratio": 0.75,
+          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAIFAQT/xAAhEAEAAgIBAwUAAAAAAAAAAAABAgMAESEEEjEUMlFhkf/EABUBAQEAAAAAAAAAAAAAAAAAAAID/8QAFhEBAQEAAAAAAAAAAAAAAAAAAQBR/9oADAMBAAIRAxEAPwDuojXGUiFxYIpFfD9/OPC1m7l2sobNHHOS77ay0GymEpHiDxivW10RT1JsPbE5/dZRDYDRVcxMMMlO/9k=",
+          "date": "2026-11-09 22:41:19"
+        },
         {
           "src": "assets/gallery/296e9bd9b639f276.jpg",
           "thumb": "assets/gallery/296e9bd9b639f276_s.jpg",
