@@ -42,53 +42,18 @@ const LQIP_W = 16;         // 微缩占位图
 const JPEG_QUALITY_FULL = 82;
 const JPEG_QUALITY_THUMB = 78;
 
-// ---------------- EXIF 最小解析：只取拍摄时间 DateTimeOriginal (0x9003) ----------------
+// ---------------- 时间处理 ----------------
 
-function parseExifDate(exifBuffer) {
-    try {
-        if (!exifBuffer || exifBuffer.length < 8) return null;
-        let off = 0;
-        // JPEG APP1 内嵌 TIFF；sharp 返回的 exif 是去掉 APP1 头的 TIFF 原始数据
-        if (exifBuffer.toString('ascii', 0, 2) === 'Ex') {
-            // "Exif\0\0" 前缀（6 字节）
-            off = 6;
-        }
-        const tiff = off;
-        const byteOrder = exifBuffer.toString('ascii', tiff, tiff + 2);
-        const little = byteOrder === 'II';
-        const big = byteOrder === 'MM';
-        if (!little && !big) return null;
-        const read16 = (o) => (little ? exifBuffer.readUInt16LE(o) : exifBuffer.readUInt16BE(o));
-        const read32 = (o) => (little ? exifBuffer.readUInt32LE(o) : exifBuffer.readUInt32BE(o));
-
-        const ifd0 = tiff + read32(tiff + 4);
-        let exifIfd = null;
-        const entryCount = read16(ifd0);
-        for (let i = 0; i < entryCount; i++) {
-            const e = ifd0 + 2 + i * 12;
-            if (read16(e) === 0x8769) { // ExifIFDPointer
-                exifIfd = tiff + read32(e + 8);
-                break;
-            }
-        }
-        if (!exifIfd) return null;
-        const count = read16(exifIfd);
-        for (let i = 0; i < count; i++) {
-            const e = exifIfd + 2 + i * 12;
-            const tag = read16(e);
-            if (tag === 0x9003 || tag === 0x9004) { // DateTimeOriginal / DateTimeDigitized
-                const len = read32(e + 4);
-                const valOff = len > 4 ? tiff + read32(e + 8) : e + 8;
-                const str = exifBuffer.toString('ascii', valOff, valOff + len).replace(/\0/g, '').trim();
-                // 形如 "2023:10:02 08:15:00"
-                const m = str.match(/^(\d{4})[:-](\d{2})[:-](\d{2})[ T](\d{2}):(\d{2}):(\d{2})/);
-                if (m) return `${m[1]}-${m[2]}-${m[3]} ${m[4]}:${m[5]}:${m[6]}`;
-            }
-        }
-        return null;
-    } catch {
-        return null;
-    }
+// UTC ISO 时间 → 东八区 "YYYY-MM-DD HH:mm:ss"
+// 照片日期统一取「上传到 GitHub 的时间」（Issue created_at），不使用 EXIF 拍摄时间；
+// created_at 为 UTC，按北京时间呈现，避免晚上上传的照片被算成前一天
+function toCN(iso) {
+    if (!iso) return null;
+    const d = new Date(iso);
+    if (isNaN(d)) return null;
+    const p = (n) => String(n).padStart(2, '0');
+    const t = new Date(d.getTime() + 8 * 3600 * 1000);
+    return `${t.getUTCFullYear()}-${p(t.getUTCMonth() + 1)}-${p(t.getUTCDate())} ${p(t.getUTCHours())}:${p(t.getUTCMinutes())}:${p(t.getUTCSeconds())}`;
 }
 
 // ---------------- 工具函数 ----------------
@@ -157,10 +122,10 @@ async function writeIfChanged(file, content) {
 }
 
 /**
- * 处理单张图片：压缩出全图/缩略图/LQIP，读取 EXIF 时间与尺寸
- * 返回 { file, thumb, lqip, w, h, takenAt, bytes }
+ * 处理单张图片：压缩出全图/缩略图/LQIP，读取尺寸
+ * 返回 { file, thumb, lqip, w, h, takenAt, bytes }（takenAt = 上传时间）
  */
-async function processImage(src, id, takenAtFallback) {
+async function processImage(src, id, createdAtFallback) {
     const { buffer } = await readLocalOrDownload(src);
     if (!buffer) return null;
 
@@ -171,7 +136,7 @@ async function processImage(src, id, takenAtFallback) {
         return null;
     }
 
-    const takenAt = parseExifDate(meta.exif) || takenAtFallback;
+    const takenAt = createdAtFallback;
     const fullFile = `${id}.jpg`;
     const thumbFile = `${id}_s.jpg`;
     const fullPath = path.join(GALLERY_ASSETS_DIR, fullFile);
@@ -196,7 +161,7 @@ async function processImage(src, id, takenAtFallback) {
     const w = fullMeta.width || meta.width || 1;
     const h = fullMeta.height || meta.height || 1;
 
-    console.log(`[Saved] ${fullFile} ${w}x${h} ${(stat.size / 1024).toFixed(0)}KB${takenAt ? ` 拍摄 ${takenAt}` : ''}`);
+    console.log(`[Saved] ${fullFile} ${w}x${h} ${(stat.size / 1024).toFixed(0)}KB${takenAt ? ` 上传 ${takenAt}` : ''}`);
     return {
         src: `assets/gallery/${fullFile}`,
         thumb: `assets/gallery/${thumbFile}`,
@@ -319,13 +284,13 @@ async function main() {
                         lqip: `data:image/jpeg;base64,${lqipBuf.toString('base64')}`,
                         w: meta.width, h: meta.height,
                         ratio: Math.round((meta.width / meta.height) * 1000) / 1000,
-                        takenAt: img.fallbackDate ? img.fallbackDate.slice(0, 19).replace('T', ' ') : null,
+                        takenAt: toCN(img.fallbackDate),
                         bytes: fullExists.size,
                         source: img.src
                     };
                     console.log(`[Cache Hit] ${id}.jpg`);
                 } else {
-                    photo = await processImage(img.src, id, img.fallbackDate ? img.fallbackDate.slice(0, 19).replace('T', ' ') : null);
+                    photo = await processImage(img.src, id, toCN(img.fallbackDate));
                 }
                 if (!photo) continue;
                 keptSources.add(`${id}.jpg`);
@@ -349,9 +314,10 @@ async function main() {
         }
     }
 
-    // 相册组装：拍摄时间范围 + 封面 + 简介；最新相册优先展示
+    // 相册组装：上传时间范围 + 封面 + 简介；最新相册优先展示
     const albums = [...albumsMap.entries()].map(([title, photos]) => {
-        photos.sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+        // 相册内按上传时间倒序：最新上传的照片排最前；同批次（时间相同）保持 Issue 内出现顺序
+        photos.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
         const dates = photos.map((p) => p.date).filter(Boolean).sort();
         let range = null;
         if (dates.length) {
@@ -378,7 +344,7 @@ async function main() {
     });
 
     const total = albums.reduce((s, a) => s + a.count, 0);
-    const json = JSON.stringify({ updated_at: new Date().toISOString().slice(0, 19).replace('T', ' '), total, albums }, null, 2) + '\n';
+    const json = JSON.stringify({ updated_at: toCN(new Date().toISOString()), total, albums }, null, 2) + '\n';
 
     const changed = await writeIfChanged(GALLERY_FILE, json);
 

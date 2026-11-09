@@ -64,9 +64,9 @@ Hexo 式写作体验：`_posts/` 里写 Markdown，push 后 GitHub Actions（`.g
 Justified 行式照片墙（Google Photos 同款布局），独立页面 `/gallery/`，首页导航「相册」进入。
 
 - **发布**：建一个带 `gallery` 标签的 Issue（[📷 相册模板](.github/ISSUE_TEMPLATE/gallery.yml)），标题写相册名（如 `2026.10 川西`），照片直接拖进正文，可一次拖任意多张；
-- **流水线**：Issue 变动触发 `.github/workflows/gallery.yml` → `scripts/build-gallery.mjs` 下载附件 → sharp 压缩为全图 1600w（q82）+ 墙面缩略图 480w + LQIP 微缩占位 → 读取 EXIF 拍摄时间 → 生成 `data/gallery.json`（含宽高比，前端运行时 Justified 装箱）→ 回写 `main`（`[skip ci]` 防循环）；
-- **分组**：Issue 标题即相册名；标题为空时按拍摄月份自动分组；相册内按拍摄时间排序；
-- **展示**：相册 = 名称 + 张数 + Justified 照片墙（保持极简）；轻打磨细节——相册滚动淡入（`prefers-reduced-motion` 时关闭）、照片 hover 显示拍摄日期角标（仅支持 hover 的设备）。Issue 的「相册简介（可选）」字段会存入 `gallery.json`（`description`），当前版本不在页面展示，供后续使用；
+- **流水线**：Issue 变动触发 `.github/workflows/gallery.yml` → `scripts/build-gallery.mjs` 下载附件 → sharp 压缩为全图 1600w（q82）+ 墙面缩略图 480w + LQIP 微缩占位 → 记录上传时间（Issue 创建时间，东八区呈现）→ 生成 `data/gallery.json`（含宽高比，前端运行时 Justified 装箱）→ 回写 `main`（`[skip ci]` 防循环）；
+- **分组**：Issue 标题即相册名；标题为空时按上传月份自动分组；相册内按上传时间倒序（最新上传在最前）；
+- **展示**：相册 = 名称 + 张数 + Justified 照片墙（保持极简）；轻打磨细节——相册滚动淡入（`prefers-reduced-motion` 时关闭）、照片 hover 显示上传日期角标（仅支持 hover 的设备）。Issue 的「相册简介（可选）」字段会存入 `gallery.json`（`description`），当前版本不在页面展示，供后续使用；
 - **产物（不手改）**：`data/gallery.json`、`assets/gallery/{id}.jpg` / `{id}_s.jpg`；
 - **下架**：删除/关闭 Issue 后，下次同步自动清理对应产物；
 - **安全**：仅同步博主本人（OWNER）的 Issue，陌生 Issue 静默丢弃（与说说模块同一套防注入）；
