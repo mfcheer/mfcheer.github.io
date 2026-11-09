@@ -44,8 +44,17 @@ jobs:
             echo "相册数据未发生变动"
           else
             git commit -m "chore(gallery): 自动同步相册照片与数据 [skip ci]"
-            # 与 sync-moments 相同：rebase 重放本地提交后再推，规避 push 竞争
-            git fetch origin main
-            git rebase origin/main
-            git push origin HEAD:main
+            # 与其他工作流（说说同步等）并发推 main 时可能竞态被拒，重试 rebase+push
+            for i in 1 2 3 4 5; do
+              if git push origin HEAD:main; then
+                echo "推送成功（第 $i 次尝试）"
+                exit 0
+              fi
+              echo "推送被拒（第 $i 次），rebase 远程最新后重试..."
+              git fetch origin main
+              git rebase origin/main
+              sleep $((i * 5))
+            done
+            echo "::error::多次推送均失败"
+            exit 1
           fi

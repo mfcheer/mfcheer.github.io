@@ -226,9 +226,11 @@ async function fetchIssues() {
 }
 
 function albumTitleFromIssue(issue) {
-    const t = (issue.title || '').trim();
-    // 模板标题或空标题 → 按拍摄月份分组
-    if (!t || t === '📷 相册' || /^[✨📷]/.test(t)) return null;
+    let t = (issue.title || '').trim();
+    // 「📷 相册 秋」→ 剥离模板前缀，取实际相册名「秋」
+    t = t.replace(/^[✨📷]\s*(相册|说说)\s*[:：]?\s*/u, '').trim();
+    // 剩余为空（纯模板标题）→ 按拍摄月份分组
+    if (!t) return null;
     return t;
 }
 

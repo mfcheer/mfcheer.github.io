@@ -531,7 +531,7 @@ loadBarcaSchedule();
 // Moments (说说) — 静态数据驱动（由 GitHub Actions 自动从 Issues 同步至 data/moments.json）
 const MOMENTS_STATIC_URL = '/data/moments.json?v=1.3.16';
 const MOMENTS_API_URL =
-    'https://api.github.com/repos/mfcheer/mfcheer.github.io/issues?state=open&per_page=30&sort=created&direction=desc';
+    'https://api.github.com/repos/mfcheer/mfcheer.github.io/issues?state=open&per_page=30&sort=created&direction=desc&labels=moment';
 const MOMENTS_CACHE_KEY = 'momentsData_v2';
 const MOMENTS_TIME_KEY = 'momentsTime_v2';
 const MOMENTS_TTL = 60 * 1000; // 本地缓存 1 分钟，配合 Service Worker Stale-While-Revalidate 实现 0ms 秒开
@@ -1167,6 +1167,9 @@ async function loadMoments() {
                 const list = (Array.isArray(issues) ? issues : [])
                     .filter((it) => {
                         if (!it || it.pull_request) return false;
+                        // 仅认带 moment 标签的 Issue（相册等其它类型 Issue 不进入说说流）
+                        const labels = Array.isArray(it.labels) ? it.labels.map((l) => l && l.name) : [];
+                        if (!labels.includes('moment')) return false;
                         const isOwner =
                             it.author_association === "OWNER" ||
                             (it.user && it.user.login && it.user.login.toLowerCase() === "mfcheer");

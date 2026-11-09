@@ -1,24 +1,5 @@
 [
   {
-    "date": "2026/11/09 17:53",
-    "text": "### 照片\n\n### 相册简介（可选）\n\n_No response_",
-    "name": "mfcheer",
-    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
-    "labels": [
-      "gallery"
-    ],
-    "images": [
-      {
-        "src": "assets/moments/55043154-c137-4efe-8e63-c070f9277330.jpg",
-        "alt": "Image"
-      },
-      {
-        "src": "assets/moments/c4f725bb-8755-4de9-a92c-2315fe9bc410.jpg",
-        "alt": "Image"
-      }
-    ]
-  },
-  {
     "date": "2026/11/09 15:26",
     "text": "国产 AI 和美国的差距真的越来越接近了吗\n会不会像新能源汽车一样，我们一直在提升车的速度、行驶里程、座舱、智驾。结果特斯拉直接会飞了",
     "name": "mfcheer",
@@ -85,67 +66,6 @@
       "折腾",
       "思考"
     ],
-    "images": []
-  },
-  {
-    "date": "2026/11/08 19:21",
-    "text": "",
-    "name": "mfcheer",
-    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
-    "labels": [],
-    "images": [
-      {
-        "src": "assets/moments/c31d10f7-a0e1-4556-9089-3f0e2c92f4f4.jpg",
-        "alt": "Image"
-      }
-    ]
-  },
-  {
-    "date": "2026/11/06 23:08",
-    "text": "我在期待什么",
-    "name": "mfcheer",
-    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
-    "labels": [],
-    "images": []
-  },
-  {
-    "date": "2026/11/04 01:04",
-    "text": "Work hard in silence. Let success be your noise.",
-    "name": "mfcheer",
-    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
-    "labels": [],
-    "images": []
-  },
-  {
-    "date": "2026/11/03 15:27",
-    "text": "AI 时代，是不是Android才是正道，需要什么软件自己直接去开发。Apple还是太封闭了",
-    "name": "mfcheer",
-    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
-    "labels": [],
-    "images": []
-  },
-  {
-    "date": "2026/11/03 15:26",
-    "text": "是生活失去了味道 还是我失去了胃道",
-    "name": "mfcheer",
-    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
-    "labels": [],
-    "images": []
-  },
-  {
-    "date": "2026/11/03 15:12",
-    "text": "Next Token Next Token",
-    "name": "mfcheer",
-    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
-    "labels": [],
-    "images": []
-  },
-  {
-    "date": "2026/11/03 15:07",
-    "text": "词元之外",
-    "name": "mfcheer",
-    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
-    "labels": [],
     "images": []
   }
 ]

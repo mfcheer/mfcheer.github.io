@@ -22,7 +22,7 @@ const MOMENTS_FILE = path.join(ROOT, 'data', 'moments.json');
 const MOMENTS_ASSETS_DIR = path.join(ROOT, 'assets', 'moments');
 
 const REPO = 'mfcheer/mfcheer.github.io';
-const API_URL = `https://api.github.com/repos/${REPO}/issues?state=open&per_page=100&sort=created&direction=desc`;
+const API_URL = `https://api.github.com/repos/${REPO}/issues?state=open&per_page=100&sort=created&direction=desc&labels=moment`;
 
 function formatMomentDate(isoString) {
     try {
@@ -219,6 +219,9 @@ async function main() {
         list = issues
             .filter((it) => {
                 if (!it || it.pull_request) return false;
+                // 仅同步带 moment 标签的 Issue（防止相册等其他类型 Issue 混入说说流）
+                const labels = Array.isArray(it.labels) ? it.labels.map((l) => l && l.name) : [];
+                if (!labels.includes('moment')) return false;
                 // 仅同步博主本人（mfcheer / OWNER）发布的说说，防止陌生人提交 Issue 注入内容
                 const isOwner =
                     it.author_association === "OWNER" ||
