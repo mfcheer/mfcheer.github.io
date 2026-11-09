@@ -1133,6 +1133,9 @@ function renderMomentsState(state = 'ok') {
 
         return item;
     }
+
+    // 首批渲染（哨兵也在此时才真正挂入 DOM，observer 随之生效）
+    renderBatch();
 }
 
 function readMomentsCache() {
