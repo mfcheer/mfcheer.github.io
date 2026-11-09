@@ -119,15 +119,6 @@
                 itemEl.style.backgroundImage = p.lqip ? 'url("' + p.lqip + '")' : 'none';
                 itemEl.setAttribute('aria-label', [p.album, p.date ? p.date.slice(0, 10) : '', '查看照片'].filter(Boolean).join(' · '));
 
-                // 悬浮层仅展示日期。
-                const caption = document.createElement('span');
-                caption.className = 'g-caption';
-                caption.setAttribute('aria-hidden', 'true');
-                const date = document.createElement('span');
-                date.className = 'g-caption-date';
-                date.textContent = p.date ? p.date.slice(0, 10) : '';
-                caption.append(date);
-
                 const img = document.createElement('img');
                 img.src = rootUrl(p.thumb);
                 img.alt = p.date || '';
@@ -143,7 +134,7 @@
                     openLightbox(globalPhotos, startIdx);
                 });
 
-                itemEl.append(img, caption);
+                itemEl.append(img);
                 rowEl.appendChild(itemEl);
             });
             wall.appendChild(rowEl);
