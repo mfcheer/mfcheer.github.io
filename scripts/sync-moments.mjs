@@ -54,7 +54,10 @@ function parseMomentContent(raw, fallbackTitle = '') {
     const seenSrcs = new Set();
     const addImage = (src, alt = '') => {
         const trimmedSrc = (src || '').trim();
-        if (!trimmedSrc || !/^https?:\/\//i.test(trimmedSrc)) return;
+        // 放行两类来源：远程绝对 URL（http/https）与仓库内相对路径（assets/...）。
+        // 站内发布会把配图直传仓库 assets/moments/，Issue 正文引用相对路径；
+        // GitHub 网页发布的附件则是绝对 URL，二者都要认
+        if (!trimmedSrc || !(/^https?:\/\//i.test(trimmedSrc) || /^assets\//i.test(trimmedSrc))) return;
         if (!seenSrcs.has(trimmedSrc)) {
             seenSrcs.add(trimmedSrc);
             images.push({
@@ -64,9 +67,9 @@ function parseMomentContent(raw, fallbackTitle = '') {
         }
     };
 
-    // 1. 匹配 HTML img 标签
+    // 1. 匹配 HTML img 标签（src 由 addImage 统一过滤，兼容绝对与仓库相对路径）
     clean = clean.replace(/<img\b([^>]*?)\/?>/gi, (_, attrs) => {
-        const srcMatch = attrs.match(/src=["'](https?:\/\/[^"'\s]+)["']/i);
+        const srcMatch = attrs.match(/src=["']([^"'\s]+)["']/i);
         const altMatch = attrs.match(/alt=["']([^"']*)["']/i);
         if (srcMatch) {
             addImage(srcMatch[1], altMatch ? altMatch[1] : '');
@@ -75,8 +78,9 @@ function parseMomentContent(raw, fallbackTitle = '') {
         return '';
     });
 
-    // 2. 匹配 Markdown 图片语法: ![alt](url)
-    clean = clean.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s\)]+)\)/gi, (_, alt, src) => {
+    // 2. 匹配 Markdown 图片语法: ![alt](url)，仅匹配可放行的两类前缀，
+    //    避免把 javascript: 等非图片协议的普通链接误当图片拆坏文本
+    clean = clean.replace(/!\[([^\]]*)\]\(((?:https?:\/\/|assets\/)[^\s\)]+)\)/gi, (_, alt, src) => {
         addImage(src, alt);
         return '';
     });
