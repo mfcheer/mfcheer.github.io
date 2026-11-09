@@ -22,9 +22,19 @@
 
 所有测试内容和故障注入仅存在临时副本，没有发布真实测试说说、相册或文章。
 
-## 尚未验证
+## 生产验证结果
 
-- GitHub Actions 运行时、Pages 写入权限、环境保护及真实部署尚未验证；PR 配置了只读验证流程，合并上线后还需确认完整部署与线上内容。
-- GitHub Pages 发布方式需从分支发布切换到 GitHub Actions。当前 Browser 未登录 GitHub，且没有保存的 GitHub 登录，因此尚未更改仓库设置或切换生产流程。
-- 本地 Node 为 v25.6.1，CI 配置 Node 22；Node 22 的实际运行由 PR 检查验证。
-- 本次不改变页面交互；未做手机真机验证。Pages 自身仍可能排队或超时，这次改造不承诺消除平台故障。
+2026-11-10 北京时间 01:15 后核对实际运行、公开站点和 main 回写记录：
+
+- [首次分模块发布](https://github.com/mfcheer/mfcheer.github.io/actions/runs/42661865513)成功，源提交 `ecf95500`。Node v22.23.4 下 18/18 测试通过；实际构建日志为 blog、moments、gallery 全部构建，625 篇文章、4 个相册、16 张照片完整组装。Pages 配置、上传、部署和成功回写步骤全部通过，证明当前 GitHub Actions 发布方式及所需权限可用。
+- [相册悬浮修改发布](https://github.com/mfcheer/mfcheer.github.io/actions/runs/42662471760)成功，事件源提交 `05ccb560`。Node v22.23.4 下 18/18 测试通过。实际构建日志为三个模块全部 `[Skip]`，`changed` 三项均为 false、`publish=true`：静态交互修改只重新组装发布，无需重建内容模块。Pages 在北京时间 01:14:00 报告成功。
+- 两次成功部署后分别回写 `e7f8c8ff`、`7bc6eed0`；`.build-state.json` 已进入 main。对 main 的干净 Git 导出独立计算 blog、moments、gallery 输出摘要及完整公共站点摘要，四项均与状态一致。直接使用 macOS 工作目录会把未跟踪的 `.DS_Store` 纳入摘要，因此本次验证使用干净导出。
+- 线上 `/gallery/` 加载 `styles.css?v=1.3.31`、`gallery.js?v=1.2.10`，`sw.js` 包含 `v1.5.39`。照片墙实际渲染 16 个 `.g-item`，每个仅含 IMG，无 `.g-caption`、可见文字或伪元素遮罩。真实鼠标悬浮首张照片后，页面文字未变化，图片计算样式为 `matrix(1.04, 0, 0, 1.04, 0, 0)`。
+- `/`、`/moments/` 及 `data/blog-index.json`、`data/gallery.json`、`data/moments.json` 均正常返回。文章索引 count 和 posts 长度均为 625；逐个请求全部 625 个文章 URL，均成功返回且含 article 正文结构。另实际打开[《常用命令》](https://mfcheer.github.io/blog/legacy-article-030e869a99/)，标题与正文正常呈现。
+- 相册数据为 4 个相册、16 张照片；说说数据为 15 条、3 张配图。按站点根目录解析数据中的图片地址，逐个在浏览器加载解码 16 张原图、16 张缩略图及 3 张说说配图，共 35 个文件，全部成功；相册页面 16 张缩略图也实际加载成功。
+
+## 验证边界
+
+- 未做手机真机验证；本次线上交互验证使用桌面浏览器。
+- 真实线上事件已验证首次全量构建和静态修改跳过内容构建；说说／相册单模块变化、重复快照不部署及故障保护仍以此前本地集成测试和 CI 单元测试为证据，未向生产发布测试内容。
+- Pages 平台未来仍可能排队或超时，本次成功上线不承诺消除平台故障。
