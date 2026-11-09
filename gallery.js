@@ -119,21 +119,14 @@
                 itemEl.style.backgroundImage = p.lqip ? 'url("' + p.lqip + '")' : 'none';
                 itemEl.setAttribute('aria-label', [p.album, p.date ? p.date.slice(0, 10) : '', '查看照片'].filter(Boolean).join(' · '));
 
-                // 文字使用 textContent，避免将相册标题作为 HTML 注入。
+                // 悬浮层仅展示日期。
                 const caption = document.createElement('span');
                 caption.className = 'g-caption';
                 caption.setAttribute('aria-hidden', 'true');
-                const title = document.createElement('span');
-                title.className = 'g-caption-title';
-                title.textContent = p.album || '';
                 const date = document.createElement('span');
                 date.className = 'g-caption-date';
                 date.textContent = p.date ? p.date.slice(0, 10) : '';
-                caption.append(title, date);
-                const zoom = document.createElement('span');
-                zoom.className = 'g-zoom';
-                zoom.setAttribute('aria-hidden', 'true');
-                zoom.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg>';
+                caption.append(date);
 
                 const img = document.createElement('img');
                 img.src = rootUrl(p.thumb);
@@ -150,7 +143,7 @@
                     openLightbox(globalPhotos, startIdx);
                 });
 
-                itemEl.append(img, caption, zoom);
+                itemEl.append(img, caption);
                 rowEl.appendChild(itemEl);
             });
             wall.appendChild(rowEl);

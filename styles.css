@@ -3679,8 +3679,7 @@ section[id] {
 }
 
 /* 默认静态，只有支持精细指针和悬浮的设备才显示信息与动效。 */
-.g-caption,
-.g-zoom {
+.g-caption {
     display: none;
     position: absolute;
     pointer-events: none;
@@ -3697,7 +3696,6 @@ section[id] {
     transform: translateY(4px);
 }
 
-.g-caption-title,
 .g-caption-date {
     display: block;
     overflow: hidden;
@@ -3705,33 +3703,17 @@ section[id] {
     white-space: nowrap;
 }
 
-.g-caption-title { font-size: 14px; font-weight: 600; }
-.g-caption-date { font-size: 11px; margin-top: 4px; }
-.g-caption-title:empty,
+.g-caption-date { font-size: 12px; }
 .g-caption-date:empty { display: none; }
 
-.g-zoom {
-    top: 12px;
-    right: 12px;
-    width: 30px;
-    height: 30px;
-    padding: 7px;
-    box-sizing: border-box;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.45);
-}
-.g-zoom svg { display: block; width: 100%; height: 100%; }
-
 @media (hover: hover) and (pointer: fine) {
-    .g-caption,
-    .g-zoom { display: block; }
+    .g-caption { display: block; }
 
     .g-item.g-loaded:is(:hover, :focus-visible) img {
         transform: scale(1.04);
     }
 
-    .g-item.g-loaded:is(:hover, :focus-visible) .g-caption,
-    .g-item.g-loaded:is(:hover, :focus-visible) .g-zoom {
+    .g-item.g-loaded:is(:hover, :focus-visible) .g-caption {
         opacity: 1;
         transform: none;
     }
@@ -3744,8 +3726,7 @@ section[id] {
         transition: none;
     }
 
-    .g-caption,
-    .g-zoom {
+    .g-caption {
         transition: none;
         transform: none;
     }
