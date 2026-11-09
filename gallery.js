@@ -549,7 +549,13 @@
         } catch (e) {
             galleryUploadBusy = false;
             submitBtn.disabled = false;
-            setErr(e.message || '发布失败，请重试');
+            // token 失效（401 Bad credentials）：自动清除本地凭据，引导重新授权
+            if (e.status === 401 || e.message === 'Bad credentials') {
+                clearMomentAuth();
+                setErr('授权已失效（可能是授权被撤销或过期），已自动退出登录。请关闭弹窗后重新点击「上传照片」并完成 GitHub 授权');
+            } else {
+                setErr(e.message || '发布失败，请重试');
+            }
         }
     }
 

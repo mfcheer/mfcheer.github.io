@@ -1923,7 +1923,9 @@ async function uploadMomentImage(token, filename, base64Content, dir = "moments"
     });
     if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || `图片上传失败 (${res.status})`);
+        const err = new Error(data.message || `图片上传失败 (${res.status})`);
+        err.status = res.status;
+        throw err;
     }
     return `assets/${dir}/${filename}`;
 }
@@ -1945,7 +1947,9 @@ async function createMomentIssue(token, title, body, labels) {
     });
     if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || `创建 Issue 失败 (${res.status})`);
+        const err = new Error(data.message || `创建 Issue 失败 (${res.status})`);
+        err.status = res.status;
+        throw err;
     }
     return await res.json();
 }
