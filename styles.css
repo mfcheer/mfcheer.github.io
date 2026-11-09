@@ -3486,7 +3486,6 @@ section[id] {
     background-size: cover;
     background-position: center;
     background-color: rgba(128, 128, 128, 0.12);
-    transition: transform 0.25s ease, filter 0.3s ease;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -3496,20 +3495,16 @@ section[id] {
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: opacity 0.45s ease;
+    transition: opacity 0.45s ease, transform 0.25s ease;
 }
 
 .g-item.g-loaded img {
     opacity: 1;
 }
 
-.g-item:hover {
-    transform: scale(1.012);
-}
-
 .g-item:focus-visible {
     outline: 2px solid var(--accent, #0071e3);
-    outline-offset: 2px;
+    outline-offset: -3px;
 }
 
 .g-item.g-error::after {
@@ -3657,7 +3652,7 @@ section[id] {
 }
 
 /* ============================================================
-   相册 · 轻打磨：滚动淡入 + hover 日期角标（保持原版 Justified 布局）
+   相册 · 滚动淡入与桌面画廊悬浮效果（保持 Justified 布局）
    ============================================================ */
 
 /* 相册淡入（组间隔与照片间距一致，紧凑无缝） */
@@ -3683,30 +3678,62 @@ section[id] {
     }
 }
 
-/* hover 日期角标（仅支持 hover 的设备显示） */
-.g-item::after {
-    content: attr(data-info);
+/* 默认静态，只有支持精细指针和悬浮的设备才显示信息与动效。 */
+.g-caption,
+.g-zoom {
+    display: none;
     position: absolute;
-    right: 8px;
-    bottom: 8px;
-    padding: 3px 9px;
-    border-radius: 999px;
-    background: rgba(10, 10, 12, 0.55);
-    color: #fff;
-    font-size: 11px;
-    letter-spacing: 0.5px;
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
     pointer-events: none;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-@media (hover: hover) {
-    .g-item:hover::after {
+.g-caption {
+    inset: auto 0 0;
+    padding: 40px 16px 14px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.72));
+    text-align: left;
+    transform: translateY(4px);
+}
+
+.g-caption-title,
+.g-caption-date {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.g-caption-title { font-size: 14px; font-weight: 600; }
+.g-caption-date { font-size: 11px; margin-top: 4px; }
+.g-caption-title:empty,
+.g-caption-date:empty { display: none; }
+
+.g-zoom {
+    top: 12px;
+    right: 12px;
+    width: 30px;
+    height: 30px;
+    padding: 7px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+}
+.g-zoom svg { display: block; width: 100%; height: 100%; }
+
+@media (hover: hover) and (pointer: fine) {
+    .g-caption,
+    .g-zoom { display: block; }
+
+    .g-item.g-loaded:is(:hover, :focus-visible) img {
+        transform: scale(1.04);
+    }
+
+    .g-item.g-loaded:is(:hover, :focus-visible) .g-caption,
+    .g-item.g-loaded:is(:hover, :focus-visible) .g-zoom {
         opacity: 1;
-        transform: translateY(0);
+        transform: none;
     }
 }
 
@@ -3717,8 +3744,14 @@ section[id] {
         transition: none;
     }
 
-    .g-item::after {
+    .g-caption,
+    .g-zoom {
         transition: none;
+        transform: none;
+    }
+
+    .g-item.g-loaded:is(:hover, :focus-visible) img {
+        transform: none;
     }
 }
 
