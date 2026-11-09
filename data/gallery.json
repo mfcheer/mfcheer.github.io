@@ -1,10 +1,21 @@
 {
-  "updated_at": "2026-11-09 08:52:18",
+  "updated_at": "2026-11-09 09:08:19",
   "total": 8,
   "albums": [
     {
       "title": "Spylent",
       "count": 1,
+      "description": "深夜 lo-fi 桌面，耳机里的节拍与城市夜灯同频。",
+      "range": null,
+      "cover": {
+        "src": "assets/gallery/Spylent-repo-spylent-headphones.jpg",
+        "thumb": "assets/gallery/Spylent-repo-spylent-headphones_s.jpg",
+        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAJABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABAMF/8QAIBAAAgIBAwUAAAAAAAAAAAAAAQIAAxESEyEiMTNBcf/EABUBAQEAAAAAAAAAAAAAAAAAAAEC/8QAFhEBAQEAAAAAAAAAAAAAAAAAAgAB/9oADAMBAAIRAxEAPwDOWpRSdPW+MkD1JWvXtsApDZ4ih4j8gbO5lF7KOX//2Q==",
+        "w": 1600,
+        "h": 900,
+        "ratio": 1.778,
+        "date": null
+      },
       "photos": [
         {
           "src": "assets/gallery/Spylent-repo-spylent-headphones.jpg",
@@ -20,6 +31,17 @@
     {
       "title": "巴塞罗那海边",
       "count": 2,
+      "description": "金色的傍晚，从 Barceloneta 的沙滩一路走到港口，海风把黄昏吹得很慢。",
+      "range": null,
+      "cover": {
+        "src": "assets/gallery/巴塞罗那海边-Barcelona_seafront_at_dusk__mo_2026-11-09T08-51-42.jpg",
+        "thumb": "assets/gallery/巴塞罗那海边-Barcelona_seafront_at_dusk__mo_2026-11-09T08-51-42_s.jpg",
+        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAYABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAME/8QAIhAAAQQBAwUBAAAAAAAAAAAAAQACAxEEEiExExQ0QWGR/8QAFgEBAQEAAAAAAAAAAAAAAAAAAwAB/8QAGBEBAQADAAAAAAAAAAAAAAAAAAEDEjH/2gAMAwEAAhEDEQA/ADMW1ZuFazPlm72ICNl6TTdWx+qss+W0+PGNvW6rkptYwCaTWHdMEt4N8KjcqWiAxv6iLR8f/9k=",
+        "w": 1024,
+        "h": 1536,
+        "ratio": 0.667,
+        "date": null
+      },
       "photos": [
         {
           "src": "assets/gallery/巴塞罗那海边-Barcelona_seafront_at_dusk__mo_2026-11-09T08-51-42.jpg",
@@ -44,6 +66,17 @@
     {
       "title": "巴萨",
       "count": 1,
+      "description": "诺坎普之夜。红蓝不只是球衣的颜色，是九十分钟的心跳。",
+      "range": null,
+      "cover": {
+        "src": "assets/gallery/巴萨-repo-camp-nou-night.jpg",
+        "thumb": "assets/gallery/巴萨-repo-camp-nou-night_s.jpg",
+        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAJABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABQED/8QAHhAAAQQCAwEAAAAAAAAAAAAAAQACAxEEIRMycTH/xAAVAQEBAAAAAAAAAAAAAAAAAAABAv/EABgRAAMBAQAAAAAAAAAAAAAAAAABURES/9oADAMBAAIRAxEAPwA/CniaSJXNqtWDsrTJzY6qHj+b0btGM7D1Q9j6q10OVD//2Q==",
+        "w": 1600,
+        "h": 900,
+        "ratio": 1.778,
+        "date": null
+      },
       "photos": [
         {
           "src": "assets/gallery/巴萨-repo-camp-nou-night.jpg",
@@ -59,6 +92,17 @@
     {
       "title": "怪奇物语",
       "count": 2,
+      "description": "八十年代的复古恐惧与温柔——字母灯串下的秘密，森林尽头的裂缝。",
+      "range": null,
+      "cover": {
+        "src": "assets/gallery/怪奇物语-1980s_nostalgia_scene_inspired_2026-11-09T08-51-12.jpg",
+        "thumb": "assets/gallery/怪奇物语-1980s_nostalgia_scene_inspired_2026-11-09T08-51-12_s.jpg",
+        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAYABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAECBf/EAB4QAAEEAwADAAAAAAAAAAAAAAEAAhEhAxITIjGB/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/xAAWEQEBAQAAAAAAAAAAAAAAAAAAEQH/2gAMAwEAAhEDEQA/AMfHhY+/IQbCXJvTUui/cJDM1jYbttHyVDn7G4KOWqXEgVRCkzNShCQP/9k=",
+        "w": 1024,
+        "h": 1536,
+        "ratio": 0.667,
+        "date": null
+      },
       "photos": [
         {
           "src": "assets/gallery/怪奇物语-1980s_nostalgia_scene_inspired_2026-11-09T08-51-12.jpg",
@@ -83,6 +127,17 @@
     {
       "title": "龙珠",
       "count": 2,
+      "description": "热血与少年气的图腾——从漫画书页到屏幕里的金色气焰。",
+      "range": null,
+      "cover": {
+        "src": "assets/gallery/龙珠-Dynamic_anime_illustration_ins_2026-11-09T08-51-58.jpg",
+        "thumb": "assets/gallery/龙珠-Dynamic_anime_illustration_ins_2026-11-09T08-51-58_s.jpg",
+        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAQIEBf/EACQQAAIBAwMDBQAAAAAAAAAAAAEDAgAEEQUSIRMycSIxQVHw/8QAFAEBAAAAAAAAAAAAAAAAAAAAA//EABcRAAMBAAAAAAAAAAAAAAAAAAABERL/2gAMAwEAAhEDEQA/AFs4BWmsksykZHuWPVz7eOaNwtb9NBbM704EjLuH2D++ayLK4cmYK2GPiqri5c60l1J7ssEScAZFFl0SqH//2Q==",
+        "w": 1536,
+        "h": 1024,
+        "ratio": 1.5,
+        "date": null
+      },
       "photos": [
         {
           "src": "assets/gallery/龙珠-Dynamic_anime_illustration_ins_2026-11-09T08-51-58.jpg",

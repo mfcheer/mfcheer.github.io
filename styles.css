@@ -3662,3 +3662,135 @@ button.activity-badge {
 .lightbox[hidden] {
     display: none;
 }
+
+/* ============================================================
+   相册 · 杂志风相册头部与封面（Magazine Album）
+   ============================================================ */
+
+.gallery-album {
+    margin-top: 0;
+    padding-top: 34px;
+    border-top: 1px solid rgba(128, 128, 128, 0.18);
+}
+
+.gallery-album:first-child {
+    padding-top: 0;
+    border-top: 0;
+}
+
+.gallery-album + .gallery-album {
+    margin-top: 42px;
+}
+
+.al-head {
+    margin-bottom: 16px;
+}
+
+.al-no {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-secondary, #86868b);
+    margin-bottom: 6px;
+}
+
+.al-title {
+    font-family: Georgia, 'Times New Roman', 'Songti SC', 'Noto Serif SC', 'SimSun', serif;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0 0 6px;
+    letter-spacing: 0.5px;
+}
+
+.al-meta {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--text-secondary, #86868b);
+}
+
+.al-desc {
+    margin: 12px 0 0;
+    max-width: 42em;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-secondary, #86868b);
+}
+
+.al-cover {
+    display: block;
+    width: 100%;
+    height: clamp(220px, 42vw, 460px);
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    margin: 0 0 14px;
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(128, 128, 128, 0.12);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.al-cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.6s ease;
+}
+
+.al-cover.g-loaded img {
+    opacity: 1;
+}
+
+.al-cover:hover img {
+    transform: scale(1.02);
+}
+
+.al-cover:focus-visible {
+    outline: 2px solid var(--accent, #0071e3);
+    outline-offset: 2px;
+}
+
+.al-cover.g-error::after {
+    content: '加载失败';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--text-secondary, #86868b);
+}
+
+/* 旧版相册头部样式（兼容期保留） */
+.gallery-album-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 600px) {
+    .al-title {
+        font-size: 22px;
+    }
+
+    .al-cover {
+        height: clamp(180px, 52vw, 320px);
+        border-radius: 12px;
+    }
+
+    .gallery-album + .gallery-album {
+        margin-top: 34px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .al-cover img {
+        transition: none;
+    }
+}

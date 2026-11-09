@@ -232,6 +232,16 @@ function albumTitleFromIssue(issue) {
     return t;
 }
 
+/** 从 Issue 正文提取「相册简介」段落（模板中的可选 textarea） */
+function extractDescription(raw) {
+    if (!raw) return null;
+    const m = raw.match(/###\s*相册简介[^\n]*\n+([\s\S]*?)(?=\n###\s|\n<!--[^\n]*-->|$)/);
+    let text = (m ? m[1] : '').trim();
+    if (!text || /^_No response_$/i.test(text) || text === '无') return null;
+    text = text.replace(/\r/g, '').split('\n').filter(Boolean).join(' ');
+    return text.slice(0, 200);
+}
+
 function formatMonth(dateStr) {
     const d = new Date(dateStr.replace(' ', 'T') + (dateStr.length === 16 ? ':00' : ''));
     if (isNaN(d)) return '未分组';
@@ -255,8 +265,13 @@ async function main() {
                 const dir = path.join(seedDir, sub);
                 const files = (await fs.readdir(dir)).filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f));
                 if (!files.length) continue;
+                let description = null;
+                try {
+                    description = (await fs.readFile(path.join(dir, 'desc.txt'), 'utf8')).trim() || null;
+                } catch { /* 无简介 */ }
                 batches.push({
                     album: sub,
+                    description,
                     images: files.map((f) => ({ src: path.join(dir, f), fallbackDate: null, key: `${sub}-${f.replace(/\.[^.]+$/, '')}` }))
                 });
             }
@@ -275,6 +290,7 @@ async function main() {
         batches = issues.map((it) => ({
             album: albumTitleFromIssue(it),
             created: it.created_at,
+            description: extractDescription(it.body),
             images: extractImages(it.body).map((src) => ({ src, fallbackDate: it.created_at, key: stableId(src) }))
         })).filter((b) => b.images.length > 0);
     }
@@ -283,6 +299,7 @@ async function main() {
 
     // 逐张处理（带缓存：同一 id 已有产物则复用）
     const albumsMap = new Map(); // albumName -> photos[]
+    const descriptions = new Map(); // albumName -> 简介文字
     for (const batch of batches) {
         const albumName = batch.album || null; // null = 之后按月份归组
         for (const img of batch.images) {
@@ -314,6 +331,7 @@ async function main() {
 
                 const name = albumName || formatMonth(photo.takenAt || batch.created || '');
                 if (!albumsMap.has(name)) albumsMap.set(name, []);
+                if (albumName && !descriptions.has(name) && batch.description) descriptions.set(name, batch.description);
                 albumsMap.get(name).push({
                     src: photo.src,
                     thumb: photo.thumb,
@@ -329,11 +347,33 @@ async function main() {
         }
     }
 
-    // 相册排序：标题含年份的按标题，否则按内部最早时间；相册内按拍摄时间
+    // 相册组装：拍摄时间范围 + 封面 + 简介；最新相册优先展示
     const albums = [...albumsMap.entries()].map(([title, photos]) => {
         photos.sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
-        return { title, count: photos.length, photos };
-    }).sort((a, b) => a.title.localeCompare(b.title));
+        const dates = photos.map((p) => p.date).filter(Boolean).sort();
+        let range = null;
+        if (dates.length) {
+            const fmt = (s) => s.slice(0, 7).replace('-', '.');
+            const a = fmt(dates[0]);
+            const b = fmt(dates[dates.length - 1]);
+            range = a === b ? a : `${a} – ${b}`;
+        }
+        const cover = photos[0] || null;
+        return {
+            title,
+            count: photos.length,
+            description: descriptions.get(title) || null,
+            range,
+            cover: cover ? { src: cover.src, thumb: cover.thumb, lqip: cover.lqip, w: cover.w, h: cover.h, ratio: cover.ratio, date: cover.date } : null,
+            photos
+        };
+    }).sort((a, b) => {
+        const last = (al) => al.photos.map((p) => p.date).filter(Boolean).sort().pop() || '';
+        const da = last(a);
+        const db = last(b);
+        if (da !== db) return db.localeCompare(da);
+        return a.title.localeCompare(b.title);
+    });
 
     const total = albums.reduce((s, a) => s + a.count, 0);
     const json = JSON.stringify({ updated_at: new Date().toISOString().slice(0, 19).replace('T', ' '), total, albums }, null, 2) + '\n';

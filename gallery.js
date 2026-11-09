@@ -64,24 +64,78 @@
         return rows;
     }
 
-    function renderAlbum(album) {
+    /** 收集全部相册的照片（含封面），供灯箱全局浏览 */
+    function collectAllPhotos() {
+        const all = [];
+        document.querySelectorAll('.gallery-album').forEach((el) => {
+            try { all.push(...JSON.parse(el.dataset.photos || '[]')); } catch {}
+        });
+        return all;
+    }
+
+    function renderAlbum(album, no) {
         const albumEl = document.createElement('section');
         albumEl.className = 'gallery-album';
+        albumEl.dataset.photos = JSON.stringify(album.photos);
 
-        const head = document.createElement('div');
-        head.className = 'gallery-album-head';
+        // 杂志式相册头部：编号 + 标题 + 元信息 + 导语
+        const head = document.createElement('header');
+        head.className = 'al-head';
+
+        const noEl = document.createElement('span');
+        noEl.className = 'al-no';
+        noEl.textContent = '№ ' + String(no).padStart(2, '0');
+        head.appendChild(noEl);
+
         const title = document.createElement('h3');
+        title.className = 'al-title';
         title.textContent = album.title;
-        const count = document.createElement('span');
-        count.className = 'gallery-album-count';
-        count.textContent = album.count + ' 张';
         head.appendChild(title);
-        head.appendChild(count);
+
+        const meta = document.createElement('div');
+        meta.className = 'al-meta';
+        meta.textContent = [album.range, album.count + ' 张'].filter(Boolean).join(' · ');
+        head.appendChild(meta);
+
+        if (album.description) {
+            const desc = document.createElement('p');
+            desc.className = 'al-desc';
+            desc.textContent = album.description;
+            head.appendChild(desc);
+        }
         albumEl.appendChild(head);
 
+        // 封面大图（相册第一张，先声夺人）
+        const cover = album.cover || album.photos[0] || null;
+        if (cover) {
+            const fig = document.createElement('button');
+            fig.type = 'button';
+            fig.className = 'al-cover';
+            fig.style.backgroundImage = cover.lqip ? 'url("' + cover.lqip + '")' : 'none';
+            fig.setAttribute('aria-label', '打开相册「' + album.title + '」的首张大图');
+
+            const img = document.createElement('img');
+            img.src = rootUrl(cover.src);
+            img.alt = cover.date || album.title;
+            img.decoding = 'async';
+            img.addEventListener('load', () => fig.classList.add('g-loaded'));
+            img.addEventListener('error', () => fig.classList.add('g-error'));
+
+            fig.addEventListener('click', () => {
+                const globalPhotos = collectAllPhotos();
+                const idx = globalPhotos.findIndex((q) => q.src === cover.src);
+                openLightbox(globalPhotos, Math.max(0, idx));
+            });
+
+            fig.appendChild(img);
+            albumEl.appendChild(fig);
+        }
+
+        // 其余照片进入 Justified 墙
+        const rest = album.photos.filter((p) => !cover || p.src !== cover.src);
         const wall = document.createElement('div');
         wall.className = 'gallery-wall';
-        wall.dataset.photos = JSON.stringify(album.photos);
+        wall.dataset.photos = JSON.stringify(rest);
         albumEl.appendChild(wall);
 
         return albumEl;
@@ -128,10 +182,7 @@
                 img.addEventListener('error', () => itemEl.classList.add('g-error'));
 
                 itemEl.addEventListener('click', () => {
-                    const globalPhotos = [];
-                    document.querySelectorAll('.gallery-wall').forEach((w) => {
-                        try { globalPhotos.push(...JSON.parse(w.dataset.photos)); } catch {}
-                    });
+                    const globalPhotos = collectAllPhotos();
                     // JSON.parse 会产生新对象，不能按引用匹配，按 src 定位
                     const startIdx = Math.max(0, globalPhotos.findIndex((q) => q.src === p.src));
                     openLightbox(globalPhotos, startIdx);
@@ -157,8 +208,8 @@
                 '</div>';
             return;
         }
-        for (const album of albums) {
-            const el = renderAlbum(album);
+        for (const [i, album] of albums.entries()) {
+            const el = renderAlbum(album, i + 1);
             listEl.appendChild(el); // 先挂载再布局，layoutWall 依赖 clientWidth
             el.querySelectorAll('.gallery-wall').forEach(layoutWall);
         }

@@ -17,3 +17,12 @@ body:
       placeholder: 把照片拖到这里
     validations:
       required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 相册简介（可选）
+      description: 一句话介绍这批照片，会以杂志导语的形式显示在相册标题下方。
+      placeholder: 例：金色的傍晚，从 Barceloneta 一路走到港口
+    validations:
+      required: false
