@@ -1,0 +1,82 @@
+name: Build and Publish Site
+
+on:
+  push:
+    branches: [main]
+  issues:
+    types: [opened, edited, deleted, closed, reopened, labeled, unlabeled]
+  workflow_dispatch:
+    inputs:
+      full:
+        description: 强制全量重建（修复缓存或回退时使用）
+        type: boolean
+        default: false
+
+# 串行到发布和回写完成；新事件不会中断正在发布的站点。
+# GitHub 可能替换 pending 任务，因此每次都读取 main 最新源码及两个 Issue 全量快照。
+concurrency:
+  group: site-publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: read
+  pages: write
+  id-token: write
+
+jobs:
+  site:
+    if: >-
+      github.event_name != 'issues' ||
+      (github.event.issue.user.login == 'mfcheer' &&
+      (contains(github.event.issue.labels.*.name, 'gallery') ||
+      contains(github.event.issue.labels.*.name, 'moment') ||
+      github.event.action == 'unlabeled' || github.event.action == 'deleted'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Build changed modules and assemble complete site
+        id: build
+        run: node scripts/build-site.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FULL_BUILD: ${{ inputs.full || 'false' }}
+      - name: Configure Pages
+        if: steps.build.outputs.publish == 'true'
+        uses: actions/configure-pages@v5
+      - name: Upload complete site
+        if: steps.build.outputs.publish == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy Pages
+        if: steps.build.outputs.publish == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Save successful build state and generated files
+        # 部署失败则不回写，后续事件或重试仍能发现未完成的输入。
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .build-state.json blog atom.xml sitemap.xml data/blog-index.json data/moments.json data/gallery.json assets/moments/ assets/gallery/
+          if git diff --cached --quiet; then
+            echo "没有需要回写的生成物"
+          else
+            git commit -m "build: 保存已验证的分模块构建产物 [skip ci]"
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          fi

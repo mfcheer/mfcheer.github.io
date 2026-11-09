@@ -271,7 +271,9 @@ async function main() {
             console.log(`[Seed] 本地目录导入模式: ${seedDir}，共 ${files.length} 张`);
         }
     } else {
-        const issues = await fetchIssues();
+        const issues = process.env.ISSUES_SNAPSHOT
+            ? JSON.parse(await fs.readFile(process.env.ISSUES_SNAPSHOT, 'utf8'))
+            : await fetchIssues();
         console.log(`拉取到 ${issues.length} 个 gallery 相册 Issue`);
         batches = issues.map((it) => ({
             album: albumTitleFromIssue(it),
@@ -307,6 +309,13 @@ async function main() {
                 const fullExists = await fs.stat(path.join(GALLERY_ASSETS_DIR, `${id}.jpg`)).catch(() => null);
                 if (fullExists && fullExists.size > 0 && !seedDir) {
                     // 缓存命中：只需补齐元数据（尺寸/EXIF 时间从产物与兜底推断）
+                    const thumbPath = path.join(GALLERY_ASSETS_DIR, `${id}_s.jpg`);
+                    const thumbExists = await fs.stat(thumbPath).catch(() => null);
+                    if (!thumbExists || !thumbExists.size) {
+                        await sharp(path.join(GALLERY_ASSETS_DIR, `${id}.jpg`), { animated: false })
+                            .resize({ width: THUMB_W, withoutEnlargement: true })
+                            .jpeg({ quality: JPEG_QUALITY_THUMB }).toFile(thumbPath);
+                    }
                     const meta = await sharp(path.join(GALLERY_ASSETS_DIR, `${id}.jpg`)).metadata();
                     const lqipBuf = await sharp(path.join(GALLERY_ASSETS_DIR, `${id}.jpg`)).resize({ width: LQIP_W }).jpeg({ quality: 30 }).toBuffer();
                     photo = {
@@ -323,7 +332,10 @@ async function main() {
                 } else {
                     photo = await processImage(img.src, id, toCN(img.fallbackDate));
                 }
-                if (!photo) continue;
+                if (!photo) {
+                    if (process.env.STRICT_BUILD === '1') throw new Error('图片未生成');
+                    continue;
+                }
                 keptSources.add(`${id}.jpg`);
                 keptSources.add(`${id}_s.jpg`);
 
@@ -340,6 +352,7 @@ async function main() {
                     date: photo.takenAt || null
                 });
             } catch (err) {
+                if (process.env.STRICT_BUILD === '1') throw err;
                 console.warn(`[Skip] 处理失败 ${img.src}: ${err.message}`);
             }
         }

@@ -5,7 +5,9 @@
   "scripts": {
     "build": "node scripts/build-posts.mjs",
     "build:gallery": "node scripts/build-gallery.mjs",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "build:site": "node scripts/build-site.mjs",
+    "test:build": "node tests/verify-build-site.mjs"
   },
   "devDependencies": {
     "gray-matter": "^4.0.3",

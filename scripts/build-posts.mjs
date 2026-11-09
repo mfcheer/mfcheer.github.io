@@ -228,6 +228,15 @@ posts.sort((a, b) => b.date - a.date);
 const today = new Date().toISOString().slice(0, 10);
 const latest = posts.length ? posts[0].atomDate : new Date().toISOString();
 
+// 删除已下架/改名/转草稿的文章，避免合并发布时残留旧页面。
+const activeSlugs = new Set(posts.map((p) => p.slug));
+fs.mkdirSync(path.join(ROOT, 'blog'), { recursive: true });
+for (const entry of fs.readdirSync(path.join(ROOT, 'blog'), { withFileTypes: true })) {
+    if (entry.isDirectory() && !activeSlugs.has(entry.name)) {
+        fs.rmSync(path.join(ROOT, 'blog', entry.name), { recursive: true });
+    }
+}
+
 // ---------- 文章页 ----------
 const postTpl = fs.readFileSync(path.join(TPL_DIR, 'post.html'), 'utf8');
 for (let i = 0; i < posts.length; i++) {
