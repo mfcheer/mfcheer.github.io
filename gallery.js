@@ -64,78 +64,34 @@
         return rows;
     }
 
-    /** 收集全部相册的照片（含封面），供灯箱全局浏览 */
+    /** 收集全部相册的照片，供灯箱全局浏览 */
     function collectAllPhotos() {
         const all = [];
-        document.querySelectorAll('.gallery-album').forEach((el) => {
-            try { all.push(...JSON.parse(el.dataset.photos || '[]')); } catch {}
+        document.querySelectorAll('.gallery-wall').forEach((w) => {
+            try { all.push(...JSON.parse(w.dataset.photos || '[]')); } catch {}
         });
         return all;
     }
 
-    function renderAlbum(album, no) {
+    function renderAlbum(album) {
         const albumEl = document.createElement('section');
         albumEl.className = 'gallery-album';
-        albumEl.dataset.photos = JSON.stringify(album.photos);
 
-        // 杂志式相册头部：编号 + 标题 + 元信息 + 导语
-        const head = document.createElement('header');
-        head.className = 'al-head';
-
-        const noEl = document.createElement('span');
-        noEl.className = 'al-no';
-        noEl.textContent = '№ ' + String(no).padStart(2, '0');
-        head.appendChild(noEl);
-
+        // 相册头部：名称 + 张数（保持原版简洁）
+        const head = document.createElement('div');
+        head.className = 'gallery-album-head';
         const title = document.createElement('h3');
-        title.className = 'al-title';
         title.textContent = album.title;
+        const count = document.createElement('span');
+        count.className = 'gallery-album-count';
+        count.textContent = album.count + ' 张';
         head.appendChild(title);
-
-        const meta = document.createElement('div');
-        meta.className = 'al-meta';
-        meta.textContent = [album.range, album.count + ' 张'].filter(Boolean).join(' · ');
-        head.appendChild(meta);
-
-        if (album.description) {
-            const desc = document.createElement('p');
-            desc.className = 'al-desc';
-            desc.textContent = album.description;
-            head.appendChild(desc);
-        }
+        head.appendChild(count);
         albumEl.appendChild(head);
 
-        // 封面大图（相册第一张，先声夺人）
-        const cover = album.cover || album.photos[0] || null;
-        if (cover) {
-            const fig = document.createElement('button');
-            fig.type = 'button';
-            fig.className = 'al-cover';
-            fig.style.backgroundImage = cover.lqip ? 'url("' + cover.lqip + '")' : 'none';
-            fig.setAttribute('aria-label', '打开相册「' + album.title + '」的首张大图');
-
-            const img = document.createElement('img');
-            img.src = rootUrl(cover.src);
-            img.alt = cover.date || album.title;
-            img.decoding = 'async';
-            img.addEventListener('load', () => fig.classList.add('g-loaded'));
-            img.addEventListener('error', () => fig.classList.add('g-error'));
-
-            fig.addEventListener('click', () => {
-                const globalPhotos = collectAllPhotos();
-                const idx = globalPhotos.findIndex((q) => q.src === cover.src);
-                openLightbox(globalPhotos, Math.max(0, idx));
-            });
-
-            fig.appendChild(img);
-            albumEl.appendChild(fig);
-        }
-
-        // 其余照片进入 Justified 墙
-        const rest = album.photos.filter((p) => !cover || p.src !== cover.src);
         const wall = document.createElement('div');
         wall.className = 'gallery-wall';
-        wall.dataset.photos = JSON.stringify(rest);
+        wall.dataset.photos = JSON.stringify(album.photos);
         albumEl.appendChild(wall);
 
         return albumEl;
@@ -172,6 +128,8 @@
                 itemEl.style.width = itemW + 'px';
                 itemEl.style.backgroundImage = p.lqip ? 'url("' + p.lqip + '")' : 'none';
                 itemEl.setAttribute('aria-label', (p.date ? p.date + ' ' : '') + '查看照片');
+                // hover 日期角标（有拍摄时间才显示）
+                if (p.date) itemEl.dataset.date = p.date.slice(0, 10);
 
                 const img = document.createElement('img');
                 img.src = rootUrl(p.thumb);
@@ -208,10 +166,25 @@
                 '</div>';
             return;
         }
-        for (const [i, album] of albums.entries()) {
-            const el = renderAlbum(album, i + 1);
+        for (const album of albums) {
+            const el = renderAlbum(album);
             listEl.appendChild(el); // 先挂载再布局，layoutWall 依赖 clientWidth
             el.querySelectorAll('.gallery-wall').forEach(layoutWall);
+        }
+
+        // 滚动淡入（尊重系统减少动效设置）
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach((en) => {
+                    if (en.isIntersecting) {
+                        en.target.classList.add('g-inview');
+                        io.unobserve(en.target);
+                    }
+                });
+            }, { rootMargin: '0px 0px -8% 0px' });
+            listEl.querySelectorAll('.gallery-album').forEach((el) => io.observe(el));
+        } else {
+            listEl.querySelectorAll('.gallery-album').forEach((el) => el.classList.add('g-inview'));
         }
     }
 
