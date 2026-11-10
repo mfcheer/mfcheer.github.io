@@ -119,6 +119,10 @@ window.runSiteRegression = async function (phase) {
         const start = new Event('touchstart'); Object.defineProperty(start, 'touches', { value: [{ clientX: 200, clientY: 100 }] }); siteLightbox.dispatchEvent(start);
         const end = new Event('touchend'); Object.defineProperty(end, 'changedTouches', { value: [{ clientX: 80, clientY: 110 }] }); siteLightbox.dispatchEvent(end);
         assert(sitePhotoIndex === 1, '横向滑动切图');
+        const pullStart = new Event('touchstart'); Object.defineProperty(pullStart, 'touches', { value: [{ clientX: 100, clientY: 100 }] }); siteLightbox.dispatchEvent(pullStart);
+        const pullEnd = new Event('touchend'); Object.defineProperty(pullEnd, 'changedTouches', { value: [{ clientX: 105, clientY: 200 }] }); siteLightbox.dispatchEvent(pullEnd);
+        assert(!siteLightbox.classList.contains('is-open'), '移动端下拉手势关闭灯箱');
+        openSitePhotos([{ src: '/avatar.jpg', caption: '第一张' }, { src: '/favicon-32x32.png', caption: '第二张' }], 1, trigger);
         siteLightboxImg.dispatchEvent(new Event('error'));
         assert(document.querySelector('.site-photo-status').textContent.includes('重试'), '图片失败提供重试');
         click('.site-photo-status'); await until(() => !siteLightboxImg.hidden);

@@ -52,7 +52,7 @@ try {
     check(await hashFiles(root, ['data/moments.json']) === momentHash, '相册更新保留最新说说');
     check(await hashFiles(root, ['blog', 'data/blog-index.json', 'atom.xml', 'sitemap.xml']) === blogHash, '相册更新保留全部文章');
     const beforeTotal = JSON.parse(await fs.readFile(path.join(root, 'data/gallery.json'))).total;
-    gallery = gallery.slice(1);
+    const targetIdx = gallery.findIndex((i) => i.body && (i.body.includes("http") || i.body.includes("assets/"))); gallery.splice(targetIdx >= 0 ? targetIdx : 0, 1);
     await buildSite(options);
     check(JSON.parse(await fs.readFile(path.join(root, 'data/gallery.json'))).total < beforeTotal, '相册下架清理对应照片');
 
