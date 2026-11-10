@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { syncSiteChrome } from '../scripts/build-nav.mjs';
 
-// 验证新列表页自动沿用，以及重复同步不会累积联系区、弹层或触发无意义重建。
+// 验证新列表页自动沿用，以及重复同步不会累积联系区或触发无意义重建。
 test('共享联系区覆盖现有及新增列表页，保留详情页边界，重复构建稳定', (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-chrome-'));
     t.after(() => fs.rmSync(root, { recursive: true, force: true }));
@@ -13,7 +13,7 @@ test('共享联系区覆盖现有及新增列表页，保留详情页边界，�
         fs.mkdirSync(path.dirname(path.join(root, file)), { recursive: true });
         fs.writeFileSync(path.join(root, file), data);
     };
-    for (const file of ['data/nav.json', 'templates/contact.html', 'templates/contact-modal.html']) {
+    for (const file of ['data/nav.json', 'templates/contact.html']) {
         put(file, fs.readFileSync(new URL(`../${file}`, import.meta.url), 'utf8'));
     }
     const page = (body = '<section>列表</section>') => `<nav><ul class="nav-links"><li><a href="/#contact">联系</a></li></ul></nav>\n<main>${body}</main>\n        <footer class="footer">页脚</footer>`;
@@ -26,9 +26,9 @@ test('共享联系区覆盖现有及新增列表页，保留详情页边界，�
         const html = fs.readFileSync(path.join(root, file), 'utf8');
         assert.equal((html.match(/id="contact"/g) || []).length, 1, file);
         assert.equal((html.match(/class="contact-icon"/g) || []).length, 6, file);
-        assert.equal((html.match(/id="xhsModal"/g) || []).length, 1, file);
+        assert.doesNotMatch(html, /id="xhsModal"/, file);
+        assert.ok(html.includes('https://www.xiaohongshu.com/user/profile/583815306a6a6979390baf9a'), file);
         assert.ok(html.indexOf('id="contact"') < html.indexOf('</main>'));
-        assert.ok(html.includes('src="/assets/xiaohongshu-card.jpg"'));
         assert.doesNotMatch(html.match(/<ul class="nav-links">[\s\S]*?<\/ul>/)[0], /#contact/);
     }
     const post = fs.readFileSync(path.join(root, 'templates/post.html'), 'utf8');

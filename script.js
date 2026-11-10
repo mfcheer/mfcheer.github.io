@@ -930,54 +930,6 @@ function bindZoomableImage(img) {
     toggleBtn();
 })();
 
-// 小红书名片弹层：点图标打开，点遮罩/×/Esc 关闭；焦点陷阱 + 关闭后焦点归还
-(function () {
-    const btn = document.getElementById('xhsBtn');
-    const modal = document.getElementById('xhsModal');
-    if (!btn || !modal) return;
-    const closeBtn = document.getElementById('xhsClose');
-    let lastFocused = null; // 打开前的焦点元素，关闭时归还
-
-    const open = () => {
-        lastFocused = document.activeElement;
-        modal.hidden = false;
-        document.body.style.overflow = 'hidden';
-        closeBtn.focus(); // 焦点移入弹层
-    };
-    const close = () => {
-        modal.hidden = true;
-        document.body.style.overflow = '';
-        if (lastFocused && typeof lastFocused.focus === 'function') {
-            lastFocused.focus();
-        }
-        lastFocused = null;
-    };
-    btn.addEventListener('click', open);
-    closeBtn.addEventListener('click', close);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) close();
-    });
-    document.addEventListener('keydown', (e) => {
-        if (modal.hidden) return;
-        if (e.key === 'Escape') {
-            close();
-        } else if (e.key === 'Tab') {
-            // 焦点陷阱：Tab 循环限制在弹层内（弹层内仅关闭按钮一个可聚焦元素，首尾相同）
-            const items = modal.querySelectorAll('button, a[href]');
-            if (!items.length) return;
-            const first = items[0];
-            const last = items[items.length - 1];
-            if (e.shiftKey && document.activeElement === first) {
-                e.preventDefault();
-                last.focus();
-            } else if (!e.shiftKey && document.activeElement === last) {
-                e.preventDefault();
-                first.focus();
-            }
-        }
-    });
-})();
-
 // 巴萨近期赛程（ESPN 公开接口，免 Key、CORS 开放、非官方）：在「关于」卡底部渲染近 3 场；
 // 失败/无数据时整块隐藏。队徽用 ESPN CDN（以球队数字 ID 拼接，缩写路径已实测 404）。
 const BARCA_ESPN_ID = '83';

@@ -12,7 +12,6 @@ export function syncSiteChrome(root = ROOT) {
     const config = JSON.parse(fs.readFileSync(path.join(root, 'data/nav.json'), 'utf8'));
     if (!Array.isArray(config.items) || !config.items.length) throw new Error('nav.json 缺少 items 配置');
     const contact = fs.readFileSync(path.join(root, 'templates/contact.html'), 'utf8').trimEnd();
-    const modal = fs.readFileSync(path.join(root, 'templates/contact-modal.html'), 'utf8').trimEnd();
     const targets = new Map([
         ['index.html', '/'],
         ['templates/blog-list.html', '/blog/'],
@@ -48,7 +47,6 @@ export function syncSiteChrome(root = ROOT) {
             html = html.replace(CONTACT, '').replace(MODAL, '');
             if (!html.includes('</main>')) throw new Error(`${file} 缺少 main`);
             html = html.replace(/\s*<\/main>/, `\n\n${contact}\n        </main>`);
-            html = html.replace(/[ \t]*<footer class="footer">/, `${modal}\n\n        <footer class="footer">`);
         }
         if (html !== original) {
             fs.writeFileSync(abs, html);

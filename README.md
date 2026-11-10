@@ -165,7 +165,7 @@ node scripts/build-posts.mjs
 ### 导航与列表页联系区
 
 `data/nav.json` 维护全站导航；联系方式只放在页面底部，不加入导航。
-`templates/contact.html` 与 `templates/contact-modal.html` 是联系图标和小红书名片弹层的共同来源。
+`templates/contact.html` 是联系图标的共同来源。
 运行 `node scripts/build-nav.mjs` 可同步；`npm run build` 和统一发布构建也会自动同步。
 首页、文章列表、说说列表、相册列表均在内容末尾显示同一联系区，文章详情页只同步导航。
 新增列表页沿用 `<ul class="nav-links">`、`<main>` 与 `<footer class="footer">` 的结构，放在一级目录的 `index.html`，或加入导航中的站内目录链接，即会自动同步，无需复制联系区；发布新目录仍需加入 `scripts/build-site.mjs` 的 `PUBLIC_DIRS`。
