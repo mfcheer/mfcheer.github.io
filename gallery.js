@@ -2,8 +2,8 @@
  * gallery.js — 相册页渲染与照片灯箱
  *
  * 数据源：data/gallery.json（由 scripts/build-gallery.mjs 构建生成）
- * 布局：疏密交错的 Justified 行式——按宽高比和变化的目标行高装箱，保持原始比例，
- *       最后一行不强行拉伸；窗口缩放自动重排。
+ * 布局：疏密交错的 Justified 行式——按宽高比和变化的目标行高装箱，普通照片保持原始比例，
+ *       限制极端比例和行高，最后一行不强行拉伸；窗口缩放自动重排。
  * 加载：缩略图 480w + LQIP 模糊占位 + loading="lazy"，点开灯箱再取 1600w 全图。
  */
 (function () {
@@ -41,7 +41,14 @@
 
     function photoRatio(photo) {
         const ratio = Number(photo.ratio) || (Number(photo.w) / Number(photo.h));
-        return Number.isFinite(ratio) && ratio > 0 ? ratio : 1.5;
+        // 仅约束墙面预览；灯箱仍使用完整原图。
+        return Number.isFinite(ratio) && ratio > 0 ? Math.max(1 / 3, Math.min(3, ratio)) : 1.5;
+    }
+
+    function heightLimits(containerW) {
+        return containerW < 520
+            ? { min: Math.min(100, containerW / 3), max: Math.min(300, containerW * 0.85) }
+            : { min: 140, max: 420 };
     }
 
     // 交替使用疏密不同的目标行高，照片顺序不变，刷新和分批加载时也不会随机跳动。
@@ -49,7 +56,8 @@
         const rhythm = containerW < 520
             ? [0.62, 0.34, 0.46, 0.30, 0.55, 0.36]
             : [0.24, 0.38, 0.28, 0.22, 0.34, 0.26];
-        return containerW * rhythm[rowIndex % rhythm.length];
+        const limits = heightLimits(containerW);
+        return Math.max(limits.min, Math.min(limits.max, containerW * rhythm[rowIndex % rhythm.length]));
     }
 
     function buildRows(photos, containerW) {
@@ -63,12 +71,18 @@
             for (let count = 1; count <= maxItems && start + count <= photos.length; count++) {
                 ratioSum += photoRatio(photos[start + count - 1]);
                 const height = (containerW - GAP * (count - 1)) / ratioSum;
+                // 不为凑满一行而把照片压成细条；单张最宽也只到 3:1。
+                if (height < heightLimits(containerW).min && count > 1) break;
                 const score = Math.abs(Math.log(height / target));
                 if (!best || score < best.score) best = { count, ratioSum, score, target };
             }
             const end = start + best.count;
+            const naturalH = (containerW - GAP * (best.count - 1)) / best.ratioSum;
+            const isLast = end === photos.length;
+            const height = Math.min(heightLimits(containerW).max,
+                isLast && naturalH > best.target * 1.35 ? best.target : naturalH);
             rows.push({ photos: photos.slice(start, end), ratioSum: best.ratioSum,
-                target: best.target, isLast: end === photos.length });
+                target: best.target, isLast, height });
             start = end;
         }
         return rows;
@@ -95,21 +109,15 @@
         if (sentinel) sentinel.hidden = visibleRows >= rows.length;
 
         for (const rowData of rows.slice(startRow, visibleRows)) {
-            const n = rowData.photos.length;
-            const gapTotal = GAP * (n - 1);
-            const naturalH = (W - gapTotal) / rowData.ratioSum;
-            // 末行不足时保持自然大小；其余行按原始宽高比铺满。
-            const isUnfilled = rowData.isLast && naturalH > rowData.target * 1.35;
-            const rowH = isUnfilled ? rowData.target : naturalH;
+            // 达到高度上限时允许行尾留白，避免拉伸照片或产生超高大图。
+            const rowH = rowData.height;
 
             const rowEl = document.createElement('div');
             rowEl.className = 'g-row';
             rowEl.style.height = rowH + 'px';
 
             rowData.photos.forEach((p) => {
-                const itemW = isUnfilled
-                    ? rowH * photoRatio(p)
-                    : (W - gapTotal) * (photoRatio(p) / rowData.ratioSum);
+                const itemW = rowH * photoRatio(p);
                 const itemEl = document.createElement('button');
                 itemEl.type = 'button';
                 itemEl.className = 'g-item';
