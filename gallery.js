@@ -2,7 +2,7 @@
  * gallery.js — 相册页渲染与照片灯箱
  *
  * 数据源：data/gallery.json（由 scripts/build-gallery.mjs 构建生成）
- * 布局：Justified 行式——运行时按宽高比逐行装箱，行内照片等高、按原始比例排满，
+ * 布局：疏密交错的 Justified 行式——按宽高比和变化的目标行高装箱，保持原始比例，
  *       最后一行不强行拉伸；窗口缩放自动重排。
  * 加载：缩略图 480w + LQIP 模糊占位 + loading="lazy"，点开灯箱再取 1600w 全图。
  */
@@ -39,34 +39,38 @@
 
     const GAP = 6;
 
-    function targetHeight(containerW) {
-        if (containerW >= 760) return 320;
-        if (containerW >= 520) return 260;
-        return 220;
+    function photoRatio(photo) {
+        const ratio = Number(photo.ratio) || (Number(photo.w) / Number(photo.h));
+        return Number.isFinite(ratio) && ratio > 0 ? ratio : 1.5;
     }
 
-    function maxItemsPerRow(containerW) {
-        if (containerW >= 760) return 3;
-        return 2;
+    // 交替使用疏密不同的目标行高，照片顺序不变，刷新和分批加载时也不会随机跳动。
+    function targetHeight(containerW, rowIndex = 0) {
+        const rhythm = containerW < 520
+            ? [0.62, 0.34, 0.46, 0.30, 0.55, 0.36]
+            : [0.24, 0.38, 0.28, 0.22, 0.34, 0.26];
+        return containerW * rhythm[rowIndex % rhythm.length];
     }
 
     function buildRows(photos, containerW) {
-        const th = targetHeight(containerW);
-        const maxItems = maxItemsPerRow(containerW);
         const rows = [];
-        let row = [];
-        let ratioSum = 0;
-        for (const p of photos) {
-            const r = p.ratio || (p.w && p.h ? p.w / p.h : 1.5);
-            row.push(p);
-            ratioSum += r;
-            if (ratioSum >= containerW / th || row.length >= maxItems) {
-                rows.push({ photos: row, ratioSum });
-                row = [];
-                ratioSum = 0;
+        const maxItems = containerW < 520 ? 3 : 5;
+        let start = 0;
+        while (start < photos.length) {
+            const target = targetHeight(containerW, rows.length);
+            let ratioSum = 0;
+            let best = null;
+            for (let count = 1; count <= maxItems && start + count <= photos.length; count++) {
+                ratioSum += photoRatio(photos[start + count - 1]);
+                const height = (containerW - GAP * (count - 1)) / ratioSum;
+                const score = Math.abs(Math.log(height / target));
+                if (!best || score < best.score) best = { count, ratioSum, score, target };
             }
+            const end = start + best.count;
+            rows.push({ photos: photos.slice(start, end), ratioSum: best.ratioSum,
+                target: best.target, isLast: end === photos.length });
+            start = end;
         }
-        if (row.length) rows.push({ photos: row, ratioSum, isLast: true });
         return rows;
     }
 
@@ -94,24 +98,18 @@
             const n = rowData.photos.length;
             const gapTotal = GAP * (n - 1);
             const naturalH = (W - gapTotal) / rowData.ratioSum;
-            const th = targetHeight(W);
-
-            // 最后一行（或不足一整行的单图）避免被过度拉伸横向填满，保持自然比例居左
-            const isUnfilled = rowData.isLast && naturalH > th * 1.35;
-            let rowH = isUnfilled ? th : naturalH;
-            if (n === 1 && rowH > th * 1.35) {
-                rowH = th * 1.35;
-            }
-            rowH = Math.max(100, Math.round(rowH));
+            // 末行不足时保持自然大小；其余行按原始宽高比铺满。
+            const isUnfilled = rowData.isLast && naturalH > rowData.target * 1.35;
+            const rowH = isUnfilled ? rowData.target : naturalH;
 
             const rowEl = document.createElement('div');
             rowEl.className = 'g-row';
             rowEl.style.height = rowH + 'px';
 
-            rowData.photos.forEach((p, idx) => {
+            rowData.photos.forEach((p) => {
                 const itemW = isUnfilled
-                    ? Math.round(rowH * (p.ratio || (p.w && p.h ? p.w / p.h : 1.5)))
-                    : Math.floor((W - gapTotal) * (p.ratio / rowData.ratioSum));
+                    ? rowH * photoRatio(p)
+                    : (W - gapTotal) * (photoRatio(p) / rowData.ratioSum);
                 const itemEl = document.createElement('button');
                 itemEl.type = 'button';
                 itemEl.className = 'g-item';
@@ -189,7 +187,7 @@
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
-            document.querySelectorAll('.gallery-wall').forEach(layoutWall);
+            document.querySelectorAll('.gallery-wall').forEach((wall) => layoutWall(wall));
         }, 150);
     });
 
