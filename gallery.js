@@ -225,7 +225,7 @@
 
     const GALLERY_MAX_IMAGES = 30;
     let galleryUploadBackdrop = null;
-    let galleryUploadFiles = []; // [{ file, dataUrl }]
+    let galleryUploadFiles = []; // [{ file, dataUrl, upload: { filename, base64, sha, attempted, path } }]
     let galleryUploadBusy = false;
     const galleryDraft = createSiteDraft('gallery');
 
@@ -274,12 +274,21 @@
                 <img class="moment-thumb-img" src="${item.dataUrl}" alt="预览">
                 <button class="moment-thumb-del" type="button" title="移除照片">&times;</button>
             `;
+            if (item.upload?.path) {
+                const badge = document.createElement('span');
+                badge.className = 'gallery-upload-badge';
+                badge.style.cssText = 'position:absolute;left:4px;bottom:4px;padding:2px 5px;border-radius:4px;background:rgba(0,0,0,.72);color:#fff;font-size:11px;pointer-events:none';
+                badge.textContent = '已上传';
+                wrap.appendChild(badge);
+            }
+            wrap.querySelector('.moment-thumb-del').disabled = galleryUploadBusy || Boolean(galleryDraft.fields.publish);
             wrap.querySelector('.moment-thumb-del').addEventListener('click', () => {
-                if (galleryUploadBusy) return;
+                if (galleryUploadBusy || galleryDraft.fields.publish) return;
                 URL.revokeObjectURL(galleryUploadFiles[index].dataUrl);
                 galleryUploadFiles.splice(index, 1);
                 galleryDraft.saveFiles(galleryUploadFiles);
                 renderGalleryUploadPreviews(previewsEl);
+                updateGalleryResumeUI();
             });
             previewsEl.appendChild(wrap);
         });
@@ -356,7 +365,7 @@
                 <button class="moment-modal-close" type="button" aria-label="关闭">&times;</button>
             </div>
             <div class="moment-modal-body">
-                <p class="draft-hint">草稿保存在当前浏览器，关闭后可继续编辑；发布成功后自动清空。</p>
+                <p class="draft-hint">草稿和上传进度保存在当前浏览器，关闭或刷新后可继续；重试只补传未完成的照片。</p>
                 <input id="galleryAlbumName" class="moment-textarea" list="galleryAlbumOptions" style="min-height:0;height:42px;padding:10px 14px;resize:none;margin-bottom:10px;" maxlength="40" placeholder="相册名称（留空则自动按月份分组）">
                 <datalist id="galleryAlbumOptions">${albumOptions}</datalist>
                 <textarea id="galleryAlbumDesc" class="moment-textarea" rows="2" maxlength="200" placeholder="相册简介（可选，最多 200 字）"></textarea>
@@ -370,7 +379,7 @@
                     </label>
                 </div>
 
-                <div class="moment-modal-status" id="galleryUploadStatus" style="display:none;"></div>
+                <div class="moment-modal-status" id="galleryUploadStatus" role="status" aria-live="polite" style="display:none;"></div>
 
                 <div class="moment-modal-footer">
                     <button type="button" class="moment-logout-link" id="galleryLogoutBtn" title="退出身份并清除本地保存的 Token">退出登录</button>
@@ -393,12 +402,13 @@
         const descInput = card.querySelector('#galleryAlbumDesc');
         nameInput.value = galleryDraft.fields.name || '';
         descInput.value = galleryDraft.fields.desc || '';
-        const saveDraft = () => galleryDraft.saveFields({ name: nameInput.value, desc: descInput.value });
+        const saveDraft = () => galleryDraft.saveFields({ ...galleryDraft.fields, name: nameInput.value, desc: descInput.value });
         nameInput.addEventListener('input', saveDraft);
         descInput.addEventListener('input', saveDraft);
         renderGalleryUploadPreviews(previewsEl);
+        updateGalleryResumeUI();
         card.querySelector('#galleryDiscardBtn').onclick = async () => {
-            if (galleryUploadBusy || !confirm('清空这份相册草稿的文字和图片？')) return;
+            if (galleryUploadBusy || !confirm('清空这份相册草稿和上传进度？已上传的文件不会删除；如果刚才发布结果不明，请先重试确认是否已发布。')) return;
             galleryUploadBusy = true;
             setEditorBusy(galleryDraft, card, true);
             galleryUploadFiles.forEach(item => URL.revokeObjectURL(item.dataUrl));
@@ -420,7 +430,7 @@
         });
 
         fileInput.addEventListener('change', () => {
-            if (galleryUploadBusy) return;
+            if (galleryUploadBusy || galleryDraft.fields.publish) return;
             const picked = Array.from(fileInput.files || []);
             fileInput.value = '';
             for (const f of picked) {
@@ -435,22 +445,113 @@
             }
             galleryDraft.saveFiles(galleryUploadFiles);
             renderGalleryUploadPreviews(previewsEl);
+            updateGalleryResumeUI();
         });
 
         submitBtn.addEventListener('click', () => submitGalleryUpload(card, statusEl, submitBtn));
     }
 
+    function updateGalleryResumeUI() {
+        const card = document.getElementById('galleryUploadCard');
+        if (!card || galleryUploadBusy || !card.querySelector('#gallerySubmitBtn')) return;
+        const done = galleryUploadFiles.filter(item => item.upload?.path).length;
+        const pending = galleryDraft.fields.publish;
+        card.querySelector('#gallerySubmitBtn').textContent = pending ? '确认并继续发布' : done ? '继续上传并发布' : '上传并发布';
+        // 创建请求结果不明时，先核实原批次，防止修改后把新草稿当作已发布。
+        for (const selector of ['#galleryAlbumName', '#galleryAlbumDesc', '#galleryFileInput', '.moment-thumb-del']) {
+            card.querySelectorAll(selector).forEach(el => { el.disabled = Boolean(pending); });
+        }
+        if (pending || done) {
+            const status = card.querySelector('#galleryUploadStatus');
+            status.style.display = 'block';
+            status.className = 'moment-modal-status';
+            status.textContent = pending ? '照片已传完，点击继续确认上次发布结果，无需重新上传。'
+                : `已上传 ${done}/${galleryUploadFiles.length} 张，继续时将跳过已完成照片。`;
+        }
+    }
+
+    // 每张图片的请求身份与压缩结果先落盘，再发请求；响应丢失时按相同路径核对 Git blob SHA。
+    async function prepareGalleryImage(item) {
+        if (item.upload) return;
+        const f = item.file;
+        let base64, ext;
+        if (f.type === 'image/gif') {
+            if (f.size > 15 * 1024 * 1024) throw new Error(`动图 ${f.name} 超过 15MB，请压缩后再试`);
+            base64 = await fileToRawBase64(f);
+            ext = 'gif';
+        } else {
+            base64 = (await compressMomentImage(f, 1600, 0.82)).base64;
+            ext = 'jpg';
+        }
+        const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+        const header = new TextEncoder().encode(`blob ${bytes.length}\0`);
+        const blob = new Uint8Array(header.length + bytes.length);
+        blob.set(header); blob.set(bytes, header.length);
+        const sha = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-1', blob)), b => b.toString(16).padStart(2, '0')).join('');
+        item.upload = { filename: `gallery-${crypto.randomUUID()}.${ext}`, base64, sha, attempted: false };
+    }
+
+    async function galleryRead(token, suffix) {
+        const res = await fetch(`https://api.github.com/repos/mfcheer/mfcheer.github.io/${suffix}`, {
+            headers: { Authorization: `Bearer ${token}`, Accept: suffix.startsWith('contents/') ? 'application/vnd.github.object+json' : 'application/vnd.github+json' },
+            cache: 'no-store', signal: AbortSignal.timeout(30000)
+        });
+        if (res.status === 404 && suffix.startsWith('contents/')) return null;
+        if (!res.ok) {
+            const err = new Error(`无法确认上次上传或发布结果 (${res.status})，请稍后继续`);
+            err.status = res.status;
+            throw err;
+        }
+        return res.json();
+    }
+
+    async function resumeGalleryImage(token, item) {
+        await prepareGalleryImage(item);
+        const upload = item.upload;
+        if (upload.path) return upload.path;
+        const path = `assets/gallery/${upload.filename}`;
+        if (upload.attempted) {
+            const remote = await galleryRead(token, `contents/${path}`);
+            if (remote) {
+                if (remote.sha !== upload.sha) throw new Error('同名照片内容不一致，已停止上传，请保留草稿后重试');
+                upload.path = path;
+                delete upload.base64;
+                await galleryDraft.saveFiles(galleryUploadFiles);
+                return path;
+            }
+        }
+        upload.attempted = true;
+        await galleryDraft.saveFiles(galleryUploadFiles);
+        // 失败时保留 attempted 和相同文件名；下次先核对，绝不覆盖已有文件。
+        const result = await uploadMomentImage(token, upload.filename, upload.base64, 'gallery');
+        upload.path = result;
+        delete upload.base64;
+        await galleryDraft.saveFiles(galleryUploadFiles);
+        return result;
+    }
+
+    async function findGalleryPublication(token, publish) {
+        if (publish.created) return true;
+        const marker = `<!-- gallery-upload:${publish.id} -->`;
+        for (let page = 1; page <= 50; page++) {
+            const issues = await galleryRead(token, `issues?state=all&creator=mfcheer&since=${encodeURIComponent(publish.since)}&per_page=100&page=${page}`);
+            if (!Array.isArray(issues)) throw new Error('无法确认相册发布结果，请稍后继续');
+            if (issues.some(issue => !issue.pull_request && issue.user?.login?.toLowerCase() === 'mfcheer' && issue.body?.includes(marker))) return true;
+            if (issues.length < 100) return false;
+        }
+        throw new Error('待核对的相册过多，请稍后继续，暂不重复发布');
+    }
+
     async function submitGalleryUpload(card, statusEl, submitBtn) {
         if (galleryUploadBusy) return;
-        const setErr = (msg) => {
+        const setErr = msg => {
             statusEl.className = 'moment-modal-status is-error';
             statusEl.style.display = 'block';
             statusEl.textContent = msg;
         };
         const albumName = (card.querySelector('#galleryAlbumName').value || '').trim().slice(0, 40);
         const desc = (card.querySelector('#galleryAlbumDesc').value || '').trim().slice(0, 200);
-        if (!galleryUploadFiles.length) { setErr('请至少选择一张照片'); return; }
-
+        if (!galleryUploadFiles.length && !galleryDraft.fields.publish) { setErr('请至少选择一张照片'); return; }
         const auth = getMomentAuth();
         if (!auth || !auth.token) { renderGalleryUploadModal(); return; }
 
@@ -458,36 +559,35 @@
         setEditorBusy(galleryDraft, card, true);
         statusEl.className = 'moment-modal-status is-loading';
         statusEl.style.display = 'block';
-        statusEl.textContent = '准备上传…';
-
-        const uploadedSrcs = [];
+        statusEl.textContent = '准备继续上传…';
         try {
-            for (let i = 0; i < galleryUploadFiles.length; i++) {
-                statusEl.textContent = `正在上传第 ${i + 1}/${galleryUploadFiles.length} 张…`;
-                const f = galleryUploadFiles[i].file;
-                let filename, base64;
-                if (f.type === 'image/gif') {
-                    if (f.size > 15 * 1024 * 1024) throw new Error(`动图 ${f.name} 超过 15MB，请压缩后再试`);
-                    filename = `gallery-${Date.now()}-${i}.gif`;
-                    base64 = await fileToRawBase64(f);
-                } else {
-                    const result = await compressMomentImage(f, 1600, 0.82);
-                    filename = `gallery-${Date.now()}-${i}.jpg`;
-                    base64 = result.base64;
+            const pending = galleryDraft.fields.publish;
+            const published = pending && await findGalleryPublication(auth.token, pending);
+            if (!published) {
+                const uploadedSrcs = [];
+                for (let i = 0; i < galleryUploadFiles.length; i++) {
+                    statusEl.textContent = `正在处理第 ${i + 1}/${galleryUploadFiles.length} 张（已完成 ${galleryUploadFiles.filter(item => item.upload?.path).length} 张）…`;
+                    const rel = await resumeGalleryImage(auth.token, galleryUploadFiles[i]);
+                    uploadedSrcs.push(`${window.location.origin}/${rel}`);
+                    renderGalleryUploadPreviews(card.querySelector('#galleryImgPreviews'));
                 }
-                const rel = await uploadMomentImage(auth.token, filename, base64, 'gallery');
-                uploadedSrcs.push(`${window.location.origin}/${rel}`);
+                statusEl.textContent = '正在创建相册…';
+                const publish = pending || { id: crypto.randomUUID(), since: new Date(Date.now() - 60000).toISOString() };
+                // 先保存发布标记，网络异常后可用 Issues 列表直接核对，不依赖搜索索引。
+                galleryDraft.saveFields({ ...galleryDraft.fields, publish });
+                if (!galleryDraft.textSaved) throw new Error('无法保存发布进度，请恢复浏览器存储后继续');
+                const body = (desc ? `### 相册简介\n${desc}\n\n` : '') +
+                    `<!-- gallery-upload:${publish.id} -->\n` + uploadedSrcs.map(u => `![photo](${u})`).join('\n');
+                await createMomentIssue(auth.token, `📷 相册 ${albumName}`.trim(), body, ['gallery']);
+                galleryDraft.saveFields({ ...galleryDraft.fields, publish: { ...publish, created: true } });
             }
-
-            statusEl.textContent = '正在创建相册…';
-            const body = (desc ? `### 相册简介\n${desc}\n\n` : '') + uploadedSrcs.map((u) => `![photo](${u})`).join('\n');
-            await createMomentIssue(auth.token, `📷 相册 ${albumName}`.trim(), body, ['gallery']);
-
-            statusEl.className = 'moment-modal-status';
-            statusEl.textContent = '✓ 已提交！同步流水线约 1-2 分钟后展示，可以关闭本页';
             showMomentToast('🎉 相册已提交，照片同步后显示（约 1–2 分钟）');
+            galleryDraft.saveFields({ ...galleryDraft.fields, publish: { ...galleryDraft.fields.publish, created: true } });
+            await galleryDraft.saveFiles([]);
+            if (!galleryDraft.imageSaved) throw new Error('相册已提交，但清理本地草稿失败，请继续以完成清理');
+            galleryDraft.saveFields({});
+            if (!galleryDraft.textSaved) throw new Error('相册已提交，但清理本地进度失败，请继续以完成清理');
             galleryUploadFiles.forEach(item => URL.revokeObjectURL(item.dataUrl));
-            await galleryDraft.clear();
             galleryUploadFiles = [];
             galleryUploadBusy = false;
             setEditorBusy(galleryDraft, card, false);
@@ -495,12 +595,14 @@
         } catch (e) {
             galleryUploadBusy = false;
             setEditorBusy(galleryDraft, card, false);
-            // token 失效（401 Bad credentials）：自动清除本地凭据，引导重新授权
+            renderGalleryUploadPreviews(card.querySelector('#galleryImgPreviews'));
+            updateGalleryResumeUI();
             if (e.status === 401 || e.message === 'Bad credentials') {
                 clearMomentAuth();
-                setErr('授权已失效（可能是授权被撤销或过期），已自动退出登录。请关闭弹窗后重新点击「上传照片」并完成 GitHub 授权');
+                setErr('授权已失效，上传进度已保留。请保存并关闭，重新登录后继续');
             } else {
-                setErr(e.message || '发布失败，请重试');
+                const done = galleryUploadFiles.filter(item => item.upload?.path).length;
+                setErr(`${e.message || '发布失败'}。已完成 ${done}/${galleryUploadFiles.length} 张，点击继续将保留进度并核对上次结果。`);
             }
         }
     }

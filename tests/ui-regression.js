@@ -24,6 +24,9 @@ window.runSiteRegression = async function (phase) {
     const nativeFetch = window.fetch;
     window.fetch = (url, options = {}) => {
         if (options.method && !['GET', 'HEAD'].includes(options.method)) throw new Error('禁止真实写入');
+        if (phase === 'gallery-restore' && String(url).startsWith('https://api.github.com/')) {
+            return Promise.resolve({ ok: !String(url).includes('/contents/'), status: String(url).includes('/contents/') ? 404 : 200, json: async () => [] });
+        }
         return nativeFetch(url, options);
     };
     if (phase === 'moment-save') {
