@@ -1,6 +1,13 @@
 {
   "movies": [
     {
+      "title": "指环王1：护戒使者",
+      "link": "https://movie.douban.com/subject/1291571/",
+      "cover": "assets/covers/1291571.jpg",
+      "rating": 4,
+      "date": "2026-11-10"
+    },
+    {
       "title": "欢迎来龙餐馆",
       "link": "https://movie.douban.com/subject/35811064/",
       "cover": "assets/covers/35811064.jpg",
@@ -27,20 +34,13 @@
       "cover": "assets/covers/26797690.jpg",
       "rating": 4,
       "date": "2026-05-07"
-    },
-    {
-      "title": "鬼吹灯之精绝古城",
-      "link": "https://movie.douban.com/subject/26298935/",
-      "cover": "assets/covers/26298935.jpg",
-      "rating": 4,
-      "date": "2026-05-07"
     }
   ],
   "books": [
     {
-      "title": "搞定系统设计",
-      "link": "https://book.douban.com/subject/36661336/",
-      "cover": "assets/covers/36661336.jpg",
+      "title": "专业投机原理",
+      "link": "https://book.douban.com/subject/30347305/",
+      "cover": "assets/covers/30347305.jpg",
       "rating": null,
       "date": null,
       "status": "读过"
@@ -80,6 +80,22 @@
   ],
   "games": [
     {
+      "title": "孤岛惊魂5 Far Cry 5",
+      "link": "https://www.douban.com/game/27056101/",
+      "cover": "assets/covers/27056101.jpg",
+      "rating": null,
+      "date": null,
+      "status": "玩过"
+    },
+    {
+      "title": "泰坦天降2 Titanfall 2",
+      "link": "https://www.douban.com/game/26771824/",
+      "cover": "assets/covers/26771824.jpg",
+      "rating": null,
+      "date": null,
+      "status": "玩过"
+    },
+    {
       "title": "战争机器：终极版  Gears of War: Ultimate Edition",
       "link": "https://www.douban.com/game/26434256/",
       "cover": "assets/covers/26434256.jpg",
@@ -99,22 +115,6 @@
       "title": "哈迪斯 Hades",
       "link": "https://www.douban.com/game/30397999/",
       "cover": "assets/covers/30397999.jpg",
-      "rating": null,
-      "date": null,
-      "status": "玩过"
-    },
-    {
-      "title": "枪火重生 Gunfire Reborn",
-      "link": "https://www.douban.com/game/35089124/",
-      "cover": "assets/covers/35089124.jpg",
-      "rating": null,
-      "date": null,
-      "status": "玩过"
-    },
-    {
-      "title": "饥荒联机版 Don't Starve Together",
-      "link": "https://www.douban.com/game/26419552/",
-      "cover": "assets/covers/26419552.jpg",
       "rating": null,
       "date": null,
       "status": "玩过"
