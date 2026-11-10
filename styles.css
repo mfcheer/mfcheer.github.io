@@ -2655,7 +2655,7 @@ html[data-theme="dark"] .post-nav-card:hover {
     margin-top: 10px;
 }
 
-/* 文章页 TOC 目录（标题 ≥2 个二级标题时由构建脚本注入） */
+/* 文章页 TOC 目录（H1/H2 合计至少两个时由构建脚本注入） */
 .toc {
     margin-top: 14px;
     padding: 12px 16px;
@@ -2704,6 +2704,10 @@ html[data-theme="dark"] .post-nav-card:hover {
 .toc .toc-sub a {
     padding-left: 22px;
     font-size: 13px;
+}
+
+.toc .toc-sub-deep a {
+    padding-left: 36px;
 }
 
 /* 代码块增强：容器 + 语言标签 + 复制按钮（script.js 注入） */

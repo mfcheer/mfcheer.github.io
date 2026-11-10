@@ -64,7 +64,7 @@ export async function buildSite({ root, output, getIssues = fetchIssues, run, fo
     if (await fs.stat(path.join(root, 'data/nav.json')).catch(() => null)) syncSiteChrome(root);
     const common = ['package.json', 'package-lock.json'];
     const inputs = {
-        blog: await hashFiles(root, [...common, '_posts', 'templates', 'scripts/build-posts.mjs']),
+        blog: await hashFiles(root, [...common, '_posts', 'templates', 'scripts/build-posts.mjs', 'scripts/lib/post-toc.mjs']),
         moments: digest(JSON.stringify([moments, await hashFiles(root, [...common, 'scripts/sync-moments.mjs'])])),
         gallery: digest(JSON.stringify([gallery, await hashFiles(root, [...common, 'scripts/build-gallery.mjs'])]))
     };

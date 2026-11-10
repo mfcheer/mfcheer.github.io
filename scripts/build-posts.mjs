@@ -19,6 +19,7 @@ import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import matter from 'gray-matter';
 import { syncSiteChrome } from './build-nav.mjs';
+import { buildToc } from './lib/post-toc.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -31,7 +32,7 @@ const TPL_DIR = path.join(ROOT, 'templates');
 import anchor from 'markdown-it-anchor';
 import taskLists from 'markdown-it-task-lists';
 
-const VERSIONS = { css: '1.3.38', js: '1.3.36' };
+const VERSIONS = { css: '1.3.39', js: '1.3.36' };
 
 // ---------- 工具 ----------
 const esc = (s) =>
@@ -84,21 +85,6 @@ function deriveSummary(html) {
     return text.length > 96 ? `${text.slice(0, 96)}…` : text;
 }
 
-// 从渲染后的 HTML 提取 h2/h3 生成目录；二级标题不足 2 个不展示
-function buildToc(html) {
-    const items = [];
-    const re = /<h([23]) id="([^"]*?)"[^>]*>(.*?)<\/h\1>/g;
-    let m;
-    while ((m = re.exec(html)) !== null) {
-        items.push({ level: Number(m[1]), id: m[2], text: m[3].replace(/<[^>]+>/g, '') });
-    }
-    if (items.filter((i) => i.level === 2).length < 2) return '';
-    const lis = items
-        .map((i) => `<li${i.level === 3 ? ' class="toc-sub"' : ''}><a href="#${i.id}">${esc(i.text)}</a></li>`)
-        .join('');
-    return `<nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul>${lis}</ul></nav>`;
-}
-
 // ---------- Markdown 渲染器 ----------
 const md = new MarkdownIt({
     html: false, // 正文禁用原始 HTML，天然免疫 XSS
@@ -116,7 +102,7 @@ const md = new MarkdownIt({
     }
 });
 
-// 标题锚点：为 h2/h3 生成 id，TOC 与文内跳链依赖
+// 标题锚点：为正文标题生成 id，TOC 与文内跳链依赖
 md.use(anchor, {
     slugify: (s) => s.trim().toLowerCase().replace(/\s+/g, '-'),
     permalink: false

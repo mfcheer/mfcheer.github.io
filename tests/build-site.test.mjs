@@ -92,6 +92,9 @@ test('文章、模板变化重建文章；静态样式仅重新组装发布', as
     await f.put('templates/post.html', '新模板');
     assert.equal((await buildSite(f.options)).changed.blog, true);
     f.calls.length = 0;
+    await f.put('scripts/lib/post-toc.mjs', '更新目录规则');
+    assert.deepEqual((await buildSite(f.options)).changed, { blog: true, moments: false, gallery: false });
+    f.calls.length = 0;
     await f.put('styles.css', 'body {}');
     const result = await buildSite(f.options);
     assert.equal(result.publish, true);
