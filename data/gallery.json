@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-10 14:40:44",
-  "total": 17,
+  "updated_at": "2026-11-10 14:55:41",
+  "total": 16,
   "albums": [
     {
       "title": "2026·11",
@@ -235,7 +235,7 @@
     },
     {
       "title": "秋",
-      "count": 2,
+      "count": 1,
       "description": null,
       "range": "2026.11",
       "cover": {
@@ -250,7 +250,7 @@
       "photos": [
         {
           "issueNumber": 19,
-          "issueUpdatedAt": "2026-11-09T09:53:08Z",
+          "issueUpdatedAt": "2026-11-10T06:49:13Z",
           "source": "https://github.com/user-attachments/assets/55043154-c137-4efe-8e63-c070f9277330",
           "src": "assets/gallery/55043154-c137-4efe-8.jpg",
           "thumb": "assets/gallery/55043154-c137-4efe-8_s.jpg",
@@ -258,18 +258,6 @@
           "h": 1600,
           "ratio": 0.75,
           "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAECAwT/xAAdEAACAQUBAQAAAAAAAAAAAAABAgADBBESITFB/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/xAAYEQEBAQEBAAAAAAAAAAAAAAABABEhIv/aAAwDAQACEQMRAD8AwW2lGslVttQYX9MpdO2y5boAHyJGxUUkg4I98jvGLXLsyj2THzkk7tANh1P0HMuvH2rs2o6eiEIRml//2Q==",
-          "date": "2026-11-09 17:53:08"
-        },
-        {
-          "issueNumber": 19,
-          "issueUpdatedAt": "2026-11-09T09:53:08Z",
-          "source": "https://github.com/user-attachments/assets/c4f725bb-8755-4de9-a92c-2315fe9bc410",
-          "src": "assets/gallery/c4f725bb-8755-4de9-a.jpg",
-          "thumb": "assets/gallery/c4f725bb-8755-4de9-a_s.jpg",
-          "w": 1600,
-          "h": 1200,
-          "ratio": 1.333,
-          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAgMF/8QAHBAAAgMBAAMAAAAAAAAAAAAAAREAAgMhIjFx/8QAFAEBAAAAAAAAAAAAAAAAAAAAA//EABYRAQEBAAAAAAAAAAAAAAAAAAABIf/aAAwDAQACEQMRAD8Ay8x3rQj08WF8gy1sbdXuXFzte9dEQGoFukf/2Q==",
           "date": "2026-11-09 17:53:08"
         }
       ]
