@@ -77,3 +77,10 @@ test('三类相册引用及重复引用删除准确，不删除同前缀的其�
     env.context.body = 'https://github.com/user-attachments/assets/abc\n![二](assets/b.jpg)';
     assert.equal(env.run('removeGalleryImage(body,"https://github.com/user-attachments/assets/abc")'), '\n![二](assets/b.jpg)');
 });
+test("认证常量与状态在说说加载前就绪，已登录博主首批与首页条目立即可见删除按钮", () => {
+    const loadMomentsIndex = script.indexOf("loadMoments();");
+    const authKeyIndex = script.indexOf("const MOMENT_AUTH_TOKEN_KEY");
+    const isOwnerIndex = script.indexOf("function isSiteOwner");
+    assert.ok(authKeyIndex > 0 && authKeyIndex < loadMomentsIndex, "MOMENT_AUTH_TOKEN_KEY 必须在 loadMoments 之前定义");
+    assert.ok(isOwnerIndex > 0 && isOwnerIndex < loadMomentsIndex, "isSiteOwner 必须在 loadMoments 之前定义");
+});
