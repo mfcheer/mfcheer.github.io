@@ -161,3 +161,11 @@ node scripts/build-posts.mjs
 5. 若需恢复旧流程，回退本次改造提交，并把 Pages Source 改回原来的分支发布方式（main / root）。现有生成物继续保留在 main，可作为回退基础。
 
 `npm run build:site` 会读取真实公开 Issue、生成 `_site/` 并更新本地构建状态；本地运行不代表发布成功。只做开发验证时请在临时副本运行，不要手动提交本地验证生成的状态。
+
+### 导航与列表页联系区
+
+`data/nav.json` 维护全站导航；联系方式只放在页面底部，不加入导航。
+`templates/contact.html` 与 `templates/contact-modal.html` 是联系图标和小红书名片弹层的共同来源。
+运行 `node scripts/build-nav.mjs` 可同步；`npm run build` 和统一发布构建也会自动同步。
+首页、文章列表、说说列表、相册列表均在内容末尾显示同一联系区，文章详情页只同步导航。
+新增列表页沿用 `<ul class="nav-links">`、`<main>` 与 `<footer class="footer">` 的结构，放在一级目录的 `index.html`，或加入导航中的站内目录链接，即会自动同步，无需复制联系区；发布新目录仍需加入 `scripts/build-site.mjs` 的 `PUBLIC_DIRS`。

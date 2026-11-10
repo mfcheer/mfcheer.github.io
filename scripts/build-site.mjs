@@ -6,6 +6,7 @@ import os from 'node:os';
 import crypto from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { syncSiteChrome } from './build-nav.mjs';
 
 export const PUBLIC_DIRS = ['assets', 'blog', 'data', 'gallery', 'moments', 'privacy'];
 export const PUBLIC_FILES = ['index.html', '404.html', '.nojekyll', 'CNAME', 'atom.xml', 'sitemap.xml', 'robots.txt', 'manifest.json', 'sw.js', 'styles.css', 'script.js', 'gallery.js', 'avatar.jpg', 'apple-touch-icon.png', 'favicon-32x32.png', 'favicon.ico', 'giscus.json'];
@@ -59,6 +60,8 @@ export async function buildSite({ root, output, getIssues = fetchIssues, run, fo
     let previous = {};
     try { previous = JSON.parse(await fs.readFile(path.join(root, '.build-state.json'), 'utf8')); }
     catch (e) { if (e.code !== 'ENOENT') throw e; }
+    // 在输入摘要前更新模板，联系区或导航变化会自动触发文章重建。
+    if (await fs.stat(path.join(root, 'data/nav.json')).catch(() => null)) syncSiteChrome(root);
     const common = ['package.json', 'package-lock.json'];
     const inputs = {
         blog: await hashFiles(root, [...common, '_posts', 'templates', 'scripts/build-posts.mjs']),

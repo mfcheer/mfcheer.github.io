@@ -18,9 +18,11 @@ import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import matter from 'gray-matter';
+import { syncSiteChrome } from './build-nav.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
+syncSiteChrome(ROOT);
 const SITE = 'https://mfcheer.github.io';
 const POSTS_DIR = path.join(ROOT, '_posts');
 const TPL_DIR = path.join(ROOT, 'templates');
