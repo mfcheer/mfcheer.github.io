@@ -7,11 +7,6 @@
       "sub": "/moments/"
     },
     {
-      "label": "文章",
-      "home": "/blog/",
-      "sub": "/blog/"
-    },
-    {
       "label": "相册",
       "home": "/gallery/",
       "sub": "/gallery/"
@@ -22,14 +17,14 @@
       "sub": "/#media"
     },
     {
-      "label": "作品",
+      "label": "动态",
       "home": "#projects",
       "sub": "/#projects"
     },
     {
-      "label": "动态",
-      "home": "#activity",
-      "sub": "/#activity"
+      "label": "文章",
+      "home": "/blog/",
+      "sub": "/blog/"
     },
     {
       "label": "留言",

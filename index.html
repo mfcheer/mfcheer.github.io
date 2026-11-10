@@ -65,7 +65,7 @@
     <meta name="apple-mobile-web-app-title" content="mfcheer">
 
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css?v=1.3.30">
+    <link rel="stylesheet" href="styles.css?v=1.3.32">
 </head>
 <body>
     <button class="float-top-btn" id="floatTopBtn" type="button" title="回到顶部" aria-label="回到顶部">
@@ -80,11 +80,10 @@
                 <nav>
                     <ul class="nav-links">
                         <li><a href="#moments">说说</a></li>
-                        <li><a href="/blog/">文章</a></li>
                         <li><a href="/gallery/">相册</a></li>
                         <li><a href="#media">书影音</a></li>
-                        <li><a href="#projects">作品</a></li>
-                        <li><a href="#activity">动态</a></li>
+                        <li><a href="#projects">动态</a></li>
+                        <li><a href="/blog/">文章</a></li>
                         <li><a href="#guestbook">留言</a></li>
                     </ul>
                 </nav>
@@ -319,17 +318,22 @@
                 <div class="barca-schedule" id="barcaSchedule" hidden></div>
             </section>
 
-            <!-- 个人作品 -->
-            <section class="glass card-projects" id="projects">
+            <!-- 作品与 GitHub 动态 -->
+            <section class="glass card-projects card-activity" id="projects">
                 <div class="activity-head">
                     <div class="head-title-wrap">
-                        <h2>作品</h2>
+                        <h2>作品与动态</h2>
                         <span class="moment-count">2 个项目</span>
                     </div>
                     <a class="activity-badge" href="https://github.com/mfcheer?tab=repositories" target="_blank" rel="noreferrer">
                         <span>全部仓库</span>
                         <span>↗</span>
                     </a>
+                </div>
+                <div class="project-activity" id="activity" aria-label="GitHub 活跃">
+                    <div class="gh-chart-container" id="ghChart">
+                        <img class="gh-chart-img" src="https://ghchart.rshah.org/0071e3/mfcheer" alt="mfcheer 的 GitHub 贡献活跃图" loading="lazy">
+                    </div>
                 </div>
                 <div class="projects-grid">
                     <a class="project-card" href="https://mfcheer.github.io/luma/" target="_blank" rel="noreferrer">
@@ -368,20 +372,6 @@
                             <span class="project-tag">Travel</span>
                         </div>
                     </a>
-                </div>
-            </section>
-
-            <!-- GitHub 活跃动态卡片 -->
-            <section class="glass card-activity" id="activity">
-                <div class="activity-head">
-                    <h2>GitHub 活跃</h2>
-                    <a class="activity-badge" href="https://github.com/mfcheer" target="_blank" rel="noreferrer">
-                        <span>@mfcheer</span>
-                        <span>↗</span>
-                    </a>
-                </div>
-                <div class="gh-chart-container" id="ghChart">
-                    <img class="gh-chart-img" src="https://ghchart.rshah.org/0071e3/mfcheer" alt="mfcheer's GitHub Contributions" loading="lazy">
                 </div>
             </section>
 

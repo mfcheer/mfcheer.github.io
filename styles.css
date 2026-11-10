@@ -851,6 +851,11 @@ button.activity-badge {
     color: var(--text);
 }
 
+.project-activity {
+    margin-bottom: 20px;
+    scroll-margin-top: 88px;
+}
+
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
