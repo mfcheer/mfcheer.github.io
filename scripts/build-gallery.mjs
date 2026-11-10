@@ -276,6 +276,8 @@ async function main() {
             : await fetchIssues();
         console.log(`拉取到 ${issues.length} 个 gallery 相册 Issue`);
         batches = issues.map((it) => ({
+            issueNumber: it.number,
+            issueUpdatedAt: it.updated_at,
             album: albumTitleFromIssue(it),
             created: it.created_at,
             description: extractDescription(it.body),
@@ -343,6 +345,9 @@ async function main() {
                 if (!albumsMap.has(name)) albumsMap.set(name, []);
                 if (albumName && !descriptions.has(name) && batch.description) descriptions.set(name, batch.description);
                 albumsMap.get(name).push({
+                    issueNumber: batch.issueNumber || null,
+                    issueUpdatedAt: batch.issueUpdatedAt,
+                    source: img.src,
                     src: photo.src,
                     thumb: photo.thumb,
                     w: photo.w,

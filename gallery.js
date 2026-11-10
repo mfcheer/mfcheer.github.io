@@ -35,6 +35,13 @@
         }
     }
 
+    document.addEventListener('site-photo-deleted', e => {
+        const { issueNumber, source } = e.detail;
+        for (const album of albums) album.photos = album.photos.filter(p => !(p.issueNumber === issueNumber && p.source === source));
+        render();
+    });
+    document.addEventListener('site-auth-change', () => render());
+
     // ---------------- Justified 布局 ----------------
 
     const GAP = 6;
@@ -92,7 +99,9 @@
     function collectAllPhotos() {
         const all = [];
         for (const a of albums) {
-            for (const p of a.photos) all.push(Object.assign({}, p, { album: a.title }));
+            for (const p of a.photos) {
+                if (!isSiteDeleted('photo', p.issueNumber, p.source, p.issueUpdatedAt)) all.push(Object.assign({}, p, { album: a.title }));
+            }
         }
         return all;
     }
@@ -136,7 +145,7 @@
                 itemEl.addEventListener('click', () => {
                     const globalPhotos = collectAllPhotos();
                     // JSON.parse 会产生新对象，不能按引用匹配，按 src 定位
-                    const startIdx = Math.max(0, globalPhotos.findIndex((q) => q.src === p.src));
+                    const startIdx = Math.max(0, globalPhotos.findIndex((q) => q.src === p.src && q.issueNumber === p.issueNumber && q.source === p.source));
                     openLightbox(globalPhotos, startIdx);
                 });
 
@@ -202,6 +211,8 @@
     // 相册与文章、说说共用灯箱。
     function openLightbox(photos, idx) {
         openSitePhotos(photos.map(p => ({
+            issueNumber: p.issueNumber,
+            source: p.source,
             src: rootUrl(p.src),
             caption: [p.album, p.date && p.date.slice(0, 10)].filter(Boolean).join(' · ')
         })), idx);

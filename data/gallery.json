@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-10 11:42:06",
+  "updated_at": "2026-11-10 11:50:09",
   "total": 19,
   "albums": [
     {
@@ -10,7 +10,7 @@
       "cover": {
         "src": "assets/gallery/4a1616f2099712d1.jpg",
         "thumb": "assets/gallery/4a1616f2099712d1_s.jpg",
-        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAQMEBf/EAB8QAQABAwQDAAAAAAAAAAAAAAEAAgMRBBIhQSIzcf/EABQBAQAAAAAAAAAAAAAAAAAAAAH/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAwDAQACEQMRAD8Au8emFqMfJgmput2s3Jh4jG5cT21mTpgjIl//2Q==",
+        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAQMEBf/EAB8QAQABBAEFAAAAAAAAAAAAAAEAAgMRIQQSIjNBYf/EABQBAQAAAAAAAAAAAAAAAAAAAAH/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAwDAQACEQMRAD8Au7fTC1GD5ME5N1u1nUmHUY3LieWsyZ0wRkS//9k=",
         "w": 1600,
         "h": 1200,
         "ratio": 1.333,
@@ -18,15 +18,21 @@
       },
       "photos": [
         {
+          "issueNumber": 35,
+          "issueUpdatedAt": "2026-11-10T03:41:43Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794282101307-0.jpg",
           "src": "assets/gallery/4a1616f2099712d1.jpg",
           "thumb": "assets/gallery/4a1616f2099712d1_s.jpg",
           "w": 1600,
           "h": 1200,
           "ratio": 1.333,
-          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAQMEBf/EAB8QAQABAwQDAAAAAAAAAAAAAAEAAgMRBBIhQSIzcf/EABQBAQAAAAAAAAAAAAAAAAAAAAH/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAwDAQACEQMRAD8Au8emFqMfJgmput2s3Jh4jG5cT21mTpgjIl//2Q==",
+          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAQMEBf/EAB8QAQABBAEFAAAAAAAAAAAAAAEAAgMRIQQSIjNBYf/EABQBAQAAAAAAAAAAAAAAAAAAAAH/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAwDAQACEQMRAD8Au7fTC1GD5ME5N1u1nUmHUY3LieWsyZ0wRkS//9k=",
           "date": "2026-11-10 11:41:43"
         },
         {
+          "issueNumber": 34,
+          "issueUpdatedAt": "2026-11-10T00:33:58Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794270836730-0.jpg",
           "src": "assets/gallery/28a7bfd9e7f62a57.jpg",
           "thumb": "assets/gallery/28a7bfd9e7f62a57_s.jpg",
           "w": 1542,
@@ -36,6 +42,9 @@
           "date": "2026-11-10 08:33:58"
         },
         {
+          "issueNumber": 33,
+          "issueUpdatedAt": "2026-11-09T17:33:32Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794245607827-0.jpg",
           "src": "assets/gallery/1e6cbe49d79ea219.jpg",
           "thumb": "assets/gallery/1e6cbe49d79ea219_s.jpg",
           "w": 1200,
@@ -45,6 +54,9 @@
           "date": "2026-11-10 01:33:32"
         },
         {
+          "issueNumber": 30,
+          "issueUpdatedAt": "2026-11-09T15:26:21Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794237976445-0.jpg",
           "src": "assets/gallery/b2ece290d59f829c.jpg",
           "thumb": "assets/gallery/b2ece290d59f829c_s.jpg",
           "w": 1200,
@@ -54,6 +66,9 @@
           "date": "2026-11-09 23:26:21"
         },
         {
+          "issueNumber": 30,
+          "issueUpdatedAt": "2026-11-09T15:26:21Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794237979534-1.jpg",
           "src": "assets/gallery/cb08fbbb402e27d4.jpg",
           "thumb": "assets/gallery/cb08fbbb402e27d4_s.jpg",
           "w": 1200,
@@ -63,6 +78,9 @@
           "date": "2026-11-09 23:26:21"
         },
         {
+          "issueNumber": 29,
+          "issueUpdatedAt": "2026-11-09T15:08:02Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794236880039-0.jpg",
           "src": "assets/gallery/77a98b9244bc6ba2.jpg",
           "thumb": "assets/gallery/77a98b9244bc6ba2_s.jpg",
           "w": 1600,
@@ -72,6 +90,9 @@
           "date": "2026-11-09 23:08:02"
         },
         {
+          "issueNumber": 28,
+          "issueUpdatedAt": "2026-11-09T14:51:35Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794235893193-0.jpg",
           "src": "assets/gallery/37f741df168de90d.jpg",
           "thumb": "assets/gallery/37f741df168de90d_s.jpg",
           "w": 1600,
@@ -81,6 +102,9 @@
           "date": "2026-11-09 22:51:35"
         },
         {
+          "issueNumber": 27,
+          "issueUpdatedAt": "2026-11-09T14:41:19Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794235274355-0.jpg",
           "src": "assets/gallery/bdab446f2b226a73.jpg",
           "thumb": "assets/gallery/bdab446f2b226a73_s.jpg",
           "w": 1200,
@@ -90,6 +114,9 @@
           "date": "2026-11-09 22:41:19"
         },
         {
+          "issueNumber": 27,
+          "issueUpdatedAt": "2026-11-09T14:41:19Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794235277211-1.jpg",
           "src": "assets/gallery/9aa6b9934cac13a6.jpg",
           "thumb": "assets/gallery/9aa6b9934cac13a6_s.jpg",
           "w": 1200,
@@ -99,6 +126,9 @@
           "date": "2026-11-09 22:41:19"
         },
         {
+          "issueNumber": 25,
+          "issueUpdatedAt": "2026-11-09T14:33:56Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794234833593-0.jpg",
           "src": "assets/gallery/296e9bd9b639f276.jpg",
           "thumb": "assets/gallery/296e9bd9b639f276_s.jpg",
           "w": 1200,
@@ -108,6 +138,9 @@
           "date": "2026-11-09 22:33:56"
         },
         {
+          "issueNumber": 24,
+          "issueUpdatedAt": "2026-11-09T14:30:03Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794234600171-0.jpg",
           "src": "assets/gallery/e1ab58c31ac3e6ca.jpg",
           "thumb": "assets/gallery/e1ab58c31ac3e6ca_s.jpg",
           "w": 1200,
@@ -117,6 +150,9 @@
           "date": "2026-11-09 22:30:03"
         },
         {
+          "issueNumber": 23,
+          "issueUpdatedAt": "2026-11-09T14:16:02Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794233758349-0.jpg",
           "src": "assets/gallery/eed22421a156712b.jpg",
           "thumb": "assets/gallery/eed22421a156712b_s.jpg",
           "w": 1600,
@@ -126,6 +162,9 @@
           "date": "2026-11-09 22:16:02"
         },
         {
+          "issueNumber": 23,
+          "issueUpdatedAt": "2026-11-09T14:16:02Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794233760582-1.jpg",
           "src": "assets/gallery/4d3f4b2881529b09.jpg",
           "thumb": "assets/gallery/4d3f4b2881529b09_s.jpg",
           "w": 1200,
@@ -152,6 +191,9 @@
       },
       "photos": [
         {
+          "issueNumber": 21,
+          "issueUpdatedAt": "2026-11-09T10:51:01Z",
+          "source": "https://github.com/user-attachments/assets/5a25ee79-92c7-4834-8ca0-82078a76f29d",
           "src": "assets/gallery/5a25ee79-92c7-4834-8.jpg",
           "thumb": "assets/gallery/5a25ee79-92c7-4834-8_s.jpg",
           "w": 1200,
@@ -161,6 +203,9 @@
           "date": "2026-11-09 18:51:01"
         },
         {
+          "issueNumber": 21,
+          "issueUpdatedAt": "2026-11-09T10:51:01Z",
+          "source": "https://github.com/user-attachments/assets/a627b169-e26b-4d19-acfa-2c53b9e4f4d5",
           "src": "assets/gallery/a627b169-e26b-4d19-a.jpg",
           "thumb": "assets/gallery/a627b169-e26b-4d19-a_s.jpg",
           "w": 1200,
@@ -187,6 +232,9 @@
       },
       "photos": [
         {
+          "issueNumber": 20,
+          "issueUpdatedAt": "2026-11-09T10:45:59Z",
+          "source": "https://github.com/user-attachments/assets/e224ca0e-e3cf-4fd3-8e51-8e3124201183",
           "src": "assets/gallery/e224ca0e-e3cf-4fd3-8.jpg",
           "thumb": "assets/gallery/e224ca0e-e3cf-4fd3-8_s.jpg",
           "w": 1290,
@@ -196,6 +244,9 @@
           "date": "2026-11-09 18:45:59"
         },
         {
+          "issueNumber": 20,
+          "issueUpdatedAt": "2026-11-09T10:45:59Z",
+          "source": "https://github.com/user-attachments/assets/32c45e29-448d-4ad3-b304-37a08303051d",
           "src": "assets/gallery/32c45e29-448d-4ad3-b.jpg",
           "thumb": "assets/gallery/32c45e29-448d-4ad3-b_s.jpg",
           "w": 1600,
@@ -222,6 +273,9 @@
       },
       "photos": [
         {
+          "issueNumber": 19,
+          "issueUpdatedAt": "2026-11-09T09:53:08Z",
+          "source": "https://github.com/user-attachments/assets/55043154-c137-4efe-8e63-c070f9277330",
           "src": "assets/gallery/55043154-c137-4efe-8.jpg",
           "thumb": "assets/gallery/55043154-c137-4efe-8_s.jpg",
           "w": 1200,
@@ -231,6 +285,9 @@
           "date": "2026-11-09 17:53:08"
         },
         {
+          "issueNumber": 19,
+          "issueUpdatedAt": "2026-11-09T09:53:08Z",
+          "source": "https://github.com/user-attachments/assets/c4f725bb-8755-4de9-a92c-2315fe9bc410",
           "src": "assets/gallery/c4f725bb-8755-4de9-a.jpg",
           "thumb": "assets/gallery/c4f725bb-8755-4de9-a_s.jpg",
           "w": 1600,

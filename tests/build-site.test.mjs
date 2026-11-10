@@ -138,8 +138,9 @@ test('分页完整读取；任何一页失败或格式异常均不能静默截�
     await assert.rejects(fetchIssues('moment', async () => ({ ok: true, json: async () => items })), /5000/);
 });
 
-test('只接受本人相应标签的开放 Issue；无关时间戳与标签顺序不触发重建', () => {
+test('只接受本人相应标签的开放 Issue；保留恢复判断所需的更新时间', () => {
     const original = issue('moment');
     assert.deepEqual(normalizeIssues([original, { ...original, user: { login: 'stranger' } }, { ...original, pull_request: {} }, { ...original, state: 'closed' }, issue('gallery')], 'moment'), normalizeIssues([original], 'moment'));
-    assert.deepEqual(normalizeIssues([{ ...original, updated_at: 'today', comments: 20 }], 'moment'), normalizeIssues([original], 'moment'));
+    assert.deepEqual(normalizeIssues([{ ...original, comments: 20 }], 'moment'), normalizeIssues([original], 'moment'));
+    assert.equal(normalizeIssues([{ ...original, updated_at: 'today' }], 'moment')[0].updated_at, 'today');
 });

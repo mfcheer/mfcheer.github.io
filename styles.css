@@ -3727,3 +3727,26 @@ section[id] {
     .moment-modal-footer .moment-btn-primary { grid-column: 1 / -1; }
     .moment-modal-footer .moment-logout-link { align-self: flex-start; white-space: nowrap; }
 }
+
+/* 博主内容管理：保持普通浏览简洁，相册按钮仅出现在放大预览。 */
+.content-delete {
+    border: 1px solid currentColor;
+    border-radius: 6px;
+    padding: 6px 12px;
+    min-height: 36px;
+    color: #b84242;
+    background: transparent;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+.content-delete:hover { background: rgba(190, 60, 60, .1); }
+.content-delete:disabled { cursor: wait; opacity: .6; }
+.content-delete[hidden] { display: none; }
+.moment-delete { margin-left: auto; flex-shrink: 0; }
+.site-photo-delete { margin-top: 12px; color: #ffb4b4; }
+
+.post-lightbox.has-delete .post-lightbox-img {
+    max-height: max(80px, calc(100vh - 210px));
+    max-height: max(80px, calc(100dvh - 210px));
+}

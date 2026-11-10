@@ -248,6 +248,8 @@ async function main() {
                 const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
                 const { text, images } = parseMomentContent(rawContent, it.title);
                 return {
+                    issueNumber: it.number,
+                    issueUpdatedAt: it.updated_at,
                     date: formatMomentDate(it.created_at),
                     text,
                     name: it.user && it.user.login,

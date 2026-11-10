@@ -8,7 +8,7 @@
  * 4. 实时交互（Giscus 留言系统）：Network-Only，不干扰正常使用。
  */
 
-const CACHE_VERSION = 'v1.5.43';
+const CACHE_VERSION = 'v1.5.44';
 const STATIC_CACHE = `mfcheer-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `mfcheer-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `mfcheer-images-${CACHE_VERSION}`;
@@ -19,9 +19,9 @@ const PRECACHE_ASSETS = [
     './blog/index.html',
     './moments/index.html',
     './gallery/index.html',
-    './styles.css?v=1.3.32',
-    './script.js?v=1.3.31',
-    './gallery.js?v=1.2.12',
+    './styles.css?v=1.3.34',
+    './script.js?v=1.3.33',
+    './gallery.js?v=1.2.13',
     './manifest.json',
     './favicon.ico',
     './favicon-32x32.png',
@@ -75,7 +75,7 @@ self.addEventListener('fetch', (event) => {
     const { request } = event;
 
     // 只拦截 GET 请求
-    if (request.method !== 'GET') return;
+    if (request.method !== 'GET' || request.headers.has('Authorization')) return;
 
     // 忽略非 HTTP/HTTPS 协议
     if (!request.url.startsWith('http://') && !request.url.startsWith('https://')) return;

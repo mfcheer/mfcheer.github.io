@@ -158,6 +158,11 @@ function showSitePhoto() {
     siteLightboxImg.alt = photo.caption || '图片';
     siteLightboxImg.src = photo.src;
     siteLightboxCaption.textContent = photo.caption || '';
+    const remove = siteLightbox.querySelector('.site-photo-delete');
+    remove.hidden = !(isSiteOwner() && Number.isInteger(photo.issueNumber) && photo.source);
+    siteLightbox.classList.toggle('has-delete', !remove.hidden);
+    remove.disabled = siteDeleteBusy;
+    remove.textContent = siteDeleteBusy ? '删除中…' : '删除照片';
     siteLightbox.querySelector('.site-photo-counter').textContent = `${sitePhotoIndex + 1} / ${sitePhotos.length}`;
     siteLightbox.querySelectorAll('.site-photo-nav').forEach(btn => { btn.hidden = sitePhotos.length < 2; });
     [-1, 1].forEach(dir => {
@@ -186,7 +191,8 @@ function createLightbox() {
         <button class="site-photo-nav site-photo-next" aria-label="下一张">›</button>
         <button class="site-photo-status" aria-live="polite"></button>
         <div class="post-lightbox-caption"></div>
-        <div class="site-photo-counter" aria-live="polite"></div>`;
+        <div class="site-photo-counter" aria-live="polite"></div>
+        <button type="button" class="content-delete site-photo-delete" hidden>删除照片</button>`;
     document.body.appendChild(siteLightbox);
     siteLightboxImg = siteLightbox.querySelector('img');
     siteLightboxCaption = siteLightbox.querySelector('.post-lightbox-caption');
@@ -194,6 +200,10 @@ function createLightbox() {
     siteLightbox.querySelector('.site-photo-prev').onclick = () => stepSitePhoto(-1);
     siteLightbox.querySelector('.site-photo-next').onclick = () => stepSitePhoto(1);
     siteLightbox.querySelector('.site-photo-status').onclick = showSitePhoto;
+    siteLightbox.querySelector('.site-photo-delete').onclick = e => {
+        const photo = sitePhotos[sitePhotoIndex];
+        if (photo) deleteSiteContent({ kind: 'photo', issueNumber: photo.issueNumber, source: photo.source }, e.currentTarget);
+    };
     siteLightbox.onclick = e => { if (e.target === siteLightbox) closeLightbox(); };
     window.addEventListener('keydown', e => {
         if (!siteLightbox.classList.contains('is-open')) return;
@@ -911,14 +921,15 @@ function renderMomentsState(state = 'ok') {
     if (!listEl) return;
     listEl.innerHTML = '';
 
+    const visible = momentsAll.filter(m => !isSiteDeleted('moment', m.issueNumber, '', m.issueUpdatedAt));
     const list = momentsFilter
-        ? momentsAll.filter((m) => (m.labels || []).includes(momentsFilter))
-        : momentsAll;
+        ? visible.filter((m) => (m.labels || []).includes(momentsFilter))
+        : visible;
 
     if (countEl) {
         countEl.textContent = momentsFilter
             ? `#${momentsFilter} · ${list.length} 条`
-            : `共 ${momentsAll.length} 条`;
+            : `共 ${visible.length} 条`;
     }
 
     // 加载失败（限流/网络异常）且无缓存可用：给出明确失败态，而非误显示「还没有说说」
@@ -945,7 +956,7 @@ function renderMomentsState(state = 'ok') {
         moreLink.style.display = (!momentsAll.length || state === 'error') ? 'none' : '';
     }
 
-    if (!momentsAll.length) {
+    if (!visible.length) {
         const empty = document.createElement('p');
         empty.className = 'moment-empty';
         empty.textContent = '还没有说说，敬请期待';
@@ -1042,6 +1053,15 @@ function renderMomentsState(state = 'ok') {
         date.className = 'moment-date';
         date.textContent = m.date;
         head.append(date);
+        if (isSiteOwner() && Number.isInteger(m.issueNumber)) {
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.className = 'content-delete moment-delete';
+            remove.textContent = '删除';
+            remove.setAttribute('aria-label', `删除 ${m.date} 的说说`);
+            remove.onclick = () => deleteSiteContent({ kind: 'moment', issueNumber: m.issueNumber }, remove);
+            head.append(remove);
+        }
 
         item.append(head);
 
@@ -1264,6 +1284,8 @@ async function loadMoments() {
                         const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
                         const { text, images } = parseMomentContent(rawContent, it.title);
                         return {
+                            issueNumber: it.number,
+                            issueUpdatedAt: it.updated_at,
                             date: formatMomentDate(it.created_at),
                             text,
                             images,
@@ -1623,6 +1645,7 @@ function setMomentAuth(token, user) {
             localStorage.setItem(MOMENT_AUTH_USER_KEY, JSON.stringify(user));
         }
     } catch (e) {}
+    document.dispatchEvent(new Event('site-auth-change'));
 }
 
 function clearMomentAuth() {
@@ -1630,7 +1653,128 @@ function clearMomentAuth() {
         localStorage.removeItem(MOMENT_AUTH_TOKEN_KEY);
         localStorage.removeItem(MOMENT_AUTH_USER_KEY);
     } catch (e) {}
+    document.dispatchEvent(new Event('site-auth-change'));
 }
+
+// 删除仅修改经过验证的本人 Issue；静态站发布完成前用本地记录避免旧数据重新出现。
+let siteDeleteBusy = false;
+const SITE_DELETED_KEY = 'mfcheer_deleted_content_v1';
+function isSiteOwner() {
+    const auth = getMomentAuth();
+    return Boolean(auth?.token && auth.user?.login?.toLowerCase() === 'mfcheer');
+}
+function deletedContentKey(kind, number, source = '') {
+    return JSON.stringify([kind, number, source]);
+}
+function readSiteDeleted() {
+    try { return JSON.parse(localStorage.getItem(SITE_DELETED_KEY) || '{}'); } catch { return {}; }
+}
+function isSiteDeleted(kind, number, source = '', updatedAt = '') {
+    const deletedAt = readSiteDeleted()[deletedContentKey(kind, number, source)];
+    // 后续重新打开或编辑 Issue 的新版本可以正常恢复；只屏蔽删除前的旧快照。
+    return Boolean(deletedAt && (!updatedAt || updatedAt <= deletedAt));
+}
+function rememberSiteDeleted(kind, number, source, updatedAt) {
+    try {
+        const deleted = readSiteDeleted();
+        deleted[deletedContentKey(kind, number, source)] = updatedAt || new Date().toISOString();
+        localStorage.setItem(SITE_DELETED_KEY, JSON.stringify(deleted));
+    } catch {} // 当前页面仍移除成功，存储不可用不把远端成功误报为失败。
+}
+
+// 与相册构建器识别同样的三类图片，仅去掉当前 URL 的图片引用，保留其他文字和图片。
+function removeGalleryImage(body, source) {
+    let removed = false;
+    const replace = (full, url) => {
+        if (url.trim() !== source) return full;
+        removed = true;
+        return '';
+    };
+    let result = body.replace(/<img\b[^>]*?src=["']([^"'\s]+)["'][^>]*?\/?>/gi, replace);
+    result = result.replace(/!\[([^\]]*)\]\(((?:https?:\/\/|assets\/)[^\s\)]+)\)/gi,
+        (full, alt, url) => replace(full, url));
+    result = result.replace(/^(https?:\/\/(?:github\.com\/user-attachments\/assets\/|user-images\.githubusercontent\.com\/)[^\s]+)$/gmi, replace);
+    if (!removed) throw new Error('原始照片引用已变化，请刷新页面后重试');
+    return result;
+}
+
+async function deleteSiteContent(target, button) {
+    if (siteDeleteBusy || !['moment', 'photo'].includes(target.kind)) return;
+    if (!isSiteOwner()) { showMomentToast('请先通过发布入口登录博主账号', false); return; }
+    if (!Number.isInteger(target.issueNumber) || target.issueNumber < 1) return;
+    const message = target.kind === 'moment'
+        ? '确定删除这条说说？它将从网页下架，可在 GitHub 重新打开对应 Issue 恢复。'
+        : '确定删除当前照片？同批上传的其他照片会保留。';
+    if (!window.confirm(message)) return;
+    const auth = getMomentAuth();
+    siteDeleteBusy = true;
+    button.disabled = true;
+    button.textContent = '删除中…';
+    const editor = { busy: true };
+    siteEditors.add(editor);
+    try {
+        const request = async (url, options = {}) => {
+            const res = await fetch(url, { ...options, cache: 'no-store', headers: {
+                Authorization: `Bearer ${auth.token}`, Accept: 'application/vnd.github+json',
+                'Content-Type': 'application/json'
+            } });
+            if (!res.ok) {
+                if (res.status === 401) { clearMomentAuth(); throw new Error('登录已过期，请重新授权登录'); }
+                throw new Error(res.status === 403 ? '没有删除权限或请求受限，请稍后重试' : `删除失败（${res.status}），请重试`);
+            }
+            return res.json();
+        };
+        const user = await request('https://api.github.com/user');
+        if (user.login?.toLowerCase() !== 'mfcheer') throw new Error('只有博主本人可以删除');
+        const url = `https://api.github.com/repos/mfcheer/mfcheer.github.io/issues/${target.issueNumber}`;
+        const issue = await request(url);
+        const label = target.kind === 'moment' ? 'moment' : 'gallery';
+        if (issue.pull_request || issue.user?.login?.toLowerCase() !== 'mfcheer' ||
+            !issue.labels?.some(l => l.name === label)) throw new Error('内容来源不匹配，请刷新后重试');
+        const change = target.kind === 'moment' ? { state: 'closed' }
+            : { body: removeGalleryImage(issue.body || '', target.source) };
+        const saved = await request(url, { method: 'PATCH', body: JSON.stringify(change) });
+        rememberSiteDeleted(target.kind, target.issueNumber, target.source || '', saved.updated_at);
+        if (target.kind === 'moment') {
+            momentsAll = momentsAll.filter(m => m.issueNumber !== target.issueNumber);
+            writeMomentsCache(momentsAll);
+            renderMomentsState();
+        } else {
+            document.dispatchEvent(new CustomEvent('site-photo-deleted', { detail: target }));
+            // 用户可能已切到另一张；按来源移除，始终不误删当前浏览的其他照片。
+            if (siteLightbox) {
+                const current = sitePhotos[sitePhotoIndex];
+                sitePhotos = sitePhotos.filter(p => !(p.issueNumber === target.issueNumber && p.source === target.source));
+                if (!sitePhotos.length) closeLightbox();
+                else {
+                    const index = sitePhotos.indexOf(current);
+                    sitePhotoIndex = index >= 0 ? index : Math.min(sitePhotoIndex, sitePhotos.length - 1);
+                    showSitePhoto();
+                }
+            }
+        }
+        showMomentToast('已删除，其他访客将在网站同步发布后看到更新');
+    } catch (error) {
+        showMomentToast(error.message || '删除失败，请稍后重试', false);
+    } finally {
+        siteDeleteBusy = false;
+        button.disabled = false;
+        button.textContent = target.kind === 'moment' ? '删除' : '删除照片';
+        editor.busy = false;
+        siteEditors.delete(editor);
+        applySiteUpdate();
+    }
+}
+
+document.addEventListener('site-auth-change', () => {
+    renderMomentsState();
+    if (siteLightbox?.classList.contains('is-open')) showSitePhoto();
+});
+window.addEventListener('storage', e => {
+    if ([MOMENT_AUTH_TOKEN_KEY, MOMENT_AUTH_USER_KEY, SITE_DELETED_KEY].includes(e.key)) {
+        document.dispatchEvent(new Event('site-auth-change'));
+    }
+});
 
 function showMomentToast(msg, isSuccess = true) {
     let toast = document.getElementById("momentToast");

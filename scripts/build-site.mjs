@@ -46,8 +46,8 @@ export function normalizeIssues(issues, label) {
     return issues.filter((it) => !it.pull_request && it.state === 'open' &&
         it.user?.login?.toLowerCase() === 'mfcheer' &&
         it.labels?.some((l) => l.name === label))
-        .map(({ number, title, body, created_at, user, labels, author_association }) => ({
-            number, title, body, created_at,
+        .map(({ number, title, body, created_at, updated_at, user, labels, author_association }) => ({
+            number, title, body, created_at, updated_at,
             user: { login: user.login, avatar_url: user.avatar_url },
             labels: labels.map(({ name }) => ({ name })).sort((a, b) => a.name.localeCompare(b.name)),
             author_association
