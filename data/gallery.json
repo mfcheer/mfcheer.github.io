@@ -1,34 +1,22 @@
 {
-  "updated_at": "2026-11-10 12:50:26",
-  "total": 18,
+  "updated_at": "2026-11-10 14:40:44",
+  "total": 17,
   "albums": [
     {
       "title": "2026·11",
-      "count": 12,
+      "count": 11,
       "description": null,
       "range": "2026.11",
       "cover": {
-        "src": "assets/gallery/4a1616f2099712d1.jpg",
-        "thumb": "assets/gallery/4a1616f2099712d1_s.jpg",
-        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAQMEBf/EAB8QAQABBAEFAAAAAAAAAAAAAAEAAgMRIQQSIjNBYf/EABQBAQAAAAAAAAAAAAAAAAAAAAH/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAwDAQACEQMRAD8Au7fTC1GD5ME5N1u1nUmHUY3LieWsyZ0wRkS//9k=",
-        "w": 1600,
-        "h": 1200,
-        "ratio": 1.333,
-        "date": "2026-11-10 11:41:43"
+        "src": "assets/gallery/28a7bfd9e7f62a57.jpg",
+        "thumb": "assets/gallery/28a7bfd9e7f62a57_s.jpg",
+        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAMEBf/EAB4QAQABBAIDAAAAAAAAAAAAAAECAAMRIQQiEjFB/8QAFAEBAAAAAAAAAAAAAAAAAAAABP/EABcRAQEBAQAAAAAAAAAAAAAAAAECABH/2gAMAwEAAhEDEQA/AJLRAe7iCe8faJRfMiHYNgUqtXj3pWuDGcAJumWN0mqZe4khRv/Z",
+        "w": 1542,
+        "h": 1179,
+        "ratio": 1.308,
+        "date": "2026-11-10 08:33:58"
       },
       "photos": [
-        {
-          "issueNumber": 35,
-          "issueUpdatedAt": "2026-11-10T03:41:43Z",
-          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794282101307-0.jpg",
-          "src": "assets/gallery/4a1616f2099712d1.jpg",
-          "thumb": "assets/gallery/4a1616f2099712d1_s.jpg",
-          "w": 1600,
-          "h": 1200,
-          "ratio": 1.333,
-          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAQMEBf/EAB8QAQABBAEFAAAAAAAAAAAAAAEAAgMRIQQSIjNBYf/EABQBAQAAAAAAAAAAAAAAAAAAAAH/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAwDAQACEQMRAD8Au7fTC1GD5ME5N1u1nUmHUY3LieWsyZ0wRkS//9k=",
-          "date": "2026-11-10 11:41:43"
-        },
         {
           "issueNumber": 34,
           "issueUpdatedAt": "2026-11-10T00:33:58Z",
