@@ -1,10 +1,10 @@
 {
-  "updated_at": "2026-11-10 12:48:00",
-  "total": 19,
+  "updated_at": "2026-11-10 12:50:26",
+  "total": 18,
   "albums": [
     {
       "title": "2026·11",
-      "count": 13,
+      "count": 12,
       "description": null,
       "range": "2026.11",
       "cover": {
@@ -55,19 +55,7 @@
         },
         {
           "issueNumber": 30,
-          "issueUpdatedAt": "2026-11-09T15:26:21Z",
-          "source": "https://mfcheer.github.io/assets/gallery/gallery-1794237976445-0.jpg",
-          "src": "assets/gallery/b2ece290d59f829c.jpg",
-          "thumb": "assets/gallery/b2ece290d59f829c_s.jpg",
-          "w": 1200,
-          "h": 1600,
-          "ratio": 0.75,
-          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAIDBAX/xAAeEAEAAgICAwEAAAAAAAAAAAABAAIDERNRBCNBYv/EABcBAAMBAAAAAAAAAAAAAAAAAAACAwX/xAAYEQADAQEAAAAAAAAAAAAAAAAAAQIRUf/aAAwDAQACEQMRAD8A4dce4/HLU4gFsg/llPSrq+ztqksqnouMbCWtTdr211NGDx65baVA+QhM5hrP/9k=",
-          "date": "2026-11-09 23:26:21"
-        },
-        {
-          "issueNumber": 30,
-          "issueUpdatedAt": "2026-11-09T15:26:21Z",
+          "issueUpdatedAt": "2026-11-10T04:50:24Z",
           "source": "https://mfcheer.github.io/assets/gallery/gallery-1794237979534-1.jpg",
           "src": "assets/gallery/cb08fbbb402e27d4.jpg",
           "thumb": "assets/gallery/cb08fbbb402e27d4_s.jpg",
