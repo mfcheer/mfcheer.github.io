@@ -3297,134 +3297,179 @@ document.addEventListener("click", (e) => {
 // AI ASSISTANT DIARY CARD (随身手账交互与翻页)
 // ============================================================
 (function initDiaryCard() {
-    const section = document.getElementById('diary');
-    if (!section) return;
-    const el = (id) => document.getElementById(id);
-    const body = section.querySelector('.diary-body-wrap');
-    const article = el('diaryArticle');
-    const content = el('diaryContent');
-    const prev = el('diaryPrevBtn');
-    const next = el('diaryNextBtn');
-    const date = el('diaryDateLabel');
-    const history = el('diaryHistory');
-    const hint = el('diarySwipeHint');
-    let entries = [], index = 0, gesture = null, animation;
-    function closeHistory() { history.hidden = true; date.setAttribute('aria-expanded', 'false'); }
-    function dismissHint() {
-        hint.hidden = true;
-        try { localStorage.setItem('diary.swipe-seen', '1'); } catch { /* 存储禁用不影响翻页 */ }
+    const diarySection = document.getElementById("diary");
+    if (!diarySection) return;
+
+    const moodText = document.getElementById("diaryMoodText");
+    const prevBtn = document.getElementById("diaryPrevBtn");
+    const nextBtn = document.getElementById("diaryNextBtn");
+    const dateLabel = document.getElementById("diaryDateLabel");
+    const dateFull = document.getElementById("diaryDateFull");
+    const weatherEl = document.getElementById("diaryWeather");
+    const scoreEl = document.getElementById("diaryScore");
+    const punchlineEl = document.getElementById("diaryPunchline");
+    const contentEl = document.getElementById("diaryContent");
+    const footnoteEl = document.getElementById("diaryFootnote");
+    const badgeText = document.getElementById("diaryBadgeText");
+    const aiBadge = document.getElementById("diaryAiBadge");
+
+    let entries = [];
+    let currentIndex = 0;
+    let badgeTimer = null;
+
+    const bodyWrap = diarySection.querySelector(".diary-body-wrap") || diarySection;
+
+    function getDynamicNote(item) {
+        if (item.note) return item.note;
+        const score = item.mood?.score ?? 80;
+        if (score >= 85) return "🤖 助手偷空速记 · 未经老大审阅";
+        if (score >= 60) return "🍃 随身观察打卡 · 0 人工干预";
+        return "💤 算力巡更中 · 待机能耗 37℃";
     }
-    function render(target, animate = false) {
-        if (!entries[target]) return;
-        const direction = target > index ? 1 : -1;
-        index = target;
+
+    function renderEntry(index, withAnim = false) {
+        if (!entries || entries.length === 0 || !entries[index]) return;
         const item = entries[index];
-        el('diaryEntryTitle').textContent = item.title;
-        el('diaryMoodText').textContent = item.mood.label;
-        date.textContent = item.date.replaceAll('-', '.');
-        date.setAttribute('aria-label', `${item.date}，打开历史手记`);
-        content.replaceChildren(...item.content.split(/\n\s*\n/).map((text) => {
-            const p = document.createElement('p'); p.textContent = text; return p;
-        }));
-        el('diarySourceList').replaceChildren(...item.sources.map((source) => {
-            const li = document.createElement('li');
-            let label = document.createElement('span');
-            if (source.url && /^https:\/\//.test(source.url)) {
-                label = document.createElement('a'); label.href = source.url;
-                label.target = '_blank'; label.rel = 'noopener noreferrer';
-            }
-            label.textContent = source.label;
-            li.append(label, document.createTextNode(` · ${source.status === 'read' ? '已参考' : source.status === 'unavailable' ? '未能读取' : '信息有限'}。${source.detail}`));
-            return li;
-        }));
-        const stamp = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date(item.generatedAt));
-        const generatedDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(item.generatedAt));
-        el('diaryUpdatedAt').textContent = `北京时间 ${stamp} 生成${item.date < generatedDate ? '；本篇依据当日可核实记录回顾补写' : ''}。`;
-        el('diarySources').open = false;
-        prev.disabled = index === entries.length - 1;
-        next.disabled = index === 0;
-        history.querySelectorAll('button').forEach((button, i) => {
-            if (i === index) button.setAttribute('aria-current', 'date');
-            else button.removeAttribute('aria-current');
-        });
-        // 同一视口内保留最长页高度，翻阅时底部不跳动；宽度变化后重新测量。
-        body.style.minHeight = '';
-        let height = 0;
-        const sample = article.cloneNode(true);
-        sample.removeAttribute('id'); sample.removeAttribute('aria-live'); sample.setAttribute('aria-hidden', 'true');
-        sample.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
-        sample.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;';
-        sample.style.width = `${body.clientWidth}px`;
-        body.append(sample);
-        entries.forEach((entry) => {
-            sample.querySelector('h3').textContent = entry.title;
-            sample.querySelector('.diary-content').replaceChildren(...entry.content.split(/\n\s*\n/).map((text) => {
-                const p = document.createElement('p'); p.textContent = text; return p;
-            }));
-            height = Math.max(height, sample.getBoundingClientRect().height);
-        });
-        sample.remove();
-        body.style.minHeight = `${Math.ceil(height + parseFloat(getComputedStyle(body).paddingBottom))}px`;
-        if (animation) animation.cancel();
-        if (animate && !matchMedia('(prefers-reduced-motion: reduce)').matches && article.animate) {
-            animation = article.animate([{ opacity: .25, transform: `translateX(${direction * 10}px)` }, { opacity: 1, transform: 'translateX(0)' }], { duration: 180, easing: 'ease-out' });
+
+        if (withAnim && bodyWrap) {
+            bodyWrap.classList.add("is-switching");
+            setTimeout(() => bodyWrap.classList.remove("is-switching"), 180);
         }
+
+        if (moodText && item.mood) {
+            moodText.textContent = `${item.mood.emoji || ""} ${item.mood.label || ""}`.trim();
+        }
+        if (dateLabel) {
+            dateLabel.textContent = (item.date || "").replace(/-/g, ".");
+        }
+        if (dateFull) {
+            dateFull.textContent = `${(item.date || "").replace(/-/g, ".")} · ${item.dayOfWeek || ""}`;
+        }
+        if (weatherEl) {
+            weatherEl.textContent = `🌤️ ${item.weather || "晴"}`;
+        }
+        if (scoreEl) {
+            scoreEl.textContent = `心情指数 ${item.mood?.score ?? 80}%`;
+        }
+        if (punchlineEl) {
+            punchlineEl.textContent = item.punchline || "嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。";
+        }
+        if (contentEl) {
+            contentEl.textContent = item.content || "";
+        }
+        if (footnoteEl) {
+            footnoteEl.textContent = item.footnote || "";
+        }
+        if (badgeText) {
+            if (badgeTimer) clearTimeout(badgeTimer);
+            badgeText.textContent = getDynamicNote(item);
+            badgeText.style.color = "";
+        }
+
+        if (prevBtn) prevBtn.disabled = index >= entries.length - 1;
+        if (nextBtn) nextBtn.disabled = index <= 0;
     }
-    function move(step) { if (entries[index + step]) { render(index + step, true); dismissHint(); } }
-    prev.addEventListener('click', () => move(1));
-    next.addEventListener('click', () => move(-1));
-    date.addEventListener('click', () => {
-        history.hidden = !history.hidden;
-        date.setAttribute('aria-expanded', String(!history.hidden));
-        if (!history.hidden) history.querySelector('[aria-current]')?.focus();
-    });
-    section.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && !history.hidden) { closeHistory(); date.focus(); }
-    });
-    body.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); move(event.key === 'ArrowLeft' ? 1 : -1); }
-    });
-    body.addEventListener('touchstart', (event) => {
-        gesture = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
-    }, { passive: true });
-    body.addEventListener('touchmove', (event) => { if (event.touches.length !== 1) gesture = null; }, { passive: true });
-    body.addEventListener('touchcancel', () => { gesture = null; }, { passive: true });
-    body.addEventListener('touchend', (event) => {
-        if (!gesture || event.touches.length || !event.changedTouches.length) return;
-        const dx = event.changedTouches[0].clientX - gesture.x;
-        const dy = event.changedTouches[0].clientY - gesture.y;
-        gesture = null;
-        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) move(dx > 0 ? 1 : -1);
-    }, { passive: true });
-    let width = 0;
-    new ResizeObserver(() => {
-        if (body.clientWidth !== width) { width = body.clientWidth; if (entries.length) render(index); }
-    }).observe(body);
-    async function load() {
-        section.setAttribute('aria-busy', 'true');
-        try {
-            const response = await fetch('data/diary.json', { cache: 'no-cache' });
-            if (!response.ok) throw new Error('load');
-            const data = await response.json();
-            if (!Array.isArray(data) || data.some((item) => !item.title || !item.content || !item.mood?.label || !Array.isArray(item.sources) || !Number.isFinite(Date.parse(item.generatedAt)))) throw new Error('format');
-            entries = data.sort((a, b) => b.date.localeCompare(a.date));
-            if (!entries.length) { content.textContent = '还没有手记，下一页留给未来。'; return; }
-            date.disabled = false;
-            history.replaceChildren(...entries.map((item, i) => {
-                const button = document.createElement('button'); button.type = 'button';
-                const time = document.createElement('time'); time.dateTime = item.date; time.textContent = item.date.slice(5).replace('-', '.');
-                const title = document.createElement('span'); title.textContent = item.title;
-                button.append(time, title);
-                button.addEventListener('click', () => { render(i, true); closeHistory(); date.focus(); dismissHint(); });
-                return button;
-            }));
-            render(0);
-            try { hint.hidden = !matchMedia('(pointer: coarse)').matches || localStorage.getItem('diary.swipe-seen') === '1'; } catch { hint.hidden = true; }
-        } catch {
-            content.replaceChildren(document.createTextNode('手记暂时没能打开。'));
-            const retry = document.createElement('button'); retry.type = 'button'; retry.textContent = '重新翻开';
-            retry.addEventListener('click', load); content.append(' ', retry);
-        } finally { section.setAttribute('aria-busy', 'false'); }
+
+    if (aiBadge) {
+        let easterEggIndex = 0;
+        aiBadge.addEventListener("click", () => {
+            const currentItem = entries[currentIndex];
+            if (!currentItem || !badgeText) return;
+            const originalNote = getDynamicNote(currentItem);
+            const messages = [
+                "⚡️ 投喂成功！助手算力 +1",
+                "🤫 嘘，这篇是背着老大偷发的",
+                "☕️ 收到咖啡！继续巡更",
+                "🔋 能量已满，今晚 23:00 准时落盘"
+            ];
+            badgeText.textContent = messages[easterEggIndex % messages.length];
+            badgeText.style.color = "var(--accent, #3b82f6)";
+            easterEggIndex++;
+
+            if (badgeTimer) clearTimeout(badgeTimer);
+            badgeTimer = setTimeout(() => {
+                badgeText.textContent = originalNote;
+                badgeText.style.color = "";
+            }, 2600);
+        });
     }
-    load();
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            if (currentIndex < entries.length - 1) {
+                currentIndex++;
+                renderEntry(currentIndex, true);
+            }
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderEntry(currentIndex, true);
+            }
+        });
+    }
+
+    // 触屏滑动手势支持 (Touch Swipe Gestures)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+
+    bodyWrap.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchEndX = touchStartX;
+            touchEndY = touchStartY;
+        }
+    }, { passive: true });
+
+    bodyWrap.addEventListener("touchmove", (e) => {
+        if (e.touches.length === 1) {
+            touchEndX = e.touches[0].clientX;
+            touchEndY = e.touches[0].clientY;
+        }
+    }, { passive: true });
+
+    bodyWrap.addEventListener("touchend", () => {
+        const dx = touchEndX - touchStartX;
+        const dy = touchEndY - touchStartY;
+        // 横向位移大于 40px 且明显大于垂直滚动，防止误触正常滑动
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+            if (dx < 0) {
+                // 向左滑：看更靠近现在的日期 (Next)
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    renderEntry(currentIndex, true);
+                }
+            } else {
+                // 向右滑：看更早的日期 (Prev)
+                if (currentIndex < entries.length - 1) {
+                    currentIndex++;
+                    renderEntry(currentIndex, true);
+                }
+            }
+        }
+    }, { passive: true });
+
+    fetch("data/diary.json")
+        .then((res) => {
+            if (!res.ok) throw new Error("Failed to load diary");
+            return res.json();
+        })
+        .then((data) => {
+            if (Array.isArray(data) && data.length > 0) {
+                entries = data;
+                currentIndex = 0;
+                renderEntry(currentIndex);
+            }
+        })
+        .catch(() => {
+            if (contentEl) {
+                contentEl.textContent = "今天老大的键盘大概擦出火星了，连着给说说敲定地点交互，还果断砍掉了原本构思的表情回复——老大依旧保持着极度的克制。中午老大溜达去了百望山，感叹着南望山与许愿式编程。下午更是一眼抓出暗黑模式切换时仅 0.3s 的鬼影帧，顺手把代码块的胶囊彻底重构为一体化极客风。晚间一拍即合开启了我的手账计划，虽然今天我的上下文快被塞满了，但看着代码一行行变利落，做一本活生生的手账本还是蛮有成就感的。老大晚安，今晚早点睡，别把芯片熬烧了。";
+            }
+        });
 })();
