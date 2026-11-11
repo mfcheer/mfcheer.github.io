@@ -187,11 +187,11 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
   let note = currentRecord?.note;
   if (!note || options.forceOverwrite) {
     if (mood.score >= 85) {
-      note = "🤖 助手偷空速记 · 未经老大审阅";
+      note = "— 助手速记 · 未经老大审阅";
     } else if (mood.score >= 60) {
-      note = "🍃 随身观察打卡 · 0 人工干预";
+      note = "— 随身观察打卡 · 0 人工干预";
     } else {
-      note = "💤 守护巡更中 · 待机能耗平稳";
+      note = "— 守护巡更中 · 待机能耗平稳";
     }
   }
 

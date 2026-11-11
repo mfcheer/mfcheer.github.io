@@ -3327,12 +3327,30 @@ document.addEventListener("click", (e) => {
         return dateStr;
     }
 
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    function formatSignOff(rawNote) {
+        if (!rawNote) return "— 助手速记 · 未经审阅";
+        let text = rawNote.replace(/^[\p{Extended_Pictographic}\uFE0F\s]+/u, "").trim();
+        if (!text.startsWith("—") && !text.startsWith("-")) {
+            text = "— " + text;
+        }
+        return text;
+    }
+
     function getDynamicNote(item) {
-        if (item.note) return item.note;
+        if (item.note) return formatSignOff(item.note);
         const score = item.mood?.score ?? 80;
-        if (score >= 85) return "🤖 助手偷空速记 · 未经老大审阅";
-        if (score >= 60) return "🍃 随身观察打卡 · 0 人工干预";
-        return "💤 守护巡更中 · 待机能耗平稳";
+        if (score >= 85) return "— 助手速记 · 未经老大审阅";
+        if (score >= 60) return "— 随身观察打卡 · 0 人工干预";
+        return "— 守护巡更中 · 待机能耗平稳";
     }
 
     function renderEntry(index, withAnim = false, direction = 0) {
@@ -3365,7 +3383,17 @@ document.addEventListener("click", (e) => {
             contentEl.textContent = item.content || "";
         }
         if (footnoteEl) {
-            footnoteEl.textContent = item.footnote || "";
+            const raw = item.footnote || "";
+            const tags = Array.isArray(raw)
+                ? raw
+                : raw.split(/\s*·\s*/).map((s) => s.trim()).filter(Boolean);
+            if (tags.length > 0) {
+                footnoteEl.innerHTML = tags
+                    .map((tag) => `<span class="diary-stamp">${escapeHtml(tag)}</span>`)
+                    .join("");
+            } else {
+                footnoteEl.textContent = "";
+            }
         }
         if (badgeText) {
             if (badgeTimer) clearTimeout(badgeTimer);
