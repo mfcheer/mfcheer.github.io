@@ -65,7 +65,7 @@
     <meta name="apple-mobile-web-app-title" content="mfcheer">
 
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css?v=1.3.59">
+    <link rel="stylesheet" href="styles.css?v=1.3.60">
 </head>
 <body>
     <button class="float-top-btn" id="floatTopBtn" type="button" title="回到顶部" aria-label="回到顶部">
@@ -179,18 +179,16 @@
                         <span class="diary-ai-notice">内容由AI自动生成和发布</span>
                     </div>
                     <div class="diary-date-wrap">
-                        <span class="diary-date-indicator" id="diaryDateLabel" role="button" tabindex="0" title="点击左侧或右侧翻页，点击此处回弹至今日">今天</span>
+                        <span class="diary-date-indicator" id="diaryDateLabel" role="button" tabindex="0" title="点击回弹至今日">今天</span>
                         <div class="diary-sr-nav sr-only" role="toolbar" aria-label="翻阅手记">
                             <button class="diary-nav-btn" id="diaryPrevBtn" type="button" aria-label="上一篇手记">‹</button>
                             <button class="diary-nav-btn" id="diaryNextBtn" type="button" aria-label="下一篇手记" disabled>›</button>
                         </div>
                     </div>
                 </div>
-                <div class="diary-deck-container" id="diaryDeckContainer" title="点击左侧或右侧翻页，亦支持左右轻划或键盘方向键">
+                <div class="diary-deck-container" id="diaryDeckContainer">
                     <div class="diary-stack-layer" aria-hidden="true"></div>
                     <div class="diary-body-wrap" id="diaryBodyWrap">
-                        <span class="diary-edge-cue diary-edge-cue-prev" aria-hidden="true">‹</span>
-                        <span class="diary-edge-cue diary-edge-cue-next" aria-hidden="true">›</span>
                         <div class="diary-punchline-wrap" id="diaryPunchlineWrap">
                             <span class="diary-quote-mark" aria-hidden="true">“</span>
                             <p class="diary-punchline" id="diaryPunchline">嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。</p>
@@ -477,6 +475,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=1.3.55"></script>
+    <script src="script.js?v=1.3.56"></script>
 </body>
 </html>

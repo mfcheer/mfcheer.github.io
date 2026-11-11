@@ -3452,12 +3452,6 @@ document.addEventListener("click", (e) => {
             }
         }
 
-        // 边缘指示器状态联动
-        const prevCue = bodyWrap ? bodyWrap.querySelector(".diary-edge-cue-prev") : null;
-        const nextCue = bodyWrap ? bodyWrap.querySelector(".diary-edge-cue-next") : null;
-        if (prevCue) prevCue.classList.toggle("is-disabled", index >= entries.length - 1);
-        if (nextCue) nextCue.classList.toggle("is-disabled", index <= 0);
-
         if (prevBtn) prevBtn.disabled = index >= entries.length - 1;
         if (nextBtn) nextBtn.disabled = index <= 0;
     }
@@ -3540,29 +3534,6 @@ document.addEventListener("click", (e) => {
             if (bodyWrap) bodyWrap.style.transition = "";
         }, 360);
     }
-
-    // PC 端悬停区域侦测：根据鼠标在左半区还是右半区，动态切换手势和提示
-    bodyWrap.addEventListener("mousemove", (e) => {
-        if (isDragging) return;
-        const rect = bodyWrap.getBoundingClientRect();
-        const isLeft = (e.clientX - rect.left) < rect.width * 0.5;
-        bodyWrap.setAttribute("data-hover-side", isLeft ? "left" : "right");
-        if (isLeft) {
-            bodyWrap.title = currentIndex < entries.length - 1 
-                ? "点击查看前一天手记 (‹)" 
-                : "已翻至最早的手记";
-        } else {
-            bodyWrap.title = currentIndex > 0 
-                ? "点击查看后一天手记 (›)" 
-                : "已是最新手记";
-        }
-    });
-
-    bodyWrap.addEventListener("mouseleave", () => {
-        if (isDragging) return;
-        bodyWrap.removeAttribute("data-hover-side");
-        bodyWrap.title = "点击左侧或右侧翻页，亦支持左右轻划或键盘方向键";
-    });
 
     // 1. 移动端触屏手势 (Touch Tap & Swipe)
     let isTouchActive = false;

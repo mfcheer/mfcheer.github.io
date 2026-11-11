@@ -4778,7 +4778,7 @@ button:active,
 
 .diary-head {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
     gap: 12px;
     margin-bottom: 16px;
@@ -4787,7 +4787,7 @@ button:active,
 
 .diary-title-wrap {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 10px;
     flex-wrap: wrap;
 }
@@ -4795,12 +4795,14 @@ button:active,
 .diary-icon {
     font-size: 1.25rem;
     line-height: 1;
+    align-self: center;
 }
 
 .card-diary h2 {
     font-size: 1.25rem;
     font-weight: 700;
     margin: 0;
+    line-height: 1.2;
     letter-spacing: -0.01em;
 }
 
@@ -4811,7 +4813,7 @@ button:active,
     font-weight: 400;
     letter-spacing: 0.01em;
     user-select: none;
-    line-height: 1.4;
+    line-height: 1.2;
     opacity: 0.85;
 }
 
@@ -4823,13 +4825,13 @@ button:active,
 
 .diary-date-wrap {
     display: flex;
-    align-items: center;
+    align-items: baseline;
 }
 
-/* 人性化日期指示器：无边框无胶囊，极简克制 */
+/* 人性化日期指示器：无边框无胶囊，极简克制，底部对齐 */
 .diary-date-indicator {
     display: inline-flex;
-    align-items: center;
+    align-items: baseline;
     font-size: 0.82rem;
     font-family: var(--font-sans, system-ui);
     color: var(--text-secondary);
@@ -4839,6 +4841,7 @@ button:active,
     border-radius: 6px;
     cursor: pointer;
     user-select: none;
+    line-height: 1.2;
     transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
 }
 
@@ -4918,7 +4921,7 @@ button:active,
     touch-action: pan-y;
     overscroll-behavior: contain;
     overscroll-behavior-x: none;
-    cursor: pointer;
+    cursor: default;
     user-select: none;
     transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.25s ease, box-shadow 0.2s ease;
     will-change: transform, opacity;
@@ -4936,41 +4939,6 @@ button:active,
 
 .diary-body-wrap.is-switching {
     opacity: 0.22;
-}
-
-/* 便签左右翻页边缘柔和微提示 */
-.diary-edge-cue {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.5rem;
-    line-height: 1;
-    color: var(--muted, #8e8e93);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    user-select: none;
-    z-index: 3;
-    font-family: var(--font-sans, system-ui);
-    font-weight: 300;
-}
-
-.diary-edge-cue-prev {
-    left: 8px;
-}
-
-.diary-edge-cue-next {
-    right: 8px;
-}
-
-.diary-body-wrap[data-hover-side="left"] .diary-edge-cue-prev:not(.is-disabled) {
-    opacity: 0.65;
-    transform: translateY(-50%) translateX(-2px);
-}
-
-.diary-body-wrap[data-hover-side="right"] .diary-edge-cue-next:not(.is-disabled) {
-    opacity: 0.65;
-    transform: translateY(-50%) translateX(2px);
 }
 
 .diary-punchline-wrap {
@@ -5064,11 +5032,8 @@ button:active,
     .diary-ai-notice {
         font-size: 0.72rem;
     }
-    .diary-edge-cue {
-        display: none;
-    }
     .diary-head {
-        align-items: flex-start;
+        align-items: baseline;
     }
     .diary-body-wrap {
         padding: 14px 16px 16px;

@@ -49,7 +49,7 @@ test('styles.css 包含手账样式、呼吸灯、便签层叠、拖拽抓手与
   assert.ok(css.includes('.diary-stack-layer'), '必须定义底层便签层叠厚度样式');
   assert.ok(css.includes('.diary-punchline'), '必须定义金句样式');
   assert.ok(css.includes('@keyframes diaryPulse'), '必须包含呼吸灯动画');
-  assert.ok(css.includes('cursor: pointer') || css.includes('cursor:pointer'), '必须定义鼠标点击手势');
+  assert.ok(css.includes('cursor: default') || css.includes('cursor: pointer'), '必须定义鼠标手势');
   assert.ok(css.includes('is-switching'), '必须包含平滑切换过渡样式');
 });
 
