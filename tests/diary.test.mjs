@@ -68,7 +68,7 @@ test('script.js 包含手账加载、层叠物理手势（触屏/PC拖拽/滚轮
 test('generate-daily-diary 支持多源数据与覆盖更新逻辑', async () => {
   const { getBeijingDateInfo, computeMoodAndSummary, getTodayGalleryPhotos, getTodayMediaItems, run } = await import('../scripts/generate-daily-diary.mjs');
 
-  const { dateStr, dayOfWeek } = getBeijingDateInfo(new Date('2026-11-11T12:00:00Z'));
+  const { dateStr, dayOfWeek } = getBeijingDateInfo();
   assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(dateStr), '日期字符串格式正确');
   assert.ok(typeof dayOfWeek === 'string', '星期信息为字符串');
 
