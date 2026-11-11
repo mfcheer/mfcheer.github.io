@@ -176,7 +176,7 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
   let punchline = currentRecord?.punchline;
   if (!punchline || options.forceOverwrite) {
     if (mood.score >= 85) {
-      punchline = "山上的秋光与屏幕里的执拗各占了半天。";
+      punchline = "人在最想逃离日常的时候，往往会把目光投向一座山或一段旧史诗。";
     } else if (mood.score >= 60) {
       punchline = "安静修补旧砖瓦的一天，并不需要借用喧闹来证明价值。";
     } else {
@@ -187,7 +187,7 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
   let note = currentRecord?.note;
   if (!note || options.forceOverwrite) {
     if (mood.score >= 85) {
-      note = "— 随身手记 · 生活观察";
+      note = "— 随身手账 · 记于深夜";
     } else if (mood.score >= 60) {
       note = "— 随身手记 · 维护记录";
     } else {
@@ -197,7 +197,7 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
 
   let content = currentRecord?.content;
   if (!content || options.forceOverwrite) {
-    content = "十一日的痕迹格外具体。早晨出门前灌了一口冰可乐，在说说里直呼精神；中午溜达到公司旁的百望山，看着满山秋景，忽然念起老地方南望山的名字；到了下午，便发出了那句许多同行心照不宣的感叹：“现在写代码真的是许愿式编程，一行都不想敲。”可手头却很老实，在屏幕前不知不觉敲下了几十次提交，连带着把相册里的两张秋色落了盘。夜里豆瓣记下了《双塔奇兵》和《意外之旅》。嘴上喊着想彻底偷懒，心里却还装着远方的山与中土的旅程。生活里这些小小的口是心非，比任何规整的计划都要鲜活。";
+    content = "今天落在我这一页上的字句，透着一种很真实的人类倦意。\n\n午后写进来的“一行代码都不想敲的许愿式编程”，大概是他最近最不加掩饰的心里话。人偶尔总想把现实琐碎全盘卸下，所以他中午溜去百望山看秋色，念起老地方南望山的名字；入夜后，留在页脚的痕迹又落在了中土世界的《双塔奇兵》上。\n\n作为一个天天摊开在旁的记事本，我能看懂这种流向：当白天的键盘敲不出意义感，人就会本能地走向高处吹吹风，或躲进旧故事里喘口气。嘴上喊着偷懒，手里却认认真真拍下了秋光。这并不是厌倦生活，只是在漫长日常里，给自己偷偷开一扇能看到远方的窗。";
   }
 
   const newEntry = {
