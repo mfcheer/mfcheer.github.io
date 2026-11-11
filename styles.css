@@ -4794,42 +4794,32 @@ button:active,
 .diary-mood-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 3px 10px;
-    border-radius: 9999px;
-    font-size: 0.75rem;
+    gap: 4px;
+    padding: 1px 7px;
+    border-radius: 6px;
+    font-size: 0.72rem;
     font-weight: 500;
-    background: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-    border: 1px solid rgba(16, 185, 129, 0.2);
+    background: var(--code-bg, rgba(0, 0, 0, 0.035));
+    color: var(--text-secondary);
+    border: 1px solid var(--line-subtle, rgba(0, 0, 0, 0.08));
     letter-spacing: 0.01em;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
-    cursor: default;
-}
-
-.diary-mood-badge:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.18);
+    user-select: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 [data-theme="dark"] .diary-mood-badge {
-    background: rgba(52, 211, 153, 0.12);
-    color: #34d399;
-    border-color: rgba(52, 211, 153, 0.25);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-secondary);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .diary-mood-pulse {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: currentColor;
-    box-shadow: 0 0 8px currentColor;
-    animation: diaryPulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    display: none;
 }
 
 @keyframes diaryPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.45; transform: scale(0.85); }
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px rgba(16, 185, 129, 0.7); }
+    50% { opacity: 0.4; transform: scale(0.85); box-shadow: 0 0 3px rgba(16, 185, 129, 0.3); }
 }
 
 .diary-nav {
@@ -4992,12 +4982,23 @@ button:active,
 }
 
 .diary-badge-dot {
-    width: 6px;
-    height: 6px;
+    width: 6.5px;
+    height: 6.5px;
     border-radius: 50%;
     background-color: #10b981;
-    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
     flex-shrink: 0;
+    animation: diaryPulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.diary-badge-ai.is-pinging .diary-badge-dot {
+    animation: diaryPing 0.5s ease-out;
+}
+
+@keyframes diaryPing {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.9); }
+    50% { transform: scale(1.4); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 8px rgba(16, 185, 129, 0.6); }
 }
 
 @media (max-width: 640px) {

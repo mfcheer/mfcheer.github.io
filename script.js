@@ -3373,6 +3373,11 @@ document.addEventListener("click", (e) => {
     if (aiBadge) {
         let easterEggIndex = 0;
         aiBadge.addEventListener("click", () => {
+            aiBadge.classList.remove("is-pinging");
+            void aiBadge.offsetWidth;
+            aiBadge.classList.add("is-pinging");
+            setTimeout(() => aiBadge.classList.remove("is-pinging"), 500);
+
             const currentItem = entries[currentIndex];
             if (!currentItem || !badgeText) return;
             const originalNote = getDynamicNote(currentItem);
