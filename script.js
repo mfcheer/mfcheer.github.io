@@ -1064,17 +1064,18 @@ function bindZoomableImage(img) {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'copy-btn';
-        btn.textContent = '复制';
+        btn.setAttribute('aria-label', '复制代码');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>复制</span>';
         btn.addEventListener('click', async () => {
             try {
                 await copyText(code.innerText);
-                btn.textContent = '已复制';
+                btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>已复制</span>';
                 btn.classList.add('copied');
             } catch (e) {
                 btn.textContent = '复制失败';
             }
             setTimeout(() => {
-                btn.textContent = '复制';
+                btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>复制</span>';
                 btn.classList.remove('copied');
             }, 1500);
         });
@@ -1210,7 +1211,7 @@ function bindZoomableImage(img) {
 
     let ticking = false;
     const toggleBtn = () => {
-        if (window.scrollY > 350) {
+        if (window.scrollY > 300) {
             topBtn.classList.add('visible');
         } else {
             topBtn.classList.remove('visible');

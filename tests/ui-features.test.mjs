@@ -151,3 +151,25 @@ test("微交互 (Micro-interactions) 与灯箱图片缩放就绪", () => {
     const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
     assert.ok(js.includes("is-zoomed"), "script.js 灯箱必须支持双击缩放");
 });
+
+test('文章右下角浮动目录与回到顶部按钮对齐、大小及竖向堆叠规范', () => {
+    const css = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+    assert.ok(css.includes('.float-top-btn,\n.float-toc-btn'), '回到顶部与浮动目录按钮必须使用统一定义');
+    assert.ok(css.includes('width: 42px'), '桌面端默认直径必须保持一致（42px）');
+    assert.ok(css.includes('height: 42px'), '桌面端默认高度必须保持一致（42px）');
+    assert.ok(css.includes('.float-toc-btn {\n    bottom: calc(78px'), '浮动目录按钮必须竖向对齐堆叠在回到顶部上方（间距 10px）');
+    assert.ok(css.includes('right: calc(16px + env(safe-area-inset-right, 0px))'), '移动端横向边距与回到顶部严格对齐');
+});
+
+test('代码块一体化卡片容器与非胶囊扁平操作样式就绪', () => {
+    const css = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+    assert.ok(css.includes('.post-body .code-block pre'), '必须对包裹在 code-block 内的 pre 归一化内边距与边框');
+    assert.ok(css.includes('.code-lang {\n    position: absolute;\n    top: 8px;\n    right: 66px;'), '语言标识必须在代码块顶部右上角非胶囊纯排版展示');
+    assert.ok(css.includes('background: transparent;\n    border: none;\n    border-radius: 0;'), '语言标识必须为非胶囊样式');
+    assert.ok(css.includes('.copy-btn {\n    position: absolute;\n    top: 8px;\n    right: 10px;'), '复制按钮必须精确定位在代码块内顶部右上角');
+    assert.ok(css.includes('background: transparent;\n    border: none;\n    border-radius: 4px;'), '复制按钮必须为非胶囊扁平样式');
+
+    const js = fs.readFileSync(path.join(ROOT, 'script.js'), 'utf8');
+    assert.ok(js.includes('viewBox="0 0 24 24" width="12" height="12"'), '复制代码按钮必须包含微型矢量图标');
+    assert.ok(js.includes('已复制'), '复制代码按钮必须支持状态反馈');
+});
