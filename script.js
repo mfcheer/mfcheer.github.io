@@ -3353,18 +3353,60 @@ document.addEventListener("click", (e) => {
         return "— 守护巡更中 · 待机能耗平稳";
     }
 
+    function flipEarlier() {
+        if (currentIndex < entries.length - 1) {
+            currentIndex++;
+            renderEntry(currentIndex, true, -1);
+        } else {
+            if (!bodyWrap) return;
+            bodyWrap.style.transition = "transform 0.15s ease-out";
+            bodyWrap.style.transform = "translateX(-12px) rotate(-0.4deg)";
+            setTimeout(() => {
+                bodyWrap.style.transition = "transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
+                bodyWrap.style.transform = "translateX(0) rotate(0deg)";
+            }, 150);
+        }
+    }
+
+    function flipNewer() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderEntry(currentIndex, true, 1);
+        } else {
+            if (!bodyWrap) return;
+            bodyWrap.style.transition = "transform 0.15s ease-out";
+            bodyWrap.style.transform = "translateX(12px) rotate(0.4deg)";
+            setTimeout(() => {
+                bodyWrap.style.transition = "transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
+                bodyWrap.style.transform = "translateX(0) rotate(0deg)";
+            }, 150);
+        }
+    }
+
     function renderEntry(index, withAnim = false, direction = 0) {
         if (!entries || entries.length === 0 || !entries[index]) return;
         const item = entries[index];
 
         if (withAnim && bodyWrap) {
             bodyWrap.classList.add("is-switching");
+            if (direction < 0) {
+                bodyWrap.style.transform = "translateX(-18px) rotate(-0.4deg) scale(0.985)";
+            } else if (direction > 0) {
+                bodyWrap.style.transform = "translateX(18px) rotate(0.4deg) scale(0.985)";
+            } else {
+                bodyWrap.style.transform = "scale(0.985)";
+            }
+            bodyWrap.style.opacity = "0.22";
             setTimeout(() => {
                 bodyWrap.classList.remove("is-switching");
-                bodyWrap.style.transform = "";
-                bodyWrap.style.opacity = "";
-            }, 220);
-        } else {
+                bodyWrap.style.transition = "transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.22s ease";
+                bodyWrap.style.transform = "translateX(0) rotate(0deg) scale(1)";
+                bodyWrap.style.opacity = "1";
+                setTimeout(() => {
+                    if (bodyWrap) bodyWrap.style.transition = "";
+                }, 300);
+            }, 60);
+        } else if (bodyWrap) {
             bodyWrap.style.transform = "";
             bodyWrap.style.opacity = "";
         }
@@ -3374,7 +3416,7 @@ document.addEventListener("click", (e) => {
             const rawDate = (item.date || "").replace(/-/g, ".");
             dateLabel.title = index > 0 
                 ? `${rawDate} · 点击一键回弹至今日` 
-                : `${rawDate} · 左右轻划或拖拽可翻阅历史`;
+                : `${rawDate} · 点击左侧或右侧可翻阅手记`;
         }
         if (punchlineEl) {
             punchlineEl.textContent = item.punchline || "嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。";
@@ -3410,6 +3452,12 @@ document.addEventListener("click", (e) => {
             }
         }
 
+        // 边缘指示器状态联动
+        const prevCue = bodyWrap ? bodyWrap.querySelector(".diary-edge-cue-prev") : null;
+        const nextCue = bodyWrap ? bodyWrap.querySelector(".diary-edge-cue-next") : null;
+        if (prevCue) prevCue.classList.toggle("is-disabled", index >= entries.length - 1);
+        if (nextCue) nextCue.classList.toggle("is-disabled", index <= 0);
+
         if (prevBtn) prevBtn.disabled = index >= entries.length - 1;
         if (nextBtn) nextBtn.disabled = index <= 0;
     }
@@ -3418,7 +3466,7 @@ document.addEventListener("click", (e) => {
         dateLabel.addEventListener("click", () => {
             if (currentIndex > 0) {
                 currentIndex = 0;
-                renderEntry(currentIndex, true);
+                renderEntry(currentIndex, true, 1);
             }
         });
         dateLabel.addEventListener("keydown", (e) => {
@@ -3426,7 +3474,7 @@ document.addEventListener("click", (e) => {
                 e.preventDefault();
                 if (currentIndex > 0) {
                     currentIndex = 0;
-                    renderEntry(currentIndex, true);
+                    renderEntry(currentIndex, true, 1);
                 }
             }
         });
@@ -3463,30 +3511,17 @@ document.addEventListener("click", (e) => {
 
     if (prevBtn) {
         prevBtn.addEventListener("click", () => {
-            if (currentIndex < entries.length - 1) {
-                currentIndex++;
-                renderEntry(currentIndex, true);
-            }
+            flipEarlier();
         });
     }
 
     if (nextBtn) {
         nextBtn.addEventListener("click", () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                renderEntry(currentIndex, true);
-            }
+            flipNewer();
         });
     }
 
     // 物理手势与交互系统 (Touch Gestures & Mouse Drag & Wheel)
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let isHorizontalGesture = null;
-
     function applyDragTransform(dx) {
         if (!bodyWrap) return;
         const rotate = dx * 0.032;
@@ -3506,48 +3541,55 @@ document.addEventListener("click", (e) => {
         }, 360);
     }
 
-    function handleSwipeEnd(dx) {
-        const threshold = 45;
-        if (dx < -threshold) {
-            // 向左掀开便签：看昨天/历史手记
-            if (currentIndex < entries.length - 1) {
-                currentIndex++;
-                renderEntry(currentIndex, true, -1);
-            } else {
-                resetDragTransform();
-            }
-        } else if (dx > threshold) {
-            // 向右翻回便签：看今天/较新手记
-            if (currentIndex > 0) {
-                currentIndex--;
-                renderEntry(currentIndex, true, 1);
-            } else {
-                resetDragTransform();
-            }
+    // PC 端悬停区域侦测：根据鼠标在左半区还是右半区，动态切换手势和提示
+    bodyWrap.addEventListener("mousemove", (e) => {
+        if (isDragging) return;
+        const rect = bodyWrap.getBoundingClientRect();
+        const isLeft = (e.clientX - rect.left) < rect.width * 0.5;
+        bodyWrap.setAttribute("data-hover-side", isLeft ? "left" : "right");
+        if (isLeft) {
+            bodyWrap.title = currentIndex < entries.length - 1 
+                ? "点击查看前一天手记 (‹)" 
+                : "已翻至最早的手记";
         } else {
-            resetDragTransform();
+            bodyWrap.title = currentIndex > 0 
+                ? "点击查看后一天手记 (›)" 
+                : "已是最新手记";
         }
-    }
+    });
 
-    // 1. 移动端触屏滑动手势 (Touch Swipe) - 严密拦截横向滑动，防止触发浏览器前进/后退
+    bodyWrap.addEventListener("mouseleave", () => {
+        if (isDragging) return;
+        bodyWrap.removeAttribute("data-hover-side");
+        bodyWrap.title = "点击左侧或右侧翻页，亦支持左右轻划或键盘方向键";
+    });
+
+    // 1. 移动端触屏手势 (Touch Tap & Swipe)
+    let isTouchActive = false;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchCurrentX = 0;
+    let touchCurrentY = 0;
+    let isHorizontalGesture = null;
+
     bodyWrap.addEventListener("touchstart", (e) => {
         if (e.touches.length === 1) {
-            isDragging = true;
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-            currentX = startX;
-            currentY = startY;
+            isTouchActive = true;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchCurrentX = touchStartX;
+            touchCurrentY = touchStartY;
             isHorizontalGesture = null;
             bodyWrap.style.transition = "none";
         }
     }, { passive: true });
 
     bodyWrap.addEventListener("touchmove", (e) => {
-        if (!isDragging || e.touches.length !== 1) return;
-        currentX = e.touches[0].clientX;
-        currentY = e.touches[0].clientY;
-        const dx = currentX - startX;
-        const dy = currentY - startY;
+        if (!isTouchActive || e.touches.length !== 1) return;
+        touchCurrentX = e.touches[0].clientX;
+        touchCurrentY = e.touches[0].clientY;
+        const dx = touchCurrentX - touchStartX;
+        const dy = touchCurrentY - touchStartY;
 
         if (isHorizontalGesture === null) {
             if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
@@ -3556,7 +3598,6 @@ document.addEventListener("click", (e) => {
         }
 
         if (isHorizontalGesture) {
-            // 关键：拦截移动端浏览器默认的前进/后退手势与页面横向滑动
             if (e.cancelable) {
                 e.preventDefault();
             }
@@ -3565,31 +3606,57 @@ document.addEventListener("click", (e) => {
     }, { passive: false });
 
     bodyWrap.addEventListener("touchend", () => {
-        if (!isDragging) return;
-        isDragging = false;
-        if (isHorizontalGesture) {
-            const dx = currentX - startX;
-            handleSwipeEnd(dx);
+        if (!isTouchActive) return;
+        isTouchActive = false;
+
+        const dx = touchCurrentX - touchStartX;
+        const dy = touchCurrentY - touchStartY;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < 12) {
+            // 触屏单指轻触 Tap：检测左半屏或右半屏翻页
+            const rect = bodyWrap.getBoundingClientRect();
+            const tapX = touchCurrentX - rect.left;
+            if (tapX < rect.width * 0.5) {
+                flipEarlier();
+            } else {
+                flipNewer();
+            }
+        } else if (isHorizontalGesture) {
+            // 轻滑滑动：位移超过 28px 即可翻页，动作幅度轻快灵敏
+            if (dx < -28) {
+                flipEarlier();
+            } else if (dx > 28) {
+                flipNewer();
+            } else {
+                resetDragTransform();
+            }
         } else {
             resetDragTransform();
         }
     }, { passive: true });
 
     bodyWrap.addEventListener("touchcancel", () => {
-        isDragging = false;
+        isTouchActive = false;
         resetDragTransform();
     }, { passive: true });
 
-    // 2. PC 端鼠标拖拽手势 (Mouse Drag to Peel / Slide)
+    // 2. PC 端鼠标点击与拖拽 (Mouse Click & Drag)
+    let isMouseDown = false;
+    let isDragging = false;
+    let mouseStartX = 0;
+    let mouseStartY = 0;
+    let mouseCurrentX = 0;
+    let mouseCurrentY = 0;
+
     bodyWrap.addEventListener("mousedown", (e) => {
-        // 仅响应鼠标左键，且不拦截内部按钮点击
         if (e.button !== 0 || e.target.closest("button") || e.target.closest("a")) return;
-        isDragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-        currentX = startX;
-        currentY = startY;
-        bodyWrap.classList.add("is-dragging");
+        isMouseDown = true;
+        isDragging = false;
+        mouseStartX = e.clientX;
+        mouseStartY = e.clientY;
+        mouseCurrentX = mouseStartX;
+        mouseCurrentY = mouseStartY;
         bodyWrap.style.transition = "none";
         if (e.cancelable) {
             e.preventDefault();
@@ -3597,27 +3664,55 @@ document.addEventListener("click", (e) => {
     });
 
     window.addEventListener("mousemove", (e) => {
-        if (!isDragging) return;
-        currentX = e.clientX;
-        currentY = e.clientY;
-        const dx = currentX - startX;
-        applyDragTransform(dx);
+        if (!isMouseDown) return;
+        mouseCurrentX = e.clientX;
+        mouseCurrentY = e.clientY;
+        const dx = mouseCurrentX - mouseStartX;
+        const dy = mouseCurrentY - mouseStartY;
+        if (!isDragging && Math.hypot(dx, dy) > 6) {
+            isDragging = true;
+            bodyWrap.classList.add("is-dragging");
+        }
+        if (isDragging) {
+            applyDragTransform(dx);
+        }
     });
 
-    window.addEventListener("mouseup", () => {
-        if (!isDragging) return;
-        isDragging = false;
+    window.addEventListener("mouseup", (e) => {
+        if (!isMouseDown) return;
+        isMouseDown = false;
         bodyWrap.classList.remove("is-dragging");
-        const dx = currentX - startX;
-        handleSwipeEnd(dx);
+
+        const dx = mouseCurrentX - mouseStartX;
+        const dy = mouseCurrentY - mouseStartY;
+        const dist = Math.hypot(dx, dy);
+
+        if (!isDragging || dist < 8) {
+            // 纯点击事件：点击左半区向前看更早，点击右半区向后看较新
+            const rect = bodyWrap.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            if (clickX < rect.width * 0.5) {
+                flipEarlier();
+            } else {
+                flipNewer();
+            }
+        } else {
+            // 鼠标拖拽：位移超 28px 执行翻页
+            if (dx < -28) {
+                flipEarlier();
+            } else if (dx > 28) {
+                flipNewer();
+            } else {
+                resetDragTransform();
+            }
+        }
+        isDragging = false;
     });
 
     // 3. PC 端双指触控板横向拨动 (Trackpad Horizontal Scroll)
-    // 监听在整个手账卡片 diarySection 上，彻底拦截触控板左右滑触发浏览器前进/后退
     let wheelDebounceTimer = null;
     diarySection.addEventListener("wheel", (e) => {
         if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-            // 只要横向位移分量大于纵向，立即阻止浏览器原生历史前进/后退手势及横向橡皮筋反弹
             if (e.cancelable) {
                 e.preventDefault();
             }
@@ -3625,17 +3720,9 @@ document.addEventListener("click", (e) => {
                 if (wheelDebounceTimer) return;
                 wheelDebounceTimer = setTimeout(() => { wheelDebounceTimer = null; }, 360);
                 if (e.deltaX > 0) {
-                    // 向左拨动：看更早记录
-                    if (currentIndex < entries.length - 1) {
-                        currentIndex++;
-                        renderEntry(currentIndex, true, -1);
-                    }
+                    flipEarlier();
                 } else {
-                    // 向右拨动：看较新记录
-                    if (currentIndex > 0) {
-                        currentIndex--;
-                        renderEntry(currentIndex, true, 1);
-                    }
+                    flipNewer();
                 }
             }
         }
@@ -3646,25 +3733,18 @@ document.addEventListener("click", (e) => {
         const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : "";
         if (activeTag === "input" || activeTag === "textarea") return;
         
-        // 仅当用户在视口内查看手账卡片或聚焦在其附近时响应
         const rect = diarySection.getBoundingClientRect();
         const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
         if (!isInViewport) return;
 
         if (e.key === "ArrowLeft") {
-            if (currentIndex < entries.length - 1) {
-                currentIndex++;
-                renderEntry(currentIndex, true, -1);
-            }
+            flipEarlier();
         } else if (e.key === "ArrowRight") {
-            if (currentIndex > 0) {
-                currentIndex--;
-                renderEntry(currentIndex, true, 1);
-            }
+            flipNewer();
         }
     });
 
-    fetch("data/diary.json")
+        fetch("data/diary.json")
         .then((res) => {
             if (!res.ok) throw new Error("Failed to load diary");
             return res.json();
