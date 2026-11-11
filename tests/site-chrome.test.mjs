@@ -36,3 +36,22 @@ test('共享联系区覆盖现有及新增列表页，保留详情页边界，�
     assert.equal(fs.readFileSync(path.join(root, 'privacy/index.html'), 'utf8'), '<main>隐私</main>');
     assert.deepEqual(syncSiteChrome(root), []);
 });
+
+test('全站导航栏行为一致：首页与各子页面点击「说说」均指向 /moments/ 专页', () => {
+    const navJson = JSON.parse(fs.readFileSync(new URL('../data/nav.json', import.meta.url), 'utf8'));
+    const momentsItem = navJson.items.find(i => i.label === '说说');
+    assert.equal(momentsItem.home, '/moments/', '首页说说导航必须指向 /moments/');
+    assert.equal(momentsItem.sub, '/moments/', '子页面说说导航必须指向 /moments/');
+
+    const indexHtml = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+    assert.match(indexHtml, /<a href="\/moments\/">说说<\/a>/, '首页导航必须包含指向 /moments/ 的说说链接');
+
+    const momentsHtml = fs.readFileSync(new URL('../moments/index.html', import.meta.url), 'utf8');
+    assert.match(momentsHtml, /<a href="\/moments\/" aria-current="page">说说<\/a>/, '说说专页导航必须高亮当前页');
+
+    const galleryHtml = fs.readFileSync(new URL('../gallery/index.html', import.meta.url), 'utf8');
+    assert.match(galleryHtml, /<a href="\/moments\/">说说<\/a>/, '相册专页说说导航必须指向 /moments/');
+
+    const blogHtml = fs.readFileSync(new URL('../blog/index.html', import.meta.url), 'utf8');
+    assert.match(blogHtml, /<a href="\/moments\/">说说<\/a>/, '博客专页说说导航必须指向 /moments/');
+});

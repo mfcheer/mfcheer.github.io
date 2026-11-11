@@ -1,7 +1,14 @@
 // Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach((anchor) => {
     anchor.addEventListener('click', (event) => {
-        const targetId = anchor.getAttribute('href');
+        const rawHref = anchor.getAttribute('href') || '';
+        const isHashOnly = rawHref.startsWith('#');
+        const isCurrentPageHash = isHashOnly || (
+            rawHref.startsWith('/#') && (window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname === '')
+        );
+        if (!isCurrentPageHash) return;
+
+        const targetId = isHashOnly ? rawHref : rawHref.slice(1);
         if (!targetId || targetId === '#') {
             event.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });

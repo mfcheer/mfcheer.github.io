@@ -3,7 +3,7 @@
   "items": [
     {
       "label": "说说",
-      "home": "#moments",
+      "home": "/moments/",
       "sub": "/moments/"
     },
     {
