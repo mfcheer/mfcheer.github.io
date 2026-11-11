@@ -1,6 +1,20 @@
 {
   "movies": [
     {
+      "title": "霍比特人1：意外之旅",
+      "link": "https://movie.douban.com/subject/1966182/",
+      "cover": "assets/covers/1966182.jpg",
+      "rating": 4,
+      "date": "2026-11-11"
+    },
+    {
+      "title": "指环王2：双塔奇兵",
+      "link": "https://movie.douban.com/subject/1291572/",
+      "cover": "assets/covers/1291572.jpg",
+      "rating": 4,
+      "date": "2026-11-11"
+    },
+    {
       "title": "指环王1：护戒使者",
       "link": "https://movie.douban.com/subject/1291571/",
       "cover": "assets/covers/1291571.jpg",
@@ -11,7 +25,7 @@
       "title": "欢迎来龙餐馆",
       "link": "https://movie.douban.com/subject/35811064/",
       "cover": "assets/covers/35811064.jpg",
-      "rating": 5,
+      "rating": 4,
       "date": "2026-08-18"
     },
     {
@@ -20,20 +34,6 @@
       "cover": "assets/covers/36246195.jpg",
       "rating": 4,
       "date": "2026-08-02"
-    },
-    {
-      "title": "命悬一生",
-      "link": "https://movie.douban.com/subject/36571896/",
-      "cover": "assets/covers/36571896.jpg",
-      "rating": 4,
-      "date": "2026-05-13"
-    },
-    {
-      "title": "大江大河",
-      "link": "https://movie.douban.com/subject/26797690/",
-      "cover": "assets/covers/26797690.jpg",
-      "rating": 4,
-      "date": "2026-05-07"
     }
   ],
   "books": [
@@ -42,7 +42,7 @@
       "link": "https://book.douban.com/subject/30347305/",
       "cover": "assets/covers/30347305.jpg",
       "rating": null,
-      "date": null,
+      "date": "2026-11-03",
       "status": "读过"
     },
     {
