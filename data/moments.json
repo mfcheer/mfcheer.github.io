@@ -1,5 +1,23 @@
 [
   {
+    "issueNumber": 43,
+    "issueUpdatedAt": "2026-11-11T16:59:04Z",
+    "date": "2026/11/12 00:59",
+    "text": "AI 都是泡沫，可口可乐不是",
+    "location": "",
+    "name": "mfcheer",
+    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
+    "labels": [
+      "生活"
+    ],
+    "images": [
+      {
+        "src": "assets/moments/m-1794416338971-i6ou1v.jpg",
+        "alt": "Image"
+      }
+    ]
+  },
+  {
     "issueNumber": 41,
     "issueUpdatedAt": "2026-11-11T07:10:55Z",
     "date": "2026/11/11 15:10",
