@@ -24,7 +24,7 @@ test('data/diary.json 存在且数据结构规范', () => {
     assert.ok(typeof entry.content === 'string', '正文必须为字符串');
     assert.ok(typeof entry.footnote === 'string', '注脚必须为字符串');
 
-    // 字数控制：严格处于 150 ~ 280 字区间，避免过长发散或过短空洞
+    // 字数控制：严格处于 100 ~ 300 字区间，避免过长发散或过短空洞
     const len = entry.content.trim().length;
     assert.ok(len >= 100 && len <= 300, `字数必须处于 100~300 范围内，当前字数: ${len}`);
   }
@@ -57,25 +57,38 @@ test('script.js 包含手账加载与翻页控制逻辑', () => {
   assert.ok(script.includes('diaryNextBtn'), '必须监听下一篇按钮');
 });
 
-test('generate-daily-diary 辅助函数逻辑正确', async () => {
-  const { getBeijingDateInfo, computeMoodAndSummary } = await import('../scripts/generate-daily-diary.mjs');
+test('generate-daily-diary 支持多源数据与覆盖更新逻辑', async () => {
+  const { getBeijingDateInfo, computeMoodAndSummary, getTodayGalleryPhotos, getTodayMediaItems, run } = await import('../scripts/generate-daily-diary.mjs');
 
   const { dateStr, dayOfWeek } = getBeijingDateInfo(new Date('2026-11-11T12:00:00Z'));
   assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(dateStr), '日期字符串格式正确');
   assert.ok(typeof dayOfWeek === 'string', '星期信息为字符串');
 
-  // 高频提交场景
-  const high = computeMoodAndSummary(8, 2, []);
+  // 多源感知数据提取验证
+  const photos = getTodayGalleryPhotos('2026-11-11');
+  assert.ok(Array.isArray(photos), '相册照片提取正常');
+
+  const mediaItems = getTodayMediaItems('2026-11-10');
+  assert.ok(Array.isArray(mediaItems), '书影音动态提取正常');
+
+  // 高频综合活跃场景
+  const high = computeMoodAndSummary({ commits: 8, moments: 2, photos: 1, media: 0 }, []);
   assert.equal(high.mood.label, '算力发烫');
   assert.equal(high.mood.emoji, '⚡️');
 
   // 低频日常场景
-  const calm = computeMoodAndSummary(2, 0, []);
+  const calm = computeMoodAndSummary({ commits: 1, moments: 1, photos: 0, media: 0 }, []);
   assert.equal(calm.mood.label, '微风徐徐');
   assert.equal(calm.mood.emoji, '🌤️');
 
   // 连续静默场景
-  const idle = computeMoodAndSummary(0, 0, [{ stats: { commits: 0 } }]);
+  const idle = computeMoodAndSummary({ commits: 0, moments: 0, photos: 0, media: 0 }, [{ stats: { commits: 0 } }]);
   assert.equal(idle.mood.label, '待机数羊');
   assert.equal(idle.mood.emoji, '💤');
+
+  // 执行一次覆盖更新并验证结果
+  const updated = run({ forceOverwrite: true });
+  assert.ok(Array.isArray(updated));
+  const todayEntry = updated.find((e) => e.date === dateStr);
+  assert.ok(todayEntry, '必须成功写入/覆盖更新今日手记');
 });
