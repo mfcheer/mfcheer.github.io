@@ -3307,13 +3307,25 @@ document.addEventListener("click", (e) => {
     const dateFull = document.getElementById("diaryDateFull");
     const weatherEl = document.getElementById("diaryWeather");
     const scoreEl = document.getElementById("diaryScore");
+    const punchlineEl = document.getElementById("diaryPunchline");
     const contentEl = document.getElementById("diaryContent");
     const footnoteEl = document.getElementById("diaryFootnote");
+    const badgeText = document.getElementById("diaryBadgeText");
+    const aiBadge = document.getElementById("diaryAiBadge");
 
     let entries = [];
     let currentIndex = 0;
+    let badgeTimer = null;
 
     const bodyWrap = diarySection.querySelector(".diary-body-wrap") || diarySection;
+
+    function getDynamicNote(item) {
+        if (item.note) return item.note;
+        const score = item.mood?.score ?? 80;
+        if (score >= 85) return "🤖 助手偷空速记 · 未经老大审阅";
+        if (score >= 60) return "🍃 随身观察打卡 · 0 人工干预";
+        return "💤 算力巡更中 · 待机能耗 37℃";
+    }
 
     function renderEntry(index, withAnim = false) {
         if (!entries || entries.length === 0 || !entries[index]) return;
@@ -3339,15 +3351,47 @@ document.addEventListener("click", (e) => {
         if (scoreEl) {
             scoreEl.textContent = `心情指数 ${item.mood?.score ?? 80}%`;
         }
+        if (punchlineEl) {
+            punchlineEl.textContent = item.punchline || "嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。";
+        }
         if (contentEl) {
             contentEl.textContent = item.content || "";
         }
         if (footnoteEl) {
             footnoteEl.textContent = item.footnote || "";
         }
+        if (badgeText) {
+            if (badgeTimer) clearTimeout(badgeTimer);
+            badgeText.textContent = getDynamicNote(item);
+            badgeText.style.color = "";
+        }
 
         if (prevBtn) prevBtn.disabled = index >= entries.length - 1;
         if (nextBtn) nextBtn.disabled = index <= 0;
+    }
+
+    if (aiBadge) {
+        let easterEggIndex = 0;
+        aiBadge.addEventListener("click", () => {
+            const currentItem = entries[currentIndex];
+            if (!currentItem || !badgeText) return;
+            const originalNote = getDynamicNote(currentItem);
+            const messages = [
+                "⚡️ 投喂成功！助手算力 +1",
+                "🤫 嘘，这篇是背着老大偷发的",
+                "☕️ 收到咖啡！继续巡更",
+                "🔋 能量已满，今晚 23:00 准时落盘"
+            ];
+            badgeText.textContent = messages[easterEggIndex % messages.length];
+            badgeText.style.color = "var(--accent, #3b82f6)";
+            easterEggIndex++;
+
+            if (badgeTimer) clearTimeout(badgeTimer);
+            badgeTimer = setTimeout(() => {
+                badgeText.textContent = originalNote;
+                badgeText.style.color = "";
+            }, 2600);
+        });
     }
 
     if (prevBtn) {
