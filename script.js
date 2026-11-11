@@ -3307,12 +3307,25 @@ document.addEventListener("click", (e) => {
     const footnoteEl = document.getElementById("diaryFootnote");
     const badgeText = document.getElementById("diaryBadgeText");
     const aiBadge = document.getElementById("diaryAiBadge");
+    const deckContainer = document.getElementById("diaryDeckContainer") || diarySection;
 
     let entries = [];
     let currentIndex = 0;
     let badgeTimer = null;
 
     const bodyWrap = diarySection.querySelector(".diary-body-wrap") || diarySection;
+
+    function formatHumanDate(dateStr, index) {
+        if (index === 0) return "今天";
+        if (index === 1) return "昨天";
+        if (index === 2) return "前天";
+        if (!dateStr) return "";
+        const parts = dateStr.split("-");
+        if (parts.length === 3) {
+            return `${parseInt(parts[1], 10)}月${parseInt(parts[2], 10)}日`;
+        }
+        return dateStr;
+    }
 
     function getDynamicNote(item) {
         if (item.note) return item.note;
@@ -3322,17 +3335,28 @@ document.addEventListener("click", (e) => {
         return "💤 守护巡更中 · 待机能耗平稳";
     }
 
-    function renderEntry(index, withAnim = false) {
+    function renderEntry(index, withAnim = false, direction = 0) {
         if (!entries || entries.length === 0 || !entries[index]) return;
         const item = entries[index];
 
         if (withAnim && bodyWrap) {
             bodyWrap.classList.add("is-switching");
-            setTimeout(() => bodyWrap.classList.remove("is-switching"), 180);
+            setTimeout(() => {
+                bodyWrap.classList.remove("is-switching");
+                bodyWrap.style.transform = "";
+                bodyWrap.style.opacity = "";
+            }, 220);
+        } else {
+            bodyWrap.style.transform = "";
+            bodyWrap.style.opacity = "";
         }
 
         if (dateLabel) {
-            dateLabel.textContent = (item.date || "").replace(/-/g, ".");
+            dateLabel.textContent = formatHumanDate(item.date, index);
+            const rawDate = (item.date || "").replace(/-/g, ".");
+            dateLabel.title = index > 0 
+                ? `${rawDate} · 点击一键回弹至今日` 
+                : `${rawDate} · 左右轻划或拖拽可翻阅历史`;
         }
         if (punchlineEl) {
             punchlineEl.textContent = item.punchline || "嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。";
@@ -3349,8 +3373,35 @@ document.addEventListener("click", (e) => {
             badgeText.style.color = "";
         }
 
+        // 便签层叠厚度更新：翻至最旧篇章时收起底层便签边角
+        if (deckContainer) {
+            if (index >= entries.length - 1) {
+                deckContainer.classList.add("is-last-page");
+            } else {
+                deckContainer.classList.remove("is-last-page");
+            }
+        }
+
         if (prevBtn) prevBtn.disabled = index >= entries.length - 1;
         if (nextBtn) nextBtn.disabled = index <= 0;
+    }
+
+    if (dateLabel) {
+        dateLabel.addEventListener("click", () => {
+            if (currentIndex > 0) {
+                currentIndex = 0;
+                renderEntry(currentIndex, true);
+            }
+        });
+        dateLabel.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    currentIndex = 0;
+                    renderEntry(currentIndex, true);
+                }
+            }
+        });
     }
 
     if (aiBadge) {
@@ -3400,48 +3451,176 @@ document.addEventListener("click", (e) => {
         });
     }
 
-    // 触屏滑动手势支持 (Touch Swipe Gestures)
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
+    // 物理手势与交互系统 (Touch Gestures & Mouse Drag & Wheel)
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isHorizontalGesture = null;
 
+    function applyDragTransform(dx) {
+        if (!bodyWrap) return;
+        const rotate = dx * 0.032;
+        const opacity = Math.max(0.65, 1 - Math.abs(dx) / 500);
+        bodyWrap.style.transform = `translateX(${dx}px) rotate(${rotate}deg)`;
+        bodyWrap.style.opacity = opacity;
+    }
+
+    function resetDragTransform() {
+        if (!bodyWrap) return;
+        bodyWrap.classList.remove("is-dragging");
+        bodyWrap.style.transition = "transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.25), opacity 0.3s ease";
+        bodyWrap.style.transform = "translateX(0) rotate(0deg)";
+        bodyWrap.style.opacity = "1";
+        setTimeout(() => {
+            if (bodyWrap) bodyWrap.style.transition = "";
+        }, 360);
+    }
+
+    function handleSwipeEnd(dx) {
+        const threshold = 45;
+        if (dx < -threshold) {
+            // 向左掀开便签：看昨天/历史手记
+            if (currentIndex < entries.length - 1) {
+                currentIndex++;
+                renderEntry(currentIndex, true, -1);
+            } else {
+                resetDragTransform();
+            }
+        } else if (dx > threshold) {
+            // 向右翻回便签：看今天/较新手记
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderEntry(currentIndex, true, 1);
+            } else {
+                resetDragTransform();
+            }
+        } else {
+            resetDragTransform();
+        }
+    }
+
+    // 1. 移动端触屏滑动手势 (Touch Swipe)
     bodyWrap.addEventListener("touchstart", (e) => {
         if (e.touches.length === 1) {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            touchEndX = touchStartX;
-            touchEndY = touchStartY;
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            currentX = startX;
+            currentY = startY;
+            isHorizontalGesture = null;
+            bodyWrap.style.transition = "none";
         }
     }, { passive: true });
 
     bodyWrap.addEventListener("touchmove", (e) => {
-        if (e.touches.length === 1) {
-            touchEndX = e.touches[0].clientX;
-            touchEndY = e.touches[0].clientY;
+        if (!isDragging || e.touches.length !== 1) return;
+        currentX = e.touches[0].clientX;
+        currentY = e.touches[0].clientY;
+        const dx = currentX - startX;
+        const dy = currentY - startY;
+
+        if (isHorizontalGesture === null) {
+            if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+                isHorizontalGesture = Math.abs(dx) > Math.abs(dy) * 1.15;
+            }
+        }
+
+        if (isHorizontalGesture) {
+            applyDragTransform(dx);
         }
     }, { passive: true });
 
     bodyWrap.addEventListener("touchend", () => {
-        const dx = touchEndX - touchStartX;
-        const dy = touchEndY - touchStartY;
-        // 横向位移大于 40px 且明显大于垂直滚动，防止误触正常滑动
-        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) {
-            if (dx < 0) {
-                // 向左滑：看更靠近现在的日期 (Next)
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    renderEntry(currentIndex, true);
-                }
-            } else {
-                // 向右滑：看更早的日期 (Prev)
+        if (!isDragging) return;
+        isDragging = false;
+        if (isHorizontalGesture) {
+            const dx = currentX - startX;
+            handleSwipeEnd(dx);
+        } else {
+            resetDragTransform();
+        }
+    }, { passive: true });
+
+    bodyWrap.addEventListener("touchcancel", () => {
+        isDragging = false;
+        resetDragTransform();
+    }, { passive: true });
+
+    // 2. PC 端鼠标拖拽手势 (Mouse Drag to Peel / Slide)
+    bodyWrap.addEventListener("mousedown", (e) => {
+        // 仅响应鼠标左键，且不拦截内部按钮点击
+        if (e.button !== 0 || e.target.closest("button") || e.target.closest("a")) return;
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        currentX = startX;
+        currentY = startY;
+        bodyWrap.classList.add("is-dragging");
+        bodyWrap.style.transition = "none";
+    });
+
+    window.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        currentX = e.clientX;
+        currentY = e.clientY;
+        const dx = currentX - startX;
+        applyDragTransform(dx);
+    });
+
+    window.addEventListener("mouseup", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        bodyWrap.classList.remove("is-dragging");
+        const dx = currentX - startX;
+        handleSwipeEnd(dx);
+    });
+
+    // 3. PC 端双指触控板横向拨动 (Trackpad Horizontal Scroll)
+    let wheelDebounceTimer = null;
+    bodyWrap.addEventListener("wheel", (e) => {
+        if (Math.abs(e.deltaX) > 28 && Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.2) {
+            if (wheelDebounceTimer) return;
+            wheelDebounceTimer = setTimeout(() => { wheelDebounceTimer = null; }, 320);
+            if (e.deltaX > 0) {
+                // 向左滚：看更早
                 if (currentIndex < entries.length - 1) {
                     currentIndex++;
-                    renderEntry(currentIndex, true);
+                    renderEntry(currentIndex, true, -1);
+                }
+            } else {
+                // 向右滚：看更新
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    renderEntry(currentIndex, true, 1);
                 }
             }
         }
     }, { passive: true });
+
+    // 4. 键盘左右方向键 (Keyboard Navigation)
+    window.addEventListener("keydown", (e) => {
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : "";
+        if (activeTag === "input" || activeTag === "textarea") return;
+        
+        // 仅当用户在视口内查看手账卡片或聚焦在其附近时响应
+        const rect = diarySection.getBoundingClientRect();
+        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+        if (!isInViewport) return;
+
+        if (e.key === "ArrowLeft") {
+            if (currentIndex < entries.length - 1) {
+                currentIndex++;
+                renderEntry(currentIndex, true, -1);
+            }
+        } else if (e.key === "ArrowRight") {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderEntry(currentIndex, true, 1);
+            }
+        }
+    });
 
     fetch("data/diary.json")
         .then((res) => {

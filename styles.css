@@ -1,3 +1,15 @@
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -4797,68 +4809,117 @@ button:active,
     50% { opacity: 0.4; transform: scale(0.85); box-shadow: 0 0 3px rgba(16, 185, 129, 0.3); }
 }
 
-.diary-nav {
-    display: inline-flex;
+.diary-date-wrap {
+    display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 3px 6px;
-    background: var(--code-bg, rgba(0, 0, 0, 0.03));
-    border: 1px solid var(--line-subtle, rgba(0, 0, 0, 0.06));
-    border-radius: 9999px;
 }
 
-.diary-nav-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: var(--text-secondary);
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1rem;
-    line-height: 1;
-    transition: background-color 0.2s, color 0.2s, opacity 0.2s;
-}
-
-.diary-nav-btn:hover:not(:disabled) {
-    background: var(--line-subtle, rgba(0, 0, 0, 0.08));
-    color: var(--text-primary);
-}
-
-.diary-nav-btn:disabled {
-    opacity: 0.28;
-    cursor: not-allowed;
-}
-
+/* 人性化日期指示器：无边框无胶囊，极简克制 */
 .diary-date-indicator {
-    font-size: 0.78rem;
-    font-family: var(--font-mono, monospace);
-    font-variant-numeric: tabular-nums;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.82rem;
+    font-family: var(--font-sans, system-ui);
     color: var(--text-secondary);
-    min-width: 80px;
-    text-align: center;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 3px 8px;
+    border-radius: 6px;
+    cursor: pointer;
     user-select: none;
+    transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
 }
 
+.diary-date-indicator:hover {
+    color: var(--text-primary);
+    background: var(--code-bg, rgba(0, 0, 0, 0.04));
+}
+
+.diary-date-indicator:active {
+    transform: scale(0.96);
+}
+
+/* 键盘与无障碍辅助样式 */
+.diary-nav-btn {
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+}
+
+/* 便签层叠容器（Deck of Cards） */
+.diary-deck-container {
+    position: relative;
+    margin-bottom: 20px;
+    perspective: 1000px;
+}
+
+/* 底层便签纸张边缘与厚度投影 */
+.diary-stack-layer {
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background: var(--code-bg, rgba(0, 0, 0, 0.02));
+    border: 1px solid var(--line-subtle, rgba(0, 0, 0, 0.04));
+    transform: translate(5px, 5px) rotate(0.6deg);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+    z-index: 1;
+}
+
+.diary-stack-layer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background: inherit;
+    border: inherit;
+    transform: translate(3px, 3px) rotate(-0.8deg);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.02);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* 翻到历史最后一页时，底层便签隐退 */
+.diary-deck-container.is-last-page .diary-stack-layer {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.98);
+}
+
+/* 顶层便签主体 */
 .diary-body-wrap {
     position: relative;
+    z-index: 2;
     padding: 18px 20px 20px;
-    background: var(--code-bg, rgba(0, 0, 0, 0.02));
-    border: 1px solid var(--line-subtle, rgba(0, 0, 0, 0.05));
+    background: var(--card-bg, var(--surface, rgba(255, 255, 255, 0.8)));
+    border: 1px solid var(--line-subtle, rgba(0, 0, 0, 0.06));
     border-radius: 12px;
-    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     touch-action: pan-y;
-    transition: opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1), transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.25s ease, box-shadow 0.2s ease;
+    will-change: transform, opacity;
+}
+
+.diary-body-wrap:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.diary-body-wrap.is-dragging {
+    cursor: grabbing !important;
+    transition: none !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
 .diary-body-wrap.is-switching {
-    opacity: 0.35;
-    transform: scale(0.988);
+    opacity: 0.2;
+    transform: scale(0.98);
 }
 
 .diary-punchline-wrap {

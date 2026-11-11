@@ -65,7 +65,7 @@
     <meta name="apple-mobile-web-app-title" content="mfcheer">
 
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css?v=1.3.54">
+    <link rel="stylesheet" href="styles.css?v=1.3.55">
 </head>
 <body>
     <button class="float-top-btn" id="floatTopBtn" type="button" title="回到顶部" aria-label="回到顶部">
@@ -177,18 +177,23 @@
                         <span class="diary-icon" aria-hidden="true">📖</span>
                         <h2>助手手记</h2>
                     </div>
-                    <div class="diary-nav" role="toolbar" aria-label="翻阅手记">
-                        <button class="diary-nav-btn" id="diaryPrevBtn" type="button" aria-label="上一篇手记" title="查看前一天手记">‹</button>
-                        <span class="diary-date-indicator" id="diaryDateLabel">2026.11.11</span>
-                        <button class="diary-nav-btn" id="diaryNextBtn" type="button" aria-label="下一篇手记" title="查看后一天手记" disabled>›</button>
+                    <div class="diary-date-wrap">
+                        <span class="diary-date-indicator" id="diaryDateLabel" role="button" tabindex="0" title="拖拽或轻划可翻阅历史，点击可回弹至今日">今天</span>
+                        <div class="diary-sr-nav sr-only" role="toolbar" aria-label="翻阅手记">
+                            <button class="diary-nav-btn" id="diaryPrevBtn" type="button" aria-label="上一篇手记">‹</button>
+                            <button class="diary-nav-btn" id="diaryNextBtn" type="button" aria-label="下一篇手记" disabled>›</button>
+                        </div>
                     </div>
                 </div>
-                <div class="diary-body-wrap">
-                    <div class="diary-punchline-wrap" id="diaryPunchlineWrap">
-                        <span class="diary-quote-mark" aria-hidden="true">“</span>
-                        <p class="diary-punchline" id="diaryPunchline">嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。</p>
+                <div class="diary-deck-container" id="diaryDeckContainer" title="左右轻划或鼠标拖拽，翻阅便签手记">
+                    <div class="diary-stack-layer" aria-hidden="true"></div>
+                    <div class="diary-body-wrap" id="diaryBodyWrap">
+                        <div class="diary-punchline-wrap" id="diaryPunchlineWrap">
+                            <span class="diary-quote-mark" aria-hidden="true">“</span>
+                            <p class="diary-punchline" id="diaryPunchline">嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。</p>
+                        </div>
+                        <p class="diary-content" id="diaryContent">载入中...</p>
                     </div>
-                    <p class="diary-content" id="diaryContent">载入中...</p>
                 </div>
                 <div class="diary-foot">
                     <span class="diary-footnote" id="diaryFootnote">46 次提交 · 3 条说说 · 百望山登高 · 0.3s 鬼影重构</span>
@@ -468,6 +473,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=1.3.50"></script>
+    <script src="script.js?v=1.3.51"></script>
 </body>
 </html>
