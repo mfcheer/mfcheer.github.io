@@ -94,9 +94,16 @@ test('generate-daily-diary 支持多源数据与覆盖更新逻辑', async () =>
   assert.equal(idle.mood.label, '待机数羊');
   assert.equal(idle.mood.emoji, '💤');
 
-  // 执行一次覆盖更新并验证结果
-  const updated = run({ forceOverwrite: true });
-  assert.ok(Array.isArray(updated));
-  const todayEntry = updated.find((e) => e.date === dateStr);
-  assert.ok(todayEntry, '必须成功写入/覆盖更新今日手记');
+  // 执行一次覆盖更新并验证结果（在隔离的临时路径运行，避免污染 Git 工作区）
+  const os = await import("node:os");
+  const tempDiaryPath = path.join(os.tmpdir(), `test-diary-${Date.now()}.json`);
+  try {
+    const updated = run({ forceOverwrite: true, targetPath: tempDiaryPath });
+    assert.ok(Array.isArray(updated));
+    const todayEntry = updated.find((e) => e.date === dateStr);
+    assert.ok(todayEntry, '必须成功写入/覆盖更新今日手记');
+    assert.ok(fs.existsSync(tempDiaryPath), '目标文件必须成功落盘');
+  } finally {
+    if (fs.existsSync(tempDiaryPath)) fs.unlinkSync(tempDiaryPath);
+  }
 });

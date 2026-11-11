@@ -140,12 +140,13 @@ export function computeMoodAndSummary(activityStats, previousEntries = []) {
 /**
  * 主执行函数：提取数据并执行覆盖更新
  */
-export function run(options = { forceOverwrite: true }) {
+export function run(options = { forceOverwrite: true, targetPath: null }) {
+  const targetFile = options.targetPath || DIARY_PATH;
   const { dateStr, dayOfWeek } = getBeijingDateInfo();
   let existing = [];
-  if (fs.existsSync(DIARY_PATH)) {
+  if (fs.existsSync(targetFile)) {
     try {
-      existing = JSON.parse(fs.readFileSync(DIARY_PATH, 'utf-8'));
+      existing = JSON.parse(fs.readFileSync(targetFile, 'utf-8'));
     } catch {
       existing = [];
     }
@@ -219,7 +220,7 @@ export function run(options = { forceOverwrite: true }) {
     existing.unshift(newEntry);
   }
 
-  fs.writeFileSync(DIARY_PATH, JSON.stringify(existing, null, 2) + '\n', 'utf-8');
+  fs.writeFileSync(targetFile, JSON.stringify(existing, null, 2) + '\n', 'utf-8');
   console.log(`[Diary] 成功落盘 ${dateStr} 随身手记（非流水账提炼版，全量覆盖更新完成）。`);
   return existing;
 }

@@ -76,6 +76,8 @@ jobs:
             echo "没有需要回写的生成物"
           else
             git commit -m "build: 保存已验证的分模块构建产物 [skip ci]"
+            git checkout -- . 2>/dev/null || true
+            git clean -fd 2>/dev/null || true
             git fetch origin main
             git rebase origin/main
             git push origin HEAD:main
