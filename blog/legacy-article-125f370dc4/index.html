@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,11 +63,11 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>378 字</span>
+                        <span>377 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 1 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#1、类型">1、类型</a></li><li><a href="#2、内存分配">2、内存分配</a></li><li><a href="#3、示例程序：">3、示例程序：</a></li><li><a href="#4、-null!=a和a!=null">4、 null!=a和a!=null</a></li></ul></nav>
                 </header>
                 <div class="post-body">
@@ -78,7 +78,6 @@
 <p>String str = null ; 表示声明一个字符串对象的引用，但指向为null，也就是说还没有指向任何的内存空间；</p>
 <p>String str = &quot;&quot;;    表示声明一个字符串类型的引用，其值为&quot;&quot;空字符串，这个str引用指向的是空字符串的内存空间；</p>
 <p>在java中变量和引用变量是存在栈中（stack），而对象（new产生的）都是存放在堆中（heap）：
-&lt;!-- more --&gt;
 就如下：</p>
 <p>String str = new String(&quot;abc&quot;) ;</p>
 <p>ps：=左边的是存放在栈中（stack），=右边是存放在堆中（heap）。</p>
@@ -152,6 +151,6 @@
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

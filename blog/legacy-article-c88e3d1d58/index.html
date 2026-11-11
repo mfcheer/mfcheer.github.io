@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,18 +63,17 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>568 字</span>
+                        <span>567 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 1 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#协同过滤">协同过滤</a></li><li><a href="#计算步骤">计算步骤</a></li><li><a href="#找到相似的用户或物品">找到相似的用户或物品</a></li><li class="toc-sub"><a href="#相似度计算">相似度计算</a></li><li class="toc-sub"><a href="#相似邻居的计算">相似邻居的计算</a></li><li><a href="#优缺点">优缺点</a></li></ul></nav>
                 </header>
                 <div class="post-body">
 <h1 id="协同过滤" tabindex="-1">协同过滤</h1>
 <p>什么是协同过滤 (Collaborative Filtering, 简称CF)，首先想一个简单的问题，如果你现在想看个电影，但你不知道具体看哪部，你会怎么做？大部分的人会问问周围的朋友，看看最近有什么好看的电影推荐，而我们一般更倾向于从口味比较类似的朋友那里得到推荐。这就是协同过滤的核心思想。</p>
-<p>　　协同过滤一般是在海量的用户中发掘出一小部分和你品位比较类似的，在协同过滤中，这些用户成为邻居，然后根据他们喜欢的其他东西组织成一个排序的目录作为推荐给你。当然其中有一个核心的问题：如何确定一个用户是不是和你有相似的品位？如何将邻居们的喜好组织成一个排序的目录？
-&lt;!--more--&gt;</p>
+<p>　　协同过滤一般是在海量的用户中发掘出一小部分和你品位比较类似的，在协同过滤中，这些用户成为邻居，然后根据他们喜欢的其他东西组织成一个排序的目录作为推荐给你。当然其中有一个核心的问题：如何确定一个用户是不是和你有相似的品位？如何将邻居们的喜好组织成一个排序的目录？</p>
 <h1 id="计算步骤" tabindex="-1">计算步骤</h1>
 <p>1.收集用户偏好。
 2.找到相似的用户或物品。
@@ -125,6 +124,6 @@
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

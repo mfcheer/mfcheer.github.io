@@ -155,38 +155,46 @@
                     .join('');
             };
 
-            const groups = [...document.querySelectorAll('.post-group')].map((group) => ({
+            let activeTag = "";
+
+            const groups = [...document.querySelectorAll(".post-group")].map((group) => ({
                 group,
                 year: group.previousElementSibling,
                 yearLink: document.querySelector(`.blog-years a[href="#${group.previousElementSibling.id}"]`),
-                items: [...group.querySelectorAll('.post-item')].map((item) => {
-                    const titleEl = item.querySelector('.post-item-title');
-                    const summaryEl = item.querySelector('.post-item-summary');
-                    const rawTitle = titleEl ? titleEl.textContent : '';
-                    const rawSummary = summaryEl ? summaryEl.textContent : '';
+                items: [...group.querySelectorAll(".post-item")].map((item) => {
+                    const titleEl = item.querySelector(".post-item-title");
+                    const summaryEl = item.querySelector(".post-item-summary");
+                    const rawTitle = titleEl ? titleEl.textContent : "";
+                    const rawSummary = summaryEl ? summaryEl.textContent : "";
+                    const rawTags = (item.dataset.tags || "").split(",").map((t) => t.trim().toLowerCase()).filter(Boolean);
                     return {
                         element: item,
                         titleEl,
                         summaryEl,
                         rawTitle,
                         rawSummary,
+                        rawTags,
                         text: item.textContent.toLocaleLowerCase()
                     };
                 })
             }));
 
-            const doSearch = () => {
+            const applyFilter = (updateHistory = true) => {
                 const query = input.value.trim();
                 const queryLower = query.toLocaleLowerCase();
+                const tagLower = activeTag.trim().toLowerCase();
+
                 if (clearBtn) {
-                    clearBtn.hidden = !query;
+                    clearBtn.hidden = !query && !activeTag;
                 }
 
                 let matches = 0;
                 groups.forEach(({ group, year, yearLink, items }) => {
                     let groupMatches = 0;
-                    items.forEach(({ element, titleEl, summaryEl, rawTitle, rawSummary, text }) => {
-                        const visible = !queryLower || text.includes(queryLower);
+                    items.forEach(({ element, titleEl, summaryEl, rawTitle, rawSummary, rawTags, text }) => {
+                        const matchesQuery = !queryLower || text.includes(queryLower);
+                        const matchesTag = !tagLower || rawTags.includes(tagLower);
+                        const visible = matchesQuery && matchesTag;
                         element.hidden = !visible;
                         if (visible) {
                             groupMatches++;
@@ -203,57 +211,99 @@
                         }
                     });
                     group.hidden = groupMatches === 0;
-                    if (year && year.classList.contains('post-year')) year.hidden = groupMatches === 0;
+                    if (year && year.classList.contains("post-year")) year.hidden = groupMatches === 0;
                     if (yearLink) yearLink.hidden = groupMatches === 0;
                     matches += groupMatches;
                 });
 
-                if (query) {
-                    if (matches > 0) {
-                        status.innerHTML = `找到 <strong>${matches}</strong> 篇文章`;
-                    } else {
-                        status.innerHTML = `
-                            <div class="blog-search-empty">
-                                <span>未找到与「<strong>${escapeHtml(query)}</strong>」相关的文章</span>
-                                <button type="button" class="blog-search-reset-btn" id="blogSearchReset">清空搜索</button>
-                            </div>
-                        `;
-                        const resetBtn = document.getElementById('blogSearchReset');
-                        if (resetBtn) {
-                            resetBtn.addEventListener('click', () => {
-                                input.value = '';
-                                doSearch();
-                                input.focus();
-                            });
-                        }
-                    }
+                if (activeTag && query) {
+                    status.innerHTML = matches > 0
+                        ? `标签「<strong>${escapeHtml(activeTag)}</strong>」下包含「<strong>${escapeHtml(query)}</strong>」的文章共 <strong>${matches}</strong> 篇 <button type="button" class="blog-search-reset-btn" id="blogFilterReset">清除筛选</button>`
+                        : `<div class="blog-search-empty"><span>在标签「<strong>${escapeHtml(activeTag)}</strong>」下未找到与「<strong>${escapeHtml(query)}</strong>」相关的文章</span><button type="button" class="blog-search-reset-btn" id="blogFilterReset">清空筛选</button></div>`;
+                } else if (activeTag) {
+                    status.innerHTML = matches > 0
+                        ? `标签「<strong>${escapeHtml(activeTag)}</strong>」下的文章共 <strong>${matches}</strong> 篇 <button type="button" class="blog-search-reset-btn" id="blogTagReset">清除标签</button>`
+                        : `<div class="blog-search-empty"><span>未找到标签「<strong>${escapeHtml(activeTag)}</strong>」下的文章</span><button type="button" class="blog-search-reset-btn" id="blogTagReset">清空筛选</button></div>`;
+                } else if (query) {
+                    status.innerHTML = matches > 0
+                        ? `找到 <strong>${matches}</strong> 篇文章`
+                        : `<div class="blog-search-empty"><span>未找到与「<strong>${escapeHtml(query)}</strong>」相关的文章</span><button type="button" class="blog-search-reset-btn" id="blogSearchReset">清空搜索</button></div>`;
                 } else {
-                    status.innerHTML = '';
+                    status.innerHTML = "";
+                }
+
+                const resetBtn = status.querySelector(".blog-search-reset-btn");
+                if (resetBtn) {
+                    resetBtn.addEventListener("click", () => {
+                        activeTag = "";
+                        input.value = "";
+                        applyFilter(true);
+                        input.focus();
+                    });
+                }
+
+                if (updateHistory) {
+                    const url = new URL(window.location.href);
+                    if (activeTag) url.searchParams.set("tag", activeTag);
+                    else url.searchParams.delete("tag");
+                    if (query) url.searchParams.set("q", query);
+                    else url.searchParams.delete("q");
+                    const search = url.searchParams.toString();
+                    history.replaceState(null, "", url.pathname + (search ? `?${search}` : ""));
                 }
             };
 
-            input.addEventListener('input', doSearch);
+            const syncFromUrl = () => {
+                const params = new URLSearchParams(window.location.search);
+                activeTag = params.get("tag") || "";
+                input.value = params.get("q") || "";
+                applyFilter(false);
+            };
+
+            input.addEventListener("input", () => applyFilter(true));
 
             if (clearBtn) {
-                clearBtn.addEventListener('click', () => {
-                    input.value = '';
-                    doSearch();
+                clearBtn.addEventListener("click", () => {
+                    activeTag = "";
+                    input.value = "";
+                    applyFilter(true);
                     input.focus();
                 });
             }
 
+            document.addEventListener("click", (e) => {
+                const tagEl = e.target.closest(".post-item-tag");
+                if (tagEl && tagEl.dataset.tag) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    activeTag = tagEl.dataset.tag;
+                    input.value = "";
+                    applyFilter(true);
+                }
+            });
+
+            window.addEventListener("popstate", () => {
+                syncFromUrl();
+            });
+
+            // 初始读取 URL 参数
+            syncFromUrl();
+
             // 快捷键支持：按 Esc 清空或失焦；按 / 或 Cmd+K 聚焦搜索框
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && document.activeElement === input) {
-                    if (input.value) {
-                        input.value = '';
-                        doSearch();
-                    } else {
-                        input.blur();
+            window.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    if (document.activeElement === input || activeTag) {
+                        if (input.value || activeTag) {
+                            activeTag = "";
+                            input.value = "";
+                            applyFilter(true);
+                        } else {
+                            input.blur();
+                        }
                     }
                 } else if (
-                    (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) && !document.activeElement.isContentEditable) ||
-                    ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k')
+                    (e.key === "/" && !["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName) && !document.activeElement?.isContentEditable) ||
+                    ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k")
                 ) {
                     e.preventDefault();
                     input.focus();

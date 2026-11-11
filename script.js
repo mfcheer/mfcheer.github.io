@@ -124,7 +124,10 @@ async function loadGitHubChart() {
     const container = document.getElementById('ghChart');
     if (!container) return;
     try {
-        const res = await fetch('https://ghchart.rshah.org/0071e3/mfcheer');
+        let res = await fetch('assets/github-contributions.svg');
+        if (!res.ok) {
+            res = await fetch('https://ghchart.rshah.org/0071e3/mfcheer');
+        }
         if (!res.ok) return;
         let svgText = await res.text();
         if (svgText.includes('<svg')) {
@@ -139,6 +142,16 @@ async function loadGitHubChart() {
 }
 
 loadGitHubChart();
+
+// 媒体封面加载状态：支持平滑微光骨架屏过渡
+document.querySelectorAll('.media-cover').forEach((img) => {
+    if (img.complete) {
+        img.classList.add('is-loaded');
+    } else {
+        img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
+        img.addEventListener('error', () => img.classList.add('is-loaded'), { once: true });
+    }
+});
 
 // 页脚版权年份：动态取当前年份（无 JS 时回退 HTML 里的静态 2026）
 (function () {
@@ -520,6 +533,7 @@ function resetLightboxTransform() {
 
 function closeLightbox() {
     if (!siteLightbox || !siteLightbox.classList.contains('is-open')) return;
+    togglePhotoInfo(false);
     siteLightbox.classList.remove('is-open');
     siteImageRequest++;
     siteLightboxImg.removeAttribute('src');
@@ -528,9 +542,73 @@ function closeLightbox() {
     siteLastActiveElement?.focus?.();
 }
 
+function escapeLightboxHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function renderPhotoInfo(photo) {
+    const infoCard = siteLightbox?.querySelector('.site-photo-info-card');
+    if (!infoCard) return;
+    const hasExif = photo && photo.exif && (photo.exif.camera || photo.exif.lens || photo.exif.aperture || photo.exif.shutter || photo.exif.iso);
+    const dateStr = (photo && (photo.date || photo.exif?.dateTaken)) || '';
+    const dims = (photo && photo.w && photo.h) ? `${photo.w} × ${photo.h} px` : '';
+
+    let html = `
+        <div class="site-photo-info-head">
+            <span class="site-photo-info-title">照片信息</span>
+            <button class="site-photo-info-close" type="button" aria-label="关闭信息">&times;</button>
+        </div>
+        <div class="site-photo-info-body">
+    `;
+
+    if (hasExif) {
+        if (photo.exif.camera) {
+            html += `<div class="site-photo-info-row"><span class="site-photo-info-label">相机</span><span class="site-photo-info-val">${escapeLightboxHtml(photo.exif.camera)}</span></div>`;
+        }
+        if (photo.exif.lens) {
+            html += `<div class="site-photo-info-row"><span class="site-photo-info-label">镜头</span><span class="site-photo-info-val">${escapeLightboxHtml(photo.exif.lens)}</span></div>`;
+        }
+        const params = [photo.exif.aperture, photo.exif.shutter, photo.exif.focalLength, photo.exif.iso].filter(Boolean);
+        if (params.length) {
+            html += `<div class="site-photo-info-row"><span class="site-photo-info-label">参数</span><span class="site-photo-info-val">${escapeLightboxHtml(params.join(' · '))}</span></div>`;
+        }
+    }
+
+    if (dims) {
+        html += `<div class="site-photo-info-row"><span class="site-photo-info-label">尺寸</span><span class="site-photo-info-val">${escapeLightboxHtml(dims)}</span></div>`;
+    }
+    if (dateStr) {
+        html += `<div class="site-photo-info-row"><span class="site-photo-info-label">日期</span><span class="site-photo-info-val">${escapeLightboxHtml(dateStr)}</span></div>`;
+    }
+    if (photo && photo.album) {
+        html += `<div class="site-photo-info-row"><span class="site-photo-info-label">相册</span><span class="site-photo-info-val">${escapeLightboxHtml(photo.album)}</span></div>`;
+    }
+
+    if (!hasExif) {
+        html += `<div class="site-photo-info-tip">未包含拍摄设备参数</div>`;
+    }
+
+    html += `</div>`;
+    infoCard.innerHTML = html;
+
+    const closeBtn = infoCard.querySelector('.site-photo-info-close');
+    if (closeBtn) closeBtn.onclick = () => togglePhotoInfo(false);
+}
+
+function togglePhotoInfo(force) {
+    const infoCard = siteLightbox?.querySelector('.site-photo-info-card');
+    const infoBtn = siteLightbox?.querySelector('.site-photo-info-btn');
+    if (!infoCard || !infoBtn) return;
+    const shouldOpen = typeof force === 'boolean' ? force : infoCard.hidden;
+    infoCard.hidden = !shouldOpen;
+    infoBtn.classList.toggle('is-active', shouldOpen);
+    infoBtn.setAttribute('aria-expanded', String(shouldOpen));
+}
+
 function showSitePhoto() {
     resetLightboxTransform();
     const photo = sitePhotos[sitePhotoIndex];
+    renderPhotoInfo(photo);
     const request = ++siteImageRequest;
     const status = siteLightbox.querySelector('.site-photo-status');
     status.textContent = '正在加载图片…';
@@ -574,10 +652,12 @@ function createLightbox() {
     siteLightbox.setAttribute('aria-label', '图片预览');
     siteLightbox.innerHTML = `
         <button class="post-lightbox-close" aria-label="关闭预览 (Esc)">×</button>
+        <button class="site-photo-info-btn" aria-label="查看照片信息 (i)" title="查看参数 (i)" type="button">ℹ</button>
         <button class="site-photo-nav site-photo-prev" aria-label="上一张">‹</button>
         <img class="post-lightbox-img" alt="">
         <button class="site-photo-nav site-photo-next" aria-label="下一张">›</button>
         <button class="site-photo-status" aria-live="polite"></button>
+        <div class="site-photo-info-card" hidden></div>
         <div class="post-lightbox-caption"></div>
         <div class="site-photo-counter" aria-live="polite"></div>
         <button type="button" class="content-delete site-photo-delete" hidden>删除照片</button>`;
@@ -585,6 +665,8 @@ function createLightbox() {
     siteLightboxImg = siteLightbox.querySelector('img');
     siteLightboxCaption = siteLightbox.querySelector('.post-lightbox-caption');
     siteLightbox.querySelector('.post-lightbox-close').onclick = closeLightbox;
+    const infoBtn = siteLightbox.querySelector('.site-photo-info-btn');
+    if (infoBtn) infoBtn.onclick = (e) => { e.stopPropagation(); togglePhotoInfo(); };
     siteLightbox.querySelector('.site-photo-prev').onclick = () => stepSitePhoto(-1);
     siteLightbox.querySelector('.site-photo-next').onclick = () => stepSitePhoto(1);
     siteLightbox.querySelector('.site-photo-status').onclick = showSitePhoto;
@@ -595,7 +677,19 @@ function createLightbox() {
     siteLightbox.onclick = e => { if (e.target === siteLightbox) closeLightbox(); };
     window.addEventListener('keydown', e => {
         if (!siteLightbox.classList.contains('is-open')) return;
-        if (e.key === 'Escape') { e.preventDefault(); closeLightbox(); }
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            const infoCard = siteLightbox.querySelector('.site-photo-info-card');
+            if (infoCard && !infoCard.hidden) {
+                togglePhotoInfo(false);
+            } else {
+                closeLightbox();
+            }
+        }
+        if (e.key === 'i' || e.key === 'I') {
+            e.preventDefault();
+            togglePhotoInfo();
+        }
         if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
             e.preventDefault(); stepSitePhoto(e.key === 'ArrowLeft' ? -1 : 1);
         }

@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,11 +63,11 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>1190 字</span>
+                        <span>1189 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 3 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#xgboost">XGBoost</a></li><li class="toc-sub"><a href="#boostedtree">BoostedTree</a></li><li class="toc-sub toc-sub-deep"><a href="#回归树">回归树</a></li><li class="toc-sub toc-sub-deep"><a href="#treeensemble">TreeEnsemble</a></li><li class="toc-sub"><a href="#模型组成">模型组成</a></li><li class="toc-sub toc-sub-deep"><a href="#模型和参数">模型和参数</a></li><li class="toc-sub toc-sub-deep"><a href="#目标函数=误差函数+正则项">目标函数=误差函数+正则项</a></li><li class="toc-sub"><a href="#模型原理">模型原理</a></li><li class="toc-sub"><a href="#模型参数">模型参数</a></li><li class="toc-sub toc-sub-deep"><a href="#增加随机性">增加随机性</a></li><li class="toc-sub toc-sub-deep"><a href="#控制模型复杂度">控制模型复杂度</a></li><li class="toc-sub toc-sub-deep"><a href="#其他参数">其他参数</a></li><li class="toc-sub"><a href="#控制过拟合">控制过拟合</a></li><li class="toc-sub"><a href="#与gbdt的差别">与GBDT的差别</a></li><li><a href="#如何画xgboost里面的决策树">如何画XGBoost里面的决策树</a></li></ul></nav>
                 </header>
                 <div class="post-body">
@@ -78,8 +78,7 @@
 <p>BoostedTree的基本组成部分是回归树（Classification And Regression Tree），称作CART。
 回归树会把输入的数据，分配到叶子节点上去，每个叶子节点都对应一个实数，非叶子节点都是一个二叉树。属于决策树的一种。
 <img src="/assets/images/legacy/MarkdownPhotos/photos/52.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
-<p>&lt;!--more--&gt;
-决策树自上而下建立，根据属性值大小分裂为左右两个节点。</p>
+<p>决策树自上而下建立，根据属性值大小分裂为左右两个节点。</p>
 <h3 id="treeensemble" tabindex="-1">TreeEnsemble</h3>
 <p>一颗回归树往往无法正确的做出预测，所以可以将多棵树的预测进行一个组合，得到最终的结果。
 预测结果就是各个回归树的和。
@@ -178,6 +177,6 @@
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

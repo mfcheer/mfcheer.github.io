@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,11 +63,11 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>627 字</span>
+                        <span>626 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 2 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#ssh-是什么">SSH 是什么</a></li><li><a href="#ssh-不是什么">SSH 不是什么</a></li><li><a href="#ssh-协议">SSH 协议</a></li><li><a href="#ssh-特点概述">SSH 特点概述</a></li></ul></nav>
                 </header>
                 <div class="post-body">
@@ -75,7 +75,6 @@
 <p>SSH(the Secure Shell), 是一个很流行的、强大的、基于软件的网络安全工具。它监听端口22的连接。任何时候，只要电脑向网络上发送数据，SSH都会自动加密。当接受到数据时，SSH会自动解密。这就是所谓的透明加密：用户象往常一样工作，并不会意识到他们的网络通讯受到了安全加密的保护。另外，SSH使用了现代的安全加密算法，可以用于大公司的关键应用。</p>
 <p>SSH采用了client/server体系结构。管理员在服务器上运行SSH server, 用户使用SSH client向服务器发出请求，比如“让我登录吧”，“传送个文件给我”，“请执行这个命令”。client与server之间的所有通讯都进行了安全加密，以防被人修改。</p>
 <p>基于SSH的产品可以是client或server, 也可以两者都包括。Uinx上的产品通常包含client和server两者；其它平台通常只有client，现在也出现了基于Windows的服务器。</p>
-<p>&lt;!--more--&gt;</p>
 <h1 id="ssh-不是什么" tabindex="-1">SSH 不是什么</h1>
 <p>虽然SSH代表Secure Shell, 但是它并不是真正意义上的shell，他不是命令解释器，也不提供通配符扩展，命令历史等等。SSH的作用是创建一个“通道”，以便在远程计算机上运行 shell，类似于unix的rsh命令，但是在本地与远程计算机之间增加了端对端的加密。</p>
 <p>SSH也不是一个完整的安全解决方案，不过所谓“完整的安全解决方案”是不存在的。它也不能防止“尝试闯入攻击”或“拒绝服务攻击”。它也无法消除病毒、木马、把咖啡洒到键盘上等其它危害。但是，它的确提供了稳固的、用户友好的加密与认证。</p>
@@ -114,6 +113,6 @@
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

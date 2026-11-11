@@ -32,7 +32,7 @@ const TPL_DIR = path.join(ROOT, 'templates');
 import anchor from 'markdown-it-anchor';
 import taskLists from 'markdown-it-task-lists';
 
-const VERSIONS = { css: '1.3.39', js: '1.3.36' };
+const VERSIONS = { css: '1.3.40', js: '1.3.37' };
 
 // ---------- 工具 ----------
 const esc = (s) =>
@@ -125,7 +125,9 @@ function normalizeObsidian(src) {
                 .replace(/ /g, '%20');
             return `![${alt}](/assets/images/${clean})`;
         })
-        .replace(/(?<!!)\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/g, '$1');
+        .replace(/(?<!!)\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/g, '$1')
+        .replace(/^[ \t]*<!--\s*more\s*-->[ \t]*\r?\n?/gim, "")
+        .replace(/<!--\s*more\s*-->/gi, "");
 }
 
 // KaTeX 按需注入片段：仅当文中检测到 $ / $$ 公式时插入 <head>
@@ -176,10 +178,11 @@ for (const file of files) {
     seenSlugs.add(slug);
 
     const { date, hasTime } = parseDate(data.date, file);
-    const html = md.render(normalizeObsidian(content));
+    const normalized = normalizeObsidian(content);
+    const html = md.render(normalized);
     const tocHtml = buildToc(html);
-    const hasMath = /\$\$[\s\S]+?\$\$|\$[^\s$][^$\n]*?\$/.test(content);
-    const words = countWords(content);
+    const hasMath = /\$\$[\s\S]+?\$\$|\$[^\s$][^$\n]*?\$/.test(normalized);
+    const words = countWords(normalized);
     const tags = Array.isArray(data.tags) ? data.tags.map((t) => String(t).trim()).filter(Boolean) : [];
     // 统一按东八区格式化：本地与 GitHub Actions（UTC）构建产物保持一致
     const cnParts = new Intl.DateTimeFormat('zh-CN', {
@@ -269,7 +272,7 @@ for (let i = 0; i < posts.length; i++) {
         author: { '@type': 'Person', name: 'mfcheer', url: `${SITE}/` }
     });
     const tagsHtml = p.tags.length
-        ? `<div class="post-tags">${p.tags.map((t) => `<span class="post-tag">${esc(t)}</span>`).join('')}</div>`
+        ? `<div class="post-tags">${p.tags.map((t) => `<a class="post-tag" href="/blog/?tag=${encodeURIComponent(t)}" title="查看「${esc(t)}」标签的所有文章">#${esc(t)}</a>`).join('')}</div>`
         : '';
     const vars = {
         TITLE: esc(p.title),
@@ -305,11 +308,11 @@ const listHtml = years
             `<div class="post-group">`,
             ...group.map(
                 (p) => [
-                    `<a class="post-item" href="/blog/${p.slug}/">`,
+                    `<a class="post-item" href="/blog/${p.slug}/" data-tags="${esc(p.tags.join(','))}">`,
                     `  <span class="post-item-main">`,
                     `    <span class="post-item-title">${esc(p.title)}</span>`,
                     `    <span class="post-item-summary">${esc(p.summary)}</span>`,
-                    `    <span class="post-item-meta">${p.dateText} · ${p.tags.length ? p.tags.map(esc).join(' / ') : '随笔'} · 约 ${p.minutes} 分钟</span>`,
+                    `    <span class="post-item-meta">${p.dateText} · ${p.tags.length ? p.tags.map((t) => `<span class="post-item-tag" data-tag="${esc(t)}">${esc(t)}</span>`).join(' / ') : '随笔'} · 约 ${p.minutes} 分钟</span>`,
                     `  </span>`,
                     `  <span class="post-item-arrow" aria-hidden="true">→</span>`,
                     `</a>`

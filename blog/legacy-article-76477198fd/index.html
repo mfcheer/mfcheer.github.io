@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,11 +63,11 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>263 字</span>
+                        <span>262 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 1 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     
                 </header>
                 <div class="post-body">
@@ -77,8 +77,7 @@
 2、喜好问题是二分类，喜欢和不喜欢
 3、假设好评的概率=点击数/曝光数
 </code></pre>
-<p>所以，具有这样特征的分布是二项分布。
-&lt;!--more--&gt;</p>
+<p>所以，具有这样特征的分布是二项分布。</p>
 <p>假设A物品曝光10次，被点击9次，B物品曝光1000次，被点击900次。
 如果按照点击率排序的话，A和B应该是获得一样分数的。但是B明显是优于A的，因为A样本少不具有说服性，所以需要进行优化。</p>
 <p>我们需要计算物品的受欢迎程度，引入<a href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval" target="_blank" rel="noreferrer">威尔逊区间公式</a>，对样本数目进行惩罚。
@@ -117,6 +116,6 @@
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

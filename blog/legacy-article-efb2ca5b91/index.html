@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,11 +63,11 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>612 字</span>
+                        <span>611 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 2 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#hadoop核心">Hadoop核心</a></li><li><a href="#hdfs">HDFS</a></li><li class="toc-sub"><a href="#hdfs的关键元素">HDFS的关键元素</a></li><li><a href="#mapreduce">MapReduce</a></li><li><a href="#总结">总结</a></li></ul></nav>
                 </header>
                 <div class="post-body">
@@ -80,8 +80,7 @@ HDFS的设计特点是：
 <p>2、文件分块存储，HDFS会将一个完整的大文件平均分块存储到不同计算器上，它的意义在于读取文件时可以同时从多个主机取不同区块的文件，多主机读取比单主机读取效率要高得多得都。</p>
 <p>3、流式数据访问，一次写入多次读写，这种模式跟传统文件不同，它不支持动态改变文件内容，而是要求让文件一次写入就不做变化，要变化也只能在文件末添加内容。</p>
 <p>4、廉价硬件，HDFS可以应用在普通PC机上，这种机制能够让给一些公司用几十台廉价的计算机就可以撑起一个大数据集群。</p>
-<p>5、硬件故障，HDFS认为所有计算机都可能会出问题，为了防止某个主机失效读取不到该主机的块文件，它将同一个文件块副本分配到其它某几个主机上，如果其中一台主机失效，可以迅速找另一块副本取文件。
-&lt;!--more--&gt;</p>
+<p>5、硬件故障，HDFS认为所有计算机都可能会出问题，为了防止某个主机失效读取不到该主机的块文件，它将同一个文件块副本分配到其它某几个主机上，如果其中一台主机失效，可以迅速找另一块副本取文件。</p>
 <h2 id="hdfs的关键元素" tabindex="-1">HDFS的关键元素</h2>
 <pre><code class="hljs">Block：将一个文件进行分块，通常是64M。
 NameNode：保存整个文件系统的目录信息、文件信息及分块信息，这是由唯一一台主机专门保存，当然这台主机如果出错，NameNode就失效了。在Hadoop2.*开始支持activity-standy模式----如果主NameNode失效，启动备用主机运行NameNode。
@@ -124,6 +123,6 @@ Hadoop典型应用有：搜索、日志处理、推荐系统、数据分析、�
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

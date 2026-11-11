@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,18 +63,17 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>241 字</span>
+                        <span>240 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 1 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     
                 </header>
                 <div class="post-body">
 <p>两个类哈希值相等，不一定equals值相等，因为两个类可能发生哈希冲突，导致哈希的位置是一样的</p>
 <p>如果两个类equals值相等，哈希值一定是一样的</p>
 <p>如果两个类相等，那么哈希值和equals值都相等，也可以通过“=”进行判断
-&lt;!--more--&gt;
 equals只能用来判断两个类的内容是否相同</p>
 <p>哈希的作用是为了加快查找速度，通过计算哈希值的方法减少遍历的时间消耗，但是不同的对象的哈希值也可能是相同的，这就发生了哈希冲突，需要进行处理，拉链法、再哈希等</p>
 <p>例如hashset，在检查元素是否存在时，通过判断元素的哈希值是否已经存在，如果没有，可以直接将元素放入set，否则再对元素进行equals值得比较，因为哈希冲突是可能的</p>
@@ -109,6 +108,6 @@ equals只能用来判断两个类的内容是否相同</p>
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

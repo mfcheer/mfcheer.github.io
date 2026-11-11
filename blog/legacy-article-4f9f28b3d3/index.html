@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,11 +63,11 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>849 字</span>
+                        <span>848 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 2 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#三层体系结构">三层体系结构</a></li><li><a href="#mvc设计思想">MVC设计思想</a></li><li><a href="#三层体系结构内涵">三层体系结构内涵</a></li><li><a href="#mvc设计思想的内涵">MVC设计思想的内涵</a></li><li><a href="#mvc工作流程">MVC工作流程</a></li></ul></nav>
                 </header>
                 <div class="post-body">
@@ -80,7 +80,6 @@
 <p>表现层负责用户界面的交互，表现层不能直接访问数据。业务层负责数据的传递和业务方法的处理，业务层不能直接访问数据库，而是要通过数据访问层提供的接口实现数据的调用。数据访问层负责数据的处理工作，封装了所有与数据库的交互操作。</p>
 <h2 id="mvc设计思想的内涵" tabindex="-1">MVC设计思想的内涵</h2>
 <p>web中引入MVC设计思想是为了实现表现层与业务层的分离，MVC提供了视图与模型分离的机制--控制器。一般把跳转关系的管理、表单数据的封装、国际化、验证等任务交给控制器处理。
-&lt;!--more--&gt;
 controller、view、model并不像三层体系结构那样存在上下层的关系，各层之间是平行的，不是分层模式，而是彼此独立的组件，是相互协作的关系。</p>
 <p>controller接受用户的请求，完成视图与模型的匹配，不负责处理业务信息，只是把用户请求的消息传递给模型，告诉模型的做什么，返回符合要求的视图，起到控制业务流程的作用。一个视图可以对应多个模型，一个模型也可以对应多个视图。</p>
 <p>model是MVC的核心，负责业务流程/状态、业务规则、数据模型的制定。业务流程的处理对其他层是不可见的。model拥有最多的处理任务，其返回的数据是与格式无关的。这样一个model就可以为多个视图提供数据，提高了代码利用率。</p>
@@ -118,6 +117,6 @@ controller、view、model并不像三层体系结构那样存在上下层的关�
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,11 +63,11 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>1034 字</span>
+                        <span>1033 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 3 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#tcpcopy工具分享">tcpcopy工具分享</a></li><li><a href="#1工具介绍">1工具介绍</a></li><li><a href="#2tcpcopy原理">2tcpcopy原理</a></li><li class="toc-sub"><a href="#2.1tcpcopy原理">2.1tcpcopy原理</a></li><li class="toc-sub"><a href="#2.2引流模式">2.2引流模式</a></li><li class="toc-sub toc-sub-deep"><a href="#2.2.1离线回放">2.2.1离线回放</a></li><li class="toc-sub toc-sub-deep"><a href="#2.2.2部分引流">2.2.2部分引流</a></li><li class="toc-sub toc-sub-deep"><a href="#2.2.3放大引流">2.2.3放大引流</a></li><li class="toc-sub"><a href="#2.3tcpcopy注意事项">2.3tcpcopy注意事项</a></li><li><a href="#3操作方法">3操作方法</a></li><li class="toc-sub"><a href="#3.1安装方法">3.1安装方法</a></li><li class="toc-sub"><a href="#3.2部署方法">3.2部署方法</a></li><li><a href="#4总结">4总结</a></li></ul></nav>
                 </header>
                 <div class="post-body">
@@ -88,7 +88,6 @@
 6.返回结果在 IP 层被截获、丢弃，由 intercept 拷贝返回结果的 IP header 返回；
 7.IP header 被发送给线上内核后端机的 tcpcopy 进程。
 </code></pre>
-<p>&lt;!--more--&gt;</p>
 <h2 id="2.2引流模式" tabindex="-1">2.2引流模式</h2>
 <p>引流模式分为离线回放、部分引流和放大引流三种模式。下面分别介绍这三种模式。</p>
 <h3 id="2.2.1离线回放" tabindex="-1">2.2.1离线回放</h3>
@@ -181,6 +180,6 @@ sudo ./tcpcopy -d -x 9909-10.4.20.51:49908 -n 10；(-x表示分布式引流，-d
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

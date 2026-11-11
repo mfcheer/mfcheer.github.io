@@ -24,6 +24,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
 import sharp from 'sharp';
+import { parseExif } from './lib/exif.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -145,7 +146,8 @@ async function processImage(src, id, createdAtFallback) {
         return null;
     }
 
-    const takenAt = createdAtFallback;
+    const exif = meta.exif ? parseExif(meta.exif) : null;
+    const takenAt = exif?.dateTaken ? toCN(exif.dateTaken) : createdAtFallback;
     const fullFile = `${id}.jpg`;
     const thumbFile = `${id}_s.jpg`;
     const fullPath = path.join(GALLERY_ASSETS_DIR, fullFile);
@@ -180,7 +182,8 @@ async function processImage(src, id, createdAtFallback) {
         ratio: Math.round((w / h) * 1000) / 1000,
         takenAt,
         bytes: stat.size,
-        source: src
+        source: src,
+        exif: exif || undefined
     };
 }
 
@@ -320,15 +323,27 @@ async function main() {
                     }
                     const meta = await sharp(path.join(GALLERY_ASSETS_DIR, `${id}.jpg`)).metadata();
                     const lqipBuf = await sharp(path.join(GALLERY_ASSETS_DIR, `${id}.jpg`)).resize({ width: LQIP_W }).jpeg({ quality: 30 }).toBuffer();
+                    let exif = meta.exif ? parseExif(meta.exif) : null;
+                    if (!exif && img.src) {
+                        try {
+                            const origFile = path.join(GALLERY_ASSETS_DIR, path.basename(decodeURIComponent(new URL(img.src).pathname)));
+                            const origStat = await fs.stat(origFile).catch(() => null);
+                            if (origStat) {
+                                const origMeta = await sharp(origFile).metadata().catch(() => null);
+                                if (origMeta?.exif) exif = parseExif(origMeta.exif);
+                            }
+                        } catch (_) {}
+                    }
                     photo = {
                         src: `assets/gallery/${id}.jpg`,
                         thumb: `assets/gallery/${id}_s.jpg`,
                         lqip: `data:image/jpeg;base64,${lqipBuf.toString('base64')}`,
                         w: meta.width, h: meta.height,
                         ratio: Math.round((meta.width / meta.height) * 1000) / 1000,
-                        takenAt: toCN(img.fallbackDate),
+                        takenAt: exif?.dateTaken ? toCN(exif.dateTaken) : toCN(img.fallbackDate),
                         bytes: fullExists.size,
-                        source: img.src
+                        source: img.src,
+                        exif: exif || undefined
                     };
                     console.log(`[Cache Hit] ${id}.jpg`);
                 } else {
@@ -354,7 +369,8 @@ async function main() {
                     h: photo.h,
                     ratio: photo.ratio,
                     lqip: photo.lqip,
-                    date: photo.takenAt || null
+                    date: photo.takenAt || null,
+                    exif: photo.exif || undefined
                 });
             } catch (err) {
                 if (process.env.STRICT_BUILD === '1') throw err;

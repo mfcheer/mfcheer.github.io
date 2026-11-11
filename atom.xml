@@ -44,7 +44,6 @@ docker run -d -p 80:80 --name &amp;lt;容器名&amp;gt; &amp;lt;镜像名&amp;gt
 进入容器bash界面
 docker exec -it &amp;lt;容器名&amp;gt; bash
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h1 id=&quot;所有命令&quot; tabindex=&quot;-1&quot;&gt;所有命令&lt;/h1&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;Usage:	docker COMMAND
 Management Commands:
@@ -133,7 +132,6 @@ CPU消耗大&lt;br&gt;
 加密长度有限制，不可超过公钥长度&lt;br&gt;
 常见算法:  RSA / ECDHE / DH / DHE&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h1 id=&quot;https的优点&quot; tabindex=&quot;-1&quot;&gt;HTTPS的优点&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;使用HTTPS协议可认证用户和服务器，确保数据发送到正确的客户机和服务器；&lt;/li&gt;
@@ -197,7 +195,6 @@ LOCATION
     <content type="html">&lt;p&gt;DFA全称为：Deterministic Finite Automaton,即确定有穷自动机。其特征为：有一个有限状态集合和一些从一个状态通向另一个状态的边，每条边上标记有一个符号，其中一个状态是初态，某些状态是终态。但不同于不确定的有限自动机，DFA中不会有从同一状态出发的两条边标志有相同的符号。常常应用于敏感词过滤，具体的细节原理可以在网上搜到很多，这里就不具体说了。&lt;/p&gt;
 &lt;p&gt;下面给出简单的实现。&lt;/p&gt;
 &lt;p&gt;简单实现代码：&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -304,7 +301,6 @@ true
 传统的日志分析系统提供了一种离线处理日志信息的可扩展方案，但若要进行实时处理，通常会有较大延迟。而现有的消（队列）系统能够很好的处理实时或者近似实时的应用，但未处理的数据通常不会写到磁盘上，这对于Hadoop之类（一小时或者一天只处理一部分数据）的离线应用而言，可能存在问题。Kafka正是为了解决以上问题而设计的，它能够很好地离线和在线应用。
 kafka对消息保存时根据Topic进行归类，发送消息者成为Producer,消息接受者成为Consumer,此外kafka集群有多个kafka实例组成，每个实例(server)成为broker。无论是kafka集群，还是producer和consumer都依赖于zookeeper来保证系统可用性集群保存一些meta信息。&lt;/p&gt;
 &lt;h1 id=&quot;相关术语&quot; tabindex=&quot;-1&quot;&gt;相关术语&lt;/h1&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Broker
 Kafka集群包含一个或多个服务器，这种服务器被称为broker&lt;/li&gt;
@@ -388,8 +384,7 @@ Partition是物理上的概念，每个Topic包含一个或多个Partition.&lt;/
 &lt;p&gt;BoostedTree的基本组成部分是回归树（Classification And Regression Tree），称作CART。
 回归树会把输入的数据，分配到叶子节点上去，每个叶子节点都对应一个实数，非叶子节点都是一个二叉树。属于决策树的一种。
 &lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/52.png&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-决策树自上而下建立，根据属性值大小分裂为左右两个节点。&lt;/p&gt;
+&lt;p&gt;决策树自上而下建立，根据属性值大小分裂为左右两个节点。&lt;/p&gt;
 &lt;h3 id=&quot;treeensemble&quot; tabindex=&quot;-1&quot;&gt;TreeEnsemble&lt;/h3&gt;
 &lt;p&gt;一颗回归树往往无法正确的做出预测，所以可以将多棵树的预测进行一个组合，得到最终的结果。
 预测结果就是各个回归树的和。
@@ -473,7 +468,6 @@ Partition是物理上的概念，每个Topic包含一个或多个Partition.&lt;/
 &lt;p&gt;String str = null ; 表示声明一个字符串对象的引用，但指向为null，也就是说还没有指向任何的内存空间；&lt;/p&gt;
 &lt;p&gt;String str = &amp;quot;&amp;quot;;    表示声明一个字符串类型的引用，其值为&amp;quot;&amp;quot;空字符串，这个str引用指向的是空字符串的内存空间；&lt;/p&gt;
 &lt;p&gt;在java中变量和引用变量是存在栈中（stack），而对象（new产生的）都是存放在堆中（heap）：
-&amp;lt;!-- more --&amp;gt;
 就如下：&lt;/p&gt;
 &lt;p&gt;String str = new String(&amp;quot;abc&amp;quot;) ;&lt;/p&gt;
 &lt;p&gt;ps：=左边的是存放在栈中（stack），=右边是存放在堆中（heap）。&lt;/p&gt;
@@ -536,7 +530,6 @@ Partition是物理上的概念，每个Topic包含一个或多个Partition.&lt;/
 &lt;li&gt;持久性
 事务完成之后，它对于系统的影响是永久性的。该修改即使出现致命的系统故障也将一直保持。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h1 id=&quot;事务隔离&quot; tabindex=&quot;-1&quot;&gt;事务隔离&lt;/h1&gt;
 &lt;p&gt;基于锁实现
 在DBMS中，可以按照锁的粒度把数据库锁分为行级锁(INNODB引擎)、表级锁(MYISAM引擎)和页级锁(BDB引擎 )。&lt;/p&gt;
@@ -595,13 +588,11 @@ Partition是物理上的概念，每个Topic包含一个或多个Partition.&lt;/
     <content type="html">&lt;p&gt;经历了遗憾的两件事&lt;/p&gt;
 &lt;p&gt;1 justinbieber在中国的世界巡演取消。13年的时候因为当时大一没太多的零花钱，放弃了比伯在国内的演唱会&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/9.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-2 MSN解散了，内马尔去了巴黎&lt;/p&gt;
+&lt;p&gt;2 MSN解散了，内马尔去了巴黎&lt;/p&gt;
 &lt;p&gt;”攒够钱就能去诺坎普寻找MSN三叉戟“，这是我之前的想法。想不到这么快就破灭了。希望巴塞罗那越来越辉煌，内少早日登上世界之巅。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/10.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/11.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
 &lt;p&gt;所以，有机会就要抓住，不要拖。有钱真好，至少在很多情况下有选择的权利。&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -623,8 +614,7 @@ Partition是物理上的概念，每个Topic包含一个或多个Partition.&lt;/
 首先要知道mysql命令或mysqladmin命令的完整路径，比如mysql的路径是：/usr/local/mysql/bin/mysql，则可以这样执行命令&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;ln -s /usr/local/mysql/bin/mysql /usr/bin
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-启动mysql
+&lt;p&gt;启动mysql
 进入系统偏好设置，最下边一行，找到mysql打开，点击&amp;quot;Start MySQL Server&amp;quot;，启动mysql
 &lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/19.png&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;
 设置密码&lt;/p&gt;
@@ -682,7 +672,6 @@ Hash索引只能用于对等比较，例如=,&amp;lt;=&amp;gt;（相当于=）�
 &lt;li&gt;如果两个表大小差距较大，则子查询表大的用exists，子查询表小的用in。&lt;/li&gt;
 &lt;li&gt;not in 和not exists，查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；而not extsts的子查询依然能用到表上的索引。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -698,8 +687,7 @@ Hash索引只能用于对等比较，例如=,&amp;lt;=&amp;gt;（相当于=）�
 &lt;p&gt;在LinkedHashMap初始化的时候可以选择一个参数accessOrder，默认为false，map内部会按照插入顺序进行维护。如果设置为true，那么map内部会按照访问顺序进行维护。&lt;/p&gt;
 &lt;p&gt;LinkedHashMap也提供了一个方法removeEldestEntry，只要重写这个方法，就很容易实现LRU的cache。当调用map的put和putAll方法后会调用removeEldestEntry()检查是否应该删除eldest元素。&lt;/p&gt;
 &lt;h1 id=&quot;代码&quot; tabindex=&quot;-1&quot;&gt;代码&lt;/h1&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-构造了一个大小为3的LRU缓存&lt;/p&gt;
+&lt;p&gt;构造了一个大小为3的LRU缓存&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;public class LRUDemo {
 	public static void main(String[] args) {
 		
@@ -831,7 +819,6 @@ logging:
   
 &amp;lt;/project&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h2 id=&quot;mybatis注解方式&quot; tabindex=&quot;-1&quot;&gt;mybatis注解方式&lt;/h2&gt;
 &lt;p&gt;例子&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;package dao;
@@ -924,8 +911,7 @@ public class MessageBoardController {
 &lt;p&gt;moveFromLocal&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;hadoop fs -moveFromLocal  &amp;lt; local src &amp;gt; ... &amp;lt; hdfs dst &amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-rm命令，删除多个文件或目录&lt;/p&gt;
+&lt;p&gt;rm命令，删除多个文件或目录&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;hadoop fs -rm &amp;lt; hdfs file &amp;gt;
 hadoop fs -rm -r &amp;lt; hdfs dir&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -975,8 +961,7 @@ hadoop fs -du - h &amp;lt; hdsf path&amp;gt;
 &lt;h1 id=&quot;适用场景分析&quot; tabindex=&quot;-1&quot;&gt;适用场景分析&lt;/h1&gt;
 &lt;p&gt;BIO方式适用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，但程序直观简单易理解。&lt;/p&gt;
 &lt;p&gt;NIO方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂。&lt;/p&gt;
-&lt;p&gt;AIO方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用OS参与并发操作，编程比较复杂。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;AIO方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用OS参与并发操作，编程比较复杂。&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -991,8 +976,7 @@ hadoop fs -du - h &amp;lt; hdsf path&amp;gt;
 &lt;h2 id=&quot;final变量&quot; tabindex=&quot;-1&quot;&gt;final变量&lt;/h2&gt;
 &lt;p&gt;凡是对成员变量或者本地变量(在方法中的或者代码块中的变量称为本地变量)声明为final的都叫作final变量。final变量经常和static关键字一起使用，作为常量。final变量是只读的&lt;/p&gt;
 &lt;h2 id=&quot;final方法&quot; tabindex=&quot;-1&quot;&gt;final方法&lt;/h2&gt;
-&lt;p&gt;final也可以声明方法。方法前面加上final关键字，代表这个方法不可以被子类的方法重写。如果你认为一个方法的功能已经足够完整了，子类中不需要改变的话，你可以声明此方法为final。final方法比非final方法要快，因为在编译的时候已经静态绑定了，不需要在运行时再动态绑定。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;final也可以声明方法。方法前面加上final关键字，代表这个方法不可以被子类的方法重写。如果你认为一个方法的功能已经足够完整了，子类中不需要改变的话，你可以声明此方法为final。final方法比非final方法要快，因为在编译的时候已经静态绑定了，不需要在运行时再动态绑定。&lt;/p&gt;
 &lt;h2 id=&quot;final类&quot; tabindex=&quot;-1&quot;&gt;final类&lt;/h2&gt;
 &lt;p&gt;使用final来修饰的类叫作final类。final类通常功能是完整的，它们不能被继承。Java中有许多类是final的，譬如String, Interger以及其他包装类。&lt;/p&gt;
 &lt;h2 id=&quot;final关键字的好处&quot; tabindex=&quot;-1&quot;&gt;final关键字的好处&lt;/h2&gt;
@@ -1109,8 +1093,7 @@ Gain(A, X) = H(X) - Sum(|Xv| / |X| * H(Xv))  {v: A的所有可能值}，Xv表�
 	
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-2、编译Java程序 javac FastTextJNI.java&lt;/p&gt;
+&lt;p&gt;2、编译Java程序 javac FastTextJNI.java&lt;/p&gt;
 &lt;p&gt;3、继续编译生成c的头文件（给c/c++程序用）
 javah -jni -classpath . FastTextJNI，生成了头文件FastTextJNI.h&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs language-java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;/* DO NOT EDIT THIS FILE - it is machine generated */&lt;/span&gt;
@@ -1215,7 +1198,6 @@ ssh-keygen -t rsa -C “youremail@example.com”
 执行完之后，我们可以找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的密钥对，id_rsa是私钥，id_rsa.pub是公钥。
 登录GitHub，打开”Account settings”，找到”SSH Keys”页面，点击”Add SSH Key”，把id_rsa.pub文件中的内容粘贴过来。
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h1 id=&quot;创建版本库(repository)&quot; tabindex=&quot;-1&quot;&gt;创建版本库(Repository)&lt;/h1&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;新建一个目录: mkdir my_dir &amp;amp;&amp;amp; cd my_dir
 用 git init 把目录变成Git可以管理Repository
@@ -1417,7 +1399,6 @@ y的含义就是x与平均值之间的距离，衡量单位是标准差&lt;/p&gt
 &lt;p&gt;可以看我CSDN的一篇文章: &lt;a href=&quot;https://blog.csdn.net/u014427196/article/details/52454462&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;https://blog.csdn.net/u014427196/article/details/52454462&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&quot;concurrentskiplistmap&quot; tabindex=&quot;-1&quot;&gt;ConcurrentSkipListMap&lt;/h2&gt;
 &lt;p&gt;通过跳表实现的map可以进行快速查找&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1516,8 +1497,7 @@ public class lockDemo implements Runnable{
 &lt;li&gt;tryLock()方法是有返回值的，它表示用来尝试获取锁，如果获取成功，则返回true，如果获取失败（即锁已被其他线程获取），则返回false，也就说这个方法无论如何都会立即返回。在拿不到锁时不会一直在那等待。&lt;/li&gt;
 &lt;li&gt;tryLock(long time, TimeUnit unit)方法和tryLock()方法是类似的，只不过区别在于这个方法在拿不到锁时会等待一定的时间，在时间期限之内如果还拿不到锁，就返回false。如果如果一开始拿到锁或者在等待期间内拿到了锁，则返回true。&lt;/li&gt;
 &lt;li&gt;lockInterruptibly()方法比较特殊，当通过这个方法去获取锁时，如果线程正在等待获取锁，则这个线程能够响应中断，即中断线程的等待状态。也就使说，当两个线程同时通过lock.lockInterruptibly()想获取某个锁时，假若此时线程A获取到了锁，而线程B只有在等待，那么对线程B调用threadB.interrupt()方法能够中断线程B的等待过程。&lt;/li&gt;
-&lt;li&gt;unlock()方法，释放锁。
-&amp;lt;!--more--&amp;gt;&lt;/li&gt;
+&lt;li&gt;unlock()方法，释放锁。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&quot;volatile关键字&quot; tabindex=&quot;-1&quot;&gt;volatile关键字&lt;/h1&gt;
 &lt;ul&gt;
@@ -1596,7 +1576,6 @@ GSSAPIDelegateCredentials yes
 GSSAPITrustDNS yes 
 GSSAPIKeyExchange yes
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h2 id=&quot;升级macos-sierra报错处理&quot; tabindex=&quot;-1&quot;&gt;升级MacOs sierra报错处理&lt;/h2&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;报错如下：
 /etc/ssh/ssh_config: line 4: Bad configuration option: gssapitrustdns
@@ -1637,7 +1616,6 @@ GSSAPIKeyExchange yes
 &lt;p&gt;表现层负责用户界面的交互，表现层不能直接访问数据。业务层负责数据的传递和业务方法的处理，业务层不能直接访问数据库，而是要通过数据访问层提供的接口实现数据的调用。数据访问层负责数据的处理工作，封装了所有与数据库的交互操作。&lt;/p&gt;
 &lt;h2 id=&quot;mvc设计思想的内涵&quot; tabindex=&quot;-1&quot;&gt;MVC设计思想的内涵&lt;/h2&gt;
 &lt;p&gt;web中引入MVC设计思想是为了实现表现层与业务层的分离，MVC提供了视图与模型分离的机制--控制器。一般把跳转关系的管理、表单数据的封装、国际化、验证等任务交给控制器处理。
-&amp;lt;!--more--&amp;gt;
 controller、view、model并不像三层体系结构那样存在上下层的关系，各层之间是平行的，不是分层模式，而是彼此独立的组件，是相互协作的关系。&lt;/p&gt;
 &lt;p&gt;controller接受用户的请求，完成视图与模型的匹配，不负责处理业务信息，只是把用户请求的消息传递给模型，告诉模型的做什么，返回符合要求的视图，起到控制业务流程的作用。一个视图可以对应多个模型，一个模型也可以对应多个视图。&lt;/p&gt;
 &lt;p&gt;model是MVC的核心，负责业务流程/状态、业务规则、数据模型的制定。业务流程的处理对其他层是不可见的。model拥有最多的处理任务，其返回的数据是与格式无关的。这样一个model就可以为多个视图提供数据，提高了代码利用率。&lt;/p&gt;
@@ -1660,8 +1638,7 @@ controller、view、model并不像三层体系结构那样存在上下层的关�
 &lt;p&gt;pom是指project object Model。pom是一个xml文件。是maven工作的基础，maven会去项目根目录下读取pom.xml获得需要的配置信息。&lt;/p&gt;
 &lt;p&gt;pom文件中包含了项目的信息和maven build项目所需的配置信息，通常有项目信息(如版本、成员)、项目的依赖、插件和goal、build选项等等。&lt;/p&gt;
 &lt;p&gt;pom是可以继承的，通常对于一个大型的项目或是多个module的情况，子模块的pom需要指定父模块的pom。
-pom文件中节点含义如下：
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+pom文件中节点含义如下：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;project pom文件的顶级元素
 modelVersion 所使用的object model版本，为了确保稳定的使用，这个元素是强制性的。除非maven开发者升级模板，否则不需要修改
 groupId 是项目创建团体或组织的唯一标志符，通常是域名倒写，如groupId  org.apache.maven.plugins就是为所有maven插件预留的
@@ -1746,8 +1723,7 @@ redis-db_version-databases-EOF-check_sum&lt;/p&gt;
 &lt;p&gt;一旦采用该方式，那么你的整个Redis数据库将只包含一个文件，这样非常方便进行备份。比如你可能打算没1天归档一些数据。
 方便备份，我们可以很容易的将一个一个RDB文件移动到其他的存储介质上
 RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快。
-RDB 可以最大化 Redis 的性能：父进程在保存 RDB 文件时唯一要做的就是 fork 出一个子进程，然后这个子进程就会处理接下来的所有保存工作，父进程无须执行任何磁盘 I/O 操作。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+RDB 可以最大化 Redis 的性能：父进程在保存 RDB 文件时唯一要做的就是 fork 出一个子进程，然后这个子进程就会处理接下来的所有保存工作，父进程无须执行任何磁盘 I/O 操作。&lt;/p&gt;
 &lt;h2 id=&quot;劣势&quot; tabindex=&quot;-1&quot;&gt;劣势&lt;/h2&gt;
 &lt;p&gt;如果你需要尽量避免在服务器故障时丢失数据，那么 RDB 不适合你。 虽然 Redis 允许你设置不同的保存点（save point）来控制保存 RDB 文件的频率， 但是， 因为RDB 文件需要保存整个数据集的状态， 所以它并不是一个轻松的操作。 因此你可能会至少 5 分钟才保存一次 RDB 文件。 在这种情况下， 一旦发生故障停机， 你就可能会丢失好几分钟的数据。
 每次保存 RDB 的时候，Redis 都要 fork() 出一个子进程，并由子进程来进行实际的持久化工作。 在数据集比较庞大时， fork() 可能会非常耗时，造成服务器在某某毫秒内停止处理客户端； 如果数据集非常巨大，并且 CPU 时间非常紧张的话，那么这种停止时间甚至可能会长达整整一秒。 虽然 AOF 重写也需要进行 fork() ，但无论 AOF 重写的执行间隔有多长，数据的耐久性都不会有任何损失。&lt;/p&gt;
@@ -1813,8 +1789,7 @@ getAttributeNames方法，获取request对象的所有属性名，返回的是�
 &lt;li&gt;一个web资源收到客户端请求后，通知服务器去调用另外一个web资源进行处理，称之为请求转发/307。&lt;/li&gt;
 &lt;li&gt;一个web资源收到客户端请求后，通知浏览器去访问另外一个web资源进行处理，称之为请求重定向/302。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;参考:&lt;a href=&quot;http://www.cnblogs.com/xdp-gacl/p/3798347.html&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;http://www.cnblogs.com/xdp-gacl/p/3798347.html&lt;/a&gt;
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;参考:&lt;a href=&quot;http://www.cnblogs.com/xdp-gacl/p/3798347.html&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;http://www.cnblogs.com/xdp-gacl/p/3798347.html&lt;/a&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1850,7 +1825,6 @@ Lambda表达式由三个部分组成：第一部分为一个括号内用逗号�
 String fString = f.apply(5);
 System.out.println(fString);
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h1 id=&quot;foreach方法&quot; tabindex=&quot;-1&quot;&gt;forEach方法&lt;/h1&gt;
 &lt;p&gt;使用forEach方法遍历List和Map&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;public static void main(String args[]) {
@@ -1915,8 +1889,7 @@ rlList.forEach(t-&amp;gt;{
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;开始很疑惑，为什么这样写，后来上网搜了一下才恍然大悟。这种语法是为了解决代码嵌套、实现goto的用途&lt;/p&gt;
 &lt;p&gt;下面是同样功能的三段代码&lt;/p&gt;
-&lt;p&gt;1、代码嵌套
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;1、代码嵌套&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs language-java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt;( A==&lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt; ) {
     &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt;(B == &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;) {
     	&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt;(C == &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;) {
@@ -1989,7 +1962,6 @@ tag:
     <summary>历史迁移文章：高频词</summary>
     <content type="html">&lt;p&gt;CountVectorizer是用于产生文本统计类特征的工具。将分词后的多个文章作为输入，词频统计结果作为输出。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;p&gt;假设通过jieba分词处理好的数据为  [&#39;hello&#39;, &#39;hello everyone&#39;, &#39;hello china&#39;]&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;from sklearn.feature_extraction.text import CountVectorizer
 
@@ -2037,8 +2009,7 @@ ORM工具简化了数据创建，数据处理和数据访问。它是将对象�
 &lt;p&gt;自动创建表： Hibernate框架提供了自动创建数据库表的功能。 因此，无需手动在数据库中创建表。&lt;/p&gt;
 &lt;p&gt;简化复杂连接： 在hibernate框架中可轻松获取多个表中的数据。
 提供查询统计和数据库状态：&lt;/p&gt;
-&lt;p&gt;Hibernate支持查询缓存，并提供有关查询和数据库状态的统计信息。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;Hibernate支持查询缓存，并提供有关查询和数据库状态的统计信息。&lt;/p&gt;
 &lt;h1 id=&quot;hibernate和mybatis&quot; tabindex=&quot;-1&quot;&gt;Hibernate和MyBatis&lt;/h1&gt;
 &lt;p&gt;Hibernate：Hibernate是当前最流行的ORM框架之一，对JDBC提供了较为完整的封装。Hibernate的O/R Mapping实现了POJO 和数据库表之间的映射，以及SQL的自动生成和执行。&lt;/p&gt;
 &lt;p&gt;Mybatis：Mybatis同样也是非常流行的ORM框架，主要着力点在于 POJO 与 SQL 之间的映射关系。然后通过映射配置文件，将SQL所需的参数，以及返回的结果字段映射到指定 POJO 。相对Hibernate“O/R”而言，Mybatis 是一种“Sql Mapping”的ORM实现。&lt;/p&gt;
@@ -2096,8 +2067,7 @@ MyBatis容易掌握，而Hibernate门槛较高。&lt;/p&gt;
 　　3）主服务器BGSAVE执行完后，向所有从服务器发送快照文件，并在发送期间继续记录被执行的写命令；
 　　4）从服务器收到快照文件后丢弃所有旧数据，载入收到的快照；
 　　5）主服务器快照发送完毕后开始向从服务器发送缓冲区中的写命令；
-　　6）从服务器完成对快照的载入，开始接收命令请求，并执行来自主服务器缓冲区的写命令；
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+　　6）从服务器完成对快照的载入，开始接收命令请求，并执行来自主服务器缓冲区的写命令；&lt;/p&gt;
 &lt;h1 id=&quot;增量同步&quot; tabindex=&quot;-1&quot;&gt;增量同步&lt;/h1&gt;
 &lt;p&gt;Redis增量复制是指Slave初始化后开始正常工作时主服务器发生的写操作同步到从服务器的过程。
 增量复制的过程主要是主服务器每执行一个写命令就会向从服务器发送相同的写命令，从服务器接收并执行收到的写命令&lt;/p&gt;
@@ -2208,7 +2178,6 @@ ok          command-line-arguments        &lt;span class=&quot;hljs-number&quot;
 &lt;p&gt;例子：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mysql -h10.16.44.210 -P3350 -uuser -ppassword
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h1 id=&quot;创建一个数据库&quot; tabindex=&quot;-1&quot;&gt;创建一个数据库&lt;/h1&gt;
 &lt;p&gt;使用 create database 语句可完成对数据库的创建, 创建命令的格式如下:&lt;/p&gt;
 &lt;p&gt;create database 数据库名 [其他选项];&lt;/p&gt;
@@ -2334,8 +2303,7 @@ AUC值是一个概率值，当你随机挑选一个正样本以及一个负样�
 2、喜好问题是二分类，喜欢和不喜欢
 3、假设好评的概率=点击数/曝光数
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;所以，具有这样特征的分布是二项分布。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;所以，具有这样特征的分布是二项分布。&lt;/p&gt;
 &lt;p&gt;假设A物品曝光10次，被点击9次，B物品曝光1000次，被点击900次。
 如果按照点击率排序的话，A和B应该是获得一样分数的。但是B明显是优于A的，因为A样本少不具有说服性，所以需要进行优化。&lt;/p&gt;
 &lt;p&gt;我们需要计算物品的受欢迎程度，引入&lt;a href=&quot;https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;威尔逊区间公式&lt;/a&gt;，对样本数目进行惩罚。
@@ -2355,8 +2323,7 @@ AUC值是一个概率值，当你随机挑选一个正样本以及一个负样�
     <content type="html">&lt;h1 id=&quot;下载配色&quot; tabindex=&quot;-1&quot;&gt;下载配色&lt;/h1&gt;
 &lt;p&gt;打开iterm的官方主题配置站  &lt;a href=&quot;http://github.com/mbadolato/iTerm2-Color-Schemes%EF%BC%8C%E5%B0%86%E8%B5%84%E6%BA%90%E4%B8%8B%E8%BD%BD%E8%87%B3%E6%9C%AC%E5%9C%B0,%E8%A7%A3%E5%8E%8B%E3%80%82&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;github.com/mbadolato/iTerm2-Color-Schemes，将资源下载至本地,解压。&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;打开iTerm2，import导入配置。
-&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/17.png&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/17.png&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
 &lt;h1 id=&quot;设置&quot; tabindex=&quot;-1&quot;&gt;设置&lt;/h1&gt;
 &lt;p&gt;vim ~/.bash_profile&lt;/p&gt;
 &lt;p&gt;添加以下代码&lt;/p&gt;
@@ -2483,8 +2450,7 @@ L1正则化表示某个向量中所有元素绝对值的和。
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos1/70.png&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
 &lt;h2 id=&quot;奇异矩阵&quot; tabindex=&quot;-1&quot;&gt;奇异矩阵&lt;/h2&gt;
 &lt;p&gt;奇异矩阵是线性代数的概念，就是对应的行列式等于0的矩阵。&lt;/p&gt;
-&lt;p&gt;奇异矩阵的判断方法：首先，看这个矩阵是不是方阵（即行数和列数相等的矩阵。若行数和列数不相等，那就谈不上奇异矩阵和非奇异矩阵）。 然后，再看此方阵的行列式|A|是否等于0，若等于0，称矩阵A为奇异矩阵；若不等于0，称矩阵A为非奇异矩阵。 同时，由|A|≠0可知矩阵A可逆，这样可以得出另外一个重要结论:可逆矩阵就是非奇异矩阵，非奇异矩阵也是可逆矩阵。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;奇异矩阵的判断方法：首先，看这个矩阵是不是方阵（即行数和列数相等的矩阵。若行数和列数不相等，那就谈不上奇异矩阵和非奇异矩阵）。 然后，再看此方阵的行列式|A|是否等于0，若等于0，称矩阵A为奇异矩阵；若不等于0，称矩阵A为非奇异矩阵。 同时，由|A|≠0可知矩阵A可逆，这样可以得出另外一个重要结论:可逆矩阵就是非奇异矩阵，非奇异矩阵也是可逆矩阵。&lt;/p&gt;
 &lt;h2 id=&quot;非奇异矩阵&quot; tabindex=&quot;-1&quot;&gt;非奇异矩阵&lt;/h2&gt;
 &lt;p&gt;n 阶方阵 A 是非奇异矩阵的充要条件是 A 可逆，即可逆方阵就是非奇异矩阵。&lt;/p&gt;
 &lt;h2 id=&quot;单位矩阵&quot; tabindex=&quot;-1&quot;&gt;单位矩阵&lt;/h2&gt;
@@ -2524,7 +2490,6 @@ public class InterruptDemo {
 }
 不会发生任何中断
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;package Chapter02;
 
 public class InterruptDemo {
@@ -2873,7 +2838,6 @@ Client收到FIN后，Client进入TIME_WAIT状态，接着发送一个ACK给Serve
 &lt;p&gt;2、被篡改的危险：第三方可以截获并修改你的内容&lt;/p&gt;
 &lt;p&gt;3、被冒充的风险：第三方可以伪装成通信方与你通信&lt;/p&gt;
 &lt;p&gt;HTTPS涉及到了很多概念，比如SSL/TLS，数字证书、数字签名、加密、认证、公钥和私钥等&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -2905,7 +2869,6 @@ get_bit(char x,int n)
 &lt;h1 id=&quot;详细的介绍&quot; tabindex=&quot;-1&quot;&gt;详细的介绍&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/dadoneo/article/details/6847481&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;http://blog.csdn.net/dadoneo/article/details/6847481&lt;/a&gt;&lt;/p&gt;
 &lt;h1 id=&quot;java简单实现&quot; tabindex=&quot;-1&quot;&gt;Java简单实现&lt;/h1&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;import java.util.*;
 
 public class BloomFilter {
@@ -2990,8 +2953,7 @@ hexo deploy #将.deploy目录部署到GitHub
 hexo help  #查看帮助
 hexo version  #查看Hexo的版本
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-文章在 source/_posts，编辑器可以用 Sublime，支持 markdown 语法。如果想修改头像可以直接在主题的 _config.yml 文件里面修改，友情链接，之类的都在这里，修改名字在 public/index.html 里修改&lt;/p&gt;
+&lt;p&gt;文章在 source/_posts，编辑器可以用 Sublime，支持 markdown 语法。如果想修改头像可以直接在主题的 _config.yml 文件里面修改，友情链接，之类的都在这里，修改名字在 public/index.html 里修改&lt;/p&gt;
 &lt;p&gt;文章链接设置，避免出现中文：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;_config.yml中添加：
 permalink: :year:month:day-:urlname.html
@@ -3307,8 +3269,7 @@ logger.info(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;传入的数据�
 &lt;span class=&quot;hljs-type&quot;&gt;Workbook&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;workbook&lt;/span&gt; &lt;span class=&quot;hljs-operator&quot;&gt;=&lt;/span&gt; ExcelUtil.createExcel(&lt;span class=&quot;hljs-built_in&quot;&gt;this&lt;/span&gt;.excelHead, &lt;span class=&quot;hljs-built_in&quot;&gt;this&lt;/span&gt;.dataList);
 workbook.write(response.getOutputStream());
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-构造Excel&lt;/p&gt;
+&lt;p&gt;构造Excel&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs language-java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title class_&quot;&gt;ExcelUtil&lt;/span&gt; {
 
     &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Log&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;hljs-operator&quot;&gt;=&lt;/span&gt; LogFactory.getLog(ExcelUtil.class);
@@ -3345,7 +3306,6 @@ workbook.write(response.getOutputStream());
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -3362,8 +3322,7 @@ workbook.write(response.getOutputStream());
 &lt;p&gt;贝叶斯公式用来描述两个条件概率之间的关系，比如 P(A|B) 和 P(B|A)。按照乘法法则：P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)，可以立刻导出。如上公式也可变形为：P(B|A)=P(A|B)*P(B)/P(A)。而其中的P(A)可以由全概率公式展开。得到最终的贝叶斯公式
 &lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos1/71.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;
 如果B事件是有多个独立子事件构成，那么公式如下：
-&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos1/72.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos1/72.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
 &lt;h2 id=&quot;常见离散型分布&quot; tabindex=&quot;-1&quot;&gt;常见离散型分布&lt;/h2&gt;
 &lt;h3 id=&quot;bernoulli分布&quot; tabindex=&quot;-1&quot;&gt;Bernoulli分布&lt;/h3&gt;
 &lt;p&gt;又名两点分布或者0-1分布。若Bernoulli试验成功，则Bernoulli随机变量X取值为1，否则X为0。记试验成功概率为θ，即P(X=1)=θ,p(X=0)=1-θ。均值μ=θ，方差 =θ(1-θ)&lt;/p&gt;
@@ -3424,7 +3383,6 @@ Beta分布：beta分布的支持区间为[0,1]&lt;/p&gt;
 6.返回结果在 IP 层被截获、丢弃，由 intercept 拷贝返回结果的 IP header 返回；
 7.IP header 被发送给线上内核后端机的 tcpcopy 进程。
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h2 id=&quot;2.2引流模式&quot; tabindex=&quot;-1&quot;&gt;2.2引流模式&lt;/h2&gt;
 &lt;p&gt;引流模式分为离线回放、部分引流和放大引流三种模式。下面分别介绍这三种模式。&lt;/p&gt;
 &lt;h3 id=&quot;2.2.1离线回放&quot; tabindex=&quot;-1&quot;&gt;2.2.1离线回放&lt;/h3&gt;
@@ -3512,8 +3470,7 @@ sudo ./tcpcopy -d -x 9909-10.4.20.51:49908 -n 10；(-x表示分布式引流，-d
 &lt;li&gt;互熵损失 （Cross Entropy Loss，Softmax Loss ）：用于Logistic 回归与Softmax 分类中；&lt;/li&gt;
 &lt;li&gt;平方损失（Square Loss）：主要是最小二乘法（OLS）中；&lt;/li&gt;
 &lt;li&gt;指数损失（Exponential Loss） ：主要用于Adaboost 集成学习算法中；&lt;/li&gt;
-&lt;li&gt;其他损失（如0-1损失，绝对值损失）
-&amp;lt;!--more--&amp;gt;&lt;/li&gt;
+&lt;li&gt;其他损失（如0-1损失，绝对值损失）&lt;/li&gt;
 &lt;/ol&gt;
 </content>
   </entry>
@@ -3527,8 +3484,7 @@ sudo ./tcpcopy -d -x 9909-10.4.20.51:49908 -n 10；(-x表示分布式引流，-d
     <content type="html">&lt;p&gt;KNN（K Nearest Neighbor）算法是机器学习里面常用的一种分类算法，假设一个样本空间被分为几类，然后给定一个待分类所有的特征数据，通过计算距离该数据的最近的K个样本来判断这个数据属于哪一类。如果距离待分类属性最近的K个类大多数都属于某一个特定的类，那么这个待分类的数据也就属于这个类。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos1/78.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
 &lt;p&gt;如图所示，假设现在需要对中间绿色的圆进行分类，假设我们寻找距离这个绿色圆最近的3个样本，即K=3，那么可以看出这个绿色圆属于红色三角形所在的类；如果K=5，因为蓝色方框最多，所以此时绿色圆属于蓝色方框所在的类。从而得到当K值取值不同时，得到的分类结果也可能不一样，所以很多时候K值得选取很关键，这就是KNN的核心思想。如果类别个数为偶数，那么K通常会设置为一个奇数；如果类别个数为奇数，K通常设置为偶数，这样就能保证不会有平局的发生。&lt;/p&gt;
-&lt;p&gt;每预测一个新样本的所属类别时，都会对整体样本进行遍历，可以看出KNN的效率实际上是十分低下的。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;每预测一个新样本的所属类别时，都会对整体样本进行遍历，可以看出KNN的效率实际上是十分低下的。&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -3549,8 +3505,7 @@ sudo ./tcpcopy -d -x 9909-10.4.20.51:49908 -n 10；(-x表示分布式引流，-d
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;出现TIME_WAIT状态过多，怎么解决呢？
 可以通过修改内核参数进行缓解
-设置如下参数：
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+设置如下参数：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_tw_reuse = 1
 net.ipv4.tcp_tw_recycle = 1
@@ -3581,7 +3536,6 @@ net.ipv4.tcp_fin_timeout 修改系統默认的TIMEOUT 时间。&lt;/p&gt;
 &lt;li&gt;Variance(方差)
 衡量每次在不同数据上训练生成的不同模型之间的差异性大小的度量值。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h1 id=&quot;常用性能度量指标&quot; tabindex=&quot;-1&quot;&gt;常用性能度量指标&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;均方误差&lt;/li&gt;
@@ -3602,7 +3556,6 @@ net.ipv4.tcp_fin_timeout 修改系統默认的TIMEOUT 时间。&lt;/p&gt;
 &lt;p&gt;SSH(the Secure Shell), 是一个很流行的、强大的、基于软件的网络安全工具。它监听端口22的连接。任何时候，只要电脑向网络上发送数据，SSH都会自动加密。当接受到数据时，SSH会自动解密。这就是所谓的透明加密：用户象往常一样工作，并不会意识到他们的网络通讯受到了安全加密的保护。另外，SSH使用了现代的安全加密算法，可以用于大公司的关键应用。&lt;/p&gt;
 &lt;p&gt;SSH采用了client/server体系结构。管理员在服务器上运行SSH server, 用户使用SSH client向服务器发出请求，比如“让我登录吧”，“传送个文件给我”，“请执行这个命令”。client与server之间的所有通讯都进行了安全加密，以防被人修改。&lt;/p&gt;
 &lt;p&gt;基于SSH的产品可以是client或server, 也可以两者都包括。Uinx上的产品通常包含client和server两者；其它平台通常只有client，现在也出现了基于Windows的服务器。&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 &lt;h1 id=&quot;ssh-不是什么&quot; tabindex=&quot;-1&quot;&gt;SSH 不是什么&lt;/h1&gt;
 &lt;p&gt;虽然SSH代表Secure Shell, 但是它并不是真正意义上的shell，他不是命令解释器，也不提供通配符扩展，命令历史等等。SSH的作用是创建一个“通道”，以便在远程计算机上运行 shell，类似于unix的rsh命令，但是在本地与远程计算机之间增加了端对端的加密。&lt;/p&gt;
 &lt;p&gt;SSH也不是一个完整的安全解决方案，不过所谓“完整的安全解决方案”是不存在的。它也不能防止“尝试闯入攻击”或“拒绝服务攻击”。它也无法消除病毒、木马、把咖啡洒到键盘上等其它危害。但是，它的确提供了稳固的、用户友好的加密与认证。&lt;/p&gt;
@@ -3652,7 +3605,6 @@ net.ipv4.tcp_fin_timeout 修改系統默认的TIMEOUT 时间。&lt;/p&gt;
 &lt;h2 id=&quot;具体参数&quot; tabindex=&quot;-1&quot;&gt;具体参数&lt;/h2&gt;
 &lt;p&gt;net.core.netdev_max_backlog = 400000
 该参数决定了，网络设备接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目。
-&amp;lt;!--more--&amp;gt;
 net.core.optmem_max = 10000000
 该参数指定了每个套接字所允许的最大缓冲区的大小&lt;/p&gt;
 &lt;p&gt;net.core.rmem_default = 10000000
@@ -3758,8 +3710,7 @@ keepalive探测包的发送间隔&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;有什么区别吗？答案是有的&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/22.png&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
-&lt;p&gt;关键在于type上
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;关键在于type上&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;使用字符串类型查找的type是const，用的是索引
 使用数字查找的type是ALL，也就是全表扫描
 &lt;/code&gt;&lt;/pre&gt;
@@ -3798,13 +3749,11 @@ mysql不会自动把数字转成字符串，而是把每个查询到的结果转
     <summary>历史迁移文章：Fitness</summary>
     <content type="html">&lt;p&gt;七月初开始对身材进行控制。一个月的时间瘦了近10斤。前一个月采用的方式是控制饮食+跑步。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/5.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;
-&amp;lt;!--more--&amp;gt;
 &lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/6.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
 &lt;p&gt;但是到了后期，感觉到了瓶颈。饮食稍微不控制，就没什么效果，跑步太多对膝盖也有伤害。毕竟美食是人生一大乐趣，所以尝试了有氧。&lt;/p&gt;
 &lt;p&gt;天猫买了一桶蛋白粉，一对哑铃，开练！飞鸟，卧推，卷腹...在家跟着视频教材练习，饮食比之前摄入的热量多了，但是10多天下来感觉到身体维度的变化，体重也有略微下降，因为肌肉量增加，会提高人体的基础代谢，所以有氧的方式是科学的。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/7.png&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
 &lt;p&gt;继续坚持几个月看效果！&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -3852,8 +3801,7 @@ tail -f /var/log/messages
 &lt;p&gt;主机文件下载到本地&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;sz &amp;quot;filename&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-日志定期清理sh&lt;/p&gt;
+&lt;p&gt;日志定期清理sh&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;#!/bin/bash
 log_path=/opt/web/mFangchanIndex #日志路径
 export log_path
@@ -4036,7 +3984,6 @@ alias rm=&#39;safe_rm.sh&#39;
 &lt;p&gt;它可以认为是 if-then 规则的集合，也可以认为是定义在特征空间与类空间上的条件概率分布。&lt;/p&gt;
 &lt;p&gt;决策树的优点：可读性强，分类速度快。&lt;/p&gt;
 &lt;p&gt;决策树学习通常包括 3 个步骤：特征选择、决策树的生成和决策树的修剪。&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -4400,7 +4347,6 @@ Pool 没有对象了，调用 Get:  &amp;amp;{None}
     <content type="html">&lt;p&gt;两个类哈希值相等，不一定equals值相等，因为两个类可能发生哈希冲突，导致哈希的位置是一样的&lt;/p&gt;
 &lt;p&gt;如果两个类equals值相等，哈希值一定是一样的&lt;/p&gt;
 &lt;p&gt;如果两个类相等，那么哈希值和equals值都相等，也可以通过“=”进行判断
-&amp;lt;!--more--&amp;gt;
 equals只能用来判断两个类的内容是否相同&lt;/p&gt;
 &lt;p&gt;哈希的作用是为了加快查找速度，通过计算哈希值的方法减少遍历的时间消耗，但是不同的对象的哈希值也可能是相同的，这就发生了哈希冲突，需要进行处理，拉链法、再哈希等&lt;/p&gt;
 &lt;p&gt;例如hashset，在检查元素是否存在时，通过判断元素的哈希值是否已经存在，如果没有，可以直接将元素放入set，否则再对元素进行equals值得比较，因为哈希冲突是可能的&lt;/p&gt;
@@ -4439,8 +4385,7 @@ Docker version 17.09.0-ce, build afdb6d4
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;docker images hello-world
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/39.png&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-制作一个容器&lt;/p&gt;
+&lt;p&gt;制作一个容器&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;docker run hello-world
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/40.png&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;
@@ -4495,8 +4440,7 @@ docker run -d -p 80:80 --name webserver nginx
     <summary>历史迁移文章：协同过滤</summary>
     <content type="html">&lt;h1 id=&quot;协同过滤&quot; tabindex=&quot;-1&quot;&gt;协同过滤&lt;/h1&gt;
 &lt;p&gt;什么是协同过滤 (Collaborative Filtering, 简称CF)，首先想一个简单的问题，如果你现在想看个电影，但你不知道具体看哪部，你会怎么做？大部分的人会问问周围的朋友，看看最近有什么好看的电影推荐，而我们一般更倾向于从口味比较类似的朋友那里得到推荐。这就是协同过滤的核心思想。&lt;/p&gt;
-&lt;p&gt;　　协同过滤一般是在海量的用户中发掘出一小部分和你品位比较类似的，在协同过滤中，这些用户成为邻居，然后根据他们喜欢的其他东西组织成一个排序的目录作为推荐给你。当然其中有一个核心的问题：如何确定一个用户是不是和你有相似的品位？如何将邻居们的喜好组织成一个排序的目录？
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;　　协同过滤一般是在海量的用户中发掘出一小部分和你品位比较类似的，在协同过滤中，这些用户成为邻居，然后根据他们喜欢的其他东西组织成一个排序的目录作为推荐给你。当然其中有一个核心的问题：如何确定一个用户是不是和你有相似的品位？如何将邻居们的喜好组织成一个排序的目录？&lt;/p&gt;
 &lt;h1 id=&quot;计算步骤&quot; tabindex=&quot;-1&quot;&gt;计算步骤&lt;/h1&gt;
 &lt;p&gt;1.收集用户偏好。
 2.找到相似的用户或物品。
@@ -4530,11 +4474,9 @@ docker run -d -p 80:80 --name webserver nginx
 2、 第一页最下面空一行，并且前几行一定要满！
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;就酱！如图
-&amp;lt;!--more--&amp;gt;
 &lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/1.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/2.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/assets/images/legacy/MarkdownPhotos/photos/3.jpg&quot; alt=&quot;&quot; loading=&quot;lazy&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -4556,8 +4498,7 @@ docker run -d -p 80:80 --name webserver nginx
 &lt;/ul&gt;
 &lt;p&gt;程序导致异常时，您可以说它抛出了 异常。已检查的异常可由任何方法在方法名中包含 throws 关键字来声明。后跟该方法可能在执行期间抛出的异常的逗号分隔列表。如果代码调用的一个方法指定它抛出一种或多种类型的异常，您必须对它进行一定的处理，或者向方法名中添加一个 throws 来传递该异常类型。&lt;/p&gt;
 &lt;h2 id=&quot;多个catch代码块&quot; tabindex=&quot;-1&quot;&gt;多个catch代码块&lt;/h2&gt;
-&lt;p&gt;可以拥有多个 catch代码块，但必须采用某种特定方式来搭建它们。如果所有异常都是其他异常的子类，那么子类会按照 catch 代码块的顺序放在父类前面。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;可以拥有多个 catch代码块，但必须采用某种特定方式来搭建它们。如果所有异常都是其他异常的子类，那么子类会按照 catch 代码块的顺序放在父类前面。&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -4591,7 +4532,6 @@ java -cp dependencies.jar com.bj.spat.hello
 	at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;原因是由较高版本的JDK编译的java class文件试图在较低版本的JVM上运行产生的错误。
-&amp;lt;!-- more --&amp;gt;
 1、解决措施就是保证jvm（java命令）和jdk（javac命令）版本一致。如果是linux版本，则在命令行中分别输入java -version和javac-version命令来查看版本是否一致。这里假设都是1.7版本。&lt;/p&gt;
 &lt;p&gt;2、如果都一致，但还是解决不了问题，那么你肯定不是直接在命令行中用javac来编译的，而是用类似于eclipse、netbeans这样的编译器来编译的。因为很多编译器都自带javac，而不是采用操作系统中的编译器。如果你的编译器是eclipse的话，那么需要在项目的属性里设置jdk版本，方法是右击项目--&amp;gt;properties--&amp;gt;java compiler --&amp;gt; Enable project specific settings --&amp;gt;将compiler compliance  level设置为1.7，也就是与jvm一致的版本（在命令行中java -version所显示的版本）。&lt;/p&gt;
 &lt;p&gt;综上，如果你是用编译器来编译的话，请首先确保编译器自带的jdk版本是否和操作系统中的java版本一致。&lt;/p&gt;
@@ -4746,8 +4686,7 @@ Select * from table WHERE id &amp;gt;= ( select id from table limit 10000,1 ) li
 Select * from table INNER JOIN (SELECT id from table limit 10000,10) USING(id)&lt;/li&gt;
 &lt;li&gt;分页方式四：
 程序取ID: Select id from table limit 10000,10;
-Select * from table WHERE ID in(123,456…);
-&amp;lt;!--more--&amp;gt;&lt;/li&gt;
+Select * from table WHERE ID in(123,456…);&lt;/li&gt;
 &lt;/ul&gt;
 </content>
   </entry>
@@ -4770,7 +4709,6 @@ os.system(&amp;quot;sh /path/xx.sh &#39;%s&#39;&amp;quot; %(params))
 status是返回状态
 output是返回结果
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -4794,8 +4732,7 @@ output是返回结果
 &lt;li&gt;支持并发和异步。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;网上看到一个代码示例，觉得很不错。
-代码示例：
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+代码示例：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -4932,8 +4869,7 @@ HDFS的设计特点是：
 &lt;p&gt;2、文件分块存储，HDFS会将一个完整的大文件平均分块存储到不同计算器上，它的意义在于读取文件时可以同时从多个主机取不同区块的文件，多主机读取比单主机读取效率要高得多得都。&lt;/p&gt;
 &lt;p&gt;3、流式数据访问，一次写入多次读写，这种模式跟传统文件不同，它不支持动态改变文件内容，而是要求让文件一次写入就不做变化，要变化也只能在文件末添加内容。&lt;/p&gt;
 &lt;p&gt;4、廉价硬件，HDFS可以应用在普通PC机上，这种机制能够让给一些公司用几十台廉价的计算机就可以撑起一个大数据集群。&lt;/p&gt;
-&lt;p&gt;5、硬件故障，HDFS认为所有计算机都可能会出问题，为了防止某个主机失效读取不到该主机的块文件，它将同一个文件块副本分配到其它某几个主机上，如果其中一台主机失效，可以迅速找另一块副本取文件。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;5、硬件故障，HDFS认为所有计算机都可能会出问题，为了防止某个主机失效读取不到该主机的块文件，它将同一个文件块副本分配到其它某几个主机上，如果其中一台主机失效，可以迅速找另一块副本取文件。&lt;/p&gt;
 &lt;h2 id=&quot;hdfs的关键元素&quot; tabindex=&quot;-1&quot;&gt;HDFS的关键元素&lt;/h2&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;Block：将一个文件进行分块，通常是64M。
 NameNode：保存整个文件系统的目录信息、文件信息及分块信息，这是由唯一一台主机专门保存，当然这台主机如果出错，NameNode就失效了。在Hadoop2.*开始支持activity-standy模式----如果主NameNode失效，启动备用主机运行NameNode。
@@ -4960,8 +4896,7 @@ Hadoop典型应用有：搜索、日志处理、推荐系统、数据分析、�
 &lt;p&gt;（1）随机生成c个类的初始中心；
 （2）在第k次迭代中，对任意一个样本，求其到c各中心的距离，将该样本归到距离最短的那个中心所在的类；
 （3）利用均值等方法更新该类的中心值；
-（4）对于所有的C个聚类中心，如果利用（2）（3）的迭代法更新后，值保持不变，则迭代结束；否则继续迭代。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+（4）对于所有的C个聚类中心，如果利用（2）（3）的迭代法更新后，值保持不变，则迭代结束；否则继续迭代。&lt;/p&gt;
 &lt;p&gt;不同的初始化k值和中心点的选择有可能引起不同的聚类结果&lt;/p&gt;
 &lt;h1 id=&quot;聚类数k的选取评价方法&quot; tabindex=&quot;-1&quot;&gt;聚类数k的选取评价方法&lt;/h1&gt;
 &lt;h3 id=&quot;1、事前的数据分析，选取合适的k值&quot; tabindex=&quot;-1&quot;&gt;1、事前的数据分析，选取合适的k值&lt;/h3&gt;
@@ -4989,8 +4924,7 @@ O(mnkd)，m为迭代次数。n为数据集中数据样本数量，k为聚类个�
     <summary>历史迁移文章：使用ReentrantLock解决哲学家就餐问题</summary>
     <content type="html">&lt;p&gt;哲学家就餐问题可以这样表述，假设有五位哲学家围坐在一张圆形餐桌旁，做以下两件事情之一：吃饭，或者思考。吃东西的时候，他们就停止思考，思考的时候也停止吃东西。餐桌中间有一大碗意大利面，每两个哲学家之间有一只餐叉。因为用一只餐叉很难吃到意大利面，所以假设哲学家必须用两只餐叉吃东西。他们只能使用自己左右手边的那两只餐叉。哲学家就餐问题有时也用米饭和筷子而不是意大利面和餐叉来描述，因为很明显，吃米饭必须用两根筷子。&lt;/p&gt;
 &lt;p&gt;哲学家从来不交谈，这就很危险，可能产生死锁，每个哲学家都拿着左手的餐叉，永远都在等右边的餐叉（或者相反）。即使没有死锁，也有可能发生资源耗尽。&lt;/p&gt;
-&lt;p&gt;&amp;lt;!--more--&amp;gt;
-使用重入锁ReentrantLock解决。&lt;/p&gt;
+&lt;p&gt;使用重入锁ReentrantLock解决。&lt;/p&gt;
 &lt;p&gt;代码：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;
 public class Dinner {
@@ -5073,8 +5007,7 @@ public class Dinner {
 &lt;p&gt;一元线性回归分析：y=ax+b，只包括一个自变量和一个因变量，且二者的关系可用一条直线近似表示。&lt;/p&gt;
 &lt;p&gt;多元线性回归分析：包括两个或两个以上的自变量，并且因变量和自变量是线性关系。&lt;/p&gt;
 &lt;h2 id=&quot;损失函数&quot; tabindex=&quot;-1&quot;&gt;损失函数&lt;/h2&gt;
-&lt;p&gt;损失函数：是指一种将一个事件（在一个样本空间中的一个元素）映射到一个表达与其事件相关的经济成本或机会成本的实数上的一种函数。更通俗地说，损失函数用来衡量参数选择的准确性。损失函数得到的值越小，损失也就越小。
-&amp;lt;!--more--&amp;gt;&lt;/p&gt;
+&lt;p&gt;损失函数：是指一种将一个事件（在一个样本空间中的一个元素）映射到一个表达与其事件相关的经济成本或机会成本的实数上的一种函数。更通俗地说，损失函数用来衡量参数选择的准确性。损失函数得到的值越小，损失也就越小。&lt;/p&gt;
 &lt;h2 id=&quot;梯度下降&quot; tabindex=&quot;-1&quot;&gt;梯度下降&lt;/h2&gt;
 &lt;p&gt;怎样最小化损失函数?损失函数的定义是一个凸函数，就可以使用凸优化的一些方法：
 １) 梯度下降：逐步最小化损失函数的过程。如同下山的过程，找准下山方向（梯度），每次迈进一步，直至山底。如果有多个特征，对应多个参数θ，需要对每一个参数做一次迭代，做完以后再求J函数。

@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,11 +63,11 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>1290 字</span>
+                        <span>1289 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 3 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#数据库事务">数据库事务</a></li><li><a href="#事务隔离">事务隔离</a></li><li class="toc-sub"><a href="#事务隔离级别">事务隔离级别</a></li><li><a href="#死锁">死锁</a></li><li class="toc-sub"><a href="#悲观锁">悲观锁</a></li><li class="toc-sub"><a href="#乐观锁">乐观锁</a></li></ul></nav>
                 </header>
                 <div class="post-body">
@@ -82,7 +82,6 @@
 <li>持久性
 事务完成之后，它对于系统的影响是永久性的。该修改即使出现致命的系统故障也将一直保持。</li>
 </ul>
-<p>&lt;!--more--&gt;</p>
 <h1 id="事务隔离" tabindex="-1">事务隔离</h1>
 <p>基于锁实现
 在DBMS中，可以按照锁的粒度把数据库锁分为行级锁(INNODB引擎)、表级锁(MYISAM引擎)和页级锁(BDB引擎 )。</p>
@@ -160,6 +159,6 @@
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

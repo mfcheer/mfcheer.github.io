@@ -66,7 +66,7 @@ export async function buildSite({ root, output, getIssues = fetchIssues, run, fo
     const inputs = {
         blog: await hashFiles(root, [...common, '_posts', 'templates', 'scripts/build-posts.mjs', 'scripts/lib/post-toc.mjs']),
         moments: digest(JSON.stringify([moments, await hashFiles(root, [...common, 'scripts/sync-moments.mjs'])])),
-        gallery: digest(JSON.stringify([gallery, await hashFiles(root, [...common, 'scripts/build-gallery.mjs'])]))
+        gallery: digest(JSON.stringify([gallery, await hashFiles(root, [...common, 'scripts/build-gallery.mjs', 'scripts/lib/exif.mjs'])]))
     };
     const outputs = {
         blog: ['blog', 'atom.xml', 'sitemap.xml', 'data/blog-index.json'],

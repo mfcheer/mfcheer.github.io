@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,19 +63,18 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>371 字</span>
+                        <span>370 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 1 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     
                 </header>
                 <div class="post-body">
 <p>KNN（K Nearest Neighbor）算法是机器学习里面常用的一种分类算法，假设一个样本空间被分为几类，然后给定一个待分类所有的特征数据，通过计算距离该数据的最近的K个样本来判断这个数据属于哪一类。如果距离待分类属性最近的K个类大多数都属于某一个特定的类，那么这个待分类的数据也就属于这个类。</p>
 <p><img src="/assets/images/legacy/MarkdownPhotos/photos1/78.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
 <p>如图所示，假设现在需要对中间绿色的圆进行分类，假设我们寻找距离这个绿色圆最近的3个样本，即K=3，那么可以看出这个绿色圆属于红色三角形所在的类；如果K=5，因为蓝色方框最多，所以此时绿色圆属于蓝色方框所在的类。从而得到当K值取值不同时，得到的分类结果也可能不一样，所以很多时候K值得选取很关键，这就是KNN的核心思想。如果类别个数为偶数，那么K通常会设置为一个奇数；如果类别个数为奇数，K通常设置为偶数，这样就能保证不会有平局的发生。</p>
-<p>每预测一个新样本的所属类别时，都会对整体样本进行遍历，可以看出KNN的效率实际上是十分低下的。
-&lt;!--more--&gt;</p>
+<p>每预测一个新样本的所属类别时，都会对整体样本进行遍历，可以看出KNN的效率实际上是十分低下的。</p>
 
                 </div>
 <nav class="post-nav" aria-label="文章翻页导航">
@@ -107,6 +106,6 @@
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,11 +63,11 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>360 字</span>
+                        <span>359 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 1 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#原理">原理</a></li><li><a href="#运行jar常见错误">运行jar常见错误</a></li><li><a href="#给jar传参数">给jar传参数</a></li><li><a href="#python代码">python代码</a></li><li><a href="#maven依赖包打jar包">maven依赖包打jar包</a></li></ul></nav>
                 </header>
                 <div class="post-body">
@@ -95,7 +95,6 @@ java -cp dependencies.jar com.bj.spat.hello
 	at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)
 </code></pre>
 <p>原因是由较高版本的JDK编译的java class文件试图在较低版本的JVM上运行产生的错误。
-&lt;!-- more --&gt;
 1、解决措施就是保证jvm（java命令）和jdk（javac命令）版本一致。如果是linux版本，则在命令行中分别输入java -version和javac-version命令来查看版本是否一致。这里假设都是1.7版本。</p>
 <p>2、如果都一致，但还是解决不了问题，那么你肯定不是直接在命令行中用javac来编译的，而是用类似于eclipse、netbeans这样的编译器来编译的。因为很多编译器都自带javac，而不是采用操作系统中的编译器。如果你的编译器是eclipse的话，那么需要在项目的属性里设置jdk版本，方法是右击项目--&gt;properties--&gt;java compiler --&gt; Enable project specific settings --&gt;将compiler compliance  level设置为1.7，也就是与jvm一致的版本（在命令行中java -version所显示的版本）。</p>
 <p>综上，如果你是用编译器来编译的话，请首先确保编译器自带的jdk版本是否和操作系统中的java版本一致。</p>
@@ -187,6 +186,6 @@ dependency:copy-dependencies -DoutputDirectory=lib
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>

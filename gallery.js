@@ -214,7 +214,12 @@
             issueNumber: p.issueNumber,
             source: p.source,
             src: rootUrl(p.src),
-            caption: [p.album, p.date && p.date.slice(0, 10)].filter(Boolean).join(' · ')
+            caption: [p.album, p.date && p.date.slice(0, 10)].filter(Boolean).join(' · '),
+            album: p.album,
+            date: p.date,
+            w: p.w,
+            h: p.h,
+            exif: p.exif
         })), idx);
     }
 

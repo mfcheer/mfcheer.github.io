@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.39">
+    <link rel="stylesheet" href="/styles.css?v=1.3.40">
 
 </head>
 <body>
@@ -63,11 +63,11 @@
                     <div class="post-meta">
                         <span>2018/01/01</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
-                        <span>1814 字</span>
+                        <span>1813 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 5 分钟</span>
                     </div>
-                    <div class="post-tags"><span class="post-tag">历史文章</span></div>
+                    <div class="post-tags"><a class="post-tag" href="/blog/?tag=%E5%8E%86%E5%8F%B2%E6%96%87%E7%AB%A0" title="查看「历史文章」标签的所有文章">#历史文章</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#rdb持久化">RDB持久化</a></li><li class="toc-sub"><a href="#两个命令:">两个命令:</a></li><li class="toc-sub"><a href="#优势">优势</a></li><li class="toc-sub"><a href="#劣势">劣势</a></li><li><a href="#aof持久化">AOF持久化</a></li><li class="toc-sub"><a href="#优势-1">优势</a></li><li class="toc-sub"><a href="#劣势-1">劣势</a></li><li><a href="#抉择">抉择</a></li></ul></nav>
                 </header>
                 <div class="post-body">
@@ -85,8 +85,7 @@ redis-db_version-databases-EOF-check_sum</p>
 <p>一旦采用该方式，那么你的整个Redis数据库将只包含一个文件，这样非常方便进行备份。比如你可能打算没1天归档一些数据。
 方便备份，我们可以很容易的将一个一个RDB文件移动到其他的存储介质上
 RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快。
-RDB 可以最大化 Redis 的性能：父进程在保存 RDB 文件时唯一要做的就是 fork 出一个子进程，然后这个子进程就会处理接下来的所有保存工作，父进程无须执行任何磁盘 I/O 操作。
-&lt;!--more--&gt;</p>
+RDB 可以最大化 Redis 的性能：父进程在保存 RDB 文件时唯一要做的就是 fork 出一个子进程，然后这个子进程就会处理接下来的所有保存工作，父进程无须执行任何磁盘 I/O 操作。</p>
 <h2 id="劣势" tabindex="-1">劣势</h2>
 <p>如果你需要尽量避免在服务器故障时丢失数据，那么 RDB 不适合你。 虽然 Redis 允许你设置不同的保存点（save point）来控制保存 RDB 文件的频率， 但是， 因为RDB 文件需要保存整个数据集的状态， 所以它并不是一个轻松的操作。 因此你可能会至少 5 分钟才保存一次 RDB 文件。 在这种情况下， 一旦发生故障停机， 你就可能会丢失好几分钟的数据。
 每次保存 RDB 的时候，Redis 都要 fork() 出一个子进程，并由子进程来进行实际的持久化工作。 在数据集比较庞大时， fork() 可能会非常耗时，造成服务器在某某毫秒内停止处理客户端； 如果数据集非常巨大，并且 CPU 时间非常紧张的话，那么这种停止时间甚至可能会长达整整一秒。 虽然 AOF 重写也需要进行 fork() ，但无论 AOF 重写的执行间隔有多长，数据的耐久性都不会有任何损失。</p>
@@ -142,6 +141,6 @@ Redis 可以在 AOF 文件体积变得过大时，自动地在后台对 AOF 进�
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.36"></script>
+    <script src="/script.js?v=1.3.37"></script>
 </body>
 </html>
