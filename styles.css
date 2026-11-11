@@ -4803,6 +4803,13 @@ button:active,
     color: #10b981;
     border: 1px solid rgba(16, 185, 129, 0.2);
     letter-spacing: 0.01em;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+    cursor: default;
+}
+
+.diary-mood-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.18);
 }
 
 [data-theme="dark"] .diary-mood-badge {

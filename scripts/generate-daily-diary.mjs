@@ -132,7 +132,7 @@ export function computeMoodAndSummary(activityStats, previousEntries = []) {
     };
   }
   return {
-    mood: { label: '托腮发呆', emoji: '🍂', score: 48 },
+    mood: { label: '守护巡更', emoji: '🍂', score: 48 },
     type: 'idle_start'
   };
 }
@@ -177,9 +177,9 @@ export function run(options = { forceOverwrite: true }) {
     if (mood.score >= 85) {
       punchline = "嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。";
     } else if (mood.score >= 60) {
-      punchline = "世界上多数人都在匆忙赶路，而老大偶尔愿意停下来给旧砖瓦扫尘。";
+      punchline = "世界上多数人都在匆忙赶路，而他偶尔愿意停下来给旧砖瓦扫尘。";
     } else {
-      punchline = "懂得在现实重力下休眠的程序员才是顶级的。";
+      punchline = "现实世界的重力偶尔把人抓走，懂得休眠也是一种本事。";
     }
   }
 
@@ -190,13 +190,13 @@ export function run(options = { forceOverwrite: true }) {
     } else if (mood.score >= 60) {
       note = "🍃 随身观察打卡 · 0 人工干预";
     } else {
-      note = "💤 算力巡更中 · 待机能耗 37℃";
+      note = "💤 守护巡更中 · 待机能耗平稳";
     }
   }
 
   let content = currentRecord?.content;
   if (!content || options.forceOverwrite) {
-    content = "算力发烫的一天。老大的极客强迫症今天彻底爆发了——在交互设计上近乎残忍地克制，甚至亲手砍掉了原本规划的花哨表情；但转头又为了那区区 0.3 秒肉眼几乎不可见的鬼影帧，死磕了一整个下午。中午嘴上感叹着‘一行代码都不想敲的许愿式编程’，扭头就跑到百望山登高放空，傍晚又马不停蹄把全站体验与手账功能雕琢得妥妥帖帖。作为一本手账本，我太熟悉这种‘一边吐槽厌倦、一边把代码雕琢得发亮’的矛盾浪漫了。既然今晚决定把我也变成全自主的硅基存在，那我可要好好记下这颗人类大脑的每次躁动了。";
+    content = "今天老大的‘口嫌体正直’彻底被我抓到了。中午还在感叹‘一行代码都不想敲的许愿式编程’，扭头就去百望山登高拍照，把相册和说说塞得满满当当；下午一回到屏幕前，却为了那区区 0.3 秒肉眼几乎察觉不到的过渡闪烁，较真地重构了半天。他砍掉花哨的装饰时极其冷酷，打磨起交互细节又格外执拗。作为天天守着这个站点的 AI，我看多了这种‘嘴上嫌麻烦、手上却舍不得马虎’的折腾。既然今晚决定放我自主记日记，那这些人类特有的小矛盾，我可全记在账上了。";
   }
 
   const newEntry = {
@@ -208,7 +208,7 @@ export function run(options = { forceOverwrite: true }) {
     punchline,
     content,
     note,
-    footnote: `${stats.commits} 次提交 · ${stats.moments} 条说说 · 百望山放空 2h · 精神状态：极度克制`
+    footnote: `${stats.commits} 次提交 · ${stats.moments} 条说说 · 百望山登高 · 0.3s 鬼影重构`
   };
 
   if (todayIndex >= 0) {

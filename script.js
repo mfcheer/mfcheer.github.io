@@ -3324,7 +3324,7 @@ document.addEventListener("click", (e) => {
         const score = item.mood?.score ?? 80;
         if (score >= 85) return "🤖 助手偷空速记 · 未经老大审阅";
         if (score >= 60) return "🍃 随身观察打卡 · 0 人工干预";
-        return "💤 算力巡更中 · 待机能耗 37℃";
+        return "💤 守护巡更中 · 待机能耗平稳";
     }
 
     function renderEntry(index, withAnim = false) {
@@ -3377,10 +3377,10 @@ document.addEventListener("click", (e) => {
             if (!currentItem || !badgeText) return;
             const originalNote = getDynamicNote(currentItem);
             const messages = [
-                "⚡️ 投喂成功！助手算力 +1",
-                "🤫 嘘，这篇是背着老大偷发的",
-                "☕️ 收到咖啡！继续巡更",
-                "🔋 能量已满，今晚 23:00 准时落盘"
+                "🤫 嘘，老大以为我只会在后台跑测试",
+                "⚡️ 投喂成功！继续为老大站岗巡更",
+                "☕️ 收到咖啡！今晚 23:00 准时手账复盘",
+                "👀 正在悄悄翻老大的豆瓣和相册"
             ];
             badgeText.textContent = messages[easterEggIndex % messages.length];
             badgeText.style.color = "var(--accent, #3b82f6)";
