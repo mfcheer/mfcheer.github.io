@@ -3529,7 +3529,7 @@ document.addEventListener("click", (e) => {
         }
     }
 
-    // 1. 移动端触屏滑动手势 (Touch Swipe)
+    // 1. 移动端触屏滑动手势 (Touch Swipe) - 严密拦截横向滑动，防止触发浏览器前进/后退
     bodyWrap.addEventListener("touchstart", (e) => {
         if (e.touches.length === 1) {
             isDragging = true;
@@ -3550,15 +3550,19 @@ document.addEventListener("click", (e) => {
         const dy = currentY - startY;
 
         if (isHorizontalGesture === null) {
-            if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
-                isHorizontalGesture = Math.abs(dx) > Math.abs(dy) * 1.15;
+            if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                isHorizontalGesture = Math.abs(dx) >= Math.abs(dy);
             }
         }
 
         if (isHorizontalGesture) {
+            // 关键：拦截移动端浏览器默认的前进/后退手势与页面横向滑动
+            if (e.cancelable) {
+                e.preventDefault();
+            }
             applyDragTransform(dx);
         }
-    }, { passive: true });
+    }, { passive: false });
 
     bodyWrap.addEventListener("touchend", () => {
         if (!isDragging) return;
@@ -3587,6 +3591,9 @@ document.addEventListener("click", (e) => {
         currentY = startY;
         bodyWrap.classList.add("is-dragging");
         bodyWrap.style.transition = "none";
+        if (e.cancelable) {
+            e.preventDefault();
+        }
     });
 
     window.addEventListener("mousemove", (e) => {
@@ -3606,26 +3613,33 @@ document.addEventListener("click", (e) => {
     });
 
     // 3. PC 端双指触控板横向拨动 (Trackpad Horizontal Scroll)
+    // 监听在整个手账卡片 diarySection 上，彻底拦截触控板左右滑触发浏览器前进/后退
     let wheelDebounceTimer = null;
-    bodyWrap.addEventListener("wheel", (e) => {
-        if (Math.abs(e.deltaX) > 28 && Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.2) {
-            if (wheelDebounceTimer) return;
-            wheelDebounceTimer = setTimeout(() => { wheelDebounceTimer = null; }, 320);
-            if (e.deltaX > 0) {
-                // 向左滚：看更早
-                if (currentIndex < entries.length - 1) {
-                    currentIndex++;
-                    renderEntry(currentIndex, true, -1);
-                }
-            } else {
-                // 向右滚：看更新
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    renderEntry(currentIndex, true, 1);
+    diarySection.addEventListener("wheel", (e) => {
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+            // 只要横向位移分量大于纵向，立即阻止浏览器原生历史前进/后退手势及横向橡皮筋反弹
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+            if (Math.abs(e.deltaX) > 20) {
+                if (wheelDebounceTimer) return;
+                wheelDebounceTimer = setTimeout(() => { wheelDebounceTimer = null; }, 360);
+                if (e.deltaX > 0) {
+                    // 向左拨动：看更早记录
+                    if (currentIndex < entries.length - 1) {
+                        currentIndex++;
+                        renderEntry(currentIndex, true, -1);
+                    }
+                } else {
+                    // 向右拨动：看较新记录
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        renderEntry(currentIndex, true, 1);
+                    }
                 }
             }
         }
-    }, { passive: true });
+    }, { passive: false });
 
     // 4. 键盘左右方向键 (Keyboard Navigation)
     window.addEventListener("keydown", (e) => {

@@ -4769,6 +4769,9 @@ button:active,
 .card-diary {
     position: relative;
     padding: 26px 28px;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+    overscroll-behavior-x: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -4852,6 +4855,9 @@ button:active,
     position: relative;
     margin-bottom: 20px;
     perspective: 1000px;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+    overscroll-behavior-x: none;
 }
 
 /* 底层便签纸张边缘与厚度投影 */
@@ -4899,6 +4905,8 @@ button:active,
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     touch-action: pan-y;
+    overscroll-behavior: contain;
+    overscroll-behavior-x: none;
     cursor: grab;
     user-select: none;
     transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.25s ease, box-shadow 0.2s ease;
