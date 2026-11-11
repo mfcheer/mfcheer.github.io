@@ -161,3 +161,96 @@ test('相册移动端手势：支持横滑切图、下拉关闭与弹回', () =>
     assert.equal(closed, false, '未达下拉阈值不误关闭');
     assert.equal(img.style.transform, '', '未达阈值弹回并清除 transform');
 });
+
+test("相册灯箱交互：上滑手势展开参数抽屉与底部文本点击触达", () => {
+    const listeners = {};
+    const imgStyle = {};
+    const boxStyle = {};
+    const img = { style: imgStyle, onload: null, onerror: null, alt: "", src: "", hidden: false, removeAttribute() {} };
+    const closeBtn = { onclick: null };
+    const prevBtn = { onclick: null };
+    const nextBtn = { onclick: null };
+    const statusBtn = { textContent: "" };
+    const counterEl = { textContent: "" };
+    const deleteBtn = { hidden: true };
+    const infoCard = {
+        hidden: true,
+        style: {},
+        innerHTML: "",
+        addEventListener() {},
+        querySelector() { return null; }
+    };
+    const captionEl = {
+        textContent: "洱海 · 2026-11-10",
+        title: "",
+        attributes: {},
+        setAttribute(k, v) { this.attributes[k] = v; },
+        removeAttribute(k) { delete this.attributes[k]; }
+    };
+    const box = {
+        classList: {
+            _classes: new Set(["post-lightbox", "is-open"]),
+            add(c) { this._classes.add(c); },
+            remove(c) { this._classes.delete(c); },
+            contains(c) { return this._classes.has(c); },
+            toggle(c, v) { if (v) this.add(c); else this.remove(c); }
+        },
+        style: boxStyle,
+        setAttribute() {}, appendChild() {}, addEventListener(name, fn) { listeners[name] = fn; },
+        querySelector(sel) {
+            if (sel === "img") return img;
+            if (sel === ".post-lightbox-caption") return captionEl;
+            if (sel === ".post-lightbox-close") return closeBtn;
+            if (sel === ".site-photo-prev") return prevBtn;
+            if (sel === ".site-photo-next") return nextBtn;
+            if (sel === ".site-photo-status") return statusBtn;
+            if (sel === ".site-photo-counter") return counterEl;
+            if (sel === ".site-photo-delete") return deleteBtn;
+            if (sel === ".site-photo-info-card") return infoCard;
+            return null;
+        },
+        querySelectorAll() { return []; }
+    };
+
+    const sandbox = {
+        siteLightbox: null,
+        siteLightboxImg: img,
+        siteLightboxCaption: captionEl,
+        sitePhotos: [{ src: "/p1.jpg", caption: "洱海", exif: { camera: "Sony A7M4" } }],
+        sitePhotoIndex: 0,
+        siteImageRequest: 0,
+        siteLastActiveElement: null,
+        siteDeleteBusy: false,
+        isSiteOwner: () => false,
+        deleteSiteContent() {},
+        document: {
+            body: { classList: { add() {}, remove() {} }, appendChild() {} },
+            createElement: () => box,
+            activeElement: null
+        },
+        window: { addEventListener() {} },
+        Date, Math, clearTimeout, setTimeout, Image: class { constructor() {} }
+    };
+
+    const ctx = vm.createContext(sandbox);
+    const lightboxSnippet = scriptSource.slice(
+        scriptSource.indexOf("function resetLightboxTransform"),
+        scriptSource.indexOf("function openSitePhotos")
+    );
+    vm.runInContext(lightboxSnippet, ctx);
+    vm.runInContext("createLightbox();", ctx);
+
+    // 1. 验证点击底部说明文本可切换参数抽屉
+    assert.equal(infoCard.hidden, true, "初始时参数面板处于收起状态");
+    assert.equal(typeof captionEl.onclick, "function", "底部说明文本已绑定点击事件");
+    captionEl.onclick({ stopPropagation() {} });
+    assert.equal(infoCard.hidden, false, "点击说明文本后参数面板展开");
+    captionEl.onclick({ stopPropagation() {} });
+    assert.equal(infoCard.hidden, true, "再次点击说明文本后参数面板收起");
+
+    // 2. 模拟手指在屏幕上滑手势展开抽屉
+    listeners.touchstart({ touches: [{ clientX: 100, clientY: 200 }], target: box });
+    listeners.touchmove({ touches: [{ clientX: 102, clientY: 100 }], cancelable: true, preventDefault() {} });
+    listeners.touchend({ changedTouches: [{ clientX: 102, clientY: 100 }] });
+    assert.equal(infoCard.hidden, false, "手指轻度垂直上滑成功拉起参数面板");
+});

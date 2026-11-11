@@ -554,6 +554,7 @@ function renderPhotoInfo(photo) {
     const dims = (photo && photo.w && photo.h) ? `${photo.w} × ${photo.h} px` : '';
 
     let html = `
+        <div class="site-photo-info-drag-handle" aria-hidden="true"></div>
         <div class="site-photo-info-head">
             <span class="site-photo-info-title">照片信息</span>
             <button class="site-photo-info-close" type="button" aria-label="关闭信息">&times;</button>
@@ -592,17 +593,23 @@ function renderPhotoInfo(photo) {
     infoCard.innerHTML = html;
 
     const closeBtn = infoCard.querySelector('.site-photo-info-close');
-    if (closeBtn) closeBtn.onclick = () => togglePhotoInfo(false);
+    if (closeBtn) closeBtn.onclick = (e) => { e.stopPropagation(); togglePhotoInfo(false); };
 }
 
 function togglePhotoInfo(force) {
     const infoCard = siteLightbox?.querySelector('.site-photo-info-card');
-    const infoBtn = siteLightbox?.querySelector('.site-photo-info-btn');
-    if (!infoCard || !infoBtn) return;
+    if (!infoCard) return;
     const shouldOpen = typeof force === 'boolean' ? force : infoCard.hidden;
     infoCard.hidden = !shouldOpen;
-    infoBtn.classList.toggle('is-active', shouldOpen);
-    infoBtn.setAttribute('aria-expanded', String(shouldOpen));
+    siteLightbox.classList.toggle('has-info-open', shouldOpen);
+    const infoBtn = siteLightbox.querySelector('.site-photo-info-btn');
+    if (infoBtn) {
+        infoBtn.classList.toggle('is-active', shouldOpen);
+        infoBtn.setAttribute('aria-expanded', String(shouldOpen));
+    }
+    if (siteLightboxCaption) {
+        siteLightboxCaption.setAttribute?.('aria-expanded', String(shouldOpen));
+    }
 }
 
 function showSitePhoto() {
@@ -623,7 +630,18 @@ function showSitePhoto() {
     };
     siteLightboxImg.alt = photo.caption || '图片';
     siteLightboxImg.src = photo.src;
-    siteLightboxCaption.textContent = photo.caption || '';
+    const hasExif = photo && photo.exif && (photo.exif.camera || photo.exif.lens || photo.exif.aperture || photo.exif.shutter || photo.exif.iso);
+    const defaultCaption = photo.caption || (hasExif ? (photo.exif.camera || '查看照片参数') : '');
+    siteLightboxCaption.textContent = defaultCaption;
+    if (defaultCaption) {
+        siteLightboxCaption.title = '点击查看拍摄参数 (快捷键 i)';
+        siteLightboxCaption.setAttribute?.('role', 'button');
+        siteLightboxCaption.setAttribute?.('tabindex', '0');
+    } else {
+        siteLightboxCaption.removeAttribute?.('title');
+        siteLightboxCaption.removeAttribute?.('role');
+        siteLightboxCaption.removeAttribute?.('tabindex');
+    }
     const remove = siteLightbox.querySelector('.site-photo-delete');
     remove.hidden = !(isSiteOwner() && Number.isInteger(photo.issueNumber) && photo.source);
     siteLightbox.classList.toggle('has-delete', !remove.hidden);
@@ -652,21 +670,45 @@ function createLightbox() {
     siteLightbox.setAttribute('aria-label', '图片预览');
     siteLightbox.innerHTML = `
         <button class="post-lightbox-close" aria-label="关闭预览 (Esc)">×</button>
-        <button class="site-photo-info-btn" aria-label="查看照片信息 (i)" title="查看参数 (i)" type="button">ℹ</button>
         <button class="site-photo-nav site-photo-prev" aria-label="上一张">‹</button>
         <img class="post-lightbox-img" alt="">
         <button class="site-photo-nav site-photo-next" aria-label="下一张">›</button>
         <button class="site-photo-status" aria-live="polite"></button>
         <div class="site-photo-info-card" hidden></div>
-        <div class="post-lightbox-caption"></div>
+        <div class="post-lightbox-caption" aria-label="查看照片信息 (i)"></div>
         <div class="site-photo-counter" aria-live="polite"></div>
         <button type="button" class="content-delete site-photo-delete" hidden>删除照片</button>`;
     document.body.appendChild(siteLightbox);
     siteLightboxImg = siteLightbox.querySelector('img');
     siteLightboxCaption = siteLightbox.querySelector('.post-lightbox-caption');
     siteLightbox.querySelector('.post-lightbox-close').onclick = closeLightbox;
-    const infoBtn = siteLightbox.querySelector('.site-photo-info-btn');
-    if (infoBtn) infoBtn.onclick = (e) => { e.stopPropagation(); togglePhotoInfo(); };
+    if (siteLightboxCaption) {
+        siteLightboxCaption.onclick = (e) => {
+            e.stopPropagation();
+            togglePhotoInfo();
+        };
+        siteLightboxCaption.onkeydown = (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                togglePhotoInfo();
+            }
+        };
+    }
+    const infoCard = siteLightbox.querySelector('.site-photo-info-card');
+    if (infoCard && infoCard.addEventListener) {
+        let cardTouchStartY = 0;
+        infoCard.addEventListener('touchstart', e => {
+            if (e.touches && e.touches.length === 1) {
+                cardTouchStartY = e.touches[0].clientY;
+            }
+        }, { passive: true });
+        infoCard.addEventListener('touchend', e => {
+            const touch = e.changedTouches && e.changedTouches[0];
+            if (touch && (touch.clientY - cardTouchStartY > 50)) {
+                togglePhotoInfo(false);
+            }
+        }, { passive: true });
+    }
     siteLightbox.querySelector('.site-photo-prev').onclick = () => stepSitePhoto(-1);
     siteLightbox.querySelector('.site-photo-next').onclick = () => stepSitePhoto(1);
     siteLightbox.querySelector('.site-photo-status').onclick = showSitePhoto;
@@ -674,13 +716,20 @@ function createLightbox() {
         const photo = sitePhotos[sitePhotoIndex];
         if (photo) deleteSiteContent({ kind: 'photo', issueNumber: photo.issueNumber, source: photo.source }, e.currentTarget);
     };
-    siteLightbox.onclick = e => { if (e.target === siteLightbox) closeLightbox(); };
+    siteLightbox.onclick = e => {
+        const currentCard = siteLightbox.querySelector('.site-photo-info-card');
+        if (currentCard && !currentCard.hidden && currentCard.contains && !currentCard.contains(e.target) && e.target !== siteLightboxCaption) {
+            togglePhotoInfo(false);
+            return;
+        }
+        if (e.target === siteLightbox) closeLightbox();
+    };
     window.addEventListener('keydown', e => {
         if (!siteLightbox.classList.contains('is-open')) return;
         if (e.key === 'Escape') {
             e.preventDefault();
-            const infoCard = siteLightbox.querySelector('.site-photo-info-card');
-            if (infoCard && !infoCard.hidden) {
+            const currentCard = siteLightbox.querySelector('.site-photo-info-card');
+            if (currentCard && !currentCard.hidden) {
                 togglePhotoInfo(false);
             } else {
                 closeLightbox();
@@ -700,7 +749,7 @@ function createLightbox() {
         }
     });
 
-    // 移动端手势交互：跟手横滑切图与下拉手势关闭
+    // 移动端手势交互：跟手横滑切图、下拉手势关闭与上滑展开参数抽屉
     let touchStartX = 0;
     let touchStartY = 0;
     let touchStartTime = 0;
@@ -708,7 +757,7 @@ function createLightbox() {
     let isTouchActive = false;
 
     siteLightbox.addEventListener('touchstart', e => {
-        if (e.target.closest && e.target.closest('button, a')) {
+        if (e.target.closest && e.target.closest('button, a, .site-photo-info-body')) {
             isTouchActive = false;
             touchLock = null;
             return;
@@ -736,26 +785,27 @@ function createLightbox() {
         if (!touchLock) {
             if (Math.hypot(dx, dy) > 8) {
                 if (dy > 0 && dy > Math.abs(dx) * 1.1) {
-                    touchLock = 'vertical';
+                    touchLock = 'vertical-down';
+                } else if (dy < 0 && Math.abs(dy) > Math.abs(dx) * 1.1) {
+                    touchLock = 'vertical-up';
                 } else if (Math.abs(dx) > Math.abs(dy)) {
                     touchLock = 'horizontal';
                 }
             }
         }
 
-        if (touchLock === 'vertical') {
+        if (touchLock === 'vertical-down') {
             if (e.cancelable) e.preventDefault();
-            if (dy > 0) {
-                const scale = Math.max(0.72, 1 - dy / 900);
-                const bgOpacity = Math.max(0.2, 0.88 * (1 - dy / 450));
-                siteLightboxImg.style.transform = `translate3d(${dx * 0.35}px, ${dy}px, 0) scale(${scale})`;
-                siteLightboxImg.style.transition = 'none';
-                siteLightbox.style.backgroundColor = `rgba(10, 12, 16, ${bgOpacity.toFixed(3)})`;
-            } else {
-                const dampedDy = dy * 0.2;
-                siteLightboxImg.style.transform = `translate3d(0, ${dampedDy}px, 0)`;
-                siteLightboxImg.style.transition = 'none';
-            }
+            const scale = Math.max(0.72, 1 - dy / 900);
+            const bgOpacity = Math.max(0.2, 0.88 * (1 - dy / 450));
+            siteLightboxImg.style.transform = `translate3d(${dx * 0.35}px, ${dy}px, 0) scale(${scale})`;
+            siteLightboxImg.style.transition = 'none';
+            siteLightbox.style.backgroundColor = `rgba(10, 12, 16, ${bgOpacity.toFixed(3)})`;
+        } else if (touchLock === 'vertical-up') {
+            if (e.cancelable) e.preventDefault();
+            const dampedDy = Math.max(-60, dy * 0.25);
+            siteLightboxImg.style.transform = `translate3d(0, ${dampedDy}px, 0)`;
+            siteLightboxImg.style.transition = 'none';
         } else if (touchLock === 'horizontal') {
             if (e.cancelable) e.preventDefault();
             const factor = sitePhotos.length > 1 ? 1 : 0.25;
@@ -777,10 +827,22 @@ function createLightbox() {
         const dt = Date.now() - touchStartTime;
 
         // 下拉手势关闭：垂直下滑超过阈值或快速下滑手势
-        if (touchLock === 'vertical' || (!touchLock && dy > 60 && dy > Math.abs(dx) * 1.2)) {
+        if (touchLock === 'vertical-down' || (!touchLock && dy > 60 && dy > Math.abs(dx) * 1.2)) {
             const isQuickFlick = dy > 35 && dt < 280 && dy / dt > 0.35;
             if (dy > 70 || isQuickFlick) {
                 closeLightbox();
+                touchLock = null;
+                return;
+            }
+        }
+
+        // 上滑手势展开参数抽屉：垂直上滑超过阈值或快速上滑手势
+        if (touchLock === 'vertical-up' || (!touchLock && dy < -50 && Math.abs(dy) > Math.abs(dx) * 1.2)) {
+            const isQuickFlickUp = dy < -25 && dt < 280 && Math.abs(dy) / dt > 0.25;
+            if (dy < -45 || isQuickFlickUp) {
+                togglePhotoInfo(true);
+                siteLightboxImg.style.transition = 'transform 0.24s cubic-bezier(0.2, 0.9, 0.3, 1)';
+                siteLightboxImg.style.transform = '';
                 touchLock = null;
                 return;
             }
