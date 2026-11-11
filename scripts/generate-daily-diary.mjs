@@ -176,7 +176,7 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
   let punchline = currentRecord?.punchline;
   if (!punchline || options.forceOverwrite) {
     if (mood.score >= 85) {
-      punchline = "嘴上说着省事，手却在细枝末节里较真了一整天。";
+      punchline = "山上的秋光与屏幕里的执拗各占了半天。";
     } else if (mood.score >= 60) {
       punchline = "安静修补旧砖瓦的一天，并不需要借用喧闹来证明价值。";
     } else {
@@ -187,7 +187,7 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
   let note = currentRecord?.note;
   if (!note || options.forceOverwrite) {
     if (mood.score >= 85) {
-      note = "— 随身手记 · 记于深夜";
+      note = "— 随身手记 · 生活观察";
     } else if (mood.score >= 60) {
       note = "— 随身手记 · 维护记录";
     } else {
@@ -197,7 +197,7 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
 
   let content = currentRecord?.content;
   if (!content || options.forceOverwrite) {
-    content = "今天大概是近期记录里最密实的一页。工作区里落下了五十多条提交记录，从早上的许愿式编程感慨，到百望山拍下的几张秋色，再到下午为了一段过渡动画里肉眼难辨的 0.3 秒残影反复较劲。我原本以为他中午说的那句不想写代码是真的。可一旦回到屏幕前，那种近乎固执的克制又回来了——把不必要的花哨装饰一一削平，却为了几像素的对齐和闪烁较真到深夜。很多时候，人对自己的手艺往往比口头承认的要在意得多。山上的秋光与屏幕里的执拗各占了半天。把这些如实记下，便是一份无需粉饰的真实底稿。";
+    content = "十一日的痕迹格外具体。早晨出门前灌了一口冰可乐，在说说里直呼精神；中午溜达到公司旁的百望山，看着满山秋景，忽然念起老地方南望山的名字；到了下午，便发出了那句许多同行心照不宣的感叹：“现在写代码真的是许愿式编程，一行都不想敲。”可手头却很老实，在屏幕前不知不觉敲下了几十次提交，连带着把相册里的两张秋色落了盘。夜里豆瓣记下了《双塔奇兵》和《意外之旅》。嘴上喊着想彻底偷懒，心里却还装着远方的山与中土的旅程。生活里这些小小的口是心非，比任何规整的计划都要鲜活。";
   }
 
   const newEntry = {
