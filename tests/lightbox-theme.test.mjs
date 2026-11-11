@@ -5,9 +5,8 @@ import { readFileSync } from 'node:fs';
 
 const scriptSource = readFileSync(new URL('../script.js', import.meta.url), 'utf8');
 
-test('主题切换具备平滑过渡机制，支持 View Transitions 与 CSS fallback', () => {
+test('主题切换具备平滑过渡机制，采用纯 CSS 柔和全局渐变', () => {
     let themeSet = null;
-    let viewTransitionCalled = false;
     let stored = {};
     const rootClasses = new Set();
     const btn = { textContent: '', attributes: {}, setAttribute(k, v) { this.attributes[k] = v; }, addEventListener(ev, fn) { this._handler = fn; } };
@@ -23,7 +22,6 @@ test('主题切换具备平滑过渡机制，支持 View Transitions 与 CSS fal
         document: {
             documentElement: htmlEl,
             getElementById(id) { if (id === 'themeToggle') return btn; return null; },
-            startViewTransition(cb) { viewTransitionCalled = true; cb(); },
             addEventListener() {},
             querySelector() { return null; }
         },
@@ -40,7 +38,6 @@ test('主题切换具备平滑过渡机制，支持 View Transitions 与 CSS fal
     };
 
     const ctx = vm.createContext(sandbox);
-    // Slice theme management section
     const themeSnippet = scriptSource.slice(
         scriptSource.indexOf('// Theme Management'),
         scriptSource.indexOf('// Live Beijing Time')
@@ -50,19 +47,19 @@ test('主题切换具备平滑过渡机制，支持 View Transitions 与 CSS fal
     assert.equal(themeSet, 'light', '初始默认为浅色模式');
     assert.equal(btn.textContent, '🌙');
 
-    // 点击切换为深色模式，使用 View Transitions
+    // 点击切换为深色模式，使用纯 CSS 平滑过渡
     btn._handler();
-    assert.equal(viewTransitionCalled, true, '切换时调用了 startViewTransition');
     assert.equal(themeSet, 'dark', '切换为深色');
     assert.equal(stored.theme, 'dark');
     assert.equal(btn.textContent, '☀️');
+    assert.ok(rootClasses.has('theme-transitioning'), '切换时打上 theme-transitioning 过渡类');
 
-    // 禁用 View Transitions 验证 fallback transition class
-    delete sandbox.document.startViewTransition;
+    // 再次点击切回浅色模式
     btn._handler();
     assert.equal(themeSet, 'light', '再次点击切回浅色');
     assert.equal(stored.theme, 'light');
-    assert.ok(rootClasses.has('theme-transitioning'), '无 View Transitions 时打上 theme-transitioning 过渡类');
+    assert.equal(btn.textContent, '🌙');
+    assert.ok(rootClasses.has('theme-transitioning'), '再次切换保持 theme-transitioning 过渡类');
 });
 
 test('相册移动端手势：支持横滑切图、下拉关闭与弹回', () => {

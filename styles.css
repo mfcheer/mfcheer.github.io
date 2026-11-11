@@ -64,63 +64,20 @@
     }
 }
 
-/* 主题切换水波纹扩散动效 (View Transitions API) 与平滑渐变动效 */
-::view-transition-old(root),
-::view-transition-new(root) {
-    animation-duration: 0.35s;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-::view-transition-old(root) {
-    animation-name: theme-fade-out;
-    z-index: 1;
-}
-
-::view-transition-new(root) {
-    animation-name: theme-fade-in;
-    z-index: 9999;
-}
-
-/* 当通过 JavaScript 驱动圆形扩散动画时，禁用 CSS 默认淡入淡出 */
-html.theme-circle-transitioning::view-transition-old(root),
-html.theme-circle-transitioning::view-transition-new(root) {
-    animation: none;
-    mix-blend-mode: normal;
-}
-html.theme-circle-transitioning::view-transition-old(root) {
-    z-index: 1;
-}
-html.theme-circle-transitioning::view-transition-new(root) {
-    z-index: 9999;
-}
-
-@keyframes theme-fade-out {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-@keyframes theme-fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
+/* 主题切换全局柔和渐变过渡（纯 CSS 渐变，无全屏截图，杜绝闪烁与眩光） */
 html.theme-transitioning,
 html.theme-transitioning *,
 html.theme-transitioning *::before,
 html.theme-transitioning *::after {
-    transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                fill 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                fill 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     transition-delay: 0s !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-        animation: none !important;
-    }
     html.theme-transitioning,
     html.theme-transitioning *,
     html.theme-transitioning *::before,

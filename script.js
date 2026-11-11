@@ -63,7 +63,7 @@ function applyTheme(theme) {
     }
 }
 
-function switchTheme(nextTheme, event) {
+function switchTheme(nextTheme) {
     currentTheme = nextTheme;
     localStorage.setItem('theme', currentTheme);
 
@@ -72,46 +72,10 @@ function switchTheme(nextTheme, event) {
         if (typeof syncGiscusTheme === "function") syncGiscusTheme(currentTheme);
     };
 
-    if (typeof document.startViewTransition === 'function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        const root = document.documentElement;
-        const rect = typeof themeToggleBtn?.getBoundingClientRect === 'function' ? themeToggleBtn.getBoundingClientRect() : null;
-        const x = event?.clientX ?? (rect ? rect.left + (rect.width || 0) / 2 : (typeof window !== 'undefined' ? window.innerWidth : 400));
-        const y = event?.clientY ?? (rect ? rect.top + (rect.height || 0) / 2 : 0);
-        const winW = typeof window !== 'undefined' ? window.innerWidth : 800;
-        const winH = typeof window !== 'undefined' ? window.innerHeight : 600;
-        const endRadius = Math.hypot(
-            Math.max(x, winW - x),
-            Math.max(y, winH - y)
-        );
-
-        if (root?.classList?.add) root.classList.add('theme-circle-transitioning');
-        const transition = document.startViewTransition(update);
-        if (transition && transition.ready && typeof root?.animate === 'function') {
-            transition.ready.then(() => {
-                const anim = root.animate(
-                    {
-                        clipPath: [
-                            `circle(0px at ${x}px ${y}px)`,
-                            `circle(${endRadius}px at ${x}px ${y}px)`
-                        ]
-                    },
-                    {
-                        duration: 380,
-                        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                        pseudoElement: '::view-transition-new(root)'
-                    }
-                );
-                anim.onfinish = () => root?.classList?.remove?.('theme-circle-transitioning');
-            }).catch(() => {
-                root?.classList?.remove?.('theme-circle-transitioning');
-            });
-        } else {
-            root?.classList?.remove?.('theme-circle-transitioning');
-        }
-    } else {
+    if (!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
         enableThemeTransition();
-        update();
     }
+    update();
 }
 
 // Initialize theme
