@@ -33,7 +33,6 @@ test('data/diary.json 存在且数据结构规范', () => {
 test('index.html 包含 AI 助手随身手账组件、挂载节点、金句与动态管家徽章', () => {
   const html = fs.readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf-8');
   assert.ok(html.includes('class="glass card-diary"'), '必须包含 card-diary 容器');
-  assert.ok(html.includes('id="diaryMoodBadge"'), '必须包含情绪徽章挂载点');
   assert.ok(html.includes('id="diaryPrevBtn"'), '必须包含上一篇翻页按钮');
   assert.ok(html.includes('id="diaryNextBtn"'), '必须包含下一篇翻页按钮');
   assert.ok(html.includes('id="diaryDateLabel"'), '必须包含日期指示器');
@@ -47,7 +46,6 @@ test('styles.css 包含手账样式、呼吸灯、滑动手势、金句与胶带
   const css = fs.readFileSync(path.join(ROOT_DIR, 'styles.css'), 'utf-8');
   assert.ok(css.includes('.card-diary'), '必须定义 .card-diary');
   assert.ok(css.includes('.diary-punchline'), '必须定义金句样式');
-  assert.ok(css.includes('.diary-mood-badge'), '必须定义 .diary-mood-badge');
   assert.ok(css.includes('@keyframes diaryPulse'), '必须包含呼吸灯动画');
   assert.ok(css.includes('.diary-nav-btn'), '必须定义翻页按钮样式');
   assert.ok(css.includes('is-switching'), '必须包含平滑切换过渡样式');

@@ -3299,8 +3299,6 @@ document.addEventListener("click", (e) => {
 (function initDiaryCard() {
     const diarySection = document.getElementById("diary");
     if (!diarySection) return;
-
-    const moodText = document.getElementById("diaryMoodText");
     const prevBtn = document.getElementById("diaryPrevBtn");
     const nextBtn = document.getElementById("diaryNextBtn");
     const dateLabel = document.getElementById("diaryDateLabel");
@@ -3333,9 +3331,6 @@ document.addEventListener("click", (e) => {
             setTimeout(() => bodyWrap.classList.remove("is-switching"), 180);
         }
 
-        if (moodText && item.mood) {
-            moodText.textContent = `${item.mood.emoji || ""} ${item.mood.label || ""}`.trim();
-        }
         if (dateLabel) {
             dateLabel.textContent = (item.date || "").replace(/-/g, ".");
         }
