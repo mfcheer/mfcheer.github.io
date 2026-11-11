@@ -4886,17 +4886,6 @@ button:active,
     transform: scale(0.988);
 }
 
-.diary-meta-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.75rem;
-    color: var(--text-tertiary, #888);
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-    font-family: var(--font-mono, monospace);
-}
-
 .diary-punchline-wrap {
     position: relative;
     padding: 10px 14px 10px 30px;

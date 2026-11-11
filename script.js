@@ -3304,9 +3304,6 @@ document.addEventListener("click", (e) => {
     const prevBtn = document.getElementById("diaryPrevBtn");
     const nextBtn = document.getElementById("diaryNextBtn");
     const dateLabel = document.getElementById("diaryDateLabel");
-    const dateFull = document.getElementById("diaryDateFull");
-    const weatherEl = document.getElementById("diaryWeather");
-    const scoreEl = document.getElementById("diaryScore");
     const punchlineEl = document.getElementById("diaryPunchline");
     const contentEl = document.getElementById("diaryContent");
     const footnoteEl = document.getElementById("diaryFootnote");
@@ -3341,15 +3338,6 @@ document.addEventListener("click", (e) => {
         }
         if (dateLabel) {
             dateLabel.textContent = (item.date || "").replace(/-/g, ".");
-        }
-        if (dateFull) {
-            dateFull.textContent = `${(item.date || "").replace(/-/g, ".")} · ${item.dayOfWeek || ""}`;
-        }
-        if (weatherEl) {
-            weatherEl.textContent = `🌤️ ${item.weather || "晴"}`;
-        }
-        if (scoreEl) {
-            scoreEl.textContent = `心情指数 ${item.mood?.score ?? 80}%`;
         }
         if (punchlineEl) {
             punchlineEl.textContent = item.punchline || "嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。";
