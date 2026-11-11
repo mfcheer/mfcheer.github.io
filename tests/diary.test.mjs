@@ -63,6 +63,7 @@ test('script.js 包含手账加载、层叠物理手势（触屏/PC拖拽/滚轮
   assert.ok(script.includes('touchstart'), '必须监听 touchstart 触屏滑动');
   assert.ok(script.includes('mousedown'), '必须监听 mousedown PC端拖拽');
   assert.ok(script.includes('wheel'), '必须监听 wheel 触摸板横向滚动');
+  assert.ok(script.includes('lastTouchEndTime') && script.includes('FLIP_COOLDOWN_MS'), '必须包含触屏合成事件过滤与翻页冷却防抖逻辑以防手机双跳');
 });
 
 test('generate-daily-diary 支持多源数据与覆盖更新逻辑', async () => {

@@ -3353,7 +3353,14 @@ document.addEventListener("click", (e) => {
         return "— 守护巡更中 · 待机能耗平稳";
     }
 
+    let lastFlipTime = 0;
+    const FLIP_COOLDOWN_MS = 280;
+
     function flipEarlier() {
+        const now = Date.now();
+        if (now - lastFlipTime < FLIP_COOLDOWN_MS) return;
+        lastFlipTime = now;
+
         if (currentIndex < entries.length - 1) {
             currentIndex++;
             renderEntry(currentIndex, true, -1);
@@ -3369,6 +3376,10 @@ document.addEventListener("click", (e) => {
     }
 
     function flipNewer() {
+        const now = Date.now();
+        if (now - lastFlipTime < FLIP_COOLDOWN_MS) return;
+        lastFlipTime = now;
+
         if (currentIndex > 0) {
             currentIndex--;
             renderEntry(currentIndex, true, 1);
@@ -3537,6 +3548,7 @@ document.addEventListener("click", (e) => {
 
     // 1. 移动端触屏手势 (Touch Tap & Swipe)
     let isTouchActive = false;
+    let lastTouchEndTime = 0;
     let touchStartX = 0;
     let touchStartY = 0;
     let touchCurrentX = 0;
@@ -3544,6 +3556,8 @@ document.addEventListener("click", (e) => {
     let isHorizontalGesture = null;
 
     bodyWrap.addEventListener("touchstart", (e) => {
+        if (e.target.closest("button") || e.target.closest("a")) return;
+        lastTouchEndTime = Date.now();
         if (e.touches.length === 1) {
             isTouchActive = true;
             touchStartX = e.touches[0].clientX;
@@ -3556,6 +3570,7 @@ document.addEventListener("click", (e) => {
     }, { passive: true });
 
     bodyWrap.addEventListener("touchmove", (e) => {
+        lastTouchEndTime = Date.now();
         if (!isTouchActive || e.touches.length !== 1) return;
         touchCurrentX = e.touches[0].clientX;
         touchCurrentY = e.touches[0].clientY;
@@ -3577,6 +3592,7 @@ document.addEventListener("click", (e) => {
     }, { passive: false });
 
     bodyWrap.addEventListener("touchend", () => {
+        lastTouchEndTime = Date.now();
         if (!isTouchActive) return;
         isTouchActive = false;
 
@@ -3608,6 +3624,7 @@ document.addEventListener("click", (e) => {
     }, { passive: true });
 
     bodyWrap.addEventListener("touchcancel", () => {
+        lastTouchEndTime = Date.now();
         isTouchActive = false;
         resetDragTransform();
     }, { passive: true });
@@ -3621,6 +3638,8 @@ document.addEventListener("click", (e) => {
     let mouseCurrentY = 0;
 
     bodyWrap.addEventListener("mousedown", (e) => {
+        // 彻底过滤手机端 touchend 之后浏览器派发的模拟合成 mousedown 事件（防双跳）
+        if (Date.now() - lastTouchEndTime < 800) return;
         if (e.button !== 0 || e.target.closest("button") || e.target.closest("a")) return;
         isMouseDown = true;
         isDragging = false;
@@ -3636,6 +3655,10 @@ document.addEventListener("click", (e) => {
 
     window.addEventListener("mousemove", (e) => {
         if (!isMouseDown) return;
+        if (Date.now() - lastTouchEndTime < 800) {
+            isMouseDown = false;
+            return;
+        }
         mouseCurrentX = e.clientX;
         mouseCurrentY = e.clientY;
         const dx = mouseCurrentX - mouseStartX;
@@ -3652,6 +3675,7 @@ document.addEventListener("click", (e) => {
     window.addEventListener("mouseup", (e) => {
         if (!isMouseDown) return;
         isMouseDown = false;
+        if (Date.now() - lastTouchEndTime < 800) return;
         bodyWrap.classList.remove("is-dragging");
 
         const dx = mouseCurrentX - mouseStartX;
