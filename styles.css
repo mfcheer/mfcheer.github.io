@@ -1117,6 +1117,37 @@ html[data-theme="dark"] .media-stars {
     margin-left: auto;
 }
 
+.moment-meta {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex-shrink: 1;
+}
+
+.moment-meta .moment-date {
+    margin-left: 0;
+    white-space: nowrap;
+}
+
+.moment-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 3.5px;
+    font-size: 11.5px;
+    color: var(--muted);
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.moment-loc-pin {
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
 .moment-empty {
     font-size: 13.5px;
     color: var(--muted);
@@ -3247,6 +3278,92 @@ section[id] {
     background: var(--accent);
     border-color: var(--accent);
     color: #ffffff;
+}
+
+/* 定位选择区 */
+.moment-location-picker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.moment-location-label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.moment-location-content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.moment-loc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px dashed var(--line);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+.moment-loc-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--surface-subtle);
+}
+
+.moment-loc-btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+.moment-loc-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    padding: 2.5px 8.5px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface-subtle);
+    color: var(--text);
+}
+
+.moment-loc-tag-text {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.moment-loc-tag-edit,
+.moment-loc-tag-clear {
+    background: none;
+    border: none;
+    padding: 0 1px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease;
+}
+
+.moment-loc-tag-edit:hover,
+.moment-loc-tag-clear:hover {
+    color: var(--text);
 }
 
 /* 提示状态 */

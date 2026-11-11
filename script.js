@@ -350,6 +350,7 @@ const MOMENT_AUTH_USER_KEY = "mfcheer_moment_auth_user";
 let momentModalBackdrop = null;
 let selectedMomentFiles = [];
 let selectedMomentTags = new Set();
+let selectedMomentLocation = "";
 const momentDraft = createSiteDraft("moment");
 
 function getMomentAuth() {
@@ -1195,8 +1196,22 @@ const MOMENTS_TTL = 60 * 1000; // 本地缓存 1 分钟，配合 Service Worker 
  * 3. 返回纯文本内容 text 与图片附件数组 images [{ src, alt }]
  */
 function parseMomentContent(raw, fallbackTitle = '') {
-    if (!raw) return { text: '', images: [] };
+    if (!raw) return { text: '', images: [], location: '' };
     let clean = raw.replace(/^#{1,4}\s*想说的话\s*[\r\n]*/gm, '').trim();
+
+    // 提取并剥离定位信息（支持 HTML 注释 <!-- location: ... --> 与模板标题 ### 所在地点）
+    let location = '';
+    const locCommentMatch = clean.match(/<!--\s*location:\s*(.+?)\s*-->/i);
+    if (locCommentMatch) {
+        location = locCommentMatch[1].trim();
+        clean = clean.replace(/<!--\s*location:\s*(.+?)\s*-->/gi, '');
+    } else {
+        const locHeaderMatch = clean.match(/^#{1,4}\s*所在地点[^\r\n]*[\r\n]+([^\r\n#]+)/m);
+        if (locHeaderMatch) {
+            location = locHeaderMatch[1].trim();
+            clean = clean.replace(/^#{1,4}\s*所在地点[^\r\n]*[\r\n]+([^\r\n#]+)[\r\n]*/m, '');
+        }
+    }
 
     const images = [];
     const seenSrcs = new Set();
@@ -1245,18 +1260,20 @@ function parseMomentContent(raw, fallbackTitle = '') {
         }
     }
 
-    return { text: clean, images };
+    return { text: clean, images, location };
 }
 
 function normalizeMomentItem(it) {
     if (!it) return null;
     let images = Array.isArray(it.images) ? it.images : [];
     let text = typeof it.text === 'string' ? it.text : '';
-    if (!images.length && text) {
+    let location = typeof it.location === 'string' ? it.location : '';
+    if (text) {
         const parsed = parseMomentContent(text);
-        if (parsed.images.length || parsed.text !== text) {
+        if (parsed.images.length || parsed.text !== text || parsed.location) {
             text = parsed.text;
-            images = parsed.images;
+            if (!images.length) images = parsed.images;
+            if (!location && parsed.location) location = parsed.location;
         }
     }
     // 关键保底：自动将任何 GitHub 附件链接重写为本地同源 assets/moments/ 静态路径
@@ -1277,6 +1294,7 @@ function normalizeMomentItem(it) {
     return {
         ...it,
         text,
+        location,
         images
     };
 }
@@ -1646,10 +1664,42 @@ function renderMomentsState(state = 'ok') {
             name.textContent = m.name; // 仅用 textContent，防 XSS
             head.append(avatar, name);
         }
+        const meta = document.createElement('div');
+        meta.className = 'moment-meta';
+
+        if (m.location) {
+            const loc = document.createElement('span');
+            loc.className = 'moment-location';
+            loc.title = m.location;
+            const pinSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            pinSvg.setAttribute('viewBox', '0 0 24 24');
+            pinSvg.setAttribute('width', '11');
+            pinSvg.setAttribute('height', '11');
+            pinSvg.setAttribute('stroke', 'currentColor');
+            pinSvg.setAttribute('stroke-width', '2');
+            pinSvg.setAttribute('fill', 'none');
+            pinSvg.setAttribute('stroke-linecap', 'round');
+            pinSvg.setAttribute('stroke-linejoin', 'round');
+            pinSvg.setAttribute('aria-hidden', 'true');
+            pinSvg.setAttribute('class', 'moment-loc-pin');
+            const pinPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pinPath.setAttribute('d', 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z');
+            const pinCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            pinCircle.setAttribute('cx', '12');
+            pinCircle.setAttribute('cy', '10');
+            pinCircle.setAttribute('r', '3');
+            pinSvg.append(pinPath, pinCircle);
+            const locText = document.createElement('span');
+            locText.textContent = m.location;
+            loc.append(pinSvg, locText);
+            meta.append(loc);
+        }
+
         const date = document.createElement('span');
         date.className = 'moment-date';
         date.textContent = m.date;
-        head.append(date);
+        meta.append(date);
+        head.append(meta);
         if (isSiteOwner() && Number.isInteger(m.issueNumber)) {
             const remove = document.createElement('button');
             remove.type = 'button';
@@ -1879,12 +1929,13 @@ async function loadMoments() {
                     })
                     .map((it) => {
                         const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
-                        const { text, images } = parseMomentContent(rawContent, it.title);
+                        const { text, images, location } = parseMomentContent(rawContent, it.title);
                         return {
                             issueNumber: it.number,
                             issueUpdatedAt: it.updated_at,
                             date: formatMomentDate(it.created_at),
                             text,
+                            location: location || '',
                             images,
                             name: it.user && it.user.login,
                             avatar: it.user && it.user.avatar_url,
@@ -2083,6 +2134,7 @@ async function openMomentModal() {
     await momentDraft.ready;
     selectedMomentFiles = momentDraft.files;
     selectedMomentTags = new Set(Array.isArray(momentDraft.fields.tags) ? momentDraft.fields.tags : []);
+    selectedMomentLocation = typeof momentDraft.fields.location === 'string' ? momentDraft.fields.location : '';
     createMomentModal();
     renderMomentModalContent();
     momentModalBackdrop.classList.add("is-open");
@@ -2224,6 +2276,11 @@ function renderMomentModalContent() {
                 </div>
             </div>
 
+            <div class="moment-location-picker">
+                <span class="moment-location-label">地点：</span>
+                <div class="moment-location-content" id="momentLocationContent"></div>
+            </div>
+
             <div class="moment-modal-status" id="momentPublishStatus" style="display:none;"></div>
 
             <div class="moment-modal-footer">
@@ -2248,15 +2305,171 @@ function renderMomentModalContent() {
     const tagChips = card.querySelectorAll(".moment-chip");
 
     textInput.value = momentDraft.fields.text || "";
-    const saveDraft = () => momentDraft.saveFields({ text: textInput.value, tags: [...selectedMomentTags] });
+    const saveDraft = () => momentDraft.saveFields({
+        text: textInput.value,
+        tags: [...selectedMomentTags],
+        location: selectedMomentLocation
+    });
     textInput.addEventListener("input", saveDraft);
     tagChips.forEach(chip => chip.classList.toggle("is-selected", selectedMomentTags.has(chip.dataset.tag)));
     renderSelectedPreviews(previewsWrap);
+
+    const locContent = card.querySelector("#momentLocationContent");
+    function renderLocationSelector() {
+        if (!locContent) return;
+        locContent.innerHTML = "";
+
+        if (selectedMomentLocation) {
+            const tag = document.createElement("div");
+            tag.className = "moment-loc-tag";
+
+            const pinSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            pinSvg.setAttribute("viewBox", "0 0 24 24");
+            pinSvg.setAttribute("width", "12");
+            pinSvg.setAttribute("height", "12");
+            pinSvg.setAttribute("stroke", "currentColor");
+            pinSvg.setAttribute("stroke-width", "2");
+            pinSvg.setAttribute("fill", "none");
+            pinSvg.setAttribute("stroke-linecap", "round");
+            pinSvg.setAttribute("stroke-linejoin", "round");
+            pinSvg.setAttribute("aria-hidden", "true");
+            pinSvg.setAttribute("class", "moment-loc-pin");
+            const pinPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            pinPath.setAttribute("d", "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z");
+            const pinCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            pinCircle.setAttribute("cx", "12");
+            pinCircle.setAttribute("cy", "10");
+            pinCircle.setAttribute("r", "3");
+            pinSvg.append(pinPath, pinCircle);
+
+            const txt = document.createElement("span");
+            txt.className = "moment-loc-tag-text";
+            txt.textContent = selectedMomentLocation;
+
+            const editBtn = document.createElement("button");
+            editBtn.type = "button";
+            editBtn.className = "moment-loc-tag-edit";
+            editBtn.title = "修改地点";
+            editBtn.setAttribute("aria-label", "修改地点");
+            editBtn.textContent = "✎";
+            editBtn.onclick = () => {
+                const next = prompt("修改地点名称（如：北京 · 朝阳区、西坝河）：", selectedMomentLocation);
+                if (next !== null && next.trim()) {
+                    selectedMomentLocation = next.trim();
+                    saveDraft();
+                    renderLocationSelector();
+                }
+            };
+
+            const clearBtn = document.createElement("button");
+            clearBtn.type = "button";
+            clearBtn.className = "moment-loc-tag-clear";
+            clearBtn.title = "清除地点";
+            clearBtn.setAttribute("aria-label", "清除地点");
+            clearBtn.innerHTML = "&times;";
+            clearBtn.onclick = () => {
+                selectedMomentLocation = "";
+                saveDraft();
+                renderLocationSelector();
+            };
+
+            tag.append(pinSvg, txt, editBtn, clearBtn);
+            locContent.append(tag);
+        } else {
+            const addBtn = document.createElement("button");
+            addBtn.type = "button";
+            addBtn.className = "moment-loc-btn";
+            addBtn.id = "momentLocDetectBtn";
+            addBtn.title = "获取当前位置";
+            addBtn.innerHTML = `<span>📍 添加位置</span>`;
+
+            const manualBtn = document.createElement("button");
+            manualBtn.type = "button";
+            manualBtn.className = "moment-loc-btn";
+            manualBtn.id = "momentLocManualBtn";
+            manualBtn.title = "手动输入地点";
+            manualBtn.innerHTML = `<span>✏️ 自定义</span>`;
+
+            addBtn.onclick = () => {
+                if (!navigator.geolocation) {
+                    const val = prompt("当前浏览器不支持自动定位，请手动输入所在地点（例如：北京 · 朝阳区）：", "");
+                    if (val !== null && val.trim()) {
+                        selectedMomentLocation = val.trim();
+                        saveDraft();
+                        renderLocationSelector();
+                    }
+                    return;
+                }
+
+                addBtn.disabled = true;
+                addBtn.innerHTML = `<span>📍 定位中…</span>`;
+
+                navigator.geolocation.getCurrentPosition(
+                    async (pos) => {
+                        let detected = "";
+                        try {
+                            const lat = pos.coords.latitude;
+                            const lon = pos.coords.longitude;
+                            const controller = new AbortController();
+                            const timer = setTimeout(() => controller.abort(), 3500);
+                            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=14&addressdetails=1`, {
+                                signal: controller.signal,
+                                headers: { Accept: "application/json" }
+                            });
+                            clearTimeout(timer);
+                            if (res.ok) {
+                                const data = await res.json();
+                                const addr = data.address || {};
+                                const city = addr.city || addr.town || addr.municipality || addr.state || "";
+                                const district = addr.city_district || addr.suburb || addr.district || addr.county || "";
+                                if (city && district && city !== district) detected = `${city} · ${district}`;
+                                else if (city || district) detected = city || district;
+                                else if (data.display_name) detected = data.display_name.split(",")[0].trim();
+                            }
+                        } catch (_) {}
+
+                        if (!detected && pos.coords) {
+                            detected = `${pos.coords.latitude.toFixed(2)}°N, ${pos.coords.longitude.toFixed(2)}°E`;
+                        }
+
+                        const confirmed = prompt("检测到当前位置，可直接确认或按需微调：", detected || "北京 · 朝阳区");
+                        if (confirmed !== null && confirmed.trim()) {
+                            selectedMomentLocation = confirmed.trim();
+                            saveDraft();
+                        }
+                        renderLocationSelector();
+                    },
+                    () => {
+                        const fallback = prompt("未获取到 GPS 定位，可手动输入所在地点（例如：北京 · 朝阳区）：", "");
+                        if (fallback !== null && fallback.trim()) {
+                            selectedMomentLocation = fallback.trim();
+                            saveDraft();
+                        }
+                        renderLocationSelector();
+                    },
+                    { timeout: 6000, enableHighAccuracy: false }
+                );
+            };
+
+            manualBtn.onclick = () => {
+                const val = prompt("请输入所在地点（例如：北京 · 朝阳区、西坝河、阿那亚）：", "");
+                if (val !== null && val.trim()) {
+                    selectedMomentLocation = val.trim();
+                    saveDraft();
+                    renderLocationSelector();
+                }
+            };
+
+            locContent.append(addBtn, manualBtn);
+        }
+    }
+    renderLocationSelector();
+
     card.querySelector("#momentDiscardBtn").onclick = async () => {
         if (momentDraft.busy || !confirm("清空这份草稿的文字、标签和图片？")) return;
         setEditorBusy(momentDraft, card, true);
         await momentDraft.clear();
-        selectedMomentFiles = []; selectedMomentTags.clear();
+        selectedMomentFiles = []; selectedMomentTags.clear(); selectedMomentLocation = "";
         setEditorBusy(momentDraft, card, false);
         renderMomentModalContent();
     };
@@ -2347,6 +2560,9 @@ function renderMomentModalContent() {
                     .join("\n\n");
                 issueBody = issueBody ? `${issueBody}\n\n${imgMarkdown}` : imgMarkdown;
             }
+            if (selectedMomentLocation) {
+                issueBody = issueBody ? `${issueBody}\n\n<!-- location: ${selectedMomentLocation} -->` : `<!-- location: ${selectedMomentLocation} -->`;
+            }
 
             const now = new Date();
             const dateStr = formatMomentDate(now.toISOString());
@@ -2360,6 +2576,7 @@ function renderMomentModalContent() {
                 issueUpdatedAt: createdIssue?.updated_at || now.toISOString(),
                 date: dateStr,
                 text: text,
+                location: selectedMomentLocation,
                 name: user.login || "mfcheer",
                 avatar: user.avatar_url || "avatar.jpg",
                 labels: Array.from(selectedMomentTags),
@@ -2370,7 +2587,7 @@ function renderMomentModalContent() {
             renderMomentsState();
 
             await momentDraft.clear();
-            selectedMomentFiles = []; selectedMomentTags.clear();
+            selectedMomentFiles = []; selectedMomentTags.clear(); selectedMomentLocation = "";
             setEditorBusy(momentDraft, card, false);
             closeMomentModal();
             showMomentToast("🎉 说说发布成功！已在页面实时展示。");

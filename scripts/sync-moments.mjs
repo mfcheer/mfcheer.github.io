@@ -44,11 +44,26 @@ function formatMomentDate(isoString) {
  * 解析说说内容：
  * 1. 自动过滤 Issue 模板自带的表单标记（如 ### 想说的话）
  * 2. 提取并分离图片（支持 HTML <img> 标签、Markdown ![](url) 语法、独立附件链接）
- * 3. 返回纯文本内容 text 与图片附件数组 images [{ src, alt }]
+ * 3. 提取并剥离定位信息（支持 HTML 注释 <!-- location: ... --> 与模板标题 ### 所在地点）
+ * 4. 返回纯文本内容 text、图片附件数组 images [{ src, alt }] 与地点字符串 location
  */
 function parseMomentContent(raw, fallbackTitle = '') {
-    if (!raw) return { text: '', images: [] };
+    if (!raw) return { text: '', images: [], location: '' };
     let clean = raw.replace(/^#{1,4}\s*想说的话\s*[\r\n]*/gm, '').trim();
+
+    // 提取并剥离定位信息
+    let location = '';
+    const locCommentMatch = clean.match(/<!--\s*location:\s*(.+?)\s*-->/i);
+    if (locCommentMatch) {
+        location = locCommentMatch[1].trim();
+        clean = clean.replace(/<!--\s*location:\s*(.+?)\s*-->/gi, '');
+    } else {
+        const locHeaderMatch = clean.match(/^#{1,4}\s*所在地点[^\r\n]*[\r\n]+([^\r\n#]+)/m);
+        if (locHeaderMatch) {
+            location = locHeaderMatch[1].trim();
+            clean = clean.replace(/^#{1,4}\s*所在地点[^\r\n]*[\r\n]+([^\r\n#]+)[\r\n]*/m, '');
+        }
+    }
 
     const images = [];
     const seenSrcs = new Set();
@@ -101,7 +116,7 @@ function parseMomentContent(raw, fallbackTitle = '') {
         }
     }
 
-    return { text: clean, images };
+    return { text: clean, images, location };
 }
 
 /**
@@ -246,12 +261,13 @@ async function main() {
             })
             .map((it) => {
                 const rawContent = ((it.body || '').trim() || (it.title || '')).trim();
-                const { text, images } = parseMomentContent(rawContent, it.title);
+                const { text, images, location } = parseMomentContent(rawContent, it.title);
                 return {
                     issueNumber: it.number,
                     issueUpdatedAt: it.updated_at,
                     date: formatMomentDate(it.created_at),
                     text,
+                    location: location || '',
                     name: it.user && it.user.login,
                     avatar: it.user && it.user.avatar_url,
                     labels: (Array.isArray(it.labels) ? it.labels : [])
@@ -280,7 +296,11 @@ async function main() {
     console.log(`成功同步并本地化 ${list.length} 条说说至 ${MOMENTS_FILE}`);
 }
 
-main().catch((err) => {
-    console.error('同步失败:', err);
-    process.exit(1);
-});
+export { parseMomentContent, formatMomentDate, main };
+
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+    main().catch((err) => {
+        console.error('同步失败:', err);
+        process.exit(1);
+    });
+}

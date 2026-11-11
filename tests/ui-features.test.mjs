@@ -48,3 +48,36 @@ test('博客详情页包含跳转至标签筛选列表的链接', () => {
         assert.match(html, /<a class="post-tag" href="\/blog\/\?tag=[^"]+"[^>]*>#[^<]+<\/a>/);
     }
 });
+
+test('说说支持定位解析与剥离（HTML 注释与 Issue 模板格式）', async () => {
+    const { parseMomentContent } = await import('../scripts/sync-moments.mjs');
+    
+    // 1. HTML 注释格式
+    const res1 = parseMomentContent('今天阳光很好\n\n<!-- location: 北京 · 朝阳区 -->');
+    assert.equal(res1.text, '今天阳光很好');
+    assert.equal(res1.location, '北京 · 朝阳区');
+    
+    // 2. Issue 模板格式
+    const res2 = parseMomentContent('### 想说的话\n\n在海边吹风\n\n### 所在地点\n\n阿那亚');
+    assert.equal(res2.text, '在海边吹风');
+    assert.equal(res2.location, '阿那亚');
+    
+    // 3. 无定位信息
+    const res3 = parseMomentContent('纯文字说说');
+    assert.equal(res3.text, '纯文字说说');
+    assert.equal(res3.location, '');
+});
+
+test('说说前端定位样式与选择器交互代码就绪', () => {
+    const css = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+    assert.ok(css.includes('.moment-location'), '必须包含 .moment-location 地理位置样式');
+    assert.ok(css.includes('.moment-location-picker'), '必须包含 .moment-location-picker 定位选择器');
+    assert.ok(css.includes('.moment-loc-btn'), '必须包含 .moment-loc-btn 定位操作按钮样式');
+    assert.ok(css.includes('.moment-loc-tag'), '必须包含 .moment-loc-tag 已选地点样式');
+
+    const js = fs.readFileSync(path.join(ROOT, 'script.js'), 'utf8');
+    assert.ok(js.includes('selectedMomentLocation'), '必须声明并维护 selectedMomentLocation 状态');
+    assert.ok(js.includes('navigator.geolocation'), '必须支持原生 navigator.geolocation 获取经纬度');
+    assert.ok(js.includes('moment-location'), '必须在说说条目中渲染 moment-location');
+    assert.ok(js.includes('location: selectedMomentLocation'), '发布说说与草稿必须保存 location 字段');
+});

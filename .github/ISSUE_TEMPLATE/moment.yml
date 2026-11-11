@@ -16,3 +16,11 @@ body:
       placeholder: 今天……
     validations:
       required: true
+  - type: input
+    id: location
+    attributes:
+      label: 所在地点（可选）
+      description: 例如：北京 · 朝阳区、西坝河、阿那亚等
+      placeholder: 北京 · 朝阳区
+    validations:
+      required: false
