@@ -4750,3 +4750,195 @@ button:active,
     transform: scale(0.96);
     transition: transform 0.08s ease;
 }
+
+/* ============================================================
+   AI ASSISTANT DIARY / 随身硅基手账
+   ============================================================ */
+.card-diary {
+    position: relative;
+    padding: 24px;
+    margin-bottom: 32px;
+    border-radius: var(--radius-lg, 16px);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.diary-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.diary-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.diary-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.card-diary h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.diary-mood-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    letter-spacing: 0.01em;
+}
+
+[data-theme="dark"] .diary-mood-badge {
+    background: rgba(52, 211, 153, 0.12);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.25);
+}
+
+.diary-mood-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+    box-shadow: 0 0 8px currentColor;
+    animation: diaryPulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes diaryPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.diary-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 6px;
+    background: var(--code-bg, rgba(0, 0, 0, 0.03));
+    border: 1px solid var(--line-subtle, rgba(0, 0, 0, 0.06));
+    border-radius: 9999px;
+}
+
+.diary-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transition: background-color 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.diary-nav-btn:hover:not(:disabled) {
+    background: var(--line-subtle, rgba(0, 0, 0, 0.08));
+    color: var(--text-primary);
+}
+
+.diary-nav-btn:disabled {
+    opacity: 0.28;
+    cursor: not-allowed;
+}
+
+.diary-date-indicator {
+    font-size: 0.78rem;
+    font-family: var(--font-mono, monospace);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    color: var(--text-secondary);
+    min-width: 80px;
+    text-align: center;
+    user-select: none;
+}
+
+.diary-body-wrap {
+    padding: 16px 18px;
+    background: var(--code-bg, rgba(0, 0, 0, 0.02));
+    border: 1px solid var(--line-subtle, rgba(0, 0, 0, 0.05));
+    border-radius: 12px;
+    margin-bottom: 14px;
+    position: relative;
+}
+
+.diary-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.75rem;
+    color: var(--text-tertiary, #888);
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono, monospace);
+}
+
+.diary-content {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: var(--text-primary);
+    text-align: justify;
+    letter-spacing: 0.01em;
+}
+
+.diary-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+}
+
+.diary-footnote {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    opacity: 0.85;
+}
+
+.diary-badge-ai {
+    font-size: 0.72rem;
+    color: var(--text-tertiary, #888);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+@media (max-width: 640px) {
+    .card-diary {
+        padding: 18px 16px;
+    }
+    .diary-head {
+        align-items: flex-start;
+    }
+    .diary-content {
+        font-size: 0.88rem;
+        line-height: 1.7;
+    }
+    .diary-foot {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+}

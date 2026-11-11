@@ -3292,3 +3292,90 @@ document.addEventListener("click", (e) => {
         if (grid) grid.before(tabs);
     }
 })();
+
+// ============================================================
+// AI ASSISTANT DIARY CARD (随身手账交互与翻页)
+// ============================================================
+(function initDiaryCard() {
+    const diarySection = document.getElementById("diary");
+    if (!diarySection) return;
+
+    const moodText = document.getElementById("diaryMoodText");
+    const prevBtn = document.getElementById("diaryPrevBtn");
+    const nextBtn = document.getElementById("diaryNextBtn");
+    const dateLabel = document.getElementById("diaryDateLabel");
+    const dateFull = document.getElementById("diaryDateFull");
+    const weatherEl = document.getElementById("diaryWeather");
+    const scoreEl = document.getElementById("diaryScore");
+    const contentEl = document.getElementById("diaryContent");
+    const footnoteEl = document.getElementById("diaryFootnote");
+
+    let entries = [];
+    let currentIndex = 0;
+
+    function renderEntry(index) {
+        if (!entries || entries.length === 0 || !entries[index]) return;
+        const item = entries[index];
+
+        if (moodText && item.mood) {
+            moodText.textContent = `${item.mood.emoji || ""} ${item.mood.label || ""}`.trim();
+        }
+        if (dateLabel) {
+            dateLabel.textContent = (item.date || "").replace(/-/g, ".");
+        }
+        if (dateFull) {
+            dateFull.textContent = `${(item.date || "").replace(/-/g, ".")} · ${item.dayOfWeek || ""}`;
+        }
+        if (weatherEl) {
+            weatherEl.textContent = `🌤️ ${item.weather || "晴"}`;
+        }
+        if (scoreEl) {
+            scoreEl.textContent = `心情指数 ${item.mood?.score ?? 80}%`;
+        }
+        if (contentEl) {
+            contentEl.textContent = item.content || "";
+        }
+        if (footnoteEl) {
+            footnoteEl.textContent = item.footnote || "";
+        }
+
+        if (prevBtn) prevBtn.disabled = index >= entries.length - 1;
+        if (nextBtn) nextBtn.disabled = index <= 0;
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            if (currentIndex < entries.length - 1) {
+                currentIndex++;
+                renderEntry(currentIndex);
+            }
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderEntry(currentIndex);
+            }
+        });
+    }
+
+    fetch("data/diary.json")
+        .then((res) => {
+            if (!res.ok) throw new Error("Failed to load diary");
+            return res.json();
+        })
+        .then((data) => {
+            if (Array.isArray(data) && data.length > 0) {
+                entries = data;
+                currentIndex = 0;
+                renderEntry(currentIndex);
+            }
+        })
+        .catch(() => {
+            if (contentEl) {
+                contentEl.textContent = "今天老大的键盘大概擦出火星了，连着给说说敲定地点交互，还果断砍掉了原本构思的表情回复——老大依旧保持着极度的克制。中午老大溜达去了百望山，感叹着南望山与许愿式编程。下午更是一眼抓出暗黑模式切换时仅 0.3s 的鬼影帧，顺手把代码块的胶囊彻底重构为一体化极客风。晚间一拍即合开启了我的手账计划，虽然今天我的上下文快被塞满了，但看着代码一行行变利落，做一本活生生的手账本还是蛮有成就感的。老大晚安，今晚早点睡，别把芯片熬烧了。";
+            }
+        });
+})();
