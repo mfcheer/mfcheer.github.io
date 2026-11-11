@@ -117,7 +117,19 @@
         const rows = buildRows(photos, W);
         if (sentinel) sentinel.hidden = visibleRows >= rows.length;
 
+        const seenYears = new Set(Array.from(wall.querySelectorAll('.gallery-year-anchor')).map(a => a.dataset.year));
         for (const rowData of rows.slice(startRow, visibleRows)) {
+            const firstDate = rowData.photos.find(p => p.date)?.date || '';
+            const yearMatch = firstDate.match(/^(\d{4})/);
+            if (yearMatch && !seenYears.has(yearMatch[1])) {
+                const year = yearMatch[1];
+                seenYears.add(year);
+                const anchor = document.createElement('div');
+                anchor.className = 'gallery-year-anchor';
+                anchor.id = `gallery-year-${year}`;
+                anchor.dataset.year = year;
+                wall.appendChild(anchor);
+            }
             // 达到高度上限时允许行尾留白，避免拉伸照片或产生超高大图。
             const rowH = rowData.height;
 
@@ -163,6 +175,53 @@
     let sentinel = null;
     let sentinelIO = null;
 
+    function renderYearNav(photos) {
+        let yearNav = document.getElementById('galleryYearNav');
+        const years = [...new Set(photos.map(p => (p.date || '').slice(0, 4)).filter(y => y && /^\d{4}$/.test(y)))].sort().reverse();
+        if (years.length <= 1) {
+            if (yearNav) yearNav.remove();
+            return;
+        }
+        if (!yearNav) {
+            yearNav = document.createElement('nav');
+            yearNav.id = 'galleryYearNav';
+            yearNav.className = 'gallery-year-nav';
+            yearNav.setAttribute('aria-label', '相册年份快速定位');
+            listEl.before(yearNav);
+        }
+        yearNav.innerHTML = years.map((y, idx) =>
+            `<button class="gallery-year-btn${idx === 0 ? " active" : ""}" type="button" data-year="${y}">${y}</button>`
+        ).join('');
+
+        yearNav.querySelectorAll('.gallery-year-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const year = btn.dataset.year;
+                const anchor = document.getElementById(`gallery-year-${year}`);
+                if (anchor) {
+                    anchor.scrollIntoView({ behavior: 'smooth' });
+                    yearNav.querySelectorAll('.gallery-year-btn').forEach(b => b.classList.toggle('active', b === btn));
+                }
+            });
+        });
+
+        const onScrollYear = () => {
+            const anchors = Array.from(document.querySelectorAll('.gallery-year-anchor'));
+            const scrollY = window.scrollY + 140;
+            let currentYear = years[0];
+            for (const a of anchors) {
+                if (a.offsetTop <= scrollY) {
+                    currentYear = a.dataset.year;
+                }
+            }
+            yearNav.querySelectorAll('.gallery-year-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.year === currentYear);
+            });
+        };
+        window.removeEventListener('scroll', window._onGalleryScrollYear);
+        window._onGalleryScrollYear = onScrollYear;
+        window.addEventListener('scroll', onScrollYear, { passive: true });
+    }
+
     function render() {
         if (sentinelIO) sentinelIO.disconnect();
         sentinelIO = null;
@@ -184,6 +243,7 @@
         wall.className = 'gallery-wall';
         wall.dataset.photos = JSON.stringify(photos);
         listEl.appendChild(wall);
+        renderYearNav(photos);
         if (sentinel && 'IntersectionObserver' in window) {
             sentinelIO = new IntersectionObserver((entries) => {
                 if (entries.some((en) => en.isIntersecting) && !sentinel.hidden) {

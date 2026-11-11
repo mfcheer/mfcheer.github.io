@@ -56,7 +56,7 @@ function applyTheme(theme) {
     }
 }
 
-function switchTheme(nextTheme) {
+function switchTheme(nextTheme, event) {
     currentTheme = nextTheme;
     localStorage.setItem('theme', currentTheme);
 
@@ -66,7 +66,41 @@ function switchTheme(nextTheme) {
     };
 
     if (typeof document.startViewTransition === 'function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.startViewTransition(update);
+        const root = document.documentElement;
+        const rect = typeof themeToggleBtn?.getBoundingClientRect === 'function' ? themeToggleBtn.getBoundingClientRect() : null;
+        const x = event?.clientX ?? (rect ? rect.left + (rect.width || 0) / 2 : (typeof window !== 'undefined' ? window.innerWidth : 400));
+        const y = event?.clientY ?? (rect ? rect.top + (rect.height || 0) / 2 : 0);
+        const winW = typeof window !== 'undefined' ? window.innerWidth : 800;
+        const winH = typeof window !== 'undefined' ? window.innerHeight : 600;
+        const endRadius = Math.hypot(
+            Math.max(x, winW - x),
+            Math.max(y, winH - y)
+        );
+
+        if (root?.classList?.add) root.classList.add('theme-circle-transitioning');
+        const transition = document.startViewTransition(update);
+        if (transition && transition.ready && typeof root?.animate === 'function') {
+            transition.ready.then(() => {
+                const anim = root.animate(
+                    {
+                        clipPath: [
+                            `circle(0px at ${x}px ${y}px)`,
+                            `circle(${endRadius}px at ${x}px ${y}px)`
+                        ]
+                    },
+                    {
+                        duration: 380,
+                        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                        pseudoElement: '::view-transition-new(root)'
+                    }
+                );
+                anim.onfinish = () => root?.classList?.remove?.('theme-circle-transitioning');
+            }).catch(() => {
+                root?.classList?.remove?.('theme-circle-transitioning');
+            });
+        } else {
+            root?.classList?.remove?.('theme-circle-transitioning');
+        }
     } else {
         enableThemeTransition();
         update();
@@ -78,9 +112,9 @@ let currentTheme = getPreferredTheme();
 applyTheme(currentTheme);
 
 if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
+    themeToggleBtn.addEventListener('click', (e) => {
         const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        switchTheme(nextTheme);
+        switchTheme(nextTheme, e);
     });
 }
 
@@ -522,6 +556,7 @@ function showMomentToast(msg, isSuccess = true) {
 
 function resetLightboxTransform() {
     if (siteLightboxImg) {
+        siteLightboxImg?.classList?.remove?.('is-zoomed');
         siteLightboxImg.style.transform = '';
         siteLightboxImg.style.transition = '';
         siteLightboxImg.style.opacity = '';
@@ -980,6 +1015,17 @@ function bindZoomableImage(img) {
         }
     }
 
+    const LANG_MAP = {
+        js: 'JavaScript', javascript: 'JavaScript',
+        ts: 'TypeScript', typescript: 'TypeScript',
+        py: 'Python', python: 'Python',
+        cpp: 'C++', 'c++': 'C++', c: 'C',
+        java: 'Java', sh: 'Shell', bash: 'Bash', zsh: 'Zsh',
+        html: 'HTML', css: 'CSS', json: 'JSON', sql: 'SQL',
+        md: 'Markdown', yaml: 'YAML', yml: 'YAML',
+        go: 'Go', rust: 'Rust', rs: 'Rust'
+    };
+
     postBody.querySelectorAll('pre').forEach((pre) => {
         const code = pre.querySelector('code');
         if (!code || pre.parentElement.classList.contains('code-block')) return;
@@ -991,11 +1037,29 @@ function bindZoomableImage(img) {
 
         const langMatch = (code.className || '').match(/language-([\w+-]+)/);
         if (langMatch) {
+            const rawLang = langMatch[1].toLowerCase();
             const lang = document.createElement('span');
             lang.className = 'code-lang';
-            lang.textContent = langMatch[1];
+            lang.textContent = LANG_MAP[rawLang] || langMatch[1].toUpperCase();
             wrapper.appendChild(lang);
         }
+
+        // 横向滚动渐变阴影指示
+        const updateScrollShadow = () => {
+            if (pre.scrollWidth > pre.clientWidth + 2) {
+                wrapper.classList.toggle('has-scroll-right', pre.scrollLeft + pre.clientWidth < pre.scrollWidth - 6);
+            } else {
+                wrapper.classList.remove('has-scroll-right');
+            }
+        };
+        pre.addEventListener('scroll', updateScrollShadow, { passive: true });
+        window.addEventListener('resize', updateScrollShadow, { passive: true });
+        setTimeout(updateScrollShadow, 100);
+
+        // 双击代码块高亮聚焦
+        code.addEventListener('dblclick', () => {
+            wrapper.classList.toggle('is-highlighted-block');
+        });
 
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -1018,22 +1082,111 @@ function bindZoomableImage(img) {
     });
 
     const tocLinks = Array.from(document.querySelectorAll('.toc a'));
-    if (tocLinks.length && 'IntersectionObserver' in window) {
-        const map = new Map();
-        tocLinks.forEach((a) => {
-            const id = decodeURIComponent((a.getAttribute('href') || '').slice(1));
-            const target = id && document.getElementById(id);
-            if (target) map.set(target, a);
-        });
-        const setActive = (link) => {
-            tocLinks.forEach((a) => a.classList.toggle('active', a === link));
-        };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) setActive(map.get(entry.target));
+    if (tocLinks.length) {
+        // 浮动目录入口按钮
+        let floatTocBtn = document.getElementById('floatTocBtn');
+        if (!floatTocBtn) {
+            floatTocBtn = document.createElement('button');
+            floatTocBtn.id = 'floatTocBtn';
+            floatTocBtn.className = 'float-toc-btn';
+            floatTocBtn.type = 'button';
+            floatTocBtn.setAttribute('title', '查看文章目录');
+            floatTocBtn.setAttribute('aria-label', '查看文章目录');
+            floatTocBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>';
+            document.body.appendChild(floatTocBtn);
+        }
+
+        // 浮动目录抽屉
+        let tocDrawerBackdrop = document.getElementById('tocDrawerBackdrop');
+        if (!tocDrawerBackdrop) {
+            tocDrawerBackdrop = document.createElement('div');
+            tocDrawerBackdrop.id = 'tocDrawerBackdrop';
+            tocDrawerBackdrop.className = 'toc-drawer-backdrop';
+            tocDrawerBackdrop.innerHTML = `
+                <div class="toc-drawer" role="dialog" aria-label="文章目录">
+                    <div class="toc-drawer-head">
+                        <span>📑 文章目录</span>
+                        <button class="toc-drawer-close" type="button" aria-label="关闭目录">✕</button>
+                    </div>
+                    <div class="toc-drawer-body">
+                        <ul>
+                            ${tocLinks.map(a => {
+                                const parentLi = a.closest('li');
+                                const cls = parentLi?.className ? ` class="${parentLi.className}"` : '';
+                                return `<li${cls}><a href="${a.getAttribute('href')}">${a.textContent}</a></li>`;
+                            }).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(tocDrawerBackdrop);
+
+            const closeDrawer = () => {
+                tocDrawerBackdrop.classList.remove('is-open');
+                document.body.classList.remove('drawer-open');
+            };
+            tocDrawerBackdrop.querySelector('.toc-drawer-close').onclick = closeDrawer;
+            tocDrawerBackdrop.addEventListener('click', (e) => {
+                if (e.target === tocDrawerBackdrop) closeDrawer();
             });
-        }, { rootMargin: '-80px 0px -55% 0px' });
-        map.forEach((_, target) => observer.observe(target));
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && tocDrawerBackdrop.classList.contains('is-open')) closeDrawer();
+            });
+
+            tocDrawerBackdrop.querySelectorAll('a').forEach(a => {
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = decodeURIComponent((a.getAttribute('href') || '').slice(1));
+                    const targetEl = targetId && document.getElementById(targetId);
+                    if (targetEl) {
+                        closeDrawer();
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                        history.replaceState(null, '', `#${targetId}`);
+                    }
+                });
+            });
+
+            floatTocBtn.addEventListener('click', () => {
+                tocDrawerBackdrop.classList.add('is-open');
+                document.body.classList.add('drawer-open');
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                floatTocBtn.classList.add('visible');
+            } else {
+                floatTocBtn.classList.remove('visible');
+            }
+        }, { passive: true });
+
+        if ('IntersectionObserver' in window) {
+            const map = new Map();
+            const drawerMap = new Map();
+            const drawerLinks = Array.from(tocDrawerBackdrop?.querySelectorAll('a') || []);
+
+            tocLinks.forEach((a, i) => {
+                const id = decodeURIComponent((a.getAttribute('href') || '').slice(1));
+                const target = id && document.getElementById(id);
+                if (target) {
+                    map.set(target, a);
+                    if (drawerLinks[i]) drawerMap.set(target, drawerLinks[i]);
+                }
+            });
+            const setActive = (link) => {
+                tocLinks.forEach((a) => a.classList.toggle('active', a === link));
+                if (drawerLinks.length) {
+                    const targetHref = link ? link.getAttribute('href') : null;
+                    drawerLinks.forEach((a) => a.classList.toggle('active', targetHref && a.getAttribute('href') === targetHref));
+                }
+            };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) setActive(map.get(entry.target));
+                });
+            }, { rootMargin: '-80px 0px -55% 0px' });
+            map.forEach((_, target) => observer.observe(target));
+        }
     }
 
     // 图片点击放大预览（Lightbox）
@@ -1317,6 +1470,19 @@ function formatMomentDate(isoString) {
 
 let momentsAll = []; // 全量说说数据
 let momentsFilter = null; // 当前筛选的标签；null = 显示全部
+let momentsLocationFilter = null; // 当前筛选的地点；null = 显示全部
+
+function setMomentsFilter(tag = null, location = null, pushState = true) {
+    momentsFilter = tag;
+    momentsLocationFilter = location;
+    if (pushState && typeof window !== 'undefined' && window.history?.pushState) {
+        const url = new URL(window.location);
+        if (tag) url.searchParams.set('tag', tag); else url.searchParams.delete('tag');
+        if (location) url.searchParams.set('location', location); else url.searchParams.delete('location');
+        window.history.pushState(null, '', url.pathname + url.search + url.hash);
+    }
+    renderMomentsState();
+}
 
 // ============================================================
 // 说说富媒体卡片：视频/音乐平台链接识别
@@ -1537,13 +1703,22 @@ function renderMomentsState(state = 'ok') {
     listEl.innerHTML = '';
 
     const visible = momentsAll.filter(m => !isSiteDeleted('moment', m.issueNumber, '', m.issueUpdatedAt));
-    const list = momentsFilter
-        ? visible.filter((m) => (m.labels || []).includes(momentsFilter))
-        : visible;
+    const list = visible.filter((m) => {
+        if (momentsFilter && !(m.labels || []).includes(momentsFilter)) return false;
+        if (momentsLocationFilter && m.location !== momentsLocationFilter) return false;
+        return true;
+    });
+
+    const isFiltering = Boolean(momentsFilter || momentsLocationFilter);
 
     if (countEl) {
-        countEl.textContent = momentsFilter
-            ? `#${momentsFilter} · ${list.length} 条`
+        let filterText = '';
+        if (momentsFilter && momentsLocationFilter) filterText = `#${momentsFilter} · 📍 ${momentsLocationFilter}`;
+        else if (momentsFilter) filterText = `#${momentsFilter}`;
+        else if (momentsLocationFilter) filterText = `📍 ${momentsLocationFilter}`;
+
+        countEl.textContent = isFiltering
+            ? `${filterText} · ${list.length} 条`
             : `共 ${visible.length} 条`;
     }
 
@@ -1580,25 +1755,27 @@ function renderMomentsState(state = 'ok') {
     }
 
     // 筛选中：顶部显示筛选条，可取消
-    if (momentsFilter) {
+    if (isFiltering) {
         const bar = document.createElement('div');
         bar.className = 'moment-filterbar';
         const chip = document.createElement('span');
-        chip.textContent = `只看 #${momentsFilter}`;
+        const descParts = [];
+        if (momentsFilter) descParts.push(`#${momentsFilter}`);
+        if (momentsLocationFilter) descParts.push(`📍 ${momentsLocationFilter}`);
+        chip.textContent = `只看 ${descParts.join(' · ')}`;
         const clear = document.createElement('button');
         clear.type = 'button';
         clear.className = 'moment-filter-clear';
         clear.textContent = '取消筛选 ✕';
         clear.addEventListener('click', () => {
-            momentsFilter = null;
-            renderMomentsState();
+            setMomentsFilter(null, null, true);
         });
         bar.append(chip, clear);
         listEl.append(bar);
     } else if (!list.length) {
         const empty = document.createElement('p');
         empty.className = 'moment-empty';
-        empty.textContent = '该标签下暂无说说';
+        empty.textContent = '该筛选条件下暂无说说';
         listEl.append(empty);
         return;
     }
@@ -1606,7 +1783,7 @@ function renderMomentsState(state = 'ok') {
     // 首页容器带 data-limit（只展示最近 N 条，不做滚动加载）；
     // 列表页全量展示：分批渲染 + 无感无限加载（滑到接近底部自动追加下一批）
     const limit = parseInt(listEl.dataset.limit, 10);
-    const hasLimit = !Number.isNaN(limit) && limit > 0 && !momentsFilter;
+    const hasLimit = !Number.isNaN(limit) && limit > 0 && !isFiltering;
     const PAGE_SIZE = hasLimit ? limit : 8;
     let rendered = 0;
     let sentinel = null;
@@ -1670,7 +1847,19 @@ function renderMomentsState(state = 'ok') {
         if (m.location) {
             const loc = document.createElement('span');
             loc.className = 'moment-location';
-            loc.title = m.location;
+            loc.setAttribute('role', 'button');
+            loc.setAttribute('tabindex', '0');
+            loc.title = `筛选位于 ${m.location} 的说说`;
+            loc.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setMomentsFilter(momentsFilter, m.location, true);
+            });
+            loc.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setMomentsFilter(momentsFilter, m.location, true);
+                }
+            });
             const pinSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             pinSvg.setAttribute('viewBox', '0 0 24 24');
             pinSvg.setAttribute('width', '11');
@@ -1834,9 +2023,9 @@ function renderMomentsState(state = 'ok') {
                 tag.className = 'moment-tag';
                 tag.textContent = `#${label}`;
                 tag.title = `筛选 #${label} 的说说`;
-                tag.addEventListener('click', () => {
-                    momentsFilter = label;
-                    renderMomentsState();
+                tag.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    setMomentsFilter(label, momentsLocationFilter, true);
                 });
                 tagsWrap.append(tag);
             });
@@ -2725,3 +2914,409 @@ document.addEventListener("click", (e) => {
         openMomentModal();
     }
 });
+
+// ============================================================
+// MOMENTS URL FILTER SYNC (说说 URL 参数联动与后退恢复)
+// ============================================================
+(function initMomentsUrlSync() {
+    function syncFromUrl() {
+        if (typeof window === "undefined" || !window.location) return;
+        const params = new URLSearchParams(window.location.search);
+        const tag = params.get("tag");
+        const loc = params.get("location");
+        if (tag || loc) {
+            momentsFilter = tag || null;
+            momentsLocationFilter = loc || null;
+        } else {
+            momentsFilter = null;
+            momentsLocationFilter = null;
+        }
+    }
+    window.addEventListener("popstate", () => {
+        syncFromUrl();
+        renderMomentsState();
+    });
+    syncFromUrl();
+})();
+
+// ============================================================
+// INSTANT PAGE PREFETCH (跨页面无缝预加载)
+// ============================================================
+(function initInstantPage() {
+    if (typeof window === "undefined" || !window.fetch || !document.addEventListener) return;
+    const prefetched = new Set();
+    const prefetch = (url) => {
+        if (!url || prefetched.has(url)) return;
+        try {
+            const parsed = new URL(url, window.location.href);
+            if (parsed.origin !== window.location.origin) return;
+            if (parsed.pathname === window.location.pathname && !parsed.search) return;
+            if (/\.(jpg|jpeg|png|webp|gif|svg|ico|zip|pdf)$/i.test(parsed.pathname)) return;
+            prefetched.add(url);
+            if (document.createElement("link").relList?.supports?.("prefetch")) {
+                const link = document.createElement("link");
+                link.rel = "prefetch";
+                link.href = url;
+                link.as = "document";
+                document.head.appendChild(link);
+            } else {
+                fetch(url, { priority: "low" }).catch(() => {});
+            }
+        } catch (e) {}
+    };
+
+    let hoverTimer = null;
+    document.addEventListener("mouseover", (e) => {
+        const a = e.target?.closest?.("a[href]");
+        if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+        const href = a.getAttribute("href");
+        if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("javascript:")) return;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(() => prefetch(a.href), 65);
+    }, { passive: true });
+
+    document.addEventListener("mouseout", () => clearTimeout(hoverTimer), { passive: true });
+    document.addEventListener("touchstart", (e) => {
+        const a = e.target?.closest?.("a[href]");
+        if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+        const href = a.getAttribute("href");
+        if (href && !href.startsWith("#") && !href.startsWith("mailto:")) prefetch(a.href);
+    }, { passive: true });
+})();
+
+// ============================================================
+// GLOBAL COMMAND PALETTE (Cmd+K / Ctrl+K 全局搜索面板)
+// ============================================================
+(function initCommandPalette() {
+    let blogPostsCache = null;
+    let momentsCache = null;
+    let isFetching = false;
+    let backdrop = null;
+    let input = null;
+    let list = null;
+    let selectedIndex = 0;
+    let currentResults = [];
+
+    const QUICK_NAV = [
+        { title: "个人首页", desc: "关于我、生活动态与技能地图", url: "/", icon: "🏠", badge: "导航" },
+        { title: "说说专页", desc: "即时想法与日常碎片记录", url: "/moments/", icon: "💬", badge: "导航" },
+        { title: "相册摄影", desc: "旅途与日常风光摄影作品", url: "/gallery/", icon: "📷", badge: "导航" },
+        { title: "博客文章", desc: "625+ 篇技术长文与沉淀", url: "/blog/", icon: "📝", badge: "导航" },
+        { title: "书影音", desc: "看过、读过与玩过", url: "/#media", icon: "🎬", badge: "导航" },
+        { title: "留言板", desc: "欢迎交流与留言", url: "/#guestbook", icon: "💌", badge: "导航" },
+        { title: "切换主题模式", desc: "在深色与浅色模式之间切换", action: "toggle-theme", icon: "🌓", badge: "快捷指令" }
+    ];
+
+    async function loadSearchData() {
+        if (blogPostsCache && momentsCache) return;
+        if (isFetching) return;
+        isFetching = true;
+        try {
+            const [postsRes, momentsRes] = await Promise.allSettled([
+                fetch("/data/blog-index.json"),
+                fetch("/data/moments.json")
+            ]);
+            if (postsRes.status === "fulfilled" && postsRes.value.ok) {
+                const data = await postsRes.value.json();
+                blogPostsCache = Array.isArray(data.posts) ? data.posts : [];
+            }
+            if (momentsRes.status === "fulfilled" && momentsRes.value.ok) {
+                const data = await momentsRes.value.json();
+                momentsCache = Array.isArray(data) ? data : [];
+            }
+        } catch (e) {
+            console.warn("[Search] Failed to load data:", e);
+        } finally {
+            isFetching = false;
+            blogPostsCache = blogPostsCache || [];
+            momentsCache = momentsCache || [];
+        }
+    }
+
+    function createPalette() {
+        if (backdrop) return;
+        backdrop = document.createElement("div");
+        backdrop.className = "cmd-palette-backdrop";
+        backdrop.id = "cmdPalette";
+        backdrop.setAttribute("role", "dialog");
+        backdrop.setAttribute("aria-modal", "true");
+        backdrop.setAttribute("aria-label", "全局搜索与指令");
+
+        backdrop.innerHTML = `
+            <div class="cmd-palette-dialog">
+                <div class="cmd-palette-header">
+                    <span class="cmd-palette-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </span>
+                    <input class="cmd-palette-input" type="text" placeholder="搜索文章、说说、或输入指令…" autocomplete="off" spellcheck="false" aria-autocomplete="list">
+                    <button class="cmd-palette-clear" type="button" aria-label="清空输入" hidden>✕</button>
+                    <span class="cmd-palette-esc">ESC</span>
+                </div>
+                <div class="cmd-palette-list" role="listbox"></div>
+                <div class="cmd-palette-footer">
+                    <div class="cmd-palette-footer-keys">
+                        <span class="cmd-palette-footer-key"><kbd>↑</kbd><kbd>↓</kbd> 移动</span>
+                        <span class="cmd-palette-footer-key"><kbd>↵</kbd> 选择</span>
+                        <span class="cmd-palette-footer-key"><kbd>ESC</kbd> 关闭</span>
+                    </div>
+                    <span>按 <kbd>⌘K</kbd> 随时唤出</span>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(backdrop);
+        input = backdrop.querySelector(".cmd-palette-input");
+        list = backdrop.querySelector(".cmd-palette-list");
+        const clearBtn = backdrop.querySelector(".cmd-palette-clear");
+
+        clearBtn.addEventListener("click", () => {
+            input.value = "";
+            clearBtn.hidden = true;
+            input.focus();
+            renderResults();
+        });
+
+        input.addEventListener("input", () => {
+            clearBtn.hidden = !input.value.trim();
+            renderResults();
+        });
+
+        backdrop.addEventListener("click", (e) => {
+            if (e.target === backdrop) closePalette();
+        });
+
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowDown") {
+                e.preventDefault();
+                if (currentResults.length) {
+                    selectedIndex = (selectedIndex + 1) % currentResults.length;
+                    updateSelection();
+                }
+            } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                if (currentResults.length) {
+                    selectedIndex = (selectedIndex - 1 + currentResults.length) % currentResults.length;
+                    updateSelection();
+                }
+            } else if (e.key === "Enter") {
+                e.preventDefault();
+                if (currentResults[selectedIndex]) {
+                    executeResult(currentResults[selectedIndex]);
+                }
+            } else if (e.key === "Escape") {
+                e.preventDefault();
+                closePalette();
+            }
+        });
+    }
+
+    function executeResult(item) {
+        closePalette();
+        if (item.action === "toggle-theme") {
+            const next = currentTheme === "dark" ? "light" : "dark";
+            switchTheme(next);
+        } else if (item.url) {
+            window.location.href = item.url;
+        }
+    }
+
+    function updateSelection() {
+        const items = list.querySelectorAll(".cmd-palette-item");
+        items.forEach((el, idx) => {
+            const isSel = idx === selectedIndex;
+            el.classList.toggle("is-selected", isSel);
+            el.setAttribute("aria-selected", String(isSel));
+            if (isSel) el.scrollIntoView({ block: "nearest" });
+        });
+    }
+
+    function renderResults() {
+        const query = (input?.value || "").trim().toLowerCase();
+        list.innerHTML = "";
+        currentResults = [];
+
+        if (!query) {
+            const groupTitle = document.createElement("div");
+            groupTitle.className = "cmd-palette-group-title";
+            groupTitle.textContent = "常用与导航";
+            list.appendChild(groupTitle);
+
+            QUICK_NAV.forEach((item) => {
+                currentResults.push(item);
+                const el = createItemElement(item, currentResults.length - 1);
+                list.appendChild(el);
+            });
+            selectedIndex = 0;
+            updateSelection();
+            return;
+        }
+
+        const matchedPosts = (blogPostsCache || []).filter((p) => {
+            const title = (p.title || "").toLowerCase();
+            const tags = (p.tags || []).join(" ").toLowerCase();
+            const summary = (p.summary || "").toLowerCase();
+            return title.includes(query) || tags.includes(query) || summary.includes(query);
+        }).slice(0, 8);
+
+        const matchedMoments = (momentsCache || []).filter((m) => {
+            const text = (m.text || "").toLowerCase();
+            const loc = (m.location || "").toLowerCase();
+            const labels = (m.labels || []).join(" ").toLowerCase();
+            return text.includes(query) || loc.includes(query) || labels.includes(query);
+        }).slice(0, 5);
+
+        const matchedNav = QUICK_NAV.filter(item =>
+            item.title.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query)
+        );
+
+        if (matchedNav.length) {
+            const groupTitle = document.createElement("div");
+            groupTitle.className = "cmd-palette-group-title";
+            groupTitle.textContent = "指令与页面";
+            list.appendChild(groupTitle);
+            matchedNav.forEach((item) => {
+                currentResults.push(item);
+                list.appendChild(createItemElement(item, currentResults.length - 1));
+            });
+        }
+
+        if (matchedPosts.length) {
+            const groupTitle = document.createElement("div");
+            groupTitle.className = "cmd-palette-group-title";
+            groupTitle.textContent = `文章 (${matchedPosts.length})`;
+            list.appendChild(groupTitle);
+            matchedPosts.forEach((post) => {
+                const item = {
+                    title: post.title,
+                    desc: `${post.dateText || ""} · ${(post.tags || []).map(t => "#" + t).join(" ")} ${post.summary || ""}`.trim(),
+                    url: post.url,
+                    icon: "📄",
+                    badge: "文章"
+                };
+                currentResults.push(item);
+                list.appendChild(createItemElement(item, currentResults.length - 1));
+            });
+        }
+
+        if (matchedMoments.length) {
+            const groupTitle = document.createElement("div");
+            groupTitle.className = "cmd-palette-group-title";
+            groupTitle.textContent = `说说 (${matchedMoments.length})`;
+            list.appendChild(groupTitle);
+            matchedMoments.forEach((m) => {
+                const item = {
+                    title: m.text.slice(0, 50) + (m.text.length > 50 ? "…" : ""),
+                    desc: `${m.date || ""} ${m.location ? "· 📍 " + m.location : ""}`.trim(),
+                    url: "/moments/",
+                    icon: "💬",
+                    badge: "说说"
+                };
+                currentResults.push(item);
+                list.appendChild(createItemElement(item, currentResults.length - 1));
+            });
+        }
+
+        if (!currentResults.length) {
+            const empty = document.createElement("div");
+            empty.className = "cmd-palette-empty";
+            empty.textContent = `未找到与 “${query}” 相关的内容`;
+            list.appendChild(empty);
+        } else {
+            selectedIndex = 0;
+            updateSelection();
+        }
+    }
+
+    function createItemElement(item, index) {
+        const el = document.createElement("div");
+        el.className = "cmd-palette-item";
+        el.setAttribute("role", "option");
+        el.innerHTML = `
+            <span class="cmd-palette-item-icon" aria-hidden="true">${item.icon}</span>
+            <div class="cmd-palette-item-content">
+                <div class="cmd-palette-item-title">${item.title}</div>
+                <div class="cmd-palette-item-desc">${item.desc}</div>
+            </div>
+            ${item.badge ? `<span class="cmd-palette-item-badge">${item.badge}</span>` : ""}
+        `;
+        el.addEventListener("click", () => executeResult(item));
+        el.addEventListener("mouseenter", () => {
+            selectedIndex = index;
+            updateSelection();
+        });
+        return el;
+    }
+
+    function openPalette() {
+        createPalette();
+        loadSearchData();
+        backdrop.classList.add("is-open");
+        document.body.classList.add("lightbox-open");
+        input.value = "";
+        renderResults();
+        setTimeout(() => input.focus(), 50);
+    }
+
+    function closePalette() {
+        if (!backdrop) return;
+        backdrop.classList.remove("is-open");
+        document.body.classList.remove("lightbox-open");
+    }
+
+    window.addEventListener("keydown", (e) => {
+        const isK = (e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K");
+        const isSlash = e.key === "/" && !["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName) && !document.activeElement?.isContentEditable;
+        if (isK || isSlash) {
+            e.preventDefault();
+            if (backdrop?.classList.contains("is-open")) closePalette();
+            else openPalette();
+        }
+    });
+
+    document.addEventListener("click", (e) => {
+        if (e.target?.closest?.("#searchTriggerBtn")) {
+            openPalette();
+        }
+    });
+
+    window.openCommandPalette = openPalette;
+})();
+
+// ============================================================
+// MEDIA TABS (书影音移动端标签切换)
+// ============================================================
+(function initMediaTabs() {
+    const mediaSection = document.getElementById("media");
+    if (!mediaSection) return;
+    const cols = mediaSection.querySelectorAll(".media-col");
+    if (cols.length < 2) return;
+
+    cols.forEach((col, idx) => col.classList.toggle("is-active", idx === 0));
+
+    let tabs = mediaSection.querySelector(".media-tabs");
+    if (!tabs) {
+        tabs = document.createElement("div");
+        tabs.className = "media-tabs";
+        tabs.setAttribute("role", "tablist");
+        const tabLabels = ["🎬 电影", "📚 读书", "🎮 游戏"];
+        tabLabels.forEach((label, idx) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = `media-tab${idx === 0 ? " active" : ""}`;
+            btn.setAttribute("role", "tab");
+            btn.setAttribute("aria-selected", String(idx === 0));
+            btn.textContent = label;
+            btn.addEventListener("click", () => {
+                tabs.querySelectorAll(".media-tab").forEach((b, i) => {
+                    const isCur = i === idx;
+                    b.classList.toggle("active", isCur);
+                    b.setAttribute("aria-selected", String(isCur));
+                });
+                cols.forEach((col, i) => col.classList.toggle("is-active", i === idx));
+            });
+            tabs.appendChild(btn);
+        });
+        const grid = mediaSection.querySelector(".media-grid");
+        if (grid) grid.before(tabs);
+    }
+})();

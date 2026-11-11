@@ -81,3 +81,73 @@ test('说说前端定位样式与选择器交互代码就绪', () => {
     assert.ok(js.includes('moment-location'), '必须在说说条目中渲染 moment-location');
     assert.ok(js.includes('location: selectedMomentLocation'), '发布说说与草稿必须保存 location 字段');
 });
+
+test("全局指令/搜索面板 (Cmd+K) 结构、样式与快捷键绑定就绪", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".cmd-palette-backdrop"), "styles.css 必须包含 .cmd-palette-backdrop 遮罩样式");
+    assert.ok(css.includes(".cmd-palette-dialog"), "styles.css 必须包含 .cmd-palette-dialog 弹窗样式");
+    assert.ok(css.includes(".search-trigger-btn"), "styles.css 必须包含 .search-trigger-btn 顶栏搜索按钮样式");
+
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("initCommandPalette"), "script.js 必须包含 initCommandPalette 初始化函数");
+    assert.ok(js.includes("cmdPalette"), "script.js 必须包含 cmdPalette DOM 元素");
+    assert.ok(js.includes("blogPostsCache"), "必须支持博客文章缓存检索");
+    assert.ok(js.includes("momentsCache"), "必须支持说说缓存检索");
+    assert.ok(js.includes("openCommandPalette"), "必须暴露 window.openCommandPalette 全局接口");
+
+    const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+    assert.ok(indexHtml.includes("id=\"searchTriggerBtn\""), "index.html 顶栏必须包含 searchTriggerBtn");
+});
+
+test("移动端浮动目录 (Floating TOC) 与抽屉样式及联动逻辑就绪", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".float-toc-btn"), "styles.css 必须包含 .float-toc-btn 浮动目录按钮样式");
+    assert.ok(css.includes(".toc-drawer"), "styles.css 必须包含 .toc-drawer 抽屉样式");
+    assert.ok(css.includes(".toc-drawer-backdrop"), "styles.css 必须包含 .toc-drawer-backdrop 遮罩样式");
+
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("floatTocBtn"), "script.js 必须包含 floatTocBtn 控制逻辑");
+    assert.ok(js.includes("tocDrawerBackdrop"), "script.js 必须包含 tocDrawerBackdrop 抽屉控制逻辑");
+});
+
+test("跨页面无缝预加载 (Instant Page) 逻辑就绪", () => {
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("initInstantPage"), "script.js 必须包含 initInstantPage");
+    assert.ok(js.includes("prefetched.has(url)"), "预加载必须防止重复请求");
+});
+
+test("相册年份时间轴快速定位 (Year Timeline Jump) 逻辑就绪", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".gallery-year-nav"), "styles.css 必须包含 .gallery-year-nav 样式");
+    assert.ok(css.includes(".gallery-year-btn"), "styles.css 必须包含 .gallery-year-btn 样式");
+    assert.ok(css.includes(".gallery-year-anchor"), "styles.css 必须包含 .gallery-year-anchor 锚点样式");
+
+    const galleryJs = fs.readFileSync(path.join(ROOT, "gallery.js"), "utf8");
+    assert.ok(galleryJs.includes("renderYearNav"), "gallery.js 必须包含 renderYearNav 函数");
+    assert.ok(galleryJs.includes("gallery-year-anchor"), "gallery.js 必须动态注入年份锚点");
+});
+
+test("说说地点/标签筛选支持 URL Query 联动与后退现场恢复", () => {
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("setMomentsFilter"), "script.js 必须包含 setMomentsFilter 函数");
+    assert.ok(js.includes("momentsLocationFilter"), "script.js 必须包含 momentsLocationFilter 状态");
+    assert.ok(js.includes("initMomentsUrlSync"), "script.js 必须支持 URL Query 状态还原");
+});
+
+test("书影音移动端标签切换 (Media Tabs) 逻辑与样式就绪", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".media-tabs"), "styles.css 必须包含 .media-tabs 样式");
+    assert.ok(css.includes(".media-tab"), "styles.css 必须包含 .media-tab 样式");
+
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("initMediaTabs"), "script.js 必须包含 initMediaTabs");
+});
+
+test("微交互 (Micro-interactions) 与灯箱图片缩放就绪", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".post-lightbox-img.is-zoomed"), "styles.css 必须包含灯箱放大样式");
+    assert.ok(css.includes("-webkit-tap-highlight-color: transparent"), "必须去除移动端点击高亮遮罩");
+
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("is-zoomed"), "script.js 灯箱必须支持双击缩放");
+});
