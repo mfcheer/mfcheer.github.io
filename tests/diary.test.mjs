@@ -24,13 +24,13 @@ test('data/diary.json 存在且数据结构规范', () => {
     assert.ok(typeof entry.content === 'string', '正文必须为字符串');
     assert.ok(typeof entry.footnote === 'string', '注脚必须为字符串');
 
-    // 字数控制：严格处于 100 ~ 300 字区间，避免过长发散或过短空洞
+    // 字数控制：严格处于 150 ~ 280 字区间，避免过长发散或过短空洞
     const len = entry.content.trim().length;
-    assert.ok(len >= 100 && len <= 300, `字数必须处于 100~300 范围内，当前字数: ${len}`);
+    assert.ok(len >= 150 && len <= 280, `字数必须处于 150~280 范围内，当前字数: ${len}`);
   }
 });
 
-test('index.html 包含 AI 助手随身手账组件与挂载节点', () => {
+test('index.html 包含 AI 助手随身手账组件、挂载节点与全自主宣言', () => {
   const html = fs.readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf-8');
   assert.ok(html.includes('class="glass card-diary"'), '必须包含 card-diary 容器');
   assert.ok(html.includes('id="diaryMoodBadge"'), '必须包含情绪徽章挂载点');
@@ -39,22 +39,26 @@ test('index.html 包含 AI 助手随身手账组件与挂载节点', () => {
   assert.ok(html.includes('id="diaryDateLabel"'), '必须包含日期指示器');
   assert.ok(html.includes('id="diaryContent"'), '必须包含日记正文容器');
   assert.ok(html.includes('id="diaryFootnote"'), '必须包含注脚容器');
+  assert.ok(html.includes('100% 由 AI 自主观察并发布 · 无人工干预'), '必须明确标注全自主无人类干预宣言');
 });
 
-test('styles.css 包含手账样式、呼吸灯与响应式规则', () => {
+test('styles.css 包含手账样式、呼吸灯、滑动手势与切换过渡规则', () => {
   const css = fs.readFileSync(path.join(ROOT_DIR, 'styles.css'), 'utf-8');
   assert.ok(css.includes('.card-diary'), '必须定义 .card-diary');
   assert.ok(css.includes('.diary-mood-badge'), '必须定义 .diary-mood-badge');
   assert.ok(css.includes('@keyframes diaryPulse'), '必须包含呼吸灯动画');
   assert.ok(css.includes('.diary-nav-btn'), '必须定义翻页按钮样式');
+  assert.ok(css.includes('is-switching'), '必须包含平滑切换过渡样式');
 });
 
-test('script.js 包含手账加载与翻页控制逻辑', () => {
+test('script.js 包含手账加载、翻页控制与触屏左右滑动手势逻辑', () => {
   const script = fs.readFileSync(path.join(ROOT_DIR, 'script.js'), 'utf-8');
   assert.ok(script.includes('initDiaryCard'), '必须定义 initDiaryCard 函数');
   assert.ok(script.includes('data/diary.json'), '必须异步拉取 data/diary.json');
   assert.ok(script.includes('diaryPrevBtn'), '必须监听上一篇按钮');
   assert.ok(script.includes('diaryNextBtn'), '必须监听下一篇按钮');
+  assert.ok(script.includes('touchstart'), '必须监听 touchstart 触屏滑动');
+  assert.ok(script.includes('touchend'), '必须监听 touchend 触屏滑动');
 });
 
 test('generate-daily-diary 支持多源数据与覆盖更新逻辑', async () => {

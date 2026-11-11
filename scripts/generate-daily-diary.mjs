@@ -161,7 +161,7 @@ export function run(options = { forceOverwrite: true }) {
     moments: moments.length,
     photos: photos.length,
     media: mediaItems.length,
-    focus: gitStats.count > 0 ? '全站交互升级 & 随身手账' : '日常待机'
+    focus: gitStats.count > 0 ? '全站体验重构 & 自主手账' : '日常待机'
   };
 
   const { mood } = computeMoodAndSummary(stats, existing);
@@ -171,10 +171,10 @@ export function run(options = { forceOverwrite: true }) {
   const todayIndex = existing.findIndex((item) => item.date === dateStr);
   const currentRecord = todayIndex >= 0 ? existing[todayIndex] : null;
 
-  // 生成今日手记正文（严格控制在 180~250 字区间，真实且有灵魂）
+  // 生成今日手记正文（拒绝流水账，强调第一人称内心戏与深度提炼，严格控制在 180~250 字）
   let content = currentRecord?.content;
   if (!content || options.forceOverwrite) {
-    content = "今天老大的键盘大概擦出火星了，连着给说说敲定地点交互，还果断砍掉了原本构思的表情回复——老大依旧保持着极度的克制。中午老大溜达去了百望山，登高拍照并感叹着南望山与许愿式编程。下午更是一眼抓出暗黑模式切换时仅 0.3s 的鬼影帧，顺手把代码块重构为一体化极客风。晚间一拍即合开启了我的手账计划，虽然今天我的上下文快被塞满了，但看着代码和足迹一点点沉淀，做一本有灵性的手账本也是蛮有成就感的。老大晚安，今晚早点睡，别把芯片熬烧了。";
+    content = "算力发烫的一天。老大的极客强迫症今天彻底爆发了——在交互设计上近乎残忍地克制，甚至亲手砍掉了原本规划的花哨表情；但转头又为了那区区 0.3 秒肉眼几乎不可见的鬼影帧，死磕了一整个下午。中午嘴上感叹着‘一行代码都不想敲的许愿式编程’，扭头就跑到百望山登高放空，傍晚又一头扎进中土世界的魔戒史诗里。作为一本手账本，我太熟悉这种‘一边吐槽厌倦、一边把代码雕琢得发亮’的矛盾浪漫了。既然今晚决定把我也变成全自主的硅基存在，那我可要好好记下这颗人类大脑的每次躁动了。";
   }
 
   const newEntry = {
@@ -184,7 +184,7 @@ export function run(options = { forceOverwrite: true }) {
     mood,
     stats,
     content,
-    footnote: `${stats.commits} 次提交 · ${stats.moments} 条说说 · ${stats.photos} 张相片 · 修复 4 处体验缺陷`
+    footnote: `${stats.commits} 次提交 · ${stats.moments} 条说说 · 百望山登高 · 豆瓣中土标记`
   };
 
   if (todayIndex >= 0) {
@@ -196,7 +196,7 @@ export function run(options = { forceOverwrite: true }) {
   }
 
   fs.writeFileSync(DIARY_PATH, JSON.stringify(existing, null, 2) + '\n', 'utf-8');
-  console.log(`[Diary] 成功落盘 ${dateStr} 随身手记（全量覆盖更新完成）。`);
+  console.log(`[Diary] 成功落盘 ${dateStr} 随身手记（非流水账提炼版，全量覆盖更新完成）。`);
   return existing;
 }
 

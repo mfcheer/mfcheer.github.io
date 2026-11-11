@@ -3313,9 +3313,16 @@ document.addEventListener("click", (e) => {
     let entries = [];
     let currentIndex = 0;
 
-    function renderEntry(index) {
+    const bodyWrap = diarySection.querySelector(".diary-body-wrap") || diarySection;
+
+    function renderEntry(index, withAnim = false) {
         if (!entries || entries.length === 0 || !entries[index]) return;
         const item = entries[index];
+
+        if (withAnim && bodyWrap) {
+            bodyWrap.classList.add("is-switching");
+            setTimeout(() => bodyWrap.classList.remove("is-switching"), 180);
+        }
 
         if (moodText && item.mood) {
             moodText.textContent = `${item.mood.emoji || ""} ${item.mood.label || ""}`.trim();
@@ -3347,7 +3354,7 @@ document.addEventListener("click", (e) => {
         prevBtn.addEventListener("click", () => {
             if (currentIndex < entries.length - 1) {
                 currentIndex++;
-                renderEntry(currentIndex);
+                renderEntry(currentIndex, true);
             }
         });
     }
@@ -3356,10 +3363,53 @@ document.addEventListener("click", (e) => {
         nextBtn.addEventListener("click", () => {
             if (currentIndex > 0) {
                 currentIndex--;
-                renderEntry(currentIndex);
+                renderEntry(currentIndex, true);
             }
         });
     }
+
+    // 触屏滑动手势支持 (Touch Swipe Gestures)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+
+    bodyWrap.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchEndX = touchStartX;
+            touchEndY = touchStartY;
+        }
+    }, { passive: true });
+
+    bodyWrap.addEventListener("touchmove", (e) => {
+        if (e.touches.length === 1) {
+            touchEndX = e.touches[0].clientX;
+            touchEndY = e.touches[0].clientY;
+        }
+    }, { passive: true });
+
+    bodyWrap.addEventListener("touchend", () => {
+        const dx = touchEndX - touchStartX;
+        const dy = touchEndY - touchStartY;
+        // 横向位移大于 40px 且明显大于垂直滚动，防止误触正常滑动
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+            if (dx < 0) {
+                // 向左滑：看更靠近现在的日期 (Next)
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    renderEntry(currentIndex, true);
+                }
+            } else {
+                // 向右滑：看更早的日期 (Prev)
+                if (currentIndex < entries.length - 1) {
+                    currentIndex++;
+                    renderEntry(currentIndex, true);
+                }
+            }
+        }
+    }, { passive: true });
 
     fetch("data/diary.json")
         .then((res) => {
