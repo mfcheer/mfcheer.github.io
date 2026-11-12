@@ -246,5 +246,5 @@ test("相册页照片反重力吸附动效 (Anti-gravity Magnetic Float) 就绪"
     assert.ok(js.includes("floatObserver"), "gallery.js 必须包含反重力视口观察器");
     assert.ok(js.includes("staggerOrder"), "gallery.js 必须支持行内照片随机打乱吸附顺序");
     assert.ok(js.includes("--float-y"), "gallery.js 必须为每张照片设置错落下沉位移");
-    assert.ok(js.includes("entry.boundingClientRect.top > rootBottom + 120"), "gallery.js 必须支持沉出视口下方较远距离时迟滞重置以防边缘抖动屏闪");
+    assert.ok(js.includes("floatObserver.unobserve(entry.target)"), "gallery.js 必须在元素吸附后解除观察，不进行反向重置动画");
 });

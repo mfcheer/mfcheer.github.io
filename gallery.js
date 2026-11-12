@@ -204,12 +204,7 @@
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('g-absorbed');
-                } else {
-                    // 仅当元素完全滑出屏幕下方一段距离（迟滞防抖区间 +120px）时才重置吸附态，支持滑上去再次往下滑重新吸附，同时杜绝边缘抖动屏闪
-                    const rootBottom = entry.rootBounds ? entry.rootBounds.bottom : (window.innerHeight || document.documentElement.clientHeight);
-                    if (entry.boundingClientRect.top > rootBottom + 120) {
-                        entry.target.classList.remove('g-absorbed');
-                    }
+                    floatObserver.unobserve(entry.target);
                 }
             });
         }, {
