@@ -106,26 +106,32 @@
         return all;
     }
 
+    let initialScreenRows = 3;
+
     function layoutWall(wall, append = false) {
         let photos;
         try { photos = JSON.parse(wall.dataset.photos); } catch { return; }
         const W = wall.clientWidth;
         if (!W || !photos.length) return;
 
-        const startRow = append ? wall.children.length : 0;
-        if (!append) wall.innerHTML = '';
+        const existingRows = wall.querySelectorAll(".g-row");
+        const startRow = append ? existingRows.length : 0;
+        if (!append) wall.innerHTML = "";
         const rows = buildRows(photos, W);
         if (sentinel) sentinel.hidden = visibleRows >= rows.length;
 
-        const seenYears = new Set(Array.from(wall.querySelectorAll('.gallery-year-anchor')).map(a => a.dataset.year));
-        for (const rowData of rows.slice(startRow, visibleRows)) {
-            const firstDate = rowData.photos.find(p => p.date)?.date || '';
+        const seenYears = new Set(Array.from(wall.querySelectorAll(".gallery-year-anchor")).map(a => a.dataset.year));
+        const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+
+        for (let rIdx = startRow; rIdx < Math.min(visibleRows, rows.length); rIdx++) {
+            const rowData = rows[rIdx];
+            const firstDate = rowData.photos.find(p => p.date)?.date || "";
             const yearMatch = firstDate.match(/^(\d{4})/);
             if (yearMatch && !seenYears.has(yearMatch[1])) {
                 const year = yearMatch[1];
                 seenYears.add(year);
-                const anchor = document.createElement('div');
-                anchor.className = 'gallery-year-anchor';
+                const anchor = document.createElement("div");
+                anchor.className = "gallery-year-anchor";
                 anchor.id = `gallery-year-${year}`;
                 anchor.dataset.year = year;
                 wall.appendChild(anchor);
@@ -133,9 +139,9 @@
             // 达到高度上限时允许行尾留白，避免拉伸照片或产生超高大图。
             const rowH = rowData.height;
 
-            const rowEl = document.createElement('div');
-            rowEl.className = 'g-row g-row-float';
-            rowEl.style.height = rowH + 'px';
+            const rowEl = document.createElement("div");
+            rowEl.className = "g-row g-row-float";
+            rowEl.style.height = rowH + "px";
 
             // 同一行内照片随机分配吸附延迟顺序（不再按从左到右机械顺序排列）
             const count = rowData.photos.length;
@@ -147,27 +153,27 @@
 
             rowData.photos.forEach((p, idx) => {
                 const itemW = rowH * photoRatio(p);
-                const itemEl = document.createElement('button');
-                itemEl.type = 'button';
-                itemEl.className = 'g-item';
-                itemEl.style.width = itemW + 'px';
-                // 随机乱序 + 错落深度位移 (64px ~ 80px)
+                const itemEl = document.createElement("button");
+                itemEl.type = "button";
+                itemEl.className = "g-item";
+                itemEl.style.width = itemW + "px";
+                // 随机乱序 + 屏幕最底边飞升起跳位移 (240px ~ 300px)
                 const order = staggerOrder[idx] !== undefined ? staggerOrder[idx] : idx;
-                itemEl.style.setProperty('--stagger-i', order);
-                const randomFloatY = 64 + Math.round(Math.random() * 16);
-                itemEl.style.setProperty('--float-y', randomFloatY + 'px');
-                itemEl.style.backgroundImage = p.lqip ? 'url("' + p.lqip + '")' : 'none';
-                itemEl.setAttribute('aria-label', [p.album, p.date ? p.date.slice(0, 10) : '', '查看照片'].filter(Boolean).join(' · '));
+                itemEl.style.setProperty("--stagger-i", order);
+                const randomFloatY = 240 + Math.round(Math.random() * 50);
+                itemEl.style.setProperty("--float-y", randomFloatY + "px");
+                itemEl.style.backgroundImage = p.lqip ? ("url('" + p.lqip + "')") : "none";
+                itemEl.setAttribute("aria-label", [p.album, p.date ? p.date.slice(0, 10) : "", "查看照片"].filter(Boolean).join(" · "));
 
-                const img = document.createElement('img');
+                const img = document.createElement("img");
                 img.src = rootUrl(p.thumb);
-                img.alt = p.date || '';
-                img.loading = 'lazy';
-                img.decoding = 'async';
-                img.addEventListener('load', () => itemEl.classList.add('g-loaded'));
-                img.addEventListener('error', () => itemEl.classList.add('g-error'));
+                img.alt = p.date || "";
+                img.loading = "lazy";
+                img.decoding = "async";
+                img.addEventListener("load", () => itemEl.classList.add("g-loaded"));
+                img.addEventListener("error", () => itemEl.classList.add("g-error"));
 
-                itemEl.addEventListener('click', () => {
+                itemEl.addEventListener("click", () => {
                     const globalPhotos = collectAllPhotos();
                     // JSON.parse 会产生新对象，不能按引用匹配，按 src 定位
                     const startIdx = Math.max(0, globalPhotos.findIndex((q) => q.src === p.src && q.issueNumber === p.issueNumber && q.source === p.source));
@@ -178,17 +184,32 @@
                 rowEl.appendChild(itemEl);
             });
             wall.appendChild(rowEl);
-            if (floatObserver) {
-                floatObserver.observe(rowEl);
+
+            // 首屏照片（初次整墙渲染且处于视口内）直接固化展现；后续随手势滚动逐行挂载的新行由观察器触发屏幕底边反重力吸附
+            const isInitialRow = !append && rIdx < initialScreenRows;
+            if (isInitialRow || !floatObserver) {
+                rowEl.classList.add("g-absorbed");
             } else {
-                rowEl.classList.add('g-absorbed');
+                floatObserver.observe(rowEl);
+            }
+        }
+
+        // 视口未撑满时的自愈填充保护
+        if (sentinel && !sentinel.hidden && visibleRows < rows.length) {
+            const sRect = sentinel.getBoundingClientRect();
+            if (sRect.top <= vh + 100) {
+                requestAnimationFrame(() => {
+                    if (visibleRows < rows.length) {
+                        visibleRows += 1;
+                        layoutWall(wall, true);
+                    }
+                });
             }
         }
     }
 
-    // ---------------- 连续照片墙：按完整行分批加载 ----------------
-    // 先合并所有相册再装箱，跨相册和加载批次都不会留下半行空白。
-    const ROW_BATCH = 8;
+    // ---------------- 连续照片墙：按行逐行动态加载与底边吸附 ----------------
+    const ROW_BATCH = 1;
     let visibleRows = ROW_BATCH;
     let sentinel = null;
     let sentinelIO = null;
@@ -199,16 +220,16 @@
             floatObserver.disconnect();
             floatObserver = null;
         }
-        if (!('IntersectionObserver' in window)) return;
+        if (!("IntersectionObserver" in window)) return;
         floatObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('g-absorbed');
+                    entry.target.classList.add("g-absorbed");
                     floatObserver.unobserve(entry.target);
                 }
             });
         }, {
-            rootMargin: '0px 0px -20px 0px',
+            rootMargin: "0px 0px -10px 0px",
             threshold: 0.01
         });
     }
@@ -231,17 +252,28 @@
             `<button class="gallery-year-btn${idx === 0 ? " active" : ""}" type="button" data-year="${y}">${y}</button>`
         ).join('');
 
-        yearNav.querySelectorAll('.gallery-year-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+        yearNav.querySelectorAll(".gallery-year-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
                 const year = btn.dataset.year;
+                const wall = document.querySelector(".gallery-wall");
+                if (wall && wall.dataset.photos) {
+                    try {
+                        const photos = JSON.parse(wall.dataset.photos);
+                        const rows = buildRows(photos, wall.clientWidth);
+                        const targetIdx = rows.findIndex(r => r.photos.some(p => (p.date || "").startsWith(year)));
+                        if (targetIdx !== -1 && visibleRows <= targetIdx) {
+                            visibleRows = targetIdx + 2;
+                            layoutWall(wall, true);
+                        }
+                    } catch {}
+                }
                 const anchor = document.getElementById(`gallery-year-${year}`);
                 if (anchor) {
-                    anchor.scrollIntoView({ behavior: 'smooth' });
-                    yearNav.querySelectorAll('.gallery-year-btn').forEach(b => b.classList.toggle('active', b === btn));
+                    anchor.scrollIntoView({ behavior: "smooth" });
+                    yearNav.querySelectorAll(".gallery-year-btn").forEach(b => b.classList.toggle("active", b === btn));
                 }
             });
         });
-
         const onScrollYear = () => {
             const anchors = Array.from(document.querySelectorAll('.gallery-year-anchor'));
             const scrollY = window.scrollY + 140;
@@ -264,32 +296,41 @@
         initFloatObserver();
         if (sentinelIO) sentinelIO.disconnect();
         sentinelIO = null;
-        sentinel = document.getElementById('gallerySentinel');
+        sentinel = document.getElementById("gallerySentinel");
         if (sentinel) sentinel.hidden = true;
-        listEl.innerHTML = '';
-        visibleRows = ROW_BATCH;
+        listEl.innerHTML = "";
+        
         const photos = collectAllPhotos();
         if (!photos.length) {
             listEl.innerHTML =
-                '<div class="gallery-empty">' +
-                '<p>相册还没有照片。</p>' +
-                '<p class="gallery-empty-hint">去 GitHub 建一个带 <code>gallery</code> 标签的 Issue，拖入照片发布，几分钟内就会自动出现在这里。</p>' +
-                '</div>';
+                "<div class=\"gallery-empty\">" +
+                "<p>相册还没有照片。</p>" +
+                "<p class=\"gallery-empty-hint\">去 GitHub 建一个带 <code>gallery</code> 标签的 Issue，拖入照片发布，几分钟内就会自动出现在这里。</p>" +
+                "</div>";
             return;
         }
 
-        const wall = document.createElement('div');
-        wall.className = 'gallery-wall';
+        const wall = document.createElement("div");
+        wall.className = "gallery-wall";
         wall.dataset.photos = JSON.stringify(photos);
         listEl.appendChild(wall);
         renderYearNav(photos);
-        if (sentinel && 'IntersectionObserver' in window) {
+
+        const W = wall.clientWidth || window.innerWidth || 800;
+        initialScreenRows = Math.max(2, Math.min(4, Math.ceil((window.innerHeight || 800) / (W < 520 ? 190 : 250))));
+        visibleRows = initialScreenRows;
+
+        if (sentinel && "IntersectionObserver" in window) {
             sentinelIO = new IntersectionObserver((entries) => {
                 if (entries.some((en) => en.isIntersecting) && !sentinel.hidden) {
-                    visibleRows += ROW_BATCH;
-                    layoutWall(wall, true);
+                    const allP = collectAllPhotos();
+                    const allR = buildRows(allP, wall.clientWidth || W);
+                    if (visibleRows < allR.length) {
+                        visibleRows += 1; // 一行一行动态按需加载
+                        layoutWall(wall, true);
+                    }
                 }
-            }, { rootMargin: '600px 0px' });
+            }, { rootMargin: "120px 0px" });
             sentinelIO.observe(sentinel);
         } else {
             // 不支持观察器时全部展示，图片依然由浏览器延迟加载。

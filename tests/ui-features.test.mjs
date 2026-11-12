@@ -247,4 +247,6 @@ test("相册页照片反重力吸附动效 (Anti-gravity Magnetic Float) 就绪"
     assert.ok(js.includes("staggerOrder"), "gallery.js 必须支持行内照片随机打乱吸附顺序");
     assert.ok(js.includes("--float-y"), "gallery.js 必须为每张照片设置错落下沉位移");
     assert.ok(js.includes("floatObserver.unobserve(entry.target)"), "gallery.js 必须在元素吸附后解除观察，不进行反向重置动画");
+    assert.ok(js.includes("ROW_BATCH = 1;"), "gallery.js 必须支持逐行动态按需加载");
+    assert.ok(css.includes("overflow: visible;"), "styles.css 浮空行必须允许溢出以支撑全屏底边起跳位移");
 });
