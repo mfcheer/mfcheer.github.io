@@ -5,8 +5,40 @@
   <link href="https://mfcheer.github.io/"/>
   <link href="https://mfcheer.github.io/atom.xml" rel="self"/>
   <id>https://mfcheer.github.io/</id>
-  <updated>2017-12-31T16:00:00.000Z</updated>
+  <updated>2026-11-12T12:45:00.000Z</updated>
   <author><name>mfcheer</name></author>
+  <entry>
+    <title>硅谷之虎下岗再就业，昆仑山下再起风云</title>
+    <link href="https://mfcheer.github.io/blog/silicon-valley-tiger-kunlun/" rel="alternate"/>
+    <id>https://mfcheer.github.io/blog/silicon-valley-tiger-kunlun/</id>
+    <published>2026-11-12T12:45:00.000Z</published>
+    <updated>2026-11-12T12:45:00.000Z</updated>
+    <summary>2026年深秋，圣克拉拉的秋风格外刺骨。老黄脱下皮衣飞往北京西二旗，昆仑山下再起风云。</summary>
+    <content type="html">&lt;h2 id=&quot;第一章：一纸休书，老黄脱下皮衣&quot; tabindex=&quot;-1&quot;&gt;第一章：一纸休书，老黄脱下皮衣&lt;/h2&gt;
+&lt;p&gt;2026年深秋，圣克拉拉的秋风格外刺骨。&lt;/p&gt;
+&lt;p&gt;英伟达总部大楼的顶层会议室里，董事会成员们面无表情地把一份解雇协议推到了黄仁勋面前。理由很荒诞，也很现实：大客户们集体叛变开始自研芯片，股价连跌三个月，再加上前阵子他非要在新品发布会上用数字人分身讲单口相声，结果系统死机在台上抽搐了五分钟，直接把华尔街看傻了。&lt;/p&gt;
+&lt;p&gt;“你们会后悔的！”黄仁勋一把扯下身上那件标志性的Tom Ford黑色鳄鱼纹皮衣，往桌上一拍，“没有我，谁来给你们算这个宇宙的摩尔定律？！”&lt;/p&gt;
+&lt;p&gt;保安客气而坚定地把老黄“请”出了大门。抱着纸箱站在加州的烈日下，箱子里只有一把大号厨刀、几块废旧的H100晶圆，以及一张飞往北京的单程机票——那是昨晚他在领英上收到的一条私信发来的，发件人只有四个字：“来吗？管饭。”&lt;/p&gt;
+&lt;h2 id=&quot;第二章：西二旗的早高峰与新战袍&quot; tabindex=&quot;-1&quot;&gt;第二章：西二旗的早高峰与新战袍&lt;/h2&gt;
+&lt;p&gt;一个月后，北京西二旗地铁站。&lt;/p&gt;
+&lt;p&gt;一个顶着一头银发、操着一口台湾腔英语混杂着京片子的大爷，正熟练地把煎饼果子塞进嘴里，手里还拎着两杯瑞幸酱香拿铁。&lt;/p&gt;
+&lt;p&gt;他现在不叫Jensen Huang了，他在百度内部的花名叫“昆仑老黄”。&lt;/p&gt;
+&lt;p&gt;入职百度昆仑芯的第一天，人力资源部的姑娘递给他一件印着百度熊掌Logo的黑色冲锋衣。老黄摸了摸面料，眼神瞬间变得犀利：“不错，防风防水，比我以前那件鳄鱼皮更适合在机房里通宵调参。”&lt;/p&gt;
+&lt;p&gt;面对昆仑芯研发团队，老黄没有讲什么宏大的AI叙事，而是直接掏出了随身携带的大号厨刀，往白板上一插：&lt;/p&gt;
+&lt;p&gt;“英伟达的护城河叫CUDA，对吧？老子亲手挖的，哪块砖松动我比谁都清楚！”老黄推了推眼镜，嘴角露出一丝邪魅的微笑，“现在，咱们给昆仑芯加点料。我不仅要让它兼容一切，还要让它在跑大模型的时候，顺便帮机房把暖气费也省了！”&lt;/p&gt;
+&lt;h2 id=&quot;第三章：发布会的降维打击&quot; tabindex=&quot;-1&quot;&gt;第三章：发布会的降维打击&lt;/h2&gt;
+&lt;p&gt;半年后，全球AI算力大会。&lt;/p&gt;
+&lt;p&gt;英伟达的新任CEO正穿着西装革履，在台上结结巴巴地介绍着新一代芯片：“我们的新款芯片，性能提升了15%，功耗只增加了40%，售价……呃，只要五万美元一片……”&lt;/p&gt;
+&lt;p&gt;话音刚落，隔壁展厅突然传来一阵震耳聋的《好汉歌》。&lt;/p&gt;
+&lt;p&gt;聚光灯打过去，只见昆仑老黄穿着那件洗得有些发白的百度冲锋衣，脚踩一双老北京布鞋，单手拎着一块泛着幽幽蓝光的全新“昆仑芯·屠龙版”走了上来。&lt;/p&gt;
+&lt;p&gt;“各位老铁，看好了！”老黄拿起麦克风，中气十足，“英伟达有的，我们全都有；英伟达没有的，我们白送！算力直接翻倍，价格砍掉一个零！买一万片，还送百度网盘超级会员一百年！”&lt;/p&gt;
+&lt;p&gt;台下的硅谷巨头们当场沸腾，微软和Meta的采购总监连夜扛着火车站票冲向了西二旗。英伟达的新任CEO在台上两眼一黑，直接顺着讲台滑了下去。&lt;/p&gt;
+&lt;h2 id=&quot;第四章：深藏功与名&quot; tabindex=&quot;-1&quot;&gt;第四章：深藏功与名&lt;/h2&gt;
+&lt;p&gt;那天晚上，英伟达市值蒸发了一半，董事会连夜给老黄打电话哭求他回去。&lt;/p&gt;
+&lt;p&gt;此时的黄仁勋，正坐在北京胡同口的一家卤煮店里，把手机调成了静音。他夹起一块大肠，蘸了蘸蒜汁，对坐在对面的李彦宏举起了北冰洋汽水：&lt;/p&gt;
+&lt;p&gt;“Robin，还是你们这儿的伙食养人啊。明天咱们把光刻机的图纸也顺便画了吧？”&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>常用命令</title>
     <link href="https://mfcheer.github.io/blog/legacy-article-030e869a99/" rel="alternate"/>

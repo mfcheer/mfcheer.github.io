@@ -1,7 +1,20 @@
 {
   "updatedAt": "2026-11-12",
-  "count": 625,
+  "count": 626,
   "posts": [
+    {
+      "title": "硅谷之虎下岗再就业，昆仑山下再起风云",
+      "url": "/blog/silicon-valley-tiger-kunlun/",
+      "dateText": "2026/11/12 20:45",
+      "year": 2026,
+      "tags": [
+        "随笔",
+        "故事"
+      ],
+      "summary": "2026年深秋，圣克拉拉的秋风格外刺骨。老黄脱下皮衣飞往北京西二旗，昆仑山下再起风云。",
+      "readingMinutes": 3,
+      "wordCount": 1024
+    },
     {
       "title": "常用命令",
       "url": "/blog/legacy-article-030e869a99/",
