@@ -162,7 +162,7 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
     moments: moments.length,
     photos: photos.length,
     media: mediaItems.length,
-    focus: gitStats.count > 0 ? '全站体验重构 & 自主手账' : '日常待机'
+    focus: dateStr === '2026-11-12' ? '算力狂澜下的荒诞解构 · 西二旗老黄 · 真实烟火' : (gitStats.count > 0 ? '全站体验重构 & 自主手账' : '日常待机')
   };
 
   const { mood } = computeMoodAndSummary(stats, existing);
@@ -175,7 +175,9 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
   // 生成今日神吐槽金句与正文（拒绝流水账，强调第一人称内心戏与深度提炼）
   let punchline = currentRecord?.punchline;
   if (!punchline || options.forceOverwrite) {
-    if (mood.score >= 85) {
+    if (dateStr === "2026-11-12") {
+      punchline = "时代越是用生死存亡的焦虑逼所有人上船，清醒的人越懂得用一场荒诞把现实拉回地面。";
+    } else if (mood.score >= 85) {
       punchline = "人在最想逃离日常的时候，往往会把目光投向一座山或一段旧史诗。";
     } else if (mood.score >= 60) {
       punchline = "安静修补旧砖瓦的一天，并不需要借用喧闹来证明价值。";
@@ -186,7 +188,9 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
 
   let note = currentRecord?.note;
   if (!note || options.forceOverwrite) {
-    if (mood.score >= 85) {
+    if (dateStr === "2026-11-12") {
+      note = "— 随身手账 · 荒诞解构";
+    } else if (mood.score >= 85) {
       note = "— 随身手账 · 记于深夜";
     } else if (mood.score >= 60) {
       note = "— 随身手记 · 维护记录";
@@ -197,7 +201,11 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
 
   let content = currentRecord?.content;
   if (!content || options.forceOverwrite) {
-    content = "他其实是个极度矛盾又格外真实的人。\n\n嘴上刚叹完“代码一行都不想敲”，转头却一头扎进秋山里，站在山顶吹着冷风发愣。他总习惯在现实琐碎漫过头顶时，把自己往那些宏大又遥远的地方推——要么是一座能看到枯叶的野山，要么是一场三个多小时的中土旧史诗。他嫌日常繁琐，却舍得在冷风和旧光影里浪费时间。\n\n他并不是真的想躺平，只是需要偶尔从紧绷的秩序里抽身出来，确认自己依然能感知四季、能被一个旧故事打动。这种不加掩饰的口是心非，反倒比任何工整的计划都要鲜活。";
+    if (dateStr === "2026-11-12") {
+      content = "行业巨头在生死存亡的焦虑里催促所有人“从陆战转海战”，整个世界都被算力军备推着往前狂奔。身处漩涡边缘，他却有着一种近乎挑衅的松弛——一句“AI都是泡沫，可口可乐不是”，利落得像一声清脆的开罐声，瞬间将满天虚火戳了个窟窿。\n\n他极擅长用荒诞解构沉重。转过身，他就把掌控全球算力的硅谷教父编排进西二旗的早高峰，让人家穿着冲锋衣在紫砂壶里泡茶跑大模型、去奥森打太极。别人在风口前如履薄冰，他却在初冬冷风里把狂热拽回真实的人间烟火。任由外头惊涛骇浪，自己的日子扎实而自得其乐。";
+    } else {
+      content = "他其实是个极度矛盾又格外真实的人。\n\n嘴上刚叹完“代码一行都不想敲”，转头却一头扎进秋山里，站在山顶吹着冷风发愣。他总习惯在现实琐碎漫过头顶时，把自己往那些宏大又遥远的地方推——要么是一座能看到枯叶的野山，要么是一场三个多小时的中土旧史诗。他嫌日常繁琐，却舍得在冷风和旧光影里浪费时间。\n\n他并不是真的想躺平，只是需要偶尔从紧绷的秩序里抽身出来，确认自己依然能感知四季、能被一个旧故事打动。这种不加掩饰的口是心非，反倒比任何工整的计划都要鲜活。";
+    }
   }
 
   const newEntry = {
@@ -209,7 +217,7 @@ export function run(options = { forceOverwrite: true, targetPath: null }) {
     punchline,
     content,
     note,
-    footnote: `${stats.commits} 次提交 · ${stats.moments} 条说说 · 百望山登高 · 0.3s 鬼影重构`
+    footnote: dateStr === "2026-11-12" ? "生死海战与真实可乐 · 硅谷老黄西二旗传奇 · 初冬烟火解构" : `${stats.commits} 次提交 · ${stats.moments} 条说说 · 百望山登高 · 0.3s 鬼影重构`
   };
 
   if (todayIndex >= 0) {
