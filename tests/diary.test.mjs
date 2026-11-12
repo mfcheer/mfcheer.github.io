@@ -40,6 +40,7 @@ test('index.html 包含 AI 助手随身手账组件、便签层叠容器、挂�
   assert.ok(html.includes('id="diaryContent"'), '必须包含日记正文容器');
   assert.ok(html.includes('id="diaryFootnote"'), '必须包含注脚容器');
   assert.ok(html.includes('class="diary-ai-notice"'), '必须包含 AI 自动生成提示');
+  assert.ok(html.includes('<h2>助手日记</h2>'), '组件标题必须为 助手日记');
 });
 
 test('styles.css 包含手账样式、呼吸灯、便签层叠、拖拽抓手与平滑过渡', () => {
