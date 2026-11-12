@@ -1,22 +1,58 @@
 {
-  "updated_at": "2026-11-12 14:55:43",
-  "total": 24,
+  "updated_at": "2026-11-12 19:14:25",
+  "total": 27,
   "albums": [
     {
       "title": "2026·11",
-      "count": 19,
+      "count": 22,
       "description": null,
       "range": "2026.11",
       "cover": {
-        "src": "assets/gallery/4dd355b09d84aab6.jpg",
-        "thumb": "assets/gallery/4dd355b09d84aab6_s.jpg",
-        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAgAF/8QAIBAAAgEEAQUAAAAAAAAAAAAAAQIAAxEhMRIEQVFhgf/EABUBAQEAAAAAAAAAAAAAAAAAAAID/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAECEf/aAAwDAQACEQMRAD8AwUoM4vbF9xt05HIrkA49iVKs4IUHF9fI3qtw7edRrWXUyf/Z",
-        "w": 1600,
-        "h": 1200,
+        "src": "assets/gallery/3a18f0fb6141bb8b.jpg",
+        "thumb": "assets/gallery/3a18f0fb6141bb8b_s.jpg",
+        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAwQG/8QAHRAAAQQDAQEAAAAAAAAAAAAAAQACAwQRITEScf/EABQBAQAAAAAAAAAAAAAAAAAAAAL/xAAYEQACAwAAAAAAAAAAAAAAAAAAAQIRE//aAAwDAQACEQMRAD8AdluuG7EfcbVMdurgEiPH1Z10h88G0kIDhtHSxKB//9k=",
+        "w": 1448,
+        "h": 1086,
         "ratio": 1.333,
-        "date": "2026-11-12 13:31:53"
+        "date": "2026-11-12 19:14:02"
       },
       "photos": [
+        {
+          "issueNumber": 50,
+          "issueUpdatedAt": "2026-11-12T11:14:02Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-3caf55d3-f33d-46ed-9942-79ee7b1bbbde.jpg",
+          "src": "assets/gallery/3a18f0fb6141bb8b.jpg",
+          "thumb": "assets/gallery/3a18f0fb6141bb8b_s.jpg",
+          "w": 1448,
+          "h": 1086,
+          "ratio": 1.333,
+          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAwQG/8QAHRAAAQQDAQEAAAAAAAAAAAAAAQACAwQRITEScf/EABQBAQAAAAAAAAAAAAAAAAAAAAL/xAAYEQACAwAAAAAAAAAAAAAAAAAAAQIRE//aAAwDAQACEQMRAD8AdluuG7EfcbVMdurgEiPH1Z10h88G0kIDhtHSxKB//9k=",
+          "date": "2026-11-12 19:14:02"
+        },
+        {
+          "issueNumber": 50,
+          "issueUpdatedAt": "2026-11-12T11:14:02Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-e295dd27-8fd2-47ac-b6d0-17de52bea1a1.jpg",
+          "src": "assets/gallery/a3cc007d8671c1de.jpg",
+          "thumb": "assets/gallery/a3cc007d8671c1de_s.jpg",
+          "w": 1448,
+          "h": 1086,
+          "ratio": 1.333,
+          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABQID/8QAIBAAAQMCBwAAAAAAAAAAAAAAAQACEQMEBRITITFRcf/EABUBAQEAAAAAAAAAAAAAAAAAAAEC/8QAFhEAAwAAAAAAAAAAAAAAAAAAAAEC/9oADAMBAAIRAxEAPwBCriFu10aoB6yrN19THFRpPgQYcZhSXuk7xClWLg//2Q==",
+          "date": "2026-11-12 19:14:02"
+        },
+        {
+          "issueNumber": 50,
+          "issueUpdatedAt": "2026-11-12T11:14:02Z",
+          "source": "https://mfcheer.github.io/assets/gallery/gallery-3a55c536-d1e1-4641-b929-5112c350669a.jpg",
+          "src": "assets/gallery/2064bf4c9d7fc128.jpg",
+          "thumb": "assets/gallery/2064bf4c9d7fc128_s.jpg",
+          "w": 1600,
+          "h": 1200,
+          "ratio": 1.333,
+          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABAMF/8QAHhAAAgEEAwEAAAAAAAAAAAAAAQIDAAQREiEiMUH/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAv/EABYRAQEBAAAAAAAAAAAAAAAAAAEAEf/aAAwDAQACEQMRAD8AyBbNnBwKotts8at1+E0ZZ5NidvaQlxIskLbcjBorWBl//9k=",
+          "date": "2026-11-12 19:14:02"
+        },
         {
           "issueNumber": 46,
           "issueUpdatedAt": "2026-11-12T06:55:18Z",
