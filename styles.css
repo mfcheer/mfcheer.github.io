@@ -4894,7 +4894,7 @@ a.post-tag:hover {
     .media-tabs {
         display: flex;
         gap: 6px;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
         background: var(--surface-subtle);
         padding: 4px;
         border-radius: 12px;
@@ -4911,7 +4911,7 @@ a.post-tag:hover {
         font-weight: 500;
         color: var(--muted);
         cursor: pointer;
-        transition: all 0.15s ease;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         text-align: center;
     }
 
@@ -4922,13 +4922,45 @@ a.post-tag:hover {
         box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
     }
 
-    .media-col {
+    .media-grid {
+        display: flex;
+        grid-template-columns: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding: 4px 2px 6px;
+        margin: -4px -2px -2px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .media-grid::-webkit-scrollbar {
         display: none;
     }
 
-    .media-col.is-active {
+    .media-col {
         display: block;
-        animation: fadeIn 0.2s ease;
+        flex: 0 0 calc(100% - 50px);
+        min-width: 0;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        padding: 14px 14px 10px;
+        background: var(--surface-card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-sizing: border-box;
+    }
+
+    .media-col:last-child {
+        scroll-snap-align: end;
+    }
+
+    .media-col-head {
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--line-subtle);
     }
 }
 

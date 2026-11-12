@@ -134,13 +134,17 @@ test("说说地点/标签筛选支持 URL Query 联动与后退现场恢复", ()
     assert.ok(js.includes("initMomentsUrlSync"), "script.js 必须支持 URL Query 状态还原");
 });
 
-test("书影音移动端标签切换 (Media Tabs) 逻辑与样式就绪", () => {
+test("书影音移动端标签切换 (Media Tabs) 与横滑吸附 (Horizontal Peek) 联动就绪", () => {
     const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
     assert.ok(css.includes(".media-tabs"), "styles.css 必须包含 .media-tabs 样式");
     assert.ok(css.includes(".media-tab"), "styles.css 必须包含 .media-tab 样式");
+    assert.ok(css.includes(".media-grid {\n        display: flex;\n        grid-template-columns: none;\n        overflow-x: auto;"), "移动端书影音必须启用弹性横向滑轨");
+    assert.ok(css.includes("scroll-snap-type: x mandatory;"), "移动端书影音必须设置横向物理吸附");
+    assert.ok(css.includes(".media-col {\n        display: block;\n        flex: 0 0 calc(100% - 50px);"), "书影音分类卡片必须设置呼吸留白与 Peek 露出");
 
     const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
     assert.ok(js.includes("initMediaTabs"), "script.js 必须包含 initMediaTabs");
+    assert.ok(js.includes("syncActiveTabOnScroll"), "script.js 必须支持滑动手势与 Tab 激活的双向联动同步");
 });
 
 test("微交互 (Micro-interactions) 与灯箱图片缩放就绪", () => {

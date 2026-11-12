@@ -3303,15 +3303,14 @@ document.addEventListener("click", (e) => {
 })();
 
 // ============================================================
-// MEDIA TABS (书影音移动端标签切换)
+// MEDIA TABS & SLIDER (书影音移动端标签切换与横滑联动)
 // ============================================================
 (function initMediaTabs() {
     const mediaSection = document.getElementById("media");
     if (!mediaSection) return;
+    const grid = mediaSection.querySelector(".media-grid");
     const cols = mediaSection.querySelectorAll(".media-col");
-    if (cols.length < 2) return;
-
-    cols.forEach((col, idx) => col.classList.toggle("is-active", idx === 0));
+    if (!grid || cols.length < 2) return;
 
     let tabs = mediaSection.querySelector(".media-tabs");
     if (!tabs) {
@@ -3319,6 +3318,15 @@ document.addEventListener("click", (e) => {
         tabs.className = "media-tabs";
         tabs.setAttribute("role", "tablist");
         const tabLabels = ["🎬 电影", "📚 读书", "🎮 游戏"];
+
+        const updateTabActive = (activeIdx) => {
+            tabs.querySelectorAll(".media-tab").forEach((b, i) => {
+                const isCur = i === activeIdx;
+                b.classList.toggle("active", isCur);
+                b.setAttribute("aria-selected", String(isCur));
+            });
+        };
+
         tabLabels.forEach((label, idx) => {
             const btn = document.createElement("button");
             btn.type = "button";
@@ -3327,17 +3335,37 @@ document.addEventListener("click", (e) => {
             btn.setAttribute("aria-selected", String(idx === 0));
             btn.textContent = label;
             btn.addEventListener("click", () => {
-                tabs.querySelectorAll(".media-tab").forEach((b, i) => {
-                    const isCur = i === idx;
-                    b.classList.toggle("active", isCur);
-                    b.setAttribute("aria-selected", String(isCur));
-                });
-                cols.forEach((col, i) => col.classList.toggle("is-active", i === idx));
+                updateTabActive(idx);
+                if (cols[idx]) {
+                    const targetLeft = cols[idx].offsetLeft - grid.offsetLeft;
+                    grid.scrollTo({ left: targetLeft, behavior: "smooth" });
+                }
             });
             tabs.appendChild(btn);
         });
-        const grid = mediaSection.querySelector(".media-grid");
-        if (grid) grid.before(tabs);
+
+        grid.before(tabs);
+
+        let scrollRaf = null;
+        const syncActiveTabOnScroll = () => {
+            const scrollCenter = grid.scrollLeft + grid.clientWidth / 2;
+            let closestIdx = 0;
+            let minDistance = Infinity;
+            cols.forEach((col, i) => {
+                const colCenter = col.offsetLeft - grid.offsetLeft + col.offsetWidth / 2;
+                const dist = Math.abs(scrollCenter - colCenter);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closestIdx = i;
+                }
+            });
+            updateTabActive(closestIdx);
+        };
+
+        grid.addEventListener("scroll", () => {
+            if (scrollRaf) cancelAnimationFrame(scrollRaf);
+            scrollRaf = requestAnimationFrame(syncActiveTabOnScroll);
+        }, { passive: true });
     }
 })();
 
