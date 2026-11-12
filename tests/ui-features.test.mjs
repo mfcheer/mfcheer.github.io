@@ -236,13 +236,16 @@ test("个人卡片头衔增加 Dad 角色标识", () => {
 test("相册页照片反重力吸附动效 (Anti-gravity Magnetic Float) 就绪", () => {
     const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
     assert.ok(css.includes(".g-row.g-row-float"), "styles.css 必须包含相册浮空行类名");
-    assert.ok(css.includes("cubic-bezier(0.16, 1, 0.3, 1)"), "styles.css 必须包含苹果物理阻尼吸附曲线");
+    assert.ok(css.includes("cubic-bezier(0.22, 1, 0.36, 1)"), "styles.css 必须包含优化后的醇厚物理阻尼吸附曲线");
     assert.ok(css.includes("--stagger-i"), "styles.css 必须支持行内照片错落交错延迟");
     assert.ok(css.includes(".g-row.g-row-float.g-absorbed"), "styles.css 必须包含吸附完成状态类名");
+    const galleryCssBlock = css.slice(css.indexOf(".g-row.g-row-float"), css.indexOf(".g-row.g-row-float") + 600);
+    assert.ok(!galleryCssBlock.includes("will-change"), "相册吸附动效中杜绝使用 will-change 引起的移动端全屏白光屏闪");
 
     const js = fs.readFileSync(path.join(ROOT, "gallery.js"), "utf8");
     assert.ok(js.includes("floatObserver"), "gallery.js 必须包含反重力视口观察器");
     assert.ok(js.includes("initFloatObserver"), "gallery.js 必须包含观察器生命周期初始化");
     assert.ok(js.includes("g-row-float"), "gallery.js 照片行必须挂载 g-row-float 类名");
     assert.ok(js.includes("--stagger-i"), "gallery.js 必须为每张照片设置 --stagger-i 序号");
+    assert.ok(js.includes("entry.target.classList.remove('g-absorbed')"), "gallery.js 必须支持沉出视口下方后重置状态以实现再次下滑重新触发动效");
 });

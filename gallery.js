@@ -188,15 +188,20 @@
             floatObserver = null;
         }
         if (!('IntersectionObserver' in window)) return;
-        floatObserver = new IntersectionObserver((entries, observer) => {
+        floatObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('g-absorbed');
-                    observer.unobserve(entry.target);
+                } else {
+                    // 仅当元素位于视口下方视野外时重置吸附态，支持滑到上面再次往下滑时重新触发反重力吸附
+                    const rootBottom = entry.rootBounds ? entry.rootBounds.bottom : (window.innerHeight || document.documentElement.clientHeight);
+                    if (entry.boundingClientRect.top > rootBottom - 10) {
+                        entry.target.classList.remove('g-absorbed');
+                    }
                 }
             });
         }, {
-            rootMargin: '0px 0px -40px 0px',
+            rootMargin: '0px 0px -30px 0px',
             threshold: 0.02
         });
     }
