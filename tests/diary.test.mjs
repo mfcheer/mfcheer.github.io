@@ -66,6 +66,27 @@ test('script.js 包含手账加载、层叠物理手势（触屏/PC拖拽/滚轮
   assert.ok(script.includes('lastTouchEndTime') && script.includes('FLIP_COOLDOWN_MS'), '必须包含触屏合成事件过滤与翻页冷却防抖逻辑以防手机双跳');
 });
 
+test('formatHumanDate 具备动态自然日历适配能力（今天/昨天/前天/跨年），杜绝按数组索引写死', () => {
+  const script = fs.readFileSync(path.join(ROOT_DIR, 'script.js'), 'utf-8');
+  assert.ok(script.includes('getBeijingDateStr'), '必须包含获取北京时间日期函数');
+  assert.ok(script.includes('dayDiff'), '必须基于自然天数差计算相对日期');
+
+  // 提取 formatHumanDate 与 getBeijingDateStr 进行动态执行测试
+  const funcMatch = script.match(/function getBeijingDateStr[\s\S]*?function formatHumanDate[\s\S]*?\n    \}/);
+  assert.ok(funcMatch, '必须能成功提取 formatHumanDate 实现');
+
+  const ctx = {};
+  const fn = new Function('ctx', funcMatch[0] + '\nctx.formatHumanDate = formatHumanDate;\nctx.getBeijingDateStr = getBeijingDateStr;');
+  fn(ctx);
+
+  const mockBaseDate = new Date('2026-11-12T10:00:00+08:00');
+  assert.equal(ctx.formatHumanDate('2026-11-12', mockBaseDate), '今天', '当天记录必须显示为 今天');
+  assert.equal(ctx.formatHumanDate('2026-11-11', mockBaseDate), '昨天', '昨日记录必须动态适配为 昨天');
+  assert.equal(ctx.formatHumanDate('2026-11-10', mockBaseDate), '前天', '前日记录必须动态适配为 前天');
+  assert.equal(ctx.formatHumanDate('2026-11-09', mockBaseDate), '11月9日', '同年前日之前记录显示为 M月D日');
+  assert.equal(ctx.formatHumanDate('2025-11-09', mockBaseDate), '2025年11月9日', '跨年记录显示为 YYYY年M月D日');
+});
+
 test('generate-daily-diary 支持多源数据与覆盖更新逻辑', async () => {
   const { getBeijingDateInfo, computeMoodAndSummary, getTodayGalleryPhotos, getTodayMediaItems, run } = await import('../scripts/generate-daily-diary.mjs');
 

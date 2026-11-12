@@ -3315,16 +3315,59 @@ document.addEventListener("click", (e) => {
 
     const bodyWrap = diarySection.querySelector(".diary-body-wrap") || diarySection;
 
-    function formatHumanDate(dateStr, index) {
-        if (index === 0) return "今天";
-        if (index === 1) return "昨天";
-        if (index === 2) return "前天";
-        if (!dateStr) return "";
-        const parts = dateStr.split("-");
-        if (parts.length === 3) {
-            return `${parseInt(parts[1], 10)}月${parseInt(parts[2], 10)}日`;
+    function getBeijingDateStr(dateObj = new Date()) {
+        try {
+            const parts = new Intl.DateTimeFormat("zh-CN", {
+                timeZone: "Asia/Shanghai",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            }).formatToParts(dateObj);
+            const y = parts.find((p) => p.type === "year")?.value;
+            const m = parts.find((p) => p.type === "month")?.value;
+            const d = parts.find((p) => p.type === "day")?.value;
+            return `${y}-${m}-${d}`;
+        } catch (e) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+            const d = String(dateObj.getDate()).padStart(2, "0");
+            return `${y}-${m}-${d}`;
         }
-        return dateStr;
+    }
+
+    function formatHumanDate(dateStr, baseDate) {
+        if (!dateStr || typeof dateStr !== "string") return "";
+        const parts = dateStr.trim().split("-");
+        if (parts.length !== 3) return dateStr;
+
+        const targetYear = parseInt(parts[0], 10);
+        const targetMonth = parseInt(parts[1], 10);
+        const targetDay = parseInt(parts[2], 10);
+        if (!targetYear || !targetMonth || !targetDay) return dateStr;
+
+        let baseDateObj = new Date();
+        if (baseDate instanceof Date && !isNaN(baseDate.getTime())) {
+            baseDateObj = baseDate;
+        } else if (typeof baseDate === "string" && /^\d{4}-\d{2}-\d{2}/.test(baseDate)) {
+            baseDateObj = new Date(baseDate);
+        }
+
+        const todayStr = getBeijingDateStr(baseDateObj);
+        const [currYear, currMonth, currDay] = todayStr.split("-").map((v) => parseInt(v, 10));
+
+        // 计算目标日期与基准日期（默认北京时间当天）的自然日历天数差
+        const targetUtc = Date.UTC(targetYear, targetMonth - 1, targetDay);
+        const todayUtc = Date.UTC(currYear, currMonth - 1, currDay);
+        const dayDiff = Math.round((todayUtc - targetUtc) / (24 * 60 * 60 * 1000));
+
+        if (dayDiff === 0) return "今天";
+        if (dayDiff === 1) return "昨天";
+        if (dayDiff === 2) return "前天";
+
+        if (targetYear === currYear) {
+            return `${targetMonth}月${targetDay}日`;
+        }
+        return `${targetYear}年${targetMonth}月${targetDay}日`;
     }
 
     function escapeHtml(str) {
@@ -3423,10 +3466,10 @@ document.addEventListener("click", (e) => {
         }
 
         if (dateLabel) {
-            dateLabel.textContent = formatHumanDate(item.date, index);
+            dateLabel.textContent = formatHumanDate(item.date);
             const rawDate = (item.date || "").replace(/-/g, ".");
             dateLabel.title = index > 0 
-                ? `${rawDate} · 点击一键回弹至今日` 
+                ? `${rawDate} · 点击一键回弹至最新` 
                 : `${rawDate} · 点击左侧或右侧可翻阅手记`;
         }
         if (punchlineEl) {
