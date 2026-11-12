@@ -181,3 +181,10 @@ test("相册放大后照片日期与标题固定于视口底部，纯文字展�
     assert.ok(css.includes(".post-lightbox-caption:empty { display: none !important; }"), "无说明时自动隐藏");
     assert.ok(css.includes("max-width: calc(100vw - 124px)"), "移动端说明宽度自适应且避开两侧翻页按钮");
 });
+
+test("移动端导航栏 brand 标志字号适配（主次层级分明且垂直居中）", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".topbar .brand {\n        order: 1;\n        font-size: 17px;"), "移动端 topbar brand 字号必须适度放大至 17px");
+    assert.ok(css.includes("line-height: 28px"), "移动端 brand 必须与右侧 28px 操作按钮垂直居中平齐");
+    assert.doesNotMatch(css, /@media \(max-width: 400px\) \{[\s\S]*?\.brand\s*\{\s*font-size:\s*13\.5px/, "窄屏不得将 brand 再次压缩为 13.5px 导致与导航小字混淆");
+});

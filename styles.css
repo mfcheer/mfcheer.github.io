@@ -1578,7 +1578,9 @@ html[data-theme="dark"] .media-stars {
     }
 
     .brand {
-        font-size: 14.5px;
+        font-size: 17px;
+        font-weight: 750;
+        letter-spacing: -0.025em;
     }
 
     .topbar-right {
@@ -1746,10 +1748,6 @@ html[data-theme="dark"] .media-stars {
 
     .nav-links a {
         font-size: 11.5px;
-    }
-
-    .brand {
-        font-size: 13.5px;
     }
 }
 
@@ -3054,6 +3052,12 @@ html[data-theme="dark"] .code-block.has-scroll-right::after {
 
     .topbar .brand {
         order: 1;
+        font-size: 17px;
+        font-weight: 750;
+        letter-spacing: -0.025em;
+        line-height: 28px;
+        display: inline-flex;
+        align-items: center;
     }
 
     .topbar .search-trigger-btn {
