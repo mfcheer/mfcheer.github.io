@@ -248,6 +248,7 @@
 
                 if (query || activeTag) {
                     document.querySelectorAll(".post-item-float:not(.post-absorbed)").forEach((el) => {
+                        el.style.transitionDelay = "";
                         el.classList.add("post-absorbed");
                     });
                 }
@@ -301,18 +302,32 @@
 
             // 文章轻量微阻尼视口浮现 (Subtle Float-in for Blog Posts)
             if ('IntersectionObserver' in window) {
+                let batchTimer = null;
+                let batchIdx = 0;
                 const postObserver = new IntersectionObserver((entries) => {
                     entries.forEach((entry) => {
                         if (entry.isIntersecting) {
-                            entry.target.classList.add('post-absorbed');
-                            postObserver.unobserve(entry.target);
+                            const target = entry.target;
+                            postObserver.unobserve(target);
+                            const delay = Math.min(batchIdx * 40, 160);
+                            batchIdx++;
+                            clearTimeout(batchTimer);
+                            batchTimer = setTimeout(() => { batchIdx = 0; }, 100);
+
+                            if (delay > 0) {
+                                target.style.transitionDelay = `${delay}ms`;
+                            }
+                            target.classList.add('post-absorbed');
                         }
                     });
-                }, { rootMargin: '0px 0px -15px 0px', threshold: 0.01 });
+                }, { rootMargin: '0px 0px -20px 0px', threshold: 0.02 });
 
                 const allPosts = document.querySelectorAll('.post-item');
+                const winH = window.innerHeight || 800;
                 allPosts.forEach((post, idx) => {
-                    if (idx >= 12) {
+                    const rect = post.getBoundingClientRect();
+                    // 仅对首屏视口下方外的文章开启浮升吸附，首屏视野内的文章直接稳态秒开
+                    if (rect.top > winH - 30) {
                         post.classList.add('post-item-float');
                         postObserver.observe(post);
                     }

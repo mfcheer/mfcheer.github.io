@@ -3896,12 +3896,12 @@ section[id] {
     }
 }
 
-/* 文章列表微阻尼浮现 (Subtle Float-in for Blog Posts) */
+/* 文章列表微阻尼浮现 (Blog Posts Subtle Float-in) */
 .post-item.post-item-float {
-    opacity: 0.18;
-    transform: translateY(18px);
-    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
-                opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0;
+    transform: translateY(32px);
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
@@ -3909,6 +3909,14 @@ section[id] {
 .post-item.post-item-float.post-absorbed {
     opacity: 1;
     transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+    .post-item.post-item-float {
+        transform: translateY(28px);
+        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                    opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+    }
 }
 
 .g-item {
