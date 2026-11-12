@@ -209,6 +209,24 @@ test("移动端作品卡片横向吸附滑块 (Horizontal Peek) 与指示点就�
     assert.ok(js.includes("updateActiveDot"), "JS 必须具备基于视口几何计算的动态指示点同步机制");
 });
 
+test("PC 端作品轮播扩展与多作品翻页微控导航就绪", () => {
+    const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+    assert.ok(html.includes('id="projectsNav"'), "HTML 必须包含作品翻页导航容器");
+    assert.ok(html.includes('id="projectsPrevBtn"'), "HTML 必须包含上一页作品微按钮");
+    assert.ok(html.includes('id="projectsNextBtn"'), "HTML 必须包含下一页作品微按钮");
+
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".projects-grid {\n    display: flex;\n    overflow-x: auto;"), "PC 端作品网格采用 flex + 横向溢出滚动");
+    assert.ok(css.includes("flex: 0 0 calc(50% - 7px);"), "PC 端单张卡片占半屏确保双卡整齐平铺");
+    assert.ok(css.includes(".projects-nav.is-visible {\n    display: inline-flex;\n}"), "多作品时 PC 翻页微按钮激活显示");
+    assert.ok(css.includes(".projects-nav {\n        display: none !important;\n    }"), "移动端强制隐藏 PC 微按钮避免与手势冲突");
+
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("projectsNav"), "JS 必须包含作品导航节点引用");
+    assert.ok(js.includes("projectsPrevBtn") && js.includes("projectsNextBtn"), "JS 必须绑定翻页微按钮");
+    assert.ok(js.includes("cards.length > 2"), "项目多于 2 个时才激活 PC 控制器");
+});
+
 test("首页个人卡片隐藏工作经历，转由全局指令面板 (Cmd+K) 彩蛋/关键词检索展示", () => {
     const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
     assert.ok(!html.includes("class=\"career-row\""), "index.html 个人卡片中不再直接展示 career-row 工作经历");

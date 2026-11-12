@@ -853,10 +853,70 @@ button.activity-badge {
     scroll-margin-top: 88px;
 }
 
+.activity-head-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.projects-nav {
+    display: none;
+    align-items: center;
+    gap: 4px;
+}
+
+.projects-nav.is-visible {
+    display: inline-flex;
+}
+
+.projects-nav-btn {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--surface-card);
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.projects-nav-btn:hover:not(:disabled) {
+    color: var(--accent);
+    border-color: rgba(0, 113, 227, 0.35);
+    background: var(--surface-hover);
+}
+
+html[data-theme="dark"] .projects-nav-btn:hover:not(:disabled) {
+    border-color: rgba(41, 151, 255, 0.4);
+}
+
+.projects-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    border-color: var(--line);
+}
+
 .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
     gap: 14px;
+    padding: 4px 0 6px;
+    margin: -4px 0 -6px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.projects-grid::-webkit-scrollbar {
+    display: none;
 }
 
 .projects-pagination {
@@ -866,6 +926,9 @@ button.activity-badge {
 .project-card {
     display: flex;
     flex-direction: column;
+    flex: 0 0 calc(50% - 7px);
+    scroll-snap-align: start;
+    min-width: 0;
     padding: 16px 18px;
     border-radius: 16px;
     background: var(--surface-card);
@@ -876,7 +939,6 @@ button.activity-badge {
                 border-color 0.22s ease,
                 background-color 0.22s ease,
                 box-shadow 0.22s ease;
-    min-width: 0;
 }
 
 .project-card:hover {
@@ -1745,6 +1807,10 @@ html[data-theme="dark"] .media-stars {
     .project-dot.active {
         width: 16px;
         background: var(--accent);
+    }
+
+    .projects-nav {
+        display: none !important;
     }
 
     .activity-head {

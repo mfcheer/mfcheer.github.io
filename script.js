@@ -149,51 +149,111 @@ async function loadGitHubChart() {
 loadGitHubChart();
 
 // ============================================================
-// PROJECTS SLIDER (移动端作品横向滑块与指示点联动)
+// PROJECTS SLIDER (作品横向滑块、移动端指示点与 PC 端多作品翻页微控)
 // ============================================================
 (function initProjectsSlider() {
     const grid = document.querySelector('.projects-grid');
     const pagination = document.getElementById('projectsPagination');
-    if (!grid || !pagination) return;
-    const dots = pagination.querySelectorAll('.project-dot');
-    if (!dots.length) return;
+    const nav = document.getElementById('projectsNav');
+    const prevBtn = document.getElementById('projectsPrevBtn');
+    const nextBtn = document.getElementById('projectsNextBtn');
+    if (!grid) return;
 
-    dots.forEach((dot) => {
-        dot.addEventListener('click', (e) => {
-            e.preventDefault();
-            const idx = parseInt(dot.getAttribute('data-index') || '0', 10);
-            const cards = grid.querySelectorAll('.project-card');
-            if (cards[idx]) {
-                const targetLeft = cards[idx].offsetLeft - grid.offsetLeft;
-                grid.scrollTo({ left: targetLeft, behavior: 'smooth' });
+    const cards = grid.querySelectorAll('.project-card');
+    if (!cards.length) return;
+
+    // 动态同步项目计数（如：2 个项目、3 个项目）
+    const countEl = document.querySelector('#projects .moment-count');
+    if (countEl) countEl.textContent = `${cards.length} 个项目`;
+
+    // 移动端指示点：如果作品数量多于既有指示点，自动动态补全
+    if (pagination) {
+        let dots = pagination.querySelectorAll('.project-dot');
+        if (dots.length < cards.length) {
+            for (let i = dots.length; i < cards.length; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'project-dot';
+                dot.setAttribute('data-index', String(i));
+                dot.setAttribute('role', 'button');
+                dot.setAttribute('aria-label', `项目 ${i + 1}`);
+                pagination.appendChild(dot);
             }
+        }
+        dots = pagination.querySelectorAll('.project-dot');
+        dots.forEach((dot) => {
+            dot.addEventListener('click', (e) => {
+                e.preventDefault();
+                const idx = parseInt(dot.getAttribute('data-index') || '0', 10);
+                if (cards[idx]) {
+                    const targetLeft = cards[idx].offsetLeft - grid.offsetLeft;
+                    grid.scrollTo({ left: targetLeft, behavior: 'smooth' });
+                }
+            });
         });
-    });
+    }
+
+    // PC 端翻页微控：当项目数量 > 2 时自动激活显示
+    const hasMultiplePages = cards.length > 2;
+    if (nav) {
+        nav.classList.toggle('is-visible', hasMultiplePages);
+    }
 
     let scrollRaf = null;
     const updateActiveDot = () => {
-        const cards = grid.querySelectorAll('.project-card');
-        if (!cards.length) return;
-        const scrollCenter = grid.scrollLeft + grid.clientWidth / 2;
-        let closestIdx = 0;
-        let minDistance = Infinity;
-        cards.forEach((card, idx) => {
-            const cardCenter = card.offsetLeft - grid.offsetLeft + card.offsetWidth / 2;
-            const dist = Math.abs(scrollCenter - cardCenter);
-            if (dist < minDistance) {
-                minDistance = dist;
-                closestIdx = idx;
+        // 1. 同步移动端指示点
+        if (pagination) {
+            const dots = pagination.querySelectorAll('.project-dot');
+            if (dots.length) {
+                const scrollCenter = grid.scrollLeft + grid.clientWidth / 2;
+                let closestIdx = 0;
+                let minDistance = Infinity;
+                cards.forEach((card, idx) => {
+                    const cardCenter = card.offsetLeft - grid.offsetLeft + card.offsetWidth / 2;
+                    const dist = Math.abs(scrollCenter - cardCenter);
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                        closestIdx = idx;
+                    }
+                });
+                dots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === closestIdx);
+                });
             }
-        });
-        dots.forEach((dot, idx) => {
-            dot.classList.toggle('active', idx === closestIdx);
-        });
+        }
+
+        // 2. 更新 PC 左右微箭头禁用态
+        if (prevBtn && nextBtn) {
+            const maxScroll = Math.max(0, grid.scrollWidth - grid.clientWidth);
+            prevBtn.disabled = grid.scrollLeft <= 4;
+            nextBtn.disabled = grid.scrollLeft >= maxScroll - 4;
+        }
     };
+
+    // 绑定左右微箭头翻页事件
+    if (prevBtn) {
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const step = grid.clientWidth;
+            grid.scrollBy({ left: -step, behavior: 'smooth' });
+        });
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const step = grid.clientWidth;
+            grid.scrollBy({ left: step, behavior: 'smooth' });
+        });
+    }
 
     grid.addEventListener('scroll', () => {
         if (scrollRaf) cancelAnimationFrame(scrollRaf);
         scrollRaf = requestAnimationFrame(updateActiveDot);
     }, { passive: true });
+
+    window.addEventListener('resize', updateActiveDot, { passive: true });
+
+    // 初始化一次控制器状态
+    updateActiveDot();
 })();
 
 // 媒体封面加载状态：支持平滑微光骨架屏过渡
