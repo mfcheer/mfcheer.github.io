@@ -227,3 +227,8 @@ test("首页个人卡片隐藏工作经历，转由全局指令面板 (Cmd+K) �
     const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
     assert.ok(css.includes(".cmd-palette-item-icon svg"), "styles.css 必须为命令面板图标 SVG 设置标准尺寸");
 });
+
+test("个人卡片头衔增加 Dad 角色标识", () => {
+    const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+    assert.ok(html.includes('<p class="role-text">Backend Engineer / Developer · Dad</p>'), "首页个人卡片头衔中必须包含 Dad 标识");
+});
