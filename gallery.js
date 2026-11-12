@@ -137,13 +137,25 @@
             rowEl.className = 'g-row g-row-float';
             rowEl.style.height = rowH + 'px';
 
+            // 同一行内照片随机分配吸附延迟顺序（不再按从左到右机械顺序排列）
+            const count = rowData.photos.length;
+            const staggerOrder = Array.from({ length: count }, (_, i) => i);
+            for (let i = count - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [staggerOrder[i], staggerOrder[j]] = [staggerOrder[j], staggerOrder[i]];
+            }
+
             rowData.photos.forEach((p, idx) => {
                 const itemW = rowH * photoRatio(p);
                 const itemEl = document.createElement('button');
                 itemEl.type = 'button';
                 itemEl.className = 'g-item';
                 itemEl.style.width = itemW + 'px';
-                itemEl.style.setProperty('--stagger-i', idx);
+                // 随机乱序 + 错落深度位移 (64px ~ 80px)
+                const order = staggerOrder[idx] !== undefined ? staggerOrder[idx] : idx;
+                itemEl.style.setProperty('--stagger-i', order);
+                const randomFloatY = 64 + Math.round(Math.random() * 16);
+                itemEl.style.setProperty('--float-y', randomFloatY + 'px');
                 itemEl.style.backgroundImage = p.lqip ? 'url("' + p.lqip + '")' : 'none';
                 itemEl.setAttribute('aria-label', [p.album, p.date ? p.date.slice(0, 10) : '', '查看照片'].filter(Boolean).join(' · '));
 
@@ -193,16 +205,16 @@
                 if (entry.isIntersecting) {
                     entry.target.classList.add('g-absorbed');
                 } else {
-                    // 仅当元素位于视口下方视野外时重置吸附态，支持滑到上面再次往下滑时重新触发反重力吸附
+                    // 仅当元素完全滑出屏幕下方一段距离（迟滞防抖区间 +120px）时才重置吸附态，支持滑上去再次往下滑重新吸附，同时杜绝边缘抖动屏闪
                     const rootBottom = entry.rootBounds ? entry.rootBounds.bottom : (window.innerHeight || document.documentElement.clientHeight);
-                    if (entry.boundingClientRect.top > rootBottom - 10) {
+                    if (entry.boundingClientRect.top > rootBottom + 120) {
                         entry.target.classList.remove('g-absorbed');
                     }
                 }
             });
         }, {
-            rootMargin: '0px 0px -30px 0px',
-            threshold: 0.02
+            rootMargin: '0px 0px -20px 0px',
+            threshold: 0.01
         });
     }
 

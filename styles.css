@@ -3846,11 +3846,11 @@ section[id] {
 }
 
 .g-row.g-row-float .g-item {
-    opacity: 0.35;
-    transform: translateY(52px) scale(0.95);
-    transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1),
-                opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1);
-    transition-delay: calc(var(--stagger-i, 0) * 65ms);
+    opacity: 0.4;
+    transform: translateY(var(--float-y, 72px)) scale(0.94);
+    transition: transform 1.35s cubic-bezier(0.35, 0, 0.25, 1),
+                opacity 1.05s cubic-bezier(0.35, 0, 0.25, 1);
+    transition-delay: calc(var(--stagger-i, 0) * 85ms);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
@@ -3862,11 +3862,11 @@ section[id] {
 
 @media (max-width: 600px) {
     .g-row.g-row-float .g-item {
-        opacity: 0.35;
-        transform: translateY(44px) scale(0.95);
-        transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1),
-                    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-        transition-delay: calc(var(--stagger-i, 0) * 55ms);
+        opacity: 0.45;
+        transform: translateY(var(--float-y, 64px)) scale(0.94);
+        transition: transform 1.25s cubic-bezier(0.35, 0, 0.25, 1),
+                    opacity 0.95s cubic-bezier(0.35, 0, 0.25, 1);
+        transition-delay: calc(var(--stagger-i, 0) * 75ms);
     }
 }
 
@@ -4023,6 +4023,9 @@ section[id] {
 @media (max-width: 600px) {
     .card-gallery {
         padding: 18px;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: var(--surface);
     }
 
     .lb-nav {
