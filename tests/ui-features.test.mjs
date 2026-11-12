@@ -173,3 +173,10 @@ test('代码块一体化卡片容器与非胶囊扁平操作样式就绪', () =>
     assert.ok(js.includes('viewBox="0 0 24 24" width="12" height="12"'), '复制代码按钮必须包含微型矢量图标');
     assert.ok(js.includes('已复制'), '复制代码按钮必须支持状态反馈');
 });
+
+test("相册放大后照片日期与标题固定于视口底部，并与移动端左右切换按钮协调统一", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".post-lightbox-caption {\n    position: absolute;\n    bottom: calc(28px"), "PC 端说明文字必须固定在视口底部");
+    assert.ok(css.includes(".post-lightbox-caption:empty { display: none !important; }"), "无说明时自动隐藏");
+    assert.ok(css.includes("max-width: calc(100vw - 124px)"), "移动端说明宽度自适应且避开两侧翻页按钮");
+});
