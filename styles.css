@@ -2401,9 +2401,7 @@ body.lightbox-open {
     padding: 4px 10px;
     margin: 0;
     box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     border-radius: 0;
     background: transparent;
     border: none;
@@ -2416,13 +2414,17 @@ body.lightbox-open {
     text-align: center;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
     pointer-events: auto;
-    cursor: pointer;
+    cursor: default;
     user-select: none;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: color 0.18s ease;
     z-index: 2001;
+}
+
+.post-lightbox-caption[role="button"] {
+    cursor: pointer;
 }
 
 .post-lightbox-caption:hover {
@@ -2482,6 +2484,7 @@ body.lightbox-open {
     .post-lightbox-caption {
         bottom: calc(24px + env(safe-area-inset-bottom, 0px));
         height: 44px;
+        line-height: 44px;
         max-width: calc(100vw - 124px);
         padding: 0 8px;
         font-size: 13px;

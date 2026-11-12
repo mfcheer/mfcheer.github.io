@@ -138,6 +138,25 @@ window.runSiteRegression = async function (phase) {
         group.innerHTML = '<img src="/avatar.jpg"><img src="/favicon-32x32.png">'; document.body.appendChild(group);
         group.querySelectorAll('img').forEach(bindZoomableImage);
         group.querySelector('img').click(); assert(sitePhotos.length === 2, '同条说说自动分组'); closeLightbox(); group.remove();
+        const momentWithText = document.createElement('div'); momentWithText.className = 'moment-item';
+        momentWithText.innerHTML = '<p class="moment-text">AI 都是泡沫，可口可乐不是</p><img src="/avatar.jpg">';
+        document.body.appendChild(momentWithText);
+        momentWithText.querySelectorAll('img').forEach(bindZoomableImage);
+        momentWithText.querySelector('img').click();
+        assert(sitePhotos[0].caption === 'AI 都是泡沫，可口可乐不是', '说说图片放大展示说说文字');
+        assert(document.querySelector('.post-lightbox-caption').textContent === 'AI 都是泡沫，可口可乐不是', '灯箱底部展示说说正文');
+        closeLightbox(); momentWithText.remove();
+
+        const momentLongText = document.createElement('div'); momentLongText.className = 'moment-item';
+        const longStr = '百望山，公司附近一个小山，中午去爬了一下。一直觉得这个名字很熟悉，对啊，南望山，我怎么把南望山忘了。今天天气很好，阳光洒在山顶的银杏树上，满地金黄。整整走了两个小时，感觉整个人的状态都放松了下来。';
+        momentLongText.innerHTML = `<p class="moment-text">${longStr}</p><img src="/avatar.jpg">`;
+        document.body.appendChild(momentLongText);
+        momentLongText.querySelectorAll('img').forEach(bindZoomableImage);
+        momentLongText.querySelector('img').click();
+        assert(sitePhotos[0].fullText === longStr, '完整文字保存在 fullText 中');
+        assert(document.querySelector('.post-lightbox-caption').title === longStr, 'title 属性挂载完整文字供 hover 查看');
+        assert(document.querySelector('.post-lightbox-caption').textContent.endsWith('…'), '超长说说文字在底部适度截断并加省略号');
+        closeLightbox(); momentLongText.remove();
         const article = document.createElement('div'); article.className = 'post-body';
         article.innerHTML = '<img src="/avatar.jpg"><img src="/favicon-32x32.png">'; document.body.appendChild(article);
         article.querySelectorAll('img').forEach(bindZoomableImage);

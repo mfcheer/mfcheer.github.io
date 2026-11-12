@@ -689,9 +689,15 @@ function showSitePhoto() {
     const defaultCaption = photo.caption || (hasExif ? (photo.exif.camera || '查看照片参数') : '');
     siteLightboxCaption.textContent = defaultCaption;
     if (defaultCaption) {
-        siteLightboxCaption.title = '点击查看拍摄参数 (快捷键 i)';
-        siteLightboxCaption.setAttribute?.('role', 'button');
-        siteLightboxCaption.setAttribute?.('tabindex', '0');
+        if (hasExif) {
+            siteLightboxCaption.title = '点击查看拍摄参数 (快捷键 i)';
+            siteLightboxCaption.setAttribute?.('role', 'button');
+            siteLightboxCaption.setAttribute?.('tabindex', '0');
+        } else {
+            siteLightboxCaption.title = photo.fullText || defaultCaption;
+            siteLightboxCaption.removeAttribute?.('role');
+            siteLightboxCaption.removeAttribute?.('tabindex');
+        }
     } else {
         siteLightboxCaption.removeAttribute?.('title');
         siteLightboxCaption.removeAttribute?.('role');
@@ -740,12 +746,20 @@ function createLightbox() {
     if (siteLightboxCaption) {
         siteLightboxCaption.onclick = (e) => {
             e.stopPropagation();
-            togglePhotoInfo();
+            const current = sitePhotos && sitePhotos[sitePhotoIndex];
+            const hasExif = current && current.exif && (current.exif.camera || current.exif.lens || current.exif.aperture || current.exif.shutter || current.exif.iso);
+            if (hasExif || (current && current.album)) {
+                togglePhotoInfo();
+            }
         };
         siteLightboxCaption.onkeydown = (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                togglePhotoInfo();
+                const current = sitePhotos && sitePhotos[sitePhotoIndex];
+                const hasExif = current && current.exif && (current.exif.camera || current.exif.lens || current.exif.aperture || current.exif.shutter || current.exif.iso);
+                if (hasExif || (current && current.album)) {
+                    togglePhotoInfo();
+                }
             }
         };
     }
@@ -792,7 +806,11 @@ function createLightbox() {
         }
         if (e.key === 'i' || e.key === 'I') {
             e.preventDefault();
-            togglePhotoInfo();
+            const current = sitePhotos && sitePhotos[sitePhotoIndex];
+            const hasExif = current && current.exif && (current.exif.camera || current.exif.lens || current.exif.aperture || current.exif.shutter || current.exif.iso);
+            if (hasExif || (current && current.album)) {
+                togglePhotoInfo();
+            }
         }
         if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
             e.preventDefault(); stepSitePhoto(e.key === 'ArrowLeft' ? -1 : 1);
@@ -891,8 +909,15 @@ function createLightbox() {
             }
         }
 
-        // 上滑手势展开参数抽屉：垂直上滑超过阈值或快速上滑手势
+        // 上滑手势展开参数抽屉：垂直上滑超过阈值或快速上滑手势（仅当具备相机参数或相册归属时生效）
         if (touchLock === 'vertical-up' || (!touchLock && dy < -50 && Math.abs(dy) > Math.abs(dx) * 1.2)) {
+            const current = sitePhotos && sitePhotos[sitePhotoIndex];
+            const hasExif = current && current.exif && (current.exif.camera || current.exif.lens || current.exif.aperture || current.exif.shutter || current.exif.iso);
+            if (!hasExif && !(current && current.album)) {
+                touchLock = null;
+                resetLightboxTransform();
+                return;
+            }
             const isQuickFlickUp = dy < -25 && dt < 280 && Math.abs(dy) / dt > 0.25;
             if (dy < -45 || isQuickFlickUp) {
                 togglePhotoInfo(true);
@@ -947,10 +972,34 @@ function openSitePhotos(photos, index = 0, trigger = document.activeElement) {
 function openLightbox(img) {
     const group = img.closest('.moment-item, .post-body');
     const images = group ? [...group.querySelectorAll('img.zoomable-img')] : [img];
-    openSitePhotos(images.map(image => ({
-        src: image.currentSrc || image.src,
-        caption: ['这里写图片描述', '说说配图', 'Image'].includes(image.alt) ? '' : image.alt
-    })), images.indexOf(img), img);
+    const isMoment = !!(group && group.classList.contains('moment-item'));
+    let momentCaption = '';
+    let momentFullText = '';
+    if (isMoment) {
+        let text = (group.dataset.momentText || group.querySelector('.moment-text')?.textContent || '').trim();
+        if (text) {
+            momentFullText = text;
+            const singleLine = text.replace(/\r\n|\r|\n+/g, ' ').replace(/\s+/g, ' ').trim();
+            const MAX_MOMENT_CAPTION = 100;
+            momentCaption = singleLine.length > MAX_MOMENT_CAPTION
+                ? singleLine.slice(0, MAX_MOMENT_CAPTION).trim() + '…'
+                : singleLine;
+        }
+    }
+    openSitePhotos(images.map(image => {
+        let caption = '';
+        if (isMoment) {
+            caption = momentCaption || (['这里写图片描述', '说说配图', 'Image'].includes(image.alt) ? '' : image.alt);
+        } else {
+            caption = ['这里写图片描述', '说说配图', 'Image'].includes(image.alt) ? '' : image.alt;
+        }
+        return {
+            src: image.currentSrc || image.src,
+            caption,
+            fullText: isMoment ? momentFullText : caption,
+            isMoment
+        };
+    }), images.indexOf(img), img);
 }
 
 function bindZoomableImage(img) {
@@ -1968,6 +2017,7 @@ function renderMomentsState(state = 'ok') {
         }
 
         if (momentText) {
+            item.dataset.momentText = momentText;
             const text = document.createElement('p');
             text.className = 'moment-text';
             // 正文中的 URL 自动转为可点击链接；已知视频/音乐平台的链接

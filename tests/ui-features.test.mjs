@@ -270,3 +270,14 @@ test("文章列表页轻量微阻尼浮现动效 (Blog Posts Subtle Float-in) �
     assert.ok(tpl.includes("postObserver"), "templates/blog-list.html 必须包含文章视口观察器");
     assert.ok(tpl.includes("post-item-float"), "templates/blog-list.html 必须给非首屏文章添加微阻尼浮现类名");
 });
+
+test("说说图片放大展示说说文字内容与长文本截断防护", () => {
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("isMoment"), "script.js 必须判断是否为说说图片灯箱");
+    assert.ok(js.includes("MAX_MOMENT_CAPTION"), "script.js 必须限制说说底栏标题最大长度并做截断");
+    assert.ok(js.includes("photo.fullText"), "script.js 必须保留完整文字用于 title 提示");
+
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".post-lightbox-caption[role=\"button\"]"), "styles.css 必须为可交互按钮设置手型光标");
+    assert.ok(css.includes("line-height: 44px;"), "styles.css 移动端底栏文字高度必须与翻页按钮垂直居中平齐");
+});
