@@ -1809,6 +1809,26 @@ function renderMomentsState(state = 'ok') {
     let sentinel = null;
     let sentinelIO = null;
 
+    if (window._momentFloatObserver) {
+        window._momentFloatObserver.disconnect();
+        window._momentFloatObserver = null;
+    }
+    let momentFloatObserver = null;
+    if (!hasLimit && 'IntersectionObserver' in window) {
+        momentFloatObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('moment-absorbed');
+                    momentFloatObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            rootMargin: '0px 0px -15px 0px',
+            threshold: 0.01
+        });
+        window._momentFloatObserver = momentFloatObserver;
+    }
+
     const teardownSentinel = () => {
         if (sentinelIO) sentinelIO.disconnect();
         if (sentinel) sentinel.remove();
@@ -1818,7 +1838,22 @@ function renderMomentsState(state = 'ok') {
     const renderBatch = () => {
         if (sentinel) sentinel.remove(); // 先摘下哨兵，保证追加的条目都在其之前
         const batch = list.slice(rendered, rendered + PAGE_SIZE);
-        batch.forEach((m, i) => listEl.append(buildMomentItem(m, rendered + i)));
+        batch.forEach((m, i) => {
+            const globalIdx = rendered + i;
+            const item = buildMomentItem(m, globalIdx);
+            if (!hasLimit && momentFloatObserver) {
+                if (globalIdx < 2) {
+                    item.classList.add('moment-absorbed');
+                } else {
+                    item.classList.add('moment-item-float');
+                    item.style.setProperty('--stagger-i', (globalIdx % 3));
+                    const randomFloatY = 64 + Math.round(Math.random() * 20);
+                    item.style.setProperty('--float-y', randomFloatY + 'px');
+                    momentFloatObserver.observe(item);
+                }
+            }
+            listEl.append(item);
+        });
         rendered += batch.length;
         if (rendered < list.length && sentinel) listEl.append(sentinel);
         else teardownSentinel();

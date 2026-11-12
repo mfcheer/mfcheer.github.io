@@ -3871,6 +3871,46 @@ section[id] {
     }
 }
 
+/* 说说卡片反重力吸附动效 (Anti-gravity Magnetic Float for Moments) */
+.moment-item.moment-item-float {
+    opacity: 0.15;
+    transform: translateY(var(--float-y, 72px)) scale(0.97);
+    transition: transform 0.95s cubic-bezier(0.35, 0, 0.25, 1),
+                opacity 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+    transition-delay: calc(var(--stagger-i, 0) * 60ms);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.moment-item.moment-item-float.moment-absorbed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+@media (max-width: 600px) {
+    .moment-item.moment-item-float {
+        transform: translateY(var(--float-y, 56px)) scale(0.97);
+        transition: transform 0.85s cubic-bezier(0.35, 0, 0.25, 1),
+                    opacity 0.65s cubic-bezier(0.35, 0, 0.25, 1);
+        transition-delay: calc(var(--stagger-i, 0) * 50ms);
+    }
+}
+
+/* 文章列表微阻尼浮现 (Subtle Float-in for Blog Posts) */
+.post-item.post-item-float {
+    opacity: 0.18;
+    transform: translateY(18px);
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.post-item.post-item-float.post-absorbed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .g-item {
     position: relative;
     height: 100%;
@@ -4039,6 +4079,8 @@ section[id] {
 /* 减少动效偏好 */
 @media (prefers-reduced-motion: reduce) {
     .g-row.g-row-float .g-item,
+    .moment-item.moment-item-float,
+    .post-item.post-item-float,
     .g-item,
     .g-item img,
     .lb-img,

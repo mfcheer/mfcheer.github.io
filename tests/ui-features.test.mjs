@@ -250,3 +250,23 @@ test("相册页照片反重力吸附动效 (Anti-gravity Magnetic Float) 就绪"
     assert.ok(js.includes("ROW_BATCH = 1;"), "gallery.js 必须支持逐行动态按需加载");
     assert.ok(css.includes("overflow: visible;"), "styles.css 浮空行必须允许溢出以支撑全屏底边起跳位移");
 });
+
+test("说说列表页反重力吸附动效 (Moments Magnetic Float) 就绪", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".moment-item.moment-item-float"), "styles.css 必须包含说说浮动卡片类名");
+    assert.ok(css.includes(".moment-item.moment-item-float.moment-absorbed"), "styles.css 必须包含说说吸附完成类名");
+
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("momentFloatObserver"), "script.js 必须包含说说视口浮动观察器");
+    assert.ok(js.includes("moment-absorbed"), "script.js 必须在说说进入视口时添加吸附类名");
+});
+
+test("文章列表页轻量微阻尼浮现动效 (Blog Posts Subtle Float-in) 就绪", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".post-item.post-item-float"), "styles.css 必须包含文章微阻尼浮现类名");
+    assert.ok(css.includes(".post-item.post-item-float.post-absorbed"), "styles.css 必须包含文章吸附类名");
+
+    const tpl = fs.readFileSync(path.join(ROOT, "templates/blog-list.html"), "utf8");
+    assert.ok(tpl.includes("postObserver"), "templates/blog-list.html 必须包含文章视口观察器");
+    assert.ok(tpl.includes("post-item-float"), "templates/blog-list.html 必须给非首屏文章添加微阻尼浮现类名");
+});
