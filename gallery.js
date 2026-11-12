@@ -108,7 +108,7 @@
 
     let initialScreenRows = 3;
 
-    function layoutWall(wall, append = false) {
+    function layoutWall(wall, append = false, isResize = false) {
         let photos;
         try { photos = JSON.parse(wall.dataset.photos); } catch { return; }
         const W = wall.clientWidth;
@@ -121,7 +121,6 @@
         if (sentinel) sentinel.hidden = visibleRows >= rows.length;
 
         const seenYears = new Set(Array.from(wall.querySelectorAll(".gallery-year-anchor")).map(a => a.dataset.year));
-        const vh = window.innerHeight || document.documentElement.clientHeight || 800;
 
         for (let rIdx = startRow; rIdx < Math.min(visibleRows, rows.length); rIdx++) {
             const rowData = rows[rIdx];
@@ -139,8 +138,12 @@
             // 达到高度上限时允许行尾留白，避免拉伸照片或产生超高大图。
             const rowH = rowData.height;
 
+            const isInitialRow = !append && !isResize && rIdx < initialScreenRows;
+            const isSolid = isInitialRow || isResize || !floatObserver;
+
             const rowEl = document.createElement("div");
-            rowEl.className = "g-row g-row-float";
+            // 仅对向下动态追加的新行挂载 g-row-float，首屏行/已加载行/重排直接以完全展示的稳态呈现，无任何初始位移与闪烁
+            rowEl.className = isSolid ? "g-row g-absorbed" : "g-row g-row-float";
             rowEl.style.height = rowH + "px";
 
             // 同一行内照片随机分配吸附延迟顺序（不再按从左到右机械顺序排列）
@@ -157,11 +160,12 @@
                 itemEl.type = "button";
                 itemEl.className = "g-item";
                 itemEl.style.width = itemW + "px";
-                // 随机乱序 + 屏幕最底边飞升起跳位移 (240px ~ 300px)
-                const order = staggerOrder[idx] !== undefined ? staggerOrder[idx] : idx;
-                itemEl.style.setProperty("--stagger-i", order);
-                const randomFloatY = 240 + Math.round(Math.random() * 50);
-                itemEl.style.setProperty("--float-y", randomFloatY + "px");
+                if (!isSolid) {
+                    const order = staggerOrder[idx] !== undefined ? staggerOrder[idx] : idx;
+                    itemEl.style.setProperty("--stagger-i", order);
+                    const randomFloatY = 240 + Math.round(Math.random() * 50);
+                    itemEl.style.setProperty("--float-y", randomFloatY + "px");
+                }
                 itemEl.style.backgroundImage = p.lqip ? ("url('" + p.lqip + "')") : "none";
                 itemEl.setAttribute("aria-label", [p.album, p.date ? p.date.slice(0, 10) : "", "查看照片"].filter(Boolean).join(" · "));
 
@@ -185,25 +189,8 @@
             });
             wall.appendChild(rowEl);
 
-            // 首屏照片（初次整墙渲染且处于视口内）直接固化展现；后续随手势滚动逐行挂载的新行由观察器触发屏幕底边反重力吸附
-            const isInitialRow = !append && rIdx < initialScreenRows;
-            if (isInitialRow || !floatObserver) {
-                rowEl.classList.add("g-absorbed");
-            } else {
+            if (!isSolid) {
                 floatObserver.observe(rowEl);
-            }
-        }
-
-        // 视口未撑满时的自愈填充保护
-        if (sentinel && !sentinel.hidden && visibleRows < rows.length) {
-            const sRect = sentinel.getBoundingClientRect();
-            if (sRect.top <= vh + 100) {
-                requestAnimationFrame(() => {
-                    if (visibleRows < rows.length) {
-                        visibleRows += 1;
-                        layoutWall(wall, true);
-                    }
-                });
             }
         }
     }
@@ -214,6 +201,7 @@
     let sentinel = null;
     let sentinelIO = null;
     let floatObserver = null;
+    let isLoadingRow = false;
 
     function initFloatObserver() {
         if (floatObserver) {
@@ -234,23 +222,49 @@
         });
     }
 
+    function appendNextRow(wall) {
+        if (!wall || isLoadingRow) return;
+        let photos;
+        try { photos = JSON.parse(wall.dataset.photos); } catch { return; }
+        const W = wall.clientWidth || window.innerWidth || 800;
+        const rows = buildRows(photos, W);
+        if (visibleRows >= rows.length) {
+            if (sentinel) sentinel.hidden = true;
+            return;
+        }
+        isLoadingRow = true;
+        visibleRows += 1;
+        layoutWall(wall, true);
+        requestAnimationFrame(() => {
+            isLoadingRow = false;
+            // 若追加后哨兵仍在视口触发区（如快速滑屏或高分辨率大屏），连贯按需补齐
+            if (sentinel && !sentinel.hidden && visibleRows < rows.length) {
+                const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+                const sRect = sentinel.getBoundingClientRect();
+                if (sRect.top <= vh + 120) {
+                    appendNextRow(wall);
+                }
+            }
+        });
+    }
+
     function renderYearNav(photos) {
-        let yearNav = document.getElementById('galleryYearNav');
-        const years = [...new Set(photos.map(p => (p.date || '').slice(0, 4)).filter(y => y && /^\d{4}$/.test(y)))].sort().reverse();
+        let yearNav = document.getElementById("galleryYearNav");
+        const years = [...new Set(photos.map(p => (p.date || "").slice(0, 4)).filter(y => y && /^\d{4}$/.test(y)))].sort().reverse();
         if (years.length <= 1) {
             if (yearNav) yearNav.remove();
             return;
         }
         if (!yearNav) {
-            yearNav = document.createElement('nav');
-            yearNav.id = 'galleryYearNav';
-            yearNav.className = 'gallery-year-nav';
-            yearNav.setAttribute('aria-label', '相册年份快速定位');
+            yearNav = document.createElement("nav");
+            yearNav.id = "galleryYearNav";
+            yearNav.className = "gallery-year-nav";
+            yearNav.setAttribute("aria-label", "相册年份快速定位");
             listEl.before(yearNav);
         }
         yearNav.innerHTML = years.map((y, idx) =>
             `<button class="gallery-year-btn${idx === 0 ? " active" : ""}" type="button" data-year="${y}">${y}</button>`
-        ).join('');
+        ).join("");
 
         yearNav.querySelectorAll(".gallery-year-btn").forEach(btn => {
             btn.addEventListener("click", () => {
@@ -275,7 +289,7 @@
             });
         });
         const onScrollYear = () => {
-            const anchors = Array.from(document.querySelectorAll('.gallery-year-anchor'));
+            const anchors = Array.from(document.querySelectorAll(".gallery-year-anchor"));
             const scrollY = window.scrollY + 140;
             let currentYear = years[0];
             for (const a of anchors) {
@@ -283,14 +297,16 @@
                     currentYear = a.dataset.year;
                 }
             }
-            yearNav.querySelectorAll('.gallery-year-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.year === currentYear);
+            yearNav.querySelectorAll(".gallery-year-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.year === currentYear);
             });
         };
-        window.removeEventListener('scroll', window._onGalleryScrollYear);
+        window.removeEventListener("scroll", window._onGalleryScrollYear);
         window._onGalleryScrollYear = onScrollYear;
-        window.addEventListener('scroll', onScrollYear, { passive: true });
+        window.addEventListener("scroll", onScrollYear, { passive: true });
     }
+
+    let lastClientW = 0;
 
     function render() {
         initFloatObserver();
@@ -317,18 +333,14 @@
         renderYearNav(photos);
 
         const W = wall.clientWidth || window.innerWidth || 800;
+        lastClientW = document.documentElement.clientWidth || window.innerWidth;
         initialScreenRows = Math.max(2, Math.min(4, Math.ceil((window.innerHeight || 800) / (W < 520 ? 190 : 250))));
         visibleRows = initialScreenRows;
 
         if (sentinel && "IntersectionObserver" in window) {
             sentinelIO = new IntersectionObserver((entries) => {
                 if (entries.some((en) => en.isIntersecting) && !sentinel.hidden) {
-                    const allP = collectAllPhotos();
-                    const allR = buildRows(allP, wall.clientWidth || W);
-                    if (visibleRows < allR.length) {
-                        visibleRows += 1; // 一行一行动态按需加载
-                        layoutWall(wall, true);
-                    }
+                    appendNextRow(wall);
                 }
             }, { rootMargin: "120px 0px" });
             sentinelIO.observe(sentinel);
@@ -337,15 +349,33 @@
             visibleRows = Infinity;
         }
         layoutWall(wall);
+
+        // 首屏自愈探测（如超大屏或高分辨率显示器首屏未填满）
+        requestAnimationFrame(() => {
+            if (sentinel && !sentinel.hidden) {
+                const allR = buildRows(photos, wall.clientWidth || W);
+                if (visibleRows < allR.length) {
+                    const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+                    const sRect = sentinel.getBoundingClientRect();
+                    if (sRect.top <= vh + 120) {
+                        appendNextRow(wall);
+                    }
+                }
+            }
+        });
     }
 
-    // 响应式重排
+    // 响应式重排：严格仅在视口水平宽度改变时重排（移动端上下滑动时地址栏展开/收起只会改变高度，忽略无意义的重排）
     let resizeTimer = null;
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
+        const curW = document.documentElement.clientWidth || window.innerWidth;
+        if (lastClientW && Math.abs(curW - lastClientW) < 8) return;
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
-            initFloatObserver();
-            document.querySelectorAll('.gallery-wall').forEach((wall) => layoutWall(wall));
+            const newW = document.documentElement.clientWidth || window.innerWidth;
+            if (lastClientW && Math.abs(newW - lastClientW) < 8) return;
+            lastClientW = newW;
+            document.querySelectorAll(".gallery-wall").forEach((wall) => layoutWall(wall, false, true));
         }, 150);
     });
 
