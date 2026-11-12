@@ -188,3 +188,20 @@ test("移动端导航栏 brand 标志字号适配（主次层级分明且垂直�
     assert.ok(css.includes("line-height: 28px"), "移动端 brand 必须与右侧 28px 操作按钮垂直居中平齐");
     assert.doesNotMatch(css, /@media \(max-width: 400px\) \{[\s\S]*?\.brand\s*\{\s*font-size:\s*13\.5px/, "窄屏不得将 brand 再次压缩为 13.5px 导致与导航小字混淆");
 });
+test("移动端作品卡片横向吸附滑块 (Horizontal Peek) 与指示点就绪", () => {
+    const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+    assert.ok(html.includes('class="projects-pagination"'), "HTML 必须包含作品移动端分页指示容器");
+    assert.ok(html.includes('class="project-dot active"'), "默认第一项指示点激活");
+
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".projects-pagination {\n    display: none;\n}"), "桌面端必须隐藏分页指示点");
+    assert.ok(css.includes("scroll-snap-type: x mandatory;"), "移动端作品网格必须启用横向物理吸附");
+    assert.ok(css.includes("-webkit-overflow-scrolling: touch;"), "移动端必须开启平滑弹性滚动");
+    assert.ok(css.includes("scroll-snap-align: start;"), "作品卡片必须设置 snap 吸附起点");
+    assert.ok(css.includes(".project-dot.active {\n        width: 16px;"), "激活的指示点呈现现代长胶囊微动效");
+
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("initProjectsSlider"), "JS 必须包含作品滑块与指示点联动初始化逻辑");
+    assert.ok(js.includes("updateActiveDot"), "JS 必须具备基于视口几何计算的动态指示点同步机制");
+});
+

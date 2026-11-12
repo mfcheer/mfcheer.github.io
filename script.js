@@ -148,6 +148,54 @@ async function loadGitHubChart() {
 
 loadGitHubChart();
 
+// ============================================================
+// PROJECTS SLIDER (移动端作品横向滑块与指示点联动)
+// ============================================================
+(function initProjectsSlider() {
+    const grid = document.querySelector('.projects-grid');
+    const pagination = document.getElementById('projectsPagination');
+    if (!grid || !pagination) return;
+    const dots = pagination.querySelectorAll('.project-dot');
+    if (!dots.length) return;
+
+    dots.forEach((dot) => {
+        dot.addEventListener('click', (e) => {
+            e.preventDefault();
+            const idx = parseInt(dot.getAttribute('data-index') || '0', 10);
+            const cards = grid.querySelectorAll('.project-card');
+            if (cards[idx]) {
+                const targetLeft = cards[idx].offsetLeft - grid.offsetLeft;
+                grid.scrollTo({ left: targetLeft, behavior: 'smooth' });
+            }
+        });
+    });
+
+    let scrollRaf = null;
+    const updateActiveDot = () => {
+        const cards = grid.querySelectorAll('.project-card');
+        if (!cards.length) return;
+        const scrollCenter = grid.scrollLeft + grid.clientWidth / 2;
+        let closestIdx = 0;
+        let minDistance = Infinity;
+        cards.forEach((card, idx) => {
+            const cardCenter = card.offsetLeft - grid.offsetLeft + card.offsetWidth / 2;
+            const dist = Math.abs(scrollCenter - cardCenter);
+            if (dist < minDistance) {
+                minDistance = dist;
+                closestIdx = idx;
+            }
+        });
+        dots.forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === closestIdx);
+        });
+    };
+
+    grid.addEventListener('scroll', () => {
+        if (scrollRaf) cancelAnimationFrame(scrollRaf);
+        scrollRaf = requestAnimationFrame(updateActiveDot);
+    }, { passive: true });
+})();
+
 // 媒体封面加载状态：支持平滑微光骨架屏过渡
 document.querySelectorAll('.media-cover').forEach((img) => {
     if (img.complete) {
