@@ -219,4 +219,11 @@ test("首页个人卡片隐藏工作经历，转由全局指令面板 (Cmd+K) �
     assert.ok(js.includes("曾就职于"), "script.js 命令面板分组与徽章必须包含「曾就职于」");
     assert.ok(js.includes("/career"), "script.js 命令面板必须支持 /career 或相关指令");
     assert.ok(js.includes("58同城") && js.includes("字节跳动") && js.includes("美团") && js.includes("百度"), "工作经历数据源必须完整包含 58同城、字节跳动、美团、百度");
+    assert.ok(js.includes("ico-bytedance"), "必须包含字节跳动专属 SVG 图标");
+    assert.ok(js.includes("FFD900"), "必须包含 58 同城专属黄色 SVG 图标");
+    assert.ok(js.includes("FFC300"), "必须包含美团专属黄色 SVG 图标");
+    assert.ok(js.includes("2932E1"), "必须包含百度专属蓝色 SVG 图标");
+
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".cmd-palette-item-icon svg"), "styles.css 必须为命令面板图标 SVG 设置标准尺寸");
 });

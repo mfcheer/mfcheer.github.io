@@ -4751,6 +4751,13 @@ a.post-tag:hover {
     color: var(--text-secondary);
 }
 
+.cmd-palette-item-icon svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    display: block;
+}
+
 .cmd-palette-item-content {
     flex: 1;
     min-width: 0;
