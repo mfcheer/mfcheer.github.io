@@ -1,16 +1,16 @@
 {
-  "updated_at": "2026-11-12 13:32:17",
-  "total": 25,
+  "updated_at": "2026-11-12 14:55:43",
+  "total": 24,
   "albums": [
     {
       "title": "2026·11",
-      "count": 20,
+      "count": 19,
       "description": null,
       "range": "2026.11",
       "cover": {
         "src": "assets/gallery/4dd355b09d84aab6.jpg",
         "thumb": "assets/gallery/4dd355b09d84aab6_s.jpg",
-        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAgAF/8QAIBAAAgEEAQUAAAAAAAAAAAAAAQIRAAMhMRIEQVFhgf/EABUBAQEAAAAAAAAAAAAAAAAAAAID/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAECEf/aAAwDAQACEQMRAD8AwUsM4mMTum3TkciuQDj2KrV5xCg4nXym91uHbzqmtZdTOH//2Q==",
+        "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAgAF/8QAIBAAAgEEAQUAAAAAAAAAAAAAAQIAAxEhMRIEQVFhgf/EABUBAQEAAAAAAAAAAAAAAAAAAAID/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAECEf/aAAwDAQACEQMRAD8AwUoM4vbF9xt05HIrkA49iVKs4IUHF9fI3qtw7edRrWXUyf/Z",
         "w": 1600,
         "h": 1200,
         "ratio": 1.333,
@@ -19,50 +19,38 @@
       "photos": [
         {
           "issueNumber": 46,
-          "issueUpdatedAt": "2026-11-12T05:31:53Z",
+          "issueUpdatedAt": "2026-11-12T06:55:18Z",
           "source": "https://mfcheer.github.io/assets/gallery/gallery-696f61a3-122a-4799-8406-f6f3c640d06b.jpg",
           "src": "assets/gallery/4dd355b09d84aab6.jpg",
           "thumb": "assets/gallery/4dd355b09d84aab6_s.jpg",
           "w": 1600,
           "h": 1200,
           "ratio": 1.333,
-          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAgAF/8QAIBAAAgEEAQUAAAAAAAAAAAAAAQIRAAMhMRIEQVFhgf/EABUBAQEAAAAAAAAAAAAAAAAAAAID/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAECEf/aAAwDAQACEQMRAD8AwUsM4mMTum3TkciuQDj2KrV5xCg4nXym91uHbzqmtZdTOH//2Q==",
+          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAgAF/8QAIBAAAgEEAQUAAAAAAAAAAAAAAQIAAxEhMRIEQVFhgf/EABUBAQEAAAAAAAAAAAAAAAAAAAID/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAECEf/aAAwDAQACEQMRAD8AwUoM4vbF9xt05HIrkA49iVKs4IUHF9fI3qtw7edRrWXUyf/Z",
           "date": "2026-11-12 13:31:53"
         },
         {
           "issueNumber": 46,
-          "issueUpdatedAt": "2026-11-12T05:31:53Z",
-          "source": "https://mfcheer.github.io/assets/gallery/gallery-b08d169a-9203-4057-a1f2-bfd83b26255a.jpg",
-          "src": "assets/gallery/04dfb8ed1c4840fd.jpg",
-          "thumb": "assets/gallery/04dfb8ed1c4840fd_s.jpg",
-          "w": 1600,
-          "h": 1200,
-          "ratio": 1.333,
-          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAMABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAEDBf/EAB4QAAICAgIDAAAAAAAAAAAAAAECAxEAIQRREnGB/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgT/xAAYEQEBAAMAAAAAAAAAAAAAAAABAAMRQf/aAAwDAQACEQMRAD8AxY0mLKoN2dbvKSQ1Y897r2MI3KurAC66x8hz0o+YNNWGM5f/2Q==",
-          "date": "2026-11-12 13:31:53"
-        },
-        {
-          "issueNumber": 46,
-          "issueUpdatedAt": "2026-11-12T05:31:53Z",
+          "issueUpdatedAt": "2026-11-12T06:55:18Z",
           "source": "https://mfcheer.github.io/assets/gallery/gallery-c6ee86f4-e700-4d1c-8052-3e9643f0d54c.jpg",
           "src": "assets/gallery/348039bd0c571388.jpg",
           "thumb": "assets/gallery/348039bd0c571388_s.jpg",
           "w": 1200,
           "h": 1600,
           "ratio": 0.75,
-          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAEFAgP/xAAgEAABBAEEAwAAAAAAAAAAAAABAAIDEQQTITFBUZGh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/xAAWEQEBAQAAAAAAAAAAAAAAAAAAARH/2gAMAwEAAhEDEQA/AJLYCU3QEdLvj5MYNSeeQtPyIDId+bG3xPZg5UsuLSa6FpahrgekIUorX//Z",
+          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAEFAgP/xAAfEAABBAICAwAAAAAAAAAAAAABAAIDEQQxIUFRkaH/xAAVAQEBAAAAAAAAAAAAAAAAAAACA//EABYRAQEBAAAAAAAAAAAAAAAAAAABEf/aAAwDAQACEQMRAD8AktgtN0BHS74+RGDUnnYWn5EBkPO7HHxPZg5UsuLSa6FpCQ1oekIUorX/2Q==",
           "date": "2026-11-12 13:31:53"
         },
         {
           "issueNumber": 46,
-          "issueUpdatedAt": "2026-11-12T05:31:53Z",
+          "issueUpdatedAt": "2026-11-12T06:55:18Z",
           "source": "https://mfcheer.github.io/assets/gallery/gallery-6da5439e-dec3-43d9-8095-d02a9fe60a42.jpg",
           "src": "assets/gallery/7a34c5a12fcdafb5.jpg",
           "thumb": "assets/gallery/7a34c5a12fcdafb5_s.jpg",
           "w": 1200,
           "h": 1600,
           "ratio": 0.75,
-          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAQBAwX/xAAiEAACAgEEAQUAAAAAAAAAAAABAgADERITIjEEIVGRocH/xAAVAQEBAAAAAAAAAAAAAAAAAAABA//EABsRAAIBBQAAAAAAAAAAAAAAAAABAgMREiFB/9oADAMBAAIRAxEAPwDL8eqvZKXJyJ9Gz1F7qGrXVkFc4yI5pRFJdG+ejK2KOrhdwY6yP2OTLOK4QOVdgPsD9xRmKtgGEIIpUdlo/9k=",
+          "lqip": "data:image/jpeg;base64,/9j/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAQBAwX/xAAiEAACAgEEAQUAAAAAAAAAAAABAgADERITIjEEIVGRocH/xAAVAQEBAAAAAAAAAAAAAAAAAAABA//EABsRAAIBBQAAAAAAAAAAAAAAAAABAgMREiFB/9oADAMBAAIRAxEAPwDL8eqvaKXJyJ9Gz1F7qGrXVkFc4yI5pRFJdG+ejK2KOrhdwY6yP2OTLOK4QOVdgPsD9xRmKtgGEIIpUdlo/9k=",
           "date": "2026-11-12 13:31:53"
         },
         {
