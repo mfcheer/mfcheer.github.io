@@ -3027,6 +3027,13 @@ document.addEventListener("click", (e) => {
         { title: "切换主题模式", desc: "在深色与浅色模式之间切换", action: "toggle-theme", icon: "🌓", badge: "快捷指令" }
     ];
 
+    const CAREER_ITEMS = [
+        { title: "58同城", badge: "曾就职于", icon: "🏢", keywords: ["career", "/career", "58", "58同城", "经历", "工作经历", "曾就职", "履历", "就职", "工作"] },
+        { title: "字节跳动", badge: "曾就职于", icon: "🏢", keywords: ["career", "/career", "字节", "字节跳动", "bytedance", "经历", "工作经历", "曾就职", "履历", "就职", "工作"] },
+        { title: "美团", badge: "曾就职于", icon: "🏢", keywords: ["career", "/career", "美团", "meituan", "经历", "工作经历", "曾就职", "履历", "就职", "工作"] },
+        { title: "百度", badge: "曾就职于", icon: "🏢", keywords: ["career", "/career", "百度", "baidu", "经历", "工作经历", "曾就职", "履历", "就职", "工作"] }
+    ];
+
     async function loadSearchData() {
         if (blogPostsCache && momentsCache) return;
         if (isFetching) return;
@@ -3200,6 +3207,27 @@ document.addEventListener("click", (e) => {
             });
         }
 
+        const careerAllKeywords = ["/career", "career", "经历", "工作经历", "曾就职", "履历", "就职", "工作"];
+        const matchedCareer = CAREER_ITEMS.filter(item => {
+            if (careerAllKeywords.some(k => query === k || query.startsWith(k) || (k.length > 2 && query.includes(k)))) {
+                return true;
+            }
+            const titleMatch = item.title.toLowerCase().includes(query);
+            const keywordMatch = item.keywords.some(k => !careerAllKeywords.includes(k) && (k.toLowerCase().includes(query) || query.includes(k.toLowerCase())));
+            return titleMatch || keywordMatch;
+        });
+
+        if (matchedCareer.length) {
+            const groupTitle = document.createElement("div");
+            groupTitle.className = "cmd-palette-group-title";
+            groupTitle.textContent = "曾就职于";
+            list.appendChild(groupTitle);
+            matchedCareer.forEach((item) => {
+                currentResults.push(item);
+                list.appendChild(createItemElement(item, currentResults.length - 1));
+            });
+        }
+
         if (matchedPosts.length) {
             const groupTitle = document.createElement("div");
             groupTitle.className = "cmd-palette-group-title";
@@ -3255,7 +3283,7 @@ document.addEventListener("click", (e) => {
             <span class="cmd-palette-item-icon" aria-hidden="true">${item.icon}</span>
             <div class="cmd-palette-item-content">
                 <div class="cmd-palette-item-title">${item.title}</div>
-                <div class="cmd-palette-item-desc">${item.desc}</div>
+                ${item.desc ? `<div class="cmd-palette-item-desc">${item.desc}</div>` : ""}
             </div>
             ${item.badge ? `<span class="cmd-palette-item-badge">${item.badge}</span>` : ""}
         `;

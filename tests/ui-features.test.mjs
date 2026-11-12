@@ -209,3 +209,14 @@ test("移动端作品卡片横向吸附滑块 (Horizontal Peek) 与指示点就�
     assert.ok(js.includes("updateActiveDot"), "JS 必须具备基于视口几何计算的动态指示点同步机制");
 });
 
+test("首页个人卡片隐藏工作经历，转由全局指令面板 (Cmd+K) 彩蛋/关键词检索展示", () => {
+    const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+    assert.ok(!html.includes("class=\"career-row\""), "index.html 个人卡片中不再直接展示 career-row 工作经历");
+    assert.ok(!html.includes("class=\"career-label\""), "index.html 个人卡片中不再直接展示 career-label");
+
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("CAREER_ITEMS"), "script.js 必须包含工作经历彩蛋数据源 CAREER_ITEMS");
+    assert.ok(js.includes("曾就职于"), "script.js 命令面板分组与徽章必须包含「曾就职于」");
+    assert.ok(js.includes("/career"), "script.js 命令面板必须支持 /career 或相关指令");
+    assert.ok(js.includes("58同城") && js.includes("字节跳动") && js.includes("美团") && js.includes("百度"), "工作经历数据源必须完整包含 58同城、字节跳动、美团、百度");
+});
