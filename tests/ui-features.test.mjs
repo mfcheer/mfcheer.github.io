@@ -232,3 +232,17 @@ test("个人卡片头衔增加 Dad 角色标识", () => {
     const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
     assert.ok(html.includes('<p class="role-text">Backend Engineer / Developer · Dad</p>'), "首页个人卡片头衔中必须包含 Dad 标识");
 });
+
+test("相册页照片反重力吸附动效 (Anti-gravity Magnetic Float) 就绪", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".g-row.g-row-float"), "styles.css 必须包含相册浮空行类名");
+    assert.ok(css.includes("cubic-bezier(0.16, 1, 0.3, 1)"), "styles.css 必须包含苹果物理阻尼吸附曲线");
+    assert.ok(css.includes("--stagger-i"), "styles.css 必须支持行内照片错落交错延迟");
+    assert.ok(css.includes(".g-row.g-row-float.g-absorbed"), "styles.css 必须包含吸附完成状态类名");
+
+    const js = fs.readFileSync(path.join(ROOT, "gallery.js"), "utf8");
+    assert.ok(js.includes("floatObserver"), "gallery.js 必须包含反重力视口观察器");
+    assert.ok(js.includes("initFloatObserver"), "gallery.js 必须包含观察器生命周期初始化");
+    assert.ok(js.includes("g-row-float"), "gallery.js 照片行必须挂载 g-row-float 类名");
+    assert.ok(js.includes("--stagger-i"), "gallery.js 必须为每张照片设置 --stagger-i 序号");
+});

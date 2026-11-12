@@ -134,15 +134,16 @@
             const rowH = rowData.height;
 
             const rowEl = document.createElement('div');
-            rowEl.className = 'g-row';
+            rowEl.className = 'g-row g-row-float';
             rowEl.style.height = rowH + 'px';
 
-            rowData.photos.forEach((p) => {
+            rowData.photos.forEach((p, idx) => {
                 const itemW = rowH * photoRatio(p);
                 const itemEl = document.createElement('button');
                 itemEl.type = 'button';
                 itemEl.className = 'g-item';
                 itemEl.style.width = itemW + 'px';
+                itemEl.style.setProperty('--stagger-i', idx);
                 itemEl.style.backgroundImage = p.lqip ? 'url("' + p.lqip + '")' : 'none';
                 itemEl.setAttribute('aria-label', [p.album, p.date ? p.date.slice(0, 10) : '', '查看照片'].filter(Boolean).join(' · '));
 
@@ -165,6 +166,11 @@
                 rowEl.appendChild(itemEl);
             });
             wall.appendChild(rowEl);
+            if (floatObserver) {
+                floatObserver.observe(rowEl);
+            } else {
+                rowEl.classList.add('g-absorbed');
+            }
         }
     }
 
@@ -174,6 +180,26 @@
     let visibleRows = ROW_BATCH;
     let sentinel = null;
     let sentinelIO = null;
+    let floatObserver = null;
+
+    function initFloatObserver() {
+        if (floatObserver) {
+            floatObserver.disconnect();
+            floatObserver = null;
+        }
+        if (!('IntersectionObserver' in window)) return;
+        floatObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('g-absorbed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            rootMargin: '0px 0px -40px 0px',
+            threshold: 0.02
+        });
+    }
 
     function renderYearNav(photos) {
         let yearNav = document.getElementById('galleryYearNav');
@@ -223,6 +249,7 @@
     }
 
     function render() {
+        initFloatObserver();
         if (sentinelIO) sentinelIO.disconnect();
         sentinelIO = null;
         sentinel = document.getElementById('gallerySentinel');
@@ -264,6 +291,7 @@
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
+            initFloatObserver();
             document.querySelectorAll('.gallery-wall').forEach((wall) => layoutWall(wall));
         }, 150);
     });
