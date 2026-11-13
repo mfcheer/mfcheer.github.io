@@ -249,6 +249,7 @@ test("首页个人卡片隐藏工作经历，转由全局指令面板 (Cmd+K) �
 test("个人卡片头衔增加 Dad 角色标识", () => {
     const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
     assert.ok(html.includes('<p class="role-text">Backend Engineer / Developer · Dad</p>'), "首页个人卡片头衔中必须包含 Dad 标识");
+    assert.ok(html.includes('<p class="text-secondary">一个男孩的父亲</p>'), "首页个人简介中必须包含「一个男孩的父亲」");
 });
 
 test("相册页照片反重力吸附动效 (Anti-gravity Magnetic Float) 就绪", () => {
