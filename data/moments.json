@@ -1,5 +1,25 @@
 [
   {
+    "issueNumber": 56,
+    "issueUpdatedAt": "2026-11-13T10:26:49Z",
+    "date": "2026/11/13 18:26",
+    "text": "向 AI 许愿，完成了体感游戏的开发\n给儿子玩玩，顺便通过英语单词卡片和语音播报磨磨耳朵\nhttps://mfcheer.github.io/camGame/",
+    "location": "",
+    "name": "mfcheer",
+    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
+    "labels": [],
+    "images": [
+      {
+        "src": "assets/moments/m-1794565604891-kzmfhu.jpg",
+        "alt": "Image"
+      },
+      {
+        "src": "assets/moments/m-1794565607379-slad89.jpg",
+        "alt": "Image"
+      }
+    ]
+  },
+  {
     "issueNumber": 55,
     "issueUpdatedAt": "2026-11-13T06:47:04Z",
     "date": "2026/11/13 14:47",
