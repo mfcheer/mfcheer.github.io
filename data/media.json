@@ -1,16 +1,23 @@
 {
   "movies": [
     {
-      "title": "霍比特人1：意外之旅",
-      "link": "https://movie.douban.com/subject/1966182/",
-      "cover": "assets/covers/1966182.jpg",
+      "title": "指环王3：王者无敌",
+      "link": "https://movie.douban.com/subject/1291552/",
+      "cover": "assets/covers/1291552.jpg",
       "rating": 4,
-      "date": "2026-11-11"
+      "date": "2026-11-14"
     },
     {
       "title": "指环王2：双塔奇兵",
       "link": "https://movie.douban.com/subject/1291572/",
       "cover": "assets/covers/1291572.jpg",
+      "rating": 4,
+      "date": "2026-11-14"
+    },
+    {
+      "title": "霍比特人1：意外之旅",
+      "link": "https://movie.douban.com/subject/1966182/",
+      "cover": "assets/covers/1966182.jpg",
       "rating": 4,
       "date": "2026-11-11"
     },
@@ -27,13 +34,6 @@
       "cover": "assets/covers/35811064.jpg",
       "rating": 4,
       "date": "2026-08-18"
-    },
-    {
-      "title": "蜘蛛侠：崭新之日",
-      "link": "https://movie.douban.com/subject/36246195/",
-      "cover": "assets/covers/36246195.jpg",
-      "rating": 4,
-      "date": "2026-08-02"
     }
   ],
   "books": [
