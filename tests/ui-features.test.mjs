@@ -300,3 +300,16 @@ test("说说图片放大展示说说文字内容与长文本截断防护", () =>
     assert.ok(css.includes(".post-lightbox-caption[role=\"button\"]"), "styles.css 必须为可交互按钮设置手型光标");
     assert.ok(css.includes("line-height: 44px;"), "styles.css 移动端底栏文字高度必须与翻页按钮垂直居中平齐");
 });
+
+
+test("首页板块反重力阻尼吸附动效 (Home Sections Magnetic Float) 就绪", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".home-card-float"), "styles.css 必须包含首页卡片浮动类名");
+    assert.ok(css.includes(".home-card-float.card-absorbed"), "styles.css 必须包含卡片吸附完成类名");
+    assert.ok(css.includes("cubic-bezier(0.35, 0, 0.25, 1)"), "styles.css 必须包含反重力阻尼贝塞尔曲线");
+
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("initHomeFloatAnimation"), "script.js 必须包含 initHomeFloatAnimation 函数");
+    assert.ok(js.includes("homeFloatObserver"), "script.js 必须包含首页卡片视口浮动观察器");
+    assert.ok(js.includes("card-absorbed"), "script.js 必须在进入视口或级联时添加吸附类名");
+});

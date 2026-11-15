@@ -3988,6 +3988,41 @@ section[id] {
     }
 }
 
+/* 首页板块反重力阻尼吸附动效 (Home Sections Magnetic Float) */
+.home-card-float {
+    opacity: 0.15;
+    transform: translateY(var(--float-y, 32px)) scale(0.985);
+    transition: transform 0.75s cubic-bezier(0.35, 0, 0.25, 1),
+                opacity 0.65s cubic-bezier(0.35, 0, 0.25, 1),
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+    transition-delay: calc(var(--stagger-i, 0) * 80ms),
+                      calc(var(--stagger-i, 0) * 80ms),
+                      0s,
+                      0s;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.home-card-float.card-absorbed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+@media (max-width: 600px) {
+    .home-card-float {
+        transform: translateY(var(--float-y, 22px)) scale(0.985);
+        transition: transform 0.65s cubic-bezier(0.35, 0, 0.25, 1),
+                    opacity 0.55s cubic-bezier(0.35, 0, 0.25, 1),
+                    box-shadow 0.25s ease,
+                    border-color 0.25s ease;
+        transition-delay: calc(var(--stagger-i, 0) * 70ms),
+                          calc(var(--stagger-i, 0) * 70ms),
+                          0s,
+                          0s;
+    }
+}
+
 .g-item {
     position: relative;
     height: 100%;
@@ -4158,6 +4193,7 @@ section[id] {
     .g-row.g-row-float .g-item,
     .moment-item.moment-item-float,
     .post-item.post-item-float,
+    .home-card-float,
     .g-item,
     .g-item img,
     .lb-img,

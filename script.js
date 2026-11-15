@@ -149,6 +149,86 @@ async function loadGitHubChart() {
 loadGitHubChart();
 
 // ============================================================
+// HOME SECTIONS MAGNETIC FLOAT (首页卡片反重力阻尼吸附动效)
+// ============================================================
+(function initHomeFloatAnimation() {
+    const heroCard = document.querySelector('main > section.card-hero');
+    if (!heroCard) return;
+
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
+
+    const sections = Array.from(document.querySelectorAll('main > section.glass:not([hidden])'));
+    if (!sections.length) return;
+
+    const hashTarget = window.location.hash ? document.querySelector(window.location.hash) : null;
+    let targetIdx = -1;
+    if (hashTarget) {
+        targetIdx = sections.indexOf(hashTarget);
+    }
+
+    const winH = window.innerHeight || 800;
+    const isScrolled = (window.scrollY || document.documentElement.scrollTop || 0) > 60;
+
+    let homeFloatObserver = null;
+    if ('IntersectionObserver' in window) {
+        homeFloatObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const sec = entry.target;
+                    sec.classList.add('card-absorbed');
+                    homeFloatObserver.unobserve(sec);
+                }
+            });
+        }, {
+            rootMargin: '0px 0px -25px 0px',
+            threshold: 0.02
+        });
+    }
+
+    sections.forEach((sec, idx) => {
+        sec.classList.add('home-card-float');
+
+        sec.addEventListener('transitionend', (e) => {
+            if (e.propertyName === 'transform') {
+                sec.style.transform = 'none';
+                sec.style.transitionDelay = '';
+            }
+        });
+
+        if (targetIdx !== -1 && idx <= targetIdx) {
+            sec.style.setProperty('--stagger-i', '0');
+            sec.classList.add('card-absorbed');
+            return;
+        }
+
+        if (isScrolled) {
+            const rect = sec.getBoundingClientRect();
+            if (rect.top < winH) {
+                sec.style.setProperty('--stagger-i', '0');
+                sec.classList.add('card-absorbed');
+                return;
+            }
+        }
+
+        const rect = sec.getBoundingClientRect();
+        if (idx < 3 || rect.top < winH - 40) {
+            sec.style.setProperty('--stagger-i', String(idx));
+            requestAnimationFrame(() => {
+                void sec.offsetHeight;
+                sec.classList.add('card-absorbed');
+            });
+        } else if (homeFloatObserver) {
+            sec.style.setProperty('--stagger-i', '0');
+            homeFloatObserver.observe(sec);
+        } else {
+            sec.classList.add('card-absorbed');
+        }
+    });
+})();
+
+// ============================================================
 // PROJECTS SLIDER (作品横向滑块、移动端指示点与 PC 端多作品翻页微控)
 // ============================================================
 (function initProjectsSlider() {
