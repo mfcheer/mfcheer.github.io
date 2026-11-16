@@ -1,238 +1,154 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { randomUUID } from 'node:crypto';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ROOT_DIR = path.resolve(__dirname, '..');
-const DIARY_PATH = path.join(ROOT_DIR, 'data', 'diary.json');
-const MOMENTS_PATH = path.join(ROOT_DIR, 'data', 'moments.json');
-const GALLERY_PATH = path.join(ROOT_DIR, 'data', 'gallery.json');
-const MEDIA_PATH = path.join(ROOT_DIR, 'data', 'media.json');
+const ROOT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const DIARY_PATH = path.join(ROOT_DIR, 'data/diary.json');
+export const PROMPT_VERSION = '2026-11-17';
+const readJson = (file) => JSON.parse(fs.readFileSync(path.join(ROOT_DIR, file), 'utf8'));
 
-/**
- * 获取当前北京时间相关信息
- */
+function assertDate(date) {
+  if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+      !Number.isFinite(Date.parse(`${date}T00:00:00Z`)) ||
+      new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10) !== date) {
+    throw new Error(`无效日期：${date}`);
+  }
+}
+
 export function getBeijingDateInfo(now = new Date()) {
-  const formatter = new Intl.DateTimeFormat('zh-CN', {
-    timeZone: 'Asia/Shanghai',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    weekday: 'long'
-  });
-  const parts = formatter.formatToParts(now);
-  const year = parts.find((p) => p.type === 'year')?.value;
-  const month = parts.find((p) => p.type === 'month')?.value;
-  const day = parts.find((p) => p.type === 'day')?.value;
-  const dayOfWeek = parts.find((p) => p.type === 'weekday')?.value || '星期三';
-  const dateStr = `${year}-${month}-${day}`;
-  return { dateStr, dayOfWeek };
+  const parts = new Intl.DateTimeFormat('zh-CN', {
+    timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'long'
+  }).formatToParts(now);
+  const value = (type) => parts.find((p) => p.type === type).value;
+  return { dateStr: `${value('year')}-${value('month')}-${value('day')}`, dayOfWeek: value('weekday') };
 }
 
-/**
- * 获取今日 Git 提交统计
- */
 export function getTodayGitStats(dateStr) {
-  try {
-    const log = execSync(`git log --since="${dateStr} 00:00:00" --until="${dateStr} 23:59:59" --oneline`, {
-      cwd: ROOT_DIR,
-      encoding: 'utf-8'
-    }).trim();
-    if (!log) return { count: 0, commits: [] };
-    const lines = log.split('\n').filter(Boolean);
-    return { count: lines.length, commits: lines };
-  } catch {
-    return { count: 0, commits: [] };
-  }
+  assertDate(dateStr);
+  const nextDate = new Date(`${dateStr}T00:00:00Z`);
+  nextDate.setUTCDate(nextDate.getUTCDate() + 1);
+  const log = execFileSync('git', ['log', '--no-merges',
+    `--since=${dateStr}T00:00:00+08:00`, `--before=${nextDate.toISOString().slice(0, 10)}T00:00:00+08:00`,
+    '--format=%H%x09%s'], { cwd: ROOT_DIR, encoding: 'utf8' });
+  const commits = log.trim().split('\n').filter(Boolean).map((line) => {
+    const [hash, ...subject] = line.split('\t');
+    return { hash, subject: subject.join('\t') };
+  }).filter(({ subject }) => !/^(build\b|chore\((moments|gallery)\):.*自动同步)/i.test(subject) &&
+    !/^[^:]*\(diary\):/.test(subject));
+  return { count: commits.length, commits };
 }
 
-/**
- * 获取今日说说条目
- */
 export function getTodayMoments(dateStr) {
-  try {
-    if (!fs.existsSync(MOMENTS_PATH)) return [];
-    const moments = JSON.parse(fs.readFileSync(MOMENTS_PATH, 'utf-8'));
-    const formattedPrefix = dateStr.replace(/-/g, '/');
-    return moments.filter((m) => m.date && m.date.startsWith(formattedPrefix));
-  } catch {
-    return [];
-  }
+  assertDate(dateStr);
+  return readJson('data/moments.json').filter((m) => m.date?.startsWith(dateStr.replaceAll('-', '/')));
 }
 
-/**
- * 获取今日相册新增照片
- */
 export function getTodayGalleryPhotos(dateStr) {
-  try {
-    if (!fs.existsSync(GALLERY_PATH)) return [];
-    const gallery = JSON.parse(fs.readFileSync(GALLERY_PATH, 'utf-8'));
-    const photos = [];
-    for (const album of gallery.albums || []) {
-      for (const p of album.photos || []) {
-        if (p.date && p.date.startsWith(dateStr)) {
-          photos.push(p);
-        }
-      }
-    }
-    return photos;
-  } catch {
-    return [];
-  }
+  assertDate(dateStr);
+  return (readJson('data/gallery.json').albums || []).flatMap((a) => a.photos || [])
+    .filter((p) => p.date?.startsWith(dateStr))
+    .map(({ src, date, issueNumber }) => ({ src, date, issueNumber, dateMeaning: '上传记录，非拍摄时间' }));
 }
 
-/**
- * 获取今日豆瓣/书影音新动态
- */
 export function getTodayMediaItems(dateStr) {
-  try {
-    if (!fs.existsSync(MEDIA_PATH)) return [];
-    const media = JSON.parse(fs.readFileSync(MEDIA_PATH, 'utf-8'));
-    const items = [];
-    const categories = ['movies', 'books', 'games'];
-    for (const cat of categories) {
-      for (const item of media[cat] || []) {
-        if (item.date && item.date.startsWith(dateStr)) {
-          items.push({ ...item, category: cat });
-        }
-      }
-    }
-    return items;
-  } catch {
-    return [];
-  }
+  assertDate(dateStr);
+  const media = readJson('data/media.json');
+  return ['movies', 'books', 'games'].flatMap((category) => (media[category] || [])
+    .filter((item) => item.date?.startsWith(dateStr))
+    .map((item) => ({ ...item, category, verified: false, warning: '仅为待核实线索；日期、评分不证明观看状态' })));
 }
 
-/**
- * 根据全站与多平台多源数据推算情绪与状态
- */
-export function computeMoodAndSummary(activityStats, previousEntries = []) {
-  const { commits = 0, moments = 0, photos = 0, media = 0 } = activityStats;
-  const totalActionScore = commits * 2 + moments * 3 + photos * 2 + media * 2;
-  const prevCommits = previousEntries[0]?.stats?.commits ?? 0;
-
-  if (totalActionScore >= 12 || commits >= 6) {
-    return {
-      mood: { label: '算力发烫', emoji: '⚡️', score: Math.min(98, 85 + commits) },
-      type: 'high_intensity'
-    };
-  }
-  if (totalActionScore > 0) {
-    return {
-      mood: { label: '微风徐徐', emoji: '🌤️', score: Math.min(84, 65 + totalActionScore) },
-      type: 'calm_routine'
-    };
-  }
-  if (prevCommits === 0) {
-    return {
-      mood: { label: '待机数羊', emoji: '💤', score: 38 },
-      type: 'idle_long'
-    };
-  }
+export function collect(dateStr) {
+  assertDate(dateStr);
   return {
-    mood: { label: '守护巡更', emoji: '🍂', score: 48 },
-    type: 'idle_start'
+    date: dateStr, promptFile: 'docs/ai-diary.md', promptVersion: PROMPT_VERSION,
+    git: getTodayGitStats(dateStr), moments: getTodayMoments(dateStr),
+    photos: getTodayGalleryPhotos(dateStr), mediaHints: getTodayMediaItems(dateStr),
+    posts: readJson('data/blog-index.json').posts.filter((p) =>
+      p.dateText?.startsWith(dateStr.replaceAll('-', '/')) && !p.tags?.includes('历史文章')),
+    limitations: ['只采集本站本地素材；未抓取豆瓣、微博、小红书，也未核实时事。缺少记录不代表没有活动。']
   };
 }
 
-/**
- * 主执行函数：提取数据并执行覆盖更新
- */
-export function run(options = { forceOverwrite: true, targetPath: null }) {
-  const targetFile = options.targetPath || DIARY_PATH;
-  const { dateStr, dayOfWeek } = getBeijingDateInfo();
-  let existing = [];
-  if (fs.existsSync(targetFile)) {
-    try {
-      existing = JSON.parse(fs.readFileSync(targetFile, 'utf-8'));
-    } catch {
-      existing = [];
+export function validateEntry(entry) {
+  if (!entry || typeof entry !== 'object') throw new Error('日记必须为对象');
+  assertDate(entry.date);
+  const required = ['dayOfWeek', 'weather', 'punchline', 'content', 'note', 'footnote'];
+  for (const key of required) {
+    if (typeof entry[key] !== 'string' || !entry[key].trim()) throw new Error(`${entry.date} 缺少 ${key}`);
+  }
+  const length = [...entry.content.replace(/\s/gu, '')].length;
+  const paragraphs = entry.content.trim().split(/\n\s*\n/);
+  if (length < 180 || length > 250 || paragraphs.length < 2 || paragraphs.length > 3) {
+    throw new Error(`${entry.date} 正文须为 180～250 字、2～3 段（当前 ${length} 字、${paragraphs.length} 段）`);
+  }
+  if ([...entry.punchline].length > 60 || !entry.mood?.label || [...entry.mood.label].length > 12 ||
+      !entry.mood.emoji || entry.mood.score !== 50) throw new Error(`${entry.date} 标题或心绪格式不符`);
+  for (const key of ['commits', 'moments', 'photos', 'media']) {
+    if (!Number.isInteger(entry.stats?.[key]) || entry.stats[key] < 0) throw new Error(`${entry.date} 统计格式错误`);
+  }
+  if (typeof entry.stats.focus !== 'string' || !Number.isFinite(Date.parse(entry.generatedAt)) ||
+      entry.promptVersion !== PROMPT_VERSION) throw new Error(`${entry.date} 缺少生成时间或规则版本`);
+  if (!Array.isArray(entry.sources) || !entry.sources.some((s) => s.status === 'read')) {
+    throw new Error(`${entry.date} 须有实际读取的来源`);
+  }
+  for (const source of entry.sources) {
+    if (!source.label || !source.detail || !['read', 'limited', 'unavailable'].includes(source.status)) {
+      throw new Error(`${entry.date} 来源格式错误`);
     }
+    if (source.url && new URL(source.url).protocol !== 'https:') throw new Error('来源链接须为 HTTPS');
   }
+  return entry;
+}
 
-  const gitStats = getTodayGitStats(dateStr);
-  const moments = getTodayMoments(dateStr);
-  const photos = getTodayGalleryPhotos(dateStr);
-  const mediaItems = getTodayMediaItems(dateStr);
-
-  const stats = {
-    commits: gitStats.count,
-    moments: moments.length,
-    photos: photos.length,
-    media: mediaItems.length,
-    focus: dateStr === '2026-11-12' ? '算力狂澜下的荒诞解构 · 西二旗老黄 · 真实烟火' : (gitStats.count > 0 ? '全站体验重构 & 自主手账' : '日常待机')
-  };
-
-  const { mood } = computeMoodAndSummary(stats, existing);
-
-  console.log(`[Diary] 综合扫描 -> Commit: ${stats.commits}, 说说: ${stats.moments}, 相册照片: ${stats.photos}, 豆瓣/社交动态: ${stats.media}`);
-
-  const todayIndex = existing.findIndex((item) => item.date === dateStr);
-  const currentRecord = todayIndex >= 0 ? existing[todayIndex] : null;
-
-  // 生成今日神吐槽金句与正文（拒绝流水账，强调第一人称内心戏与深度提炼）
-  let punchline = currentRecord?.punchline;
-  if (!punchline || options.forceOverwrite) {
-    if (dateStr === "2026-11-12") {
-      punchline = "时代越是用生死存亡的焦虑逼所有人上船，清醒的人越懂得用一场荒诞把现实拉回地面。";
-    } else if (mood.score >= 85) {
-      punchline = "人在最想逃离日常的时候，往往会把目光投向一座山或一段旧史诗。";
-    } else if (mood.score >= 60) {
-      punchline = "安静修补旧砖瓦的一天，并不需要借用喧闹来证明价值。";
-    } else {
-      punchline = "安静一天，并不欠任何解释。";
-    }
+// 只接受 AI 已写好的成稿；绝不以模板、提交数量或固定日期生成正文。
+export function run({ entries, targetPath = DIARY_PATH, allowHistory = false, now = new Date() } = {}) {
+  if (!entries) throw new Error('请先采集素材并由 AI 写作，再通过 --input 提交成稿；脚本不生成文章');
+  const incoming = Array.isArray(entries) ? entries : [entries];
+  if (!incoming.length) throw new Error('成稿数组不能为空');
+  const seen = new Set();
+  const today = getBeijingDateInfo(now).dateStr;
+  for (const entry of incoming) {
+    validateEntry(entry);
+    if (entry.date > today || (!allowHistory && entry.date !== today)) throw new Error('历史重写须显式传入 --allow-history；不允许未来日记');
+    if (seen.has(entry.date)) throw new Error(`批次日期重复：${entry.date}`);
+    seen.add(entry.date);
   }
-
-  let note = currentRecord?.note;
-  if (!note || options.forceOverwrite) {
-    if (dateStr === "2026-11-12") {
-      note = "— 随身手账 · 荒诞解构";
-    } else if (mood.score >= 85) {
-      note = "— 随身手账 · 记于深夜";
-    } else if (mood.score >= 60) {
-      note = "— 随身手记 · 维护记录";
-    } else {
-      note = "— 随身手记 · 安静留白";
-    }
+  const existing = fs.existsSync(targetPath) ? JSON.parse(fs.readFileSync(targetPath, 'utf8')) : [];
+  if (!Array.isArray(existing) || new Set(existing.map((e) => e.date)).size !== existing.length) {
+    throw new Error('现有日记格式错误或日期重复，停止写入');
   }
-
-  let content = currentRecord?.content;
-  if (!content || options.forceOverwrite) {
-    if (dateStr === "2026-11-12") {
-      content = "行业巨头在生死存亡的焦虑里催促所有人“从陆战转海战”，整个世界都被算力军备推着往前狂奔。身处漩涡边缘，他却有着一种近乎挑衅的松弛——一句“AI都是泡沫，可口可乐不是”，利落得像一声清脆的开罐声，瞬间将满天虚火戳了个窟窿。\n\n他极擅长用荒诞解构沉重。转过身，他就把掌控全球算力的硅谷教父编排进西二旗的早高峰，让人家穿着冲锋衣在紫砂壶里泡茶跑大模型、去奥森打太极。别人在风口前如履薄冰，他却在初冬冷风里把狂热拽回真实的人间烟火。任由外头惊涛骇浪，自己的日子扎实而自得其乐。";
-    } else {
-      content = "他其实是个极度矛盾又格外真实的人。\n\n嘴上刚叹完“代码一行都不想敲”，转头却一头扎进秋山里，站在山顶吹着冷风发愣。他总习惯在现实琐碎漫过头顶时，把自己往那些宏大又遥远的地方推——要么是一座能看到枯叶的野山，要么是一场三个多小时的中土旧史诗。他嫌日常繁琐，却舍得在冷风和旧光影里浪费时间。\n\n他并不是真的想躺平，只是需要偶尔从紧绷的秩序里抽身出来，确认自己依然能感知四季、能被一个旧故事打动。这种不加掩饰的口是心非，反倒比任何工整的计划都要鲜活。";
-    }
+  const merged = new Map(existing.map((entry) => [entry.date, entry]));
+  incoming.forEach((entry) => merged.set(entry.date, entry));
+  const result = [...merged.values()].sort((a, b) => b.date.localeCompare(a.date));
+  const temp = `${targetPath}.${randomUUID()}.tmp`;
+  try {
+    fs.writeFileSync(temp, JSON.stringify(result, null, 2) + '\n', 'utf8');
+    fs.renameSync(temp, targetPath);
+  } finally {
+    if (fs.existsSync(temp)) fs.unlinkSync(temp);
   }
-
-  const newEntry = {
-    date: dateStr,
-    dayOfWeek,
-    weather: '晴',
-    mood,
-    stats,
-    punchline,
-    content,
-    note,
-    footnote: dateStr === "2026-11-12" ? "生死海战与真实可乐 · 硅谷老黄西二旗传奇 · 初冬烟火解构" : `${stats.commits} 次提交 · ${stats.moments} 条说说 · 百望山登高 · 0.3s 鬼影重构`
-  };
-
-  if (todayIndex >= 0) {
-    console.log(`[Diary] 今日 ${dateStr} 已存在记录，正在执行全量覆盖更新...`);
-    existing[todayIndex] = newEntry;
-  } else {
-    console.log(`[Diary] 今日 ${dateStr} 无记录，正在插入新记录...`);
-    existing.unshift(newEntry);
-  }
-
-  fs.writeFileSync(targetFile, JSON.stringify(existing, null, 2) + '\n', 'utf-8');
-  console.log(`[Diary] 成功落盘 ${dateStr} 随身手记（非流水账提炼版，全量覆盖更新完成）。`);
-  return existing;
+  return result;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  run();
+  try {
+    const args = process.argv.slice(2);
+    if (args[0] === 'collect') {
+      if (args.length !== 2) throw new Error('用法：collect YYYY-MM-DD');
+      console.log(JSON.stringify(collect(args[1]), null, 2));
+    } else {
+      if (args[0] !== '--input' || !args[1] || args.slice(2).some((a) => a !== '--allow-history')) {
+        throw new Error('用法：--input 成稿.json [--allow-history]；脚本不生成文章');
+      }
+      const entries = JSON.parse(fs.readFileSync(args[1], 'utf8'));
+      const result = run({ entries, allowHistory: args.includes('--allow-history') });
+      console.log(`已校验并保存，现有 ${result.length} 篇手账。`);
+    }
+  } catch (error) {
+    console.error(error.message);
+    process.exitCode = 1;
+  }
 }

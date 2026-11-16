@@ -88,45 +88,59 @@ test('formatHumanDate 具备动态自然日历适配能力（今天/昨天/前�
   assert.equal(ctx.formatHumanDate('2025-11-09', mockBaseDate), '2025年11月9日', '跨年记录显示为 YYYY年M月D日');
 });
 
-test('generate-daily-diary 支持多源数据与覆盖更新逻辑', async () => {
-  const { getBeijingDateInfo, computeMoodAndSummary, getTodayGalleryPhotos, getTodayMediaItems, run } = await import('../scripts/generate-daily-diary.mjs');
+test('素材采集按北京时间筛选，并明确书影音和照片的证据边界', async () => {
+  const { getBeijingDateInfo, collect } = await import('../scripts/generate-daily-diary.mjs');
+  assert.equal(getBeijingDateInfo(new Date('2026-11-09T16:01:00Z')).dateStr, '2026-11-10');
+  const sample = collect('2026-11-14');
+  assert.ok(sample.mediaHints.every((item) => item.verified === false));
+  assert.ok(sample.photos.every((item) => item.dateMeaning.includes('非拍摄时间')));
+  assert.ok(sample.git.commits.every((item) => !item.subject.startsWith('build:')));
+  assert.throws(() => collect('2026-02-30'), /无效日期/);
+});
 
-  const { dateStr, dayOfWeek } = getBeijingDateInfo();
-  assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(dateStr), '日期字符串格式正确');
-  assert.ok(typeof dayOfWeek === 'string', '星期信息为字符串');
-
-  // 多源感知数据提取验证
-  const photos = getTodayGalleryPhotos('2026-11-11');
-  assert.ok(Array.isArray(photos), '相册照片提取正常');
-
-  const mediaItems = getTodayMediaItems('2026-11-10');
-  assert.ok(Array.isArray(mediaItems), '书影音动态提取正常');
-
-  // 高频综合活跃场景
-  const high = computeMoodAndSummary({ commits: 8, moments: 2, photos: 1, media: 0 }, []);
-  assert.equal(high.mood.label, '算力发烫');
-  assert.equal(high.mood.emoji, '⚡️');
-
-  // 低频日常场景
-  const calm = computeMoodAndSummary({ commits: 1, moments: 1, photos: 0, media: 0 }, []);
-  assert.equal(calm.mood.label, '微风徐徐');
-  assert.equal(calm.mood.emoji, '🌤️');
-
-  // 连续静默场景
-  const idle = computeMoodAndSummary({ commits: 0, moments: 0, photos: 0, media: 0 }, [{ stats: { commits: 0 } }]);
-  assert.equal(idle.mood.label, '待机数羊');
-  assert.equal(idle.mood.emoji, '💤');
-
-  // 执行一次覆盖更新并验证结果（在隔离的临时路径运行，避免污染 Git 工作区）
-  const os = await import("node:os");
-  const tempDiaryPath = path.join(os.tmpdir(), `test-diary-${Date.now()}.json`);
+test('成稿覆盖保留其他日期，非法批次和损坏旧文件均不写入', async () => {
+  const { run } = await import('../scripts/generate-daily-diary.mjs');
+  const os = await import('node:os');
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'diary-test-'));
+  const targetPath = path.join(directory, 'diary.json');
+  const originals = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'data/diary.json'), 'utf8'));
+  const now = new Date('2026-11-17T12:00:00+08:00');
   try {
-    const updated = run({ forceOverwrite: true, targetPath: tempDiaryPath });
-    assert.ok(Array.isArray(updated));
-    const todayEntry = updated.find((e) => e.date === dateStr);
-    assert.ok(todayEntry, '必须成功写入/覆盖更新今日手记');
-    assert.ok(fs.existsSync(tempDiaryPath), '目标文件必须成功落盘');
+    fs.writeFileSync(targetPath, JSON.stringify(originals));
+    const entries = { ...originals[0], punchline: '覆盖后的具体发现' };
+    const updated = run({ entries, targetPath, allowHistory: true, now });
+    assert.equal(updated.length, originals.length);
+    assert.equal(updated[0].punchline, entries.punchline);
+    assert.deepEqual(updated.slice(1), originals.slice(1));
+    const before = fs.readFileSync(targetPath, 'utf8');
+    for (const invalid of [
+      [entries, { ...originals[1], content: '过短' }],
+      [entries, entries],
+      [{ ...entries, date: '2026-11-18' }],
+      [{ ...entries, sources: [] }]
+    ]) {
+      assert.throws(() => run({ entries: invalid, targetPath, allowHistory: true, now }));
+      assert.equal(fs.readFileSync(targetPath, 'utf8'), before);
+    }
+    assert.throws(() => run({ entries, targetPath, now }), /历史重写/);
+    assert.throws(() => run({ targetPath }), /脚本不生成文章/);
+    assert.equal(fs.readFileSync(targetPath, 'utf8'), before);
+    fs.writeFileSync(targetPath, '{broken');
+    assert.throws(() => run({ entries, targetPath, allowHistory: true, now }));
+    assert.equal(fs.readFileSync(targetPath, 'utf8'), '{broken');
   } finally {
-    if (fs.existsSync(tempDiaryPath)) fs.unlinkSync(tempDiaryPath);
+    fs.rmSync(directory, { recursive: true, force: true });
   }
+});
+
+test('全部手账符合新规则的字数、来源、版本及日期唯一降序要求', async () => {
+  const { validateEntry, PROMPT_VERSION } = await import('../scripts/generate-daily-diary.mjs');
+  const entries = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'data/diary.json'), 'utf8'));
+  for (const entry of entries) {
+    validateEntry(entry);
+    assert.equal(entry.promptVersion, PROMPT_VERSION);
+  }
+  const dates = entries.map((entry) => entry.date);
+  assert.equal(new Set(dates).size, dates.length);
+  assert.deepEqual(dates, [...dates].sort().reverse());
 });
