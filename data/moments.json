@@ -1,5 +1,16 @@
 [
   {
+    "issueNumber": 67,
+    "issueUpdatedAt": "2026-11-17T16:41:41Z",
+    "date": "2026/11/18 00:41",
+    "text": "开发基于Agent应用，就像指挥一支足球队：组件是能力各异的队员，编排是灵活多变的战术，数据是流转的足球。",
+    "location": "",
+    "name": "mfcheer",
+    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
+    "labels": [],
+    "images": []
+  },
+  {
     "issueNumber": 66,
     "issueUpdatedAt": "2026-11-17T15:18:17Z",
     "date": "2026/11/17 23:18",
