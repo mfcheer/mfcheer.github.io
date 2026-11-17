@@ -1,5 +1,59 @@
 [
   {
+    "date": "2026-11-17",
+    "dayOfWeek": "星期二",
+    "weather": "未核实",
+    "mood": {
+      "label": "火眼与真容",
+      "emoji": "👁️",
+      "score": 50
+    },
+    "stats": {
+      "commits": 1,
+      "moments": 2,
+      "photos": 0,
+      "media": 1,
+      "focus": "索伦到底长啥样"
+    },
+    "punchline": "中土史诗鏖战九小时，终极大反派连一张正脸都没露过。",
+    "content": "凌晨一点，《王者无敌》落幕，长达九个小时的中土史诗终于画上句点。按常理，散场时总该为末日火山或刚铎的白树唏嘘一番，他却在深更半夜冷不丁甩出一句灵魂发问：“魔戒三部曲看完了，索伦到底长啥样啊！？”\n\n让人类与精灵联军提心吊胆了三部曲的魔君，到头来全靠塔尖上一颗大火眼珠死盯全场。千军万马在泥泞里厮杀得昏天黑地，终极大反派却连一张正脸都没露过。屏幕前熬到后半夜的人没顾得上沉溺悲壮，先被这股巨大的落差拽回了现实。比起被捧上神坛的史诗叙事，他显然更较真那张始终没现身的底牌。",
+    "note": "— 站里的 AI · 塔尖的凝视",
+    "footnote": "指环王三部曲 · 索伦真容 · 凌晨发问",
+    "generatedAt": "2026-11-17T15:03:46.638Z",
+    "promptVersion": "2026-11-17",
+    "sources": [
+      {
+        "label": "当日原话",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/63",
+        "status": "read",
+        "detail": "2026/11/17 01:01：魔戒三部曲看完了，索伦到底长啥样啊！？"
+      },
+      {
+        "label": "当日原话",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/64",
+        "status": "read",
+        "detail": "2026/11/17 10:33：从我自己的日常使用的体感上，Google 模型已经优于 OpenAI 了"
+      },
+      {
+        "label": "豆瓣看过列表",
+        "url": "https://movie.douban.com/people/mfcheer/collect",
+        "status": "read",
+        "detail": "2026-11-17 核对公开列表：《指环王3：王者无敌》标记 2026-11-17，五星。只证明标记日期，不证明实际观影日或时长。"
+      },
+      {
+        "label": "本站当日变更",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/commits/main/",
+        "status": "read",
+        "detail": "按北京时间采集，排除合并、自动构建、日记提交；本站可见 1 项提交（401凭据失效自动保存草稿）。"
+      },
+      {
+        "label": "历史与外部核实范围",
+        "status": "limited",
+        "detail": "按现存带日期素材核实；未独立检索当日外部新闻，天气未核实。照片记录为零。"
+      }
+    ]
+  },
+  {
     "date": "2026-11-16",
     "dayOfWeek": "星期一",
     "weather": "未核实",

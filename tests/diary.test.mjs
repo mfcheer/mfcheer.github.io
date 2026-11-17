@@ -104,7 +104,12 @@ test('成稿覆盖保留其他日期，非法批次和损坏旧文件均不写�
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'diary-test-'));
   const targetPath = path.join(directory, 'diary.json');
   const originals = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'data/diary.json'), 'utf8'));
-  const now = new Date('2026-11-17T12:00:00+08:00');
+  const nextDate = new Date(`${originals[0].date}T12:00:00+08:00`);
+  nextDate.setDate(nextDate.getDate() + 1);
+  const now = nextDate;
+  const futureDate = new Date(nextDate);
+  futureDate.setDate(futureDate.getDate() + 1);
+  const futureDateStr = futureDate.toISOString().slice(0, 10);
   try {
     fs.writeFileSync(targetPath, JSON.stringify(originals));
     const entries = { ...originals[0], punchline: '覆盖后的具体发现' };
@@ -116,7 +121,7 @@ test('成稿覆盖保留其他日期，非法批次和损坏旧文件均不写�
     for (const invalid of [
       [entries, { ...originals[1], content: '过短' }],
       [entries, entries],
-      [{ ...entries, date: '2026-11-18' }],
+      [{ ...entries, date: futureDateStr }],
       [{ ...entries, sources: [] }]
     ]) {
       assert.throws(() => run({ entries: invalid, targetPath, allowHistory: true, now }));
