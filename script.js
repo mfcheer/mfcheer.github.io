@@ -455,12 +455,46 @@ function getOAuthConfig() {
     };
 }
 
+function startMomentOAuth(returnPath) {
+    const config = getOAuthConfig();
+    if (!config.clientId || config.clientId.includes("XXXX")) {
+        const inputId = prompt(
+            "【初次使用 GitHub 授权登录】\n" +
+            "请填入你的 GitHub OAuth App Client ID（只需填一次，保存在当前设备）：\n\n" +
+            "💡 如未配置，可点取消并点击「直接前往 GitHub 提 Issue 发布」；\n" +
+            "也可配置 Client ID 与 Worker 代理体验全自动一键授权。"
+        );
+        if (!inputId || !inputId.trim()) {
+            return false;
+        }
+        localStorage.setItem(GITHUB_OAUTH_CLIENT_ID_KEY, inputId.trim());
+        config.clientId = inputId.trim();
+    }
+
+    const path = returnPath || (window.location.pathname + window.location.search);
+    sessionStorage.setItem("mfcheer_post_auth_return", path);
+    sessionStorage.setItem("mfcheer_reauth_open_moment", "1");
+
+    const redirectUri = window.location.origin + "/";
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(config.clientId)}&scope=public_repo&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    window.location.href = authUrl;
+    return true;
+}
+
 // 检查页面 URL 中是否携带 OAuth 重定向的 code 参数
 async function checkOAuthCallback() {
     try {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code");
-        if (!code) return;
+        if (!code) {
+            if (sessionStorage.getItem("mfcheer_reauth_open_moment") === "1") {
+                sessionStorage.removeItem("mfcheer_reauth_open_moment");
+                openMomentModal().then(() => {
+                    showMomentToast("🎉 登录状态已刷新，草稿已恢复，可直接发布。");
+                });
+            }
+            return;
+        }
 
         // 清理地址栏 query，保持整洁
         const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
@@ -511,15 +545,24 @@ async function checkOAuthCallback() {
 
         setMomentAuth(token, user);
 
-        // 若授权前来自相册页（站内上传发起的授权），成功后直接跳回相册页继续上传
+        // 若授权前来自相册页或说说专页等，跳回来源页继续
         const postAuthReturn = sessionStorage.getItem("mfcheer_post_auth_return");
-        if (postAuthReturn && postAuthReturn.startsWith("/")) {
+        const currentPath = window.location.pathname;
+        if (postAuthReturn && postAuthReturn.startsWith("/") && postAuthReturn !== currentPath && postAuthReturn !== (currentPath + "index.html")) {
             sessionStorage.removeItem("mfcheer_post_auth_return");
             window.location.replace(postAuthReturn);
             return;
         }
+        sessionStorage.removeItem("mfcheer_post_auth_return");
 
-        showMomentToast("🎉 欢迎回来，博主 mfcheer！已成功登录。");
+        const wasReauth = sessionStorage.getItem("mfcheer_reauth_open_moment") === "1";
+        sessionStorage.removeItem("mfcheer_reauth_open_moment");
+
+        if (wasReauth) {
+            showMomentToast("🎉 登录状态已刷新，草稿已恢复，可直接发布。");
+        } else {
+            showMomentToast("🎉 欢迎回来，博主 mfcheer！已成功登录。");
+        }
         renderMomentModalContent();
     } catch (e) {
         const statusEl = document.getElementById("momentAuthStatus");
@@ -2646,28 +2689,7 @@ function renderMomentModalContent() {
         });
 
         oauthBtn.addEventListener("click", () => {
-            const config = getOAuthConfig();
-            if (!config.clientId || config.clientId.includes("XXXX")) {
-                const inputId = prompt(
-                    "【初次使用 GitHub 授权登录】\n" +
-                    "请填入你的 GitHub OAuth App Client ID（只需填一次，保存在当前设备）：\n\n" +
-                    "💡 如未配置，可点取消并点击「直接前往 GitHub 提 Issue 发布」；\n" +
-                    "也可配置 Client ID 与 Worker 代理体验全自动一键授权。"
-                );
-                if (!inputId || !inputId.trim()) {
-                    return;
-                }
-                localStorage.setItem(GITHUB_OAUTH_CLIENT_ID_KEY, inputId.trim());
-                config.clientId = inputId.trim();
-            }
-
-            // 跳转 GitHub 授权
-            // 固定回调到首页：GitHub OAuth App 注册的回调地址是站点根路径，
-            // 必须精确匹配；回调由首页的 checkOAuthCallback 接住（token 存
-            // localStorage，同源全站共享，/moments/ 发起授权后同样生效）
-            const redirectUri = window.location.origin + "/";
-            const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(config.clientId)}&scope=public_repo&redirect_uri=${encodeURIComponent(redirectUri)}`;
-            window.location.href = authUrl;
+            startMomentOAuth();
         });
 
         return;
@@ -2962,12 +2984,38 @@ function renderMomentModalContent() {
 
     submitBtn.addEventListener("click", async () => {
         if (momentDraft.busy) return;
+
+        // 如果处于凭据过期状态，点击按钮直接唤起重新授权
+        if (submitBtn.dataset.reauth === "true") {
+            await saveDraft();
+            if (selectedMomentFiles.length) {
+                await momentDraft.saveFiles(selectedMomentFiles);
+            }
+            startMomentOAuth();
+            return;
+        }
+
         const text = (textInput.value || "").trim();
         if (!text && !selectedMomentFiles.length) {
             statusEl.className = "moment-modal-status is-error";
             statusEl.textContent = "请输入说说内容或选择配图";
             statusEl.style.display = "block";
             textInput.focus();
+            return;
+        }
+
+        const currentAuth = getMomentAuth();
+        if (!currentAuth || !currentAuth.token) {
+            await saveDraft();
+            if (selectedMomentFiles.length) {
+                await momentDraft.saveFiles(selectedMomentFiles);
+            }
+            statusEl.className = "moment-modal-status is-error";
+            statusEl.textContent = "博主登录凭据已失效，草稿与图片已安全保存。请点击下方「重新授权登录」继续。";
+            statusEl.style.display = "block";
+            submitBtn.textContent = "重新授权登录";
+            submitBtn.dataset.reauth = "true";
+            submitBtn.classList.add("is-reauth");
             return;
         }
 
@@ -2982,7 +3030,7 @@ function renderMomentModalContent() {
                 const item = selectedMomentFiles[i];
                 const ext = item.file && item.file.type === "image/gif" ? "gif" : "jpg";
                 const filename = `m-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-                const uploadedPath = await uploadMomentImage(auth.token, filename, item.base64);
+                const uploadedPath = await uploadMomentImage(currentAuth.token, filename, item.base64);
                 uploadedImageUrls.push({ src: uploadedPath, alt: "Image" });
             }
 
@@ -3002,7 +3050,7 @@ function renderMomentModalContent() {
             const dateStr = formatMomentDate(now.toISOString());
             const labels = ["moment", ...Array.from(selectedMomentTags)];
 
-            const createdIssue = await createMomentIssue(auth.token, `✨ 说说 · ${dateStr}`, issueBody, labels);
+            const createdIssue = await createMomentIssue(currentAuth.token, `✨ 说说 · ${dateStr}`, issueBody, labels);
 
             // 乐观 UI 呈现：即刻插在说说列表首位
             const newMoment = {
@@ -3026,10 +3074,34 @@ function renderMomentModalContent() {
             closeMomentModal();
             showMomentToast("🎉 说说发布成功！已在页面实时展示。");
         } catch (err) {
-            statusEl.className = "moment-modal-status is-error";
-            statusEl.textContent = err.message || "发布失败，请重试";
-            statusEl.style.display = "block";
-            setEditorBusy(momentDraft, card, false);
+            const isAuthExpired = Boolean(err && (
+                err.status === 401 ||
+                (typeof err.message === "string" && (
+                    err.message.includes("401") ||
+                    err.message.toLowerCase().includes("bad credentials") ||
+                    err.message.includes("登录已过期")
+                ))
+            ));
+
+            if (isAuthExpired) {
+                clearMomentAuth();
+                await saveDraft();
+                if (selectedMomentFiles.length) {
+                    await momentDraft.saveFiles(selectedMomentFiles);
+                }
+                statusEl.className = "moment-modal-status is-error";
+                statusEl.textContent = "博主登录凭据已失效（401），草稿与图片已安全保存。请点击下方「重新授权登录」继续。";
+                statusEl.style.display = "block";
+                submitBtn.textContent = "重新授权登录";
+                submitBtn.dataset.reauth = "true";
+                submitBtn.classList.add("is-reauth");
+                setEditorBusy(momentDraft, card, false);
+            } else {
+                statusEl.className = "moment-modal-status is-error";
+                statusEl.textContent = err.message || "发布失败，请重试";
+                statusEl.style.display = "block";
+                setEditorBusy(momentDraft, card, false);
+            }
         }
     });
 

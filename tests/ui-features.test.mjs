@@ -313,3 +313,16 @@ test("首页板块反重力阻尼吸附动效 (Home Sections Magnetic Float) 就
     assert.ok(js.includes("homeFloatObserver"), "script.js 必须包含首页卡片视口浮动观察器");
     assert.ok(js.includes("card-absorbed"), "script.js 必须在进入视口或级联时添加吸附类名");
 });
+
+test("说说发布 401 凭据失效拦截与重新授权闭环 (Scheme 3) 就绪", () => {
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("startMomentOAuth"), "script.js 必须包含 startMomentOAuth 统一授权函数");
+    assert.ok(js.includes("isAuthExpired"), "script.js 必须具备 401 / Bad credentials 认证失效拦截逻辑");
+    assert.ok(js.includes("clearMomentAuth()"), "script.js 凭据失效时必须自动清理脏 Token");
+    assert.ok(js.includes("submitBtn.dataset.reauth = \"true\""), "script.js 必须将提交按钮转换为重新授权状态");
+    assert.ok(js.includes("mfcheer_reauth_open_moment"), "script.js 必须包含授权后自动唤起说说并恢复草稿的标记");
+    assert.ok(js.includes("is-reauth"), "script.js 必须添加 is-reauth 视觉类名");
+
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".moment-btn-primary.is-reauth"), "styles.css 必须包含重新授权按钮警示高亮样式");
+});

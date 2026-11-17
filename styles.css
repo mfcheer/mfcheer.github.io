@@ -3763,6 +3763,17 @@ section[id] {
     cursor: not-allowed;
 }
 
+.moment-btn-primary.is-reauth {
+    background: #e65100;
+    border-color: #e65100;
+    box-shadow: 0 0 0 2px rgba(230, 81, 0, 0.2);
+}
+
+.moment-btn-primary.is-reauth:hover:not(:disabled) {
+    background: #ef6c00;
+    border-color: #ef6c00;
+}
+
 /* 顶部轻提示 Toast */
 .moment-toast {
     position: fixed;
