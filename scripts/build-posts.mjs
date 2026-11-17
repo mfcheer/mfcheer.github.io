@@ -117,6 +117,7 @@ md.use(taskLists, { label: false });
 // 3. 笔记互链 [[xxx]] → 纯文本（站点没有同名页面，降级避免坏链）
 function normalizeObsidian(src) {
     return src
+        .replace(/!\[\[([^\]]+\.(mp4|webm|mov|m4v|ogg))\]\]/gi, (_, name) => `![video](/assets/videos/${name.trim().replace(/ /g, '%20')})`)
         .replace(/!\[\[([^\]]+)\]\]/g, (_, name) => `![](/assets/images/${name.trim().replace(/ /g, '%20')})`)
         .replace(/!\[([^\]]*)\]\(\s*(?!https?:|\/|data:)([^)\s]+)\s*\)/g, (_, alt, srcPath) => {
             const clean = srcPath
@@ -137,9 +138,49 @@ const KATEX_HEAD = [
     `    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.querySelector('.post-body'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>`
 ].join('\n');
 
-// 图片统一懒加载 + 不带 referer
+// 媒体与图片渲染：视频（B站/YouTube/原生视频直链）自动包装为 16:9 响应式播放器；普通图片懒加载 + no-referrer
 const defaultImage = md.renderer.rules.image;
 md.renderer.rules.image = (tokens, idx, options, env, self) => {
+    const src = tokens[idx].attrGet('src') || '';
+    const alt = (tokens[idx].content || '').trim().toLowerCase();
+
+    // 1. 哔哩哔哩视频识别：![video](url) / ![bilibili](url) 或 src 包含 bilibili / BV 号
+    let bvMatch = src.match(/(BV[a-zA-Z0-9]{6,20})/i);
+    if (!bvMatch && /^BV[a-zA-Z0-9]{6,20}$/i.test(src.trim())) {
+        bvMatch = [null, src.trim()];
+    }
+    if (bvMatch && (alt.includes('video') || alt.includes('bilibili') || /bilibili\.com|b23\.tv/i.test(src) || /^BV/i.test(src.trim()))) {
+        const bv = bvMatch[1];
+        let pParam = '';
+        try {
+            const u = new URL(src.startsWith('http') ? src : `https://www.bilibili.com/video/${bv}`);
+            const p = u.searchParams.get('p') || u.searchParams.get('page');
+            if (p && /^\d+$/.test(p)) pParam = `&page=${encodeURIComponent(p)}`;
+        } catch (e) {}
+        return `<div class="post-video-container"><iframe src="https://player.bilibili.com/player.html?bvid=${esc(bv)}&autoplay=0&high_quality=1&danmaku=0&as_wide=1${pParam}" allow="fullscreen; autoplay; encrypted-media" loading="lazy" title="Bilibili Video ${esc(bv)}"></iframe></div>\n`;
+    }
+
+    // 2. YouTube 视频识别：![video](https://www.youtube.com/watch?v=...) / ![youtube](https://youtu.be/...)
+    let ytMatch = null;
+    try {
+        if (/youtube\.com|youtu\.be/i.test(src)) {
+            const u = new URL(src);
+            if (u.searchParams.get('v')) {
+                ytMatch = u.searchParams.get('v');
+            } else if (u.hostname === 'youtu.be') {
+                ytMatch = u.pathname.slice(1);
+            }
+        }
+    } catch (e) {}
+    if (ytMatch && /^[\w-]{4,20}$/.test(ytMatch)) {
+        return `<div class="post-video-container"><iframe src="https://www.youtube-nocookie.com/embed/${esc(ytMatch)}?autoplay=0&rel=0" allow="fullscreen; autoplay; encrypted-media" loading="lazy" title="YouTube Video"></iframe></div>\n`;
+    }
+
+    // 3. 通用原生视频：![video](https://.../demo.mp4) 或 src 结尾为 .mp4 / .webm / .mov / .ogg / .m4v
+    if (/\.(mp4|webm|mov|ogg|m4v)(\?.*)?$/i.test(src) || (alt === 'video' && /\.(mp4|webm|mov|ogg|m4v)/i.test(src))) {
+        return `<div class="post-video-container"><video src="${esc(src)}" controls playsinline preload="metadata"></video></div>\n`;
+    }
+
     tokens[idx].attrSet('loading', 'lazy');
     tokens[idx].attrSet('referrerpolicy', 'no-referrer');
     return defaultImage(tokens, idx, options, env, self);

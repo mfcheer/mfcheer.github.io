@@ -326,3 +326,22 @@ test("说说发布 401 凭据失效拦截与重新授权闭环 (Scheme 3) 就绪
     const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
     assert.ok(css.includes(".moment-btn-primary.is-reauth"), "styles.css 必须包含重新授权按钮警示高亮样式");
 });
+
+test("外链视频与流媒体播放优化 (Bilibili / YouTube / MP4 直链与文章容器) 就绪", () => {
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("high_quality=1"), "script.js B站播放器参数必须包含 high_quality=1 高清标识");
+    assert.ok(js.includes("danmaku=0"), "script.js B站播放器必须默认关闭弹幕 danmaku=0 以保持清爽");
+    assert.ok(js.includes("as_wide=1"), "script.js B站播放器必须包含 as_wide=1 宽屏适配");
+    assert.ok(js.includes("b23.tv"), "script.js 必须支持 b23.tv 短链中的 BV 号提取");
+    assert.ok(js.includes("directVideo"), "script.js 必须支持原生视频直链解析");
+    assert.ok(js.includes("createElement('video')"), "script.js 必须支持直接创建原生 video 标签原位播放");
+
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes(".moment-media-player video"), "styles.css 说说播放器必须适配 video 标签");
+    assert.ok(css.includes(".post-video-container"), "styles.css 必须包含文章视频 16:9 响应式容器类名");
+    assert.ok(css.includes(".post-body video"), "styles.css 必须包含文章原生 video 基础样式");
+
+    const buildPosts = fs.readFileSync(path.join(ROOT, "scripts/build-posts.mjs"), "utf8");
+    assert.ok(buildPosts.includes("post-video-container"), "scripts/build-posts.mjs 必须支持将视频渲染为 post-video-container");
+    assert.ok(buildPosts.includes("player.bilibili.com"), "scripts/build-posts.mjs 必须支持 B 站内嵌");
+});

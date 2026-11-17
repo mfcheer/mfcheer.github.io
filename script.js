@@ -1756,31 +1756,38 @@ function recognizeMomentMediaUrl(rawUrl) {
     const host = u.hostname.toLowerCase();
     const bareHost = host.replace(/^www\./, '');
 
-    // —— 哔哩哔哩：BV 号可提取 → 支持点击原位播放 ——
-    if (bareHost === 'bilibili.com' || host === 'm.bilibili.com') {
-        const bv = u.pathname.match(/\/video\/(BV[a-zA-Z0-9]{6,20})/);
-        if (bv) {
+    // —— 哔哩哔哩：BV 号可提取 → 支持点击原位播放（含高清与清爽参数） ——
+    if (bareHost === 'bilibili.com' || host === 'm.bilibili.com' || bareHost === 'b23.tv') {
+        const fullTarget = u.pathname + u.search + u.hash;
+        const bvMatch = fullTarget.match(/(BV[a-zA-Z0-9]{6,20})/i);
+        if (bvMatch) {
+            const bv = bvMatch[1];
+            let embed = `https://player.bilibili.com/player.html?bvid=${encodeURIComponent(bv)}&autoplay=0&high_quality=1&danmaku=0&as_wide=1`;
+            const p = u.searchParams.get('p') || u.searchParams.get('page');
+            if (p && /^\d+$/.test(p)) {
+                embed += `&page=${encodeURIComponent(p)}`;
+            }
             return {
                 kind: 'video', platform: 'bilibili', title: '哔哩哔哩',
                 sub: '视频 · 点击原位播放', url: rawUrl,
-                embed: `https://player.bilibili.com/player.html?bvid=${encodeURIComponent(bv[1])}&autoplay=0`
+                embed
             };
+        }
+        if (bareHost === 'b23.tv') {
+            // 无 BV 号的纯短链需服务端跳转才能解析，客户端退回链接卡片
+            return { kind: 'video', platform: 'bilibili', title: '哔哩哔哩', sub: '视频短链 · 打开观看', url: rawUrl };
         }
         return { kind: 'video', platform: 'bilibili', title: '哔哩哔哩', sub: '视频 · 打开观看', url: rawUrl };
     }
-    if (host === 'b23.tv') {
-        // 短链需服务端跳转才能拿到 BV 号，客户端只做链接卡片
-        return { kind: 'video', platform: 'bilibili', title: '哔哩哔哩', sub: '视频短链 · 打开观看', url: rawUrl };
-    }
 
-    // —— YouTube：视频 ID 校验后拼接 embed ——
+    // —— YouTube：视频 ID 校验后拼接 embed（免追踪域名 + 关推荐） ——
     if (bareHost === 'youtube.com' || host === 'm.youtube.com') {
         const v = u.searchParams.get('v');
         if (v && /^[\w-]{4,20}$/.test(v)) {
             return {
                 kind: 'video', platform: 'youtube', title: 'YouTube',
                 sub: '视频 · 点击原位播放', url: rawUrl,
-                embed: `https://www.youtube-nocookie.com/embed/${v}`
+                embed: `https://www.youtube-nocookie.com/embed/${v}?autoplay=0&rel=0`
             };
         }
         return { kind: 'video', platform: 'youtube', title: 'YouTube', sub: '视频 · 打开观看', url: rawUrl };
@@ -1791,9 +1798,29 @@ function recognizeMomentMediaUrl(rawUrl) {
             return {
                 kind: 'video', platform: 'youtube', title: 'YouTube',
                 sub: '视频 · 点击原位播放', url: rawUrl,
-                embed: `https://www.youtube-nocookie.com/embed/${v[1]}`
+                embed: `https://www.youtube-nocookie.com/embed/${v[1]}?autoplay=0&rel=0`
             };
         }
+    }
+
+    // —— 通用原生视频：mp4 / webm / mov / m4v / ogg 直链 ——
+    const cleanPath = u.pathname.toLowerCase();
+    if (/\.(mp4|webm|mov|m4v|ogg)$/i.test(cleanPath)) {
+        const rawFileName = u.pathname.split('/').filter(Boolean).pop() || '视频';
+        let displayName = rawFileName;
+        try {
+            displayName = decodeURIComponent(rawFileName);
+        } catch (e) {
+            displayName = rawFileName;
+        }
+        return {
+            kind: 'video',
+            platform: 'video',
+            title: displayName,
+            sub: '视频 · 点击原位播放',
+            url: rawUrl,
+            directVideo: rawUrl
+        };
     }
 
     // —— 网易云音乐：兼容 /#/song?id= 哈希路由与 /song?id= 直连两种形态 ——
@@ -1899,7 +1926,7 @@ function buildMomentMediaCard(media) {
         return wrap;
     }
 
-    const isLinkOut = !media.embed;
+    const isLinkOut = !media.embed && !media.directVideo;
     const card = document.createElement(isLinkOut ? 'a' : 'button');
     card.className = 'moment-media-card';
     card.title = media.url;
@@ -1936,12 +1963,22 @@ function buildMomentMediaCard(media) {
         card.addEventListener('click', () => {
             const player = document.createElement('div');
             player.className = media.tall ? 'moment-media-player is-tall' : 'moment-media-player';
-            const iframe = document.createElement('iframe');
-            iframe.src = media.embed;
-            iframe.title = media.title;
-            iframe.loading = 'lazy';
-            iframe.setAttribute('allow', 'fullscreen; autoplay; encrypted-media');
-            player.append(iframe);
+            if (media.directVideo) {
+                const video = document.createElement('video');
+                video.src = media.directVideo;
+                video.controls = true;
+                video.autoplay = true;
+                video.playsInline = true;
+                video.preload = 'metadata';
+                player.append(video);
+            } else {
+                const iframe = document.createElement('iframe');
+                iframe.src = media.embed;
+                iframe.title = media.title;
+                iframe.loading = 'lazy';
+                iframe.setAttribute('allow', 'fullscreen; autoplay; encrypted-media');
+                player.append(iframe);
+            }
             card.replaceWith(player);
         });
     }
@@ -2709,7 +2746,7 @@ function renderMomentModalContent() {
             <button class="moment-modal-close" type="button" aria-label="关闭">&times;</button>
         </div>
         <div class="moment-modal-body">
-            <p class="draft-hint">草稿保存在当前浏览器，关闭后可继续编辑；发布成功后自动清空。</p>
+            <p class="draft-hint">草稿保存在当前浏览器，关闭后可继续编辑；支持贴入 B 站 / YouTube / 视频直链原位播放。</p>
             <textarea id="momentTextInput" class="moment-textarea" placeholder="记录这一刻的想法、生活随想或灵感..." rows="4"></textarea>
             
             <div class="moment-img-picker-wrap">

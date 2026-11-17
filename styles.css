@@ -1460,12 +1460,15 @@ html[data-theme="dark"] .media-stars {
     height: 450px; /* 官方歌单/专辑外链规格：外框 450px + 内容 height=330 */
 }
 
-.moment-media-player iframe {
+.moment-media-player iframe,
+.moment-media-player video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     border: 0;
+    object-fit: contain;
+    background: #000;
 }
 
 /* 网易云/Spotify 单曲：直接内嵌的小播放器条 */
@@ -2404,6 +2407,46 @@ html[data-theme="dark"] .post-body {
 .moment-img.zoomable-img:hover {
     transform: scale(1.015);
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+}
+
+.post-body video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 18px auto;
+    border-radius: 12px;
+    border: 1px solid var(--line-subtle);
+    background: #000;
+}
+
+/* 文章内嵌流媒体（B站/YouTube）与原生视频容器：自适应 16:9 + 圆角 + 微边框阴影 */
+.post-video-container,
+.post-body .video-wrapper,
+.post-body .video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: 20px auto;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--line);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.post-video-container iframe,
+.post-video-container video,
+.post-body .video-wrapper iframe,
+.post-body .video-wrapper video,
+.post-body .video-container iframe,
+.post-body .video-container video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    object-fit: contain;
+    background: #000;
 }
 
 /* 文章图片点击放大预览灯箱（Lightbox） */
