@@ -20,7 +20,7 @@ const PRECACHE_ASSETS = [
     './moments/index.html',
     './gallery/index.html',
     './styles.css?v=1.3.79',
-    './script.js?v=1.3.67',
+    './script.js?v=1.3.68',
     './gallery.js?v=1.2.25',
     './manifest.json',
     './favicon.ico',

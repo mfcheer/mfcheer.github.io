@@ -2316,7 +2316,7 @@ function renderMomentsState(state = 'ok') {
                 img.className = 'moment-img zoomable-img';
                 const rawSrc = (imgObj.src || '').trim();
                 // 确保相对路径能正确解析为站点根相对路径
-                img.src = rawSrc.startsWith('http') || rawSrc.startsWith('/') ? rawSrc : '/' + rawSrc;
+                img.src = rawSrc.startsWith('http') || rawSrc.startsWith('/') || rawSrc.startsWith('blob:') || rawSrc.startsWith('data:') ? rawSrc : '/' + rawSrc;
                 img.alt = imgObj.alt || '说说配图';
                 // 前部说说采用 eager 加载，避免移动端 WebKit 0 盒模型下 lazy 观察器不触发的问题
                 img.loading = itemIndex < 3 ? 'eager' : 'lazy';
