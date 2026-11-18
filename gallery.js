@@ -70,7 +70,11 @@
 
     // JSON 里的图片路径是站点根相对路径（assets/...），页面在子目录时需补根前缀
     function rootUrl(p) {
-        return (p.startsWith('http') || p.startsWith('/')) ? p : '/' + p;
+        if (!p || typeof p !== 'string') return '';
+        if (p.startsWith('http://') || p.startsWith('https://') || p.startsWith('/') || p.startsWith('blob:') || p.startsWith('data:')) {
+            return p;
+        }
+        return '/' + p;
     }
 
     async function loadGallery() {
@@ -267,7 +271,10 @@
                 img.alt = p.date || "";
                 img.loading = "lazy";
                 img.decoding = "async";
-                img.addEventListener("load", () => itemEl.classList.add("g-loaded"));
+                img.addEventListener("load", () => {
+                    itemEl.classList.remove("g-error");
+                    itemEl.classList.add("g-loaded");
+                });
                 let retried = false;
                 img.addEventListener("error", () => {
                     if (!retried && p.src) {
@@ -486,7 +493,7 @@
         openSitePhotos(photos.map(p => ({
             issueNumber: p.issueNumber,
             source: p.source,
-            src: rootUrl(p.src),
+            src: rootUrl(p.thumb && (p.thumb.startsWith('blob:') || p.thumb.startsWith('data:')) ? p.thumb : p.src),
             caption: [p.album, p.date && p.date.slice(0, 10)].filter(Boolean).join(' · '),
             album: p.album,
             date: p.date,
@@ -792,6 +799,32 @@
         const blob = new Uint8Array(header.length + bytes.length);
         blob.set(header); blob.set(bytes, header.length);
         const sha = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-1', blob)), b => b.toString(16).padStart(2, '0')).join('');
+        let lqip = "";
+        if (typeof document !== "undefined" && typeof Image !== "undefined" && (item.dataUrl || item.file)) {
+            try {
+                lqip = await new Promise(res => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement("canvas");
+                        const targetW = 32;
+                        const nw = img.naturalWidth || img.width || 32;
+                        const nh = img.naturalHeight || img.height || 24;
+                        const targetH = Math.max(1, Math.round((targetW * nh) / nw));
+                        canvas.width = targetW;
+                        canvas.height = targetH;
+                        const ctx = canvas.getContext("2d");
+                        if (ctx) {
+                            ctx.drawImage(img, 0, 0, targetW, targetH);
+                            res(canvas.toDataURL("image/jpeg", 0.5));
+                        } else {
+                            res("");
+                        }
+                    };
+                    img.onerror = () => res("");
+                    img.src = item.dataUrl || (item.file ? URL.createObjectURL(item.file) : "");
+                });
+            } catch (_) {}
+        }
         item.upload = {
             filename: `gallery-${crypto.randomUUID()}.${ext}`,
             base64,
@@ -799,7 +832,8 @@
             attempted: false,
             w: width,
             h: height,
-            ratio: Math.round((width / height) * 1000) / 1000
+            ratio: Math.round((width / height) * 1000) / 1000,
+            lqip
         };
     }
 
@@ -878,7 +912,7 @@
                 w,
                 h,
                 ratio,
-                lqip: '',
+                lqip: item.upload?.lqip || '',
                 date: dateStr,
                 album: title,
                 _optimistic: true
@@ -922,6 +956,7 @@
                     w: pt.w,
                     h: pt.h,
                     ratio: pt.ratio,
+                    lqip: pt.lqip || '',
                     date: pt.date,
                     album: pt.album
                 }))

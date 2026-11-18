@@ -355,6 +355,7 @@ test("相册发布后即刻乐观更新与待同步合并 (Optimistic Gallery Up
     assert.ok(galleryJs.includes("mergeBatchIntoAlbums"), "gallery.js 必须包含待同步批次合并函数");
     assert.ok(galleryJs.includes("🎉 照片发布成功！已在相册实时展示。"), "gallery.js 必须给出即时乐观展示的成功提示");
     assert.ok(galleryJs.includes("raw.githubusercontent.com"), "gallery.js 必须支持 Pages 未部署时的 raw GitHub 回退加载");
+    assert.ok(galleryJs.includes("p.startsWith('blob:') || p.startsWith('data:')"), "gallery.js rootUrl 必须保留 blob: 与 data: 协议");
 
     const scriptJs = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
     assert.ok(scriptJs.includes("resolve({ dataUrl, base64, width, height })"), "script.js 图片压缩必须返回尺寸元数据供相册排版");
