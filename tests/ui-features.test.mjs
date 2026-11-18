@@ -345,3 +345,18 @@ test("外链视频与流媒体播放优化 (Bilibili / YouTube / MP4 直链与�
     assert.ok(buildPosts.includes("post-video-container"), "scripts/build-posts.mjs 必须支持将视频渲染为 post-video-container");
     assert.ok(buildPosts.includes("player.bilibili.com"), "scripts/build-posts.mjs 必须支持 B 站内嵌");
 });
+
+test("相册发布后即刻乐观更新与待同步合并 (Optimistic Gallery Update & Pending Sync) 就绪", () => {
+    const galleryJs = fs.readFileSync(path.join(ROOT, "gallery.js"), "utf8");
+    assert.ok(galleryJs.includes("optimisticAddGalleryPhotos"), "gallery.js 必须包含乐观更新函数 optimisticAddGalleryPhotos");
+    assert.ok(galleryJs.includes("GALLERY_PENDING_KEY"), "gallery.js 必须包含本地待同步批次常量");
+    assert.ok(galleryJs.includes("getPendingGalleryBatches"), "gallery.js 必须包含读取待同步批次函数");
+    assert.ok(galleryJs.includes("savePendingGalleryBatch"), "gallery.js 必须包含保存待同步批次函数");
+    assert.ok(galleryJs.includes("mergeBatchIntoAlbums"), "gallery.js 必须包含待同步批次合并函数");
+    assert.ok(galleryJs.includes("🎉 照片发布成功！已在相册实时展示。"), "gallery.js 必须给出即时乐观展示的成功提示");
+    assert.ok(galleryJs.includes("raw.githubusercontent.com"), "gallery.js 必须支持 Pages 未部署时的 raw GitHub 回退加载");
+
+    const scriptJs = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(scriptJs.includes("resolve({ dataUrl, base64, width, height })"), "script.js 图片压缩必须返回尺寸元数据供相册排版");
+    assert.ok(scriptJs.includes("raw.githubusercontent.com"), "script.js 灯箱必须支持相册未部署原图回退");
+});

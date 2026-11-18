@@ -864,7 +864,16 @@ function showSitePhoto() {
         status.textContent = '';
     };
     siteLightboxImg.onerror = () => {
-        if (request === siteImageRequest) status.textContent = '图片加载失败，请点击重试';
+        if (request !== siteImageRequest) return;
+        if (photo && photo.src && !photo._retried && !photo.src.startsWith('data:') && !photo.src.startsWith('blob:')) {
+            photo._retried = true;
+            if (photo.src.includes('assets/gallery/')) {
+                const fn = photo.src.split('/').pop();
+                siteLightboxImg.src = `https://raw.githubusercontent.com/mfcheer/mfcheer.github.io/main/assets/gallery/${fn}`;
+                return;
+            }
+        }
+        status.textContent = '图片加载失败，请点击重试';
     };
     siteLightboxImg.alt = photo.caption || '图片';
     siteLightboxImg.src = photo.src;
@@ -3182,7 +3191,7 @@ function compressMomentImage(file, maxDimension = 1600, quality = 0.82) {
                 ctx.drawImage(img, 0, 0, width, height);
                 const dataUrl = canvas.toDataURL("image/jpeg", quality);
                 const base64 = dataUrl.split(",")[1];
-                resolve({ dataUrl, base64 });
+                resolve({ dataUrl, base64, width, height });
             };
             img.onerror = reject;
             img.src = e.target.result;

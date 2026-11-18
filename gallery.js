@@ -17,6 +17,56 @@
     // ---------------- 数据 ----------------
 
     let albums = []; // [{ title, count, photos: [{src, thumb, w, h, ratio, lqip, date}] }]
+    const GALLERY_PENDING_KEY = 'mfcheer_gallery_pending_batches';
+
+    function getPendingGalleryBatches() {
+        try {
+            const raw = localStorage.getItem(GALLERY_PENDING_KEY);
+            const list = raw ? JSON.parse(raw) : [];
+            return Array.isArray(list) ? list : [];
+        } catch {
+            return [];
+        }
+    }
+
+    function savePendingGalleryBatches(batches) {
+        try {
+            if (!batches || !batches.length) {
+                localStorage.removeItem(GALLERY_PENDING_KEY);
+            } else {
+                localStorage.setItem(GALLERY_PENDING_KEY, JSON.stringify(batches));
+            }
+        } catch {}
+    }
+
+    function savePendingGalleryBatch(batch) {
+        const list = getPendingGalleryBatches();
+        list.unshift(batch);
+        savePendingGalleryBatches(list);
+    }
+
+    function mergeBatchIntoAlbums(albumsList, batch) {
+        if (!batch || !Array.isArray(batch.photos) || !batch.photos.length) return;
+        const title = batch.title || '相册';
+        let target = albumsList.find(a => a.title === title);
+        if (target) {
+            const curSources = new Set(target.photos.map(p => p.source || p.src));
+            const toAdd = batch.photos.filter(p => !curSources.has(p.source || p.src));
+            target.photos.unshift(...toAdd);
+            target.count = target.photos.length;
+            if (!target.cover && target.photos.length) target.cover = target.photos[0];
+            if (batch.description && !target.description) target.description = batch.description;
+        } else {
+            albumsList.unshift({
+                title,
+                count: batch.photos.length,
+                description: batch.description || null,
+                range: batch.photos[0]?.date ? batch.photos[0].date.slice(0, 10).replace(/-/g, '.') : null,
+                cover: batch.photos[0] || null,
+                photos: [...batch.photos]
+            });
+        }
+    }
 
     // JSON 里的图片路径是站点根相对路径（assets/...），页面在子目录时需补根前缀
     function rootUrl(p) {
@@ -28,16 +78,59 @@
             const res = await fetch('/data/gallery.json', { cache: 'no-cache' });
             if (!res.ok) throw new Error('HTTP ' + res.status);
             const data = await res.json();
-            albums = Array.isArray(data.albums) ? data.albums : [];
+            const remoteAlbums = Array.isArray(data.albums) ? data.albums : [];
+
+            // 提取远端已收录的照片 source 与 issueNumber 集合
+            const existingSources = new Set();
+            for (const a of remoteAlbums) {
+                for (const p of a.photos) {
+                    if (p.source) existingSources.add(p.source);
+                    if (p.issueNumber) existingSources.add(`issue:${p.issueNumber}`);
+                }
+            }
+
+            // 检查本地待同步批次（Pending Batches）
+            const pendingBatches = getPendingGalleryBatches();
+            const stillPending = [];
+            const now = Date.now();
+
+            for (const batch of pendingBatches) {
+                const isSynced = (batch.issueNumber && existingSources.has(`issue:${batch.issueNumber}`)) ||
+                    (Array.isArray(batch.photos) && batch.photos.length > 0 && batch.photos.every(p => existingSources.has(p.source)));
+
+                // 超过 2 小时未同步的异常旧批次放弃合并，避免永久滞留
+                const isTooOld = (now - (batch.timestamp || 0)) > 2 * 3600 * 1000;
+
+                if (!isSynced && !isTooOld) {
+                    stillPending.push(batch);
+                    mergeBatchIntoAlbums(remoteAlbums, batch);
+                }
+            }
+
+            savePendingGalleryBatches(stillPending);
+            albums = remoteAlbums;
             render();
         } catch (err) {
-            listEl.innerHTML = '<div class="gallery-empty">相册数据加载失败，请刷新重试。</div>';
+            const pendingBatches = getPendingGalleryBatches();
+            if (pendingBatches.length) {
+                const fallbackAlbums = [];
+                for (const b of pendingBatches) mergeBatchIntoAlbums(fallbackAlbums, b);
+                albums = fallbackAlbums;
+                render();
+            } else {
+                listEl.innerHTML = '<div class="gallery-empty">相册数据加载失败，请刷新重试。</div>';
+            }
         }
     }
 
     document.addEventListener('site-photo-deleted', e => {
         const { issueNumber, source } = e.detail;
         for (const album of albums) album.photos = album.photos.filter(p => !(p.issueNumber === issueNumber && p.source === source));
+        const pending = getPendingGalleryBatches();
+        for (const b of pending) {
+            b.photos = (b.photos || []).filter(p => !(p.issueNumber === issueNumber && p.source === source));
+        }
+        savePendingGalleryBatches(pending.filter(b => b.photos && b.photos.length > 0));
         render();
     });
     document.addEventListener('site-auth-change', () => render());
@@ -175,7 +268,16 @@
                 img.loading = "lazy";
                 img.decoding = "async";
                 img.addEventListener("load", () => itemEl.classList.add("g-loaded"));
-                img.addEventListener("error", () => itemEl.classList.add("g-error"));
+                let retried = false;
+                img.addEventListener("error", () => {
+                    if (!retried && p.src) {
+                        retried = true;
+                        const fn = p.src.split("/").pop();
+                        img.src = `https://raw.githubusercontent.com/mfcheer/mfcheer.github.io/main/assets/gallery/${fn}`;
+                        return;
+                    }
+                    itemEl.classList.add("g-error");
+                });
 
                 itemEl.addEventListener("click", () => {
                     const globalPhotos = collectAllPhotos();
@@ -624,7 +726,16 @@
             updateGalleryResumeUI();
         });
 
-        submitBtn.addEventListener('click', () => submitGalleryUpload(card, statusEl, submitBtn));
+        submitBtn.addEventListener('click', () => {
+            if (submitBtn.dataset.reauth === 'true') {
+                sessionStorage.setItem("mfcheer_oauth_return", window.location.pathname + window.location.search);
+                sessionStorage.setItem("mfcheer_reauth_draft", "gallery");
+                if (typeof triggerOAuthLogin === "function") triggerOAuthLogin();
+                else window.location.href = `https://github.com/login/oauth/authorize?client_id=${typeof GITHUB_OAUTH_CLIENT_ID !== "undefined" ? GITHUB_OAUTH_CLIENT_ID : "Ov23likP1d4vGjE45QfK"}&scope=repo`;
+                return;
+            }
+            submitGalleryUpload(card, statusEl, submitBtn);
+        });
     }
 
     function updateGalleryResumeUI() {
@@ -651,20 +762,45 @@
         if (item.upload) return;
         const f = item.file;
         let base64, ext;
+        let width = 1600, height = 1200;
         if (f.type === 'image/gif') {
             if (f.size > 15 * 1024 * 1024) throw new Error(`动图 ${f.name} 超过 15MB，请压缩后再试`);
             base64 = await fileToRawBase64(f);
             ext = 'gif';
+            if (typeof Image !== 'undefined' && item.dataUrl) {
+                try {
+                    const dims = await new Promise((res) => {
+                        const img = new Image();
+                        img.onload = () => res({ w: img.naturalWidth || img.width, h: img.naturalHeight || img.height });
+                        img.onerror = () => res(null);
+                        img.src = item.dataUrl;
+                    });
+                    if (dims) { width = dims.w; height = dims.h; }
+                } catch {}
+            }
         } else {
-            base64 = (await compressMomentImage(f, 1600, 0.82)).base64;
+            const comp = await compressMomentImage(f, 1600, 0.82);
+            base64 = comp.base64;
             ext = 'jpg';
+            if (comp && comp.width && comp.height) {
+                width = comp.width;
+                height = comp.height;
+            }
         }
         const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
         const header = new TextEncoder().encode(`blob ${bytes.length}\0`);
         const blob = new Uint8Array(header.length + bytes.length);
         blob.set(header); blob.set(bytes, header.length);
         const sha = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-1', blob)), b => b.toString(16).padStart(2, '0')).join('');
-        item.upload = { filename: `gallery-${crypto.randomUUID()}.${ext}`, base64, sha, attempted: false };
+        item.upload = {
+            filename: `gallery-${crypto.randomUUID()}.${ext}`,
+            base64,
+            sha,
+            attempted: false,
+            w: width,
+            h: height,
+            ratio: Math.round((width / height) * 1000) / 1000
+        };
     }
 
     async function galleryRead(token, suffix) {
@@ -718,6 +854,95 @@
         throw new Error('待核对的相册过多，请稍后继续，暂不重复发布');
     }
 
+    function optimisticAddGalleryPhotos(files, albumName, desc, issue) {
+        if (!Array.isArray(files) || !files.length) return;
+        if (typeof albums === 'undefined' || typeof render !== 'function') return;
+
+        const now = new Date();
+        const p = n => String(n).padStart(2, '0');
+        const dateStr = `${now.getFullYear()}-${p(now.getMonth() + 1)}-${p(now.getDate())} ${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}`;
+        const defaultAlbumTitle = `${now.getFullYear()}·${p(now.getMonth() + 1)}`;
+        const title = (albumName || '').trim() || defaultAlbumTitle;
+
+        const newPhotos = files.map(item => {
+            const path = item.upload?.path || `assets/gallery/${item.upload?.filename || 'photo.jpg'}`;
+            const w = Number(item.upload?.w) || 1600;
+            const h = Number(item.upload?.h) || 1200;
+            const ratio = Number(item.upload?.ratio) || (Math.round((w / h) * 1000) / 1000);
+            return {
+                issueNumber: issue?.number || null,
+                issueUpdatedAt: issue?.updated_at || now.toISOString(),
+                source: `${window.location.origin}/${path}`,
+                src: path,
+                thumb: item.dataUrl || path,
+                w,
+                h,
+                ratio,
+                lqip: '',
+                date: dateStr,
+                album: title,
+                _optimistic: true
+            };
+        });
+
+        // 1. 合并进当前相册并置顶
+        let targetAlbum = albums.find(a => a.title === title);
+        if (targetAlbum) {
+            targetAlbum.photos.unshift(...newPhotos);
+            targetAlbum.count = targetAlbum.photos.length;
+            if (!targetAlbum.cover) targetAlbum.cover = newPhotos[0];
+            if (desc && !targetAlbum.description) targetAlbum.description = desc;
+        } else {
+            targetAlbum = {
+                title,
+                count: newPhotos.length,
+                description: desc || null,
+                range: dateStr.slice(0, 10).replace(/-/g, '.'),
+                cover: newPhotos[0],
+                photos: newPhotos
+            };
+            albums.unshift(targetAlbum);
+        }
+
+        // 2. 存入待同步缓存（Pending Batches），保证刷新后依然可见
+        if (typeof savePendingGalleryBatch === 'function') {
+            savePendingGalleryBatch({
+                issueNumber: issue?.number || null,
+                issueUpdatedAt: issue?.updated_at || now.toISOString(),
+                title,
+                description: desc || null,
+                date: dateStr,
+                timestamp: Date.now(),
+                photos: newPhotos.map(pt => ({
+                    issueNumber: pt.issueNumber,
+                    issueUpdatedAt: pt.issueUpdatedAt,
+                    source: pt.source,
+                    src: pt.src,
+                    thumb: pt.src,
+                    w: pt.w,
+                    h: pt.h,
+                    ratio: pt.ratio,
+                    date: pt.date,
+                    album: pt.album
+                }))
+            });
+        }
+
+        // 3. 立即重新计算布局并渲染相册墙
+        render();
+
+        // 4. 平滑滚动到相册墙顶部
+        try {
+            const wall = document.querySelector('.gallery-wall') || listEl;
+            if (wall) {
+                const top = wall.getBoundingClientRect().top + window.scrollY - 80;
+                if (window.scrollY > top + 150) {
+                    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+                }
+            }
+        } catch (_) {}
+    }
+
     async function submitGalleryUpload(card, statusEl, submitBtn) {
         if (galleryUploadBusy) return;
         const setErr = msg => {
@@ -739,6 +964,7 @@
         try {
             const pending = galleryDraft.fields.publish;
             const published = pending && await findGalleryPublication(auth.token, pending);
+            let createdIssue = null;
             if (!published) {
                 const uploadedSrcs = [];
                 for (let i = 0; i < galleryUploadFiles.length; i++) {
@@ -754,16 +980,21 @@
                 if (!galleryDraft.textSaved) throw new Error('无法保存发布进度，请恢复浏览器存储后继续');
                 const body = (desc ? `### 相册简介\n${desc}\n\n` : '') +
                     `<!-- gallery-upload:${publish.id} -->\n` + uploadedSrcs.map(u => `![photo](${u})`).join('\n');
-                await createMomentIssue(auth.token, `📷 相册 ${albumName}`.trim(), body, ['gallery']);
+                createdIssue = await createMomentIssue(auth.token, `📷 相册 ${albumName}`.trim(), body, ['gallery']);
                 galleryDraft.saveFields({ ...galleryDraft.fields, publish: { ...publish, created: true } });
             }
-            showMomentToast('🎉 相册已提交，照片同步后显示（约 1–2 分钟）');
+
+            // 乐观更新相册视图：立即呈现在当前页面
+            if (typeof optimisticAddGalleryPhotos === 'function') {
+                optimisticAddGalleryPhotos(galleryUploadFiles, albumName, desc, createdIssue);
+            }
+
+            showMomentToast('🎉 照片发布成功！已在相册实时展示。');
             galleryDraft.saveFields({ ...galleryDraft.fields, publish: { ...galleryDraft.fields.publish, created: true } });
             await galleryDraft.saveFiles([]);
             if (!galleryDraft.imageSaved) throw new Error('相册已提交，但清理本地草稿失败，请继续以完成清理');
             galleryDraft.saveFields({});
             if (!galleryDraft.textSaved) throw new Error('相册已提交，但清理本地进度失败，请继续以完成清理');
-            galleryUploadFiles.forEach(item => URL.revokeObjectURL(item.dataUrl));
             galleryUploadFiles = [];
             galleryUploadBusy = false;
             setEditorBusy(galleryDraft, card, false);
@@ -775,7 +1006,13 @@
             updateGalleryResumeUI();
             if (e.status === 401 || e.message === 'Bad credentials') {
                 clearMomentAuth();
-                setErr('授权已失效，上传进度已保留。请保存并关闭，重新登录后继续');
+                setErr('博主登录凭据已失效（401），草稿与图片已安全保存。请重新授权登录继续。');
+                if (submitBtn) {
+                    submitBtn.textContent = '重新授权登录';
+                    if (!submitBtn.dataset) submitBtn.dataset = {};
+                    submitBtn.dataset.reauth = 'true';
+                    if (submitBtn.classList?.add) submitBtn.classList.add('is-reauth');
+                }
             } else {
                 const done = galleryUploadFiles.filter(item => item.upload?.path).length;
                 setErr(`${e.message || '发布失败'}。已完成 ${done}/${galleryUploadFiles.length} 张，点击继续将保留进度并核对上次结果。`);

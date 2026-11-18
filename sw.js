@@ -8,7 +8,7 @@
  * 4. 实时交互（Giscus 留言系统）：Network-Only，不干扰正常使用。
  */
 
-const CACHE_VERSION = 'v1.6.0';
+const CACHE_VERSION = 'v1.6.1';
 const STATIC_CACHE = `mfcheer-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `mfcheer-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `mfcheer-images-${CACHE_VERSION}`;
@@ -20,8 +20,8 @@ const PRECACHE_ASSETS = [
     './moments/index.html',
     './gallery/index.html',
     './styles.css?v=1.3.79',
-    './script.js?v=1.3.66',
-    './gallery.js?v=1.2.19',
+    './script.js?v=1.3.67',
+    './gallery.js?v=1.2.24',
     './manifest.json',
     './favicon.ico',
     './favicon-32x32.png',
