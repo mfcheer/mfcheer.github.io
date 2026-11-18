@@ -361,3 +361,10 @@ test("相册发布后即刻乐观更新与待同步合并 (Optimistic Gallery Up
     assert.ok(scriptJs.includes("resolve({ dataUrl, base64, width, height })"), "script.js 图片压缩必须返回尺寸元数据供相册排版");
     assert.ok(scriptJs.includes("raw.githubusercontent.com"), "script.js 灯箱必须支持相册未部署原图回退");
 });
+
+test("说说配图发布即刻乐观预览与 Pages 未就绪容灾 (Moments Image Optimistic Preview & Fallback) 就绪", () => {
+    const scriptJs = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(scriptJs.includes("previewUrl"), "script.js 必须支持说说配图 previewUrl 内存预览");
+    assert.ok(scriptJs.includes("raw.githubusercontent.com/mfcheer/mfcheer.github.io/main/"), "script.js 必须具备 Pages 构建期 raw.githubusercontent 容灾");
+    assert.ok(scriptJs.includes("cleanList"), "script.js writeMomentsCache 必须过滤大体积 dataUrl 以免超出配额");
+});

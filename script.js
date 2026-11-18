@@ -2315,8 +2315,9 @@ function renderMomentsState(state = 'ok') {
                 const img = document.createElement('img');
                 img.className = 'moment-img zoomable-img';
                 const rawSrc = (imgObj.src || '').trim();
-                // 确保相对路径能正确解析为站点根相对路径
-                img.src = rawSrc.startsWith('http') || rawSrc.startsWith('/') || rawSrc.startsWith('blob:') || rawSrc.startsWith('data:') ? rawSrc : '/' + rawSrc;
+                const displaySrc = (imgObj.previewUrl || rawSrc).trim();
+                // 确保相对路径能正确解析为站点根相对路径，且优先展示 0 毫秒秒显的本地预览
+                img.src = displaySrc.startsWith('http') || displaySrc.startsWith('/') || displaySrc.startsWith('blob:') || displaySrc.startsWith('data:') ? displaySrc : '/' + displaySrc;
                 img.alt = imgObj.alt || '说说配图';
                 // 前部说说采用 eager 加载，避免移动端 WebKit 0 盒模型下 lazy 观察器不触发的问题
                 img.loading = itemIndex < 3 ? 'eager' : 'lazy';
@@ -2325,8 +2326,14 @@ function renderMomentsState(state = 'ok') {
 
                 let retried = false;
                 img.addEventListener('error', () => {
-                    // 若本地静态路径加载失败，回退尝试原始 GitHub 附件 URL
+                    // 若本地静态路径加载失败，回退尝试 raw.githubusercontent 或原始 GitHub 附件 URL 容灾
                     if (!retried && rawSrc && !rawSrc.startsWith('http')) {
+                        retried = true;
+                        if (rawSrc.startsWith('assets/moments/') || rawSrc.startsWith('/assets/moments/')) {
+                            const cleanPath = rawSrc.replace(/^\/+/, '');
+                            img.src = `https://raw.githubusercontent.com/mfcheer/mfcheer.github.io/main/${cleanPath}`;
+                            return;
+                        }
                         const ghUuid = rawSrc.match(/([0-9a-fA-F-]+)\.\w+$/);
                         if (ghUuid) {
                             retried = true;
@@ -2395,7 +2402,18 @@ function readMomentsCache() {
 
 function writeMomentsCache(list) {
     try {
-        localStorage.setItem(MOMENTS_CACHE_KEY, JSON.stringify(list));
+        const cleanList = Array.isArray(list) ? list.map(item => {
+            if (!item || !Array.isArray(item.images)) return item;
+            const images = item.images.map(img => {
+                if (img && img.previewUrl && img.previewUrl.startsWith("data:")) {
+                    const { previewUrl, ...rest } = img;
+                    return rest;
+                }
+                return img;
+            });
+            return { ...item, images };
+        }) : list;
+        localStorage.setItem(MOMENTS_CACHE_KEY, JSON.stringify(cleanList));
         localStorage.setItem(MOMENTS_TIME_KEY, String(Date.now()));
     } catch (e) {
         // 隐私模式等存储异常时忽略，不影响展示
@@ -3077,7 +3095,14 @@ function renderMomentModalContent() {
                 const ext = item.file && item.file.type === "image/gif" ? "gif" : "jpg";
                 const filename = `m-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
                 const uploadedPath = await uploadMomentImage(currentAuth.token, filename, item.base64);
-                uploadedImageUrls.push({ src: uploadedPath, alt: "Image" });
+                let previewUrl = "";
+                if (item.file) {
+                    try { previewUrl = URL.createObjectURL(item.file); } catch (_) {}
+                }
+                if (!previewUrl && item.dataUrl) {
+                    previewUrl = item.dataUrl;
+                }
+                uploadedImageUrls.push({ src: uploadedPath, alt: "Image", previewUrl });
             }
 
             statusEl.textContent = "正在发布说说…";
