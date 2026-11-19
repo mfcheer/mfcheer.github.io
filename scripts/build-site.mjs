@@ -26,15 +26,31 @@ export async function hashFiles(root, paths) {
     return digest(JSON.stringify(hashes));
 }
 
-export async function fetchIssues(label, fetcher = fetch) {
+export async function fetchIssues(label, fetcher = fetch, retryAttempts = 3, retryDelayMs = 250) {
     const headers = { Accept: 'application/vnd.github+json', 'User-Agent': 'mfcheer-site-builder' };
     const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
     if (token) headers.Authorization = `Bearer ${token}`;
     const result = [];
     for (let page = 1; page <= 50; page++) {
         const url = `https://api.github.com/repos/mfcheer/mfcheer.github.io/issues?state=open&labels=${label}&per_page=100&sort=created&direction=desc&page=${page}`;
-        const response = await fetcher(url, { headers, signal: AbortSignal.timeout(60000) });
-        if (!response.ok) throw new Error(`读取 ${label} 第 ${page} 页失败：HTTP ${response.status}`);
+        let response;
+        for (let attempt = 1; attempt <= retryAttempts; attempt++) {
+            try {
+                response = await fetcher(url, { headers, signal: AbortSignal.timeout(60000) });
+                if (response.ok) break;
+                if ((response.status >= 500 || response.status === 429) && attempt < retryAttempts) {
+                    await new Promise((resolve) => setTimeout(resolve, retryDelayMs * attempt));
+                    continue;
+                }
+                throw new Error(`读取 ${label} 第 ${page} 页失败：HTTP ${response.status}`);
+            } catch (err) {
+                if (attempt < retryAttempts && (!response || response.status >= 500 || err.name === 'TimeoutError' || err.code === 'ECONNRESET' || err.code === 'ETIMEDOUT')) {
+                    await new Promise((resolve) => setTimeout(resolve, retryDelayMs * attempt));
+                    continue;
+                }
+                throw err;
+            }
+        }
         const batch = await response.json();
         if (!Array.isArray(batch)) throw new Error(`${label} 返回格式错误`);
         result.push(...batch);

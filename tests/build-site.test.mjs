@@ -133,12 +133,24 @@ test('产物丢失自动修复；手动全量重建可回退', async (t) => {
 test('分页完整读取；任何一页失败或格式异常均不能静默截断', async () => {
     let calls = 0;
     const items = Array.from({ length: 100 }, (_, i) => issue('moment', i + 1));
-    const fetched = await fetchIssues('moment', async () => ({ ok: true, json: async () => ++calls === 1 ? items : [issue('moment', 101)] }));
+    const fetched = await fetchIssues('moment', async () => ({ ok: true, json: async () => ++calls === 1 ? items : [issue('moment', 101)] }), 3, 10);
     assert.equal(fetched.length, 101);
     calls = 0;
-    await assert.rejects(fetchIssues('moment', async () => ++calls === 1 ? { ok: true, json: async () => items } : { ok: false, status: 503 }), /第 2 页失败/);
-    await assert.rejects(fetchIssues('moment', async () => ({ ok: true, json: async () => ({}) })), /格式错误/);
-    await assert.rejects(fetchIssues('moment', async () => ({ ok: true, json: async () => items })), /5000/);
+    await assert.rejects(fetchIssues('moment', async () => ++calls === 1 ? { ok: true, json: async () => items } : { ok: false, status: 503 }, 3, 10), /第 2 页失败/);
+    await assert.rejects(fetchIssues('moment', async () => ({ ok: true, json: async () => ({}) }), 3, 10), /格式错误/);
+    await assert.rejects(fetchIssues('moment', async () => ({ ok: true, json: async () => items }), 3, 10), /5000/);
+});
+
+test('fetchIssues 在遇到临时 502/503 错误或网络抖动时自动重试并最终成功', async () => {
+    let calls = 0;
+    const items = [issue('moment', 1)];
+    const fetched = await fetchIssues('moment', async () => {
+        calls++;
+        if (calls === 1) return { ok: false, status: 502 };
+        return { ok: true, json: async () => items };
+    }, 3, 10);
+    assert.equal(fetched.length, 1);
+    assert.equal(calls, 2);
 });
 
 test('只接受本人相应标签的开放 Issue；保留恢复判断所需的更新时间', () => {
