@@ -32,7 +32,7 @@ const TPL_DIR = path.join(ROOT, 'templates');
 import anchor from 'markdown-it-anchor';
 import taskLists from 'markdown-it-task-lists';
 
-const VERSIONS = { css: '1.3.45', js: '1.3.43' };
+const VERSIONS = { css: '1.3.80', js: '1.3.70' };
 
 // ---------- 工具 ----------
 const esc = (s) =>
@@ -240,6 +240,7 @@ for (const file of files) {
     const dateText = `${y}/${part('month')}/${part('day')}${hasTime ? ` ${part('hour')}:${part('minute')}` : ''}`;
 
     posts.push({
+        file,
         title,
         slug,
         tags,
@@ -317,6 +318,8 @@ for (let i = 0; i < posts.length; i++) {
         : '';
     const vars = {
         TITLE: esc(p.title),
+        SOURCE_FILE: esc(p.file),
+        SLUG: esc(p.slug),
         DESCRIPTION: esc(p.summary),
         PAGE_URL: pageUrl,
         JSONLD: jsonld,

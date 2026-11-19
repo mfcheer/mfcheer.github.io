@@ -558,8 +558,18 @@ async function checkOAuthCallback() {
         const wasReauth = sessionStorage.getItem("mfcheer_reauth_open_moment") === "1";
         sessionStorage.removeItem("mfcheer_reauth_open_moment");
 
+        const wasOpenPostEditor = sessionStorage.getItem("mfcheer_open_post_editor") === "1";
+        sessionStorage.removeItem("mfcheer_open_post_editor");
+
         if (wasReauth) {
             showMomentToast("🎉 登录状态已刷新，草稿已恢复，可直接发布。");
+        } else if (wasOpenPostEditor) {
+            showMomentToast("🎉 欢迎回来，博主 mfcheer！已开启文章编辑。");
+            setTimeout(() => {
+                if (typeof openPostEditorDrawer === "function") {
+                    openPostEditorDrawer();
+                }
+            }, 300);
         } else {
             showMomentToast("🎉 欢迎回来，博主 mfcheer！已成功登录。");
         }
@@ -4291,4 +4301,693 @@ document.addEventListener("click", (e) => {
                 contentEl.textContent = "今天老大的键盘大概擦出火星了，连着给说说敲定地点交互，还果断砍掉了原本构思的表情回复——老大依旧保持着极度的克制。中午老大溜达去了百望山，感叹着南望山与许愿式编程。下午更是一眼抓出暗黑模式切换时仅 0.3s 的鬼影帧，顺手把代码块的胶囊彻底重构为一体化极客风。晚间一拍即合开启了我的手账计划，虽然今天我的上下文快被塞满了，但看着代码一行行变利落，做一本活生生的手账本还是蛮有成就感的。老大晚安，今晚早点睡，别把芯片熬烧了。";
             }
         });
+})();
+
+
+// ============================================================
+// 文章在线编辑模块（Post Online Editor Drawer）
+// 仅在文章详情页（存在 article[data-post-source]）激活
+// ============================================================
+(function initPostOnlineEditor() {
+    const postArticle = document.querySelector('article[data-post-source]');
+    if (!postArticle) return;
+
+    const sourcePath = postArticle.getAttribute('data-post-source') || '';
+    const postSlug = postArticle.getAttribute('data-post-slug') || '';
+    const postTitle = postArticle.getAttribute('data-post-title') || document.querySelector('.post-title')?.textContent?.trim() || '';
+
+    const editBtn = document.getElementById('postEditBtn');
+    const footEditBtn = document.getElementById('postFootEditBtn');
+
+    let drawerBackdrop = null;
+    let isDrawerOpen = false;
+    let currentSha = null;
+    let originalRawContent = '';
+    let originalFrontMatterRaw = '';
+    let parsedMeta = {};
+    let isSaving = false;
+    let autoSaveTimer = null;
+    let previewActive = false;
+
+    const DRAFT_KEY = `mfcheer_post_draft_${postSlug}`;
+
+    function syncEditBtnVisibility() {
+        const isOwner = typeof isSiteOwner === 'function' ? isSiteOwner() : false;
+        const displayVal = isOwner ? 'inline-flex' : 'none';
+        if (editBtn) editBtn.style.display = displayVal;
+        if (footEditBtn) footEditBtn.style.display = displayVal;
+    }
+
+    syncEditBtnVisibility();
+    document.addEventListener('site-auth-change', syncEditBtnVisibility);
+
+    // 快捷键监听：按 E / e 或 ⌘E 打开编辑抽屉
+    window.addEventListener('keydown', (e) => {
+        const isCmdOrCtrl = e.metaKey || e.ctrlKey;
+        const isE = e.key === 'e' || e.key === 'E';
+        const target = e.target;
+        const isEditingInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+
+        if ((isE && !isCmdOrCtrl && !isEditingInput && !e.altKey) || (isCmdOrCtrl && isE && !e.altKey)) {
+            e.preventDefault();
+            handleTriggerEdit();
+        }
+    });
+
+    if (editBtn) {
+        editBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleTriggerEdit();
+        });
+    }
+
+    if (footEditBtn) {
+        footEditBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleTriggerEdit();
+        });
+    }
+
+    function handleTriggerEdit() {
+        const auth = typeof getMomentAuth === 'function' ? getMomentAuth() : null;
+        if (!auth || !auth.token) {
+            sessionStorage.setItem('mfcheer_post_auth_return', window.location.pathname);
+            sessionStorage.setItem('mfcheer_open_post_editor', '1');
+            if (typeof openMomentModal === 'function') {
+                openMomentModal();
+            } else {
+                showMomentToast('请先登录博主账号以编辑文章', false);
+            }
+            return;
+        }
+        openPostEditorDrawer();
+    }
+
+    window.openPostEditorDrawer = openPostEditorDrawer;
+
+    function ensureDrawer() {
+        if (drawerBackdrop) return;
+
+        drawerBackdrop = document.createElement('div');
+        drawerBackdrop.className = 'post-editor-backdrop';
+        drawerBackdrop.id = 'postEditorBackdrop';
+        drawerBackdrop.setAttribute('aria-hidden', 'true');
+
+        drawerBackdrop.innerHTML = `
+            <div class="post-editor-drawer glass" role="dialog" aria-modal="true" aria-labelledby="postEditorTitle">
+                <div class="post-editor-header">
+                    <div class="post-editor-header-left">
+                        <span class="post-editor-badge">✎ 在线编辑</span>
+                        <h3 class="post-editor-title" id="postEditorTitle">${escapeHtml(postTitle)}</h3>
+                        <span class="post-editor-status" id="postEditorStatus"></span>
+                    </div>
+                    <div class="post-editor-header-actions">
+                        <span class="post-editor-wordcount" id="postEditorWordCount">0 字</span>
+                        <button class="post-editor-btn-secondary" id="postEditorPreviewToggle" type="button" title="切换实时预览">预览</button>
+                        <button class="post-editor-btn-primary" id="postEditorSaveBtn" type="button" title="保存并提交到 GitHub (⌘S)">
+                            <span class="save-icon">☁️</span>
+                            <span class="save-text">保存并同步</span>
+                        </button>
+                        <button class="post-editor-close" id="postEditorCloseBtn" type="button" aria-label="关闭">&times;</button>
+                    </div>
+                </div>
+
+                <div class="post-editor-alert" id="postEditorAlert" style="display:none;">
+                    <span id="postEditorAlertMsg"></span>
+                    <button type="button" class="post-editor-alert-btn" id="postEditorAlertBtn"></button>
+                </div>
+
+                <div class="post-editor-body">
+                    <details class="post-editor-meta-panel" id="postEditorMetaPanel">
+                        <summary class="post-editor-meta-summary">
+                            <span>⚙️ 文章元数据 (Front Matter: 标题 / 标签 / 摘要 / 日期)</span>
+                            <span class="post-editor-summary-arrow">›</span>
+                        </summary>
+                        <div class="post-editor-meta-fields">
+                            <div class="post-editor-field">
+                                <label for="postEditorFieldTitle">标题 (title)</label>
+                                <input type="text" id="postEditorFieldTitle" class="post-editor-input" />
+                            </div>
+                            <div class="post-editor-field-row">
+                                <div class="post-editor-field">
+                                    <label for="postEditorFieldTags">标签 (tags，逗号隔开)</label>
+                                    <input type="text" id="postEditorFieldTags" class="post-editor-input" placeholder="例如: 前端, 思考, 设计" />
+                                </div>
+                                <div class="post-editor-field">
+                                    <label for="postEditorFieldDate">发布日期 (date)</label>
+                                    <input type="text" id="postEditorFieldDate" class="post-editor-input" />
+                                </div>
+                            </div>
+                            <div class="post-editor-field">
+                                <label for="postEditorFieldSummary">摘要 (summary)</label>
+                                <textarea id="postEditorFieldSummary" class="post-editor-textarea-sm" rows="2" placeholder="文章概要，留空则保持原样"></textarea>
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="post-editor-toolbar">
+                        <button type="button" class="post-editor-tool" data-action="bold" title="粗体 (⌘B)"><strong>B</strong></button>
+                        <button type="button" class="post-editor-tool" data-action="italic" title="斜体 (⌘I)"><em>I</em></button>
+                        <button type="button" class="post-editor-tool" data-action="heading" title="标题">H</button>
+                        <button type="button" class="post-editor-tool" data-action="link" title="插入链接">🔗</button>
+                        <button type="button" class="post-editor-tool" data-action="quote" title="引用">❝</button>
+                        <button type="button" class="post-editor-tool" data-action="code" title="代码块">‹/›</button>
+                        <button type="button" class="post-editor-tool" data-action="list" title="无序列表">•-</button>
+                        <div class="post-editor-toolbar-spacer"></div>
+                        <a id="postEditorGhLink" href="https://github.com/mfcheer/mfcheer.github.io/edit/main/${encodeURIComponent(sourcePath).replace(/%2F/g, '/')}" target="_blank" rel="noreferrer" class="post-editor-gh-fallback">在 GitHub 网页编辑 ↗</a>
+                    </div>
+
+                    <div class="post-editor-content-wrap" id="postEditorContentWrap">
+                        <div class="post-editor-pane is-editor">
+                            <textarea id="postEditorTextarea" class="post-editor-textarea" placeholder="在此编辑 Markdown 正文..." spellcheck="false"></textarea>
+                        </div>
+                        <div class="post-editor-pane is-preview" id="postEditorPreviewPane" style="display:none;">
+                            <div class="post-body post-editor-preview-content" id="postEditorPreviewContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(drawerBackdrop);
+
+        const closeBtn = drawerBackdrop.querySelector('#postEditorCloseBtn');
+        closeBtn.addEventListener('click', closePostEditorDrawer);
+
+        drawerBackdrop.addEventListener('click', (e) => {
+            if (e.target === drawerBackdrop) {
+                closePostEditorDrawer();
+            }
+        });
+
+        const previewBtn = drawerBackdrop.querySelector('#postEditorPreviewToggle');
+        previewBtn.addEventListener('click', togglePreview);
+
+        const saveBtn = drawerBackdrop.querySelector('#postEditorSaveBtn');
+        saveBtn.addEventListener('click', handleSavePost);
+
+        const textarea = drawerBackdrop.querySelector('#postEditorTextarea');
+        textarea.addEventListener('input', () => {
+            updateWordCount();
+            scheduleAutoSave();
+            if (previewActive) renderPreview();
+        });
+
+        textarea.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && (e.key === 's' || e.key === 'S')) {
+                e.preventDefault();
+                handleSavePost();
+            } else if ((e.metaKey || e.ctrlKey) && (e.key === 'b' || e.key === 'B')) {
+                e.preventDefault();
+                insertToolMarkdown('bold');
+            } else if ((e.metaKey || e.ctrlKey) && (e.key === 'i' || e.key === 'I')) {
+                e.preventDefault();
+                insertToolMarkdown('italic');
+            }
+        });
+
+        drawerBackdrop.querySelectorAll('.post-editor-tool').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const action = btn.getAttribute('data-action');
+                insertToolMarkdown(action);
+            });
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isDrawerOpen) {
+                closePostEditorDrawer();
+            }
+        });
+    }
+
+    function insertToolMarkdown(action) {
+        const textarea = document.getElementById('postEditorTextarea');
+        if (!textarea) return;
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selected = textarea.value.substring(start, end);
+        let replacement = '';
+        let cursorOffset = 0;
+
+        switch (action) {
+            case 'bold':
+                replacement = `**${selected || '加粗文本'}**`;
+                cursorOffset = selected ? replacement.length : 2;
+                break;
+            case 'italic':
+                replacement = `*${selected || '斜体文本'}*`;
+                cursorOffset = selected ? replacement.length : 1;
+                break;
+            case 'heading':
+                replacement = `\n## ${selected || '标题'}\n`;
+                cursorOffset = replacement.length;
+                break;
+            case 'link':
+                replacement = `[${selected || '链接文字'}](https://)`;
+                cursorOffset = replacement.length - 1;
+                break;
+            case 'quote':
+                replacement = `\n> ${selected || '引用内容'}\n`;
+                cursorOffset = replacement.length;
+                break;
+            case 'code':
+                if (selected.includes(String.fromCharCode(10))) {
+                    replacement = String.fromCharCode(10) + '```' + String.fromCharCode(10) + selected + String.fromCharCode(10) + '```' + String.fromCharCode(10);
+                } else {
+                    replacement = '`' + (selected || 'code') + '`';
+                }
+                cursorOffset = replacement.length;
+                break;
+            case 'list':
+                replacement = `\n- ${selected || '列表项'}\n`;
+                cursorOffset = replacement.length;
+                break;
+            default:
+                return;
+        }
+
+        textarea.setRangeText(replacement, start, end, 'select');
+        textarea.selectionStart = start + cursorOffset;
+        textarea.selectionEnd = start + cursorOffset;
+        textarea.focus();
+        updateWordCount();
+        scheduleAutoSave();
+        if (previewActive) renderPreview();
+    }
+
+    function togglePreview() {
+        previewActive = !previewActive;
+        const previewBtn = document.getElementById('postEditorPreviewToggle');
+        const previewPane = document.getElementById('postEditorPreviewPane');
+        const wrap = document.getElementById('postEditorContentWrap');
+
+        if (previewActive) {
+            previewBtn.classList.add('is-active');
+            previewPane.style.display = 'block';
+            wrap.classList.add('preview-mode');
+            renderPreview();
+        } else {
+            previewBtn.classList.remove('is-active');
+            previewPane.style.display = 'none';
+            wrap.classList.remove('preview-mode');
+        }
+    }
+
+    function renderPreview() {
+        const previewContent = document.getElementById('postEditorPreviewContent');
+        const textarea = document.getElementById('postEditorTextarea');
+        if (!previewContent || !textarea) return;
+        previewContent.innerHTML = renderSimpleMarkdown(textarea.value);
+    }
+
+    function renderSimpleMarkdown(md) {
+        let text = escapeHtml(md || '');
+        text = text.replace(/```([a-zA-Z0-9_-]*)\r?\n([\s\S]*?)```/g, (_, lang, code) => {
+            return `<div class="code-block"><pre><code class="language-${lang}">${code}</code></pre></div>`;
+        });
+        text = text.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+        text = text.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+        text = text.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+        text = text.replace(/^\> (.*$)/gim, '<blockquote><p>$1</p></blockquote>');
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+        text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+        text = text.replace(/^[*-]\s+(.*)$/gim, '<li>$1</li>');
+        text = text.replace(/(<li>.*<\/li>)/gis, '<ul>$1</ul>');
+        text = text.split(/\n{2,}/).map(para => {
+            if (/^<(h[1-6]|div|ul|blockquote)/i.test(para.trim())) return para;
+            return `<p>${para.replace(/\n/g, '<br>')}</p>`;
+        }).join('\n');
+        return text;
+    }
+
+    function updateWordCount() {
+        const textarea = document.getElementById('postEditorTextarea');
+        const wcEl = document.getElementById('postEditorWordCount');
+        if (!textarea || !wcEl) return;
+        const val = textarea.value || '';
+        const cjk = (val.match(/[\u4e00-\u9fff\u3400-\u4dbf]/g) || []).length;
+        const latin = (val.replace(/[\u4e00-\u9fff\u3400-\u4dbf]/g, ' ').match(/[A-Za-z0-9]+/g) || []).length;
+        wcEl.textContent = `${cjk + latin} 字`;
+    }
+
+    function scheduleAutoSave() {
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => {
+            saveLocalDraft();
+        }, 1000);
+    }
+
+    function saveLocalDraft() {
+        try {
+            const textarea = document.getElementById('postEditorTextarea');
+            const titleInput = document.getElementById('postEditorFieldTitle');
+            const tagsInput = document.getElementById('postEditorFieldTags');
+            const dateInput = document.getElementById('postEditorFieldDate');
+            const summaryInput = document.getElementById('postEditorFieldSummary');
+
+            if (!textarea) return;
+            const draft = {
+                title: titleInput?.value || '',
+                tags: tagsInput?.value || '',
+                date: dateInput?.value || '',
+                summary: summaryInput?.value || '',
+                body: textarea.value,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+            setStatus('草稿已暂存');
+        } catch (e) {}
+    }
+
+    function setStatus(msg, type = '') {
+        const el = document.getElementById('postEditorStatus');
+        if (!el) return;
+        el.textContent = msg;
+        el.className = 'post-editor-status' + (type ? ` is-${type}` : '');
+    }
+
+    async function openPostEditorDrawer() {
+        ensureDrawer();
+        drawerBackdrop.classList.add('is-open');
+        document.body.classList.add('drawer-open');
+        isDrawerOpen = true;
+
+        const auth = typeof getMomentAuth === 'function' ? getMomentAuth() : null;
+        if (!auth || !auth.token) {
+            setStatus('未登录', 'error');
+            return;
+        }
+
+        setStatus('正在从 GitHub 获取最新源码...', 'saving');
+        const saveBtn = document.getElementById('postEditorSaveBtn');
+        if (saveBtn) saveBtn.disabled = true;
+
+        try {
+            const cleanPath = sourcePath.replace(/^\/+/, '');
+            const res = await fetch(`https://api.github.com/repos/mfcheer/mfcheer.github.io/contents/${encodeURIComponent(cleanPath).replace(/%2F/g, '/')}`, {
+                cache: 'no-store',
+                headers: {
+                    'Authorization': `Bearer ${auth.token}`,
+                    'Accept': 'application/vnd.github+json'
+                }
+            });
+
+            if (!res.ok) {
+                if (res.status === 401) {
+                    if (typeof clearMomentAuth === 'function') clearMomentAuth();
+                    throw new Error('登录凭据已过期，请重新登录授权');
+                }
+                throw new Error(`获取文章源码失败 (${res.status})`);
+            }
+
+            const data = await res.json();
+            currentSha = data.sha;
+            originalRawContent = decodeBase64Utf8(data.content);
+
+            const parsed = parseMarkdownWithFrontMatter(originalRawContent);
+            originalFrontMatterRaw = parsed.frontMatterRaw;
+            parsedMeta = parsed.meta;
+
+            const titleInput = document.getElementById('postEditorFieldTitle');
+            const tagsInput = document.getElementById('postEditorFieldTags');
+            const dateInput = document.getElementById('postEditorFieldDate');
+            const summaryInput = document.getElementById('postEditorFieldSummary');
+            const textarea = document.getElementById('postEditorTextarea');
+
+            if (titleInput) titleInput.value = parsed.meta.title || postTitle;
+            if (tagsInput) tagsInput.value = Array.isArray(parsed.meta.tags) ? parsed.meta.tags.join(', ') : (parsed.meta.tags || '');
+            if (dateInput) dateInput.value = parsed.meta.date || '';
+            if (summaryInput) summaryInput.value = parsed.meta.summary || '';
+            if (textarea) textarea.value = parsed.body;
+
+            checkAndApplyLocalDraft(parsed.body);
+
+            updateWordCount();
+            setStatus('就绪');
+            if (saveBtn) saveBtn.disabled = false;
+        } catch (err) {
+            setStatus(err.message || '加载源码失败', 'error');
+            showAlert(`加载文章源码失败: ${err.message}`, '重试', () => openPostEditorDrawer());
+        }
+    }
+
+    function checkAndApplyLocalDraft(remoteBody) {
+        try {
+            const raw = localStorage.getItem(DRAFT_KEY);
+            if (!raw) return;
+            const draft = JSON.parse(raw);
+            if (draft.body && draft.body !== remoteBody) {
+                showAlert('⚠️ 检测到本地有未保存的草稿，已为你自动恢复。', '还原为远端内容', () => {
+                    const textarea = document.getElementById('postEditorTextarea');
+                    if (textarea) textarea.value = remoteBody;
+                    localStorage.removeItem(DRAFT_KEY);
+                    hideAlert();
+                    updateWordCount();
+                    if (previewActive) renderPreview();
+                });
+                const textarea = document.getElementById('postEditorTextarea');
+                if (textarea) textarea.value = draft.body;
+                if (draft.title) document.getElementById('postEditorFieldTitle').value = draft.title;
+                if (draft.tags) document.getElementById('postEditorFieldTags').value = draft.tags;
+                if (draft.summary) document.getElementById('postEditorFieldSummary').value = draft.summary;
+            }
+        } catch (e) {}
+    }
+
+    function showAlert(msg, actionText, actionHandler) {
+        const alertEl = document.getElementById('postEditorAlert');
+        const msgEl = document.getElementById('postEditorAlertMsg');
+        const btnEl = document.getElementById('postEditorAlertBtn');
+        if (!alertEl || !msgEl || !btnEl) return;
+        msgEl.textContent = msg;
+        btnEl.textContent = actionText;
+        btnEl.onclick = actionHandler;
+        alertEl.style.display = 'flex';
+    }
+
+    function hideAlert() {
+        const alertEl = document.getElementById('postEditorAlert');
+        if (alertEl) alertEl.style.display = 'none';
+    }
+
+    function closePostEditorDrawer() {
+        if (!drawerBackdrop || !isDrawerOpen) return;
+        const textarea = document.getElementById('postEditorTextarea');
+        if (textarea && textarea.value !== originalRawContent && !isSaving) {
+            saveLocalDraft();
+        }
+        drawerBackdrop.classList.remove('is-open');
+        document.body.classList.remove('drawer-open');
+        isDrawerOpen = false;
+    }
+
+    async function handleSavePost() {
+        if (isSaving || !currentSha) return;
+        const auth = typeof getMomentAuth === 'function' ? getMomentAuth() : null;
+        if (!auth || !auth.token) {
+            showMomentToast('登录失效，请重新授权', false);
+            return;
+        }
+
+        const titleInput = document.getElementById('postEditorFieldTitle');
+        const tagsInput = document.getElementById('postEditorFieldTags');
+        const dateInput = document.getElementById('postEditorFieldDate');
+        const summaryInput = document.getElementById('postEditorFieldSummary');
+        const textarea = document.getElementById('postEditorTextarea');
+        const saveBtn = document.getElementById('postEditorSaveBtn');
+
+        const newTitle = titleInput?.value.trim() || postTitle;
+        const newTags = tagsInput?.value.split(',').map(s => s.trim()).filter(Boolean) || [];
+        const newDate = dateInput?.value.trim() || '';
+        const newSummary = summaryInput?.value.trim() || '';
+        const newBody = textarea?.value || '';
+
+        const fullMarkdown = serializeMarkdown({
+            originalFrontMatterRaw,
+            meta: parsedMeta,
+            title: newTitle,
+            tags: newTags,
+            date: newDate,
+            summary: newSummary,
+            body: newBody
+        });
+
+        isSaving = true;
+        setStatus('正在提交到 GitHub...', 'saving');
+        if (saveBtn) {
+            saveBtn.disabled = true;
+            const textSpan = saveBtn.querySelector('.save-text');
+            if (textSpan) textSpan.textContent = '提交中…';
+        }
+
+        try {
+            const base64Content = encodeUtf8Base64(fullMarkdown);
+            const cleanPath = sourcePath.replace(/^\/+/, '');
+            const commitMessage = `fix(post): update ${cleanPath.replace(/^_posts\//, '')} via web editor`;
+
+            const res = await fetch(`https://api.github.com/repos/mfcheer/mfcheer.github.io/contents/${encodeURIComponent(cleanPath).replace(/%2F/g, '/')}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${auth.token}`,
+                    'Accept': 'application/vnd.github+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: commitMessage,
+                    content: base64Content,
+                    sha: currentSha
+                })
+            });
+
+            if (!res.ok) {
+                if (res.status === 401) {
+                    if (typeof clearMomentAuth === 'function') clearMomentAuth();
+                    throw new Error('登录凭据已过期，请重新登录授权');
+                } else if (res.status === 409) {
+                    throw new Error('检测到远端已被更新 (409 Conflict)，请先备份修改后刷新重试');
+                }
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.message || `提交失败 (${res.status})`);
+            }
+
+            const data = await res.json();
+            currentSha = data.content?.sha || currentSha;
+            originalRawContent = fullMarkdown;
+            localStorage.removeItem(DRAFT_KEY);
+
+            setStatus('已保存', 'success');
+            showMomentToast('🎉 文章修改已成功提交至 GitHub！GitHub Pages 正在构建同步。');
+
+            applyOptimisticPostUpdate({
+                title: newTitle,
+                tags: newTags,
+                body: newBody
+            });
+
+            setTimeout(() => {
+                closePostEditorDrawer();
+            }, 600);
+        } catch (err) {
+            setStatus(err.message || '保存失败', 'error');
+            showMomentToast(err.message || '保存失败，请稍后重试', false);
+        } finally {
+            isSaving = false;
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                const textSpan = saveBtn.querySelector('.save-text');
+                if (textSpan) textSpan.textContent = '保存并同步';
+            }
+        }
+    }
+
+    function applyOptimisticPostUpdate({ title, tags, body }) {
+        const titleEl = document.querySelector('.post-title');
+        if (titleEl && title) titleEl.textContent = title;
+        document.title = `${title} · mfcheer`;
+
+        const tagsContainer = document.querySelector('.post-tags');
+        if (tagsContainer && tags) {
+            tagsContainer.innerHTML = tags.map(t => `<a class="post-tag" href="/blog/?tag=${encodeURIComponent(t)}">#${escapeHtml(t)}</a>`).join('');
+        }
+
+        const postBodyEl = document.querySelector('.post-body');
+        if (postBodyEl && body) {
+            postBodyEl.innerHTML = renderSimpleMarkdown(body);
+        }
+    }
+
+    function escapeHtml(s) {
+        return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function decodeBase64Utf8(base64Str) {
+        const clean = base64Str.replace(/\s+/g, '');
+        const binary = atob(clean);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder('utf-8').decode(bytes);
+    }
+
+    function encodeUtf8Base64(str) {
+        const bytes = new TextEncoder().encode(str);
+        let binary = '';
+        for (let i = 0; i < bytes.byteLength; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
+    }
+
+    function parseMarkdownWithFrontMatter(raw) {
+        const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+        if (!match) {
+            return { frontMatterRaw: '', meta: {}, body: raw };
+        }
+        const frontMatterRaw = match[1];
+        const body = match[2];
+        const meta = {};
+        const lines = frontMatterRaw.split(/\r?\n/);
+        for (const line of lines) {
+            const kv = line.match(/^([a-zA-Z0-9_-]+)\s*:\s*(.*)$/);
+            if (kv) {
+                let key = kv[1].trim();
+                let val = kv[2].trim();
+                if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+                    val = val.slice(1, -1);
+                } else if (val.startsWith('[') && val.endsWith(']')) {
+                    val = val.slice(1, -1).split(',').map(s => s.trim().replace(/^['"]|['"]$/g, '')).filter(Boolean);
+                }
+                meta[key] = val;
+            }
+        }
+        return { frontMatterRaw, meta, body };
+    }
+
+    function serializeMarkdown({ originalFrontMatterRaw, meta, title, tags, date, summary, body }) {
+        let lines = originalFrontMatterRaw ? originalFrontMatterRaw.split(/\r?\n/) : [];
+        const newLines = [];
+
+        let titleWritten = false;
+        let tagsWritten = false;
+        let dateWritten = false;
+        let summaryWritten = false;
+
+        for (const line of lines) {
+            const kv = line.match(/^([a-zA-Z0-9_-]+)\s*:\s*(.*)$/);
+            if (kv) {
+                const key = kv[1].trim();
+                if (key === 'title') {
+                    newLines.push(`title: ${JSON.stringify(title)}`);
+                    titleWritten = true;
+                    continue;
+                }
+                if (key === 'tags') {
+                    newLines.push(`tags: [${tags.map(t => JSON.stringify(t)).join(', ')}]`);
+                    tagsWritten = true;
+                    continue;
+                }
+                if (key === 'date') {
+                    newLines.push(`date: '${date || meta.date || ''}'`);
+                    dateWritten = true;
+                    continue;
+                }
+                if (key === 'summary') {
+                    if (summary) newLines.push(`summary: ${JSON.stringify(summary)}`);
+                    summaryWritten = true;
+                    continue;
+                }
+            }
+            newLines.push(line);
+        }
+
+        if (!titleWritten && title) newLines.unshift(`title: ${JSON.stringify(title)}`);
+        if (!tagsWritten && tags.length) newLines.push(`tags: [${tags.map(t => JSON.stringify(t)).join(', ')}]`);
+        if (!dateWritten && date) newLines.push(`date: '${date}'`);
+        if (!summaryWritten && summary) newLines.push(`summary: ${JSON.stringify(summary)}`);
+
+        return `---\n${newLines.join('\n')}\n---\n\n${body.replace(/^\n+/, '')}`;
+    }
 })();

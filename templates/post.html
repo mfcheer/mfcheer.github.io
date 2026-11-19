@@ -61,7 +61,7 @@
         </header>
 
         <main>
-            <article class="glass card-post">
+            <article class="glass card-post" data-post-source="_posts/{{SOURCE_FILE}}" data-post-slug="{{SLUG}}" data-post-title="{{TITLE}}">
                 <header class="post-head">
                     <h1 class="post-title">{{TITLE}}</h1>
                     <div class="post-meta">
@@ -70,6 +70,10 @@
                         <span>{{WORD_COUNT}} 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 {{READING_MINUTES}} 分钟</span>
+                        <button class="post-edit-btn" id="postEditBtn" type="button" title="在线编辑此文 (快捷键 E)" aria-label="编辑文章" style="display:none;">
+                            <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            <span>编辑</span>
+                        </button>
                     </div>
                     {{TAGS_HTML}}
                     {{TOC_HTML}}
@@ -80,6 +84,7 @@
 {{POST_NAV_HTML}}
                 <div class="post-foot">
                     <a class="post-back" href="/blog/">← 全部文章</a>
+                    <button class="post-foot-edit-btn" id="postFootEditBtn" type="button" style="display:none;" title="在线编辑此文 (快捷键 E)">✎ 编辑此文</button>
                 </div>
             </article>
 

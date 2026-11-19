@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.45">
+    <link rel="stylesheet" href="/styles.css?v=1.3.80">
 
 </head>
 <body>
@@ -61,7 +61,7 @@
         </header>
 
         <main>
-            <article class="glass card-post">
+            <article class="glass card-post" data-post-source="_posts/2015-11-23-legacy-csdn-6e38845dca.md" data-post-slug="legacy-csdn-6e38845dca" data-post-title="Redis内存回收:LRU算法">
                 <header class="post-head">
                     <h1 class="post-title">Redis内存回收:LRU算法</h1>
                     <div class="post-meta">
@@ -70,6 +70,10 @@
                         <span>585 字</span>
                         <span class="post-meta-dot" aria-hidden="true">·</span>
                         <span>约 1 分钟</span>
+                        <button class="post-edit-btn" id="postEditBtn" type="button" title="在线编辑此文 (快捷键 E)" aria-label="编辑文章" style="display:none;">
+                            <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            <span>编辑</span>
+                        </button>
                     </div>
                     <div class="post-tags"><a class="post-tag" href="/blog/?tag=redis" title="查看「redis」标签的所有文章">#redis</a><a class="post-tag" href="/blog/?tag=%E5%86%85%E5%AD%98" title="查看「内存」标签的所有文章">#内存</a><a class="post-tag" href="/blog/?tag=%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86" title="查看「内存管理」标签的所有文章">#内存管理</a><a class="post-tag" href="/blog/?tag=%E7%AE%97%E6%B3%95" title="查看「算法」标签的所有文章">#算法</a></div>
                     <nav class="toc" aria-label="文章目录"><div class="toc-title">目录</div><ul><li><a href="#lru算法(最近最久未使用算法)">LRU算法(最近最久未使用算法)</a></li><li><a href="#lru算法演示">LRU算法演示</a></li></ul></nav>
@@ -204,6 +208,7 @@ public:
           </nav>
                 <div class="post-foot">
                     <a class="post-back" href="/blog/">← 全部文章</a>
+                    <button class="post-foot-edit-btn" id="postFootEditBtn" type="button" style="display:none;" title="在线编辑此文 (快捷键 E)">✎ 编辑此文</button>
                 </div>
             </article>
 
@@ -221,6 +226,6 @@ public:
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.43"></script>
+    <script src="/script.js?v=1.3.70"></script>
 </body>
 </html>
