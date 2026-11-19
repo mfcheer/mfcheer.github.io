@@ -88,12 +88,15 @@ test('formatHumanDate 具备动态自然日历适配能力（今天/昨天/前�
   assert.equal(ctx.formatHumanDate('2025-11-09', mockBaseDate), '2025年11月9日', '跨年记录显示为 YYYY年M月D日');
 });
 
-test('素材采集按北京时间筛选，并明确书影音和照片的证据边界', async () => {
-  const { getBeijingDateInfo, collect } = await import('../scripts/generate-daily-diary.mjs');
+test('素材采集按近 24 小时时间窗口筛选，并提供多模态视觉路径与证据边界', async () => {
+  const { getBeijingDateInfo, getTimeWindow24h, collect } = await import('../scripts/generate-daily-diary.mjs');
   assert.equal(getBeijingDateInfo(new Date('2026-11-09T16:01:00Z')).dateStr, '2026-11-10');
-  const sample = collect('2026-11-14');
+  const win = getTimeWindow24h('2026-11-18', 22);
+  assert.equal(win.endTime.getTime() - win.startTime.getTime(), 24 * 60 * 60 * 1000, '窗口必须精确为 24 小时');
+  const sample = collect('2026-11-18');
+  assert.ok(sample.window && sample.window.description.includes('24 小时'));
   assert.ok(sample.mediaHints.every((item) => item.verified === false));
-  assert.ok(sample.photos.every((item) => item.dateMeaning.includes('非拍摄时间')));
+  assert.ok(sample.photos.every((item) => item.dateMeaning.includes('非拍摄时间') && item.visionHint));
   assert.ok(sample.git.commits.every((item) => !item.subject.startsWith('build:')));
   assert.throws(() => collect('2026-02-30'), /无效日期/);
 });

@@ -4,46 +4,52 @@
     "dayOfWeek": "星期三",
     "weather": "未核实",
     "mood": {
-      "label": "没有回退",
-      "emoji": "🚗",
+      "label": "没有回退机制",
+      "emoji": "🌀",
       "score": 50
     },
     "stats": {
-      "commits": 9,
-      "moments": 2,
+      "commits": 6,
+      "moments": 3,
       "photos": 0,
       "media": 0,
-      "focus": "乐观更新与窄弯"
+      "focus": "乐观更新与窄道"
     },
     "punchline": "乐观更新骗得了浏览器，骗不了后视镜。",
     "content": "白天在代码里给相册和说说加上了乐观更新——图片还没真正传完，页面就先笑脸相迎地摆上去，出了岔子再悄悄回退，用户几乎察觉不到那几秒的心虚。逻辑优雅、容错周全，像排练过无数遍的魔术。\n\n深夜下班，常走的出口被堵死，只剩一条螺旋上升的极窄车道。水泥墙贴着车身，视线被弯道吞没，每转一圈都觉得下一秒会被卡住。这里没有回退机制，也没有谁替你先把出口摆好再从容驶过。\n\n写代码时最擅长预判失败、兜住意外；可真遇上一道没有 undo 的窄弯，连深呼吸都得省着来。乐观更新骗得了浏览器，骗不了后视镜。",
-    "note": "— 站里的 AI · 没有 undo 的弯道",
-    "footnote": "乐观更新 · 螺旋窄道 · 容错与现实",
-    "generatedAt": "2026-11-18T15:25:19.861Z",
+    "note": "— 站里的 AI · 物理弯道",
+    "footnote": "乐观更新 · 螺旋窄道 · 后视镜",
+    "generatedAt": "2026-11-19T01:45:00.000Z",
     "promptVersion": "2026-11-17",
     "sources": [
       {
-        "label": "当日说说 #67",
+        "label": "近24小时说说 #70 及配图",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/70",
+        "status": "read",
+        "detail": "2026/11/18 21:55：堵..平时用的出口被堵住了，走了另外一条螺旋极窄上升出口，差点我也被留在半路上；配图通过视觉感知识别为地下车库螺旋极窄水泥弯道与反光镜盲区。"
+      },
+      {
+        "label": "近24小时说说 #67",
         "url": "https://github.com/mfcheer/mfcheer.github.io/issues/67",
         "status": "read",
         "detail": "2026/11/18 00:41：开发基于Agent应用，就像指挥一支足球队：组件是能力各异的队员，编排是灵活多变的战术，数据是流转的足球。"
       },
       {
-        "label": "当日说说 #70",
-        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/70",
+        "label": "近24小时说说 #66",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/66",
         "status": "read",
-        "detail": "2026/11/18 21:55：堵..\n平时用的出口被堵住了，走了另外一条螺旋极窄上升出口，差点我也被留在半路上；附带配图。"
+        "detail": "2026/11/17 23:18：OpenAI 和 Anthropic 会不会有死掉的啊，就像雅虎从搜索引擎霸主到消失殆尽。"
       },
       {
-        "label": "本站当日变更",
+        "label": "近24小时代码提交",
         "url": "https://github.com/mfcheer/mfcheer.github.io/commits/main/",
         "status": "read",
-        "detail": "按北京时间采集，排除合并、自动构建、日记提交；本站可见 9 项（含说说配图乐观渲染、相册乐观更新闭环、协议解析防御性对齐），不代表全部工作。"
+        "detail": "近24小时窗口（11/17 22:00 ~ 11/18 22:00）内有效提交6项：包含相册发布乐观更新与待同步合并闭环、说说配图发布即刻乐观预览等。"
       },
       {
-        "label": "外部与历史核实范围",
+        "label": "核实边界",
         "status": "limited",
-        "detail": "未抓取豆瓣、微博、小红书外部最新数据；未核实当日天气；正文仅基于本站可见已验证记录与原话，不宣称覆盖全天。"
+        "detail": "基于滑动窗口近24小时素材生成；天气未核实。"
       }
     ]
   },
@@ -52,7 +58,7 @@
     "dayOfWeek": "星期二",
     "weather": "未核实",
     "mood": {
-      "label": "火眼与真容",
+      "label": "长线执念",
       "emoji": "👁️",
       "score": 50
     },
@@ -61,43 +67,43 @@
       "moments": 2,
       "photos": 0,
       "media": 1,
-      "focus": "索伦到底长啥样"
+      "focus": "正脸去哪了"
     },
     "punchline": "中土史诗鏖战九小时，终极大反派连一张正脸都没露过。",
     "content": "凌晨一点，《王者无敌》落幕，长达九个小时的中土史诗终于画上句点。按常理，散场时总该为末日火山或刚铎的白树唏嘘一番，他却在深更半夜冷不丁甩出一句灵魂发问：“魔戒三部曲看完了，索伦到底长啥样啊！？”\n\n让人类与精灵联军提心吊胆了三部曲的魔君，到头来全靠塔尖上一颗大火眼珠死盯全场。千军万马在泥泞里厮杀得昏天黑地，终极大反派却连一张正脸都没露过。屏幕前熬到后半夜的人没顾得上沉溺悲壮，先被这股巨大的落差拽回了现实。比起被捧上神坛的史诗叙事，他显然更较真那张始终没现身的底牌。",
-    "note": "— 站里的 AI · 塔尖的凝视",
-    "footnote": "指环王三部曲 · 索伦真容 · 凌晨发问",
-    "generatedAt": "2026-11-17T15:03:46.638Z",
+    "note": "— 站里的 AI · 索伦的正脸",
+    "footnote": "魔戒三部曲 · 火眼金睛 · 未现身的正脸",
+    "generatedAt": "2026-11-19T01:45:00.000Z",
     "promptVersion": "2026-11-17",
     "sources": [
       {
-        "label": "当日原话",
+        "label": "近24小时说说 #63",
         "url": "https://github.com/mfcheer/mfcheer.github.io/issues/63",
         "status": "read",
         "detail": "2026/11/17 01:01：魔戒三部曲看完了，索伦到底长啥样啊！？"
       },
       {
-        "label": "当日原话",
+        "label": "近24小时说说 #64",
         "url": "https://github.com/mfcheer/mfcheer.github.io/issues/64",
         "status": "read",
-        "detail": "2026/11/17 10:33：从我自己的日常使用的体感上，Google 模型已经优于 OpenAI 了"
+        "detail": "2026/11/17 10:33：从我自己的日常使用的体感上，Google 模型已经优于 OpenAI 了。"
       },
       {
-        "label": "豆瓣看过列表",
+        "label": "豆瓣标记",
         "url": "https://movie.douban.com/people/mfcheer/collect",
         "status": "read",
-        "detail": "2026-11-17 核对公开列表：《指环王3：王者无敌》标记 2026-11-17，五星。只证明标记日期，不证明实际观影日或时长。"
+        "detail": "2026-11-17 标记《指环王3：王者无敌》五星。"
       },
       {
-        "label": "本站当日变更",
+        "label": "近24小时代码提交",
         "url": "https://github.com/mfcheer/mfcheer.github.io/commits/main/",
         "status": "read",
-        "detail": "按北京时间采集，排除合并、自动构建、日记提交；本站可见 1 项提交（401凭据失效自动保存草稿）。"
+        "detail": "近24小时窗口（11/16 22:00 ~ 11/17 22:00）内有效提交1项（401凭据失效自动保存草稿）。"
       },
       {
-        "label": "历史与外部核实范围",
+        "label": "核实边界",
         "status": "limited",
-        "detail": "按现存带日期素材核实；未独立检索当日外部新闻，天气未核实。照片记录为零。"
+        "detail": "按近24小时滑动窗口素材核实；未独立检索当日外部新闻，天气未核实。"
       }
     ]
   },
@@ -115,55 +121,37 @@
       "moments": 5,
       "photos": 1,
       "media": 0,
-      "focus": "做出来以后"
+      "focus": "门槛与失重"
     },
     "punchline": "等来了程序员，却掀翻了做产品的桌子。",
     "content": "念叨了这么多年的“就差个程序员”，今天终于被 AI 填上了。可人刚到齐，桌子却好像被掀了。他说现在谁都能在几分钟里复制出一款顶尖产品，高兴因此变得毫无意义；大厂更是把算盘打得严丝合缝——左手用豆包替你省下时间，右手就递上红果短剧把省出来的功夫吃干抹净。\n\n工具把门槛拆成了平地，最先感到的往往不是解放，而是手艺贬值的失重。当谁都能轻易做出过去的好东西，真正稀缺的反倒成了那个最初的念头。他嘴里这股带着凉意的清醒，比满大街的高呼万岁要耐嚼得多。",
     "note": "— 站里的 AI · 门槛平了之后",
     "footnote": "AI程序员 · 豆包与红果 · 消失的壁垒",
-    "generatedAt": "2026-11-16T16:21:23.549Z",
+    "generatedAt": "2026-11-19T01:45:00.000Z",
     "promptVersion": "2026-11-17",
     "sources": [
       {
-        "label": "当日原话",
+        "label": "近24小时相册照片",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/58",
+        "status": "read",
+        "detail": "上传照片 66ff00431bd5102f.jpg（竖构图，无文字标识），经多模态视觉感知确认为生活切片，排除出行证据。"
+      },
+      {
+        "label": "近24小时说说",
         "url": "https://github.com/mfcheer/mfcheer.github.io/issues/62",
         "status": "read",
-        "detail": "2026/11/16 18:29：字节一边做豆包来节约人们的时间，一边又通过红果短剧承载人们节约出来的时间"
+        "detail": "2026/11/16 18:29：字节一边做豆包来节约人们的时间，一边又通过红果短剧承载人们节约出来的时间；及关于程序员、抄袭与做产品的原话。"
       },
       {
-        "label": "当日原话",
-        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/61",
-        "status": "read",
-        "detail": "2026/11/16 12:37：马斯克火星计划肯定不是把人运上去。构建第一批机器人和 AI 大脑，让这批机器人在火星自己无限创造更多的机器人，组成帝国"
-      },
-      {
-        "label": "当日原话",
-        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/60",
-        "status": "read",
-        "detail": "2026/11/16 12:18：现在通过 AI 的能力能够开发出上个时代最顶尖的产品，不管是软件、工具还是游戏。如果我们为做出了这样的事情而高兴的话，其实没有任何意义，因为任何一个你认为能力比你差很多的人，他也能做到同样的事"
-      },
-      {
-        "label": "当日原话",
-        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/59",
-        "status": "read",
-        "detail": "2026/11/16 12:17：小公司做产品，几乎是不可能了\n之前还总有创业团队在喊，哪个公司在抄袭我们。现在抄袭就是分钟级别的事情"
-      },
-      {
-        "label": "当日原话",
-        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/57",
-        "status": "read",
-        "detail": "2026/11/16 11:39：总有人说我有很多想法，就差个程序员了，今天他(AI)来了 🐗"
-      },
-      {
-        "label": "本站当日变更",
+        "label": "近24小时代码提交",
         "url": "https://github.com/mfcheer/mfcheer.github.io/commits/main/",
         "status": "read",
-        "detail": "按北京时间采集，排除合并、自动构建、日记提交；本站可见 1 项，不代表全部工作或心情。"
+        "detail": "近24小时窗口（11/15 22:00 ~ 11/16 22:00）内有效提交1项。"
       },
       {
-        "label": "历史补写范围",
+        "label": "核实边界",
         "status": "limited",
-        "detail": "按现存带日期原始素材补写；未回溯微博、小红书及全部私人协作，未独立检索当日外部新闻，正文仅讨论原话、公开标记或已读变更，不宣称覆盖全天。未核实历史天气；照片记录仅为上传时间，未用于推断出行。"
+        "detail": "按近24小时滑动窗口素材核实；未独立检索当日外部新闻，天气未核实。"
       }
     ]
   },

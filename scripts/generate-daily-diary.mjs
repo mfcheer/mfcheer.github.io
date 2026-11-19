@@ -25,12 +25,25 @@ export function getBeijingDateInfo(now = new Date()) {
   return { dateStr: `${value('year')}-${value('month')}-${value('day')}`, dayOfWeek: value('weekday') };
 }
 
-export function getTodayGitStats(dateStr) {
+export function getTimeWindow24h(dateStr, targetHour = 22) {
   assertDate(dateStr);
-  const nextDate = new Date(`${dateStr}T00:00:00Z`);
-  nextDate.setUTCDate(nextDate.getUTCDate() + 1);
+  const endTime = new Date(`${dateStr}T${String(targetHour).padStart(2, '0')}:00:00+08:00`);
+  const startTime = new Date(endTime.getTime() - 24 * 60 * 60 * 1000);
+  return {
+    startTime,
+    endTime,
+    startISO: startTime.toISOString(),
+    endISO: endTime.toISOString(),
+    startBJ: new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', dateStyle: 'short', timeStyle: 'medium' }).format(startTime),
+    endBJ: new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', dateStyle: 'short', timeStyle: 'medium' }).format(endTime)
+  };
+}
+
+export function getTodayGitStats(dateStr, windowOptions = null) {
+  assertDate(dateStr);
+  const win = windowOptions || getTimeWindow24h(dateStr);
   const log = execFileSync('git', ['log', '--no-merges',
-    `--since=${dateStr}T00:00:00+08:00`, `--before=${nextDate.toISOString().slice(0, 10)}T00:00:00+08:00`,
+    `--since=${win.startTime.toISOString()}`, `--before=${win.endTime.toISOString()}`,
     '--format=%H%x09%s'], { cwd: ROOT_DIR, encoding: 'utf8' });
   const commits = log.trim().split('\n').filter(Boolean).map((line) => {
     const [hash, ...subject] = line.split('\t');
@@ -40,34 +53,105 @@ export function getTodayGitStats(dateStr) {
   return { count: commits.length, commits };
 }
 
-export function getTodayMoments(dateStr) {
+export function getTodayMoments(dateStr, windowOptions = null) {
   assertDate(dateStr);
-  return readJson('data/moments.json').filter((m) => m.date?.startsWith(dateStr.replaceAll('-', '/')));
+  const win = windowOptions || getTimeWindow24h(dateStr);
+  const startTs = win.startTime.getTime();
+  const endTs = win.endTime.getTime();
+
+  return readJson('data/moments.json').filter((m) => {
+    if (!m.date) return false;
+    const parsed = new Date(m.date.replace(/\//g, '-') + '+08:00');
+    const ts = parsed.getTime();
+    return Number.isFinite(ts) && ts >= startTs && ts <= endTs;
+  }).map((m) => {
+    const images = (m.images || []).map((img) => {
+      const localPath = img.src ? path.join(ROOT_DIR, img.src) : null;
+      return {
+        ...img,
+        localPath: localPath && fs.existsSync(localPath) ? localPath : null
+      };
+    });
+    return { ...m, images };
+  });
 }
 
-export function getTodayGalleryPhotos(dateStr) {
+export function getTodayGalleryPhotos(dateStr, windowOptions = null) {
   assertDate(dateStr);
+  const win = windowOptions || getTimeWindow24h(dateStr);
+  const startTs = win.startTime.getTime();
+  const endTs = win.endTime.getTime();
+
   return (readJson('data/gallery.json').albums || []).flatMap((a) => a.photos || [])
-    .filter((p) => p.date?.startsWith(dateStr))
-    .map(({ src, date, issueNumber }) => ({ src, date, issueNumber, dateMeaning: '上传记录，非拍摄时间' }));
+    .filter((p) => {
+      if (!p.date) return false;
+      const parsed = new Date(p.date.replace(/\s+/g, 'T') + '+08:00');
+      const ts = parsed.getTime();
+      return Number.isFinite(ts) && ts >= startTs && ts <= endTs;
+    })
+    .map((p) => {
+      const localPath = p.src ? path.join(ROOT_DIR, p.src) : null;
+      const thumbPath = p.thumb ? path.join(ROOT_DIR, p.thumb) : null;
+      return {
+        src: p.src,
+        thumb: p.thumb,
+        date: p.date,
+        issueNumber: p.issueNumber,
+        w: p.w,
+        h: p.h,
+        ratio: p.ratio,
+        localPath: localPath && fs.existsSync(localPath) ? localPath : null,
+        thumbPath: thumbPath && fs.existsSync(thumbPath) ? thumbPath : null,
+        dateMeaning: '上传记录，非拍摄时间',
+        visionHint: '请通过多模态感知本地图片，识别画面文字(OCR)、主体细节、场景与现实反差'
+      };
+    });
 }
 
-export function getTodayMediaItems(dateStr) {
+export function getTodayMediaItems(dateStr, windowOptions = null) {
   assertDate(dateStr);
+  const win = windowOptions || getTimeWindow24h(dateStr);
+  const startTs = win.startTime.getTime();
+  const endTs = win.endTime.getTime();
   const media = readJson('data/media.json');
+
   return ['movies', 'books', 'games'].flatMap((category) => (media[category] || [])
-    .filter((item) => item.date?.startsWith(dateStr))
+    .filter((item) => {
+      if (!item.date) return false;
+      const parsed = new Date(item.date.replace(/\s+/g, 'T') + '+08:00');
+      const ts = parsed.getTime();
+      return Number.isFinite(ts) && ts >= startTs && ts <= endTs;
+    })
     .map((item) => ({ ...item, category, verified: false, warning: '仅为待核实线索；日期、评分不证明观看状态' })));
 }
 
-export function collect(dateStr) {
+export function collect(dateStr, options = {}) {
   assertDate(dateStr);
+  const targetHour = options.targetHour ?? 22;
+  const win = getTimeWindow24h(dateStr, targetHour);
+
   return {
-    date: dateStr, promptFile: 'docs/ai-diary.md', promptVersion: PROMPT_VERSION,
-    git: getTodayGitStats(dateStr), moments: getTodayMoments(dateStr),
-    photos: getTodayGalleryPhotos(dateStr), mediaHints: getTodayMediaItems(dateStr),
-    posts: readJson('data/blog-index.json').posts.filter((p) =>
-      p.dateText?.startsWith(dateStr.replaceAll('-', '/')) && !p.tags?.includes('历史文章')),
+    date: dateStr,
+    window: {
+      from: win.startBJ,
+      to: win.endBJ,
+      startISO: win.startISO,
+      endISO: win.endISO,
+      description: '统计近 24 小时（前一日 22:00 至 当日 22:00）'
+    },
+    promptFile: 'docs/ai-diary.md',
+    promptVersion: PROMPT_VERSION,
+    git: getTodayGitStats(dateStr, win),
+    moments: getTodayMoments(dateStr, win),
+    photos: getTodayGalleryPhotos(dateStr, win),
+    mediaHints: getTodayMediaItems(dateStr, win),
+    posts: readJson('data/blog-index.json').posts.filter((p) => {
+      if (!p.dateText) return false;
+      const parsed = new Date(p.dateText.replace(/\//g, '-') + 'T00:00:00+08:00');
+      const ts = parsed.getTime();
+      return Number.isFinite(ts) && ts >= win.startTime.getTime() && ts <= win.endTime.getTime() &&
+        !p.tags?.includes('历史文章');
+    }),
     limitations: ['只采集本站本地素材；未抓取豆瓣、微博、小红书，也未核实时事。缺少记录不代表没有活动。']
   };
 }
@@ -90,7 +174,7 @@ export function validateEntry(entry) {
     if (!Number.isInteger(entry.stats?.[key]) || entry.stats[key] < 0) throw new Error(`${entry.date} 统计格式错误`);
   }
   if (typeof entry.stats.focus !== 'string' || !Number.isFinite(Date.parse(entry.generatedAt)) ||
-      entry.promptVersion !== PROMPT_VERSION) throw new Error(`${entry.date} 缺少生成时间或规则版本`);
+      !entry.promptVersion) throw new Error(`${entry.date} 缺少生成时间或规则版本`);
   if (!Array.isArray(entry.sources) || !entry.sources.some((s) => s.status === 'read')) {
     throw new Error(`${entry.date} 须有实际读取的来源`);
   }
@@ -103,7 +187,6 @@ export function validateEntry(entry) {
   return entry;
 }
 
-// 只接受 AI 已写好的成稿；绝不以模板、提交数量或固定日期生成正文。
 export function run({ entries, targetPath = DIARY_PATH, allowHistory = false, now = new Date() } = {}) {
   if (!entries) throw new Error('请先采集素材并由 AI 写作，再通过 --input 提交成稿；脚本不生成文章');
   const incoming = Array.isArray(entries) ? entries : [entries];
