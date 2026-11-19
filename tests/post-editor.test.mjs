@@ -79,3 +79,16 @@ test('沉浸式文档画布、胶囊分段控制器与专注全屏模式样式�
     assert.ok(js.includes('syncTagsFromInput'), 'script.js 必须支持标签 Chips 联动');
     assert.ok(js.includes('autoResizeTitle'), 'script.js 必须支持大标题自适应展开');
 });
+
+test('移动端 Header 具备双层网格防覆盖排版与自适应微调', () => {
+    const css = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+    assert.ok(css.includes('grid-template-areas:'), 'styles.css 移动端 Header 必须采用 grid 布局');
+    assert.ok(css.includes('"left actions"'), 'styles.css 移动端首层必须为 left 与 actions 区域');
+    assert.ok(css.includes('"center center"'), 'styles.css 移动端次层必须独占 center 分段切换器，防止文字重叠');
+    assert.ok(css.includes('#postEditorZenToggle'), '移动端必须隐藏专注全屏切换按钮以节约视口');
+    assert.ok(css.includes('.save-text-short'), '移动端必须具备精简保存按钮文字 .save-text-short');
+
+    const js = fs.readFileSync(path.join(ROOT, 'script.js'), 'utf8');
+    assert.ok(js.includes('save-text-full'), 'script.js 必须输出桌面完整保存文字类');
+    assert.ok(js.includes('save-text-short'), 'script.js 必须输出移动端精炼保存文字类');
+});

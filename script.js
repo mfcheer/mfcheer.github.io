@@ -4417,11 +4417,12 @@ document.addEventListener("click", (e) => {
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
                         </button>
                         <button class="post-editor-meta-toggle" id="postEditorMetaToggle" type="button" title="文章参数与设置">
-                            <span>⚙️ 设置</span>
+                            <span class="meta-toggle-icon">⚙️</span>
+                            <span class="meta-toggle-text">设置</span>
                         </button>
                         <button class="post-editor-btn-primary" id="postEditorSaveBtn" type="button" title="保存并提交到 GitHub (⌘S)">
                             <span class="save-icon">☁️</span>
-                            <span class="save-text">保存并同步</span>
+                            <span class="save-text"><span class="save-text-full">保存并同步</span><span class="save-text-short">保存</span></span>
                         </button>
                         <button class="post-editor-close" id="postEditorCloseBtn" type="button" aria-label="关闭">&times;</button>
                     </div>
@@ -5087,7 +5088,7 @@ document.addEventListener("click", (e) => {
         if (saveBtn) {
             saveBtn.disabled = true;
             const textSpan = saveBtn.querySelector('.save-text');
-            if (textSpan) textSpan.textContent = '提交中…';
+            if (textSpan) textSpan.innerHTML = '<span class="save-text-full">提交中…</span><span class="save-text-short">提交中</span>';
         }
 
         try {
@@ -5145,7 +5146,7 @@ document.addEventListener("click", (e) => {
             if (saveBtn) {
                 saveBtn.disabled = false;
                 const textSpan = saveBtn.querySelector('.save-text');
-                if (textSpan) textSpan.textContent = '保存并同步';
+                if (textSpan) textSpan.innerHTML = '<span class="save-text-full">保存并同步</span><span class="save-text-short">保存</span>';
             }
         }
     }

@@ -5803,6 +5803,24 @@ button {
     font-weight: 500;
     color: var(--muted);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.save-text-short {
+    display: none;
+}
+
+.save-text-full {
+    display: inline;
+}
+
+.meta-toggle-icon {
+    display: inline-flex;
+}
+
+.meta-toggle-text {
+    display: inline;
 }
 
 .post-editor-status.is-saving {
@@ -6354,17 +6372,147 @@ button {
         width: 100% !important;
         border-left: none;
     }
+
+    /* 移动端两层防覆盖布局：首层状态指示与动作栏，次层分段切换器 */
     .post-editor-header {
-        padding: 10px 14px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "left actions"
+            "center center";
+        row-gap: 8px;
+        column-gap: 8px;
+        padding: 9px 12px;
     }
-    .post-editor-canvas,
-    .post-editor-preview-canvas {
-        padding: 16px 18px 60px;
+
+    .post-editor-header-left {
+        grid-area: left;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+        overflow: hidden;
     }
+
+    .post-editor-status {
+        font-size: 11.5px;
+        max-width: 96px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .post-editor-wordcount {
+        font-size: 11px;
+        padding: 1.5px 6px;
+        flex-shrink: 0;
+    }
+
+    .post-editor-header-actions {
+        grid-area: actions;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+    }
+
+    #postEditorZenToggle {
+        display: none !important;
+    }
+
+    .save-text-full {
+        display: none !important;
+    }
+
+    .save-text-short {
+        display: inline !important;
+    }
+
+    .meta-toggle-text {
+        display: none !important;
+    }
+
+    .post-editor-meta-toggle {
+        padding: 4px 7px;
+        font-size: 12px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .post-editor-btn-primary {
+        padding: 4px 10px;
+        font-size: 12px;
+        height: 28px;
+        gap: 4px;
+    }
+
+    .post-editor-close {
+        padding: 2px 6px;
+        font-size: 18px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .post-editor-header-center {
+        grid-area: center;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 2px;
+    }
+
+    .post-editor-segmented {
+        width: 100%;
+        display: flex;
+        padding: 2.5px;
+        background: var(--surface-subtle);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+    }
+
+    .post-editor-seg-btn {
+        flex: 1 1 50%;
+        text-align: center;
+        padding: 5px 0;
+        font-size: 12px;
+    }
+
     #postEditorModeSplit {
         display: none !important;
     }
+
     .post-editor-content-wrap.mode-split .post-editor-pane.is-preview {
+        display: none !important;
+    }
+
+    .post-editor-canvas,
+    .post-editor-preview-canvas {
+        padding: 14px 16px 60px;
+    }
+
+    .post-editor-title-input {
+        font-size: 22px;
+    }
+
+    .post-editor-toolbar {
+        overflow-x: auto;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 4px 6px;
+    }
+
+    .post-editor-toolbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .post-editor-gh-fallback {
         display: none !important;
     }
 }
