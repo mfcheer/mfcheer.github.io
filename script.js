@@ -767,6 +767,13 @@ function showMomentToast(msg, isSuccess = true) {
 
 
 function resetLightboxTransform() {
+    lbScale = 1;
+    lbTranslateX = 0;
+    lbTranslateY = 0;
+    lbIsPinching = false;
+    lbPinchStartDist = 0;
+    lbPinchStartScale = 1;
+    lbLastTapTime = 0;
     if (siteLightboxImg) {
         siteLightboxImg?.classList?.remove?.('is-zoomed');
         siteLightboxImg.style.transform = '';
@@ -776,6 +783,62 @@ function resetLightboxTransform() {
     if (siteLightbox) {
         siteLightbox.style.backgroundColor = '';
         siteLightbox.style.transition = '';
+    }
+}
+
+let lbScale = 1;
+let lbTranslateX = 0;
+let lbTranslateY = 0;
+let lbIsPinching = false;
+let lbPinchStartDist = 0;
+let lbPinchStartScale = 1;
+let lbPinchStartCenter = { x: 0, y: 0 };
+let lbPinchStartTranslate = { x: 0, y: 0 };
+let lbPanStart = { x: 0, y: 0, tx: 0, ty: 0 };
+let lbLastTapTime = 0;
+let lbLastTapPos = { x: 0, y: 0 };
+
+function clampLightboxTranslate() {
+    if (lbScale <= 1.02) {
+        lbTranslateX = 0;
+        lbTranslateY = 0;
+        return;
+    }
+    const vw = (typeof window !== 'undefined' && window.innerWidth) || 1024;
+    const vh = (typeof window !== 'undefined' && window.innerHeight) || 768;
+    const baseW = (siteLightboxImg && (siteLightboxImg.offsetWidth || (siteLightboxImg.getBoundingClientRect && siteLightboxImg.getBoundingClientRect().width / lbScale))) || (vw * 0.85);
+    const baseH = (siteLightboxImg && (siteLightboxImg.offsetHeight || (siteLightboxImg.getBoundingClientRect && siteLightboxImg.getBoundingClientRect().height / lbScale))) || (vh * 0.7);
+    const scaledW = baseW * lbScale;
+    const scaledH = baseH * lbScale;
+
+    if (scaledW > vw) {
+        const maxTx = (scaledW - vw) / 2 + 20;
+        lbTranslateX = Math.max(-maxTx, Math.min(maxTx, lbTranslateX));
+    } else {
+        lbTranslateX = 0;
+    }
+
+    if (scaledH > vh) {
+        const maxTy = (scaledH - vh) / 2 + 20;
+        lbTranslateY = Math.max(-maxTy, Math.min(maxTy, lbTranslateY));
+    } else {
+        lbTranslateY = 0;
+    }
+}
+
+function applyLightboxTransform(animated = false, duration = 0.28) {
+    if (!siteLightboxImg) return;
+    if (animated) {
+        siteLightboxImg.style.transition = `transform ${duration}s cubic-bezier(0.2, 0.9, 0.3, 1)`;
+    } else {
+        siteLightboxImg.style.transition = 'none';
+    }
+    if (lbScale <= 1.001 && Math.abs(lbTranslateX) < 0.5 && Math.abs(lbTranslateY) < 0.5) {
+        siteLightboxImg.style.transform = '';
+        siteLightboxImg.classList?.remove?.('is-zoomed');
+    } else {
+        siteLightboxImg.style.transform = `translate3d(${lbTranslateX.toFixed(2)}px, ${lbTranslateY.toFixed(2)}px, 0) scale(${lbScale.toFixed(4)})`;
+        siteLightboxImg.classList?.toggle?.('is-zoomed', lbScale > 1.05);
     }
 }
 
@@ -1024,7 +1087,7 @@ function createLightbox() {
         }
     });
 
-    // 移动端手势交互：跟手横滑切图、下拉手势关闭与上滑展开参数抽屉
+    // 移动端手势交互：跟手横滑切图、下拉手势关闭与上滑展开参数抽屉，双指捏合缩放（Pinch-to-zoom）与单指放大平移
     let touchStartX = 0;
     let touchStartY = 0;
     let touchStartTime = 0;
@@ -1037,21 +1100,92 @@ function createLightbox() {
             touchLock = null;
             return;
         }
+
+        // 双指触控：进入捏合缩放模式
+        if (e.touches && e.touches.length === 2) {
+            isTouchActive = false;
+            touchLock = 'pinch';
+            lbIsPinching = true;
+            const t1 = e.touches[0];
+            const t2 = e.touches[1];
+            lbPinchStartDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+            lbPinchStartScale = lbScale;
+            lbPinchStartCenter = { x: (t1.clientX + t2.clientX) / 2, y: (t1.clientY + t2.clientY) / 2 };
+            lbPinchStartTranslate = { x: lbTranslateX, y: lbTranslateY };
+            applyLightboxTransform(false);
+            return;
+        }
+
+        // 单指触控
         if (e.touches && e.touches.length === 1) {
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
             touchStartTime = Date.now();
+            lbIsPinching = false;
+
+            // 若当前已处于放大状态 (> 1.05)，单指行为切换为平移查看细节
+            if (lbScale > 1.05) {
+                touchLock = 'pan';
+                lbPanStart = { x: touchStartX, y: touchStartY, tx: lbTranslateX, ty: lbTranslateY };
+                isTouchActive = true;
+                applyLightboxTransform(false);
+                return;
+            }
+
+            // 原始 1x 比例下正常响应滑动与下拉手势
             touchLock = null;
             isTouchActive = true;
         } else {
             isTouchActive = false;
             touchLock = null;
-            resetLightboxTransform();
+            if (lbScale <= 1.05) resetLightboxTransform();
         }
     }, { passive: true });
 
     siteLightbox.addEventListener('touchmove', e => {
-        if (!isTouchActive || !e.touches || e.touches.length !== 1) return;
+        // 双指捏合缩放
+        if (lbIsPinching && e.touches && e.touches.length === 2) {
+            if (e.cancelable) e.preventDefault();
+            const t1 = e.touches[0];
+            const t2 = e.touches[1];
+            const currentDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+            const currentCenter = { x: (t1.clientX + t2.clientX) / 2, y: (t1.clientY + t2.clientY) / 2 };
+            if (lbPinchStartDist > 0) {
+                const ratio = currentDist / lbPinchStartDist;
+                let targetScale = lbPinchStartScale * ratio;
+                // 阻尼弹性范围：0.8 ~ 5.0
+                if (targetScale < 0.8) targetScale = 0.8 + (targetScale - 0.8) * 0.35;
+                if (targetScale > 4.5) targetScale = 4.5 + (targetScale - 4.5) * 0.35;
+
+                const vw = (typeof window !== 'undefined' && window.innerWidth) || 1024;
+                const vh = (typeof window !== 'undefined' && window.innerHeight) || 768;
+                const originX = (vw / 2) + lbPinchStartTranslate.x;
+                const originY = (vh / 2) + lbPinchStartTranslate.y;
+                const sRatio = targetScale / (lbPinchStartScale || 1);
+
+                lbScale = targetScale;
+                lbTranslateX = lbPinchStartTranslate.x + (currentCenter.x - lbPinchStartCenter.x) - (lbPinchStartCenter.x - originX) * (sRatio - 1);
+                lbTranslateY = lbPinchStartTranslate.y + (currentCenter.y - lbPinchStartCenter.y) - (lbPinchStartCenter.y - originY) * (sRatio - 1);
+
+                applyLightboxTransform(false);
+            }
+            return;
+        }
+
+        // 单指在放大状态下的拖拽平移 (Pan)
+        if (touchLock === 'pan' && isTouchActive && e.touches && e.touches.length === 1) {
+            if (e.cancelable) e.preventDefault();
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const dx = currentX - lbPanStart.x;
+            const dy = currentY - lbPanStart.y;
+            lbTranslateX = lbPanStart.tx + dx;
+            lbTranslateY = lbPanStart.ty + dy;
+            applyLightboxTransform(false);
+            return;
+        }
+
+        if (!isTouchActive || !e.touches || e.touches.length !== 1 || lbScale > 1.05) return;
         const currentX = e.touches[0].clientX;
         const currentY = e.touches[0].clientY;
         const dx = currentX - touchStartX;
@@ -1090,16 +1224,90 @@ function createLightbox() {
     }, { passive: false });
 
     siteLightbox.addEventListener('touchend', e => {
+        const touch = (e.changedTouches && e.changedTouches[0]) || (e.touches && e.touches[0]) || null;
+        const dx = touch ? touch.clientX - touchStartX : 0;
+        const dy = touch ? touch.clientY - touchStartY : 0;
+        const dt = Date.now() - touchStartTime;
+
+        // 双指松手释放
+        if (lbIsPinching) {
+            if (!e.touches || e.touches.length < 2) {
+                lbIsPinching = false;
+                touchLock = null;
+                if (lbScale < 1.08) {
+                    lbScale = 1;
+                    lbTranslateX = 0;
+                    lbTranslateY = 0;
+                    applyLightboxTransform(true, 0.26);
+                } else {
+                    if (lbScale > 4.0) lbScale = 4.0;
+                    clampLightboxTranslate();
+                    applyLightboxTransform(true, 0.24);
+                    if (e.touches && e.touches.length === 1) {
+                        isTouchActive = true;
+                        touchLock = 'pan';
+                        lbPanStart = { x: e.touches[0].clientX, y: e.touches[0].clientY, tx: lbTranslateX, ty: lbTranslateY };
+                    }
+                }
+            }
+            return;
+        }
+
+        // 放大状态下单指平移松手
+        if (touchLock === 'pan') {
+            touchLock = null;
+            isTouchActive = false;
+            if (Math.hypot(dx, dy) < 12 && dt < 280) {
+                const now = Date.now();
+                if (now - lbLastTapTime < 320 && Math.hypot(touch.clientX - lbLastTapPos.x, touch.clientY - lbLastTapPos.y) < 30) {
+                    lbLastTapTime = 0;
+                    lbScale = 1;
+                    lbTranslateX = 0;
+                    lbTranslateY = 0;
+                    applyLightboxTransform(true, 0.26);
+                    return;
+                }
+                lbLastTapTime = now;
+                lbLastTapPos = { x: touch.clientX, y: touch.clientY };
+            }
+            clampLightboxTranslate();
+            applyLightboxTransform(true, 0.24);
+            return;
+        }
+
         if (!isTouchActive) return;
         isTouchActive = false;
-        const touch = (e.changedTouches && e.changedTouches[0]) || null;
         if (!touch) {
             resetLightboxTransform();
             return;
         }
-        const dx = touch.clientX - touchStartX;
-        const dy = touch.clientY - touchStartY;
-        const dt = Date.now() - touchStartTime;
+
+        // 双击放大/还原检测 (Double-tap to zoom toggle)
+        if (Math.hypot(dx, dy) < 12 && dt < 280) {
+            const now = Date.now();
+            if (now - lbLastTapTime < 320 && Math.hypot(touch.clientX - lbLastTapPos.x, touch.clientY - lbLastTapPos.y) < 30) {
+                lbLastTapTime = 0;
+                if (lbScale > 1.2) {
+                    lbScale = 1;
+                    lbTranslateX = 0;
+                    lbTranslateY = 0;
+                    applyLightboxTransform(true, 0.26);
+                } else {
+                    const targetScale = 2.5;
+                    const vw = (typeof window !== 'undefined' && window.innerWidth) || 1024;
+                    const vh = (typeof window !== 'undefined' && window.innerHeight) || 768;
+                    lbScale = targetScale;
+                    lbTranslateX = (vw / 2 - touch.clientX) * 1.2;
+                    lbTranslateY = (vh / 2 - touch.clientY) * 1.2;
+                    clampLightboxTranslate();
+                    applyLightboxTransform(true, 0.26);
+                }
+                touchLock = null;
+                return;
+            }
+            lbLastTapTime = now;
+            lbLastTapPos = { x: touch.clientX, y: touch.clientY };
+        }
 
         // 下拉手势关闭：垂直下滑超过阈值或快速下滑手势
         if (touchLock === 'vertical-down' || (!touchLock && dy > 60 && dy > Math.abs(dx) * 1.2)) {
@@ -1152,9 +1360,35 @@ function createLightbox() {
 
     siteLightbox.addEventListener('touchcancel', () => {
         isTouchActive = false;
+        lbIsPinching = false;
         touchLock = null;
-        resetLightboxTransform();
+        if (lbScale < 1.08) {
+            resetLightboxTransform();
+        } else {
+            clampLightboxTranslate();
+            applyLightboxTransform(true, 0.24);
+        }
     });
+
+    siteLightbox.addEventListener('wheel', e => {
+        if (!siteLightbox || !siteLightbox.classList.contains('is-open')) return;
+        if (e.target.closest && e.target.closest('.site-photo-info-card')) return;
+        if (e.ctrlKey) {
+            if (e.cancelable) e.preventDefault();
+            const factor = Math.exp(-e.deltaY * 0.012);
+            let targetScale = lbScale * factor;
+            if (targetScale < 1.0) {
+                lbScale = 1;
+                lbTranslateX = 0;
+                lbTranslateY = 0;
+            } else {
+                if (targetScale > 5.0) targetScale = 5.0;
+                lbScale = targetScale;
+                clampLightboxTranslate();
+            }
+            applyLightboxTransform(false);
+        }
+    }, { passive: false });
 }
 
 function openSitePhotos(photos, index = 0, trigger = document.activeElement) {

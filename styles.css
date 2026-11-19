@@ -5287,7 +5287,7 @@ a.post-tag:hover {
    ============================================================ */
 .post-lightbox-img.is-zoomed {
     cursor: grab;
-    transform: scale(2) !important;
+    touch-action: none;
 }
 
 .post-lightbox-img.is-zoomed:active {

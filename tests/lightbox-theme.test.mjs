@@ -251,3 +251,112 @@ test("相册灯箱交互：上滑手势展开参数抽屉与底部文本点击�
     listeners.touchend({ changedTouches: [{ clientX: 102, clientY: 100 }] });
     assert.equal(infoCard.hidden, false, "手指轻度垂直上滑成功拉起参数面板");
 });
+
+test("灯箱照片交互：支持双指捏合缩放（Pinch-to-zoom）、放大单指平移与双击快速缩放", () => {
+    const listeners = {};
+    const imgStyle = {};
+    const boxStyle = {};
+    const img = {
+        style: imgStyle,
+        classList: {
+            _classes: new Set(),
+            add(c) { this._classes.add(c); },
+            remove(c) { this._classes.delete(c); },
+            contains(c) { return this._classes.has(c); },
+            toggle(c, v) { if (v) this.add(c); else this.remove(c); }
+        },
+        onload: null, onerror: null, alt: "", src: "", hidden: false, removeAttribute() {}
+    };
+    const box = {
+        classList: {
+            _classes: new Set(["post-lightbox", "is-open"]),
+            add(c) { this._classes.add(c); },
+            remove(c) { this._classes.delete(c); },
+            contains(c) { return this._classes.has(c); },
+            toggle(c, v) { if (v) this.add(c); else this.remove(c); }
+        },
+        style: boxStyle,
+        setAttribute() {}, appendChild() {}, addEventListener(name, fn) { listeners[name] = fn; },
+        querySelector(sel) {
+            if (sel === "img") return img;
+            if (sel === ".post-lightbox-caption") return { textContent: "" };
+            if (sel === ".post-lightbox-close") return { onclick: null };
+            if (sel === ".site-photo-prev") return { onclick: null };
+            if (sel === ".site-photo-next") return { onclick: null };
+            if (sel === ".site-photo-status") return { textContent: "" };
+            if (sel === ".site-photo-counter") return { textContent: "" };
+            if (sel === ".site-photo-delete") return { hidden: true };
+            if (sel === ".site-photo-info-card") return { hidden: true };
+            return null;
+        },
+        querySelectorAll() { return []; }
+    };
+
+    const sandbox = {
+        siteLightbox: null,
+        siteLightboxImg: img,
+        siteLightboxCaption: { textContent: "" },
+        sitePhotos: [{ src: "/p1.jpg" }, { src: "/p2.jpg" }],
+        sitePhotoIndex: 0,
+        siteImageRequest: 0,
+        siteLastActiveElement: null,
+        siteDeleteBusy: false,
+        isSiteOwner: () => false,
+        deleteSiteContent() {},
+        document: {
+            body: { classList: { add() {}, remove() {} }, appendChild() {} },
+            createElement: () => box,
+            activeElement: null
+        },
+        window: { addEventListener() {}, innerWidth: 1000, innerHeight: 800 },
+        Date, Math, clearTimeout, setTimeout, Image: class { constructor() {} }
+    };
+
+    const ctx = vm.createContext(sandbox);
+    const lightboxSnippet = scriptSource.slice(
+        scriptSource.indexOf("function resetLightboxTransform"),
+        scriptSource.indexOf("function openSitePhotos")
+    );
+    vm.runInContext(lightboxSnippet, ctx);
+    vm.runInContext("createLightbox();", ctx);
+
+    // 1. 模拟双指触控捏合缩放（Pinch-to-zoom）
+    listeners.touchstart({ touches: [{ clientX: 100, clientY: 100 }, { clientX: 200, clientY: 100 }], target: box });
+    listeners.touchmove({ touches: [{ clientX: 50, clientY: 100 }, { clientX: 250, clientY: 100 }], cancelable: true, preventDefault() {} });
+    assert.ok(img.style.transform.includes("scale("), "双指捏合移动触发缩放变换");
+    assert.ok(img.classList.contains("is-zoomed"), "放大后包含 is-zoomed 类");
+
+    // 2. 双指松手后维持放大状态
+    listeners.touchend({ touches: [] });
+    assert.ok(img.style.transform.includes("scale(2"), "松手后稳定在放大倍率");
+    assert.ok(img.classList.contains("is-zoomed"), "松手后依然保持 is-zoomed");
+
+    // 3. 放大状态下单指拖拽平移照片细节 (Pan)
+    listeners.touchstart({ touches: [{ clientX: 200, clientY: 200 }], target: box });
+    listeners.touchmove({ touches: [{ clientX: 230, clientY: 220 }], cancelable: true, preventDefault() {} });
+    listeners.touchend({ changedTouches: [{ clientX: 230, clientY: 220 }], touches: [] });
+    assert.ok(img.style.transform.includes("translate3d("), "放大状态下单指拖拽平移图片");
+
+    // 4. 重置为 1x
+    vm.runInContext("resetLightboxTransform();", ctx);
+    assert.equal(img.style.transform, "", "重置后 transform 清空");
+    assert.equal(img.classList.contains("is-zoomed"), false, "重置后清除 is-zoomed");
+
+    // 5. 模拟双击快速放大与还原 (Double-tap to zoom)
+    listeners.touchstart({ touches: [{ clientX: 300, clientY: 300 }], target: box });
+    listeners.touchend({ changedTouches: [{ clientX: 300, clientY: 300 }], touches: [] });
+
+    listeners.touchstart({ touches: [{ clientX: 302, clientY: 301 }], target: box });
+    listeners.touchend({ changedTouches: [{ clientX: 302, clientY: 301 }], touches: [] });
+
+    assert.ok(img.style.transform.includes("scale(2.5"), "双击成功放大至 2.5 倍");
+    assert.ok(img.classList.contains("is-zoomed"), "双击放大后打上 is-zoomed 状态");
+
+    // 再次双击还原
+    listeners.touchstart({ touches: [{ clientX: 300, clientY: 300 }], target: box });
+    listeners.touchend({ changedTouches: [{ clientX: 300, clientY: 300 }], touches: [] });
+    listeners.touchstart({ touches: [{ clientX: 302, clientY: 301 }], target: box });
+    listeners.touchend({ changedTouches: [{ clientX: 302, clientY: 301 }], touches: [] });
+
+    assert.equal(img.classList.contains("is-zoomed"), false, "再次双击还原清除 is-zoomed");
+});
