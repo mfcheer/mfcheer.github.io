@@ -4394,7 +4394,7 @@ document.addEventListener("click", (e) => {
         drawerBackdrop.setAttribute('aria-hidden', 'true');
 
         drawerBackdrop.innerHTML = `
-            <div class="post-editor-drawer glass" role="dialog" aria-modal="true" aria-labelledby="postEditorTitle">
+            <div class="post-editor-drawer" role="dialog" aria-modal="true" aria-labelledby="postEditorTitle">
                 <div class="post-editor-header">
                     <div class="post-editor-header-left">
                         <span class="post-editor-badge">✎ 在线编辑</span>
@@ -4670,66 +4670,105 @@ document.addEventListener("click", (e) => {
 
     async function openPostEditorDrawer() {
         ensureDrawer();
-        drawerBackdrop.classList.add('is-open');
-        document.body.classList.add('drawer-open');
+        drawerBackdrop.classList.add("is-open");
+        document.body.classList.add("drawer-open");
         isDrawerOpen = true;
 
-        const auth = typeof getMomentAuth === 'function' ? getMomentAuth() : null;
+        const titleInput = document.getElementById("postEditorFieldTitle");
+        const tagsInput = document.getElementById("postEditorFieldTags");
+        const dateInput = document.getElementById("postEditorFieldDate");
+        const summaryInput = document.getElementById("postEditorFieldSummary");
+        const textarea = document.getElementById("postEditorTextarea");
+        const saveBtn = document.getElementById("postEditorSaveBtn");
+
+        // 立即从页面 DOM / 已有元数据填入初始值，避免等待期间空置
+        if (titleInput && !titleInput.value) titleInput.value = postTitle;
+        if (tagsInput && !tagsInput.value) {
+            const pageTags = Array.from(document.querySelectorAll(".post-tags .post-tag")).map(el => el.textContent.replace(/^#/, "").trim()).filter(Boolean);
+            if (pageTags.length) tagsInput.value = pageTags.join(", ");
+        }
+        if (dateInput && !dateInput.value) {
+            const pageDate = document.querySelector(".post-meta span:first-child")?.textContent?.trim() || "";
+            if (pageDate) dateInput.value = pageDate;
+        }
+
+        const hasDraft = checkAndApplyLocalDraft("");
+        if (!hasDraft && textarea && !textarea.value) {
+            textarea.placeholder = "正在从 GitHub 获取最新 Markdown 源码...";
+        }
+
+        const auth = typeof getMomentAuth === "function" ? getMomentAuth() : null;
         if (!auth || !auth.token) {
-            setStatus('未登录', 'error');
+            setStatus("未登录", "error");
+            if (saveBtn) saveBtn.disabled = true;
             return;
         }
 
-        setStatus('正在从 GitHub 获取最新源码...', 'saving');
-        const saveBtn = document.getElementById('postEditorSaveBtn');
+        setStatus("正在从 GitHub 获取最新源码...", "saving");
         if (saveBtn) saveBtn.disabled = true;
 
         try {
-            const cleanPath = sourcePath.replace(/^\/+/, '');
-            const res = await fetch(`https://api.github.com/repos/mfcheer/mfcheer.github.io/contents/${encodeURIComponent(cleanPath).replace(/%2F/g, '/')}`, {
-                cache: 'no-store',
-                headers: {
-                    'Authorization': `Bearer ${auth.token}`,
-                    'Accept': 'application/vnd.github+json'
-                }
-            });
+            const cleanPath = sourcePath.replace(/^\/+/, "");
+            let fetchedRaw = "";
+            let sha = null;
 
-            if (!res.ok) {
-                if (res.status === 401) {
-                    if (typeof clearMomentAuth === 'function') clearMomentAuth();
-                    throw new Error('登录凭据已过期，请重新登录授权');
+            try {
+                const res = await fetch(`https://api.github.com/repos/mfcheer/mfcheer.github.io/contents/${encodeURIComponent(cleanPath).replace(/%2F/g, "/")}`, {
+                    cache: "no-store",
+                    headers: {
+                        "Authorization": `Bearer ${auth.token}`,
+                        "Accept": "application/vnd.github+json"
+                    }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    sha = data.sha;
+                    fetchedRaw = decodeBase64Utf8(data.content);
+                } else if (res.status === 401) {
+                    if (typeof clearMomentAuth === "function") clearMomentAuth();
+                    throw new Error("登录凭据已过期，请重新登录授权");
+                } else {
+                    throw new Error(`GitHub API 返回 ${res.status}`);
                 }
-                throw new Error(`获取文章源码失败 (${res.status})`);
+            } catch (apiErr) {
+                if (apiErr.message && apiErr.message.includes("登录凭据已过期")) {
+                    throw apiErr;
+                }
+                // 容灾兜底：尝试拉取 raw.githubusercontent.com 公开源文件
+                try {
+                    const rawRes = await fetch(`https://raw.githubusercontent.com/mfcheer/mfcheer.github.io/main/${cleanPath}`, { cache: "no-store" });
+                    if (rawRes.ok) {
+                        fetchedRaw = await rawRes.text();
+                    } else {
+                        throw apiErr;
+                    }
+                } catch (_) {
+                    throw apiErr;
+                }
             }
 
-            const data = await res.json();
-            currentSha = data.sha;
-            originalRawContent = decodeBase64Utf8(data.content);
+            currentSha = sha;
+            originalRawContent = fetchedRaw;
 
             const parsed = parseMarkdownWithFrontMatter(originalRawContent);
             originalFrontMatterRaw = parsed.frontMatterRaw;
             parsedMeta = parsed.meta;
 
-            const titleInput = document.getElementById('postEditorFieldTitle');
-            const tagsInput = document.getElementById('postEditorFieldTags');
-            const dateInput = document.getElementById('postEditorFieldDate');
-            const summaryInput = document.getElementById('postEditorFieldSummary');
-            const textarea = document.getElementById('postEditorTextarea');
-
             if (titleInput) titleInput.value = parsed.meta.title || postTitle;
-            if (tagsInput) tagsInput.value = Array.isArray(parsed.meta.tags) ? parsed.meta.tags.join(', ') : (parsed.meta.tags || '');
-            if (dateInput) dateInput.value = parsed.meta.date || '';
-            if (summaryInput) summaryInput.value = parsed.meta.summary || '';
-            if (textarea) textarea.value = parsed.body;
+            if (tagsInput) tagsInput.value = Array.isArray(parsed.meta.tags) ? parsed.meta.tags.join(", ") : (parsed.meta.tags || "");
+            if (dateInput) dateInput.value = parsed.meta.date || "";
+            if (summaryInput) summaryInput.value = parsed.meta.summary || "";
+            if (textarea && (!hasDraft || !textarea.value)) textarea.value = parsed.body;
 
             checkAndApplyLocalDraft(parsed.body);
 
             updateWordCount();
-            setStatus('就绪');
+            setStatus("就绪");
             if (saveBtn) saveBtn.disabled = false;
         } catch (err) {
-            setStatus(err.message || '加载源码失败', 'error');
-            showAlert(`加载文章源码失败: ${err.message}`, '重试', () => openPostEditorDrawer());
+            setStatus(err.message || "加载源码失败", "error");
+            showAlert(`加载文章源码失败: ${err.message}`, "重试", () => openPostEditorDrawer());
         }
     }
 
@@ -4784,7 +4823,7 @@ document.addEventListener("click", (e) => {
     }
 
     async function handleSavePost() {
-        if (isSaving || !currentSha) return;
+        if (isSaving) return;
         const auth = typeof getMomentAuth === 'function' ? getMomentAuth() : null;
         if (!auth || !auth.token) {
             showMomentToast('登录失效，请重新授权', false);

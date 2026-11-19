@@ -23,6 +23,8 @@
     --surface-hover: rgba(255, 255, 255, 0.96);
     --surface-card: rgba(255, 255, 255, 0.65);
     --surface-subtle: rgba(0, 0, 0, 0.03);
+    --card-bg: rgba(255, 255, 255, 0.96);
+    --text-primary: var(--text);
     --text: #1d1d1f;
     --text-secondary: #515154;
     --muted: #86868b;
@@ -42,6 +44,8 @@
     --surface-hover: rgba(32, 34, 42, 0.95);
     --surface-card: rgba(26, 27, 34, 0.6);
     --surface-subtle: rgba(255, 255, 255, 0.04);
+    --card-bg: #121317;
+    --text-primary: var(--text);
     --text: #f5f5f7;
     --text-secondary: #c7c7cc;
     --muted: #8e8e93;
@@ -5709,9 +5713,11 @@ button {
     right: 0;
     bottom: 0;
     width: min(840px, 92vw);
-    background: var(--card-bg, rgba(255, 255, 255, 0.96));
+    height: 100%;
+    background: var(--card-bg, var(--bg));
+    color: var(--text);
     border-left: 1px solid var(--line);
-    box-shadow: -10px 0 36px rgba(0, 0, 0, 0.16);
+    box-shadow: -10px 0 36px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     transform: translateX(100%);
@@ -5725,13 +5731,14 @@ button {
 }
 
 .post-editor-header {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
     padding: 14px 20px;
-    border-bottom: 1px solid var(--line-subtle);
-    background: var(--surface, rgba(255, 255, 255, 0.85));
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     z-index: 10;
@@ -5753,7 +5760,7 @@ button {
     font-size: 11px;
     font-weight: 600;
     color: var(--accent);
-    background: var(--accent-bg, rgba(59, 130, 246, 0.1));
+    background: var(--accent-bg);
     border-radius: 6px;
     white-space: nowrap;
 }
@@ -5762,7 +5769,7 @@ button {
     margin: 0;
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -5808,22 +5815,22 @@ button {
     font-size: 12.5px;
     font-weight: 500;
     color: var(--text-secondary);
-    background: var(--surface-subtle, rgba(0, 0, 0, 0.04));
-    border: 1px solid var(--line-subtle);
+    background: var(--surface-subtle);
+    border: 1px solid var(--line);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.15s ease;
 }
 
 .post-editor-btn-secondary:hover {
-    color: var(--text-primary);
-    background: var(--line-subtle);
+    color: var(--text);
+    background: var(--surface-hover);
 }
 
 .post-editor-btn-secondary.is-active {
     color: var(--accent);
-    background: var(--accent-bg, rgba(59, 130, 246, 0.1));
-    border-color: rgba(59, 130, 246, 0.3);
+    background: var(--accent-bg);
+    border-color: var(--accent);
 }
 
 .post-editor-btn-primary {
@@ -5834,17 +5841,17 @@ button {
     font-size: 12.5px;
     font-weight: 600;
     color: #fff;
-    background: var(--accent, #3b82f6);
+    background: var(--accent);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+    box-shadow: 0 2px 8px rgba(0, 113, 227, 0.35);
     transition: all 0.15s ease;
 }
 
 .post-editor-btn-primary:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.45);
+    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.45);
 }
 
 .post-editor-btn-primary:disabled {
@@ -5866,27 +5873,30 @@ button {
 }
 
 .post-editor-close:hover {
-    color: var(--text-primary);
+    color: var(--text);
 }
 
 .post-editor-body {
-    flex: 1;
+    flex: 1 1 0%;
+    min-height: 0;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     padding: 0;
+    background: var(--bg);
 }
 
 .post-editor-alert {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
     padding: 8px 20px;
     font-size: 12px;
-    background: var(--accent-bg, rgba(59, 130, 246, 0.08));
-    border-bottom: 1px solid var(--line-subtle);
-    color: var(--text-primary);
+    background: var(--accent-bg);
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
 }
 
 .post-editor-alert-btn {
@@ -5900,8 +5910,9 @@ button {
 }
 
 .post-editor-meta-panel {
-    border-bottom: 1px solid var(--line-subtle);
-    background: var(--surface-subtle, rgba(0, 0, 0, 0.02));
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface-subtle);
 }
 
 .post-editor-meta-summary {
@@ -5961,8 +5972,8 @@ button {
     font-size: 12.5px;
     border: 1px solid var(--line);
     border-radius: 6px;
-    background: var(--surface, rgba(255, 255, 255, 0.9));
-    color: var(--text-primary);
+    background: var(--surface-card, var(--surface));
+    color: var(--text);
     font-family: inherit;
     outline: none;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -5971,16 +5982,17 @@ button {
 .post-editor-input:focus,
 .post-editor-textarea-sm:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-bg, rgba(59, 130, 246, 0.15));
+    box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
 .post-editor-toolbar {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 4px;
     padding: 8px 20px;
-    border-bottom: 1px solid var(--line-subtle);
-    background: var(--surface, rgba(255, 255, 255, 0.5));
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
     flex-wrap: wrap;
 }
 
@@ -6001,9 +6013,9 @@ button {
 }
 
 .post-editor-tool:hover {
-    color: var(--text-primary);
-    background: var(--surface-subtle, rgba(0, 0, 0, 0.05));
-    border-color: var(--line-subtle);
+    color: var(--text);
+    background: var(--surface-subtle);
+    border-color: var(--line);
 }
 
 .post-editor-toolbar-spacer {
@@ -6024,15 +6036,18 @@ button {
 }
 
 .post-editor-content-wrap {
-    flex: 1;
+    flex: 1 1 0%;
+    min-height: 0;
     display: flex;
-    min-height: 420px;
     position: relative;
     overflow: hidden;
+    background: transparent;
 }
 
 .post-editor-pane {
-    flex: 1;
+    flex: 1 1 0%;
+    min-height: 0;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -6044,23 +6059,30 @@ button {
 }
 
 .post-editor-textarea {
+    flex: 1 1 auto;
     width: 100%;
     height: 100%;
+    min-height: 0;
     border: none;
     outline: none;
     padding: 16px 20px;
     font-size: 14px;
     line-height: 1.7;
     font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
-    color: var(--text-primary);
+    color: var(--text);
     background: transparent;
     resize: none;
     box-sizing: border-box;
 }
 
+.post-editor-textarea::placeholder {
+    color: var(--muted);
+    opacity: 0.7;
+}
+
 .post-editor-pane.is-preview {
-    border-left: 1px solid var(--line-subtle);
-    background: var(--surface-subtle, rgba(0, 0, 0, 0.015));
+    border-left: 1px solid var(--line);
+    background: var(--surface-subtle);
     overflow-y: auto;
     padding: 16px 24px;
     box-sizing: border-box;
@@ -6070,6 +6092,7 @@ button {
     margin: 0;
     padding: 0;
     border-top: none;
+    color: var(--text);
 }
 
 @media (max-width: 768px) {

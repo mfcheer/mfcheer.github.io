@@ -51,3 +51,15 @@ test('script.js 包含文章在线编辑模块与 GitHub Contents 提交闭环',
     assert.ok(js.includes('applyOptimisticPostUpdate'), 'script.js 必须具备文章原地乐观更新 applyOptimisticPostUpdate');
     assert.ok(js.includes('mfcheer_open_post_editor'), 'script.js 必须支持 OAuth 登录后回跳并自动打开编辑器');
 });
+
+test("styles.css 与 script.js 具备深色模式自适应与源码拉取双轨容灾保护", () => {
+    const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+    assert.ok(css.includes("--card-bg: rgba(255, 255, 255, 0.96);"), "浅色模式必须定义 --card-bg");
+    assert.ok(css.includes("--card-bg: #121317;"), "深色模式必须定义暗色 --card-bg，严防白屏穿透");
+    assert.ok(css.includes("background: var(--card-bg, var(--bg));"), "抽屉背景必须采用主题自适应变量");
+    assert.ok(!css.includes("background: var(--card-bg, rgba(255, 255, 255, 0.96));"), "抽屉背景绝不可硬编码回退为纯白");
+
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("raw.githubusercontent.com"), "script.js 必须具备 raw.githubusercontent.com 降级容灾兜底");
+    assert.ok(js.includes("titleInput.value = postTitle"), "script.js 必须在网络拉取期间从 DOM 立即预填标题");
+});
