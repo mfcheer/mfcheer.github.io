@@ -4385,6 +4385,9 @@ document.addEventListener("click", (e) => {
 
     window.openPostEditorDrawer = openPostEditorDrawer;
 
+    let currentMode = 'edit';
+    let isZenMode = false;
+
     function ensureDrawer() {
         if (drawerBackdrop) return;
 
@@ -4397,13 +4400,25 @@ document.addEventListener("click", (e) => {
             <div class="post-editor-drawer" role="dialog" aria-modal="true" aria-labelledby="postEditorTitle">
                 <div class="post-editor-header">
                     <div class="post-editor-header-left">
-                        <span class="post-editor-badge">✎ 在线编辑</span>
-                        <h3 class="post-editor-title" id="postEditorTitle">${escapeHtml(postTitle)}</h3>
-                        <span class="post-editor-status" id="postEditorStatus"></span>
+                        <span class="post-editor-status-dot" id="postEditorStatusDot" title="状态指示"></span>
+                        <span class="post-editor-status" id="postEditorStatus">就绪</span>
+                        <span class="post-editor-wordcount" id="postEditorWordCount">0 字</span>
+                        <span class="post-editor-header-title-text" id="postEditorTitle" style="display:none;">${escapeHtml(postTitle)}</span>
+                    </div>
+                    <div class="post-editor-header-center">
+                        <div class="post-editor-segmented" role="tablist">
+                            <button class="post-editor-seg-btn is-active" id="postEditorModeEdit" type="button" data-mode="edit">编辑</button>
+                            <button class="post-editor-seg-btn" id="postEditorModeSplit" type="button" data-mode="split">分栏</button>
+                            <button class="post-editor-seg-btn" id="postEditorPreviewToggle" type="button" data-mode="preview">预览</button>
+                        </div>
                     </div>
                     <div class="post-editor-header-actions">
-                        <span class="post-editor-wordcount" id="postEditorWordCount">0 字</span>
-                        <button class="post-editor-btn-secondary" id="postEditorPreviewToggle" type="button" title="切换实时预览">预览</button>
+                        <button class="post-editor-btn-icon" id="postEditorZenToggle" type="button" title="切换专注模式 (Zen Mode)" aria-label="切换专注模式">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        </button>
+                        <button class="post-editor-meta-toggle" id="postEditorMetaToggle" type="button" title="文章参数与设置">
+                            <span>⚙️ 设置</span>
+                        </button>
                         <button class="post-editor-btn-primary" id="postEditorSaveBtn" type="button" title="保存并提交到 GitHub (⌘S)">
                             <span class="save-icon">☁️</span>
                             <span class="save-text">保存并同步</span>
@@ -4418,51 +4433,64 @@ document.addEventListener("click", (e) => {
                 </div>
 
                 <div class="post-editor-body">
-                    <details class="post-editor-meta-panel" id="postEditorMetaPanel">
-                        <summary class="post-editor-meta-summary">
-                            <span>⚙️ 文章元数据 (Front Matter: 标题 / 标签 / 摘要 / 日期)</span>
-                            <span class="post-editor-summary-arrow">›</span>
-                        </summary>
-                        <div class="post-editor-meta-fields">
-                            <div class="post-editor-field">
-                                <label for="postEditorFieldTitle">标题 (title)</label>
-                                <input type="text" id="postEditorFieldTitle" class="post-editor-input" />
-                            </div>
-                            <div class="post-editor-field-row">
-                                <div class="post-editor-field">
-                                    <label for="postEditorFieldTags">标签 (tags，逗号隔开)</label>
-                                    <input type="text" id="postEditorFieldTags" class="post-editor-input" placeholder="例如: 前端, 思考, 设计" />
-                                </div>
-                                <div class="post-editor-field">
-                                    <label for="postEditorFieldDate">发布日期 (date)</label>
-                                    <input type="text" id="postEditorFieldDate" class="post-editor-input" />
-                                </div>
-                            </div>
-                            <div class="post-editor-field">
-                                <label for="postEditorFieldSummary">摘要 (summary)</label>
-                                <textarea id="postEditorFieldSummary" class="post-editor-textarea-sm" rows="2" placeholder="文章概要，留空则保持原样"></textarea>
-                            </div>
-                        </div>
-                    </details>
-
-                    <div class="post-editor-toolbar">
-                        <button type="button" class="post-editor-tool" data-action="bold" title="粗体 (⌘B)"><strong>B</strong></button>
-                        <button type="button" class="post-editor-tool" data-action="italic" title="斜体 (⌘I)"><em>I</em></button>
-                        <button type="button" class="post-editor-tool" data-action="heading" title="标题">H</button>
-                        <button type="button" class="post-editor-tool" data-action="link" title="插入链接">🔗</button>
-                        <button type="button" class="post-editor-tool" data-action="quote" title="引用">❝</button>
-                        <button type="button" class="post-editor-tool" data-action="code" title="代码块">‹/›</button>
-                        <button type="button" class="post-editor-tool" data-action="list" title="无序列表">•-</button>
-                        <div class="post-editor-toolbar-spacer"></div>
-                        <a id="postEditorGhLink" href="https://github.com/mfcheer/mfcheer.github.io/edit/main/${encodeURIComponent(sourcePath).replace(/%2F/g, '/')}" target="_blank" rel="noreferrer" class="post-editor-gh-fallback">在 GitHub 网页编辑 ↗</a>
-                    </div>
-
-                    <div class="post-editor-content-wrap" id="postEditorContentWrap">
+                    <div class="post-editor-content-wrap mode-edit" id="postEditorContentWrap">
                         <div class="post-editor-pane is-editor">
-                            <textarea id="postEditorTextarea" class="post-editor-textarea" placeholder="在此编辑 Markdown 正文..." spellcheck="false"></textarea>
+                            <div class="post-editor-canvas">
+                                <div class="post-editor-toolbar">
+                                    <button type="button" class="post-editor-tool" data-action="bold" title="粗体 (⌘B)"><strong>B</strong></button>
+                                    <button type="button" class="post-editor-tool" data-action="italic" title="斜体 (⌘I)"><em>I</em></button>
+                                    <button type="button" class="post-editor-tool" data-action="heading" title="二级标题 (## )">H2</button>
+                                    <button type="button" class="post-editor-tool" data-action="h3" title="三级标题 (### )">H3</button>
+                                    <span class="post-editor-tool-divider"></span>
+                                    <button type="button" class="post-editor-tool" data-action="quote" title="引用 (> )">❝</button>
+                                    <button type="button" class="post-editor-tool" data-action="code" title="代码块 (&#96;&#96;&#96;)">‹/›</button>
+                                    <button type="button" class="post-editor-tool" data-action="list" title="无序列表 (- )">•-</button>
+                                    <button type="button" class="post-editor-tool" data-action="link" title="插入链接">🔗</button>
+                                    <div class="post-editor-toolbar-spacer"></div>
+                                    <a id="postEditorGhLink" href="https://github.com/mfcheer/mfcheer.github.io/edit/main/${encodeURIComponent(sourcePath).replace(/%2F/g, '/')}" target="_blank" rel="noreferrer" class="post-editor-gh-fallback">在 GitHub 网页编辑 ↗</a>
+                                </div>
+
+                                <textarea id="postEditorFieldTitle" class="post-editor-canvas-title" rows="1" placeholder="在此输入文章标题..." spellcheck="false"></textarea>
+
+                                <div class="post-editor-tags-wrap" id="postEditorTagsWrap">
+                                    <div class="post-editor-tags-list" id="postEditorTagsList"></div>
+                                    <div class="post-editor-tag-add-wrap">
+                                        <input type="text" id="postEditorTagInput" class="post-editor-tag-input" placeholder="+ 标签..." />
+                                    </div>
+                                </div>
+
+                                <details class="post-editor-meta-panel" id="postEditorMetaPanel">
+                                    <summary class="post-editor-meta-summary">
+                                        <span>⚙️ 文章元数据与底层参数 (Front Matter)</span>
+                                        <span class="post-editor-summary-arrow">›</span>
+                                    </summary>
+                                    <div class="post-editor-meta-fields">
+                                        <div class="post-editor-field-row">
+                                            <div class="post-editor-field">
+                                                <label for="postEditorFieldTags">标签文本 (逗号分隔)</label>
+                                                <input type="text" id="postEditorFieldTags" class="post-editor-input" placeholder="例如: 前端, 思考, 设计" />
+                                            </div>
+                                            <div class="post-editor-field">
+                                                <label for="postEditorFieldDate">发布日期 (date)</label>
+                                                <input type="text" id="postEditorFieldDate" class="post-editor-input" />
+                                            </div>
+                                        </div>
+                                        <div class="post-editor-field">
+                                            <label for="postEditorFieldSummary">摘要 (summary)</label>
+                                            <textarea id="postEditorFieldSummary" class="post-editor-textarea-sm" rows="2" placeholder="文章概要，留空则保持原样"></textarea>
+                                        </div>
+                                    </div>
+                                </details>
+
+                                <div class="post-editor-canvas-divider"></div>
+
+                                <textarea id="postEditorTextarea" class="post-editor-textarea" placeholder="在此编辑 Markdown 正文..." spellcheck="false"></textarea>
+                            </div>
                         </div>
                         <div class="post-editor-pane is-preview" id="postEditorPreviewPane" style="display:none;">
-                            <div class="post-body post-editor-preview-content" id="postEditorPreviewContent"></div>
+                            <div class="post-editor-preview-canvas">
+                                <div class="post-body post-editor-preview-content" id="postEditorPreviewContent"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -4480,11 +4508,66 @@ document.addEventListener("click", (e) => {
             }
         });
 
+        // 视图分段控制
+        const editModeBtn = drawerBackdrop.querySelector('#postEditorModeEdit');
+        const splitModeBtn = drawerBackdrop.querySelector('#postEditorModeSplit');
         const previewBtn = drawerBackdrop.querySelector('#postEditorPreviewToggle');
-        previewBtn.addEventListener('click', togglePreview);
+        if (editModeBtn) editModeBtn.addEventListener('click', () => setEditorMode('edit'));
+        if (splitModeBtn) splitModeBtn.addEventListener('click', () => setEditorMode('split'));
+        if (previewBtn) previewBtn.addEventListener('click', () => setEditorMode(currentMode === 'preview' ? 'edit' : 'preview'));
+
+        // 专注模式与高级设置
+        const zenBtn = drawerBackdrop.querySelector('#postEditorZenToggle');
+        if (zenBtn) zenBtn.addEventListener('click', toggleZenMode);
+
+        const metaToggle = drawerBackdrop.querySelector('#postEditorMetaToggle');
+        if (metaToggle) {
+            metaToggle.addEventListener('click', () => {
+                const panel = document.getElementById('postEditorMetaPanel');
+                if (panel) {
+                    panel.open = !panel.open;
+                    if (panel.open) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        }
 
         const saveBtn = drawerBackdrop.querySelector('#postEditorSaveBtn');
         saveBtn.addEventListener('click', handleSavePost);
+
+        // 标题输入联动
+        const titleInput = drawerBackdrop.querySelector('#postEditorFieldTitle');
+        if (titleInput) {
+            titleInput.addEventListener('input', () => {
+                autoResizeTitle();
+                scheduleAutoSave();
+            });
+        }
+
+        // 标签输入与 Chips 联动
+        const tagsInput = drawerBackdrop.querySelector('#postEditorFieldTags');
+        if (tagsInput) {
+            tagsInput.addEventListener('input', () => {
+                syncTagsFromInput();
+                scheduleAutoSave();
+            });
+        }
+
+        const tagAddInput = drawerBackdrop.querySelector('#postEditorTagInput');
+        if (tagAddInput) {
+            tagAddInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    const val = tagAddInput.value.trim().replace(/^#/, '');
+                    if (val) addTag(val);
+                    tagAddInput.value = '';
+                }
+            });
+            tagAddInput.addEventListener('blur', () => {
+                const val = tagAddInput.value.trim().replace(/^#/, '');
+                if (val) addTag(val);
+                tagAddInput.value = '';
+            });
+        }
 
         const textarea = drawerBackdrop.querySelector('#postEditorTextarea');
         textarea.addEventListener('input', () => {
@@ -4513,11 +4596,143 @@ document.addEventListener("click", (e) => {
             });
         });
 
+        // 分栏模式同步滚动
+        const editorPane = drawerBackdrop.querySelector('.post-editor-pane.is-editor');
+        const previewPane = drawerBackdrop.querySelector('#postEditorPreviewPane');
+        let isSyncingScroll = false;
+        if (editorPane && previewPane) {
+            editorPane.addEventListener('scroll', () => {
+                if (currentMode !== 'split' || isSyncingScroll) return;
+                isSyncingScroll = true;
+                const maxEditScroll = editorPane.scrollHeight - editorPane.clientHeight;
+                const maxPrevScroll = previewPane.scrollHeight - previewPane.clientHeight;
+                if (maxEditScroll > 0 && maxPrevScroll > 0) {
+                    previewPane.scrollTop = (editorPane.scrollTop / maxEditScroll) * maxPrevScroll;
+                }
+                setTimeout(() => { isSyncingScroll = false; }, 20);
+            });
+        }
+
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && isDrawerOpen) {
                 closePostEditorDrawer();
             }
         });
+    }
+
+    function setEditorMode(mode) {
+        currentMode = mode;
+        const wrap = document.getElementById('postEditorContentWrap');
+        const editPane = drawerBackdrop ? drawerBackdrop.querySelector('.post-editor-pane.is-editor') : null;
+        const previewPane = document.getElementById('postEditorPreviewPane');
+        const editBtn = document.getElementById('postEditorModeEdit');
+        const splitBtn = document.getElementById('postEditorModeSplit');
+        const prevBtn = document.getElementById('postEditorPreviewToggle');
+
+        [editBtn, splitBtn, prevBtn].forEach(b => b && b.classList.remove('is-active'));
+
+        if (mode === 'edit') {
+            if (editBtn) editBtn.classList.add('is-active');
+            previewActive = false;
+            if (wrap) wrap.className = 'post-editor-content-wrap mode-edit';
+            if (editPane) editPane.style.display = 'flex';
+            if (previewPane) previewPane.style.display = 'none';
+        } else if (mode === 'split') {
+            if (splitBtn) splitBtn.classList.add('is-active');
+            previewActive = true;
+            if (wrap) wrap.className = 'post-editor-content-wrap mode-split';
+            if (editPane) editPane.style.display = 'flex';
+            if (previewPane) previewPane.style.display = 'block';
+            renderPreview();
+        } else if (mode === 'preview') {
+            if (prevBtn) prevBtn.classList.add('is-active');
+            previewActive = true;
+            if (wrap) wrap.className = 'post-editor-content-wrap mode-preview';
+            if (editPane) editPane.style.display = 'none';
+            if (previewPane) previewPane.style.display = 'block';
+            renderPreview();
+        }
+    }
+
+    function togglePreview() {
+        if (currentMode === 'edit') {
+            setEditorMode('preview');
+        } else {
+            setEditorMode('edit');
+        }
+    }
+
+    function toggleZenMode() {
+        isZenMode = !isZenMode;
+        const drawer = drawerBackdrop ? drawerBackdrop.querySelector('.post-editor-drawer') : null;
+        const zenBtn = document.getElementById('postEditorZenToggle');
+        if (isZenMode) {
+            if (drawer) drawer.classList.add('is-zen');
+            if (zenBtn) {
+                zenBtn.classList.add('is-active');
+                zenBtn.setAttribute('title', '退出全屏模式');
+                zenBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>';
+            }
+        } else {
+            if (drawer) drawer.classList.remove('is-zen');
+            if (zenBtn) {
+                zenBtn.classList.remove('is-active');
+                zenBtn.setAttribute('title', '切换专注模式 (Zen Mode)');
+                zenBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+            }
+        }
+    }
+
+    function syncTagsFromInput() {
+        const tagsInput = document.getElementById('postEditorFieldTags');
+        const list = document.getElementById('postEditorTagsList');
+        if (!tagsInput || !list) return;
+        const raw = tagsInput.value || '';
+        const tags = raw.split(',').map(s => s.trim()).filter(Boolean);
+        list.innerHTML = '';
+        tags.forEach(tag => {
+            const chip = document.createElement('span');
+            chip.className = 'post-editor-tag-chip';
+            chip.innerHTML = `<span class="chip-text">#${escapeHtml(tag)}</span><button type="button" class="chip-del" title="移除标签">&times;</button>`;
+            chip.querySelector('.chip-del').addEventListener('click', (e) => {
+                e.stopPropagation();
+                removeTag(tag);
+            });
+            list.appendChild(chip);
+        });
+    }
+
+    function addTag(newTag) {
+        const tagsInput = document.getElementById('postEditorFieldTags');
+        if (!tagsInput) return;
+        const clean = newTag.replace(/^#/, '').trim();
+        if (!clean) return;
+        const tags = (tagsInput.value || '').split(',').map(s => s.trim()).filter(Boolean);
+        if (!tags.includes(clean)) {
+            tags.push(clean);
+            tagsInput.value = tags.join(', ');
+            syncTagsFromInput();
+            scheduleAutoSave();
+        }
+    }
+
+    function removeTag(tagToRemove) {
+        const tagsInput = document.getElementById('postEditorFieldTags');
+        if (!tagsInput) return;
+        const tags = (tagsInput.value || '').split(',').map(s => s.trim()).filter(Boolean);
+        const filtered = tags.filter(t => t !== tagToRemove);
+        tagsInput.value = filtered.join(', ');
+        syncTagsFromInput();
+        scheduleAutoSave();
+    }
+
+    function autoResizeTitle() {
+        const titleInput = document.getElementById('postEditorFieldTitle');
+        if (!titleInput) return;
+        titleInput.style.height = 'auto';
+        titleInput.style.height = Math.max(42, titleInput.scrollHeight) + 'px';
+        const headerTitle = document.getElementById('postEditorTitle');
+        if (headerTitle) headerTitle.textContent = titleInput.value.trim() || postTitle;
     }
 
     function insertToolMarkdown(action) {
@@ -4539,7 +4754,12 @@ document.addEventListener("click", (e) => {
                 cursorOffset = selected ? replacement.length : 1;
                 break;
             case 'heading':
-                replacement = `\n## ${selected || '标题'}\n`;
+            case 'h2':
+                replacement = `\n## ${selected || '二级标题'}\n`;
+                cursorOffset = replacement.length;
+                break;
+            case 'h3':
+                replacement = `\n### ${selected || '三级标题'}\n`;
                 cursorOffset = replacement.length;
                 break;
             case 'link':
@@ -4573,24 +4793,6 @@ document.addEventListener("click", (e) => {
         updateWordCount();
         scheduleAutoSave();
         if (previewActive) renderPreview();
-    }
-
-    function togglePreview() {
-        previewActive = !previewActive;
-        const previewBtn = document.getElementById('postEditorPreviewToggle');
-        const previewPane = document.getElementById('postEditorPreviewPane');
-        const wrap = document.getElementById('postEditorContentWrap');
-
-        if (previewActive) {
-            previewBtn.classList.add('is-active');
-            previewPane.style.display = 'block';
-            wrap.classList.add('preview-mode');
-            renderPreview();
-        } else {
-            previewBtn.classList.remove('is-active');
-            previewPane.style.display = 'none';
-            wrap.classList.remove('preview-mode');
-        }
     }
 
     function renderPreview() {
@@ -4629,7 +4831,8 @@ document.addEventListener("click", (e) => {
         const val = textarea.value || '';
         const cjk = (val.match(/[\u4e00-\u9fff\u3400-\u4dbf]/g) || []).length;
         const latin = (val.replace(/[\u4e00-\u9fff\u3400-\u4dbf]/g, ' ').match(/[A-Za-z0-9]+/g) || []).length;
-        wcEl.textContent = `${cjk + latin} 字`;
+        const total = cjk + latin;
+        wcEl.textContent = `${total.toLocaleString()} 字`;
     }
 
     function scheduleAutoSave() {
@@ -4657,15 +4860,21 @@ document.addEventListener("click", (e) => {
                 timestamp: Date.now()
             };
             localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-            setStatus('草稿已暂存');
+            setStatus('草稿已暂存', 'draft');
         } catch (e) {}
     }
 
     function setStatus(msg, type = '') {
         const el = document.getElementById('postEditorStatus');
-        if (!el) return;
-        el.textContent = msg;
-        el.className = 'post-editor-status' + (type ? ` is-${type}` : '');
+        const dot = document.getElementById('postEditorStatusDot');
+        if (el) {
+            el.textContent = msg;
+            el.className = 'post-editor-status' + (type ? ` is-${type}` : '');
+        }
+        if (dot) {
+            const dotType = type || (msg.includes('草稿') ? 'draft' : (msg.includes('同步') || msg.includes('正在') ? 'saving' : (msg.includes('失败') || msg.includes('未登录') ? 'error' : 'ready')));
+            dot.className = 'post-editor-status-dot is-' + dotType;
+        }
     }
 
     async function openPostEditorDrawer() {
@@ -4682,10 +4891,16 @@ document.addEventListener("click", (e) => {
         const saveBtn = document.getElementById("postEditorSaveBtn");
 
         // 立即从页面 DOM / 已有元数据填入初始值，避免等待期间空置
-        if (titleInput && !titleInput.value) titleInput.value = postTitle;
+        if (titleInput && !titleInput.value) {
+            titleInput.value = postTitle;
+            autoResizeTitle();
+        }
         if (tagsInput && !tagsInput.value) {
             const pageTags = Array.from(document.querySelectorAll(".post-tags .post-tag")).map(el => el.textContent.replace(/^#/, "").trim()).filter(Boolean);
-            if (pageTags.length) tagsInput.value = pageTags.join(", ");
+            if (pageTags.length) {
+                tagsInput.value = pageTags.join(", ");
+                syncTagsFromInput();
+            }
         }
         if (dateInput && !dateInput.value) {
             const pageDate = document.querySelector(".post-meta span:first-child")?.textContent?.trim() || "";
@@ -4704,7 +4919,7 @@ document.addEventListener("click", (e) => {
             return;
         }
 
-        setStatus("正在从 GitHub 获取最新源码...", "saving");
+        setStatus("同步中", "saving");
         if (saveBtn) saveBtn.disabled = true;
 
         try {
@@ -4755,8 +4970,14 @@ document.addEventListener("click", (e) => {
             originalFrontMatterRaw = parsed.frontMatterRaw;
             parsedMeta = parsed.meta;
 
-            if (titleInput) titleInput.value = parsed.meta.title || postTitle;
-            if (tagsInput) tagsInput.value = Array.isArray(parsed.meta.tags) ? parsed.meta.tags.join(", ") : (parsed.meta.tags || "");
+            if (titleInput) {
+                titleInput.value = parsed.meta.title || postTitle;
+                autoResizeTitle();
+            }
+            if (tagsInput) {
+                tagsInput.value = Array.isArray(parsed.meta.tags) ? parsed.meta.tags.join(", ") : (parsed.meta.tags || "");
+                syncTagsFromInput();
+            }
             if (dateInput) dateInput.value = parsed.meta.date || "";
             if (summaryInput) summaryInput.value = parsed.meta.summary || "";
             if (textarea && (!hasDraft || !textarea.value)) textarea.value = parsed.body;
@@ -4764,7 +4985,7 @@ document.addEventListener("click", (e) => {
             checkAndApplyLocalDraft(parsed.body);
 
             updateWordCount();
-            setStatus("就绪");
+            setStatus("就绪", "ready");
             if (saveBtn) saveBtn.disabled = false;
         } catch (err) {
             setStatus(err.message || "加载源码失败", "error");
@@ -4788,9 +5009,17 @@ document.addEventListener("click", (e) => {
                 });
                 const textarea = document.getElementById('postEditorTextarea');
                 if (textarea) textarea.value = draft.body;
-                if (draft.title) document.getElementById('postEditorFieldTitle').value = draft.title;
-                if (draft.tags) document.getElementById('postEditorFieldTags').value = draft.tags;
-                if (draft.summary) document.getElementById('postEditorFieldSummary').value = draft.summary;
+                if (draft.title && document.getElementById('postEditorFieldTitle')) {
+                    document.getElementById('postEditorFieldTitle').value = draft.title;
+                    autoResizeTitle();
+                }
+                if (draft.tags && document.getElementById('postEditorFieldTags')) {
+                    document.getElementById('postEditorFieldTags').value = draft.tags;
+                    syncTagsFromInput();
+                }
+                if (draft.summary && document.getElementById('postEditorFieldSummary')) {
+                    document.getElementById('postEditorFieldSummary').value = draft.summary;
+                }
             }
         } catch (e) {}
     }

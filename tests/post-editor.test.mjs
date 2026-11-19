@@ -63,3 +63,19 @@ test("styles.css 与 script.js 具备深色模式自适应与源码拉取双轨�
     assert.ok(js.includes("raw.githubusercontent.com"), "script.js 必须具备 raw.githubusercontent.com 降级容灾兜底");
     assert.ok(js.includes("titleInput.value = postTitle"), "script.js 必须在网络拉取期间从 DOM 立即预填标题");
 });
+
+test('沉浸式文档画布、胶囊分段控制器与专注全屏模式样式与交互就绪', () => {
+    const css = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+    assert.ok(css.includes('.post-editor-segmented'), 'styles.css 必须包含胶囊分段控制器 .post-editor-segmented');
+    assert.ok(css.includes('.post-editor-drawer.is-zen'), 'styles.css 必须包含专注全屏模式 .post-editor-drawer.is-zen');
+    assert.ok(css.includes('.post-editor-canvas-title'), 'styles.css 必须包含画布无边框大标题 .post-editor-canvas-title');
+    assert.ok(css.includes('.post-editor-tag-chip'), 'styles.css 必须包含标签 Chips .post-editor-tag-chip');
+    assert.ok(css.includes('.post-editor-status-dot'), 'styles.css 必须包含微状态呼吸指示灯 .post-editor-status-dot');
+
+    const js = fs.readFileSync(path.join(ROOT, 'script.js'), 'utf8');
+    assert.ok(js.includes('postEditorModeEdit'), 'script.js 必须支持编辑视图切换');
+    assert.ok(js.includes('postEditorModeSplit'), 'script.js 必须支持分栏对照视图切换');
+    assert.ok(js.includes('postEditorZenToggle'), 'script.js 必须支持专注模式切换');
+    assert.ok(js.includes('syncTagsFromInput'), 'script.js 必须支持标签 Chips 联动');
+    assert.ok(js.includes('autoResizeTitle'), 'script.js 必须支持大标题自适应展开');
+});
