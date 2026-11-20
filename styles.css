@@ -6556,3 +6556,177 @@ button {
         display: none !important;
     }
 }
+
+/* ==========================================================
+   首页苹果风反重力星尘启动器（Home Stardust Launcher）
+   ========================================================== */
+.home-launcher-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #fbfbfd;
+    color: #1d1d1f;
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.75s;
+    will-change: opacity, transform, filter;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+}
+
+[data-theme="dark"] .home-launcher-overlay {
+    background: #000000;
+    color: #ffffff;
+}
+
+.home-launcher-overlay.launch-exit {
+    opacity: 0;
+    filter: blur(20px);
+    transform: scale(1.02);
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.home-launcher-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.home-launcher-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 24px;
+    pointer-events: none;
+}
+
+.home-launcher-monogram {
+    position: relative;
+    width: 66px;
+    height: 66px;
+    margin-bottom: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    transform: scale(0.85);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-launcher-monogram.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+[data-theme="dark"] .home-launcher-monogram {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.home-launcher-monogram img {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+.home-launcher-pulse {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #34c759;
+    border: 2px solid #fbfbfd;
+}
+
+[data-theme="dark"] .home-launcher-pulse {
+    border-color: #000000;
+}
+
+.home-launcher-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin: 0;
+    color: #1d1d1f;
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(8px);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-launcher-title.visible {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+}
+
+[data-theme="dark"] .home-launcher-title {
+    color: #ffffff;
+}
+
+.home-launcher-skip-hint {
+    position: absolute;
+    bottom: max(24px, env(safe-area-inset-bottom, 24px));
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+    z-index: 3;
+    pointer-events: auto;
+}
+
+.home-launcher-skip-hint:hover {
+    color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .home-launcher-skip-hint {
+    color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .home-launcher-skip-hint:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.08);
+}

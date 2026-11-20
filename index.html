@@ -70,9 +70,38 @@
     <meta name="apple-mobile-web-app-title" content="mfcheer">
 
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css?v=1.3.86">
+    <link rel="stylesheet" href="styles.css?v=1.3.87">
 </head>
 <body>
+    <!-- 极简苹果风 · 反重力星尘首页启动器（仅会话首次进入主页时呈现） -->
+    <div id="homeLauncherOverlay" class="home-launcher-overlay" style="display:none;" aria-hidden="true">
+        <canvas id="homeLauncherCanvas" class="home-launcher-canvas"></canvas>
+        <div class="home-launcher-content">
+            <div class="home-launcher-monogram">
+                <img src="avatar.jpg" alt="mfcheer" onerror="this.style.display='none'">
+                <div class="home-launcher-pulse"></div>
+            </div>
+            <div class="home-launcher-title">mfcheer</div>
+        </div>
+        <div class="home-launcher-skip-hint">
+            <span>轻触跳过</span>
+            <span style="opacity:0.4;">·</span>
+            <span id="homeLauncherCountdown">2.0s</span>
+        </div>
+    </div>
+    <script>
+        (function() {
+            try {
+                if (!sessionStorage.getItem("mfcheer_home_launched")) {
+                    var el = document.getElementById("homeLauncherOverlay");
+                    if (el) {
+                        el.style.display = "flex";
+                        el.removeAttribute("aria-hidden");
+                    }
+                }
+            } catch(e) {}
+        })();
+    </script>
     <!-- 微信聊天分享专用缩略图锚点（不可见，确保微信客户端 100% 抓取到 1:1 正方形高清头像，不被 16:9 横图拉伸） -->
     <div style="display:none;font-size:0;line-height:0;max-height:0;overflow:hidden;mso-hide:all;" aria-hidden="true">
         <img src="https://mfcheer.github.io/assets/wechat-share.jpg" width="400" height="400" alt="mfcheer">
@@ -482,6 +511,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=1.3.75"></script>
+    <script src="script.js?v=1.3.76"></script>
 </body>
 </html>

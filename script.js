@@ -5531,3 +5531,232 @@ document.addEventListener("click", (e) => {
         return `---\n${newLines.join('\n')}\n---\n\n${body.replace(/^\n+/, '')}`;
     }
 })();
+
+/* ==========================================================
+   首页星尘启动器（Home Stardust Launcher）
+   - 纯原生 Canvas 2D，零外部依赖
+   - 仅在会话首次进入主页时呈现，2.0s 优雅从容揭幕
+   ========================================================== */
+function initHomeLauncher() {
+    const overlay = document.getElementById("homeLauncherOverlay");
+    const canvas = document.getElementById("homeLauncherCanvas");
+    if (!overlay || !canvas) return;
+
+    try {
+        if (sessionStorage.getItem("mfcheer_home_launched")) {
+            overlay.remove();
+            return;
+        }
+        sessionStorage.setItem("mfcheer_home_launched", "1");
+    } catch(e) {}
+
+    const ctx = canvas.getContext("2d");
+    let dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    let width = 0;
+    let height = 0;
+    let animationFrameId = null;
+
+    function getOptimalParticleCount() {
+        const screenArea = window.innerWidth * window.innerHeight;
+        if (window.innerWidth < 600) {
+            return Math.floor(Math.min(240, Math.max(180, screenArea / 3000)));
+        } else {
+            return Math.floor(Math.min(420, Math.max(280, screenArea / 2800)));
+        }
+    }
+
+    let particleCount = getOptimalParticleCount();
+    let particles = [];
+    let startTime = performance.now();
+    let durationMs = 2000;
+    let countdownInterval = null;
+
+    class AmbientStardust {
+        constructor() {
+            this.init();
+        }
+
+        init() {
+            const cx = width / 2;
+            const cy = height / 2;
+            const angle = Math.random() * Math.PI * 2;
+            const maxR = Math.hypot(width, height) * 0.55;
+            const minR = Math.min(width, height) * 0.12;
+            const r = Math.random() * (maxR - minR) + minR;
+
+            this.radius = r;
+            this.angle = angle;
+
+            const depthRand = Math.random();
+            if (depthRand < 0.2) {
+                this.depth = "near";
+                this.size = (Math.random() * 0.7 + 1.6) * dpr;
+                this.baseAlpha = Math.random() * 0.35 + 0.45;
+                this.speedFactor = 1.05;
+            } else if (depthRand < 0.7) {
+                this.depth = "mid";
+                this.size = (Math.random() * 0.5 + 1.0) * dpr;
+                this.baseAlpha = Math.random() * 0.3 + 0.35;
+                this.speedFactor = 0.9;
+            } else {
+                this.depth = "far";
+                this.size = (Math.random() * 0.4 + 0.6) * dpr;
+                this.baseAlpha = Math.random() * 0.2 + 0.2;
+                this.speedFactor = 0.7;
+            }
+
+            this.direction = Math.random() > 0.45 ? 1 : -1;
+            this.radialSpeed = (Math.random() * 0.45 + 0.35) * this.speedFactor * dpr;
+            this.angularSpeed = (Math.random() * 0.004 + 0.002) * this.direction * this.speedFactor;
+            this.alpha = 0;
+
+            const centerSafeZone = Math.min(width, height) * 0.18;
+            this.stopRadius = Math.random() * (width * 0.3) + centerSafeZone;
+
+            this.x = cx + Math.cos(this.angle) * this.radius;
+            this.y = cy + Math.sin(this.angle) * this.radius;
+        }
+
+        update(elapsed, cx, cy) {
+            if (elapsed < 450) {
+                this.alpha = Math.min(this.baseAlpha, (elapsed / 450) * this.baseAlpha);
+            }
+            if (elapsed < 1600) {
+                let distToStop = this.radius - this.stopRadius;
+                if (distToStop > 0) {
+                    let factor = Math.min(1, Math.max(0.12, distToStop / (width * 0.5)));
+                    this.radius -= this.radialSpeed * factor * 1.5;
+                }
+                this.angle += this.angularSpeed;
+            } else {
+                this.radius += 0.5 * dpr;
+                this.angle += this.angularSpeed * 0.5;
+                this.y -= 0.4 * dpr;
+                let fadeProgress = (elapsed - 1600) / 400;
+                this.alpha = Math.max(0, this.baseAlpha * (1 - fadeProgress));
+            }
+
+            this.x = cx + Math.cos(this.angle) * this.radius;
+            this.y = cy + Math.sin(this.angle) * this.radius;
+        }
+
+        draw(isDark) {
+            if (this.alpha <= 0.01) return;
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+
+            if (isDark) {
+                ctx.fillStyle = "rgba(255, 255, 255, " + this.alpha + ")";
+                ctx.shadowColor = "rgba(255, 255, 255, 0.45)";
+                ctx.shadowBlur = this.size * 1.4;
+            } else {
+                ctx.fillStyle = "rgba(29, 29, 31, " + (this.alpha * 0.85) + ")";
+                ctx.shadowColor = "rgba(0, 0, 0, 0.12)";
+                ctx.shadowBlur = this.size * 0.8;
+            }
+
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+        width = window.innerWidth * dpr;
+        height = window.innerHeight * dpr;
+        canvas.width = width;
+        canvas.height = height;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
+        particleCount = getOptimalParticleCount();
+    }
+
+    function initParticles() {
+        particles = [];
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new AmbientStardust());
+        }
+    }
+
+    const monogram = overlay.querySelector(".home-launcher-monogram");
+    const title = overlay.querySelector(".home-launcher-title");
+    const countdownEl = document.getElementById("homeLauncherCountdown");
+
+    function animate(now) {
+        const elapsed = now - startTime;
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const cx = width / 2;
+        const cy = height / 2;
+
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update(elapsed, cx, cy);
+            particles[i].draw(isDark);
+        }
+
+        if (elapsed > 200 && monogram) {
+            monogram.classList.add("visible");
+        }
+        if (elapsed > 400 && title) {
+            title.classList.add("visible");
+        }
+
+        if (elapsed < durationMs) {
+            animationFrameId = requestAnimationFrame(animate);
+        } else {
+            dismiss();
+        }
+    }
+
+    function startTimer() {
+        clearInterval(countdownInterval);
+        startTime = performance.now();
+        let remaining = durationMs;
+        if (countdownEl) countdownEl.textContent = (remaining / 1000).toFixed(1) + "s";
+
+        countdownInterval = setInterval(() => {
+            remaining -= 100;
+            if (remaining > 0) {
+                if (countdownEl) countdownEl.textContent = (remaining / 1000).toFixed(1) + "s";
+            } else {
+                if (countdownEl) countdownEl.textContent = "0.0s";
+                clearInterval(countdownInterval);
+            }
+        }, 100);
+    }
+
+    let isDismissed = false;
+    function dismiss() {
+        if (isDismissed) return;
+        isDismissed = true;
+        clearInterval(countdownInterval);
+        overlay.classList.add("launch-exit");
+        setTimeout(() => {
+            cancelAnimationFrame(animationFrameId);
+            overlay.remove();
+        }, 800);
+    }
+
+    window.addEventListener("resize", () => {
+        if (isDismissed) return;
+        resize();
+        initParticles();
+    });
+
+    overlay.addEventListener("click", () => {
+        dismiss();
+    });
+
+    resize();
+    initParticles();
+    startTimer();
+    animationFrameId = requestAnimationFrame(animate);
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initHomeLauncher);
+} else {
+    initHomeLauncher();
+}
