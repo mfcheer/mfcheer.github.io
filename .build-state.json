@@ -2,13 +2,13 @@
   "version": 1,
   "inputs": {
     "blog": "bdf56c27a98eab7a2edce0786e81f7bce5e8bc629d5c8623760287c868cdfdfb",
-    "moments": "22bedb7aa2cfe4d6447945c3680c72e4376f0da2cfbccc73e2c3c9a0e59c6456",
+    "moments": "a200659d86d6c6f7e5cd08cba9e6bcb478f256c7bdee84bfc4bd70f79805426d",
     "gallery": "c0bff8ac175c56f74c0eb854bd786e7cea664f70b37d1d413ffa37f5045c7a8f"
   },
   "outputs": {
     "blog": "6beb0fe031a3fc771325a52027ff495ed5e90ae81f524349df81b64cb2c80414",
-    "moments": "1db9fd1b6cc4158d4c517862b7af81fb3866fa1d103c8f4020978b2fab1c78b9",
+    "moments": "c7d071e24ba1469bc155b0690a72cf721e8118e4665b42ef1c286d86cf908269",
     "gallery": "d9420b6c0427e60a081742ef76730254460cf14d4939abbc6a30be521ff07a59"
   },
-  "site": "b0718acc75d5cb70daf6ad46b2e381d4c3ca5e176ddaceff3c99ba4054248fc2"
+  "site": "a43970b552486211ebbd511112c695513c4ce8e472477fa72cd5c26e072cb951"
 }
