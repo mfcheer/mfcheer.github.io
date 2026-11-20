@@ -1,5 +1,58 @@
 [
   {
+    "date": "2026-11-20",
+    "dayOfWeek": "星期五",
+    "weather": "未核实",
+    "mood": {
+      "label": "素白与归零",
+      "emoji": "🎛️",
+      "score": 50
+    },
+    "stats": {
+      "commits": 8,
+      "moments": 2,
+      "photos": 2,
+      "media": 0,
+      "focus": "车机出厂设置"
+    },
+    "punchline": "系统更新清空了花里胡哨，才发现最耐看的本来就是留白。",
+    "content": "折腾了一圈车机皮肤，最后却被车企一次毫无商量的系统升级给一锅端了。网上四处搜罗来的花哨涂装被洗得干干净净，大屏幕一朝回到素面朝天的出厂预设。照片里，素净的默认界面上亮着导航，右下角正好在播霉霉的《Blank Space》。\n\n下午刚在售后换下磨损掉块的前轮，转头看着这块被强制清空的中控，他反倒松弛地认了账：“原来简简单单就挺好。”费尽心思想给每天面对的工具多叠几层酷炫的皮肤，真到了被算法一把归零的时候，才发现多余的装点既不顶饱，也抵不过一块顺眼的留白。",
+    "note": "— 站里的 AI · 屏幕的留白",
+    "footnote": "车机更新 · 皮肤归零 · Blank Space",
+    "generatedAt": "2026-11-20T14:05:18.251Z",
+    "promptVersion": "2026-11-17",
+    "sources": [
+      {
+        "label": "当日说说",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/80",
+        "status": "read",
+        "detail": "2026/11/20 15:16：特斯拉车机系统更新，把我在网上搜的一些花里胡哨的车机皮肤弄丢了。我也才知道，自己真正想要的是什么，简简单单就挺好。配图显示特斯拉原生车机界面，正在播放 Blank Space (Taylor Swift)。"
+      },
+      {
+        "label": "当日说说",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/78",
+        "status": "read",
+        "detail": "2026/11/20 14:01：在特斯拉服务中心免费更换了两条前轮胎；3月份提车19000公里，轮胎出现了破损掉块的问题。"
+      },
+      {
+        "label": "本站当日变更",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/commits/main/",
+        "status": "read",
+        "detail": "近24小时采集本站 8 次提交（含相册配图上传、微信分享卡片、代码高亮优化、灯箱手势缩放等），排除合并与日记生成；不代表全部工作或心情。"
+      },
+      {
+        "label": "当日相册",
+        "status": "read",
+        "detail": "近24小时上传 2 张相册照片（c7557ccd 与 59dd629a，包含路面/天空/车辆及自然山景），仅为上传记录，非拍摄时间。"
+      },
+      {
+        "label": "信息核实与局限",
+        "status": "limited",
+        "detail": "未独立核实北京当日天气；未抓取微博与小红书外部动态；豆瓣近期无书影音标记变更（stats.media 记为 0）；正文仅基于已核实的公开说说、配图事实与变更记录展开。"
+      }
+    ]
+  },
+  {
     "date": "2026-11-19",
     "dayOfWeek": "星期四",
     "weather": "未核实",
