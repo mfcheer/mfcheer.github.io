@@ -5549,12 +5549,16 @@ function initHomeLauncher() {
     let animationFrameId = null;
 
     function getOptimalParticleCount() {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
         const screenArea = window.innerWidth * window.innerHeight;
+        let count;
         if (window.innerWidth < 600) {
-            return Math.floor(Math.min(240, Math.max(180, screenArea / 3000)));
+            count = Math.floor(Math.min(240, Math.max(180, screenArea / 3000)));
         } else {
-            return Math.floor(Math.min(420, Math.max(280, screenArea / 2800)));
+            count = Math.floor(Math.min(420, Math.max(280, screenArea / 2800)));
         }
+        // 浅色模式由于白底缺乏暗底的光晕扩散效应，人眼对离散微点的感知阈值更高，补偿 +18% 粒子基数
+        return isDark ? count : Math.floor(count * 1.18);
     }
 
     let particleCount = getOptimalParticleCount();
@@ -5635,16 +5639,20 @@ function initHomeLauncher() {
             if (this.alpha <= 0.01) return;
             ctx.save();
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
 
             if (isDark) {
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fillStyle = "rgba(255, 255, 255, " + this.alpha + ")";
                 ctx.shadowColor = "rgba(255, 255, 255, 0.45)";
                 ctx.shadowBlur = this.size * 1.4;
             } else {
-                ctx.fillStyle = "rgba(29, 29, 31, " + (this.alpha * 0.85) + ")";
+                // 浅色模式光学对比度补偿：微调粒子物理半径（+0.25px）与透明度对比（1.35x），抵消人眼在明亮白底下的感知衰减
+                const effectiveSize = this.size + 0.25 * dpr;
+                const lightAlpha = Math.min(0.85, this.alpha * 1.35);
+                ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(35, 35, 38, " + lightAlpha + ")";
                 ctx.shadowColor = "rgba(0, 0, 0, 0.12)";
-                ctx.shadowBlur = this.size * 0.8;
+                ctx.shadowBlur = effectiveSize * 0.6;
             }
 
             ctx.fill();
