@@ -368,3 +368,21 @@ test("说说配图发布即刻乐观预览与 Pages 未就绪容灾 (Moments Ima
     assert.ok(scriptJs.includes("raw.githubusercontent.com/mfcheer/mfcheer.github.io/main/"), "script.js 必须具备 Pages 构建期 raw.githubusercontent 容灾");
     assert.ok(scriptJs.includes("cleanList"), "script.js writeMomentsCache 必须过滤大体积 dataUrl 以免超出配额");
 });
+
+test("主页微信群聊分享卡片规范（itemprop 专用元信息与 1:1 正方形首图锚点）", () => {
+    const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+    assert.ok(html.includes("itemprop=\"name\" content=\"mfcheer · 个人主页\""), "必须包含微信专属 itemprop name 规范");
+    assert.ok(html.includes("itemprop=\"description\""), "必须包含微信专属 itemprop description 规范");
+    assert.ok(html.includes("itemprop=\"image\" content=\"https://mfcheer.github.io/assets/wechat-share.jpg\""), "必须包含微信专属正方形缩略图链接");
+    assert.ok(html.includes("<img src=\"https://mfcheer.github.io/assets/wechat-share.jpg\" width=\"400\" height=\"400\""), "body 必须包含微信不可见首图锚点以保障微信客户端 100% 抓取");
+
+    // 保证国际标准 Open Graph 保持完整
+    assert.ok(html.includes("property=\"og:image\" content=\"https://mfcheer.github.io/assets/share-card.png\""), "国际标准 16:9 横版 share-card.png 必须完整保留");
+    assert.ok(html.includes("name=\"twitter:image\" content=\"https://mfcheer.github.io/assets/share-card.png\""), "Twitter 大卡片必须完整保留");
+
+    // 检查图片文件
+    const imgPath = path.join(ROOT, "assets/wechat-share.jpg");
+    assert.ok(fs.existsSync(imgPath), "assets/wechat-share.jpg 必须存在");
+    const stat = fs.statSync(imgPath);
+    assert.ok(stat.size > 0 && stat.size <= 65536, "图片体积必须适中且小于 64KB");
+});

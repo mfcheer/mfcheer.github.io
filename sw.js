@@ -29,6 +29,7 @@ const PRECACHE_ASSETS = [
     './avatar.jpg?v=1.0.9',
     './assets/icon-192.png',
     './assets/icon-512.png',
+    './assets/wechat-share.jpg',
     './assets/projects/camgame.png',
     './assets/projects/still.png',
     './assets/projects/tripnote.png',

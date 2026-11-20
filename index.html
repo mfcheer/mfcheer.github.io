@@ -39,15 +39,20 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-    <!-- Open Graph / 社交分享卡片 -->
+    <!-- Open Graph / 社交分享卡片（Twitter / Telegram / Slack 等国际标准） -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="mfcheer">
-    <meta property="og:title" content="mfcheer · Backend Engineer">
-    <meta property="og:description" content="关注后端架构、基础组件与实用软件 · FC Barcelona">
+    <meta property="og:title" content="mfcheer · 个人主页">
+    <meta property="og:description" content="后端工程师 · 架构与基础组件 · 摄影与随身手账">
     <meta property="og:image" content="https://mfcheer.github.io/assets/share-card.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://mfcheer.github.io/">
+
+    <!-- 微信 / QQ 网页分享卡片专有规范（聊天与群聊卡片优先抓取 itemprop） -->
+    <meta itemprop="name" content="mfcheer · 个人主页">
+    <meta itemprop="description" content="后端工程师 · 架构与基础组件 · 摄影与随身手账">
+    <meta itemprop="image" content="https://mfcheer.github.io/assets/wechat-share.jpg">
 
     <!-- Twitter / X 社交卡片（大图模式） -->
     <meta name="twitter:card" content="summary_large_image">
@@ -68,6 +73,11 @@
     <link rel="stylesheet" href="styles.css?v=1.3.86">
 </head>
 <body>
+    <!-- 微信聊天分享专用缩略图锚点（不可见，确保微信客户端 100% 抓取到 1:1 正方形高清头像，不被 16:9 横图拉伸） -->
+    <div style="display:none;font-size:0;line-height:0;max-height:0;overflow:hidden;mso-hide:all;" aria-hidden="true">
+        <img src="https://mfcheer.github.io/assets/wechat-share.jpg" width="400" height="400" alt="mfcheer">
+    </div>
+
     <button class="float-top-btn" id="floatTopBtn" type="button" title="回到顶部" aria-label="回到顶部">
         <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
     </button>
