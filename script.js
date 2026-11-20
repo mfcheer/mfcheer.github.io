@@ -5562,6 +5562,24 @@ function initHomeLauncher() {
     }
 
     let particleCount = getOptimalParticleCount();
+    // 璀璨多光谱星尘色板：涵盖科技电青、星云霓紫、绯红蔷薇、炽热晨曦、极光翠绿、曦光金辉与纯净星芒
+    const STARDUST_PALETTES = [
+        // 0: 电光天蓝 / 蔚蓝 (Electric Sky Blue)
+        { dark: { r: 56, g: 189, b: 248 }, light: { r: 2, g: 132, b: 215 } },
+        // 1: 星云霓紫 / 丁香 (Vivid Violet)
+        { dark: { r: 192, g: 132, b: 252 }, light: { r: 147, g: 51, b: 234 } },
+        // 2: 绯红蔷薇 / 珊瑚粉 (Vibrant Rose Pink)
+        { dark: { r: 244, g: 63, b: 94 }, light: { r: 225, g: 29, b: 72 } },
+        // 3: 炽热晨曦 / 曜橙 (Solar Tangerine / Amber)
+        { dark: { r: 251, g: 146, b: 60 }, light: { r: 234, g: 88, b: 12 } },
+        // 4: 极光翠绿 / 碧玺 (Aurora Emerald Mint)
+        { dark: { r: 52, g: 211, b: 153 }, light: { r: 5, g: 150, b: 105 } },
+        // 5: 璀璨星金 (Solar Gold)
+        { dark: { r: 250, g: 204, b: 21 }, light: { r: 202, g: 138, b: 4 } },
+        // 6: 纯净光核 (Prism Diamond / Royal Blue)
+        { dark: { r: 255, g: 255, b: 255 }, light: { r: 37, g: 99, b: 235 } }
+    ];
+
     let particles = [];
     let startTime = performance.now();
     let durationMs = 2000;
@@ -5581,22 +5599,25 @@ function initHomeLauncher() {
 
             this.radius = r;
             this.angle = angle;
+            this.palette = STARDUST_PALETTES[Math.floor(Math.random() * STARDUST_PALETTES.length)];
+            this.twinklePhase = Math.random() * Math.PI * 2;
+            this.twinkleSpeed = Math.random() * 0.005 + 0.003;
 
             const depthRand = Math.random();
             if (depthRand < 0.2) {
                 this.depth = "near";
                 this.size = (Math.random() * 0.7 + 1.6) * dpr;
-                this.baseAlpha = Math.random() * 0.35 + 0.45;
+                this.baseAlpha = Math.random() * 0.3 + 0.55;
                 this.speedFactor = 1.05;
             } else if (depthRand < 0.7) {
                 this.depth = "mid";
                 this.size = (Math.random() * 0.5 + 1.0) * dpr;
-                this.baseAlpha = Math.random() * 0.3 + 0.35;
+                this.baseAlpha = Math.random() * 0.25 + 0.42;
                 this.speedFactor = 0.9;
             } else {
                 this.depth = "far";
                 this.size = (Math.random() * 0.4 + 0.6) * dpr;
-                this.baseAlpha = Math.random() * 0.2 + 0.2;
+                this.baseAlpha = Math.random() * 0.2 + 0.28;
                 this.speedFactor = 0.7;
             }
 
@@ -5613,10 +5634,15 @@ function initHomeLauncher() {
         }
 
         update(elapsed, cx, cy) {
+            let baseA = this.baseAlpha;
+            // 细微的星辉明暗呼吸 (0.90 ~ 1.0)
+            let twinkle = 0.92 + 0.08 * Math.sin(elapsed * this.twinkleSpeed + this.twinklePhase);
+            baseA *= twinkle;
+
             if (elapsed < 450) {
-                this.alpha = Math.min(this.baseAlpha, (elapsed / 450) * this.baseAlpha);
-            }
-            if (elapsed < 1600) {
+                this.alpha = Math.min(baseA, (elapsed / 450) * baseA);
+            } else if (elapsed < 1600) {
+                this.alpha = baseA;
                 let distToStop = this.radius - this.stopRadius;
                 if (distToStop > 0) {
                     let factor = Math.min(1, Math.max(0.12, distToStop / (width * 0.5)));
@@ -5628,7 +5654,7 @@ function initHomeLauncher() {
                 this.angle += this.angularSpeed * 0.5;
                 this.y -= 0.4 * dpr;
                 let fadeProgress = (elapsed - 1600) / 400;
-                this.alpha = Math.max(0, this.baseAlpha * (1 - fadeProgress));
+                this.alpha = Math.max(0, baseA * (1 - fadeProgress));
             }
 
             this.x = cx + Math.cos(this.angle) * this.radius;
@@ -5641,18 +5667,21 @@ function initHomeLauncher() {
             ctx.beginPath();
 
             if (isDark) {
+                // 深色模式：色彩饱和明亮的星云霓虹微芒与发光晕染
+                const c = this.palette.dark;
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(255, 255, 255, " + this.alpha + ")";
-                ctx.shadowColor = "rgba(255, 255, 255, 0.45)";
-                ctx.shadowBlur = this.size * 1.4;
+                ctx.fillStyle = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + this.alpha + ")";
+                ctx.shadowColor = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.75)";
+                ctx.shadowBlur = this.size * 2.2;
             } else {
-                // 浅色模式光学对比度补偿：微调粒子物理半径（+0.25px）与透明度对比（1.35x），抵消人眼在明亮白底下的感知衰减
+                // 浅色模式：高饱和宝石粒子与柔和光晕，告别单调灰暗，在纯白背景上呈现鲜艳灵动的多彩微粒
+                const c = this.palette.light;
                 const effectiveSize = this.size + 0.25 * dpr;
-                const lightAlpha = Math.min(0.85, this.alpha * 1.35);
+                const lightAlpha = Math.min(0.92, this.alpha * 1.35);
                 ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(35, 35, 38, " + lightAlpha + ")";
-                ctx.shadowColor = "rgba(0, 0, 0, 0.12)";
-                ctx.shadowBlur = effectiveSize * 0.6;
+                ctx.fillStyle = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + lightAlpha + ")";
+                ctx.shadowColor = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.35)";
+                ctx.shadowBlur = effectiveSize * 1.2;
             }
 
             ctx.fill();

@@ -57,3 +57,23 @@ test("首页启动器触发判定逻辑严格符合预期：首次进入与刷�
     // 场景 6：从外部网站（微信、Google）首次跳入主页 -> 属于首次进入，触发
     assert.equal(simulateTrigger({ isReload: false, referrer: "https://weixin.qq.com/", sessionLaunched: false }), true, "外部首次跳入主页触发");
 });
+
+
+test("启动器星尘粒子包含高饱和多光谱色彩色板（深浅双模鲜艳绚丽）", () => {
+    const script = fs.readFileSync("script.js", "utf8");
+    assert.ok(script.includes("STARDUST_PALETTES"), "包含多光谱星尘色板定义");
+    assert.ok(script.includes("palette.dark"), "包含深色模式霓虹发光粒子渲染");
+    assert.ok(script.includes("palette.light"), "包含浅色模式高饱和宝石粒子渲染");
+
+    // 验证调色板至少覆盖蓝、紫、粉/红、橙、绿、金等 6 种以上鲜艳光谱
+    const paletteMatch = script.match(/const STARDUST_PALETTES = ([\s\S]*?\n\s*\];)/);
+    assert.ok(paletteMatch, "成功提取到 STARDUST_PALETTES 定义");
+
+    const palettes = eval(paletteMatch[1]);
+    assert.ok(palettes.length >= 6, "色彩种类不少于 6 种");
+
+    palettes.forEach((p, idx) => {
+        assert.ok(p.dark && typeof p.dark.r === "number", "深色模式配色有效: " + idx);
+        assert.ok(p.light && typeof p.light.r === "number", "浅色模式配色有效: " + idx);
+    });
+});
