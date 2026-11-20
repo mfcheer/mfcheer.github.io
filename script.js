@@ -5540,15 +5540,7 @@ document.addEventListener("click", (e) => {
 function initHomeLauncher() {
     const overlay = document.getElementById("homeLauncherOverlay");
     const canvas = document.getElementById("homeLauncherCanvas");
-    if (!overlay || !canvas) return;
-
-    try {
-        if (sessionStorage.getItem("mfcheer_home_launched")) {
-            overlay.remove();
-            return;
-        }
-        sessionStorage.setItem("mfcheer_home_launched", "1");
-    } catch(e) {}
+    if (!overlay || !canvas || overlay.style.display === "none") return;
 
     const ctx = canvas.getContext("2d");
     let dpr = Math.min(window.devicePixelRatio || 1, 2.5);
