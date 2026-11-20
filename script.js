@@ -5569,7 +5569,6 @@ function initHomeLauncher() {
     let particles = [];
     let startTime = performance.now();
     let durationMs = 2000;
-    let countdownInterval = null;
 
     class AmbientStardust {
         constructor() {
@@ -5681,7 +5680,6 @@ function initHomeLauncher() {
 
     const monogram = overlay.querySelector(".home-launcher-monogram");
     const title = overlay.querySelector(".home-launcher-title");
-    const countdownEl = document.getElementById("homeLauncherCountdown");
 
     function animate(now) {
         const elapsed = now - startTime;
@@ -5711,27 +5709,13 @@ function initHomeLauncher() {
     }
 
     function startTimer() {
-        clearInterval(countdownInterval);
         startTime = performance.now();
-        let remaining = durationMs;
-        if (countdownEl) countdownEl.textContent = (remaining / 1000).toFixed(1) + "s";
-
-        countdownInterval = setInterval(() => {
-            remaining -= 100;
-            if (remaining > 0) {
-                if (countdownEl) countdownEl.textContent = (remaining / 1000).toFixed(1) + "s";
-            } else {
-                if (countdownEl) countdownEl.textContent = "0.0s";
-                clearInterval(countdownInterval);
-            }
-        }, 100);
     }
 
     let isDismissed = false;
     function dismiss() {
         if (isDismissed) return;
         isDismissed = true;
-        clearInterval(countdownInterval);
         overlay.classList.add("launch-exit");
         setTimeout(() => {
             cancelAnimationFrame(animationFrameId);

@@ -6696,29 +6696,7 @@ button {
     color: #ffffff;
 }
 
-.home-launcher-skip-hint {
-    position: absolute;
-    bottom: max(24px, env(safe-area-inset-bottom, 24px));
-    font-size: 12px;
-    letter-spacing: 0.05em;
-    color: rgba(0, 0, 0, 0.35);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    padding: 6px 14px;
-    border-radius: 20px;
-    background: rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    transition: all 0.2s ease;
-    z-index: 3;
-    pointer-events: auto;
-}
 
-.home-launcher-skip-hint:hover {
-    color: rgba(0, 0, 0, 0.7);
-    background: rgba(0, 0, 0, 0.06);
-}
 
 [data-theme="dark"] .home-launcher-skip-hint {
     color: rgba(255, 255, 255, 0.35);
