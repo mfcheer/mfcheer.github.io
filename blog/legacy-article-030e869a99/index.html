@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -83,34 +83,34 @@
 查看所有命令
 </code></pre>
 <h1 id="常用命令" tabindex="-1">常用命令</h1>
-<pre><code class="hljs">容器版本
+<pre><code class="hljs language-html">容器版本
 docker --version
 从仓库获取镜像
-docker pull &lt;镜像名:tag&gt;
+docker pull <span class="hljs-tag">&lt;<span class="hljs-name">镜像名:tag</span>&gt;</span>
 查看正在运行的容器
 docker ps 
 查看所有容器，包括退出的
 docker ps -a
 删除镜像
-docker rmi &lt;镜像名&gt; 
+docker rmi <span class="hljs-tag">&lt;<span class="hljs-name">镜像名</span>&gt;</span> 
 删除容器
-docker rm &lt;容器名orID&gt;
+docker rm <span class="hljs-tag">&lt;<span class="hljs-name">容器名orID</span>&gt;</span>
 停止容器
-docker stop &lt;容器名orID&gt;
+docker stop <span class="hljs-tag">&lt;<span class="hljs-name">容器名orID</span>&gt;</span>
 启动容器
-docker start &lt;容器名orID&gt;
+docker start <span class="hljs-tag">&lt;<span class="hljs-name">容器名orID</span>&gt;</span>
 杀死运行的容器
-docker kill &lt;容器名orID&gt;
+docker kill <span class="hljs-tag">&lt;<span class="hljs-name">容器名orID</span>&gt;</span>
 查看所有镜像
 docker images
 制作运行容器，-d是后台运行，-p是本地端口到容器端口的映射，
 --name为容器起名字
-docker run -d -p 80:80 --name &lt;容器名&gt; &lt;镜像名&gt;
+docker run -d -p 80:80 --name <span class="hljs-tag">&lt;<span class="hljs-name">容器名</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">镜像名</span>&gt;</span>
 进入容器bash界面
-docker exec -it &lt;容器名&gt; bash
+docker exec -it <span class="hljs-tag">&lt;<span class="hljs-name">容器名</span>&gt;</span> bash
 </code></pre>
 <h1 id="所有命令" tabindex="-1">所有命令</h1>
-<pre><code class="hljs">Usage:	docker COMMAND
+<pre><code class="hljs language-python">Usage:	docker COMMAND
 Management Commands:
   checkpoint  Manage checkpoints
   config      Manage Docker configs
@@ -126,16 +126,16 @@ Management Commands:
   system      Manage Docker
   volume      Manage volumes
 Commands:
-  attach      Attach local standard input, output, and error streams to a running container
-  build       Build an image from a Dockerfile
-  commit      Create a new image from a container's changes
+  attach      Attach local standard <span class="hljs-built_in">input</span>, output, <span class="hljs-keyword">and</span> error streams to a running container
+  build       Build an image <span class="hljs-keyword">from</span> a Dockerfile
+  commit      Create a new image <span class="hljs-keyword">from</span> a containe<span class="hljs-string">r&#x27;s changes
   cp          Copy files/folders between a container and the local filesystem
   create      Create a new container
   deploy      Deploy a new stack or update an existing stack
-  diff        Inspect changes to files or directories on a container's filesystem
-  events      Get real time events from the server
-  exec        Run a command in a running container
-  export      Export a container's filesystem as a tar archive
+  diff        Inspect changes to files or directories on a container&#x27;</span>s filesystem
+  events      Get real time events <span class="hljs-keyword">from</span> the server
+  <span class="hljs-built_in">exec</span>        Run a command <span class="hljs-keyword">in</span> a running container
+  export      Export a containe<span class="hljs-string">r&#x27;s filesystem as a tar archive
   history     Show the history of an image
   images      List images
   import      Import the contents from a tarball to create a filesystem image
@@ -167,7 +167,7 @@ Commands:
   update      Update configuration of one or more containers
   version     Show the Docker version information
   wait        Block until one or more containers stop, then print their exit codes
-</code></pre>
+</span></code></pre>
 
                 </div>
 <nav class="post-nav" aria-label="文章翻页导航">
@@ -200,6 +200,6 @@ Commands:
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

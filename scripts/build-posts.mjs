@@ -32,7 +32,7 @@ const TPL_DIR = path.join(ROOT, 'templates');
 import anchor from 'markdown-it-anchor';
 import taskLists from 'markdown-it-task-lists';
 
-const VERSIONS = { css: '1.3.85', js: '1.3.74' };
+const VERSIONS = { css: '1.3.86', js: '1.3.75' };
 
 // ---------- 工具 ----------
 const esc = (s) =>
@@ -86,6 +86,11 @@ function deriveSummary(html) {
 }
 
 // ---------- Markdown 渲染器 ----------
+const SUPPORTED_AUTO_LANGS = [
+    'javascript', 'typescript', 'python', 'go', 'cpp', 'c',
+    'java', 'sql', 'bash', 'shell', 'json', 'html', 'css', 'rust', 'yaml'
+];
+
 const md = new MarkdownIt({
     html: false, // 正文禁用原始 HTML，天然免疫 XSS
     linkify: true,
@@ -94,6 +99,17 @@ const md = new MarkdownIt({
         if (lang && hljs.getLanguage(lang)) {
             try {
                 return `<pre><code class="hljs language-${esc(lang)}">${hljs.highlight(code, { language: lang, ignoreIllegals: true }).value}</code></pre>`;
+            } catch (e) {
+                /* fallthrough */
+            }
+        }
+        // 未指定语言或语言未注册时，在常用语言子集中自动推断高亮
+        if (code && code.trim().length > 6) {
+            try {
+                const auto = hljs.highlightAuto(code, SUPPORTED_AUTO_LANGS);
+                if (auto && auto.language && auto.relevance > 2) {
+                    return `<pre><code class="hljs language-${esc(auto.language)}">${auto.value}</code></pre>`;
+                }
             } catch (e) {
                 /* fallthrough */
             }

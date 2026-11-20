@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -82,87 +82,87 @@
 <p>DFA全称为：Deterministic Finite Automaton,即确定有穷自动机。其特征为：有一个有限状态集合和一些从一个状态通向另一个状态的边，每条边上标记有一个符号，其中一个状态是初态，某些状态是终态。但不同于不确定的有限自动机，DFA中不会有从同一状态出发的两条边标志有相同的符号。常常应用于敏感词过滤，具体的细节原理可以在网上搜到很多，这里就不具体说了。</p>
 <p>下面给出简单的实现。</p>
 <p>简单实现代码：</p>
-<pre><code class="hljs">import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">import</span> java.<span class="hljs-property">util</span>.<span class="hljs-property">ArrayList</span>;
+<span class="hljs-keyword">import</span> java.<span class="hljs-property">util</span>.<span class="hljs-property">HashMap</span>;
+<span class="hljs-keyword">import</span> java.<span class="hljs-property">util</span>.<span class="hljs-property">HashSet</span>;
+<span class="hljs-keyword">import</span> java.<span class="hljs-property">util</span>.<span class="hljs-property">Map</span>;
+<span class="hljs-keyword">import</span> java.<span class="hljs-property">util</span>.<span class="hljs-property">Set</span>;
 
 
-public class DFA {
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DFA</span> {
 	
-	public static Map&lt;String,String&gt; sensitiveWordsMap = new HashMap&lt;String, String&gt;();  
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title class_">Map</span>&lt;<span class="hljs-title class_">String</span>,<span class="hljs-title class_">String</span>&gt; sensitiveWordsMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;<span class="hljs-title class_">String</span>, <span class="hljs-title class_">String</span>&gt;();  
 	
-	public void addSensitiveWords(Set&lt;String&gt; wordSet){ 
-        for (String word : wordSet) {  
-            Map nowMap = sensitiveWordsMap;  
-            for (int i = 0; i &lt; word.length(); i++) {  
-                char keyChar = word.charAt(i);  
-                Object nextMap = nowMap.get(keyChar);  
-                if (nextMap != null) {
-                    nowMap = (Map&lt;String,String&gt;) nextMap;  
-                }else {  
-                    Map&lt;String, String&gt; newMap = new HashMap&lt;String, String&gt;();  
-                    newMap.put(&quot;isEnd&quot;, &quot;0&quot;);  
-                    nowMap.put(keyChar, newMap);  
+	<span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">addSensitiveWords</span>(<span class="hljs-params"><span class="hljs-title class_">Set</span>&lt;<span class="hljs-title class_">String</span>&gt; wordSet</span>){ 
+        <span class="hljs-keyword">for</span> (<span class="hljs-title class_">String</span> word : wordSet) {  
+            <span class="hljs-title class_">Map</span> nowMap = sensitiveWordsMap;  
+            <span class="hljs-keyword">for</span> (int i = <span class="hljs-number">0</span>; i &lt; word.<span class="hljs-title function_">length</span>(); i++) {  
+                char keyChar = word.<span class="hljs-title function_">charAt</span>(i);  
+                <span class="hljs-title class_">Object</span> nextMap = nowMap.<span class="hljs-title function_">get</span>(keyChar);  
+                <span class="hljs-keyword">if</span> (nextMap != <span class="hljs-literal">null</span>) {
+                    nowMap = (<span class="hljs-title class_">Map</span>&lt;<span class="hljs-title class_">String</span>,<span class="hljs-title class_">String</span>&gt;) nextMap;  
+                }<span class="hljs-keyword">else</span> {  
+                    <span class="hljs-title class_">Map</span>&lt;<span class="hljs-title class_">String</span>, <span class="hljs-title class_">String</span>&gt; newMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;<span class="hljs-title class_">String</span>, <span class="hljs-title class_">String</span>&gt;();  
+                    newMap.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;isEnd&quot;</span>, <span class="hljs-string">&quot;0&quot;</span>);  
+                    nowMap.<span class="hljs-title function_">put</span>(keyChar, newMap);  
                     nowMap = newMap;  
                 } 
                 
-                if (i == word.length() - 1) {  
-                    nowMap.put(&quot;isEnd&quot;, &quot;1&quot;);  
+                <span class="hljs-keyword">if</span> (i == word.<span class="hljs-title function_">length</span>() - <span class="hljs-number">1</span>) {  
+                    nowMap.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;isEnd&quot;</span>, <span class="hljs-string">&quot;1&quot;</span>);  
                 }
             }  
         }
 	}
 	
-	 public boolean isSensitiveWord(String word) {  
-	        Map nowMap = sensitiveWordsMap;
+	 <span class="hljs-keyword">public</span> <span class="hljs-built_in">boolean</span> <span class="hljs-title function_">isSensitiveWord</span>(<span class="hljs-params"><span class="hljs-title class_">String</span> word</span>) {  
+	        <span class="hljs-title class_">Map</span> nowMap = sensitiveWordsMap;
 	        
-	        for(int i=0;i&lt;word.length();i++){
-	        	char keyChar = word.charAt(i);
-	        	nowMap = (Map) nowMap.get(keyChar);
-	        	if(nowMap == null)
-	        		return false;
-	        	if(nowMap.get(&quot;isEnd&quot;).equals(&quot;1&quot;)){
-	        		return true;
+	        <span class="hljs-keyword">for</span>(int i=<span class="hljs-number">0</span>;i&lt;word.<span class="hljs-title function_">length</span>();i++){
+	        	char keyChar = word.<span class="hljs-title function_">charAt</span>(i);
+	        	nowMap = (<span class="hljs-title class_">Map</span>) nowMap.<span class="hljs-title function_">get</span>(keyChar);
+	        	<span class="hljs-keyword">if</span>(nowMap == <span class="hljs-literal">null</span>)
+	        		<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+	        	<span class="hljs-keyword">if</span>(nowMap.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;isEnd&quot;</span>).<span class="hljs-title function_">equals</span>(<span class="hljs-string">&quot;1&quot;</span>)){
+	        		<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
 	        	}
 	        }
-			return false;
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
 	}   
 	
-	public boolean isContainSensitiveWord(String txt){
-		for(int i=0; i &lt; txt.length(); i++){
-			String subTxt = txt.substring(i);
-			if(isSensitiveWord(subTxt))
-				return true;
+	<span class="hljs-keyword">public</span> <span class="hljs-built_in">boolean</span> <span class="hljs-title function_">isContainSensitiveWord</span>(<span class="hljs-params"><span class="hljs-title class_">String</span> txt</span>){
+		<span class="hljs-keyword">for</span>(int i=<span class="hljs-number">0</span>; i &lt; txt.<span class="hljs-title function_">length</span>(); i++){
+			<span class="hljs-title class_">String</span> subTxt = txt.<span class="hljs-title function_">substring</span>(i);
+			<span class="hljs-keyword">if</span>(<span class="hljs-title function_">isSensitiveWord</span>(subTxt))
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
 		}
-		return false;
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
 	}
 	 
-	public static void main(String[] args){
-		Set&lt;String&gt; wordSet = new HashSet&lt;String&gt;();
-		wordSet.add(&quot;赌博&quot;);
-		wordSet.add(&quot;赌博赌博&quot;);
-		wordSet.add(&quot;嫖娼&quot;);
-		wordSet.add(&quot;毒品&quot;);
-		wordSet.add(&quot;枪支&quot;);
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"><span class="hljs-title class_">String</span>[] args</span>){
+		<span class="hljs-title class_">Set</span>&lt;<span class="hljs-title class_">String</span>&gt; wordSet = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashSet</span>&lt;<span class="hljs-title class_">String</span>&gt;();
+		wordSet.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;赌博&quot;</span>);
+		wordSet.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;赌博赌博&quot;</span>);
+		wordSet.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;嫖娼&quot;</span>);
+		wordSet.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;毒品&quot;</span>);
+		wordSet.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;枪支&quot;</span>);
 		
-		DFA dfa = new DFA();
-		//添加敏感词
-		dfa.addSensitiveWords(wordSet);
-		System.out.println(sensitiveWordsMap.toString());
+		<span class="hljs-variable constant_">DFA</span> dfa = <span class="hljs-keyword">new</span> <span class="hljs-title function_">DFA</span>();
+		<span class="hljs-comment">//添加敏感词</span>
+		dfa.<span class="hljs-title function_">addSensitiveWords</span>(wordSet);
+		<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(sensitiveWordsMap.<span class="hljs-title function_">toString</span>());
 		
-		//查询测试
-		System.out.println(dfa.isContainSensitiveWord(&quot;赌博&quot;));
-		System.out.println(dfa.isContainSensitiveWord(&quot;赌博赌&quot;));
-		System.out.println(dfa.isContainSensitiveWord(&quot;博赌&quot;));
-		System.out.println(dfa.isContainSensitiveWord(&quot;赌&amp;博&quot;));
-		System.out.println(dfa.isContainSensitiveWord(&quot;赌博不许&quot;));
-		System.out.println(dfa.isContainSensitiveWord(&quot;不许赌博&quot;));
-		System.out.println(dfa.isContainSensitiveWord(&quot;&amp;赌博&amp;嫖娼&amp;毒品&amp;枪支&amp;&quot;));
+		<span class="hljs-comment">//查询测试</span>
+		<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(dfa.<span class="hljs-title function_">isContainSensitiveWord</span>(<span class="hljs-string">&quot;赌博&quot;</span>));
+		<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(dfa.<span class="hljs-title function_">isContainSensitiveWord</span>(<span class="hljs-string">&quot;赌博赌&quot;</span>));
+		<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(dfa.<span class="hljs-title function_">isContainSensitiveWord</span>(<span class="hljs-string">&quot;博赌&quot;</span>));
+		<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(dfa.<span class="hljs-title function_">isContainSensitiveWord</span>(<span class="hljs-string">&quot;赌&amp;博&quot;</span>));
+		<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(dfa.<span class="hljs-title function_">isContainSensitiveWord</span>(<span class="hljs-string">&quot;赌博不许&quot;</span>));
+		<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(dfa.<span class="hljs-title function_">isContainSensitiveWord</span>(<span class="hljs-string">&quot;不许赌博&quot;</span>));
+		<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(dfa.<span class="hljs-title function_">isContainSensitiveWord</span>(<span class="hljs-string">&quot;&amp;赌博&amp;嫖娼&amp;毒品&amp;枪支&amp;&quot;</span>));
  	}
 }
-/*
+<span class="hljs-comment">/*
 {枪={支={isEnd=1}, isEnd=0}, 赌={isEnd=0, 博={isEnd=1, 赌={isEnd=0, 博={isEnd=1}}}}, 
 嫖={isEnd=0, 娼={isEnd=1}}, 毒={品={isEnd=1}, isEnd=0}}
 true
@@ -172,7 +172,7 @@ false
 true
 true
 true
-*/
+*/</span>
 </code></pre>
 
                 </div>
@@ -206,6 +206,6 @@ true
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

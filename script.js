@@ -1530,61 +1530,67 @@ function bindZoomableImage(img) {
         go: 'Go', rust: 'Rust', rs: 'Rust'
     };
 
-    postBody.querySelectorAll('pre').forEach((pre) => {
-        const code = pre.querySelector('code');
-        if (!code || pre.parentElement.classList.contains('code-block')) return;
+    function initCodeBlocksIn(container) {
+        if (!container) return;
+        container.querySelectorAll('pre').forEach((pre) => {
+            const code = pre.querySelector('code');
+            if (!code || pre.parentElement.classList.contains('code-block')) return;
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'code-block';
-        pre.before(wrapper);
-        wrapper.appendChild(pre);
+            const wrapper = document.createElement('div');
+            wrapper.className = 'code-block';
+            pre.before(wrapper);
+            wrapper.appendChild(pre);
 
-        const langMatch = (code.className || '').match(/language-([\w+-]+)/);
-        if (langMatch) {
-            const rawLang = langMatch[1].toLowerCase();
-            const lang = document.createElement('span');
-            lang.className = 'code-lang';
-            lang.textContent = LANG_MAP[rawLang] || langMatch[1].toUpperCase();
-            wrapper.appendChild(lang);
-        }
-
-        // 横向滚动渐变阴影指示
-        const updateScrollShadow = () => {
-            if (pre.scrollWidth > pre.clientWidth + 2) {
-                wrapper.classList.toggle('has-scroll-right', pre.scrollLeft + pre.clientWidth < pre.scrollWidth - 6);
-            } else {
-                wrapper.classList.remove('has-scroll-right');
+            const langMatch = (code.className || '').match(/language-([\w+-]+)/);
+            if (langMatch) {
+                const rawLang = langMatch[1].toLowerCase();
+                const lang = document.createElement('span');
+                lang.className = 'code-lang';
+                lang.textContent = LANG_MAP[rawLang] || langMatch[1].toUpperCase();
+                wrapper.appendChild(lang);
             }
-        };
-        pre.addEventListener('scroll', updateScrollShadow, { passive: true });
-        window.addEventListener('resize', updateScrollShadow, { passive: true });
-        setTimeout(updateScrollShadow, 100);
 
-        // 双击代码块高亮聚焦
-        code.addEventListener('dblclick', () => {
-            wrapper.classList.toggle('is-highlighted-block');
-        });
+            // 横向滚动渐变阴影指示
+            const updateScrollShadow = () => {
+                if (pre.scrollWidth > pre.clientWidth + 2) {
+                    wrapper.classList.toggle('has-scroll-right', pre.scrollLeft + pre.clientWidth < pre.scrollWidth - 6);
+                } else {
+                    wrapper.classList.remove('has-scroll-right');
+                }
+            };
+            pre.addEventListener('scroll', updateScrollShadow, { passive: true });
+            window.addEventListener('resize', updateScrollShadow, { passive: true });
+            setTimeout(updateScrollShadow, 100);
 
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'copy-btn';
-        btn.setAttribute('aria-label', '复制代码');
-        btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>复制</span>';
-        btn.addEventListener('click', async () => {
-            try {
-                await copyText(code.innerText);
-                btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>已复制</span>';
-                btn.classList.add('copied');
-            } catch (e) {
-                btn.textContent = '复制失败';
-            }
-            setTimeout(() => {
-                btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>复制</span>';
-                btn.classList.remove('copied');
-            }, 1500);
+            // 双击代码块高亮聚焦
+            code.addEventListener('dblclick', () => {
+                wrapper.classList.toggle('is-highlighted-block');
+            });
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'copy-btn';
+            btn.setAttribute('aria-label', '复制代码');
+            btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>复制</span>';
+            btn.addEventListener('click', async () => {
+                try {
+                    await copyText(code.innerText);
+                    btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>已复制</span>';
+                    btn.classList.add('copied');
+                } catch (e) {
+                    btn.textContent = '复制失败';
+                }
+                setTimeout(() => {
+                    btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>复制</span>';
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+            wrapper.appendChild(btn);
         });
-        wrapper.appendChild(btn);
-    });
+    }
+    window._mfcheerInitCodeBlocks = initCodeBlocksIn;
+
+    initCodeBlocksIn(postBody);
 
     const tocLinks = Array.from(document.querySelectorAll('.toc a'));
     if (tocLinks.length) {
@@ -5030,17 +5036,45 @@ document.addEventListener("click", (e) => {
         if (previewActive) renderPreview();
     }
 
+    function highlightSimpleCode(rawCode, rawLang) {
+        let code = rawCode;
+        const comments = [];
+        code = code.replace(/(\/\/[^\n]*|#[^\n]*|\/\*[\s\S]*?\*\/)/g, (m) => {
+            comments.push(m);
+            return `___MB_COMMENT_${comments.length - 1}___`;
+        });
+        const strings = [];
+        code = code.replace(/(&quot;[^\n&]*&quot;|&#39;[^\n&]*&#39;|`[^`\n]*`)/g, (m) => {
+            strings.push(m);
+            return `___MB_STRING_${strings.length - 1}___`;
+        });
+        code = code.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="hljs-number">$1</span>');
+        code = code.replace(/\b(true|false|null|nil|undefined)\b/g, '<span class="hljs-literal">$1</span>');
+        const kw = 'const|let|var|function|func|fn|def|return|if|else|elif|for|while|in|of|switch|case|break|continue|import|export|from|as|class|struct|type|interface|package|new|this|self|try|catch|finally|throw|async|await|select|from|where|insert|update|delete';
+        const kwRe = new RegExp(`\\b(${kw})\\b`, 'gi');
+        code = code.replace(kwRe, '<span class="hljs-keyword">$1</span>');
+        code = code.replace(/___MB_STRING_(\d+)___/g, (_, idx) => `<span class="hljs-string">${strings[Number(idx)]}</span>`);
+        code = code.replace(/___MB_COMMENT_(\d+)___/g, (_, idx) => `<span class="hljs-comment">${comments[Number(idx)]}</span>`);
+        return code;
+    }
+
     function renderPreview() {
         const previewContent = document.getElementById('postEditorPreviewContent');
         const textarea = document.getElementById('postEditorTextarea');
         if (!previewContent || !textarea) return;
         previewContent.innerHTML = renderSimpleMarkdown(textarea.value);
+        if (typeof window._mfcheerInitCodeBlocks === 'function') {
+            window._mfcheerInitCodeBlocks(previewContent);
+        }
     }
 
     function renderSimpleMarkdown(md) {
         let text = escapeHtml(md || '');
         text = text.replace(/```([a-zA-Z0-9_-]*)\r?\n([\s\S]*?)```/g, (_, lang, code) => {
-            return `<div class="code-block"><pre><code class="language-${lang}">${code}</code></pre></div>`;
+            const cleanLang = (lang || '').trim();
+            const langClass = cleanLang ? ` language-${cleanLang}` : '';
+            const highlighted = highlightSimpleCode(code, cleanLang);
+            return `<pre><code class="hljs${langClass}">${highlighted}</code></pre>`;
         });
         text = text.replace(/^### (.*$)/gim, '<h3>$1</h3>');
         text = text.replace(/^## (.*$)/gim, '<h2>$1</h2>');
@@ -5053,7 +5087,7 @@ document.addEventListener("click", (e) => {
         text = text.replace(/^[*-]\s+(.*)$/gim, '<li>$1</li>');
         text = text.replace(/(<li>.*<\/li>)/gis, '<ul>$1</ul>');
         text = text.split(/\n{2,}/).map(para => {
-            if (/^<(h[1-6]|div|ul|blockquote)/i.test(para.trim())) return para;
+            if (/^<(h[1-6]|div|ul|blockquote|pre)/i.test(para.trim())) return para;
             return `<p>${para.replace(/\n/g, '<br>')}</p>`;
         }).join('\n');
         return text;
@@ -5398,6 +5432,9 @@ document.addEventListener("click", (e) => {
         const postBodyEl = document.querySelector('.post-body');
         if (postBodyEl && body) {
             postBodyEl.innerHTML = renderSimpleMarkdown(body);
+            if (typeof window._mfcheerInitCodeBlocks === 'function') {
+                window._mfcheerInitCodeBlocks(postBodyEl);
+            }
         }
     }
 

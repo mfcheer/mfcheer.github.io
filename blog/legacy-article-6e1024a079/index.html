@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -85,10 +85,10 @@
 <p>MySQL 为关系型数据库(Relational Database Management System), 这种所谓的&quot;关系型&quot;可以理解为&quot;表格&quot;的概念, 一个关系型数据库由一个或数个表格组成</p>
 <h1 id="登录到mysql" tabindex="-1">登录到MySQL</h1>
 <p>当 MySQL 服务已经运行时, 我们可以通过MySQL自带的客户端工具登录到MySQL数据库中, 首先打开命令提示符, 输入以下格式的命名:</p>
-<pre><code class="hljs">mysql -h 主机名 -u 用户名 -p
+<pre><code class="hljs language-css">mysql -h 主机名 -u 用户名 -<span class="hljs-selector-tag">p</span>
 -h : 该命令用于指定客户端所要登录的MySQL主机名, 登录当前机器该参数可以省略;
 -u : 所要登录的用户名;
--p : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。
+-<span class="hljs-selector-tag">p</span> : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。
 </code></pre>
 <p>以登录刚刚安装在本机的MySQL数据库为例, 在命令行下输入 mysql -u root -p 按回车确认</p>
 <p>然后命令提示符会一直以 mysql&gt; 加一个闪烁的光标等待命令的输入</p>
@@ -192,6 +192,6 @@ alter table 语句用于创建后对表的修改, 基础用法如下:</p>
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -87,20 +87,20 @@
 java -cp dependencies.jar com.bj.spat.hello
 </code></pre>
 <p>产生错误</p>
-<pre><code class="hljs">Exception in thread &quot;main&quot; java.lang.UnsupportedClassVersionError: hello : Unsupported major.minor version 52.0
-	at java.lang.ClassLoader.defineClass1(Native Method)
-	at java.lang.ClassLoader.defineClass(ClassLoader.java:800)
-	at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
-	at java.net.URLClassLoader.defineClass(URLClassLoader.java:449)
-	at java.net.URLClassLoader.access$100(URLClassLoader.java:71)
-	at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
-	at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
-	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
-	at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)
+<pre><code class="hljs language-css">Exception in thread &quot;<span class="hljs-selector-tag">main</span>&quot; java<span class="hljs-selector-class">.lang</span><span class="hljs-selector-class">.UnsupportedClassVersionError</span>: hello : Unsupported major.minor version <span class="hljs-number">52.0</span>
+	at java.lang.ClassLoader.<span class="hljs-built_in">defineClass1</span>(Native Method)
+	at java.lang.ClassLoader.<span class="hljs-built_in">defineClass</span>(ClassLoader.java:<span class="hljs-number">800</span>)
+	at java.security.SecureClassLoader.<span class="hljs-built_in">defineClass</span>(SecureClassLoader.java:<span class="hljs-number">142</span>)
+	at java.net.URLClassLoader.<span class="hljs-built_in">defineClass</span>(URLClassLoader.java:<span class="hljs-number">449</span>)
+	at java.net.URLClassLoader.access$<span class="hljs-number">100</span>(URLClassLoader.java:<span class="hljs-number">71</span>)
+	at java.net.URLClassLoader$<span class="hljs-number">1</span>.<span class="hljs-built_in">run</span>(URLClassLoader.java:<span class="hljs-number">361</span>)
+	at java.net.URLClassLoader$<span class="hljs-number">1</span>.<span class="hljs-built_in">run</span>(URLClassLoader.java:<span class="hljs-number">355</span>)
+	at java.security.AccessController.<span class="hljs-built_in">doPrivileged</span>(Native Method)
+	at java.net.URLClassLoader.<span class="hljs-built_in">findClass</span>(URLClassLoader.java:<span class="hljs-number">354</span>)
+	at java.lang.ClassLoader.<span class="hljs-built_in">loadClass</span>(ClassLoader.java:<span class="hljs-number">425</span>)
+	at sun.misc.Launcher$AppClassLoader.<span class="hljs-built_in">loadClass</span>(Launcher.java:<span class="hljs-number">308</span>)
+	at java.lang.ClassLoader.<span class="hljs-built_in">loadClass</span>(ClassLoader.java:<span class="hljs-number">358</span>)
+	at sun.launcher.LauncherHelper.<span class="hljs-built_in">checkAndLoadMain</span>(LauncherHelper.java:<span class="hljs-number">482</span>)
 </code></pre>
 <p>原因是由较高版本的JDK编译的java class文件试图在较低版本的JVM上运行产生的错误。
 1、解决措施就是保证jvm（java命令）和jdk（javac命令）版本一致。如果是linux版本，则在命令行中分别输入java -version和javac-version命令来查看版本是否一致。这里假设都是1.7版本。</p>
@@ -109,12 +109,12 @@ java -cp dependencies.jar com.bj.spat.hello
 <h1 id="给jar传参数" tabindex="-1">给jar传参数</h1>
 <pre><code class="hljs">java -cp hello.jar hello &quot;参数&quot;
 </code></pre>
-<pre><code class="hljs">public class hello {
-	public static void main(String []args) {
-		 System.out.println(args.length);
-	     for(int i=0;i&lt;args.length;i++)
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">hello</span> {
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"><span class="hljs-title class_">String</span> []args</span>) {
+		 <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(args.<span class="hljs-property">length</span>);
+	     <span class="hljs-keyword">for</span>(int i=<span class="hljs-number">0</span>;i&lt;args.<span class="hljs-property">length</span>;i++)
 	     {
-	         System.out.println(args[i]);
+	         <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(args[i]);
 	     }
 	}
 }
@@ -125,14 +125,14 @@ java -cp dependencies.jar com.bj.spat.hello
 1
 123456</p>
 <h1 id="python代码" tabindex="-1">python代码</h1>
-<pre><code class="hljs">import commands
-import json
+<pre><code class="hljs language-python"><span class="hljs-keyword">import</span> commands
+<span class="hljs-keyword">import</span> json
 
-if __name__ == &quot;__main__&quot;:
-    id = str(123)
-    command = &quot;java -cp hello.jar hello &quot; + id
-    line = str(commands.getoutput(command))
-    print line
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
+    <span class="hljs-built_in">id</span> = <span class="hljs-built_in">str</span>(<span class="hljs-number">123</span>)
+    command = <span class="hljs-string">&quot;java -cp hello.jar hello &quot;</span> + <span class="hljs-built_in">id</span>
+    line = <span class="hljs-built_in">str</span>(commands.getoutput(command))
+    <span class="hljs-built_in">print</span> line
 
 </code></pre>
 <p>运行python
@@ -141,19 +141,19 @@ if __name__ == &quot;__main__&quot;:
 123456</p>
 <h1 id="maven依赖包打jar包" tabindex="-1">maven依赖包打jar包</h1>
 <p>1、maven pom中添加：</p>
-<pre><code class="hljs">  &lt;build&gt;
-    &lt;plugins&gt;
-      &lt;plugin&gt;
-          &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
-          &lt;!-- &lt;version&gt;2.1&lt;/version&gt; --&gt;
-          &lt;configuration&gt;
-              &lt;descriptorRefs&gt;
-                  &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
-              &lt;/descriptorRefs&gt;
-          &lt;/configuration&gt;
-      &lt;/plugin&gt;
-    &lt;/plugins&gt;
-  &lt;/build&gt;
+<pre><code class="hljs language-html">  <span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>maven-assembly-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+          <span class="hljs-comment">&lt;!-- &lt;version&gt;2.1&lt;/version&gt; --&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">descriptorRefs</span>&gt;</span>
+                  <span class="hljs-tag">&lt;<span class="hljs-name">descriptorRef</span>&gt;</span>jar-with-dependencies<span class="hljs-tag">&lt;/<span class="hljs-name">descriptorRef</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">descriptorRefs</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span>
 </code></pre>
 <p>maven build输入命令：</p>
 <pre><code class="hljs">assembly::assembly
@@ -195,6 +195,6 @@ dependency:copy-dependencies -DoutputDirectory=lib
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.querySelector('.post-body'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
@@ -83,13 +83,13 @@
                 <div class="post-body">
 <p>linux下的rm删除是不能恢复的。mac下有废纸篓的概念，我们可以对rm进行修改，将删除的文件放到废纸篓里</p>
 <p>安全删除脚本, safe_rm.sh</p>
-<pre><code class="hljs">TRASH_DIR=&quot;/Users/mfcheer/.Trash&quot;
-for i in $*; do
-    mv -f $i $TRASH_DIR
-done
+<pre><code class="hljs language-bash">TRASH_DIR=<span class="hljs-string">&quot;/Users/mfcheer/.Trash&quot;</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> $*; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">mv</span> -f <span class="hljs-variable">$i</span> <span class="hljs-variable">$TRASH_DIR</span>
+<span class="hljs-keyword">done</span>
 </code></pre>
 <p>将安全删除脚本文件的目录，修改~/.bash_profile文件将脚本加入到PATH中，再对rm命令重定向</p>
-<pre><code class="hljs">alias rm='safe_rm.sh'
+<pre><code class="hljs language-bash"><span class="hljs-built_in">alias</span> <span class="hljs-built_in">rm</span>=<span class="hljs-string">&#x27;safe_rm.sh&#x27;</span>
 </code></pre>
 <p>这样就能安全的使用rm了</p>
 
@@ -124,6 +124,6 @@ done
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

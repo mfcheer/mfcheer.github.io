@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -86,9 +86,9 @@
 <li>函数式接口里是可以包含默认方法，因为默认方法不是抽象方法</li>
 <li>函数式接口里是可以包含静态方法，因为静态方法不能是抽象方法</li>
 </ul>
-<pre><code class="hljs">@FunctionalInterface
-public interface funcInterfaceDemo {
-	public abstract void hello();
+<pre><code class="hljs language-typescript"><span class="hljs-meta">@FunctionalInterface</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> funcInterfaceDemo {
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">hello</span>();
 }
 </code></pre>
 <h1 id="lambda表达式" tabindex="-1">Lambda表达式</h1>
@@ -101,23 +101,23 @@ Lambda表达式由三个部分组成：第一部分为一个括号内用逗号�
 <li>Predicate&lt;T&gt; ：将 T 作为输入，返回一个布尔值作为输出</li>
 <li>Consumer&lt;T&gt; ：将 T 作为输入，不返回任何内容</li>
 </ul>
-<pre><code class="hljs">Function&lt;Integer, String&gt; f = (t)-&gt;String.valueOf(t);
-String fString = f.apply(5);
-System.out.println(fString);
+<pre><code class="hljs language-javascript"><span class="hljs-title class_">Function</span>&lt;<span class="hljs-title class_">Integer</span>, <span class="hljs-title class_">String</span>&gt; f = (t)-&gt;<span class="hljs-title class_">String</span>.<span class="hljs-title function_">valueOf</span>(t);
+<span class="hljs-title class_">String</span> fString = f.<span class="hljs-title function_">apply</span>(<span class="hljs-number">5</span>);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(fString);
 </code></pre>
 <h1 id="foreach方法" tabindex="-1">forEach方法</h1>
 <p>使用forEach方法遍历List和Map</p>
-<pre><code class="hljs">public static void main(String args[]) {
-	List&lt;String&gt; rlList = Arrays.asList(&quot;1&quot;,&quot;2&quot;);
-	rlList.forEach(t-&gt;{
-			System.out.println(t);
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"><span class="hljs-title class_">String</span> args[]</span>) {
+	<span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">String</span>&gt; rlList = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;1&quot;</span>,<span class="hljs-string">&quot;2&quot;</span>);
+	rlList.<span class="hljs-title function_">forEach</span>(t-&gt;{
+			<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(t);
 	});
 	
-	Map&lt;String, String&gt; items = new HashMap&lt;&gt;();
-	items.put(&quot;1&quot;, &quot;A&quot;);
-	items.put(&quot;2&quot;, &quot;B&quot;);
-	items.forEach((k,v)-&gt;{
-		System.out.println(k + v);
+	<span class="hljs-title class_">Map</span>&lt;<span class="hljs-title class_">String</span>, <span class="hljs-title class_">String</span>&gt; items = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();
+	items.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;1&quot;</span>, <span class="hljs-string">&quot;A&quot;</span>);
+	items.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;2&quot;</span>, <span class="hljs-string">&quot;B&quot;</span>);
+	items.<span class="hljs-title function_">forEach</span>((k,v)-&gt;{
+		<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(k + v);
 	});
 }
 </code></pre>
@@ -136,14 +136,14 @@ System.out.println(fString);
 <li>subStream()：获取子 Stream 等。</li>
 </ul>
 <p>sorted()排序</p>
-<pre><code class="hljs">List&lt;Integer&gt; rlList = Arrays.asList(1,6,4,2,7,9,3);
+<pre><code class="hljs language-python"><span class="hljs-type">List</span>&lt;Integer&gt; rlList = Arrays.asList(<span class="hljs-number">1</span>,<span class="hljs-number">6</span>,<span class="hljs-number">4</span>,<span class="hljs-number">2</span>,<span class="hljs-number">7</span>,<span class="hljs-number">9</span>,<span class="hljs-number">3</span>);
 rlList.forEach(t-&gt;{
-	System.out.print(t);
+	System.out.<span class="hljs-built_in">print</span>(t);
 });
 		
-rlList = rlList.stream().parallel().sorted().collect(Collectors.toList());
+rlList = rlList.stream().parallel().<span class="hljs-built_in">sorted</span>().collect(Collectors.toList());
 rlList.forEach(t-&gt;{
-	System.out.print(t);
+	System.out.<span class="hljs-built_in">print</span>(t);
 });
 </code></pre>
 <h2 id="最终操作" tabindex="-1">最终操作</h2>
@@ -185,6 +185,6 @@ rlList.forEach(t-&gt;{
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

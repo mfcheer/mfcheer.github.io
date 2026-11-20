@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -111,42 +111,42 @@ parent 表示父pom
 <pre><code class="hljs">dependency:copy-dependencies
 </code></pre>
 <p>将依赖包打包成一个包</p>
-<pre><code class="hljs">&lt;build&gt;
-  &lt;plugins&gt;
-    &lt;plugin&gt;
-        &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
-        &lt;!-- &lt;version&gt;2.1&lt;/version&gt; --&gt;
-        &lt;configuration&gt;
-            &lt;descriptorRefs&gt;
-                &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
-            &lt;/descriptorRefs&gt;
-        &lt;/configuration&gt;
-    &lt;/plugin&gt;
-  &lt;/plugins&gt;
-&lt;/build&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>maven-assembly-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+        <span class="hljs-comment">&lt;!-- &lt;version&gt;2.1&lt;/version&gt; --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">descriptorRefs</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">descriptorRef</span>&gt;</span>jar-with-dependencies<span class="hljs-tag">&lt;/<span class="hljs-name">descriptorRef</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">descriptorRefs</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span>
 assembly::assembly
 </code></pre>
 <p>排除依赖包</p>
-<pre><code class="hljs">&lt;exclusions&gt;
-    &lt;exclusion&gt;
-        &lt;groupId&gt;redis.clients&lt;/groupId&gt;
-        &lt;artifactId&gt;jedis&lt;/artifactId&gt;
-    &lt;/exclusion&gt;
-&lt;/exclusions&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">exclusions</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">exclusion</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>redis.clients<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jedis<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">exclusion</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">exclusions</span>&gt;</span>
 </code></pre>
 <p>设定编译jdk版本</p>
-<pre><code class="hljs">&lt;build&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-                &lt;configuration&gt;
-                    &lt;source&gt;1.8&lt;/source&gt;
-                    &lt;target&gt;1.8&lt;/target&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-&lt;/build&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">source</span>&gt;</span>1.8<span class="hljs-tag">&lt;/<span class="hljs-name">source</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">target</span>&gt;</span>1.8<span class="hljs-tag">&lt;/<span class="hljs-name">target</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span>
 </code></pre>
 
                 </div>
@@ -180,6 +180,6 @@ assembly::assembly
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

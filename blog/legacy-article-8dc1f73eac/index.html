@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -80,29 +80,29 @@
                 </header>
                 <div class="post-body">
 <h2 id="前端代码" tabindex="-1">前端代码</h2>
-<pre><code class="hljs">function exportData() {
-    params = encodeURI(params);
-    window.location.href = &quot;interface?&quot; + params
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">exportData</span>(<span class="hljs-params"></span>) {
+    params = <span class="hljs-built_in">encodeURI</span>(params);
+    <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span> = <span class="hljs-string">&quot;interface?&quot;</span> + params
 }
 </code></pre>
 <h2 id="后端代码" tabindex="-1">后端代码</h2>
 <p>maven依赖</p>
-<pre><code class="hljs">&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;
-    &lt;artifactId&gt;poi&lt;/artifactId&gt;
-    &lt;version&gt;3.15&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;
-    &lt;artifactId&gt;poi-ooxml&lt;/artifactId&gt;
-    &lt;version&gt;3.15&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;net.sf.json-lib&lt;/groupId&gt;
-    &lt;artifactId&gt;json-lib&lt;/artifactId&gt;
-    &lt;version&gt;2.4&lt;/version&gt;
-    &lt;classifier&gt;jdk15&lt;/classifier&gt;
-&lt;/dependency&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.poi<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>poi<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.15<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.poi<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>poi-ooxml<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.15<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>net.sf.json-lib<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>json-lib<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.4<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">classifier</span>&gt;</span>jdk15<span class="hljs-tag">&lt;/<span class="hljs-name">classifier</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
 </code></pre>
 <p>发送请求</p>
 <pre><code class="hljs language-java">HttpServletResponse response
@@ -185,6 +185,6 @@ workbook.write(response.getOutputStream());
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

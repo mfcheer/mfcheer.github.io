@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -81,56 +81,56 @@
                 <div class="post-body">
 <h1 id="runnable-或者-callable" tabindex="-1">Runnable 或者 Callable</h1>
 <p>通过实现接口的run方法，实现任务</p>
-<pre><code class="hljs">public class LiftOff implements Runnable {
-    protected int countDown = 10;
-    private static int taskCount = 0;
-    private int id = taskCount++;
-	public LiftOff() {
+<pre><code class="hljs language-cpp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LiftOff</span> implements Runnable {
+    <span class="hljs-keyword">protected</span> <span class="hljs-type">int</span> countDown = <span class="hljs-number">10</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">static</span> <span class="hljs-type">int</span> taskCount = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> id = taskCount++;
+	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">LiftOff</span><span class="hljs-params">()</span> </span>{
 		
 	}
-	public LiftOff(int countDown) {
-		this.countDown = countDown;
+	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">LiftOff</span><span class="hljs-params">(<span class="hljs-type">int</span> countDown)</span> </span>{
+		<span class="hljs-keyword">this</span>.countDown = countDown;
 	}
-	public String Status() {
-		return &quot;#&quot; + id + &quot;(&quot; + 
-				(countDown &gt; 0?countDown : &quot;LiftOff!&quot;) + &quot;).&quot;;
+	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">Status</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;#&quot;</span> + id + <span class="hljs-string">&quot;(&quot;</span> + 
+				(countDown &gt; <span class="hljs-number">0</span>?countDown : <span class="hljs-string">&quot;LiftOff!&quot;</span>) + <span class="hljs-string">&quot;).&quot;</span>;
 	}
-	@Override
-	public void run() {
-		while (countDown-- &gt; 0) {
-			System.out.print(Status());
-			Thread.yield();
+	@<span class="hljs-function">Override
+	<span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-keyword">while</span> (countDown-- &gt; <span class="hljs-number">0</span>) {
+			System.out.<span class="hljs-built_in">print</span>(<span class="hljs-built_in">Status</span>());
+			Thread.<span class="hljs-built_in">yield</span>();
 		}
 		
 	}
-	public static void main(String[] args) {
-		LiftOff launch = new LiftOff(10);
-		launch.run();
+	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+		LiftOff launch = <span class="hljs-keyword">new</span> <span class="hljs-built_in">LiftOff</span>(<span class="hljs-number">10</span>);
+		launch.<span class="hljs-built_in">run</span>();
 	}
 }
-/*
+<span class="hljs-comment">/*
  * Output：
  * #0(9).#0(8).#0(7).#0(6).#0(5).#0(4).#0(3).#0(2).#0(1).#0(LiftOff!).
  * 
- */
+ */</span>
 </code></pre>
 <p>任务和线程是各自独立的。我们实现了 Runnable 接口的 run（）方法，这只是定义任务，和线程没有任何关系。要实现线程行为，必须显式地将一个任务附着到线程上。</p>
 <p>Thread.yield() 它是对线程调度器的一种建议，它在声明：”我已经执行完生命周期中最重要的部分了，此刻可以切换给别的任务，让它们执行吧。”这仅仅是一种建议，线程调度器不一定会执行。当调用 yield()时，其实是在建议线程调度器去调度具有相同优先级的其他线程工作。</p>
 <h1 id="thread类" tabindex="-1">Thread类</h1>
 <p>将runnable的任务提交给Thread构造器</p>
-<pre><code class="hljs">public class BasicThreads {
-	public static void main(String[] args) {
-		Thread t = new Thread(new LiftOff(10));
-		t.start();
-		System.out.println(&quot;Waiting for LiftOff&quot;);
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BasicThreads</span> {
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"><span class="hljs-title class_">String</span>[] args</span>) {
+		<span class="hljs-title class_">Thread</span> t = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">LiftOff</span>(<span class="hljs-number">10</span>));
+		t.<span class="hljs-title function_">start</span>();
+		<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;Waiting for LiftOff&quot;</span>);
 	}
 }
 
-/*
+<span class="hljs-comment">/*
  * Output:
  * Waiting for LiftOff
  * #0(9).#0(8).#0(7).#0(6).#0(5).#0(4).#0(3).#0(2).#0(1).#0(LiftOff!)
- * */
+ * */</span>
  * 
 </code></pre>
 <p>Thread 构造器只需要一个 Runnable 对象。调用 start()方法为该线程执行必需的初始化操作，然后调用 Runnable 接口的 run()方法，以便在这个新线程中启动该任务。注意执行结果，在 start()方法执行时，虽然调用了 run()方法，但是 start()迅速返回了（先输出了 Waiting for LiftOff），这是因为：main()方法本身就是一个线程，调用 Thread.start()后系统又创建了一个新的线程，而LiftOff就依附在这个线程上执行。两个线程是同时执行的，互不影响。</p>
@@ -141,14 +141,14 @@
 </ul>
 <h1 id="使用-executorservice-管理-thread" tabindex="-1">使用 ExecutorService 管理 Thread</h1>
 <p>单个 Executor 被用来管理系统中所有的任务</p>
-<pre><code class="hljs">import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+<pre><code class="hljs language-java"><span class="hljs-keyword">import</span> java.util.concurrent.ExecutorService;
+<span class="hljs-keyword">import</span> java.util.concurrent.Executors;
 
-public class CachedThreadPool {
-	public static void main(String[] args) {
-		ExecutorService exec = Executors.newCachedThreadPool();
-		for(int i = 0; i &lt; 5; i++) {
-			exec.execute(new LiftOff(5));
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CachedThreadPool</span> {
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> {
+		<span class="hljs-type">ExecutorService</span> <span class="hljs-variable">exec</span> <span class="hljs-operator">=</span> Executors.newCachedThreadPool();
+		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) {
+			exec.execute(<span class="hljs-keyword">new</span> <span class="hljs-title class_">LiftOff</span>(<span class="hljs-number">5</span>));
 		}
 		exec.shutdown();
 	}
@@ -164,117 +164,117 @@ SingleThreadExecutor() 线程数量为1的线程池
 <p>Runnable执行独立任务的没有返回值的。
 Callable接口，实现call方法，call方法是有返回值的。
 但是必须使用ExecutorService.submit()方法去调用它。submit方法会产生Future对象</p>
-<pre><code class="hljs">class TaskWithResult implements Callable&lt;String&gt;{
-	private int id;
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">TaskWithResult</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Callable</span>&lt;<span class="hljs-title class_">String</span>&gt;{
+	<span class="hljs-keyword">private</span> int id;
 	
-	public TaskWithResult(int id){
-		this.id = id;
+	<span class="hljs-keyword">public</span> <span class="hljs-title class_">TaskWithResult</span>(int id){
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span> = id;
 	}
 	
-	public String call() {
-		return &quot;resulit id: &quot; + this.id;
+	<span class="hljs-keyword">public</span> <span class="hljs-title class_">String</span> <span class="hljs-title function_">call</span>(<span class="hljs-params"></span>) {
+		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;resulit id: &quot;</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span>;
 	}
 }
-public class CallableDemo {
-	public static void main(String[] args) throws InterruptedException, ExecutionException{
-		ExecutorService exec = Executors.newCachedThreadPool();
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CallableDemo</span> {
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-title class_">String</span>[] args) throws <span class="hljs-title class_">InterruptedException</span>, <span class="hljs-title class_">ExecutionException</span>{
+		<span class="hljs-title class_">ExecutorService</span> exec = <span class="hljs-title class_">Executors</span>.<span class="hljs-title function_">newCachedThreadPool</span>();
 	
-		ArrayList&lt;Future&lt;String&gt;&gt; results = new ArrayList&lt;Future&lt;String&gt;&gt;();
+		<span class="hljs-title class_">ArrayList</span>&lt;<span class="hljs-title class_">Future</span>&lt;<span class="hljs-title class_">String</span>&gt;&gt; results = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;<span class="hljs-title class_">Future</span>&lt;<span class="hljs-title class_">String</span>&gt;&gt;();
 		
-		for(int i = 0;i &lt; 10; i++){
-			results.add(exec.submit(new TaskWithResult(i)));
+		<span class="hljs-keyword">for</span>(int i = <span class="hljs-number">0</span>;i &lt; <span class="hljs-number">10</span>; i++){
+			results.<span class="hljs-title function_">add</span>(exec.<span class="hljs-title function_">submit</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TaskWithResult</span>(i)));
 		}
 		
-		for(Future&lt;String&gt; fs: results){
-			if(fs.isDone()){
-				System.out.println(fs.get());
+		<span class="hljs-keyword">for</span>(<span class="hljs-title class_">Future</span>&lt;<span class="hljs-title class_">String</span>&gt; <span class="hljs-attr">fs</span>: results){
+			<span class="hljs-keyword">if</span>(fs.<span class="hljs-title function_">isDone</span>()){
+				<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(fs.<span class="hljs-title function_">get</span>());
 			}
 		}
-		exec.shutdown();
+		exec.<span class="hljs-title function_">shutdown</span>();
 	}
 }
-resulit id: 0
-resulit id: 1
-resulit id: 2
-resulit id: 3
-resulit id: 4
-resulit id: 5
-resulit id: 6
-resulit id: 7
-resulit id: 8
-resulit id: 9
+resulit <span class="hljs-attr">id</span>: <span class="hljs-number">0</span>
+resulit <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>
+resulit <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>
+resulit <span class="hljs-attr">id</span>: <span class="hljs-number">3</span>
+resulit <span class="hljs-attr">id</span>: <span class="hljs-number">4</span>
+resulit <span class="hljs-attr">id</span>: <span class="hljs-number">5</span>
+resulit <span class="hljs-attr">id</span>: <span class="hljs-number">6</span>
+resulit <span class="hljs-attr">id</span>: <span class="hljs-number">7</span>
+resulit <span class="hljs-attr">id</span>: <span class="hljs-number">8</span>
+resulit <span class="hljs-attr">id</span>: <span class="hljs-number">9</span>
 </code></pre>
 <h1 id="休眠" tabindex="-1">休眠</h1>
-<pre><code class="hljs">import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+<pre><code class="hljs language-java"><span class="hljs-keyword">import</span> java.util.concurrent.ExecutorService;
+<span class="hljs-keyword">import</span> java.util.concurrent.Executors;
+<span class="hljs-keyword">import</span> java.util.concurrent.TimeUnit;
 
-public class SleepingTask extends LiftOff{
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SleepingTask</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">LiftOff</span>{
 
-	public void run(){
-		try{
-			while (countDown-- &gt; 0){
+	<span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span>{
+		<span class="hljs-keyword">try</span>{
+			<span class="hljs-keyword">while</span> (countDown-- &gt; <span class="hljs-number">0</span>){
 				System.out.print(Status());
-				TimeUnit.MILLISECONDS.sleep(1000);
+				TimeUnit.MILLISECONDS.sleep(<span class="hljs-number">1000</span>);
 			}
-		}catch(InterruptedException e){
-			System.err.println(&quot;Interrupted&quot;);
+		}<span class="hljs-keyword">catch</span>(InterruptedException e){
+			System.err.println(<span class="hljs-string">&quot;Interrupted&quot;</span>);
 		}
 	}
 	
-	public static void main(String[] args){
-		ExecutorService exec = Executors.newCachedThreadPool();
-		for(int i=0;i&lt;5;i++){
-			exec.execute(new SleepingTask());
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span>{
+		<span class="hljs-type">ExecutorService</span> <span class="hljs-variable">exec</span> <span class="hljs-operator">=</span> Executors.newCachedThreadPool();
+		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span><span class="hljs-operator">=</span><span class="hljs-number">0</span>;i&lt;<span class="hljs-number">5</span>;i++){
+			exec.execute(<span class="hljs-keyword">new</span> <span class="hljs-title class_">SleepingTask</span>());
 		}
 		exec.shutdown();
 	}
 }
-/*
+<span class="hljs-comment">/*
  * 异常不能跨线程 
- * */
+ * */</span>
 </code></pre>
 <p>对 sleep()的调用可能抛出 InterruptedException 异常（很容易想象，你在睡觉的时候也会被闹钟打断。这里是调用 Thread.interrupt()），并且你可以看到，它在 run()中被捕获。因为异常不能跨线程传播，所以这里抛出的异常是不能被 main 线程捕获的。线程之间只共享指定的临界资源，像异常处理都是线程私有的</p>
 <h1 id="优先级" tabindex="-1">优先级</h1>
 <p>通过setPriority和getPriority去修改和获取线程的优先级</p>
-<pre><code class="hljs">import java.util.concurrent.*;
+<pre><code class="hljs language-java"><span class="hljs-keyword">import</span> java.util.concurrent.*;
 
-import com.sun.corba.se.spi.orb.StringPair;
-import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
+<span class="hljs-keyword">import</span> com.sun.corba.se.spi.orb.StringPair;
+<span class="hljs-keyword">import</span> com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
 
-public class SimplePriorities implements Runnable{
-	private int countDown = 5;
-	private volatile double d;
-	private int priority;
-	public SimplePriorities(int priority) {
-		this.priority = priority;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SimplePriorities</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span>{
+	<span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">countDown</span> <span class="hljs-operator">=</span> <span class="hljs-number">5</span>;
+	<span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">double</span> d;
+	<span class="hljs-keyword">private</span> <span class="hljs-type">int</span> priority;
+	<span class="hljs-type">public</span> <span class="hljs-title function_">SimplePriorities</span><span class="hljs-params">(<span class="hljs-type">int</span> priority)</span> {
+		<span class="hljs-built_in">this</span>.priority = priority;
 	}
-	public String ToString(){
-		return Thread.currentThread() + &quot;: &quot; + countDown;
+	<span class="hljs-keyword">public</span> <span class="hljs-type">String</span> <span class="hljs-title function_">ToString</span><span class="hljs-params">()</span>{
+		<span class="hljs-keyword">return</span> Thread.currentThread() + <span class="hljs-string">&quot;: &quot;</span> + countDown;
 	}
 	
-	@Override
-	public void run() {
+	<span class="hljs-meta">@Override</span>
+	<span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> {
 		Thread.currentThread().setPriority(priority);
-		while(true){
-			for(int i=0;i&lt;100000;i++){
+		<span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>){
+			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span><span class="hljs-operator">=</span><span class="hljs-number">0</span>;i&lt;<span class="hljs-number">100000</span>;i++){
 				d += (Math.PI + Math.E) / i;
-				if (i % 1000 == 0){
-					Thread.yield();
+				<span class="hljs-keyword">if</span> (i % <span class="hljs-number">1000</span> == <span class="hljs-number">0</span>){
+					Thread.<span class="hljs-keyword">yield</span>();
 				}
 			}
-			System.out.println(this.priority);
-			if (--countDown == 0)
-				return;
+			System.out.println(<span class="hljs-built_in">this</span>.priority);
+			<span class="hljs-keyword">if</span> (--countDown == <span class="hljs-number">0</span>)
+				<span class="hljs-keyword">return</span>;
 		}
 		
 	}
 	
-	public static void main(String[] args){
-		ExecutorService exec = Executors.newCachedThreadPool();
-		for(int i=0;i&lt;5;i++){
-			exec.execute(new SimplePriorities(Thread.MIN_PRIORITY));
-			exec.execute(new SimplePriorities(Thread.MAX_PRIORITY));
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span>{
+		<span class="hljs-type">ExecutorService</span> <span class="hljs-variable">exec</span> <span class="hljs-operator">=</span> Executors.newCachedThreadPool();
+		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span><span class="hljs-operator">=</span><span class="hljs-number">0</span>;i&lt;<span class="hljs-number">5</span>;i++){
+			exec.execute(<span class="hljs-keyword">new</span> <span class="hljs-title class_">SimplePriorities</span>(Thread.MIN_PRIORITY));
+			exec.execute(<span class="hljs-keyword">new</span> <span class="hljs-title class_">SimplePriorities</span>(Thread.MAX_PRIORITY));
 		}
 		exec.shutdown();
 	}
@@ -282,27 +282,27 @@ public class SimplePriorities implements Runnable{
 </code></pre>
 <h1 id="后台线程" tabindex="-1">后台线程</h1>
 <p>后台线程是指在程序运行的时候在后台提供一种通用服务的线程，并且这种线程并不属于程序中不可或缺的部分（意思是非必要，比如在项目中定时打印线程池的使用状况）。因此，当所有的非后台线程结束时，程序也就终止了，同时会杀死进程中的所有后台线程。所以，只要有任何非后台线程还在运行，程序就不会终止。main()就是一个非后台线程。设置后台线程有一个注意点：必须在 start()之前设定。</p>
-<pre><code class="hljs">public class SimpleDaemons implements Runnable {
-    public void run() {
-        try {
-                while (true) {
-                    TimeUnit.MILLISECONDS.sleep(100);
-                    System.out.println(Thread.currentThread() + &quot; &quot; + this);
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SimpleDaemons</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span> {
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">run</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">try</span> {
+                <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+                    <span class="hljs-title class_">TimeUnit</span>.<span class="hljs-property">MILLISECONDS</span>.<span class="hljs-title function_">sleep</span>(<span class="hljs-number">100</span>);
+                    <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">Thread</span>.<span class="hljs-title function_">currentThread</span>() + <span class="hljs-string">&quot; &quot;</span> + <span class="hljs-variable language_">this</span>);
                 }
-            } catch (InterruptedException e) {
-                System.out.println(&quot;sleep() interrupted&quot;);
-                e.printStackTrace();
+            } <span class="hljs-keyword">catch</span> (<span class="hljs-title class_">InterruptedException</span> e) {
+                <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;sleep() interrupted&quot;</span>);
+                e.<span class="hljs-title function_">printStackTrace</span>();
             }
     }
 
-    public static void main(String[]() args) throws InterruptedException {
-        for(int i = 0; i &lt; 10; i++) {
-            Thread daemon = new Thread(new SimpleDaemons());
-            daemon.setDaemon(true); // Must call before start();
-            daemon.start();
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-title class_">String</span>[]() args) throws <span class="hljs-title class_">InterruptedException</span> {
+        <span class="hljs-keyword">for</span>(int i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+            <span class="hljs-title class_">Thread</span> daemon = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleDaemons</span>());
+            daemon.<span class="hljs-title function_">setDaemon</span>(<span class="hljs-literal">true</span>); <span class="hljs-comment">// Must call before start();</span>
+            daemon.<span class="hljs-title function_">start</span>();
         }
-        System.out.println(&quot;All daemons started&quot;);
-        TimeUnit.MILLISECONDS.sleep(275);
+        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;All daemons started&quot;</span>);
+        <span class="hljs-title class_">TimeUnit</span>.<span class="hljs-property">MILLISECONDS</span>.<span class="hljs-title function_">sleep</span>(<span class="hljs-number">275</span>);
     }
 }
 
@@ -339,6 +339,6 @@ public class SimplePriorities implements Runnable{
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

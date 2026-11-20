@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -100,7 +100,7 @@
 <p>引流模式分为离线回放、部分引流和放大引流三种模式。下面分别介绍这三种模式。</p>
 <h3 id="2.2.1离线回放" tabindex="-1">2.2.1离线回放</h3>
 <p>　　用法：离线回放模式需要在configure 的时候加上--enable-offline 参数，离线回放还需要安装pcap 库和pcap 开发库（需要用到pcap 库的头文件），另外运行的时候需要指定-i 参数。</p>
-<pre><code class="hljs">#./tcpcopy -x 110-xxx.xxx.xxx.148:110 -i ./online.pcap
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">./tcpcopy -x 110-xxx.xxx.xxx.148:110 -i ./online.pcap</span>
 </code></pre>
 <p>　　这里oline.pcap（利用tcpdump 的工具来抓请求数据包，存放到pcap 格式的文件中去）文件作为数据源，把请求转发到测试服务器上。此外增加-a参数对请求数据包的访问进行加速</p>
 <pre><code class="hljs">#./tcpcopy -x 80-xxx.xxx.x.xx:8080 -a 2 -i online.pcap
@@ -134,20 +134,20 @@
 <p>2.intercept：安装到测试内核后端机，intercept.tar解压后放到测试内核后端机的目录下(/opt/soft/)，</p>
 <h2 id="3.2部署方法" tabindex="-1">3.2部署方法</h2>
 <p>假如有两台机器：</p>
-<pre><code class="hljs">机器A：线上内核后端机，ip：10.9.20.20，端口号：9909；
- 机器B：测试内核后端机，ip：10.4.20.51，端口号：49908；
+<pre><code class="hljs language-css">机器<span class="hljs-selector-tag">A</span>：线上内核后端机，ip：<span class="hljs-number">10.9</span>.<span class="hljs-number">20.20</span>，端口号：<span class="hljs-number">9909</span>；
+ 机器<span class="hljs-selector-tag">B</span>：测试内核后端机，ip：<span class="hljs-number">10.4</span>.<span class="hljs-number">20.51</span>，端口号：<span class="hljs-number">49908</span>；
  两台机器上都起了推荐内核服务，操作者在两台机器上都需有root权限
 操作步骤：
-1.进入B机器root用户，在B上依次执行，
-1)加载 ip_queue 模块，modprobe ip_queue；
-2)配置 iptables 规则，
-sudo -S /root/.init_sys/iptables -I OUTPUT -p tcp --sport 49908 -j QUEUE；
-3)启动 tcpcopy 服务端，后台运行，sudo ./interception -d；(-d表示后台运行)
-2.进入A机器root用户，在A上执行，
-1)启动 tcpcopy 客户端，后台启动：
-sudo ./tcpcopy -d -x 9909-10.4.20.51:49908；(-x表示分布式引流，-d 表示后台启动)；
-2)若要复制线上多份流量，则如下启动tcpcopy客户端：
-sudo ./tcpcopy -d -x 9909-10.4.20.51:49908 -n 10；(-x表示分布式引流，-d 表示后台启动，-n后的数字表示复制的份数)。
+<span class="hljs-number">1</span>.进入<span class="hljs-selector-tag">B</span>机器root用户，在<span class="hljs-selector-tag">B</span>上依次执行，
+<span class="hljs-number">1</span>)加载 ip_queue 模块，modprobe ip_queue；
+<span class="hljs-number">2</span>)配置 iptables 规则，
+sudo -S /root/<span class="hljs-selector-class">.init_sys</span>/iptables -<span class="hljs-selector-tag">I</span> OUTPUT -<span class="hljs-selector-tag">p</span> tcp <span class="hljs-attr">--sport</span> <span class="hljs-number">49908</span> -j QUEUE；
+<span class="hljs-number">3</span>)启动 tcpcopy 服务端，后台运行，sudo ./interception -d；(-d表示后台运行)
+<span class="hljs-number">2</span>.进入<span class="hljs-selector-tag">A</span>机器root用户，在<span class="hljs-selector-tag">A</span>上执行，
+<span class="hljs-number">1</span>)启动 tcpcopy 客户端，后台启动：
+sudo ./tcpcopy -d -<span class="hljs-attribute">x</span> <span class="hljs-number">9909</span>-<span class="hljs-number">10.4</span>.<span class="hljs-number">20.51</span>:<span class="hljs-number">49908</span>；(-x表示分布式引流，-d 表示后台启动)；
+<span class="hljs-number">2</span>)若要复制线上多份流量，则如下启动tcpcopy客户端：
+sudo ./tcpcopy -d -x <span class="hljs-number">9909</span>-<span class="hljs-number">10.4</span>.<span class="hljs-number">20.51</span>:<span class="hljs-number">49908</span> -n <span class="hljs-number">10</span>；(-x表示分布式引流，-d 表示后台启动，-n后的数字表示复制的份数)。
 </code></pre>
 <h1 id="4总结" tabindex="-1">4总结</h1>
 <p>tcpcopy工具可用于从前端到后端的请求的测试，可用于复制线上流量到本地测试机，因此，可以通过该工具在不上线时完成测试。利用此工具测试有以后优势：</p>
@@ -189,6 +189,6 @@ sudo ./tcpcopy -d -x 9909-10.4.20.51:49908 -n 10；(-x表示分布式引流，-d
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

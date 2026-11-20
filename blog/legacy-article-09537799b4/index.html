@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -89,19 +89,19 @@ hive -e &quot;sql&quot; 命令可以运行语句</p>
 创建一个内部表时，hive会在hdfs上创建一个相应的表目录，该表目录位于hive配置文件中参数 ${hive.metastore.warehouse.dir}  指定的数据仓库目录下，所有的表数据（不包括外部表数据）都保存在这个目录中。如该参数默认值是 /user/hive/warehouse，则创建test表会创建hdfs目录/user/hive/warehouse/test</p>
 <h3 id="外部表" tabindex="-1">外部表</h3>
 <p>external 关键字可以让用户创建一个外部表，在建表的同时需要指定一个location，为已存在的hdfs目录。与Hive 创建内部表时会在hdfs上创建数据仓库表目录不同，创建外部表时不会创建表目录，而是直接使用指定的location作为表目录。这种方式下，在删除表的时候，只删除元数据，不删除实际数据。而内部表删除表时将所有数据均删除。此外，创建外部表的同时可以指定分隔符。</p>
-<pre><code class="hljs">CREATE EXTERNAL TABLE `test`(
- `r1` string, 
- `r2` string, 
- `r3` string, 
- `r4` string, 
- `r5` string)
-PARTITIONED BY ( 
- `dt` string)
-ROW FORMAT DELIMITED 
- FIELDS TERMINATED BY '\t'
- LINES TERMINATED BY '\n' 
-LOCATION
- '/home/work/mfcheer/test';
+<pre><code class="hljs language-typescript"><span class="hljs-variable constant_">CREATE</span> <span class="hljs-variable constant_">EXTERNAL</span> <span class="hljs-variable constant_">TABLE</span> <span class="hljs-string">`test`</span>(
+ <span class="hljs-string">`r1`</span> <span class="hljs-built_in">string</span>, 
+ <span class="hljs-string">`r2`</span> <span class="hljs-built_in">string</span>, 
+ <span class="hljs-string">`r3`</span> <span class="hljs-built_in">string</span>, 
+ <span class="hljs-string">`r4`</span> <span class="hljs-built_in">string</span>, 
+ <span class="hljs-string">`r5`</span> <span class="hljs-built_in">string</span>)
+<span class="hljs-variable constant_">PARTITIONED</span> <span class="hljs-title function_">BY</span> ( 
+ <span class="hljs-string">`dt`</span> <span class="hljs-built_in">string</span>)
+<span class="hljs-variable constant_">ROW</span> <span class="hljs-variable constant_">FORMAT</span> <span class="hljs-variable constant_">DELIMITED</span> 
+ <span class="hljs-variable constant_">FIELDS</span> <span class="hljs-variable constant_">TERMINATED</span> <span class="hljs-variable constant_">BY</span> <span class="hljs-string">&#x27;\t&#x27;</span>
+ <span class="hljs-variable constant_">LINES</span> <span class="hljs-variable constant_">TERMINATED</span> <span class="hljs-variable constant_">BY</span> <span class="hljs-string">&#x27;\n&#x27;</span> 
+<span class="hljs-variable constant_">LOCATION</span>
+ <span class="hljs-string">&#x27;/home/work/mfcheer/test&#x27;</span>;
 </code></pre>
 <h1 id="与传统数据库相比" tabindex="-1">与传统数据库相比</h1>
 <p>不支持更新和删除操作</p>
@@ -139,6 +139,6 @@ LOCATION
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

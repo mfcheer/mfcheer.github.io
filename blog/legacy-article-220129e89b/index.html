@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -98,8 +98,8 @@
 <pre><code class="hljs">hadoop fs -moveFromLocal  &lt; local src &gt; ... &lt; hdfs dst &gt;
 </code></pre>
 <p>rm命令，删除多个文件或目录</p>
-<pre><code class="hljs">hadoop fs -rm &lt; hdfs file &gt;
-hadoop fs -rm -r &lt; hdfs dir&gt;
+<pre><code class="hljs language-bash">hadoop fs -<span class="hljs-built_in">rm</span> &lt; hdfs file &gt;
+hadoop fs -<span class="hljs-built_in">rm</span> -r &lt; hdfs <span class="hljs-built_in">dir</span>&gt;
 </code></pre>
 <p>cp</p>
 <pre><code class="hljs">hadoop fs -cp  &lt; hdfs file &gt;  &lt; hdfs file &gt;
@@ -108,9 +108,9 @@ hadoop fs -rm -r &lt; hdfs dir&gt;
 <pre><code class="hljs">hadoop fs -mv &lt; hdfs file &gt;  &lt; hdfs file &gt;
 </code></pre>
 <p>du 显示hdfs对应路径下每个文件夹和文件的大小</p>
-<pre><code class="hljs">hadoop fs -du &lt; hdsf path&gt; 
-hadoop fs -du -s &lt; hdsf path&gt; 
-hadoop fs -du - h &lt; hdsf path&gt; 
+<pre><code class="hljs language-bash">hadoop fs -<span class="hljs-built_in">du</span> &lt; hdsf path&gt; 
+hadoop fs -<span class="hljs-built_in">du</span> -s &lt; hdsf path&gt; 
+hadoop fs -<span class="hljs-built_in">du</span> - h &lt; hdsf path&gt; 
 </code></pre>
 <p>mkdir</p>
 <pre><code class="hljs">hadoop fs -mkdir &lt; hdfs path&gt;
@@ -147,6 +147,6 @@ hadoop fs -du - h &lt; hdsf path&gt;
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

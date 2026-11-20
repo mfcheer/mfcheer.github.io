@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -94,82 +94,82 @@
 </ul>
 <p>网上看到一个代码示例，觉得很不错。
 代码示例：</p>
-<pre><code class="hljs">import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
+<pre><code class="hljs language-java"><span class="hljs-keyword">import</span> java.util.concurrent.BlockingQueue;
+<span class="hljs-keyword">import</span> java.util.concurrent.ExecutorService;
+<span class="hljs-keyword">import</span> java.util.concurrent.Executors;
+<span class="hljs-keyword">import</span> java.util.concurrent.LinkedBlockingQueue;
 
-public class ProducerConsumer {
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ProducerConsumer</span> {
 	
-    public class Product {
-        private int id;
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Product</span> {
+        <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> id;
 
-        public Product(int id) {
-            this.id = id;
+        <span class="hljs-type">public</span> <span class="hljs-title function_">Product</span><span class="hljs-params">(<span class="hljs-type">int</span> id)</span> {
+            <span class="hljs-built_in">this</span>.id = id;
         }
 
-        public String toString() {
-            return &quot;产品：&quot; + this.id;
+        <span class="hljs-keyword">public</span> <span class="hljs-type">String</span> <span class="hljs-title function_">toString</span><span class="hljs-params">()</span> {
+            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;产品：&quot;</span> + <span class="hljs-built_in">this</span>.id;
         }
     }
 	
-	public class Storage {
-        BlockingQueue&lt;Product&gt; queues = new LinkedBlockingQueue&lt;Product&gt;(10);
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Storage</span> {
+        <span class="hljs-type">BlockingQueue</span>&lt;Product&gt; <span class="hljs-variable">queues</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LinkedBlockingQueue</span>&lt;Product&gt;(<span class="hljs-number">10</span>);
 
-        public void push(Product p) throws InterruptedException {
+        <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">push</span><span class="hljs-params">(Product p)</span> <span class="hljs-keyword">throws</span> InterruptedException {
             queues.put(p);
         }
         
-        public Product pop() throws InterruptedException {
-            return queues.take();
+        <span class="hljs-keyword">public</span> <span class="hljs-type">Product</span> <span class="hljs-title function_">pop</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> InterruptedException {
+            <span class="hljs-keyword">return</span> queues.take();
         }
     }
 
-	 class Producer implements Runnable {
-	        private String name;
-	        private Storage s = null;
+	 <span class="hljs-keyword">class</span> <span class="hljs-title class_">Producer</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span> {
+	        <span class="hljs-keyword">private</span> String name;
+	        <span class="hljs-keyword">private</span> <span class="hljs-type">Storage</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
 
-	        public Producer(String name, Storage s) {
-	            this.name = name;
-	            this.s = s;
+	        <span class="hljs-type">public</span> <span class="hljs-title function_">Producer</span><span class="hljs-params">(String name, Storage s)</span> {
+	            <span class="hljs-built_in">this</span>.name = name;
+	            <span class="hljs-built_in">this</span>.s = s;
 	        }
 
-	        public void run() {
-	            try {
-	                while (true) {
-	                    Product product = new Product((int) (Math.random() * 10000)); // 产生0~9999随机整数
-	                    System.out.println(name + &quot;准备生产(&quot; + product.toString() + &quot;).&quot;);
+	        <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> {
+	            <span class="hljs-keyword">try</span> {
+	                <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+	                    <span class="hljs-type">Product</span> <span class="hljs-variable">product</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Product</span>((<span class="hljs-type">int</span>) (Math.random() * <span class="hljs-number">10000</span>)); <span class="hljs-comment">// 产生0~9999随机整数</span>
+	                    System.out.println(name + <span class="hljs-string">&quot;准备生产(&quot;</span> + product.toString() + <span class="hljs-string">&quot;).&quot;</span>);
 	                    s.push(product);
-	                    System.out.println(name + &quot;已生产(&quot; + product.toString() + &quot;).&quot;);
-	                    System.out.println(&quot;===============&quot;);
-	                    Thread.sleep(500);
+	                    System.out.println(name + <span class="hljs-string">&quot;已生产(&quot;</span> + product.toString() + <span class="hljs-string">&quot;).&quot;</span>);
+	                    System.out.println(<span class="hljs-string">&quot;===============&quot;</span>);
+	                    Thread.sleep(<span class="hljs-number">500</span>);
 	                }
-	            } catch (InterruptedException e1) {
+	            } <span class="hljs-keyword">catch</span> (InterruptedException e1) {
 	                e1.printStackTrace();
 	            }
 
 	        }
 	    }
 	
-	class Consumer implements Runnable {
-        private String name;
-        private Storage s = null;
+	<span class="hljs-keyword">class</span> <span class="hljs-title class_">Consumer</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span> {
+        <span class="hljs-keyword">private</span> String name;
+        <span class="hljs-keyword">private</span> <span class="hljs-type">Storage</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
 
-        public Consumer(String name, Storage s) {
-            this.name = name;
-            this.s = s;
+        <span class="hljs-type">public</span> <span class="hljs-title function_">Consumer</span><span class="hljs-params">(String name, Storage s)</span> {
+            <span class="hljs-built_in">this</span>.name = name;
+            <span class="hljs-built_in">this</span>.s = s;
         }
 
-        public void run() {
-            try {
-                while (true) {
-                    System.out.println(name + &quot;准备消费产品.&quot;);
-                    Product product = s.pop();
-                    System.out.println(name + &quot;已消费(&quot; + product.toString() + &quot;).&quot;);
-                    System.out.println(&quot;===============&quot;);
-                    Thread.sleep(500);
+        <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> {
+            <span class="hljs-keyword">try</span> {
+                <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+                    System.out.println(name + <span class="hljs-string">&quot;准备消费产品.&quot;</span>);
+                    <span class="hljs-type">Product</span> <span class="hljs-variable">product</span> <span class="hljs-operator">=</span> s.pop();
+                    System.out.println(name + <span class="hljs-string">&quot;已消费(&quot;</span> + product.toString() + <span class="hljs-string">&quot;).&quot;</span>);
+                    System.out.println(<span class="hljs-string">&quot;===============&quot;</span>);
+                    Thread.sleep(<span class="hljs-number">500</span>);
                 }
-            } catch (InterruptedException e) {
+            } <span class="hljs-keyword">catch</span> (InterruptedException e) {
                 e.printStackTrace();
             }
 
@@ -177,22 +177,22 @@ public class ProducerConsumer {
 
     }
 
-    public static void main(String[] args) {
-        ProducerConsumer pc = new ProducerConsumer();
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> {
+        <span class="hljs-type">ProducerConsumer</span> <span class="hljs-variable">pc</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ProducerConsumer</span>();
 
-        Storage s = pc.new Storage();
+        <span class="hljs-type">Storage</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> pc.<span class="hljs-keyword">new</span> <span class="hljs-title class_">Storage</span>();
         
-        Producer p = pc.new Producer(&quot;张三&quot;, s);
-        Producer p2 = pc.new Producer(&quot;李四&quot;, s);
+        <span class="hljs-type">Producer</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> pc.<span class="hljs-keyword">new</span> <span class="hljs-title class_">Producer</span>(<span class="hljs-string">&quot;张三&quot;</span>, s);
+        <span class="hljs-type">Producer</span> <span class="hljs-variable">p2</span> <span class="hljs-operator">=</span> pc.<span class="hljs-keyword">new</span> <span class="hljs-title class_">Producer</span>(<span class="hljs-string">&quot;李四&quot;</span>, s);
         
-        Consumer c = pc.new Consumer(&quot;王五&quot;, s);
-        Consumer c2 = pc.new Consumer(&quot;老刘&quot;, s);
-        Consumer c3 = pc.new Consumer(&quot;老林&quot;, s);
+        <span class="hljs-type">Consumer</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> pc.<span class="hljs-keyword">new</span> <span class="hljs-title class_">Consumer</span>(<span class="hljs-string">&quot;王五&quot;</span>, s);
+        <span class="hljs-type">Consumer</span> <span class="hljs-variable">c2</span> <span class="hljs-operator">=</span> pc.<span class="hljs-keyword">new</span> <span class="hljs-title class_">Consumer</span>(<span class="hljs-string">&quot;老刘&quot;</span>, s);
+        <span class="hljs-type">Consumer</span> <span class="hljs-variable">c3</span> <span class="hljs-operator">=</span> pc.<span class="hljs-keyword">new</span> <span class="hljs-title class_">Consumer</span>(<span class="hljs-string">&quot;老林&quot;</span>, s);
         
-        ExecutorService service = Executors.newCachedThreadPool();
+        <span class="hljs-type">ExecutorService</span> <span class="hljs-variable">service</span> <span class="hljs-operator">=</span> Executors.newCachedThreadPool();
         
         service.submit(p);
-        //service.submit(p2);
+        <span class="hljs-comment">//service.submit(p2);</span>
         service.submit(c);
         service.submit(c2);
         service.submit(c3);        
@@ -231,6 +231,6 @@ public class ProducerConsumer {
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

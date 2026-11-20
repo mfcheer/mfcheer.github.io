@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -83,25 +83,25 @@
 <p>在命令行下输入kinit，若是有这个命令，说明kerberos已经装好了。否则需要自己安装。</p>
 <h1 id="配置" tabindex="-1">配置</h1>
 <p>安装完成后，修改/etc/ssh/ssh_config</p>
-<pre><code class="hljs">GSSAPIAuthentication yes 
-GSSAPIDelegateCredentials yes 
-GSSAPITrustDNS yes 
-GSSAPIKeyExchange yes
+<pre><code class="hljs language-bash">GSSAPIAuthentication <span class="hljs-built_in">yes</span> 
+GSSAPIDelegateCredentials <span class="hljs-built_in">yes</span> 
+GSSAPITrustDNS <span class="hljs-built_in">yes</span> 
+GSSAPIKeyExchange <span class="hljs-built_in">yes</span>
 </code></pre>
 <h2 id="升级macos-sierra报错处理" tabindex="-1">升级MacOs sierra报错处理</h2>
-<pre><code class="hljs">报错如下：
+<pre><code class="hljs language-bash">报错如下：
 /etc/ssh/ssh_config: line 4: Bad configuration option: gssapitrustdns
 /etc/ssh/ssh_config: line 5: Bad configuration option: gssapikeyexchange  
 /etc/ssh/ssh_config: terminating, 2 bad configuration options
 </code></pre>
 <h2 id="解决方式" tabindex="-1">解决方式</h2>
-<pre><code class="hljs">注释报错中的两行，然后：
+<pre><code class="hljs language-bash">注释报错中的两行，然后：
   当前用户目录新建文件 .ssh/config
   内容： 
   Host *
      ControlMaster auto
      ControlPath ~/.ssh/%h-%p-%r
-     ControlPersist yes
+     ControlPersist <span class="hljs-built_in">yes</span>
 </code></pre>
 <h1 id="简单使用" tabindex="-1">简单使用</h1>
 <pre><code class="hljs">登陆：kinit 账户
@@ -142,6 +142,6 @@ GSSAPIKeyExchange yes
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

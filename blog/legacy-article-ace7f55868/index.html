@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -80,12 +80,12 @@
                 </header>
                 <div class="post-body">
 <p>对于这样一张表</p>
-<pre><code class="hljs">+-------+----------+------+-----+---------+-------+
-| Field | Type     | Null | Key | Default | Extra |
-+-------+----------+------+-----+---------+-------+
-| id    | char(16) | NO   | PRI | NULL    |       |
-| name  | char(16) | YES  |     | NULL    |       |
-+-------+----------+------+-----+---------+-------+
+<pre><code class="hljs language-sql"><span class="hljs-operator">+</span><span class="hljs-comment">-------+----------+------+-----+---------+-------+</span>
+<span class="hljs-operator">|</span> Field <span class="hljs-operator">|</span> Type     <span class="hljs-operator">|</span> <span class="hljs-keyword">Null</span> <span class="hljs-operator">|</span> Key <span class="hljs-operator">|</span> <span class="hljs-keyword">Default</span> <span class="hljs-operator">|</span> Extra <span class="hljs-operator">|</span>
+<span class="hljs-operator">+</span><span class="hljs-comment">-------+----------+------+-----+---------+-------+</span>
+<span class="hljs-operator">|</span> id    <span class="hljs-operator">|</span> <span class="hljs-type">char</span>(<span class="hljs-number">16</span>) <span class="hljs-operator">|</span> <span class="hljs-keyword">NO</span>   <span class="hljs-operator">|</span> PRI <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span>    <span class="hljs-operator">|</span>       <span class="hljs-operator">|</span>
+<span class="hljs-operator">|</span> name  <span class="hljs-operator">|</span> <span class="hljs-type">char</span>(<span class="hljs-number">16</span>) <span class="hljs-operator">|</span> YES  <span class="hljs-operator">|</span>     <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span>    <span class="hljs-operator">|</span>       <span class="hljs-operator">|</span>
+<span class="hljs-operator">+</span><span class="hljs-comment">-------+----------+------+-----+---------+-------+</span>
 </code></pre>
 <p>两个查询语句</p>
 <pre><code class="hljs language-sql"><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> test <span class="hljs-keyword">where</span> id<span class="hljs-operator">=</span><span class="hljs-string">&#x27;1&#x27;</span>;
@@ -94,8 +94,8 @@
 <p>有什么区别吗？答案是有的</p>
 <p><img src="/assets/images/legacy/MarkdownPhotos/photos/22.png" alt="" loading="lazy" referrerpolicy="no-referrer"></p>
 <p>关键在于type上</p>
-<pre><code class="hljs">使用字符串类型查找的type是const，用的是索引
-使用数字查找的type是ALL，也就是全表扫描
+<pre><code class="hljs language-typescript">使用字符串类型查找的<span class="hljs-keyword">type</span>是<span class="hljs-keyword">const</span>，用的是索引
+使用数字查找的<span class="hljs-keyword">type</span>是<span class="hljs-variable constant_">ALL</span>，也就是全表扫描
 </code></pre>
 <p>使用数字的时候没有用到索引，使用单引号的时候用到了索引。所以数据量较大时，在效率上会有很大的差别！
 mysql不会自动把数字转成字符串，而是把每个查询到的结果转成了数字去比较。
@@ -132,6 +132,6 @@ mysql不会自动把数字转成字符串，而是把每个查询到的结果转
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>

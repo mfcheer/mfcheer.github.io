@@ -2342,16 +2342,21 @@ html[data-theme="dark"] .search-highlight {
     border-radius: 999px;
 }
 
-.post-body {
+.post-body,
+.post-editor-preview-content {
     --code-bg: #f6f8fa;
-    --code-text: #24292f;
-    --code-comment: #6a737d;
+    --code-text: #1f2328;
+    --code-comment: #6e7781;
     --code-keyword: #cf222e;
-    --code-string: #0a3069;
-    --code-number: #0550ae;
+    --code-string: #1a7f37;
+    --code-number: #953800;
     --code-title: #8250df;
+    --code-built_in: #0550ae;
     --code-attr: #0550ae;
     --code-meta: #953800;
+}
+
+.post-body {
     margin-top: 18px;
     padding-top: 16px;
     border-top: 1px solid var(--line-subtle);
@@ -2361,14 +2366,16 @@ html[data-theme="dark"] .search-highlight {
     overflow-wrap: break-word;
 }
 
-html[data-theme="dark"] .post-body {
+html[data-theme="dark"] .post-body,
+html[data-theme="dark"] .post-editor-preview-content {
     --code-bg: #16181d;
-    --code-text: #c9d1d9;
+    --code-text: #e6edf3;
     --code-comment: #8b949e;
     --code-keyword: #ff7b72;
-    --code-string: #a5d6ff;
-    --code-number: #79c0ff;
+    --code-string: #7ee787;
+    --code-number: #ffa657;
     --code-title: #d2a8ff;
+    --code-built_in: #79c0ff;
     --code-attr: #79c0ff;
     --code-meta: #ffa657;
 }
@@ -2714,7 +2721,8 @@ body.lightbox-open {
     line-height: 1.6;
 }
 
-.post-body pre code {
+.post-body pre code,
+.post-editor-preview-content pre code {
     font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
     background: none;
     border: none;
@@ -2723,7 +2731,9 @@ body.lightbox-open {
 }
 
 .post-body .hljs-comment,
-.post-body .hljs-quote {
+.post-body .hljs-quote,
+.post-editor-preview-content .hljs-comment,
+.post-editor-preview-content .hljs-quote {
     color: var(--code-comment);
     font-style: italic;
 }
@@ -2735,28 +2745,47 @@ body.lightbox-open {
 .post-body .hljs-name,
 .post-body .hljs-section,
 .post-body .hljs-doctag,
-.post-body .hljs-strong {
+.post-body .hljs-strong,
+.post-editor-preview-content .hljs-keyword,
+.post-editor-preview-content .hljs-selector-tag,
+.post-editor-preview-content .hljs-literal,
+.post-editor-preview-content .hljs-type,
+.post-editor-preview-content .hljs-name,
+.post-editor-preview-content .hljs-section,
+.post-editor-preview-content .hljs-doctag,
+.post-editor-preview-content .hljs-strong {
     color: var(--code-keyword);
     font-weight: 600;
 }
 
 .post-body .hljs-string,
 .post-body .hljs-regexp,
-.post-body .hljs-addition {
+.post-body .hljs-addition,
+.post-editor-preview-content .hljs-string,
+.post-editor-preview-content .hljs-regexp,
+.post-editor-preview-content .hljs-addition {
     color: var(--code-string);
 }
 
 .post-body .hljs-number,
 .post-body .hljs-symbol,
 .post-body .hljs-bullet,
-.post-body .hljs-link {
+.post-body .hljs-link,
+.post-editor-preview-content .hljs-number,
+.post-editor-preview-content .hljs-symbol,
+.post-editor-preview-content .hljs-bullet,
+.post-editor-preview-content .hljs-link {
     color: var(--code-number);
 }
 
 .post-body .hljs-title,
 .post-body .hljs-title.function_,
 .post-body .hljs-title.class_,
-.post-body .hljs-built_in {
+.post-body .hljs-built_in,
+.post-editor-preview-content .hljs-title,
+.post-editor-preview-content .hljs-title.function_,
+.post-editor-preview-content .hljs-title.class_,
+.post-editor-preview-content .hljs-built_in {
     color: var(--code-title);
 }
 
@@ -2767,16 +2796,27 @@ body.lightbox-open {
 .post-body .hljs-params,
 .post-body .hljs-selector-attr,
 .post-body .hljs-selector-class,
-.post-body .hljs-selector-id {
+.post-body .hljs-selector-id,
+.post-editor-preview-content .hljs-attr,
+.post-editor-preview-content .hljs-attribute,
+.post-editor-preview-content .hljs-variable,
+.post-editor-preview-content .hljs-template-variable,
+.post-editor-preview-content .hljs-params,
+.post-editor-preview-content .hljs-selector-attr,
+.post-editor-preview-content .hljs-selector-class,
+.post-editor-preview-content .hljs-selector-id {
     color: var(--code-attr);
 }
 
 .post-body .hljs-meta,
-.post-body .hljs-deletion {
+.post-body .hljs-deletion,
+.post-editor-preview-content .hljs-meta,
+.post-editor-preview-content .hljs-deletion {
     color: var(--code-meta);
 }
 
-.post-body .hljs-emphasis {
+.post-body .hljs-emphasis,
+.post-editor-preview-content .hljs-emphasis {
     font-style: italic;
 }
 

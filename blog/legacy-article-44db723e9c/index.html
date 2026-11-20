@@ -27,7 +27,7 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e0e11">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/styles.css?v=1.3.85">
+    <link rel="stylesheet" href="/styles.css?v=1.3.86">
 
 </head>
 <body>
@@ -83,80 +83,80 @@
 <p>当任务要执行被synchronized保护的代码片段的时候，会检查锁是否可用，然后获取锁，执行代码，释放锁。</p>
 <h2 id="同步规则" tabindex="-1">同步规则</h2>
 <p>如果你正在写一个变量，它接下来可能将被另一个线程读取，或者读取一个上一次已经被另一个线程写过的变量，那么你必须使用同步，并且，读写线程都必须使用相同的监视器锁同步。</p>
-<pre><code class="hljs">
-public class synchronizedDemo implements Runnable {
-	public void run() {
-		synchronized (this) {
-			for (int i = 0; i &lt; 5; i++) {
-				System.out.println(Thread.currentThread().getName() + &quot; synchronized loop lock &quot; + i);
+<pre><code class="hljs language-java">
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">synchronizedDemo</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span> {
+	<span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> {
+		<span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>) {
+			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) {
+				System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot; synchronized loop lock &quot;</span> + i);
 			}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
+			<span class="hljs-keyword">try</span> {
+				Thread.sleep(<span class="hljs-number">1000</span>);
+			} <span class="hljs-keyword">catch</span> (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		for (int i = 0; i &lt; 5; i++) {
-			System.out.println(Thread.currentThread().getName() + &quot; synchronized loop no lock &quot; + i);
+		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) {
+			System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot; synchronized loop no lock &quot;</span> + i);
 		}
 	}
 
-	public static void main(String[] args) {
-		synchronizedDemo common = new synchronizedDemo();
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> {
+		<span class="hljs-type">synchronizedDemo</span> <span class="hljs-variable">common</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">synchronizedDemo</span>();
 		
-		Thread ta = new Thread(common, &quot;A&quot;);
-		Thread tb = new Thread(common, &quot;B&quot;);
+		<span class="hljs-type">Thread</span> <span class="hljs-variable">ta</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(common, <span class="hljs-string">&quot;A&quot;</span>);
+		<span class="hljs-type">Thread</span> <span class="hljs-variable">tb</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(common, <span class="hljs-string">&quot;B&quot;</span>);
 		ta.start();
 		tb.start();
 	}
 }
 输出：
-A synchronized loop lock 0
-A synchronized loop lock 1
-A synchronized loop lock 2
-A synchronized loop lock 3
-A synchronized loop lock 4
-A synchronized loop no lock 0
-B synchronized loop lock 0
-A synchronized loop no lock 1
-B synchronized loop lock 1
-B synchronized loop lock 2
-B synchronized loop lock 3
-B synchronized loop lock 4
-A synchronized loop no lock 2
-A synchronized loop no lock 3
-A synchronized loop no lock 4
-B synchronized loop no lock 0
-B synchronized loop no lock 1
-B synchronized loop no lock 2
-B synchronized loop no lock 3
-B synchronized loop no lock 4
+A <span class="hljs-keyword">synchronized</span> loop lock <span class="hljs-number">0</span>
+A <span class="hljs-keyword">synchronized</span> loop lock <span class="hljs-number">1</span>
+A <span class="hljs-keyword">synchronized</span> loop lock <span class="hljs-number">2</span>
+A <span class="hljs-keyword">synchronized</span> loop lock <span class="hljs-number">3</span>
+A <span class="hljs-keyword">synchronized</span> loop lock <span class="hljs-number">4</span>
+A <span class="hljs-keyword">synchronized</span> loop no lock <span class="hljs-number">0</span>
+B <span class="hljs-keyword">synchronized</span> loop lock <span class="hljs-number">0</span>
+A <span class="hljs-keyword">synchronized</span> loop no lock <span class="hljs-number">1</span>
+B <span class="hljs-keyword">synchronized</span> loop lock <span class="hljs-number">1</span>
+B <span class="hljs-keyword">synchronized</span> loop lock <span class="hljs-number">2</span>
+B <span class="hljs-keyword">synchronized</span> loop lock <span class="hljs-number">3</span>
+B <span class="hljs-keyword">synchronized</span> loop lock <span class="hljs-number">4</span>
+A <span class="hljs-keyword">synchronized</span> loop no lock <span class="hljs-number">2</span>
+A <span class="hljs-keyword">synchronized</span> loop no lock <span class="hljs-number">3</span>
+A <span class="hljs-keyword">synchronized</span> loop no lock <span class="hljs-number">4</span>
+B <span class="hljs-keyword">synchronized</span> loop no lock <span class="hljs-number">0</span>
+B <span class="hljs-keyword">synchronized</span> loop no lock <span class="hljs-number">1</span>
+B <span class="hljs-keyword">synchronized</span> loop no lock <span class="hljs-number">2</span>
+B <span class="hljs-keyword">synchronized</span> loop no lock <span class="hljs-number">3</span>
+B <span class="hljs-keyword">synchronized</span> loop no lock <span class="hljs-number">4</span>
 </code></pre>
 <p>被synchronized修饰的代码片段会被阻塞，其它代码块不会阻塞。</p>
 <h1 id="使用显示的lock对象" tabindex="-1">使用显示的Lock对象</h1>
 <p>Lock对象必须显示的被创建、锁定和释放。优点的更加的灵活。</p>
-<pre><code class="hljs">import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+<pre><code class="hljs language-java"><span class="hljs-keyword">import</span> java.util.concurrent.ExecutorService;
+<span class="hljs-keyword">import</span> java.util.concurrent.Executors;
+<span class="hljs-keyword">import</span> java.util.concurrent.locks.Lock;
+<span class="hljs-keyword">import</span> java.util.concurrent.locks.ReentrantLock;
 
-public class lockDemo implements Runnable{
-	Lock lock = new ReentrantLock();
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">lockDemo</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span>{
+	<span class="hljs-type">Lock</span> <span class="hljs-variable">lock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReentrantLock</span>();
 
-	@Override
-	public void run() {
+	<span class="hljs-meta">@Override</span>
+	<span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> {
 		lock.lock();
-		for(int i = 0; i &lt; 10; i++) {
-			System.out.println(&quot;hello &quot; + Thread.currentThread().getName());
+		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+			System.out.println(<span class="hljs-string">&quot;hello &quot;</span> + Thread.currentThread().getName());
 		}
 		lock.unlock();
 	}
 	
-	public static void main(String[] args) {
-		ExecutorService executorService = Executors.newCachedThreadPool();
-		lockDemo lk = new lockDemo();
-		for(int i = 0;i &lt; 5; i++) {
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> {
+		<span class="hljs-type">ExecutorService</span> <span class="hljs-variable">executorService</span> <span class="hljs-operator">=</span> Executors.newCachedThreadPool();
+		<span class="hljs-type">lockDemo</span> <span class="hljs-variable">lk</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">lockDemo</span>();
+		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;i &lt; <span class="hljs-number">5</span>; i++) {
 			executorService.execute(lk);
 		}
 	}
@@ -179,8 +179,8 @@ public class lockDemo implements Runnable{
 2、禁止指令重排序优化</p>
 <h1 id="临界区" tabindex="-1">临界区</h1>
 <p>希望防止多个线程同时访问方法内部的部分代码而不是整个方法，分离出来的代码片段成为“临界区“，也成为同步控制块</p>
-<pre><code class="hljs">synchronized(syncObject){
-	//临界区
+<pre><code class="hljs language-javascript"><span class="hljs-title function_">synchronized</span>(<span class="hljs-params">syncObject</span>){
+	<span class="hljs-comment">//临界区</span>
 }
 </code></pre>
 <p>也可以使用Lock对象实现。</p>
@@ -190,20 +190,20 @@ public class lockDemo implements Runnable{
 <li>set方法，将数据插入线程的存储对象中并返回对象</li>
 <li>get方法，返回线程相关联对象的副本</li>
 </ul>
-<pre><code class="hljs">public class threadLocalDemo {
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">threadLocalDemo</span> {
 
-	public static void main(String[] args) {
-		Thread t = new Thread() {
-			ThreadLocal&lt;String&gt; mStringThreadLocal = new ThreadLocal&lt;&gt;();
+	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"><span class="hljs-title class_">String</span>[] args</span>) {
+		<span class="hljs-title class_">Thread</span> t = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>() {
+			<span class="hljs-title class_">ThreadLocal</span>&lt;<span class="hljs-title class_">String</span>&gt; mStringThreadLocal = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ThreadLocal</span>&lt;&gt;();
 
-			@Override
-			public void run() {
-				super.run();
-				mStringThreadLocal.set(&quot;mfcheer&quot;);
-				System.out.println(mStringThreadLocal.get());
+			<span class="hljs-meta">@Override</span>
+			<span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">run</span>(<span class="hljs-params"></span>) {
+				<span class="hljs-variable language_">super</span>.<span class="hljs-title function_">run</span>();
+				mStringThreadLocal.<span class="hljs-title function_">set</span>(<span class="hljs-string">&quot;mfcheer&quot;</span>);
+				<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(mStringThreadLocal.<span class="hljs-title function_">get</span>());
 			}
 		};
-		t.start();
+		t.<span class="hljs-title function_">start</span>();
 	}
 }
 输出：
@@ -241,6 +241,6 @@ mfcheer
         </footer>
     </div>
 
-    <script src="/script.js?v=1.3.74"></script>
+    <script src="/script.js?v=1.3.75"></script>
 </body>
 </html>
