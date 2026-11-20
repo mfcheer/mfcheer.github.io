@@ -5562,21 +5562,21 @@ function initHomeLauncher() {
     }
 
     let particleCount = getOptimalParticleCount();
-    // 璀璨多光谱星尘色板：涵盖科技电青、星云霓紫、绯红蔷薇、炽热晨曦、极光翠绿、曦光金辉与纯净星芒
+    // 星尘多光谱色板：深色模式采用淡雅低饱和星芒（温和克制、绝不俗艳），浅色模式保持鲜艳晶莹的高饱和宝石色
     const STARDUST_PALETTES = [
-        // 0: 电光天蓝 / 蔚蓝 (Electric Sky Blue)
-        { dark: { r: 56, g: 189, b: 248 }, light: { r: 2, g: 132, b: 215 } },
-        // 1: 星云霓紫 / 丁香 (Vivid Violet)
-        { dark: { r: 192, g: 132, b: 252 }, light: { r: 147, g: 51, b: 234 } },
-        // 2: 绯红蔷薇 / 珊瑚粉 (Vibrant Rose Pink)
-        { dark: { r: 244, g: 63, b: 94 }, light: { r: 225, g: 29, b: 72 } },
-        // 3: 炽热晨曦 / 曜橙 (Solar Tangerine / Amber)
-        { dark: { r: 251, g: 146, b: 60 }, light: { r: 234, g: 88, b: 12 } },
-        // 4: 极光翠绿 / 碧玺 (Aurora Emerald Mint)
-        { dark: { r: 52, g: 211, b: 153 }, light: { r: 5, g: 150, b: 105 } },
-        // 5: 璀璨星金 (Solar Gold)
-        { dark: { r: 250, g: 204, b: 21 }, light: { r: 202, g: 138, b: 4 } },
-        // 6: 纯净光核 (Prism Diamond / Royal Blue)
+        // 0: 淡冰蓝 (Soft Ice Blue) / 浅色: 蔚蓝宝石
+        { dark: { r: 180, g: 218, b: 250 }, light: { r: 2, g: 132, b: 215 } },
+        // 1: 丁香淡紫 (Muted Lavender) / 浅色: 星云紫晶
+        { dark: { r: 215, g: 200, b: 245 }, light: { r: 147, g: 51, b: 234 } },
+        // 2: 晨曦淡粉 (Blush Rose Mist) / 浅色: 绯红蔷薇
+        { dark: { r: 248, g: 205, b: 215 }, light: { r: 225, g: 29, b: 72 } },
+        // 3: 香槟暖金 (Soft Champagne Gold) / 浅色: 炽热晨曦
+        { dark: { r: 250, g: 232, b: 195 }, light: { r: 234, g: 88, b: 12 } },
+        // 4: 薄荷淡青 (Ice Mint Sage) / 浅色: 极光翠绿
+        { dark: { r: 195, g: 235, b: 220 }, light: { r: 5, g: 150, b: 105 } },
+        // 5: 银辉淡铂 (Pale Silver Gray) / 浅色: 璀璨星金
+        { dark: { r: 225, g: 230, b: 240 }, light: { r: 202, g: 138, b: 4 } },
+        // 6: 纯净星芒 (Starlight White) / 浅色: 克莱因皇家蓝
         { dark: { r: 255, g: 255, b: 255 }, light: { r: 37, g: 99, b: 235 } }
     ];
 
@@ -5667,12 +5667,13 @@ function initHomeLauncher() {
             ctx.beginPath();
 
             if (isDark) {
-                // 深色模式：色彩饱和明亮的星云霓虹微芒与发光晕染
+                // 深色模式：低饱和淡雅星芒与克制柔焦晕染（温润从容、拒绝廉价霓虹感）
                 const c = this.palette.dark;
+                const softDarkAlpha = Math.min(0.75, this.alpha * 0.85);
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + this.alpha + ")";
-                ctx.shadowColor = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.75)";
-                ctx.shadowBlur = this.size * 2.2;
+                ctx.fillStyle = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + softDarkAlpha + ")";
+                ctx.shadowColor = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.35)";
+                ctx.shadowBlur = this.size * 1.2;
             } else {
                 // 浅色模式：高饱和宝石粒子与柔和光晕，告别单调灰暗，在纯白背景上呈现鲜艳灵动的多彩微粒
                 const c = this.palette.light;

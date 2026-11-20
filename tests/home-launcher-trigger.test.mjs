@@ -59,7 +59,7 @@ test("首页启动器触发判定逻辑严格符合预期：首次进入与刷�
 });
 
 
-test("启动器星尘粒子包含高饱和多光谱色彩色板（深浅双模鲜艳绚丽）", () => {
+test("启动器星尘粒子包含多光谱色彩色板（深色淡雅低饱和、浅色高饱和宝石）", () => {
     const script = fs.readFileSync("script.js", "utf8");
     assert.ok(script.includes("STARDUST_PALETTES"), "包含多光谱星尘色板定义");
     assert.ok(script.includes("palette.dark"), "包含深色模式霓虹发光粒子渲染");
