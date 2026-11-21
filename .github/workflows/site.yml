@@ -53,7 +53,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - name: Sync external data (GitHub contributions and Douban media)
-        run: |\
+        run: |
           node scripts/update-github-chart.mjs || true
           node scripts/sync-douban.mjs || true
       - name: Build changed modules and assemble complete site
@@ -72,7 +72,7 @@ jobs:
           path: _site
       - name: Wait for Pages artifact registration
         if: steps.build.outputs.publish == 'true'
-        run: |\
+        run: |
           echo "Waiting for Pages artifact to be registered in GitHub API..."
           for i in {1..12}; do
             ARTIFACTS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
@@ -94,7 +94,7 @@ jobs:
         uses: actions/deploy-pages@v4
       - name: Save successful build state and generated files
         # 部署失败则不回写，后续事件或重试仍能发现未完成的输入。
-        run: |\
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .build-state.json blog atom.xml sitemap.xml data/blog-index.json data/moments.json data/gallery.json assets/moments/ assets/gallery/ assets/github-contributions.svg data/media.json data/media-stats.json assets/covers/ index.html
