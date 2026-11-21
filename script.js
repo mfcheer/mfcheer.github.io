@@ -5535,7 +5535,7 @@ document.addEventListener("click", (e) => {
 /* ==========================================================
    首页星尘启动器（Home Stardust Launcher）
    - 纯原生 Canvas 2D，零外部依赖
-   - 仅在会话首次进入主页时呈现，2.0s 优雅从容揭幕
+   - 仅在会话首次进入主页时呈现，3.5s 优雅从容揭幕（轻触任意位置随时跳过）
    ========================================================== */
 function initHomeLauncher() {
     const overlay = document.getElementById("homeLauncherOverlay");
@@ -5582,7 +5582,7 @@ function initHomeLauncher() {
 
     let particles = [];
     let startTime = performance.now();
-    let durationMs = 2000;
+    let durationMs = 3500;
 
     class AmbientStardust {
         constructor() {
@@ -5639,9 +5639,9 @@ function initHomeLauncher() {
             let twinkle = 0.92 + 0.08 * Math.sin(elapsed * this.twinkleSpeed + this.twinklePhase);
             baseA *= twinkle;
 
-            if (elapsed < 450) {
-                this.alpha = Math.min(baseA, (elapsed / 450) * baseA);
-            } else if (elapsed < 1600) {
+            if (elapsed < 500) {
+                this.alpha = Math.min(baseA, (elapsed / 500) * baseA);
+            } else if (elapsed < 2800) {
                 this.alpha = baseA;
                 let distToStop = this.radius - this.stopRadius;
                 if (distToStop > 0) {
@@ -5653,7 +5653,7 @@ function initHomeLauncher() {
                 this.radius += 0.5 * dpr;
                 this.angle += this.angularSpeed * 0.5;
                 this.y -= 0.4 * dpr;
-                let fadeProgress = (elapsed - 1600) / 400;
+                let fadeProgress = (elapsed - 2800) / 700;
                 this.alpha = Math.max(0, baseA * (1 - fadeProgress));
             }
 
@@ -5724,10 +5724,10 @@ function initHomeLauncher() {
             particles[i].draw(isDark);
         }
 
-        if (elapsed > 200 && monogram) {
+        if (elapsed > 250 && monogram) {
             monogram.classList.add("visible");
         }
-        if (elapsed > 400 && title) {
+        if (elapsed > 500 && title) {
             title.classList.add("visible");
         }
 

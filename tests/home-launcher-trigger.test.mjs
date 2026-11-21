@@ -77,3 +77,13 @@ test("启动器星尘粒子包含多光谱色彩色板（深色淡雅低饱和�
         assert.ok(p.light && typeof p.light.r === "number", "浅色模式配色有效: " + idx);
     });
 });
+
+test("首页启动器特效时长适中（不低于 3000ms 且粒子汇聚观赏周期充裕）", () => {
+    const script = fs.readFileSync("script.js", "utf8");
+    const durationMatch = script.match(/let\s+durationMs\s*=\s*(\d+);/);
+    assert.ok(durationMatch, "包含 durationMs 定义");
+    const durationMs = parseInt(durationMatch[1], 10);
+    assert.ok(durationMs >= 3000, "durationMs 应调长至3000ms以上（当前: " + durationMs + "ms）");
+    assert.ok(script.includes("elapsed < 2800"), "星尘粒子拥有充足的汇聚、环绕与呼吸闪烁周期");
+    assert.ok(script.includes("(elapsed - 2800) / 700"), "淡出过渡阶段自然平滑");
+});
