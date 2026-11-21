@@ -3641,7 +3641,7 @@ document.addEventListener("click", (e) => {
         { title: "相册摄影", desc: "旅途与日常风光摄影作品", url: "/gallery/", icon: "📷", badge: "导航" },
         { title: "博客文章", desc: "625+ 篇技术长文与沉淀", url: "/blog/", icon: "📝", badge: "导航" },
         { title: "书影音", desc: "看过、读过与玩过", url: "/#media", icon: "🎬", badge: "导航" },
-        { title: "留言板", desc: "欢迎交流与留言", url: "/#guestbook", icon: "💌", badge: "导航" },
+        // { title: "留言板", desc: "欢迎交流与留言", url: "/#guestbook", icon: "💌", badge: "导航" }, // 暂隐藏入口，相关代码保留
         { title: "切换主题模式", desc: "在深色与浅色模式之间切换", action: "toggle-theme", icon: "🌓", badge: "快捷指令" }
     ];
 

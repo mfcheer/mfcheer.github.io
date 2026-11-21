@@ -386,3 +386,28 @@ test("主页微信群聊分享卡片规范（itemprop 专用元信息与 1:1 正
     const stat = fs.statSync(imgPath);
     assert.ok(stat.size > 0 && stat.size <= 65536, "图片体积必须适中且小于 64KB");
 });
+
+test("首页留言展示入口暂隐藏，相关代码与组件逻辑完整保留", () => {
+    const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+    // 首页导航不再展示「留言」直接入口
+    const navLinksMatch = html.match(/<ul class="nav-links">[\s\S]*?<\/ul>/);
+    assert.ok(navLinksMatch, "index.html 必须包含导航列表");
+    assert.ok(!navLinksMatch[0].includes("留言"), "首页导航栏不再展示留言入口");
+
+    // 首页正文不再直接暴露活动的 #guestbook 卡片，但代码完整保留于注释中
+    const htmlWithoutComments = html.replace(/<!--[\s\S]*?-->/g, "");
+    assert.ok(!htmlWithoutComments.includes("guestbook"), "index.html 不再直接渲染活动的 guestbook 板块");
+    assert.ok(html.includes("<!-- 留言（暂时隐藏展示入口，相关代码与组件结构完整保留）"), "index.html 必须在注释中完整保留留言区结构代码");
+    assert.ok(html.includes("giscus-toggle"), "注释中保留 giscusToggle 展开按钮结构");
+    assert.ok(html.includes("giscusBox"), "注释中保留 giscusBox 挂载容器");
+
+    // data/nav.json 保持单一数据源规范，且保留 _hidden_items
+    const navConfig = JSON.parse(fs.readFileSync(path.join(ROOT, "data/nav.json"), "utf8"));
+    assert.ok(!navConfig.items.some(i => i.label === "留言"), "data/nav.json 活动导航项不包含留言");
+    assert.ok(Array.isArray(navConfig._hidden_items) && navConfig._hidden_items.some(i => i.label === "留言"), "data/nav.json 必须在 _hidden_items 保留留言项配置");
+
+    // script.js 完整保留 Giscus 加载机制与主题跟随逻辑
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    assert.ok(js.includes("initGiscus"), "script.js 必须完整保留 initGiscus 函数");
+    assert.ok(js.includes("syncGiscusTheme"), "script.js 必须完整保留 syncGiscusTheme 函数");
+});

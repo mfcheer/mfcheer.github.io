@@ -25,11 +25,14 @@
       "label": "文章",
       "home": "/blog/",
       "sub": "/blog/"
-    },
+    }
+  ],
+  "_hidden_items": [
     {
       "label": "留言",
       "home": "#guestbook",
-      "sub": "/#guestbook"
+      "sub": "/#guestbook",
+      "_note": "首页留言展示入口暂隐藏，配置与相关代码完整保留"
     }
   ]
 }
