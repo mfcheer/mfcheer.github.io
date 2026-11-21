@@ -42,11 +42,13 @@ test('index.html 包含 AI 助手随身手账组件、便签层叠容器、挂�
   assert.ok(html.includes('class="diary-ai-notice"'), '必须包含 AI 自动生成提示');
   assert.ok(html.includes('<h2>助手日记</h2>'), '组件标题必须为 助手日记');
   assert.ok(html.includes('class="diary-spine"'), '必须包含书脊装订压痕 diary-spine');
-  assert.ok(html.includes('class="diary-page-curl"'), '必须包含右下角微卷角 diary-page-curl');
   assert.ok(html.includes('id="diaryEntryDate"'), '必须包含日记内页日期 diaryEntryDate');
   assert.ok(html.includes('id="diaryEntryMood"'), '必须包含日记内页心绪 diaryEntryMood');
-  assert.ok(html.includes('class="diary-ribbon"'), '必须包含日记本顶部丝带书签 diary-ribbon');
   assert.ok(html.includes('id="diaryUnderPage"'), '必须包含双页翻书露出底层页面 diaryUnderPage');
+  assert.ok(html.includes('id="diaryPrevBtn"'), '必须包含上一篇日记按钮 diaryPrevBtn');
+  assert.ok(html.includes('id="diaryNextBtn"'), '必须包含下一篇日记按钮 diaryNextBtn');
+  assert.ok(html.includes('id="diaryTouchPrev"'), '必须包含触屏左侧翻页轻触区 diaryTouchPrev');
+  assert.ok(html.includes('id="diaryTouchNext"'), '必须包含触屏右侧翻页轻触区 diaryTouchNext');
 });
 
 test('styles.css 包含手账样式、呼吸灯、便签层叠、拖拽抓手与平滑过渡', () => {
@@ -60,8 +62,8 @@ test('styles.css 包含手账样式、呼吸灯、便签层叠、拖拽抓手与
   assert.ok(css.includes('@keyframes diaryPulse'), '必须包含呼吸灯动画');
   assert.ok(css.includes('cursor: default') || css.includes('cursor: pointer'), '必须定义鼠标手势');
   assert.ok(css.includes('.diary-spine'), '必须定义书脊样式 .diary-spine');
-  assert.ok(css.includes('.diary-page-curl'), '必须定义右下角卷角样式 .diary-page-curl');
-  assert.ok(css.includes('.diary-ribbon'), '必须定义丝带书签样式 .diary-ribbon');
+  assert.ok(css.includes('.diary-nav-btn'), '必须定义翻页按钮样式 .diary-nav-btn');
+  assert.ok(css.includes('.diary-touch-zone'), '必须定义左右轻触翻页区域样式 .diary-touch-zone');
   assert.ok(css.includes('prefers-reduced-motion') && css.includes('.diary-body-wrap'), '必须针对减弱动态效果优化 .diary-body-wrap 动画');
 });
 

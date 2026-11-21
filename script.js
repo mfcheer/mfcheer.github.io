@@ -4066,6 +4066,7 @@ document.addEventListener("click", (e) => {
     let currentIndex = 0;
     let badgeTimer = null;
     let isFlipping = false;
+    let resetTimer = null;
 
     function renderUnderEntry(item) {
         if (!item || !underPage) return;
@@ -4182,6 +4183,7 @@ document.addEventListener("click", (e) => {
         if (now - lastFlipTime < FLIP_COOLDOWN_MS || isFlipping) return;
         lastFlipTime = now;
 
+        if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
         if (currentIndex < entries.length - 1) {
             const nextIndex = currentIndex + 1;
             const nextItem = entries[nextIndex];
@@ -4226,6 +4228,7 @@ document.addEventListener("click", (e) => {
         if (now - lastFlipTime < FLIP_COOLDOWN_MS || isFlipping) return;
         lastFlipTime = now;
 
+        if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
         if (currentIndex > 0) {
             const prevIndex = currentIndex - 1;
             const prevItem = entries[prevIndex];
@@ -4453,16 +4456,32 @@ document.addEventListener("click", (e) => {
         });
     }
 
-    if (pageCurl) {
-        pageCurl.addEventListener("click", (e) => {
+    const touchPrev = document.getElementById("diaryTouchPrev");
+    const touchNext = document.getElementById("diaryTouchNext");
+    if (touchPrev) {
+        touchPrev.addEventListener("click", (e) => {
             e.stopPropagation();
+            const selection = window.getSelection ? window.getSelection().toString() : "";
+            if (selection && selection.trim().length > 0) return;
             flipEarlier();
+        });
+    }
+    if (touchNext) {
+        touchNext.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const selection = window.getSelection ? window.getSelection().toString() : "";
+            if (selection && selection.trim().length > 0) return;
+            flipNewer();
         });
     }
 
     // 物理手势与交互系统 (Touch Gestures & Mouse Drag & Wheel)
     function applyDragTransform(dx) {
         if (!bodyWrap || isFlipping) return;
+        if (resetTimer) {
+            clearTimeout(resetTimer);
+            resetTimer = null;
+        }
         if (isMotionReduced()) {
             bodyWrap.style.transform = `translateX(${dx * 0.25}px)`;
             bodyWrap.style.opacity = Math.max(0.7, 1 - Math.abs(dx) / 500);
@@ -4485,22 +4504,28 @@ document.addEventListener("click", (e) => {
     function resetDragTransform() {
         if (!bodyWrap) return;
         bodyWrap.classList.remove("is-dragging");
+        if (resetTimer) {
+            clearTimeout(resetTimer);
+            resetTimer = null;
+        }
         if (isMotionReduced()) {
             bodyWrap.style.transition = "opacity 0.16s ease";
             bodyWrap.style.transform = "";
             bodyWrap.style.opacity = "1";
-            setTimeout(() => {
+            resetTimer = setTimeout(() => {
                 if (bodyWrap) bodyWrap.style.transition = "";
                 deckContainer.classList.remove("is-turning");
+                resetTimer = null;
             }, 180);
             return;
         }
         bodyWrap.style.transition = "transform 0.38s cubic-bezier(0.2, 0.85, 0.3, 1), opacity 0.3s ease";
         bodyWrap.style.transform = "rotateY(0deg) translateZ(0)";
         bodyWrap.style.opacity = "1";
-        setTimeout(() => {
+        resetTimer = setTimeout(() => {
             if (bodyWrap) bodyWrap.style.transition = "";
             deckContainer.classList.remove("is-turning");
+            resetTimer = null;
         }, 380);
     }
 
@@ -4680,6 +4705,8 @@ document.addEventListener("click", (e) => {
     // 3. PC 端双指触控板横向拨动 (Trackpad Horizontal Scroll)
     let wheelDebounceTimer = null;
     diarySection.addEventListener("wheel", (e) => {
+        const selection = window.getSelection ? window.getSelection().toString() : "";
+        if (selection && selection.trim().length > 0) return;
         if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
             if (e.cancelable) {
                 e.preventDefault();

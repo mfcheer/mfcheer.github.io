@@ -70,7 +70,7 @@
     <meta name="apple-mobile-web-app-title" content="mfcheer">
 
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css?v=1.3.94">
+    <link rel="stylesheet" href="styles.css?v=1.3.95">
 </head>
 <body>
     <!-- 极简苹果风 · 反重力星尘首页启动器（仅会话首次进入主页时呈现） -->
@@ -212,20 +212,16 @@
             <section class="glass card-diary" id="diary" aria-label="AI 助手随身手账">
                 <div class="diary-head">
                     <div class="diary-title-wrap">
-                        <span class="diary-icon" aria-hidden="true">📖</span>
                         <h2>助手日记</h2>
-                        <span class="diary-ai-notice">内容由AI自动生成和发布</span>
+                        <span class="diary-ai-notice">AI 自动记录</span>
                     </div>
-                    <div class="diary-date-wrap">
-                        <span class="diary-date-indicator" id="diaryDateLabel" role="button" tabindex="0" title="点击回弹至最新">昨天</span>
-                        <div class="diary-sr-nav sr-only" role="toolbar" aria-label="翻阅日记">
-                            <button class="diary-nav-btn" id="diaryPrevBtn" type="button" aria-label="上一篇日记">‹</button>
-                            <button class="diary-nav-btn" id="diaryNextBtn" type="button" aria-label="下一篇日记" disabled>›</button>
-                        </div>
+                    <div class="diary-nav-actions" role="toolbar" aria-label="翻阅日记">
+                        <button class="diary-nav-btn" id="diaryPrevBtn" type="button" aria-label="更早一篇（左翻）" title="更早一篇（左翻）">‹</button>
+                        <button class="diary-nav-btn" id="diaryNextBtn" type="button" aria-label="更新一篇（右翻）" title="更新一篇（右翻）" disabled>›</button>
+                        <span id="diaryDateLabel" class="sr-only" aria-live="polite">昨天</span>
                     </div>
                 </div>
                 <div class="diary-deck-container" id="diaryDeckContainer">
-                    <div class="diary-ribbon" aria-hidden="true"></div>
                     <div class="diary-spine" aria-hidden="true"></div>
                     <div class="diary-stack-layer" aria-hidden="true"></div>
                     <div class="diary-under-page" id="diaryUnderPage" aria-hidden="true">
@@ -240,7 +236,10 @@
                         <p class="diary-content" id="diaryUnderContent"></p>
                     </div>
                     <div class="diary-body-wrap" id="diaryBodyWrap">
-                        <div class="diary-page-curl" aria-hidden="true" title="翻阅手记"></div>
+                        <!-- 左右轻触翻页区域 (移动端单手点击极佳体验，不干扰正文划词复制) -->
+                        <div class="diary-touch-zone diary-touch-prev" id="diaryTouchPrev" role="button" aria-label="点击翻看更早一页" title="轻触左侧翻看更早一页"></div>
+                        <div class="diary-touch-zone diary-touch-next" id="diaryTouchNext" role="button" aria-label="点击翻看更新一页" title="轻触右侧翻看更新一页"></div>
+
                         <div class="diary-entry-meta">
                             <span class="diary-entry-date" id="diaryEntryDate">2026.11.20 · 星期五</span>
                             <span class="diary-entry-mood" id="diaryEntryMood">🎛️ 素白与归零</span>
@@ -561,6 +560,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=1.3.88"></script>
+    <script src="script.js?v=1.3.89"></script>
 </body>
 </html>
