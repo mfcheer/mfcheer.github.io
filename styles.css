@@ -5716,7 +5716,9 @@ html[data-theme="dark"] .diary-body-wrap {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 44px;
+    width: 25%;
+    min-width: 84px;
+    max-width: 140px;
     z-index: 4;
     cursor: pointer;
     background: transparent;
@@ -5726,10 +5728,14 @@ html[data-theme="dark"] .diary-body-wrap {
 
 .diary-touch-prev {
     left: 0;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
 }
 
 .diary-touch-next {
     right: 0;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
 }
 
 /* 日记内页页首：日期与心绪 */
@@ -5898,7 +5904,9 @@ html[data-theme="dark"] .diary-content {
         padding-top: 10px;
     }
     .diary-touch-zone {
-        width: 40px;
+        width: 26%;
+        min-width: 72px;
+        max-width: 100px;
     }
 }
 
@@ -5906,6 +5914,10 @@ html[data-theme="dark"] .diary-content {
     .diary-deck-container,
     .diary-body-wrap {
         min-height: 540px;
+    }
+    .diary-touch-zone {
+        min-width: 60px;
+        max-width: 76px;
     }
 }
 

@@ -4465,6 +4465,12 @@ document.addEventListener("click", (e) => {
             if (selection && selection.trim().length > 0) return;
             flipEarlier();
         });
+        touchPrev.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                flipEarlier();
+            }
+        });
     }
     if (touchNext) {
         touchNext.addEventListener("click", (e) => {
@@ -4472,6 +4478,12 @@ document.addEventListener("click", (e) => {
             const selection = window.getSelection ? window.getSelection().toString() : "";
             if (selection && selection.trim().length > 0) return;
             flipNewer();
+        });
+        touchNext.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                flipNewer();
+            }
         });
     }
 
