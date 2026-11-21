@@ -53,7 +53,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - name: Sync external data (GitHub contributions and Douban media)
-        run: |
+        run: |\
           node scripts/update-github-chart.mjs || true
           node scripts/sync-douban.mjs || true
       - name: Build changed modules and assemble complete site
@@ -72,27 +72,29 @@ jobs:
           path: _site
       - name: Wait for Pages artifact registration
         if: steps.build.outputs.publish == 'true'
-        run: |
+        run: |\
           echo "Waiting for Pages artifact to be registered in GitHub API..."
           for i in {1..12}; do
             ARTIFACTS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "Accept: application/vnd.github+json" \
               "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts")
             if echo "$ARTIFACTS" | grep -q '"name": "github-pages"'; then
-              echo "Artifact 'github-pages' detected successfully!"
+              echo "Artifact 'github-pages' detected in API. Waiting 15s for Pages backend replication..."
+              sleep 15
               exit 0
             fi
             echo "Artifact not yet indexed, waiting 5s (attempt $i/12)..."
             sleep 5
           done
-          echo "Proceeding to deployment..."
+          echo "Proceeding to deployment after timeout..."
+          sleep 10
       - name: Deploy Pages
         if: steps.build.outputs.publish == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
       - name: Save successful build state and generated files
         # 部署失败则不回写，后续事件或重试仍能发现未完成的输入。
-        run: |
+        run: |\
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .build-state.json blog atom.xml sitemap.xml data/blog-index.json data/moments.json data/gallery.json assets/moments/ assets/gallery/ assets/github-contributions.svg data/media.json data/media-stats.json assets/covers/ index.html
