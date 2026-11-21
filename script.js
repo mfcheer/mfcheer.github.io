@@ -4036,20 +4036,26 @@ document.addEventListener("click", (e) => {
 })();
 
 // ============================================================
-// AI ASSISTANT DIARY CARD (随身手账交互与翻页)
+// AI ASSISTANT DIARY CARD (随身手账交互与 3D 书本翻页)
 // ============================================================
 (function initDiaryCard() {
     const diarySection = document.getElementById("diary");
     if (!diarySection) return;
     const prevBtn = document.getElementById("diaryPrevBtn");
     const nextBtn = document.getElementById("diaryNextBtn");
+    const prevPageBtn = document.getElementById("diaryPrevPageBtn");
+    const nextPageBtn = document.getElementById("diaryNextPageBtn");
+    const pageIndicator = document.getElementById("diaryPageIndicator");
     const dateLabel = document.getElementById("diaryDateLabel");
+    const entryDateEl = document.getElementById("diaryEntryDate");
+    const entryMoodEl = document.getElementById("diaryEntryMood");
     const punchlineEl = document.getElementById("diaryPunchline");
     const contentEl = document.getElementById("diaryContent");
     const footnoteEl = document.getElementById("diaryFootnote");
     const badgeText = document.getElementById("diaryBadgeText");
     const aiBadge = document.getElementById("diaryAiBadge");
     const deckContainer = document.getElementById("diaryDeckContainer") || diarySection;
+    const pageCurl = diarySection.querySelector(".diary-page-curl");
 
     let entries = [];
     let currentIndex = 0;
@@ -4151,12 +4157,13 @@ document.addEventListener("click", (e) => {
             renderEntry(currentIndex, true, -1);
         } else {
             if (!bodyWrap) return;
-            bodyWrap.style.transition = "transform 0.15s ease-out";
-            bodyWrap.style.transform = "translateX(-12px) rotate(-0.4deg)";
+            bodyWrap.style.transition = "transform 0.16s ease-out";
+            bodyWrap.style.transform = "rotateY(-7deg) translateZ(6px)";
             setTimeout(() => {
-                bodyWrap.style.transition = "transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
-                bodyWrap.style.transform = "translateX(0) rotate(0deg)";
-            }, 150);
+                bodyWrap.style.transition = "transform 0.32s cubic-bezier(0.2, 0.85, 0.3, 1.2)";
+                bodyWrap.style.transform = "rotateY(0deg) translateZ(0)";
+                setTimeout(() => { if (bodyWrap) bodyWrap.style.transition = ""; }, 320);
+            }, 160);
         }
     }
 
@@ -4170,12 +4177,13 @@ document.addEventListener("click", (e) => {
             renderEntry(currentIndex, true, 1);
         } else {
             if (!bodyWrap) return;
-            bodyWrap.style.transition = "transform 0.15s ease-out";
-            bodyWrap.style.transform = "translateX(12px) rotate(0.4deg)";
+            bodyWrap.style.transition = "transform 0.16s ease-out";
+            bodyWrap.style.transform = "rotateY(6deg) translateZ(4px)";
             setTimeout(() => {
-                bodyWrap.style.transition = "transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
-                bodyWrap.style.transform = "translateX(0) rotate(0deg)";
-            }, 150);
+                bodyWrap.style.transition = "transform 0.32s cubic-bezier(0.2, 0.85, 0.3, 1.2)";
+                bodyWrap.style.transform = "rotateY(0deg) translateZ(0)";
+                setTimeout(() => { if (bodyWrap) bodyWrap.style.transition = ""; }, 320);
+            }, 160);
         }
     }
 
@@ -4186,40 +4194,64 @@ document.addEventListener("click", (e) => {
         if (withAnim && bodyWrap) {
             bodyWrap.classList.add("is-switching");
             if (direction < 0) {
-                bodyWrap.style.transform = "translateX(-18px) rotate(-0.4deg) scale(0.985)";
+                // 翻看更早一页：沿左侧书脊向左立体掀起
+                bodyWrap.style.transform = "rotateY(-36deg) translateZ(8px) scale(0.985)";
             } else if (direction > 0) {
-                bodyWrap.style.transform = "translateX(18px) rotate(0.4deg) scale(0.985)";
+                // 翻看更新一页：沿左侧书脊向右合回
+                bodyWrap.style.transform = "rotateY(22deg) translateZ(6px) scale(0.985)";
             } else {
                 bodyWrap.style.transform = "scale(0.985)";
             }
-            bodyWrap.style.opacity = "0.22";
+            bodyWrap.style.opacity = "0.26";
             setTimeout(() => {
                 bodyWrap.classList.remove("is-switching");
-                bodyWrap.style.transition = "transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.22s ease";
-                bodyWrap.style.transform = "translateX(0) rotate(0deg) scale(1)";
+                bodyWrap.style.transition = "transform 0.4s cubic-bezier(0.2, 0.85, 0.3, 1), opacity 0.28s ease";
+                bodyWrap.style.transform = "rotateY(0deg) translateZ(0) scale(1)";
                 bodyWrap.style.opacity = "1";
                 setTimeout(() => {
                     if (bodyWrap) bodyWrap.style.transition = "";
-                }, 300);
+                }, 400);
             }, 60);
         } else if (bodyWrap) {
             bodyWrap.style.transform = "";
             bodyWrap.style.opacity = "";
         }
 
+        // 顶部日期指示
         if (dateLabel) {
             dateLabel.textContent = formatHumanDate(item.date);
             const rawDate = (item.date || "").replace(/-/g, ".");
             dateLabel.title = index > 0 
                 ? `${rawDate} · 点击一键回弹至最新` 
-                : `${rawDate} · 点击左侧或右侧可翻阅手记`;
+                : `${rawDate} · 随身手账`;
         }
+
+        // 内页页首日期与心绪
+        if (entryDateEl) {
+            const rawDate = (item.date || "").replace(/-/g, ".");
+            const dayOfWeek = item.dayOfWeek ? ` · ${item.dayOfWeek}` : "";
+            entryDateEl.textContent = `${rawDate}${dayOfWeek}`;
+        }
+        if (entryMoodEl) {
+            const emoji = item.mood?.emoji || "📖";
+            const label = item.mood?.label || "手记";
+            entryMoodEl.textContent = `${emoji} ${label}`;
+        }
+
+        // 金句与正文
         if (punchlineEl) {
             punchlineEl.textContent = item.punchline || "嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。";
         }
         if (contentEl) {
             contentEl.textContent = item.content || "";
         }
+
+        // 页码指示器
+        if (pageIndicator) {
+            pageIndicator.textContent = `第 ${index + 1} / ${entries.length} 页`;
+        }
+
+        // 注脚
         if (footnoteEl) {
             const raw = item.footnote || "";
             const tags = Array.isArray(raw)
@@ -4233,13 +4265,15 @@ document.addEventListener("click", (e) => {
                 footnoteEl.textContent = "";
             }
         }
+
+        // AI 助手签名彩蛋
         if (badgeText) {
             if (badgeTimer) clearTimeout(badgeTimer);
             badgeText.textContent = getDynamicNote(item);
             badgeText.style.color = "";
         }
 
-        // 便签层叠厚度更新：翻至最旧篇章时收起底层便签边角
+        // 书本纸张边缘厚度：翻至最后一页时收起底层边缘
         if (deckContainer) {
             if (index >= entries.length - 1) {
                 deckContainer.classList.add("is-last-page");
@@ -4248,8 +4282,13 @@ document.addEventListener("click", (e) => {
             }
         }
 
-        if (prevBtn) prevBtn.disabled = index >= entries.length - 1;
-        if (nextBtn) nextBtn.disabled = index <= 0;
+        // 同步翻页按钮禁用状态
+        const isOldest = index >= entries.length - 1;
+        const isNewest = index <= 0;
+        if (prevBtn) prevBtn.disabled = isOldest;
+        if (nextBtn) nextBtn.disabled = isNewest;
+        if (prevPageBtn) prevPageBtn.disabled = isOldest;
+        if (nextPageBtn) nextPageBtn.disabled = isNewest;
     }
 
     if (dateLabel) {
@@ -4311,24 +4350,47 @@ document.addEventListener("click", (e) => {
         });
     }
 
+    if (prevPageBtn) {
+        prevPageBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            flipEarlier();
+        });
+    }
+
+    if (nextPageBtn) {
+        nextPageBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            flipNewer();
+        });
+    }
+
+    if (pageCurl) {
+        pageCurl.addEventListener("click", (e) => {
+            e.stopPropagation();
+            flipEarlier();
+        });
+    }
+
     // 物理手势与交互系统 (Touch Gestures & Mouse Drag & Wheel)
     function applyDragTransform(dx) {
         if (!bodyWrap) return;
-        const rotate = dx * 0.032;
-        const opacity = Math.max(0.65, 1 - Math.abs(dx) / 500);
-        bodyWrap.style.transform = `translateX(${dx}px) rotate(${rotate}deg)`;
+        // 沿左侧书脊 3D 掀起物理曲线
+        const rotateY = Math.max(-42, Math.min(25, (dx / 320) * 35));
+        const lift = Math.min(18, Math.abs(dx) * 0.08);
+        const opacity = Math.max(0.7, 1 - Math.abs(dx) / 500);
+        bodyWrap.style.transform = `rotateY(${rotateY}deg) translateZ(${lift}px)`;
         bodyWrap.style.opacity = opacity;
     }
 
     function resetDragTransform() {
         if (!bodyWrap) return;
         bodyWrap.classList.remove("is-dragging");
-        bodyWrap.style.transition = "transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.25), opacity 0.3s ease";
-        bodyWrap.style.transform = "translateX(0) rotate(0deg)";
+        bodyWrap.style.transition = "transform 0.38s cubic-bezier(0.2, 0.85, 0.3, 1), opacity 0.3s ease";
+        bodyWrap.style.transform = "rotateY(0deg) translateZ(0)";
         bodyWrap.style.opacity = "1";
         setTimeout(() => {
             if (bodyWrap) bodyWrap.style.transition = "";
-        }, 360);
+        }, 380);
     }
 
     // 1. 移动端触屏手势 (Touch Tap & Swipe)
@@ -4524,7 +4586,7 @@ document.addEventListener("click", (e) => {
         }
     });
 
-        fetch("data/diary.json")
+    fetch("data/diary.json")
         .then((res) => {
             if (!res.ok) throw new Error("Failed to load diary");
             return res.json();

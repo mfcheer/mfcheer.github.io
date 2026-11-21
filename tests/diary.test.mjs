@@ -41,6 +41,14 @@ test('index.html 包含 AI 助手随身手账组件、便签层叠容器、挂�
   assert.ok(html.includes('id="diaryFootnote"'), '必须包含注脚容器');
   assert.ok(html.includes('class="diary-ai-notice"'), '必须包含 AI 自动生成提示');
   assert.ok(html.includes('<h2>助手日记</h2>'), '组件标题必须为 助手日记');
+  assert.ok(html.includes('class="diary-spine"'), '必须包含书脊装订压痕 diary-spine');
+  assert.ok(html.includes('class="diary-page-curl"'), '必须包含右下角微卷角 diary-page-curl');
+  assert.ok(html.includes('id="diaryEntryDate"'), '必须包含日记内页日期 diaryEntryDate');
+  assert.ok(html.includes('id="diaryEntryMood"'), '必须包含日记内页心绪 diaryEntryMood');
+  assert.ok(html.includes('class="diary-book-pager"'), '必须包含书本分页器 diary-book-pager');
+  assert.ok(html.includes('id="diaryPageIndicator"'), '必须包含页码指示器 diaryPageIndicator');
+  assert.ok(html.includes('id="diaryPrevPageBtn"'), '必须包含上一页按钮 diaryPrevPageBtn');
+  assert.ok(html.includes('id="diaryNextPageBtn"'), '必须包含下一页按钮 diaryNextPageBtn');
 });
 
 test('styles.css 包含手账样式、呼吸灯、便签层叠、拖拽抓手与平滑过渡', () => {
@@ -52,6 +60,10 @@ test('styles.css 包含手账样式、呼吸灯、便签层叠、拖拽抓手与
   assert.ok(css.includes('@keyframes diaryPulse'), '必须包含呼吸灯动画');
   assert.ok(css.includes('cursor: default') || css.includes('cursor: pointer'), '必须定义鼠标手势');
   assert.ok(css.includes('is-switching'), '必须包含平滑切换过渡样式');
+  assert.ok(css.includes('.diary-spine'), '必须定义书脊样式 .diary-spine');
+  assert.ok(css.includes('.diary-page-curl'), '必须定义右下角卷角样式 .diary-page-curl');
+  assert.ok(css.includes('.diary-book-pager'), '必须定义分页器容器样式 .diary-book-pager');
+  assert.ok(css.includes('.diary-page-nav-btn'), '必须定义翻页按钮样式 .diary-page-nav-btn');
 });
 
 test('script.js 包含手账加载、层叠物理手势（触屏/PC拖拽/滚轮）与管家私语互动彩蛋', () => {
@@ -65,6 +77,9 @@ test('script.js 包含手账加载、层叠物理手势（触屏/PC拖拽/滚轮
   assert.ok(script.includes('mousedown'), '必须监听 mousedown PC端拖拽');
   assert.ok(script.includes('wheel'), '必须监听 wheel 触摸板横向滚动');
   assert.ok(script.includes('lastTouchEndTime') && script.includes('FLIP_COOLDOWN_MS'), '必须包含触屏合成事件过滤与翻页冷却防抖逻辑以防手机双跳');
+  assert.ok(script.includes('diaryPageIndicator'), '必须更新页码指示器');
+  assert.ok(script.includes('diaryPrevPageBtn'), '必须支持上一页按钮事件');
+  assert.ok(script.includes('diaryNextPageBtn'), '必须支持下一页按钮事件');
 });
 
 test('formatHumanDate 具备动态自然日历适配能力（今天/昨天/前天/跨年），杜绝按数组索引写死', () => {
