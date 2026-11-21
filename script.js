@@ -3983,7 +3983,7 @@ document.addEventListener("click", (e) => {
         tabs = document.createElement("div");
         tabs.className = "media-tabs";
         tabs.setAttribute("role", "tablist");
-        const tabLabels = ["🎬 电影", "📚 读书", "🎮 游戏"];
+        const tabLabels = ["电影", "读书", "游戏"];
 
         const updateTabActive = (activeIdx) => {
             tabs.querySelectorAll(".media-tab").forEach((b, i) => {

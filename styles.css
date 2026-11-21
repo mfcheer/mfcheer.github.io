@@ -5242,7 +5242,7 @@ a.post-tag:hover {
 }
 
 /* ============================================================
-   MEDIA TABS (书影音移动端标签切换)
+   MEDIA TABS (书影音移动端标签切换 - 极简无框指示线风格)
    ============================================================ */
 .media-tabs {
     display: none;
@@ -5251,33 +5251,57 @@ a.post-tag:hover {
 @media (max-width: 768px) {
     .media-tabs {
         display: flex;
-        gap: 6px;
-        margin-bottom: 14px;
-        background: var(--surface-subtle);
-        padding: 4px;
-        border-radius: 12px;
-        border: 1px solid var(--line-subtle);
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 12px;
+        padding: 0 4px 2px;
+        background: transparent;
+        border: none;
     }
 
     .media-tab {
-        flex: 1;
-        padding: 7px 10px;
-        border-radius: 8px;
+        position: relative;
+        flex: 0 0 auto;
+        padding: 4px 2px 8px;
         border: none;
         background: transparent;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 500;
         color: var(--muted);
         cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: -0.01em;
+        line-height: 1.4;
+    }
+
+    .media-tab::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 16px;
+        height: 2.5px;
+        border-radius: 999px;
+        background: var(--accent);
+        transform: translateX(-50%) scaleX(0);
+        opacity: 0;
+        transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
     }
 
     .media-tab.active {
-        background: var(--surface);
+        background: transparent;
         color: var(--text);
         font-weight: 600;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+        box-shadow: none;
+    }
+
+    .media-tab.active::after {
+        transform: translateX(-50%) scaleX(1);
+        opacity: 1;
     }
 
     .media-grid {
@@ -5304,7 +5328,7 @@ a.post-tag:hover {
         min-width: 0;
         scroll-snap-align: start;
         scroll-snap-stop: always;
-        padding: 14px 14px 10px;
+        padding: 12px 14px 10px;
         background: var(--surface-card);
         border: 1px solid var(--line);
         border-radius: 14px;
@@ -5316,9 +5340,7 @@ a.post-tag:hover {
     }
 
     .media-col-head {
-        margin-bottom: 8px;
-        padding-bottom: 6px;
-        border-bottom: 1px solid var(--line-subtle);
+        display: none;
     }
 }
 
