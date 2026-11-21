@@ -163,6 +163,9 @@ export function validateEntry(entry) {
   for (const key of required) {
     if (typeof entry[key] !== 'string' || !entry[key].trim()) throw new Error(`${entry.date} 缺少 ${key}`);
   }
+  if (entry.punchline.trim().endsWith('。') || entry.content.trim().endsWith('。')) {
+    throw new Error(`${entry.date} 总结短句(punchline)与正文末尾不得以句号结束`);
+  }
   const length = [...entry.content.replace(/\s/gu, '')].length;
   const paragraphs = entry.content.trim().split(/\n\s*\n/);
   if (length < 180 || length > 250 || paragraphs.length < 2 || paragraphs.length > 3) {
@@ -194,6 +197,12 @@ export function run({ entries, targetPath = DIARY_PATH, allowHistory = false, no
   const seen = new Set();
   const today = getBeijingDateInfo(now).dateStr;
   for (const entry of incoming) {
+    if (typeof entry.punchline === 'string') {
+      entry.punchline = entry.punchline.trim().replace(/。+$/u, '');
+    }
+    if (typeof entry.content === 'string') {
+      entry.content = entry.content.trim().replace(/。+$/u, '');
+    }
     validateEntry(entry);
     if (entry.date > today || (!allowHistory && entry.date !== today)) throw new Error('历史重写须显式传入 --allow-history；不允许未来日记');
     if (seen.has(entry.date)) throw new Error(`批次日期重复：${entry.date}`);

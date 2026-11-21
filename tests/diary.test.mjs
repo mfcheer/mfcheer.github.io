@@ -158,13 +158,19 @@ test('成稿覆盖保留其他日期，非法批次和损坏旧文件均不写�
   }
 });
 
-test('全部手账符合新规则的字数、来源、版本及日期唯一降序要求', async () => {
+test('全部手账符合新规则的字数、来源、版本及日期唯一降序要求，且末尾均无句号', async () => {
   const { validateEntry, PROMPT_VERSION } = await import('../scripts/generate-daily-diary.mjs');
   const entries = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'data/diary.json'), 'utf8'));
   for (const entry of entries) {
     validateEntry(entry);
     assert.equal(entry.promptVersion, PROMPT_VERSION);
+    assert.ok(!entry.punchline.trim().endsWith('。'), `${entry.date} punchline 末尾不得以句号结束`);
+    assert.ok(!entry.content.trim().endsWith('。'), `${entry.date} content 末尾不得以句号结束`);
   }
+  // 校验带句号时会被严格拦截
+  assert.throws(() => validateEntry({ ...entries[0], punchline: entries[0].punchline + '。' }), /句号/);
+  assert.throws(() => validateEntry({ ...entries[0], content: entries[0].content + '。' }), /句号/);
+
   const dates = entries.map((entry) => entry.date);
   assert.equal(new Set(dates).size, dates.length);
   assert.deepEqual(dates, [...dates].sort().reverse());

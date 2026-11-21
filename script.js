@@ -4332,7 +4332,7 @@ document.addEventListener("click", (e) => {
 
         // 金句与正文
         if (punchlineEl) {
-            punchlineEl.textContent = item.punchline || "嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天。";
+            punchlineEl.textContent = item.punchline || "嘴上喊着‘一行代码都不想写’，身体却为了 0.3 秒鬼影帧死磕了一天";
         }
         if (contentEl) {
             contentEl.textContent = item.content || "";
