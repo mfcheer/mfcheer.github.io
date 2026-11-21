@@ -35,7 +35,7 @@ test('index.html 包含 AI 助手随身手账组件、便签层叠容器、挂�
   assert.ok(html.includes('class="glass card-diary"'), '必须包含 card-diary 容器');
   assert.ok(html.includes('id="diaryDeckContainer"'), '必须包含便签层叠容器 diaryDeckContainer');
   assert.ok(html.includes('class="diary-stack-layer"'), '必须包含底层便签纸张边缘 diary-stack-layer');
-  assert.ok(html.includes('id="diaryDateLabel"'), '必须包含人性化日期指示器');
+  // 已精简移除：右上角日期指示器
   assert.ok(html.includes('id="diaryPunchline"'), '必须包含金句 punchline 容器');
   assert.ok(html.includes('id="diaryContent"'), '必须包含日记正文容器');
   assert.ok(html.includes('id="diaryFootnote"'), '必须包含注脚容器');
@@ -43,10 +43,10 @@ test('index.html 包含 AI 助手随身手账组件、便签层叠容器、挂�
   assert.ok(html.includes('<h2>助手日记</h2>'), '组件标题必须为 助手日记');
   assert.ok(html.includes('class="diary-spine"'), '必须包含书脊装订压痕 diary-spine');
   assert.ok(html.includes('id="diaryEntryDate"'), '必须包含日记内页日期 diaryEntryDate');
-  assert.ok(html.includes('id="diaryEntryMood"'), '必须包含日记内页心绪 diaryEntryMood');
+  // 已精简移除：日记心绪标签
   assert.ok(html.includes('id="diaryUnderPage"'), '必须包含双页翻书露出底层页面 diaryUnderPage');
-  assert.ok(html.includes('id="diaryPrevBtn"'), '必须包含上一篇日记按钮 diaryPrevBtn');
-  assert.ok(html.includes('id="diaryNextBtn"'), '必须包含下一篇日记按钮 diaryNextBtn');
+  // 已精简移除：右上角翻页按钮
+  // 已精简移除：右上角翻页按钮
   assert.ok(html.includes('id="diaryTouchPrev"'), '必须包含触屏左侧翻页轻触区 diaryTouchPrev');
   assert.ok(html.includes('id="diaryTouchNext"'), '必须包含触屏右侧翻页轻触区 diaryTouchNext');
 });
