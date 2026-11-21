@@ -4504,6 +4504,10 @@ document.addEventListener("click", (e) => {
         // 过滤手机端 touchend 之后浏览器派发的模拟合成 mousedown 事件
         if (Date.now() - lastTouchEndTime < 800) return;
         if (e.button !== 0 || e.target.closest("button") || e.target.closest("a")) return;
+        // 如果在正文文本、金句或日期区域内点击，优先保障文字光标选词复制，不劫持为卡片拖拽翻页
+        if (e.target.closest(".diary-content") || e.target.closest(".diary-punchline") || e.target.closest(".diary-entry-meta")) {
+            return;
+        }
         isMouseDown = true;
         isDragging = false;
         mouseStartX = e.clientX;
@@ -4524,7 +4528,7 @@ document.addEventListener("click", (e) => {
         const dx = mouseCurrentX - mouseStartX;
         const dy = mouseCurrentY - mouseStartY;
 
-        if (!isDragging && Math.hypot(dx, dy) > 8) {
+        if (!isDragging && Math.hypot(dx, dy) > 10) {
             if (Math.abs(dx) > Math.abs(dy)) {
                 isDragging = true;
                 bodyWrap.classList.add("is-dragging");
@@ -4544,13 +4548,21 @@ document.addEventListener("click", (e) => {
         if (Date.now() - lastTouchEndTime < 800) return;
         bodyWrap.classList.remove("is-dragging");
 
+        // 若当前页面产生了划词文本选区，取消翻页动作，优先保障用户选词复制
+        const selection = window.getSelection ? window.getSelection().toString() : "";
+        if (selection && selection.trim().length > 0) {
+            isDragging = false;
+            resetDragTransform();
+            return;
+        }
+
         const dx = mouseCurrentX - mouseStartX;
 
         if (isDragging) {
-            // 鼠标水平拖拽：位移超 28px 执行翻页
-            if (dx < -28) {
+            // 鼠标水平拖拽：位移超 32px 执行翻页
+            if (dx < -32) {
                 flipEarlier();
-            } else if (dx > 28) {
+            } else if (dx > 32) {
                 flipNewer();
             } else {
                 resetDragTransform();

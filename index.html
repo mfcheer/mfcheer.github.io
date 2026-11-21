@@ -70,7 +70,7 @@
     <meta name="apple-mobile-web-app-title" content="mfcheer">
 
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css?v=1.3.92">
+    <link rel="stylesheet" href="styles.css?v=1.3.93">
 </head>
 <body>
     <!-- 极简苹果风 · 反重力星尘首页启动器（仅会话首次进入主页时呈现） -->
@@ -225,6 +225,7 @@
                     </div>
                 </div>
                 <div class="diary-deck-container" id="diaryDeckContainer">
+                    <div class="diary-ribbon" aria-hidden="true"></div>
                     <div class="diary-spine" aria-hidden="true"></div>
                     <div class="diary-stack-layer" aria-hidden="true"></div>
                     <div class="diary-body-wrap" id="diaryBodyWrap">
@@ -241,17 +242,6 @@
                     </div>
                 </div>
                 <div class="diary-foot">
-                    <div class="diary-book-pager">
-                        <button class="diary-page-nav-btn" id="diaryPrevPageBtn" type="button" aria-label="翻看更早一页">
-                            <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-                            <span>上一页</span>
-                        </button>
-                        <span class="diary-page-indicator" id="diaryPageIndicator">第 1 / 15 页</span>
-                        <button class="diary-page-nav-btn" id="diaryNextPageBtn" type="button" aria-label="翻看更新一页" disabled>
-                            <span>下一页</span>
-                            <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-                        </button>
-                    </div>
                     <div class="diary-footnote" id="diaryFootnote">
                         <span class="diary-stamp">52 次提交</span>
                         <span class="diary-stamp">3 条说说</span>
@@ -560,6 +550,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=1.3.86"></script>
+    <script src="script.js?v=1.3.87"></script>
 </body>
 </html>
