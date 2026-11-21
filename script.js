@@ -4739,6 +4739,49 @@ document.addEventListener("click", (e) => {
         }
     });
 
+    function syncMaxBookHeight() {
+        if (!entries || entries.length === 0 || !bodyWrap || !deckContainer) return;
+        const width = bodyWrap.clientWidth;
+        if (!width) return;
+
+        const measurer = document.createElement("div");
+        measurer.className = "diary-body-wrap";
+        measurer.style.cssText = "position:absolute;visibility:hidden;pointer-events:none;top:-9999px;left:0;width:100%;box-sizing:border-box;min-height:0;max-height:none;";
+        measurer.innerHTML = `
+            <div class="diary-entry-meta"><span class="diary-entry-date">2026.00.00 · 星期日</span></div>
+            <div class="diary-punchline-wrap"><p class="diary-punchline"></p></div>
+            <p class="diary-content"></p>
+        `;
+        deckContainer.appendChild(measurer);
+
+        const mPunchline = measurer.querySelector(".diary-punchline");
+        const mContent = measurer.querySelector(".diary-content");
+
+        let maxH = 0;
+        for (const item of entries) {
+            if (mPunchline) mPunchline.textContent = item.punchline || "";
+            if (mContent) mContent.textContent = item.content || "";
+            const h = measurer.offsetHeight;
+            if (h > maxH) maxH = h;
+        }
+
+        deckContainer.removeChild(measurer);
+
+        if (maxH > 0) {
+            bodyWrap.style.minHeight = `${maxH}px`;
+            if (underPage) underPage.style.minHeight = `${maxH}px`;
+            deckContainer.style.minHeight = `${maxH}px`;
+        }
+    }
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+        if (resizeTimer) clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            syncMaxBookHeight();
+        }, 120);
+    });
+
     fetch("data/diary.json")
         .then((res) => {
             if (!res.ok) throw new Error("Failed to load diary");
@@ -4749,6 +4792,7 @@ document.addEventListener("click", (e) => {
                 entries = data;
                 currentIndex = 0;
                 renderEntry(currentIndex);
+                syncMaxBookHeight();
             }
         })
         .catch(() => {

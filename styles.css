@@ -5902,6 +5902,13 @@ html[data-theme="dark"] .diary-content {
     }
 }
 
+@media (max-width: 360px) {
+    .diary-deck-container,
+    .diary-body-wrap {
+        min-height: 540px;
+    }
+}
+
 /* ============================================================
    移动端输入框防自动缩放 (Prevent iOS Safari / WebKit Auto Zoom)
    iOS Safari 与部分移动端浏览器在聚焦 font-size < 16px 的输入控件时，
