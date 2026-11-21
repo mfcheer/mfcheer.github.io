@@ -5535,7 +5535,7 @@ html[data-theme="dark"] .diary-nav-btn:hover:not(:disabled) {
     touch-action: pan-y;
     overscroll-behavior: contain;
     overscroll-behavior-x: none;
-    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.05));
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.035));
     min-height: 330px;
 }
 
@@ -5551,11 +5551,11 @@ html[data-theme="dark"] .diary-nav-btn:hover:not(:disabled) {
     z-index: 5;
     pointer-events: none;
     background: linear-gradient(90deg, 
-        rgba(40, 30, 20, 0.09) 0%, 
-        rgba(40, 30, 20, 0.04) 40%, 
+        rgba(0, 0, 0, 0.035) 0%, 
+        rgba(0, 0, 0, 0.01) 40%, 
         transparent 100%
     );
-    border-right: 1.5px solid rgba(160, 120, 90, 0.22);
+    border-right: 1.5px solid var(--line, rgba(0, 0, 0, 0.08));
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
 }
@@ -5574,14 +5574,14 @@ html[data-theme="dark"] .diary-spine {
     position: absolute;
     inset: 0;
     border-radius: 12px;
-    background: #f4f0e8;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #f0f0f3;
+    border: 1px solid rgba(0, 0, 0, 0.06);
     transform: translate(5px, 5px);
     box-shadow: 
-        1px 1px 0 #ede8de,
-        2px 2px 0 #e5dfd3,
-        3px 3px 0 #ded7c9,
-        4px 4px 12px rgba(0, 0, 0, 0.05);
+        1px 1px 0 #ececf0,
+        2px 2px 0 #e4e4e9,
+        3px 3px 0 #dedee3,
+        4px 4px 14px rgba(0, 0, 0, 0.035);
     pointer-events: none;
     transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
     z-index: 1;
@@ -5626,10 +5626,10 @@ html[data-theme="dark"] .diary-stack-layer::after {
     inset: 0;
     z-index: 2;
     padding: 24px 24px 22px 34px;
-    background: #faf8f5;
-    border: 1px solid rgba(0, 0, 0, 0.07);
+    background: #ffffff;
+    border: 1px solid var(--line, rgba(0, 0, 0, 0.08));
     border-radius: 12px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
     pointer-events: none;
     opacity: 0;
     overflow: hidden;
@@ -5660,10 +5660,10 @@ html[data-theme="dark"] .diary-under-page {
     min-height: 330px;
     display: flex;
     flex-direction: column;
-    background: #faf8f5;
-    border: 1px solid rgba(0, 0, 0, 0.07);
+    background: #ffffff;
+    border: 1px solid var(--line, rgba(0, 0, 0, 0.08));
     border-radius: 12px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
     touch-action: pan-y;
     overscroll-behavior: contain;
     overscroll-behavior-x: none;
@@ -5760,11 +5760,11 @@ html[data-theme="dark"] .diary-body-wrap {
     padding: 6px 12px 6px 12px;
     margin-bottom: 14px;
     background: transparent;
-    border-left: 2px solid rgba(220, 38, 38, 0.45);
+    border-left: 2px solid var(--accent, #0071e3);
 }
 
 html[data-theme="dark"] .diary-punchline-wrap {
-    border-left-color: rgba(245, 158, 11, 0.5);
+    border-left-color: var(--accent, #2997ff);
 }
 
 .diary-quote-mark {
@@ -5795,7 +5795,7 @@ html[data-theme="dark"] .diary-punchline-wrap {
     color: var(--text-primary);
     text-align: justify;
     letter-spacing: 0.015em;
-    background-image: linear-gradient(to bottom, transparent calc(1.85em - 1px), rgba(0, 0, 0, 0.038) calc(1.85em - 1px), rgba(0, 0, 0, 0.038) 1.85em);
+    background-image: linear-gradient(to bottom, transparent calc(1.85em - 1px), rgba(0, 0, 0, 0.032) calc(1.85em - 1px), rgba(0, 0, 0, 0.032) 1.85em);
     background-size: 100% 1.85em;
     background-position: 0 0.25em;
 }
@@ -5888,7 +5888,7 @@ html[data-theme="dark"] .diary-content {
     .diary-content {
         font-size: 0.88rem;
         line-height: 1.8;
-        background-image: linear-gradient(to bottom, transparent calc(1.8em - 1px), rgba(0, 0, 0, 0.038) calc(1.8em - 1px), rgba(0, 0, 0, 0.038) 1.8em);
+        background-image: linear-gradient(to bottom, transparent calc(1.8em - 1px), rgba(0, 0, 0, 0.032) calc(1.8em - 1px), rgba(0, 0, 0, 0.032) 1.8em);
         background-size: 100% 1.8em;
     }
     html[data-theme="dark"] .diary-content {
