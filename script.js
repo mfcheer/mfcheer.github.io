@@ -4458,34 +4458,111 @@ document.addEventListener("click", (e) => {
 
     const touchPrev = document.getElementById("diaryTouchPrev");
     const touchNext = document.getElementById("diaryTouchNext");
-    if (touchPrev) {
-        touchPrev.addEventListener("click", (e) => {
+
+    // 纸页边缘左右热区 (支持点击翻页 + 正文选词穿透桥接，保障两侧文字拖选与轻触翻页完美共存)
+    function attachTouchZoneSelection(zone, onFlip) {
+        if (!zone) return;
+
+        let isDown = false;
+        let isTextSelecting = false;
+        let startX = 0;
+        let startY = 0;
+        let startNode = null;
+        let startOffset = 0;
+
+        function getUnderlyingCaret(px, py) {
+            zone.style.pointerEvents = "none";
+            const rng = document.caretRangeFromPoint ? document.caretRangeFromPoint(px, py) : null;
+            zone.style.pointerEvents = "";
+            return rng;
+        }
+
+        zone.addEventListener("mousemove", (e) => {
+            if (isDown) return;
+            const rng = getUnderlyingCaret(e.clientX, e.clientY);
+            if (rng && rng.startContainer && rng.startContainer.nodeType === Node.TEXT_NODE && rng.startContainer.textContent.trim().length > 0) {
+                zone.style.cursor = "text";
+            } else {
+                zone.style.cursor = "pointer";
+            }
+        });
+
+        zone.addEventListener("mousedown", (e) => {
+            if (e.button !== 0) return;
+            isDown = true;
+            isTextSelecting = false;
+            startX = e.clientX;
+            startY = e.clientY;
+
+            const range = getUnderlyingCaret(e.clientX, e.clientY);
+            if (range) {
+                startNode = range.startContainer;
+                startOffset = range.startOffset;
+            } else {
+                startNode = null;
+                startOffset = 0;
+            }
+        });
+
+        window.addEventListener("mousemove", (e) => {
+            if (!isDown) return;
+            const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
+            if (dist > 4 && startNode) {
+                isTextSelecting = true;
+                const curRange = getUnderlyingCaret(e.clientX, e.clientY);
+                if (curRange) {
+                    const sel = window.getSelection();
+                    if (sel && sel.setBaseAndExtent) {
+                        try {
+                            sel.setBaseAndExtent(startNode, startOffset, curRange.startContainer, curRange.startOffset);
+                        } catch (_) {}
+                    }
+                }
+            }
+        });
+
+        window.addEventListener("mouseup", (e) => {
+            if (!isDown) return;
+            isDown = false;
+            if (isTextSelecting) {
+                isTextSelecting = false;
+                startNode = null;
+                return;
+            }
+            startNode = null;
+        });
+
+        zone.addEventListener("dblclick", (e) => {
+            e.stopPropagation();
+            const range = getUnderlyingCaret(e.clientX, e.clientY);
+            if (range && range.startContainer) {
+                const sel = window.getSelection();
+                if (sel) {
+                    const r = document.createRange();
+                    r.selectNodeContents(range.startContainer);
+                    sel.removeAllRanges();
+                    sel.addRange(r);
+                }
+            }
+        });
+
+        zone.addEventListener("click", (e) => {
             e.stopPropagation();
             const selection = window.getSelection ? window.getSelection().toString() : "";
             if (selection && selection.trim().length > 0) return;
-            flipEarlier();
+            onFlip();
         });
-        touchPrev.addEventListener("keydown", (e) => {
+
+        zone.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                flipEarlier();
+                onFlip();
             }
         });
     }
-    if (touchNext) {
-        touchNext.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const selection = window.getSelection ? window.getSelection().toString() : "";
-            if (selection && selection.trim().length > 0) return;
-            flipNewer();
-        });
-        touchNext.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                flipNewer();
-            }
-        });
-    }
+
+    attachTouchZoneSelection(touchPrev, flipEarlier);
+    attachTouchZoneSelection(touchNext, flipNewer);
 
     // 物理手势与交互系统 (Touch Gestures & Mouse Drag & Wheel)
     function applyDragTransform(dx) {
@@ -4648,7 +4725,7 @@ document.addEventListener("click", (e) => {
         if (Date.now() - lastTouchEndTime < 800) return;
         if (e.button !== 0 || e.target.closest("button") || e.target.closest("a")) return;
         // 如果在正文文本、金句或日期区域内点击，优先保障文字光标选词复制，不劫持为卡片拖拽翻页
-        if (e.target.closest(".diary-content") || e.target.closest(".diary-punchline") || e.target.closest(".diary-entry-meta")) {
+        if (e.target.closest(".diary-touch-zone") || e.target.closest(".diary-content") || e.target.closest(".diary-punchline") || e.target.closest(".diary-entry-meta")) {
             return;
         }
         isMouseDown = true;

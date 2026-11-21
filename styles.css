@@ -5711,7 +5711,7 @@ html[data-theme="dark"] .diary-body-wrap {
     }
 }
 
-/* 纸页边缘左右轻触翻页区域 (移动端单手极佳体验，点击即翻) */
+/* 纸页边缘左右轻触翻页区域 (扩大热区 + 选词穿透桥接，点击即翻且正文划词完全无阻) */
 .diary-touch-zone {
     position: absolute;
     top: 0;
