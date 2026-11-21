@@ -70,7 +70,7 @@
     <meta name="apple-mobile-web-app-title" content="mfcheer">
 
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css?v=1.3.93">
+    <link rel="stylesheet" href="styles.css?v=1.3.94">
 </head>
 <body>
     <!-- 极简苹果风 · 反重力星尘首页启动器（仅会话首次进入主页时呈现） -->
@@ -228,6 +228,17 @@
                     <div class="diary-ribbon" aria-hidden="true"></div>
                     <div class="diary-spine" aria-hidden="true"></div>
                     <div class="diary-stack-layer" aria-hidden="true"></div>
+                    <div class="diary-under-page" id="diaryUnderPage" aria-hidden="true">
+                        <div class="diary-entry-meta">
+                            <span class="diary-entry-date" id="diaryUnderDate"></span>
+                            <span class="diary-entry-mood" id="diaryUnderMood"></span>
+                        </div>
+                        <div class="diary-punchline-wrap">
+                            <span class="diary-quote-mark" aria-hidden="true">“</span>
+                            <p class="diary-punchline" id="diaryUnderPunchline"></p>
+                        </div>
+                        <p class="diary-content" id="diaryUnderContent"></p>
+                    </div>
                     <div class="diary-body-wrap" id="diaryBodyWrap">
                         <div class="diary-page-curl" aria-hidden="true" title="翻阅手记"></div>
                         <div class="diary-entry-meta">
@@ -550,6 +561,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=1.3.87"></script>
+    <script src="script.js?v=1.3.88"></script>
 </body>
 </html>

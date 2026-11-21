@@ -4056,10 +4056,36 @@ document.addEventListener("click", (e) => {
     const aiBadge = document.getElementById("diaryAiBadge");
     const deckContainer = document.getElementById("diaryDeckContainer") || diarySection;
     const pageCurl = diarySection.querySelector(".diary-page-curl");
+    const underPage = document.getElementById("diaryUnderPage");
+    const underDateEl = document.getElementById("diaryUnderDate");
+    const underMoodEl = document.getElementById("diaryUnderMood");
+    const underPunchlineEl = document.getElementById("diaryUnderPunchline");
+    const underContentEl = document.getElementById("diaryUnderContent");
 
     let entries = [];
     let currentIndex = 0;
     let badgeTimer = null;
+    let isFlipping = false;
+
+    function renderUnderEntry(item) {
+        if (!item || !underPage) return;
+        if (underDateEl) {
+            const rawDate = (item.date || "").replace(/-/g, ".");
+            const dayOfWeek = item.dayOfWeek ? ` · ${item.dayOfWeek}` : "";
+            underDateEl.textContent = `${rawDate}${dayOfWeek}`;
+        }
+        if (underMoodEl) {
+            const emoji = item.mood?.emoji || "📖";
+            const label = item.mood?.label || "手记";
+            underMoodEl.textContent = `${emoji} ${label}`;
+        }
+        if (underPunchlineEl) {
+            underPunchlineEl.textContent = item.punchline || "";
+        }
+        if (underContentEl) {
+            underContentEl.textContent = item.content || "";
+        }
+    }
 
     const bodyWrap = diarySection.querySelector(".diary-body-wrap") || diarySection;
 
@@ -4153,15 +4179,38 @@ document.addEventListener("click", (e) => {
 
     function flipEarlier() {
         const now = Date.now();
-        if (now - lastFlipTime < FLIP_COOLDOWN_MS) return;
+        if (now - lastFlipTime < FLIP_COOLDOWN_MS || isFlipping) return;
         lastFlipTime = now;
 
         if (currentIndex < entries.length - 1) {
-            currentIndex++;
-            renderEntry(currentIndex, true, -1);
+            const nextIndex = currentIndex + 1;
+            const nextItem = entries[nextIndex];
+
+            if (isMotionReduced()) {
+                currentIndex = nextIndex;
+                renderEntry(currentIndex, true, -1);
+                return;
+            }
+
+            isFlipping = true;
+            renderUnderEntry(nextItem);
+            deckContainer.classList.add("is-turning");
+
+            bodyWrap.style.transition = "transform 0.42s cubic-bezier(0.2, 0.85, 0.3, 1), opacity 0.36s ease";
+            bodyWrap.style.transform = "rotateY(-95deg) translateZ(8px) scale(0.985)";
+            bodyWrap.style.opacity = "0.15";
+
+            setTimeout(() => {
+                currentIndex = nextIndex;
+                renderEntry(currentIndex);
+                bodyWrap.style.transition = "none";
+                bodyWrap.style.transform = "rotateY(0deg) translateZ(0) scale(1)";
+                bodyWrap.style.opacity = "1";
+                deckContainer.classList.remove("is-turning");
+                isFlipping = false;
+            }, 420);
         } else {
-            if (!bodyWrap) return;
-            if (isMotionReduced()) return;
+            if (!bodyWrap || isMotionReduced()) return;
             bodyWrap.style.transition = "transform 0.16s ease-out";
             bodyWrap.style.transform = "rotateY(-7deg) translateZ(6px)";
             setTimeout(() => {
@@ -4174,15 +4223,40 @@ document.addEventListener("click", (e) => {
 
     function flipNewer() {
         const now = Date.now();
-        if (now - lastFlipTime < FLIP_COOLDOWN_MS) return;
+        if (now - lastFlipTime < FLIP_COOLDOWN_MS || isFlipping) return;
         lastFlipTime = now;
 
         if (currentIndex > 0) {
-            currentIndex--;
-            renderEntry(currentIndex, true, 1);
+            const prevIndex = currentIndex - 1;
+            const prevItem = entries[prevIndex];
+
+            if (isMotionReduced()) {
+                currentIndex = prevIndex;
+                renderEntry(currentIndex, true, 1);
+                return;
+            }
+
+            isFlipping = true;
+            renderUnderEntry(entries[currentIndex]);
+            deckContainer.classList.add("is-turning");
+
+            renderEntry(prevIndex);
+            bodyWrap.style.transition = "none";
+            bodyWrap.style.transform = "rotateY(-95deg) translateZ(8px) scale(0.985)";
+            bodyWrap.style.opacity = "0.15";
+            void bodyWrap.offsetWidth;
+
+            bodyWrap.style.transition = "transform 0.42s cubic-bezier(0.2, 0.85, 0.3, 1), opacity 0.36s ease";
+            bodyWrap.style.transform = "rotateY(0deg) translateZ(0) scale(1)";
+            bodyWrap.style.opacity = "1";
+
+            setTimeout(() => {
+                currentIndex = prevIndex;
+                deckContainer.classList.remove("is-turning");
+                isFlipping = false;
+            }, 420);
         } else {
-            if (!bodyWrap) return;
-            if (isMotionReduced()) return;
+            if (!bodyWrap || isMotionReduced()) return;
             bodyWrap.style.transition = "transform 0.16s ease-out";
             bodyWrap.style.transform = "rotateY(6deg) translateZ(4px)";
             setTimeout(() => {
@@ -4388,16 +4462,22 @@ document.addEventListener("click", (e) => {
 
     // 物理手势与交互系统 (Touch Gestures & Mouse Drag & Wheel)
     function applyDragTransform(dx) {
-        if (!bodyWrap) return;
+        if (!bodyWrap || isFlipping) return;
         if (isMotionReduced()) {
             bodyWrap.style.transform = `translateX(${dx * 0.25}px)`;
             bodyWrap.style.opacity = Math.max(0.7, 1 - Math.abs(dx) / 500);
             return;
         }
-        // 沿左侧书脊 3D 掀起物理曲线
-        const rotateY = Math.max(-42, Math.min(25, (dx / 320) * 35));
+        if (dx < 0 && currentIndex < entries.length - 1) {
+            renderUnderEntry(entries[currentIndex + 1]);
+            deckContainer.classList.add("is-turning");
+        } else if (dx > 0 && currentIndex > 0) {
+            renderUnderEntry(entries[currentIndex]);
+            deckContainer.classList.add("is-turning");
+        }
+        const rotateY = Math.max(-55, Math.min(30, (dx / 320) * 45));
         const lift = Math.min(18, Math.abs(dx) * 0.08);
-        const opacity = Math.max(0.7, 1 - Math.abs(dx) / 500);
+        const opacity = Math.max(0.4, 1 - Math.abs(dx) / 420);
         bodyWrap.style.transform = `rotateY(${rotateY}deg) translateZ(${lift}px)`;
         bodyWrap.style.opacity = opacity;
     }
@@ -4409,7 +4489,10 @@ document.addEventListener("click", (e) => {
             bodyWrap.style.transition = "opacity 0.16s ease";
             bodyWrap.style.transform = "";
             bodyWrap.style.opacity = "1";
-            setTimeout(() => { if (bodyWrap) bodyWrap.style.transition = ""; }, 180);
+            setTimeout(() => {
+                if (bodyWrap) bodyWrap.style.transition = "";
+                deckContainer.classList.remove("is-turning");
+            }, 180);
             return;
         }
         bodyWrap.style.transition = "transform 0.38s cubic-bezier(0.2, 0.85, 0.3, 1), opacity 0.3s ease";
@@ -4417,6 +4500,7 @@ document.addEventListener("click", (e) => {
         bodyWrap.style.opacity = "1";
         setTimeout(() => {
             if (bodyWrap) bodyWrap.style.transition = "";
+            deckContainer.classList.remove("is-turning");
         }, 380);
     }
 
@@ -4432,6 +4516,12 @@ document.addEventListener("click", (e) => {
     bodyWrap.addEventListener("touchstart", (e) => {
         if (e.target.closest("button") || e.target.closest("a")) return;
         lastTouchEndTime = Date.now();
+        // 如果当前已有文本选区，绝不启动拖拽翻页，优先保护选区
+        const selection = window.getSelection ? window.getSelection().toString() : "";
+        if (selection && selection.trim().length > 0) {
+            isTouchActive = false;
+            return;
+        }
         if (e.touches.length === 1) {
             isTouchActive = true;
             touchStartX = e.touches[0].clientX;
@@ -4446,13 +4536,22 @@ document.addEventListener("click", (e) => {
     bodyWrap.addEventListener("touchmove", (e) => {
         lastTouchEndTime = Date.now();
         if (!isTouchActive || e.touches.length !== 1) return;
+
+        // 触屏滑动过程中若产生文本选区，立即放弃翻页，保持文本选区
+        const selection = window.getSelection ? window.getSelection().toString() : "";
+        if (selection && selection.trim().length > 0) {
+            isTouchActive = false;
+            resetDragTransform();
+            return;
+        }
+
         touchCurrentX = e.touches[0].clientX;
         touchCurrentY = e.touches[0].clientY;
         const dx = touchCurrentX - touchStartX;
         const dy = touchCurrentY - touchStartY;
 
         if (isHorizontalGesture === null) {
-            if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
+            if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
                 isHorizontalGesture = Math.abs(dx) >= Math.abs(dy);
             }
         }
@@ -4470,13 +4569,20 @@ document.addEventListener("click", (e) => {
         if (!isTouchActive) return;
         isTouchActive = false;
 
+        // 终点检查：若存在划词文本选区，保留选区，绝不翻页
+        const selection = window.getSelection ? window.getSelection().toString() : "";
+        if (selection && selection.trim().length > 0) {
+            resetDragTransform();
+            return;
+        }
+
         const dx = touchCurrentX - touchStartX;
 
-        // 仅在明确的水平滑动手势下翻页；轻触或垂直滚动不触发翻页，杜绝误触
+        // 仅在明确的水平滑动手势且位移超 36px 时翻页
         if (isHorizontalGesture) {
-            if (dx < -28) {
+            if (dx < -36) {
                 flipEarlier();
-            } else if (dx > 28) {
+            } else if (dx > 36) {
                 flipNewer();
             } else {
                 resetDragTransform();

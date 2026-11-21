@@ -46,6 +46,7 @@ test('index.html 包含 AI 助手随身手账组件、便签层叠容器、挂�
   assert.ok(html.includes('id="diaryEntryDate"'), '必须包含日记内页日期 diaryEntryDate');
   assert.ok(html.includes('id="diaryEntryMood"'), '必须包含日记内页心绪 diaryEntryMood');
   assert.ok(html.includes('class="diary-ribbon"'), '必须包含日记本顶部丝带书签 diary-ribbon');
+  assert.ok(html.includes('id="diaryUnderPage"'), '必须包含双页翻书露出底层页面 diaryUnderPage');
 });
 
 test('styles.css 包含手账样式、呼吸灯、便签层叠、拖拽抓手与平滑过渡', () => {
@@ -53,10 +54,11 @@ test('styles.css 包含手账样式、呼吸灯、便签层叠、拖拽抓手与
   assert.ok(css.includes('.card-diary'), '必须定义 .card-diary');
   assert.ok(css.includes('.diary-deck-container'), '必须定义便签层叠容器样式');
   assert.ok(css.includes('.diary-stack-layer'), '必须定义底层便签层叠厚度样式');
+  assert.ok(css.includes('html[data-theme="dark"] .diary-stack-layer'), '深色模式下必须适配暗灰纸边样式，避免露白');
+  assert.ok(css.includes('.diary-under-page'), '必须定义底层页面样式 .diary-under-page');
   assert.ok(css.includes('.diary-punchline'), '必须定义金句样式');
   assert.ok(css.includes('@keyframes diaryPulse'), '必须包含呼吸灯动画');
   assert.ok(css.includes('cursor: default') || css.includes('cursor: pointer'), '必须定义鼠标手势');
-  assert.ok(css.includes('is-switching'), '必须包含平滑切换过渡样式');
   assert.ok(css.includes('.diary-spine'), '必须定义书脊样式 .diary-spine');
   assert.ok(css.includes('.diary-page-curl'), '必须定义右下角卷角样式 .diary-page-curl');
   assert.ok(css.includes('.diary-ribbon'), '必须定义丝带书签样式 .diary-ribbon');
@@ -70,11 +72,13 @@ test('script.js 包含手账加载、层叠物理手势（触屏/PC拖拽/滚轮
   assert.ok(script.includes('formatHumanDate'), '必须包含人性化日期转换函数');
   assert.ok(script.includes('diaryPunchline'), '必须渲染金句');
   assert.ok(script.includes('flipEarlier'), '必须包含左右点击翻页');
+  assert.ok(script.includes('renderUnderEntry'), '必须支持底层新页预填与掀起双页层次渲染');
   assert.ok(script.includes('touchstart'), '必须监听 touchstart 触屏滑动');
   assert.ok(script.includes('mousedown'), '必须监听 mousedown PC端拖拽');
   assert.ok(script.includes('wheel'), '必须监听 wheel 触摸板横向滚动');
   assert.ok(script.includes('lastTouchEndTime') && script.includes('FLIP_COOLDOWN_MS'), '必须包含触屏合成事件过滤与翻页冷却防抖逻辑以防手机双跳');
   assert.ok(script.includes('ArrowLeft') && script.includes('ArrowRight'), '必须支持键盘左右方向键翻页');
+  assert.ok(script.includes('window.getSelection'), '必须包含文本选区检测与划词保护，避免拖选误翻');
   assert.ok(script.includes('isMotionReduced') || script.includes('prefers-reduced-motion'), '必须检测并支持无障碍减弱动态效果');
 });
 

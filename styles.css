@@ -5599,16 +5599,56 @@ html[data-theme="dark"] .diary-spine::after {
     pointer-events: none;
 }
 
+html[data-theme="dark"] .diary-stack-layer {
+    background: #141519;
+    border-color: rgba(255, 255, 255, 0.07);
+    box-shadow: 
+        1px 1px 0 #101115,
+        2px 2px 0 #0d0e11,
+        3px 3px 0 #090a0d,
+        4px 4px 16px rgba(0, 0, 0, 0.55);
+}
+
+html[data-theme="dark"] .diary-stack-layer::after {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
 /* 翻到历史最后一页时，底层纸页收起隐退 */
 .diary-deck-container.is-last-page .diary-stack-layer {
     opacity: 0;
     transform: translate(0, 0) scale(0.98);
 }
 
-/* 日记内页主体（温润特种纸质感 + 3D 轴心翻转） */
+/* 底层展示内页（用于真实的双页翻书露出动效） */
+.diary-under-page {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    padding: 24px 24px 22px 34px;
+    background: #faf8f5;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+    pointer-events: none;
+    opacity: 0;
+    overflow: hidden;
+    user-select: none;
+}
+
+html[data-theme="dark"] .diary-under-page {
+    background: #1c1d22;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+}
+
+.diary-deck-container.is-turning .diary-under-page {
+    opacity: 1;
+}
+
+/* 日记内页主体（温润特种纸质感 + 3D 轴心翻转，顶层 z-index: 3） */
 .diary-body-wrap {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     padding: 24px 24px 22px 34px;
     background: #faf8f5;
     border: 1px solid rgba(0, 0, 0, 0.07);
@@ -5823,6 +5863,20 @@ html[data-theme="dark"] .diary-content {
         width: 12px;
         height: 26px;
         top: -4px;
+    }
+    .diary-under-page {
+        padding: 16px 16px 16px 24px;
+    }
+    .diary-under-page .diary-punchline-wrap {
+        padding: 6px 10px 6px 16px;
+        margin-bottom: 10px;
+    }
+    .diary-under-page .diary-punchline {
+        font-size: 0.9rem;
+    }
+    .diary-under-page .diary-content {
+        font-size: 0.88rem;
+        line-height: 1.8;
     }
     .diary-body-wrap {
         padding: 16px 16px 16px 24px;
