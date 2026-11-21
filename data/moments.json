@@ -1,5 +1,27 @@
 [
   {
+    "issueNumber": 83,
+    "issueUpdatedAt": "2026-11-21T06:48:23Z",
+    "date": "2026/11/21 14:48",
+    "text": "我们三个联手，就是天下最强的开发者",
+    "location": "",
+    "name": "mfcheer",
+    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
+    "labels": [
+      "技术"
+    ],
+    "images": [
+      {
+        "src": "assets/moments/m-1795243693623-7ivher.jpg",
+        "alt": "Image"
+      },
+      {
+        "src": "assets/moments/m-1795243698247-cdfhzg.jpg",
+        "alt": "Image"
+      }
+    ]
+  },
+  {
     "issueNumber": 82,
     "issueUpdatedAt": "2026-11-21T06:23:36Z",
     "date": "2026/11/21 14:23",
