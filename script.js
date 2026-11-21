@@ -4063,6 +4063,10 @@ document.addEventListener("click", (e) => {
 
     const bodyWrap = diarySection.querySelector(".diary-body-wrap") || diarySection;
 
+    function isMotionReduced() {
+        return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
     function getBeijingDateStr(dateObj = new Date()) {
         try {
             const parts = new Intl.DateTimeFormat("zh-CN", {
@@ -4157,6 +4161,7 @@ document.addEventListener("click", (e) => {
             renderEntry(currentIndex, true, -1);
         } else {
             if (!bodyWrap) return;
+            if (isMotionReduced()) return;
             bodyWrap.style.transition = "transform 0.16s ease-out";
             bodyWrap.style.transform = "rotateY(-7deg) translateZ(6px)";
             setTimeout(() => {
@@ -4177,6 +4182,7 @@ document.addEventListener("click", (e) => {
             renderEntry(currentIndex, true, 1);
         } else {
             if (!bodyWrap) return;
+            if (isMotionReduced()) return;
             bodyWrap.style.transition = "transform 0.16s ease-out";
             bodyWrap.style.transform = "rotateY(6deg) translateZ(4px)";
             setTimeout(() => {
@@ -4193,25 +4199,34 @@ document.addEventListener("click", (e) => {
 
         if (withAnim && bodyWrap) {
             bodyWrap.classList.add("is-switching");
-            if (direction < 0) {
-                // 翻看更早一页：沿左侧书脊向左立体掀起
-                bodyWrap.style.transform = "rotateY(-36deg) translateZ(8px) scale(0.985)";
-            } else if (direction > 0) {
-                // 翻看更新一页：沿左侧书脊向右合回
-                bodyWrap.style.transform = "rotateY(22deg) translateZ(6px) scale(0.985)";
-            } else {
-                bodyWrap.style.transform = "scale(0.985)";
-            }
-            bodyWrap.style.opacity = "0.26";
-            setTimeout(() => {
-                bodyWrap.classList.remove("is-switching");
-                bodyWrap.style.transition = "transform 0.4s cubic-bezier(0.2, 0.85, 0.3, 1), opacity 0.28s ease";
-                bodyWrap.style.transform = "rotateY(0deg) translateZ(0) scale(1)";
-                bodyWrap.style.opacity = "1";
+            if (isMotionReduced()) {
+                // 开启减少动态效果：轻微淡入淡出，不使用 3D 旋转
+                bodyWrap.style.opacity = "0.28";
                 setTimeout(() => {
-                    if (bodyWrap) bodyWrap.style.transition = "";
-                }, 400);
-            }, 60);
+                    bodyWrap.classList.remove("is-switching");
+                    bodyWrap.style.opacity = "1";
+                }, 80);
+            } else {
+                if (direction < 0) {
+                    // 翻看更早一页：沿左侧书脊向左立体掀起
+                    bodyWrap.style.transform = "rotateY(-36deg) translateZ(8px) scale(0.985)";
+                } else if (direction > 0) {
+                    // 翻看更新一页：沿左侧书脊向右合回
+                    bodyWrap.style.transform = "rotateY(22deg) translateZ(6px) scale(0.985)";
+                } else {
+                    bodyWrap.style.transform = "scale(0.985)";
+                }
+                bodyWrap.style.opacity = "0.26";
+                setTimeout(() => {
+                    bodyWrap.classList.remove("is-switching");
+                    bodyWrap.style.transition = "transform 0.4s cubic-bezier(0.2, 0.85, 0.3, 1), opacity 0.28s ease";
+                    bodyWrap.style.transform = "rotateY(0deg) translateZ(0) scale(1)";
+                    bodyWrap.style.opacity = "1";
+                    setTimeout(() => {
+                        if (bodyWrap) bodyWrap.style.transition = "";
+                    }, 400);
+                }, 60);
+            }
         } else if (bodyWrap) {
             bodyWrap.style.transform = "";
             bodyWrap.style.opacity = "";
@@ -4374,6 +4389,11 @@ document.addEventListener("click", (e) => {
     // 物理手势与交互系统 (Touch Gestures & Mouse Drag & Wheel)
     function applyDragTransform(dx) {
         if (!bodyWrap) return;
+        if (isMotionReduced()) {
+            bodyWrap.style.transform = `translateX(${dx * 0.25}px)`;
+            bodyWrap.style.opacity = Math.max(0.7, 1 - Math.abs(dx) / 500);
+            return;
+        }
         // 沿左侧书脊 3D 掀起物理曲线
         const rotateY = Math.max(-42, Math.min(25, (dx / 320) * 35));
         const lift = Math.min(18, Math.abs(dx) * 0.08);
@@ -4385,6 +4405,13 @@ document.addEventListener("click", (e) => {
     function resetDragTransform() {
         if (!bodyWrap) return;
         bodyWrap.classList.remove("is-dragging");
+        if (isMotionReduced()) {
+            bodyWrap.style.transition = "opacity 0.16s ease";
+            bodyWrap.style.transform = "";
+            bodyWrap.style.opacity = "1";
+            setTimeout(() => { if (bodyWrap) bodyWrap.style.transition = ""; }, 180);
+            return;
+        }
         bodyWrap.style.transition = "transform 0.38s cubic-bezier(0.2, 0.85, 0.3, 1), opacity 0.3s ease";
         bodyWrap.style.transform = "rotateY(0deg) translateZ(0)";
         bodyWrap.style.opacity = "1";
@@ -4393,7 +4420,7 @@ document.addEventListener("click", (e) => {
         }, 380);
     }
 
-    // 1. 移动端触屏手势 (Touch Tap & Swipe)
+    // 1. 移动端触屏手势 (Touch Swipe - 不劫持轻触点击，保障文本阅读与复制)
     let isTouchActive = false;
     let lastTouchEndTime = 0;
     let touchStartX = 0;
@@ -4425,7 +4452,7 @@ document.addEventListener("click", (e) => {
         const dy = touchCurrentY - touchStartY;
 
         if (isHorizontalGesture === null) {
-            if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+            if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
                 isHorizontalGesture = Math.abs(dx) >= Math.abs(dy);
             }
         }
@@ -4444,20 +4471,9 @@ document.addEventListener("click", (e) => {
         isTouchActive = false;
 
         const dx = touchCurrentX - touchStartX;
-        const dy = touchCurrentY - touchStartY;
-        const dist = Math.hypot(dx, dy);
 
-        if (dist < 12) {
-            // 触屏单指轻触 Tap：检测左半屏或右半屏翻页
-            const rect = bodyWrap.getBoundingClientRect();
-            const tapX = touchCurrentX - rect.left;
-            if (tapX < rect.width * 0.5) {
-                flipEarlier();
-            } else {
-                flipNewer();
-            }
-        } else if (isHorizontalGesture) {
-            // 轻滑滑动：位移超过 28px 即可翻页，动作幅度轻快灵敏
+        // 仅在明确的水平滑动手势下翻页；轻触或垂直滚动不触发翻页，杜绝误触
+        if (isHorizontalGesture) {
             if (dx < -28) {
                 flipEarlier();
             } else if (dx > 28) {
@@ -4476,7 +4492,7 @@ document.addEventListener("click", (e) => {
         resetDragTransform();
     }, { passive: true });
 
-    // 2. PC 端鼠标点击与拖拽 (Mouse Click & Drag)
+    // 2. PC 端鼠标拖拽 (Mouse Drag - 仅水平拖拽生效，点击与选词不触发翻页)
     let isMouseDown = false;
     let isDragging = false;
     let mouseStartX = 0;
@@ -4485,7 +4501,7 @@ document.addEventListener("click", (e) => {
     let mouseCurrentY = 0;
 
     bodyWrap.addEventListener("mousedown", (e) => {
-        // 彻底过滤手机端 touchend 之后浏览器派发的模拟合成 mousedown 事件（防双跳）
+        // 过滤手机端 touchend 之后浏览器派发的模拟合成 mousedown 事件
         if (Date.now() - lastTouchEndTime < 800) return;
         if (e.button !== 0 || e.target.closest("button") || e.target.closest("a")) return;
         isMouseDown = true;
@@ -4495,9 +4511,6 @@ document.addEventListener("click", (e) => {
         mouseCurrentX = mouseStartX;
         mouseCurrentY = mouseStartY;
         bodyWrap.style.transition = "none";
-        if (e.cancelable) {
-            e.preventDefault();
-        }
     });
 
     window.addEventListener("mousemove", (e) => {
@@ -4510,9 +4523,15 @@ document.addEventListener("click", (e) => {
         mouseCurrentY = e.clientY;
         const dx = mouseCurrentX - mouseStartX;
         const dy = mouseCurrentY - mouseStartY;
-        if (!isDragging && Math.hypot(dx, dy) > 6) {
-            isDragging = true;
-            bodyWrap.classList.add("is-dragging");
+
+        if (!isDragging && Math.hypot(dx, dy) > 8) {
+            if (Math.abs(dx) > Math.abs(dy)) {
+                isDragging = true;
+                bodyWrap.classList.add("is-dragging");
+            } else {
+                isMouseDown = false;
+                return;
+            }
         }
         if (isDragging) {
             applyDragTransform(dx);
@@ -4526,20 +4545,9 @@ document.addEventListener("click", (e) => {
         bodyWrap.classList.remove("is-dragging");
 
         const dx = mouseCurrentX - mouseStartX;
-        const dy = mouseCurrentY - mouseStartY;
-        const dist = Math.hypot(dx, dy);
 
-        if (!isDragging || dist < 8) {
-            // 纯点击事件：点击左半区向前看更早，点击右半区向后看较新
-            const rect = bodyWrap.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            if (clickX < rect.width * 0.5) {
-                flipEarlier();
-            } else {
-                flipNewer();
-            }
-        } else {
-            // 鼠标拖拽：位移超 28px 执行翻页
+        if (isDragging) {
+            // 鼠标水平拖拽：位移超 28px 执行翻页
             if (dx < -28) {
                 flipEarlier();
             } else if (dx > 28) {

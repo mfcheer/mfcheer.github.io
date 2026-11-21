@@ -64,6 +64,7 @@ test('styles.css 包含手账样式、呼吸灯、便签层叠、拖拽抓手与
   assert.ok(css.includes('.diary-page-curl'), '必须定义右下角卷角样式 .diary-page-curl');
   assert.ok(css.includes('.diary-book-pager'), '必须定义分页器容器样式 .diary-book-pager');
   assert.ok(css.includes('.diary-page-nav-btn'), '必须定义翻页按钮样式 .diary-page-nav-btn');
+  assert.ok(css.includes('prefers-reduced-motion') && css.includes('.diary-body-wrap'), '必须针对减弱动态效果优化 .diary-body-wrap 动画');
 });
 
 test('script.js 包含手账加载、层叠物理手势（触屏/PC拖拽/滚轮）与管家私语互动彩蛋', () => {
@@ -80,6 +81,7 @@ test('script.js 包含手账加载、层叠物理手势（触屏/PC拖拽/滚轮
   assert.ok(script.includes('diaryPageIndicator'), '必须更新页码指示器');
   assert.ok(script.includes('diaryPrevPageBtn'), '必须支持上一页按钮事件');
   assert.ok(script.includes('diaryNextPageBtn'), '必须支持下一页按钮事件');
+  assert.ok(script.includes('isMotionReduced') || script.includes('prefers-reduced-motion'), '必须检测并支持无障碍减弱动态效果');
 });
 
 test('formatHumanDate 具备动态自然日历适配能力（今天/昨天/前天/跨年），杜绝按数组索引写死', () => {
