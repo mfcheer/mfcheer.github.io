@@ -26,6 +26,7 @@ permissions:
   issues: read
   pages: write
   id-token: write
+  actions: read
 
 jobs:
   site:
@@ -69,6 +70,22 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+      - name: Wait for Pages artifact registration
+        if: steps.build.outputs.publish == 'true'
+        run: |
+          echo "Waiting for Pages artifact to be registered in GitHub API..."
+          for i in {1..12}; do
+            ARTIFACTS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts")
+            if echo "$ARTIFACTS" | grep -q '"name": "github-pages"'; then
+              echo "Artifact 'github-pages' detected successfully!"
+              exit 0
+            fi
+            echo "Artifact not yet indexed, waiting 5s (attempt $i/12)..."
+            sleep 5
+          done
+          echo "Proceeding to deployment..."
       - name: Deploy Pages
         if: steps.build.outputs.publish == 'true'
         id: deployment
