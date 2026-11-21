@@ -4469,6 +4469,14 @@ document.addEventListener("click", (e) => {
         let startY = 0;
         let startNode = null;
         let startOffset = 0;
+        let clickTimer = null;
+
+        function cancelPendingClick() {
+            if (clickTimer) {
+                clearTimeout(clickTimer);
+                clickTimer = null;
+            }
+        }
 
         function getUnderlyingCaret(px, py) {
             zone.style.pointerEvents = "none";
@@ -4499,6 +4507,9 @@ document.addEventListener("click", (e) => {
 
         zone.addEventListener("mousedown", (e) => {
             if (e.button !== 0) return;
+            if (e.detail > 1) {
+                cancelPendingClick();
+            }
             isDown = true;
             isTextSelecting = false;
             startX = e.clientX;
@@ -4518,6 +4529,7 @@ document.addEventListener("click", (e) => {
             if (!isDown) return;
             const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
             if (dist > 4 && startNode) {
+                cancelPendingClick();
                 isTextSelecting = true;
                 const curRange = getUnderlyingCaret(e.clientX, e.clientY);
                 if (curRange) {
@@ -4544,6 +4556,7 @@ document.addEventListener("click", (e) => {
 
         zone.addEventListener("dblclick", (e) => {
             e.stopPropagation();
+            cancelPendingClick();
             const range = getUnderlyingCaret(e.clientX, e.clientY);
             if (!range || !range.startContainer) return;
 
@@ -4604,13 +4617,26 @@ document.addEventListener("click", (e) => {
 
         zone.addEventListener("click", (e) => {
             e.stopPropagation();
-            if (hasActiveTextSelection()) return;
-            onFlip();
+            if (hasActiveTextSelection()) {
+                cancelPendingClick();
+                return;
+            }
+            if (e.detail > 1) {
+                cancelPendingClick();
+                return;
+            }
+            cancelPendingClick();
+            clickTimer = setTimeout(() => {
+                clickTimer = null;
+                if (hasActiveTextSelection()) return;
+                onFlip();
+            }, 220);
         });
 
         zone.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
+                cancelPendingClick();
                 if (hasActiveTextSelection()) return;
                 onFlip();
             }

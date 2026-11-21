@@ -70,6 +70,32 @@ export function normalizeIssues(issues, label) {
         })).sort((a, b) => b.created_at.localeCompare(a.created_at) || b.number - a.number);
 }
 
+
+export async function minifySiteAssets(outputDir) {
+    let esbuild;
+    try {
+        esbuild = (await import('esbuild')).default || await import('esbuild');
+    } catch (_) {
+        return;
+    }
+    const targets = [
+        { file: 'styles.css', loader: 'css' },
+        { file: 'script.js', loader: 'js' },
+        { file: 'gallery.js', loader: 'js' }
+    ];
+    for (const { file, loader } of targets) {
+        const fullPath = path.join(outputDir, file);
+        try {
+            const content = await fs.readFile(fullPath, 'utf8');
+            if (!content || !content.trim()) continue;
+            const res = await esbuild.transform(content, { loader, minify: true, target: 'es2020' });
+            await fs.writeFile(fullPath, res.code, 'utf8');
+            const savedPct = ((1 - res.code.length / content.length) * 100).toFixed(1);
+            console.log(`[Minify] ${file}: ${(content.length / 1024).toFixed(1)} KB -> ${(res.code.length / 1024).toFixed(1)} KB (-${savedPct}%)`);
+        } catch (_) {}
+    }
+}
+
 export async function buildSite({ root, output, getIssues = fetchIssues, run, force = false }) {
     // 先完整读取两个模块：任一 API 分页失败，不写数据、不发布旧快照。
     const [moments, gallery] = await Promise.all([getIssues('moment'), getIssues('gallery')]);
@@ -141,6 +167,7 @@ export async function buildSite({ root, output, getIssues = fetchIssues, run, fo
             for (const p of publicPaths) {
                 if ((await filesUnder(root, p)).length) await fs.cp(path.join(root, p), path.join(output, p), { recursive: true });
             }
+            await minifySiteAssets(output);
         }
         return { changed, publish, state };
     } finally { await fs.rm(temp, { recursive: true, force: true }); }

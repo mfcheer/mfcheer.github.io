@@ -10,6 +10,7 @@
     "test:build": "node tests/verify-build-site.mjs"
   },
   "devDependencies": {
+    "esbuild": "^0.28.2",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",
     "markdown-it": "^14.1.0",

@@ -84,6 +84,7 @@ test('script.js 包含手账加载、层叠物理手势（触屏/PC拖拽/滚轮
   assert.ok(script.includes('hasActiveTextSelection'), '必须包含独立活动选区保护判定，防止已有选区时键盘与点击误翻');
   assert.ok(script.includes('Intl.Segmenter'), '双击选词必须支持分词器精确选择单词或词组，避免整段选中');
   assert.ok(script.includes('isMotionReduced') || script.includes('prefers-reduced-motion'), '必须检测并支持无障碍减弱动态效果');
+  assert.ok(script.includes('cancelPendingClick') && script.includes('clickTimer'), '必须包含单击延时防抖与双击选词冲突规避逻辑');
 });
 
 test('formatHumanDate 具备动态自然日历适配能力（今天/昨天/前天/跨年），杜绝按数组索引写死', () => {
