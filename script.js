@@ -4472,7 +4472,17 @@ document.addEventListener("click", (e) => {
 
         function getUnderlyingCaret(px, py) {
             zone.style.pointerEvents = "none";
-            const rng = document.caretRangeFromPoint ? document.caretRangeFromPoint(px, py) : null;
+            let rng = null;
+            if (document.caretRangeFromPoint) {
+                rng = document.caretRangeFromPoint(px, py);
+            } else if (document.caretPositionFromPoint) {
+                const pos = document.caretPositionFromPoint(px, py);
+                if (pos && pos.offsetNode) {
+                    rng = document.createRange();
+                    rng.setStart(pos.offsetNode, pos.offset);
+                    rng.setEnd(pos.offsetNode, pos.offset);
+                }
+            }
             zone.style.pointerEvents = "";
             return rng;
         }
@@ -4535,27 +4545,73 @@ document.addEventListener("click", (e) => {
         zone.addEventListener("dblclick", (e) => {
             e.stopPropagation();
             const range = getUnderlyingCaret(e.clientX, e.clientY);
-            if (range && range.startContainer) {
+            if (!range || !range.startContainer) return;
+
+            let node = range.startContainer;
+            let offset = range.startOffset;
+
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                if (node.childNodes && node.childNodes[offset]) {
+                    node = node.childNodes[offset];
+                    offset = 0;
+                } else if (node.firstChild) {
+                    node = node.firstChild;
+                    offset = 0;
+                }
+            }
+            if (node && node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent || "";
+                if (!text.length) return;
+                const clampedOffset = Math.max(0, Math.min(offset, text.length - 1));
+                let start = clampedOffset;
+                let end = clampedOffset + 1;
+
+                if (typeof Intl !== "undefined" && Intl.Segmenter) {
+                    try {
+                        const segmenter = new Intl.Segmenter(undefined, { granularity: "word" });
+                        for (const s of segmenter.segment(text)) {
+                            if (clampedOffset >= s.index && clampedOffset < s.index + s.segment.length) {
+                                start = s.index;
+                                end = s.index + s.segment.length;
+                                break;
+                            }
+                        }
+                    } catch (_) {}
+                } else {
+                    const isWordChar = (ch) => /[a-zA-Z0-9_\u4e00-\u9fa5]/.test(ch);
+                    while (start > 0 && isWordChar(text[start - 1])) start--;
+                    while (end < text.length && isWordChar(text[end])) end++;
+                }
+
                 const sel = window.getSelection();
                 if (sel) {
                     const r = document.createRange();
-                    r.selectNodeContents(range.startContainer);
+                    r.setStart(node, start);
+                    r.setEnd(node, end);
                     sel.removeAllRanges();
                     sel.addRange(r);
                 }
             }
         });
 
+        function hasActiveTextSelection() {
+            const sel = window.getSelection ? window.getSelection() : null;
+            if (!sel) return false;
+            if (sel.isCollapsed) return false;
+            const str = sel.toString();
+            return !!(str && str.trim().length > 0);
+        }
+
         zone.addEventListener("click", (e) => {
             e.stopPropagation();
-            const selection = window.getSelection ? window.getSelection().toString() : "";
-            if (selection && selection.trim().length > 0) return;
+            if (hasActiveTextSelection()) return;
             onFlip();
         });
 
         zone.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
+                if (hasActiveTextSelection()) return;
                 onFlip();
             }
         });

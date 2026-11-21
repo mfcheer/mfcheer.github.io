@@ -81,6 +81,8 @@ test('script.js 包含手账加载、层叠物理手势（触屏/PC拖拽/滚轮
   assert.ok(script.includes('lastTouchEndTime') && script.includes('FLIP_COOLDOWN_MS'), '必须包含触屏合成事件过滤与翻页冷却防抖逻辑以防手机双跳');
   assert.ok(script.includes('ArrowLeft') && script.includes('ArrowRight'), '必须支持键盘左右方向键翻页');
   assert.ok(script.includes('window.getSelection'), '必须包含文本选区检测与划词保护，避免拖选误翻');
+  assert.ok(script.includes('hasActiveTextSelection'), '必须包含独立活动选区保护判定，防止已有选区时键盘与点击误翻');
+  assert.ok(script.includes('Intl.Segmenter'), '双击选词必须支持分词器精确选择单词或词组，避免整段选中');
   assert.ok(script.includes('isMotionReduced') || script.includes('prefers-reduced-motion'), '必须检测并支持无障碍减弱动态效果');
 });
 
