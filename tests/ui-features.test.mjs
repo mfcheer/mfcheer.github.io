@@ -329,6 +329,22 @@ test("说说发布 401 凭据失效拦截与重新授权闭环 (Scheme 3) 就绪
     assert.ok(css.includes(".moment-btn-primary.is-reauth"), "styles.css 必须包含重新授权按钮警示高亮样式");
 });
 
+test("GitHub OAuth 回调与子页面回跳闭环（TDZ 防护、state 双重备份与独立页直接回跳）就绪", () => {
+    const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
+    const checkOAuthIdx = js.indexOf("async function checkOAuthCallback");
+    const draftIdx = js.indexOf("const momentDraft = createSiteDraft");
+    const openModalIdx = js.indexOf("async function openMomentModal");
+
+    assert.ok(checkOAuthIdx !== -1, "script.js 必须包含 checkOAuthCallback 函数");
+    assert.ok(draftIdx !== -1 && openModalIdx !== -1, "script.js 必须包含 momentDraft 与 openMomentModal");
+    assert.ok(checkOAuthIdx > draftIdx, "checkOAuthCallback 必须在 momentDraft 初始化之后定义，防止 defer 下 TDZ ReferenceError");
+    assert.ok(checkOAuthIdx > openModalIdx, "checkOAuthCallback 必须在 openMomentModal 定义之后定义");
+
+    assert.ok(js.includes("statePayload"), "startMomentOAuth 必须附带 statePayload 增强跨域回跳稳定性");
+    assert.ok(js.includes("willRedirect"), "checkOAuthCallback 必须具备 willRedirect 判定以避免在首页冗余弹窗并直接回跳");
+    assert.ok(js.includes("sessionStorage.setItem(\"mfcheer_reauth_open_moment\", \"1\")"), "回跳前必须保留 reauth 标记以在目标页恢复弹窗");
+});
+
 test("外链视频与流媒体播放优化 (Bilibili / YouTube / MP4 直链与文章容器) 就绪", () => {
     const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
     assert.ok(js.includes("high_quality=1"), "script.js B站播放器参数必须包含 high_quality=1 高清标识");

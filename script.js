@@ -475,119 +475,17 @@ function startMomentOAuth(returnPath) {
     sessionStorage.setItem("mfcheer_post_auth_return", path);
     sessionStorage.setItem("mfcheer_reauth_open_moment", "1");
 
+    // state 双重备份，保障跨域跳转或私密浏览模式下回跳目标与意图不丢失
+    const statePayload = encodeURIComponent(JSON.stringify({
+        returnTo: path,
+        reauth: "1",
+        postEditor: sessionStorage.getItem("mfcheer_open_post_editor") === "1" ? "1" : "0"
+    }));
+
     const redirectUri = window.location.origin + "/";
-    const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(config.clientId)}&scope=public_repo&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(config.clientId)}&scope=public_repo&redirect_uri=${encodeURIComponent(redirectUri)}&state=${statePayload}`;
     window.location.href = authUrl;
     return true;
-}
-
-// 检查页面 URL 中是否携带 OAuth 重定向的 code 参数
-async function checkOAuthCallback() {
-    try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
-        if (!code) {
-            if (sessionStorage.getItem("mfcheer_reauth_open_moment") === "1") {
-                sessionStorage.removeItem("mfcheer_reauth_open_moment");
-                openMomentModal().then(() => {
-                    showMomentToast("🎉 登录状态已刷新，草稿已恢复，可直接发布。");
-                });
-            }
-            return;
-        }
-
-        // 清理地址栏 query，保持整洁
-        const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
-        window.history.replaceState({}, document.title, cleanUrl);
-
-        await openMomentModal();
-        const statusEl = document.getElementById("momentAuthStatus");
-        if (statusEl) {
-            statusEl.className = "moment-modal-status is-loading";
-            statusEl.textContent = "正在通过 GitHub 授权登录完成认证…";
-            statusEl.style.display = "block";
-        }
-
-        const oauthConfig = getOAuthConfig();
-        if (!oauthConfig.proxy) {
-            throw new Error("未配置 OAuth 代理服务地址");
-        }
-
-        const res = await fetch(oauthConfig.proxy, {
-            method: "POST",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                code: code,
-                client_id: oauthConfig.clientId
-            })
-        });
-
-        const data = await res.json().catch(() => ({}));
-        const token = data.access_token || data.token;
-        if (!token) {
-            throw new Error(data.error_description || data.error || "授权换取 Token 失败，请检查 OAuth 代理配置");
-        }
-
-        // 验证用户身份
-        const userRes = await fetch("https://api.github.com/user", {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Accept": "application/vnd.github+json"
-            }
-        });
-        const user = await userRes.json();
-        if (!user || !user.login || user.login.toLowerCase() !== "mfcheer") {
-            throw new Error(`当前授权账号 (@${user ? user.login : "未知"}) 不是博主本人，无权发布说说`);
-        }
-
-        setMomentAuth(token, user);
-
-        // 若授权前来自相册页或说说专页等，跳回来源页继续
-        const postAuthReturn = sessionStorage.getItem("mfcheer_post_auth_return");
-        const currentPath = window.location.pathname;
-        if (postAuthReturn && postAuthReturn.startsWith("/") && postAuthReturn !== currentPath && postAuthReturn !== (currentPath + "index.html")) {
-            sessionStorage.removeItem("mfcheer_post_auth_return");
-            window.location.replace(postAuthReturn);
-            return;
-        }
-        sessionStorage.removeItem("mfcheer_post_auth_return");
-
-        const wasReauth = sessionStorage.getItem("mfcheer_reauth_open_moment") === "1";
-        sessionStorage.removeItem("mfcheer_reauth_open_moment");
-
-        const wasOpenPostEditor = sessionStorage.getItem("mfcheer_open_post_editor") === "1";
-        sessionStorage.removeItem("mfcheer_open_post_editor");
-
-        if (wasReauth) {
-            showMomentToast("🎉 登录状态已刷新，草稿已恢复，可直接发布。");
-        } else if (wasOpenPostEditor) {
-            showMomentToast("🎉 欢迎回来，博主 mfcheer！已开启文章编辑。");
-            setTimeout(() => {
-                if (typeof openPostEditorDrawer === "function") {
-                    openPostEditorDrawer();
-                }
-            }, 300);
-        } else {
-            showMomentToast("🎉 欢迎回来，博主 mfcheer！已成功登录。");
-        }
-        renderMomentModalContent();
-    } catch (e) {
-        const statusEl = document.getElementById("momentAuthStatus");
-        if (statusEl) {
-            statusEl.className = "moment-modal-status is-error";
-            statusEl.textContent = e.message || "OAuth 授权登录失败，请使用备用方式登录";
-            statusEl.style.display = "block";
-        }
-    }
-}
-
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", checkOAuthCallback);
-} else {
-    checkOAuthCallback();
 }
 
 const MOMENT_AUTH_TOKEN_KEY = "mfcheer_moment_auth_token";
@@ -3552,6 +3450,142 @@ document.addEventListener("click", (e) => {
         openMomentModal();
     }
 });
+
+// 检查页面 URL 中是否携带 OAuth 重定向的 code 参数并处理授权闭环
+async function checkOAuthCallback() {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+        const stateRaw = urlParams.get("state");
+        let stateData = {};
+        if (stateRaw) {
+            try {
+                stateData = JSON.parse(decodeURIComponent(stateRaw)) || {};
+            } catch (_) {}
+        }
+
+        const postAuthReturn = sessionStorage.getItem("mfcheer_post_auth_return") || stateData.returnTo;
+        const currentPath = window.location.pathname;
+
+        if (!code) {
+            if (sessionStorage.getItem("mfcheer_reauth_open_moment") === "1" || stateData.reauth === "1") {
+                sessionStorage.removeItem("mfcheer_reauth_open_moment");
+                await openMomentModal();
+                showMomentToast("🎉 登录状态已刷新，草稿已恢复，可直接发布。");
+            }
+            return;
+        }
+
+        // 清理地址栏中的 code 与 state query，保持 URL 整洁且防止后退/刷新重复触发
+        const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
+        window.history.replaceState({}, document.title, cleanUrl);
+
+        // 如果授权前来自独立子页面（如 /moments/），直接在后台静默换取 Token 并迅速跳回，不在首页冗余弹出弹窗
+        const willRedirect = Boolean(
+            postAuthReturn &&
+            postAuthReturn.startsWith("/") &&
+            postAuthReturn !== currentPath &&
+            postAuthReturn !== (currentPath + "index.html")
+        );
+
+        showMomentToast("正在通过 GitHub 授权登录完成认证…");
+
+        if (!willRedirect) {
+            await openMomentModal();
+            const statusEl = document.getElementById("momentAuthStatus");
+            if (statusEl) {
+                statusEl.className = "moment-modal-status is-loading";
+                statusEl.textContent = "正在通过 GitHub 授权登录完成认证…";
+                statusEl.style.display = "block";
+            }
+        }
+
+        const oauthConfig = getOAuthConfig();
+        if (!oauthConfig.proxy) {
+            throw new Error("未配置 OAuth 代理服务地址");
+        }
+
+        const res = await fetch(oauthConfig.proxy, {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                code: code,
+                client_id: oauthConfig.clientId
+            })
+        });
+
+        const data = await res.json().catch(() => ({}));
+        const token = data.access_token || data.token;
+        if (!token) {
+            throw new Error(data.error_description || data.error || "授权换取 Token 失败，请检查 OAuth 代理配置");
+        }
+
+        // 验证用户身份
+        const userRes = await fetch("https://api.github.com/user", {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Accept": "application/vnd.github+json"
+            }
+        });
+        const user = await userRes.json();
+        if (!user || !user.login || user.login.toLowerCase() !== "mfcheer") {
+            throw new Error(`当前授权账号 (@${user ? user.login : "未知"}) 不是博主本人，无权发布说说`);
+        }
+
+        setMomentAuth(token, user);
+
+        // 若授权前来自相册页或说说专页等，跳回来源页继续
+        if (willRedirect) {
+            sessionStorage.removeItem("mfcheer_post_auth_return");
+            sessionStorage.setItem("mfcheer_reauth_open_moment", "1");
+            window.location.replace(postAuthReturn);
+            return;
+        }
+
+        sessionStorage.removeItem("mfcheer_post_auth_return");
+        const wasReauth = sessionStorage.getItem("mfcheer_reauth_open_moment") === "1" || stateData.reauth === "1";
+        sessionStorage.removeItem("mfcheer_reauth_open_moment");
+
+        const wasOpenPostEditor = sessionStorage.getItem("mfcheer_open_post_editor") === "1" || stateData.postEditor === "1";
+        sessionStorage.removeItem("mfcheer_open_post_editor");
+
+        if (wasReauth) {
+            showMomentToast("🎉 登录状态已刷新，草稿已恢复，可直接发布。");
+        } else if (wasOpenPostEditor) {
+            showMomentToast("🎉 欢迎回来，博主 mfcheer！已开启文章编辑。");
+            setTimeout(() => {
+                if (typeof openPostEditorDrawer === "function") {
+                    openPostEditorDrawer();
+                }
+            }, 300);
+        } else {
+            showMomentToast("🎉 欢迎回来，博主 mfcheer！已成功登录。");
+        }
+        renderMomentModalContent();
+    } catch (e) {
+        console.error("[OAuth] 认证处理异常:", e);
+        showMomentToast("OAuth 授权失败: " + (e.message || "请稍后重试"), false);
+        try {
+            await openMomentModal();
+            const statusEl = document.getElementById("momentAuthStatus");
+            if (statusEl) {
+                statusEl.className = "moment-modal-status is-error";
+                statusEl.textContent = e.message || "OAuth 授权登录失败，请使用备用方式登录";
+                statusEl.style.display = "block";
+            }
+        } catch (_) {}
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", checkOAuthCallback);
+} else {
+    checkOAuthCallback();
+}
+
 
 // ============================================================
 // MOMENTS URL FILTER SYNC (说说 URL 参数联动与后退恢复)
