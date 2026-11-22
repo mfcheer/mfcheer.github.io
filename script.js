@@ -6025,27 +6025,27 @@ function initHomeLauncher() {
         } else {
             count = Math.floor(Math.min(420, Math.max(280, screenArea / 2800)));
         }
-        // 浅色模式由于白底缺乏暗底的光晕扩散效应，人眼对离散微点的感知阈值更高，补偿 +18% 粒子基数
-        return isDark ? count : Math.floor(count * 1.18);
+        // 深色模式保持全量星芒；浅色模式适度削减（约取 72%），保有流光微尘的灵动充裕，避免过载密集
+        return isDark ? count : Math.floor(count * 0.72);
     }
 
     let particleCount = getOptimalParticleCount();
-    // 星尘多光谱色板：深色模式采用淡雅低饱和星芒（温和克制、绝不俗艳），浅色模式保持鲜艳晶莹的高饱和宝石色
+    // 星尘多光谱色板：深色模式采用淡雅低饱和星芒（温和克制、绝不俗艳），浅色模式采用极简低饱和纯净银灰与淡冰蓝晨光
     const STARDUST_PALETTES = [
-        // 0: 淡冰蓝 (Soft Ice Blue) / 浅色: 蔚蓝宝石
-        { dark: { r: 180, g: 218, b: 250 }, light: { r: 2, g: 132, b: 215 } },
-        // 1: 丁香淡紫 (Muted Lavender) / 浅色: 星云紫晶
-        { dark: { r: 215, g: 200, b: 245 }, light: { r: 147, g: 51, b: 234 } },
-        // 2: 晨曦淡粉 (Blush Rose Mist) / 浅色: 绯红蔷薇
-        { dark: { r: 248, g: 205, b: 215 }, light: { r: 225, g: 29, b: 72 } },
-        // 3: 香槟暖金 (Soft Champagne Gold) / 浅色: 炽热晨曦
-        { dark: { r: 250, g: 232, b: 195 }, light: { r: 234, g: 88, b: 12 } },
-        // 4: 薄荷淡青 (Ice Mint Sage) / 浅色: 极光翠绿
-        { dark: { r: 195, g: 235, b: 220 }, light: { r: 5, g: 150, b: 105 } },
-        // 5: 银辉淡铂 (Pale Silver Gray) / 浅色: 璀璨星金
-        { dark: { r: 225, g: 230, b: 240 }, light: { r: 202, g: 138, b: 4 } },
-        // 6: 纯净星芒 (Starlight White) / 浅色: 克莱因皇家蓝
-        { dark: { r: 255, g: 255, b: 255 }, light: { r: 37, g: 99, b: 235 } }
+        // 0: 淡冰蓝 (Soft Ice Blue) / 浅色: 极淡天霜蓝
+        { dark: { r: 180, g: 218, b: 250 }, light: { r: 105, g: 155, b: 205 } },
+        // 1: 丁香淡紫 (Muted Lavender) / 浅色: 柔和雾银灰
+        { dark: { r: 215, g: 200, b: 245 }, light: { r: 138, g: 146, b: 160 } },
+        // 2: 晨曦淡粉 (Blush Rose Mist) / 浅色: 极淡暖铂灰
+        { dark: { r: 248, g: 205, b: 215 }, light: { r: 158, g: 152, b: 146 } },
+        // 3: 香槟暖金 (Soft Champagne Gold) / 浅色: 晨曦微风金
+        { dark: { r: 250, g: 232, b: 195 }, light: { r: 168, g: 158, b: 140 } },
+        // 4: 薄荷淡青 (Ice Mint Sage) / 浅色: 极淡鼠尾灰
+        { dark: { r: 195, g: 235, b: 220 }, light: { r: 125, g: 155, b: 150 } },
+        // 5: 银辉淡铂 (Pale Silver Gray) / 浅色: 纯净钛金银
+        { dark: { r: 225, g: 230, b: 240 }, light: { r: 142, g: 148, b: 158 } },
+        // 6: 纯净星芒 (Starlight White) / 浅色: 冰晶蔚蓝
+        { dark: { r: 255, g: 255, b: 255 }, light: { r: 95, g: 145, b: 195 } }
     ];
 
     let particles = [];
@@ -6143,14 +6143,14 @@ function initHomeLauncher() {
                 ctx.shadowColor = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.35)";
                 ctx.shadowBlur = this.size * 1.2;
             } else {
-                // 浅色模式：高饱和宝石粒子与柔和光晕，告别单调灰暗，在纯白背景上呈现鲜艳灵动的多彩微粒
+                // 浅色模式：通透半透明空气微尘，低透明度且无脏晕投影，在纯白背景上呈现纯净克制的浮光
                 const c = this.palette.light;
-                const effectiveSize = this.size + 0.25 * dpr;
-                const lightAlpha = Math.min(0.92, this.alpha * 1.35);
+                const effectiveSize = this.size * 0.95;
+                const lightAlpha = Math.min(0.22, this.alpha * 0.28);
                 ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
                 ctx.fillStyle = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + lightAlpha + ")";
-                ctx.shadowColor = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.35)";
-                ctx.shadowBlur = effectiveSize * 1.2;
+                ctx.shadowColor = "transparent";
+                ctx.shadowBlur = 0;
             }
 
             ctx.fill();
