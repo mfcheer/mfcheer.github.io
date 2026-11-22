@@ -5716,9 +5716,9 @@ html[data-theme="dark"] .diary-body-wrap {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 25%;
-    min-width: 84px;
-    max-width: 140px;
+    width: 33%;
+    min-width: 120px;
+    max-width: 200px;
     z-index: 4;
     cursor: pointer;
     background: transparent;
@@ -5904,9 +5904,9 @@ html[data-theme="dark"] .diary-content {
         padding-top: 10px;
     }
     .diary-touch-zone {
-        width: 26%;
-        min-width: 72px;
-        max-width: 100px;
+        width: 33%;
+        min-width: 96px;
+        max-width: 135px;
     }
 }
 
@@ -5916,8 +5916,8 @@ html[data-theme="dark"] .diary-content {
         min-height: 540px;
     }
     .diary-touch-zone {
-        min-width: 60px;
-        max-width: 76px;
+        min-width: 80px;
+        max-width: 96px;
     }
 }
 
