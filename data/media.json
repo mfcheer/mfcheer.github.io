@@ -1,6 +1,13 @@
 {
   "movies": [
     {
+      "title": "末日地堡 第一季",
+      "link": "https://movie.douban.com/subject/35468745/",
+      "cover": "assets/covers/35468745.jpg",
+      "rating": 4,
+      "date": "2026-11-22"
+    },
+    {
       "title": "指环王3：王者无敌",
       "link": "https://movie.douban.com/subject/1291552/",
       "cover": "assets/covers/1291552.jpg",
@@ -27,13 +34,6 @@
       "cover": "assets/covers/1291571.jpg",
       "rating": 4,
       "date": "2026-11-10"
-    },
-    {
-      "title": "欢迎来龙餐馆",
-      "link": "https://movie.douban.com/subject/35811064/",
-      "cover": "assets/covers/35811064.jpg",
-      "rating": 4,
-      "date": "2026-08-18"
     }
   ],
   "books": [
