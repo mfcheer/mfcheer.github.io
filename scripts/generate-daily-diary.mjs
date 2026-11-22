@@ -53,6 +53,15 @@ export function getTodayGitStats(dateStr, windowOptions = null) {
   return { count: commits.length, commits };
 }
 
+function parseToTimestamp(dateStr) {
+  if (!dateStr) return NaN;
+  const str = String(dateStr).trim().replace(/\//g, "-");
+  const iso = str.includes("T") || str.includes(" ")
+    ? str.replace(/\s+/g, "T") + (str.includes("+") ? "" : "+08:00")
+    : `${str}T00:00:00+08:00`;
+  return new Date(iso).getTime();
+}
+
 export function getTodayMoments(dateStr, windowOptions = null) {
   assertDate(dateStr);
   const win = windowOptions || getTimeWindow24h(dateStr);
@@ -84,9 +93,7 @@ export function getTodayGalleryPhotos(dateStr, windowOptions = null) {
 
   return (readJson('data/gallery.json').albums || []).flatMap((a) => a.photos || [])
     .filter((p) => {
-      if (!p.date) return false;
-      const parsed = new Date(p.date.replace(/\s+/g, 'T') + '+08:00');
-      const ts = parsed.getTime();
+      const ts = parseToTimestamp(p.date);
       return Number.isFinite(ts) && ts >= startTs && ts <= endTs;
     })
     .map((p) => {
@@ -117,9 +124,7 @@ export function getTodayMediaItems(dateStr, windowOptions = null) {
 
   return ['movies', 'books', 'games'].flatMap((category) => (media[category] || [])
     .filter((item) => {
-      if (!item.date) return false;
-      const parsed = new Date(item.date.replace(/\s+/g, 'T') + '+08:00');
-      const ts = parsed.getTime();
+      const ts = parseToTimestamp(item.date);
       return Number.isFinite(ts) && ts >= startTs && ts <= endTs;
     })
     .map((item) => ({ ...item, category, verified: false, warning: '仅为待核实线索；日期、评分不证明观看状态' })));
