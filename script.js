@@ -3540,7 +3540,11 @@ async function checkOAuthCallback() {
         // 若授权前来自相册页或说说专页等，跳回来源页继续
         if (willRedirect) {
             sessionStorage.removeItem("mfcheer_post_auth_return");
-            sessionStorage.setItem("mfcheer_reauth_open_moment", "1");
+            if (postAuthReturn.startsWith("/gallery")) {
+                sessionStorage.setItem("mfcheer_reauth_open_gallery", "1");
+            } else {
+                sessionStorage.setItem("mfcheer_reauth_open_moment", "1");
+            }
             window.location.replace(postAuthReturn);
             return;
         }

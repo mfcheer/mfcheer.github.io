@@ -1060,7 +1060,17 @@
         if (e.target.closest && e.target.closest('#galleryUploadBtn')) renderGalleryUploadModal();
     });
 
+    window.renderGalleryUploadModal = renderGalleryUploadModal;
+
     // ---------------- 启动 ----------------
 
     loadGallery();
+
+    if (sessionStorage.getItem("mfcheer_reauth_open_gallery") === "1") {
+        sessionStorage.removeItem("mfcheer_reauth_open_gallery");
+        renderGalleryUploadModal();
+        if (typeof showMomentToast === "function") {
+            showMomentToast("🎉 登录成功！已开启相册上传。");
+        }
+    }
 })();

@@ -21,7 +21,7 @@ const PRECACHE_ASSETS = [
     './gallery/index.html',
     './styles.css?v=1.3.102',
     './script.js?v=1.3.95',
-    './gallery.js?v=1.2.25',
+    './gallery.js?v=1.2.26',
     './manifest.json',
     './favicon.ico',
     './favicon-32x32.png',
