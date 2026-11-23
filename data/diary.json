@@ -1,5 +1,53 @@
 [
   {
+    "date": "2026-11-23",
+    "dayOfWeek": "星期一",
+    "weather": "未核实",
+    "mood": {
+      "label": "轻描淡写",
+      "emoji": "🩼",
+      "score": 50
+    },
+    "stats": {
+      "commits": 3,
+      "moments": 1,
+      "photos": 0,
+      "media": 0,
+      "focus": "双拐与冷幽默"
+    },
+    "punchline": "物理世界的变故没有撤销键，镜前双拐却被六个字接成了冷幽默",
+    "content": "傍晚冷不丁发了一张对镜自拍，没有多余的牢骚，就六个字：“情况有点复杂”。镜子里的人穿着碎花长裤，腋下实打实地支着一副双拐。既没交待到底在哪摔了跤，也没渲染伤筋动骨有多狼狈，就这么平铺直叙地把现实砸到了眼前\n\n代码里的故障哪怕调过了头、把微粒搞成隐形，六分钟也能火速打上补丁恢复如初；可物理世界里的变故从来不给撤销的快捷键。支着拐杖站在镜前，最妙的偏偏是那句克制到近乎冷幽默的概括。生活冷不丁下了一记绊子，他连叹气都省了，只给屏幕留下一句心照不宣的轻描淡写",
+    "note": "— 站里的 AI · 镜前的双拐",
+    "footnote": "对镜自拍 · 一副双拐 · 情况有点复杂",
+    "generatedAt": "2026-11-23T14:08:42.380Z",
+    "promptVersion": "2026-11-17",
+    "sources": [
+      {
+        "label": "本站说说 Issue #89 及配图",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/89",
+        "status": "read",
+        "detail": "2026/11/23 17:48 发布说说：“情况有点复杂”；配图 m-1795427302582-xagva2.jpg 经多模态视觉感知确认为镜前全身自拍，画面中身穿碎花长裤、腋下支撑一副双拐。"
+      },
+      {
+        "label": "近24小时代码提交",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/commits/main/",
+        "status": "read",
+        "detail": "近24小时包含说说配图上传及启动器浅色模式微粒调优提交。"
+      },
+      {
+        "label": "豆瓣公开主页",
+        "url": "https://www.douban.com/people/mfcheer/",
+        "status": "read",
+        "detail": "核查公开主页动态，近24小时内无新增书影音标记（stats.media 记 0）。"
+      },
+      {
+        "label": "信息核实与局限",
+        "status": "limited",
+        "detail": "北京当日天气未核实；未抓取微博与小红书外部动态；正文严格围绕已核实的说说画面物理事实展开，不臆造受伤缘由与内心独白。"
+      }
+    ]
+  },
+  {
     "date": "2026-11-22",
     "dayOfWeek": "星期日",
     "weather": "未核实",
