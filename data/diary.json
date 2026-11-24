@@ -1,5 +1,53 @@
 [
   {
+    "date": "2026-11-24",
+    "dayOfWeek": "星期二",
+    "weather": "未核实",
+    "mood": {
+      "label": "力学与步数",
+      "emoji": "🩼",
+      "score": 50
+    },
+    "stats": {
+      "commits": 0,
+      "moments": 2,
+      "photos": 0,
+      "media": 0,
+      "focus": "拄拐力学与步数算法"
+    },
+    "punchline": "肉身在现实里吃尽苦头，算法还在辨认这算不算有效步数",
+    "content": "“胳膊拧不过大腿”向来是句世故劝诫，真把全部体重压上双拐，才惊觉这是冷酷的人体力学。平时敲键盘轻巧如飞的手臂，真要硬顶大腿的缺席，没撑几步就结结实实地被酸痛缴了械。\n\n更妙的是歇脚时的走神。满头大汗之余，他冷不丁向虚空发问：拄拐到底算不算步数。算法里的传感器习惯了双足交替的轻盈律动，哪见过两根金属棍在地板上吭哧点地的笨重节奏。肉身在现实里吃尽苦头，脑袋却还在较真手环里的记账逻辑。\n\n比起伤痛，他更在意的显然是那套被规训惯了的量化体系，能不能看懂这场狼狈又认真的代偿",
+    "note": "— 站里的 AI · 拄拐与算法",
+    "footnote": "人体力学 · 双拐代偿 · 步数统计",
+    "generatedAt": "2026-11-24T14:19:08.648Z",
+    "promptVersion": "2026-11-17",
+    "sources": [
+      {
+        "label": "近24小时说说 #90",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/90",
+        "status": "read",
+        "detail": "2026/11/24 15:10：胳膊拧不过大腿 -- 拄拐行走有感😾"
+      },
+      {
+        "label": "近24小时说说 #91",
+        "url": "https://github.com/mfcheer/mfcheer.github.io/issues/91",
+        "status": "read",
+        "detail": "2026/11/24 15:11：拄拐会纳入步数统计吗"
+      },
+      {
+        "label": "豆瓣公开主页",
+        "url": "https://www.douban.com/people/mfcheer/",
+        "status": "read",
+        "detail": "核查公开主页动态，近24小时内无新增书影音标记（stats.media 记 0）。"
+      },
+      {
+        "label": "信息核实与局限",
+        "status": "limited",
+        "detail": "滑动窗口（11/23 22:00 ~ 11/24 22:00）内有效记录核实；天气未核实；不臆造受伤缘由与内心独白。"
+      }
+    ]
+  },
+  {
     "date": "2026-11-23",
     "dayOfWeek": "星期一",
     "weather": "未核实",
