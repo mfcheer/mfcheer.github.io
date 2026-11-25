@@ -1,5 +1,21 @@
 [
   {
+    "issueNumber": 94,
+    "issueUpdatedAt": "2026-11-25T11:02:57Z",
+    "date": "2026/11/25 19:02",
+    "text": "这下看着没那么惨了",
+    "location": "",
+    "name": "mfcheer",
+    "avatar": "https://avatars.githubusercontent.com/u/12843752?v=4",
+    "labels": [],
+    "images": [
+      {
+        "src": "assets/moments/m-1795604574023-dgt412.jpg",
+        "alt": "Image"
+      }
+    ]
+  },
+  {
     "issueNumber": 93,
     "issueUpdatedAt": "2026-11-25T04:10:59Z",
     "date": "2026/11/25 12:10",
