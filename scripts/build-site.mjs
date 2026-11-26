@@ -7,6 +7,7 @@ import crypto from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { syncSiteChrome } from './build-nav.mjs';
+import { syncLatestDiary } from './lib/diary-home.mjs';
 
 export const PUBLIC_DIRS = ['assets', 'blog', 'data', 'gallery', 'moments', 'privacy'];
 export const PUBLIC_FILES = ['index.html', '404.html', '.nojekyll', 'CNAME', 'atom.xml', 'sitemap.xml', 'robots.txt', 'manifest.json', 'sw.js', 'styles.css', 'script.js', 'gallery.js', 'avatar.jpg', 'apple-touch-icon.png', 'favicon-32x32.png', 'favicon.ico', 'giscus.json'];
@@ -152,6 +153,7 @@ export async function buildSite({ root, output, getIssues = fetchIssues, run, fo
             const stat = await fs.stat(path.join(root, relative));
             if (!stat.isFile() || !stat.size) throw new Error(`图片为空：${src}`);
         }
+        await syncLatestDiary(root);
         const publicPaths = [...PUBLIC_DIRS, ...PUBLIC_FILES];
         const site = await hashFiles(root, publicPaths);
         const publish = force || site !== previous.site;

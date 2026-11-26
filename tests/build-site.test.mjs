@@ -50,6 +50,42 @@ test('首次组装完整站点；不发布源码、测试和内部状态；重�
     assert.deepEqual(f.calls, []);
 });
 
+test('发布时将最新日记的完整内容写入首页，日记更新后重新发布', async (t) => {
+    const f = await fixture(t);
+    await f.put('index.html', [
+        '<span id="diaryEntryDate">旧日期</span>',
+        '<p id="diaryPunchline">旧金句</p>',
+        '<p id="diaryContent">载入中...</p>',
+        '<div id="diaryFootnote">旧注脚</div>'
+    ].join('\n'));
+    const previous = {
+        date: '2026-11-25', dayOfWeek: '星期三', punchline: '前一天的金句',
+        content: '前一天的正文', footnote: '前一天的注脚'
+    };
+    const latest = {
+        date: '2026-11-26', dayOfWeek: '星期四', punchline: '糖 & 盐',
+        content: '第一段 <纸条>\n\n第二段 $&', footnote: '散步 · 晚饭'
+    };
+    const homepage = () => fs.readFile(path.join(f.root, '_site/index.html'), 'utf8');
+    await f.put('data/diary.json', JSON.stringify([previous]));
+    await buildSite(f.options);
+    const first = await homepage();
+    assert.ok(first.includes('前一天的正文'));
+
+    await f.put('data/diary.json', JSON.stringify([latest, previous]));
+    const result = await buildSite(f.options);
+    assert.equal(result.publish, true);
+    assert.deepEqual(result.changed, { blog: false, moments: false, gallery: false });
+    const second = await homepage();
+    assert.match(second, /data-date="2026-11-26" data-history-version="[a-f0-9]{12}">2026\.11\.26 · 星期四/);
+    assert.ok(second.includes('<p id="diaryPunchline">糖 &amp; 盐</p>'));
+    assert.ok(second.includes('<p id="diaryContent">第一段 &lt;纸条&gt;\n\n第二段 $&amp;</p>'));
+    assert.ok(second.includes('<span class="diary-stamp">散步</span>'));
+    assert.ok(second.includes('<span class="diary-stamp">晚饭</span>'));
+    assert.ok(!second.includes('前一天'));
+    assert.equal((await buildSite(f.options)).publish, false);
+});
+
 test('相册变化仅构建相册，完整保留文章和说说', async (t) => {
     const f = await fixture(t);
     await buildSite(f.options);
