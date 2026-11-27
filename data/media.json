@@ -1,6 +1,13 @@
 {
   "movies": [
     {
+      "title": "末日地堡 第二季",
+      "link": "https://movie.douban.com/subject/36444323/",
+      "cover": "assets/covers/36444323.jpg",
+      "rating": 4,
+      "date": "2026-11-27"
+    },
+    {
       "title": "末日地堡 第一季",
       "link": "https://movie.douban.com/subject/35468745/",
       "cover": "assets/covers/35468745.jpg",
@@ -27,13 +34,6 @@
       "cover": "assets/covers/1966182.jpg",
       "rating": 4,
       "date": "2026-11-11"
-    },
-    {
-      "title": "指环王1：护戒使者",
-      "link": "https://movie.douban.com/subject/1291571/",
-      "cover": "assets/covers/1291571.jpg",
-      "rating": 4,
-      "date": "2026-11-10"
     }
   ],
   "books": [
