@@ -321,6 +321,15 @@ main {
     color: var(--accent);
 }
 
+.card-hero .avatar-img {
+    --avatar-glow: rgba(84, 123, 223, 0.2);
+    box-shadow: var(--glow-x, 0px) var(--glow-y, 2px) 15px var(--avatar-glow);
+}
+
+[data-theme="dark"] .card-hero .avatar-img {
+    --avatar-glow: rgba(146, 169, 255, 0.3);
+}
+
 .profile-title h1 {
     font-size: 24px;
     font-weight: 700;
@@ -4150,37 +4159,14 @@ section[id] {
 
 /* 首页板块反重力阻尼吸附动效 (Home Sections Magnetic Float) */
 .home-card-float {
-    opacity: 0.15;
-    transform: translateY(var(--float-y, 32px)) scale(0.985);
-    transition: transform 0.75s cubic-bezier(0.35, 0, 0.25, 1),
-                opacity 0.65s cubic-bezier(0.35, 0, 0.25, 1),
+    opacity: 0.68;
+    transition: opacity 0.28s ease-out,
                 box-shadow 0.25s ease,
                 border-color 0.25s ease;
-    transition-delay: calc(var(--stagger-i, 0) * 80ms),
-                      calc(var(--stagger-i, 0) * 80ms),
-                      0s,
-                      0s;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
 }
 
 .home-card-float.card-absorbed {
     opacity: 1;
-    transform: translateY(0) scale(1);
-}
-
-@media (max-width: 600px) {
-    .home-card-float {
-        transform: translateY(var(--float-y, 22px)) scale(0.985);
-        transition: transform 0.65s cubic-bezier(0.35, 0, 0.25, 1),
-                    opacity 0.55s cubic-bezier(0.35, 0, 0.25, 1),
-                    box-shadow 0.25s ease,
-                    border-color 0.25s ease;
-        transition-delay: calc(var(--stagger-i, 0) * 70ms),
-                          calc(var(--stagger-i, 0) * 70ms),
-                          0s,
-                          0s;
-    }
 }
 
 .g-item {
@@ -6850,27 +6836,20 @@ button {
     overflow: hidden;
     background: #fbfbfd;
     color: #1d1d1f;
-    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-                filter 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-                visibility 0.75s;
-    will-change: opacity, transform, filter;
+    transition: opacity 300ms ease-out;
     user-select: none;
     -webkit-user-select: none;
     touch-action: none;
 }
 
 [data-theme="dark"] .home-launcher-overlay {
-    background: #000000;
+    background: #090d18;
     color: #ffffff;
 }
 
 .home-launcher-overlay.launch-exit {
     opacity: 0;
-    filter: blur(20px);
-    transform: scale(1.02);
     pointer-events: none;
-    visibility: hidden;
 }
 
 .home-launcher-canvas {
@@ -6903,24 +6882,32 @@ button {
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.03);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    opacity: 0;
-    transform: scale(0.85);
-    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    --launch-glow: rgba(119, 110, 226, 0.23);
 }
 
-.home-launcher-monogram.visible {
-    opacity: 1;
-    transform: scale(1);
+.home-launcher-monogram::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    box-shadow: 0 0 26px 5px var(--launch-glow);
+    opacity: 0.16;
+}
+
+.launch-playing .home-launcher-monogram::before {
+    animation: home-launcher-glow 1200ms ease-in-out both;
+}
+
+@keyframes home-launcher-glow {
+    0%, 100% { opacity: 0.16; }
+    50% { opacity: 1; }
 }
 
 [data-theme="dark"] .home-launcher-monogram {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    --launch-glow: rgba(152, 178, 255, 0.52);
 }
 
 .home-launcher-monogram img {
@@ -6931,21 +6918,6 @@ button {
     display: block;
 }
 
-.home-launcher-pulse {
-    position: absolute;
-    bottom: -1px;
-    right: -1px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #34c759;
-    border: 2px solid #fbfbfd;
-}
-
-[data-theme="dark"] .home-launcher-pulse {
-    border-color: #000000;
-}
-
 .home-launcher-title {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif;
     font-size: 32px;
@@ -6953,16 +6925,6 @@ button {
     letter-spacing: -0.015em;
     margin: 0;
     color: #1d1d1f;
-    opacity: 0;
-    filter: blur(8px);
-    transform: translateY(8px);
-    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.home-launcher-title.visible {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0);
 }
 
 [data-theme="dark"] .home-launcher-title {

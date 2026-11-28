@@ -304,11 +304,13 @@ test("说说图片放大展示说说文字内容与长文本截断防护", () =>
 });
 
 
-test("首页板块反重力阻尼吸附动效 (Home Sections Magnetic Float) 就绪", () => {
+test("首页卡片只做轻淡入，不平移或缩放", () => {
     const css = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
     assert.ok(css.includes(".home-card-float"), "styles.css 必须包含首页卡片浮动类名");
     assert.ok(css.includes(".home-card-float.card-absorbed"), "styles.css 必须包含卡片吸附完成类名");
-    assert.ok(css.includes("cubic-bezier(0.35, 0, 0.25, 1)"), "styles.css 必须包含反重力阻尼贝塞尔曲线");
+    const fadeRules = css.match(/\.home-card-float(?:\.card-absorbed)? \{[^}]*}/g).slice(0, 2).join("\n");
+    assert.match(fadeRules, /transition: opacity/);
+    assert.doesNotMatch(fadeRules, /transform:/);
 
     const js = fs.readFileSync(path.join(ROOT, "script.js"), "utf8");
     assert.ok(js.includes("initHomeFloatAnimation"), "script.js 必须包含 initHomeFloatAnimation 函数");

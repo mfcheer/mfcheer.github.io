@@ -159,6 +159,20 @@ loadGitHubChart();
         return;
     }
 
+    const avatar = heroCard.querySelector('.avatar-img');
+    if (avatar && window.matchMedia?.('(hover: hover) and (pointer: fine)').matches) {
+        avatar.addEventListener('pointermove', (event) => {
+            if (event.pointerType !== 'mouse') return;
+            const bounds = avatar.getBoundingClientRect();
+            avatar.style.setProperty('--glow-x', `${(event.clientX - bounds.left - bounds.width / 2) * 0.2}px`);
+            avatar.style.setProperty('--glow-y', `${(event.clientY - bounds.top - bounds.height / 2) * 0.2}px`);
+        });
+        avatar.addEventListener('pointerleave', () => {
+            avatar.style.removeProperty('--glow-x');
+            avatar.style.removeProperty('--glow-y');
+        });
+    }
+
     const sections = Array.from(document.querySelectorAll('main > section.glass:not([hidden])'));
     if (!sections.length) return;
 
@@ -190,15 +204,7 @@ loadGitHubChart();
     sections.forEach((sec, idx) => {
         sec.classList.add('home-card-float');
 
-        sec.addEventListener('transitionend', (e) => {
-            if (e.propertyName === 'transform') {
-                sec.style.transform = 'none';
-                sec.style.transitionDelay = '';
-            }
-        });
-
         if (targetIdx !== -1 && idx <= targetIdx) {
-            sec.style.setProperty('--stagger-i', '0');
             sec.classList.add('card-absorbed');
             return;
         }
@@ -206,7 +212,6 @@ loadGitHubChart();
         if (isScrolled) {
             const rect = sec.getBoundingClientRect();
             if (rect.top < winH) {
-                sec.style.setProperty('--stagger-i', '0');
                 sec.classList.add('card-absorbed');
                 return;
             }
@@ -214,13 +219,11 @@ loadGitHubChart();
 
         const rect = sec.getBoundingClientRect();
         if (idx < 3 || rect.top < winH - 40) {
-            sec.style.setProperty('--stagger-i', String(idx));
             requestAnimationFrame(() => {
                 void sec.offsetHeight;
                 sec.classList.add('card-absorbed');
             });
         } else if (homeFloatObserver) {
-            sec.style.setProperty('--stagger-i', '0');
             homeFloatObserver.observe(sec);
         } else {
             sec.classList.add('card-absorbed');
@@ -6210,243 +6213,136 @@ function loadDiaryArchive() {
     }
 })();
 
-/* ==========================================================
-   首页星尘启动器（Home Stardust Launcher）
-   - 纯原生 Canvas 2D，零外部依赖
-   - 仅在会话首次进入主页时呈现，3.5s 优雅从容揭幕（轻触任意位置随时跳过）
-   ========================================================== */
 function initHomeLauncher() {
     const overlay = document.getElementById("homeLauncherOverlay");
+    if (!overlay || overlay.style.display === "none") return;
+
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const canvas = document.getElementById("homeLauncherCanvas");
-    if (!overlay || !canvas || overlay.style.display === "none") return;
-
-    const ctx = canvas.getContext("2d");
-    let dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-    let width = 0;
-    let height = 0;
-    let animationFrameId = null;
-
-    function getOptimalParticleCount() {
-        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        const screenArea = window.innerWidth * window.innerHeight;
-        let count;
-        if (window.innerWidth < 600) {
-            count = Math.floor(Math.min(240, Math.max(180, screenArea / 3000)));
-        } else {
-            count = Math.floor(Math.min(420, Math.max(280, screenArea / 2800)));
-        }
-        // 降低星尘密度，浅色模式继续保留 95% 的密度系数。
-        return Math.round(count * 0.8 * (isDark ? 1 : 0.95));
+    const ctx = canvas?.getContext("2d");
+    if (!ctx || motion.matches || document.hidden) {
+        overlay.remove();
+        return;
     }
 
-    let particleCount = getOptimalParticleCount();
-    // 星尘多光谱色板：深色模式采用淡雅低饱和星芒（温和克制），浅色模式采用晶莹清爽的明丽宝石星尘
-    const STARDUST_PALETTES = [
-        // 0: 淡冰蓝 (Soft Ice Blue) / 浅色: 蔚蓝星芒
-        { dark: { r: 180, g: 218, b: 250 }, light: { r: 2, g: 132, b: 215 } },
-        // 1: 丁香淡紫 (Muted Lavender) / 浅色: 柔和紫晶
-        { dark: { r: 215, g: 200, b: 245 }, light: { r: 136, g: 68, b: 238 } },
-        // 2: 晨曦淡粉 (Blush Rose Mist) / 浅色: 晨曦蔷薇
-        { dark: { r: 248, g: 205, b: 215 }, light: { r: 228, g: 55, b: 110 } },
-        // 3: 香槟暖金 (Soft Champagne Gold) / 浅色: 暖阳琥珀
-        { dark: { r: 250, g: 232, b: 195 }, light: { r: 228, g: 115, b: 16 } },
-        // 4: 薄荷淡青 (Ice Mint Sage) / 浅色: 极光翠青
-        { dark: { r: 195, g: 235, b: 220 }, light: { r: 8, g: 156, b: 120 } },
-        // 5: 银辉淡铂 (Pale Silver Gray) / 浅色: 璀璨星金
-        { dark: { r: 225, g: 230, b: 240 }, light: { r: 198, g: 134, b: 8 } },
-        // 6: 纯净星芒 (Starlight White) / 浅色: 克莱因海蓝
-        { dark: { r: 255, g: 255, b: 255 }, light: { r: 35, g: 95, b: 232 } }
-    ];
-
-    let particles = [];
-    let startTime = performance.now();
-    let durationMs = 3500;
-
-    class AmbientStardust {
-        constructor() {
-            this.init();
-        }
-
-        init() {
-            const cx = width / 2;
-            const cy = height / 2;
-            const angle = Math.random() * Math.PI * 2;
-            const maxR = Math.hypot(width, height) * 0.55;
-            const minR = Math.min(width, height) * 0.12;
-            const r = Math.random() * (maxR - minR) + minR;
-
-            this.radius = r;
-            this.angle = angle;
-            this.palette = STARDUST_PALETTES[Math.floor(Math.random() * STARDUST_PALETTES.length)];
-            this.twinklePhase = Math.random() * Math.PI * 2;
-            this.twinkleSpeed = Math.random() * 0.005 + 0.003;
-
-            const depthRand = Math.random();
-            if (depthRand < 0.2) {
-                this.depth = "near";
-                this.size = (Math.random() * 0.7 + 1.6) * dpr;
-                this.baseAlpha = Math.random() * 0.3 + 0.55;
-                this.speedFactor = 1.05;
-            } else if (depthRand < 0.7) {
-                this.depth = "mid";
-                this.size = (Math.random() * 0.5 + 1.0) * dpr;
-                this.baseAlpha = Math.random() * 0.25 + 0.42;
-                this.speedFactor = 0.9;
-            } else {
-                this.depth = "far";
-                this.size = (Math.random() * 0.4 + 0.6) * dpr;
-                this.baseAlpha = Math.random() * 0.2 + 0.28;
-                this.speedFactor = 0.7;
-            }
-
-            this.direction = Math.random() > 0.45 ? 1 : -1;
-            this.radialSpeed = (Math.random() * 0.45 + 0.35) * this.speedFactor * dpr;
-            this.angularSpeed = (Math.random() * 0.004 + 0.002) * this.direction * this.speedFactor;
-            this.alpha = 0;
-
-            const centerSafeZone = Math.min(width, height) * 0.18;
-            this.stopRadius = Math.random() * (width * 0.3) + centerSafeZone;
-
-            this.x = cx + Math.cos(this.angle) * this.radius;
-            this.y = cy + Math.sin(this.angle) * this.radius;
-        }
-
-        update(elapsed, cx, cy) {
-            let baseA = this.baseAlpha;
-            // 细微的星辉明暗呼吸 (0.90 ~ 1.0)
-            let twinkle = 0.92 + 0.08 * Math.sin(elapsed * this.twinkleSpeed + this.twinklePhase);
-            baseA *= twinkle;
-
-            if (elapsed < 500) {
-                this.alpha = Math.min(baseA, (elapsed / 500) * baseA);
-            } else if (elapsed < 2800) {
-                this.alpha = baseA;
-                let distToStop = this.radius - this.stopRadius;
-                if (distToStop > 0) {
-                    let factor = Math.min(1, Math.max(0.12, distToStop / (width * 0.5)));
-                    this.radius -= this.radialSpeed * factor * 1.5;
-                }
-                this.angle += this.angularSpeed;
-            } else {
-                this.radius += 0.5 * dpr;
-                this.angle += this.angularSpeed * 0.5;
-                this.y -= 0.4 * dpr;
-                let fadeProgress = (elapsed - 2800) / 700;
-                this.alpha = Math.max(0, baseA * (1 - fadeProgress));
-            }
-
-            this.x = cx + Math.cos(this.angle) * this.radius;
-            this.y = cy + Math.sin(this.angle) * this.radius;
-        }
-
-        draw(isDark) {
-            if (this.alpha <= 0.01) return;
-            const sizeScale = this.depth === "far" ? 1 : 1.15;
-            ctx.save();
-            ctx.beginPath();
-
-            if (isDark) {
-                // 深色模式：低饱和淡雅星芒与克制柔焦晕染（温润从容、拒绝廉价霓虹感）
-                const c = this.palette.dark;
-                const softDarkAlpha = Math.min(0.75, this.alpha * 0.85);
-                const effectiveSize = this.size * sizeScale;
-                ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + softDarkAlpha + ")";
-                ctx.shadowColor = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.35)";
-                ctx.shadowBlur = effectiveSize * 1.2;
-            } else {
-                // 浅色模式：晶莹柔和的半透明流光星尘，保有清晰辨识度与自然发光光晕，告别生硬实心色斑
-                const c = this.palette.light;
-                const effectiveSize = (this.size + 0.15 * dpr) * sizeScale;
-                const lightAlpha = Math.min(0.72, this.alpha * 0.95);
-                ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + lightAlpha + ")";
-                ctx.shadowColor = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.26)";
-                ctx.shadowBlur = effectiveSize * 1.1;
-            }
-
-            ctx.fill();
-            ctx.restore();
-        }
-    }
+    const avatar = overlay.querySelector(".home-launcher-monogram");
+    const dark = document.documentElement.getAttribute("data-theme") === "dark";
+    const palette = dark ? ["187, 224, 255", "212, 195, 255"] : ["46, 117, 217", "121, 83, 216"];
+    const driftX = 0.96;
+    const driftY = -0.28;
+    const playMs = 1200;
+    let width, height, centerX, centerY, particles, frame, timer;
+    const started = performance.now();
 
     function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-        width = window.innerWidth * dpr;
-        height = window.innerHeight * dpr;
-        canvas.width = width;
-        canvas.height = height;
-        canvas.style.width = window.innerWidth + "px";
-        canvas.style.height = window.innerHeight + "px";
-        particleCount = getOptimalParticleCount();
-    }
+        const bounds = overlay.getBoundingClientRect();
+        const avatarBounds = avatar.getBoundingClientRect();
+        width = bounds.width;
+        height = bounds.height;
+        centerX = avatarBounds.left - bounds.left + avatarBounds.width / 2;
+        centerY = avatarBounds.top - bounds.top + avatarBounds.height / 2;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    function initParticles() {
-        particles = [];
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new AmbientStardust());
-        }
+        const mobile = width < 600;
+        const area = width * height / (mobile ? 3000 : 2800);
+        const count = Math.round(Math.min(mobile ? 240 : 420, Math.max(mobile ? 180 : 280, area)) * 0.8 * (dark ? 1 : 0.95));
+        particles = Array.from({ length: count }, (_, index) => {
+            const focal = index < (mobile ? 12 : 18);
+            const depth = focal ? 2 : Math.random() < 0.3 ? 0 : Math.random() < 0.72 ? 1 : 2;
+            const lateral = (index % 2 ? 1 : -1) * (36 + Math.random() * 19);
+            const velocity = focal ? 0.19 + Math.random() * 0.09 : 0.025 + depth * 0.026 + Math.random() * 0.024;
+            const along = -(400 + Math.random() * 340) * velocity;
+            return {
+                x: focal ? centerX + along * driftX - lateral * driftY : Math.random() * (width + 40) - 20,
+                y: focal ? centerY + along * driftY + lateral * driftX : Math.random() * (height + 40) - 20,
+                size: [0.6, 1.15, 1.84][depth] + Math.random() * [0.4, 0.575, 0.805][depth],
+                alpha: 0.29 + depth * 0.16 + Math.random() * 0.16,
+                rgb: palette[index % palette.length],
+                velocity,
+                focal
+            };
+        });
     }
-
-    const monogram = overlay.querySelector(".home-launcher-monogram");
-    const title = overlay.querySelector(".home-launcher-title");
 
     function animate(now) {
-        const elapsed = now - startTime;
-        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        const cx = width / 2;
-        const cy = height / 2;
-
+        const elapsed = Math.max(0, now - started);
+        if (elapsed >= playMs) return dismiss();
         ctx.clearRect(0, 0, width, height);
-
-        for (let i = 0; i < particles.length; i++) {
-            particles[i].update(elapsed, cx, cy);
-            particles[i].draw(isDark);
+        const fade = Math.min(1, elapsed / 170);
+        for (const particle of particles) {
+            const travel = elapsed * particle.velocity;
+            const x = particle.x + travel * driftX;
+            const y = particle.y + travel * driftY;
+            const distance = Math.hypot(x - centerX, y - centerY);
+            const focus = particle.focal ? Math.max(0, 1 - Math.abs(distance - 50) / 38) : 0;
+            const alpha = Math.min(dark ? 0.88 : 0.7, particle.alpha * fade * (dark ? 0.86 : 0.69) + focus * 0.14 * fade);
+            if (focus > 0.13) {
+                const tail = focus * (dark ? 25 : 16);
+                const endX = x - driftX * tail;
+                const endY = y - driftY * tail;
+                const gradient = ctx.createLinearGradient(endX, endY, x, y);
+                gradient.addColorStop(0, `rgba(${particle.rgb}, 0)`);
+                gradient.addColorStop(1, `rgba(${particle.rgb}, ${alpha * 0.8})`);
+                ctx.beginPath();
+                ctx.moveTo(endX, endY);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = particle.size * 1.05;
+                ctx.stroke();
+            }
+            ctx.beginPath();
+            ctx.arc(x, y, particle.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${particle.rgb}, ${alpha})`;
+            ctx.fill();
         }
-
-        if (elapsed > 250 && monogram) {
-            monogram.classList.add("visible");
-        }
-        if (elapsed > 500 && title) {
-            title.classList.add("visible");
-        }
-
-        if (elapsed < durationMs) {
-            animationFrameId = requestAnimationFrame(animate);
-        } else {
-            dismiss();
-        }
+        frame = requestAnimationFrame(animate);
     }
 
-    function startTimer() {
-        startTime = performance.now();
-    }
-
-    let isDismissed = false;
-    function dismiss() {
-        if (isDismissed) return;
-        isDismissed = true;
-        overlay.classList.add("launch-exit");
-        setTimeout(() => {
-            cancelAnimationFrame(animationFrameId);
+    function dismiss(immediate = false) {
+        cancelAnimationFrame(frame);
+        clearTimeout(timer);
+        window.removeEventListener("resize", resize);
+        window.removeEventListener("keydown", skipOnEscape);
+        window.removeEventListener("pagehide", unload);
+        document.removeEventListener("visibilitychange", skipWhenHidden);
+        motion.removeEventListener("change", skipWhenReduced);
+        if (immediate) {
             overlay.remove();
-        }, 800);
+        } else {
+            overlay.classList.add("launch-exit");
+            setTimeout(() => overlay.remove(), 300);
+        }
     }
 
-    window.addEventListener("resize", () => {
-        if (isDismissed) return;
-        resize();
-        initParticles();
-    });
+    function skipOnEscape(event) {
+        if (event.key === "Escape") dismiss(true);
+    }
 
-    overlay.addEventListener("click", () => {
-        dismiss();
-    });
+    function skipWhenHidden() {
+        if (document.hidden) dismiss(true);
+    }
 
+    function skipWhenReduced(event) {
+        if (event.matches) dismiss(true);
+    }
+
+    function unload() {
+        dismiss(true);
+    }
+
+    window.addEventListener("resize", resize);
+    window.addEventListener("keydown", skipOnEscape);
+    window.addEventListener("pagehide", unload);
+    document.addEventListener("visibilitychange", skipWhenHidden);
+    motion.addEventListener("change", skipWhenReduced);
+    overlay.addEventListener("click", () => dismiss(true), { once: true });
     resize();
-    initParticles();
-    startTimer();
-    animationFrameId = requestAnimationFrame(animate);
+    overlay.classList.add("launch-playing");
+    frame = requestAnimationFrame(animate);
+    timer = setTimeout(dismiss, playMs);
 }
 
 if (document.readyState === "loading") {
