@@ -6892,16 +6892,7 @@ button {
     inset: -1px;
     border-radius: inherit;
     box-shadow: 0 0 26px 5px var(--launch-glow);
-    opacity: 0.16;
-}
-
-.launch-playing .home-launcher-monogram::before {
-    animation: home-launcher-glow 1200ms ease-in-out both;
-}
-
-@keyframes home-launcher-glow {
-    0%, 100% { opacity: 0.16; }
-    50% { opacity: 1; }
+    opacity: 0.5;
 }
 
 [data-theme="dark"] .home-launcher-monogram {

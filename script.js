@@ -6225,22 +6225,51 @@ function initHomeLauncher() {
         return;
     }
 
-    const avatar = overlay.querySelector(".home-launcher-monogram");
+    const content = overlay.querySelector(".home-launcher-content");
     const dark = document.documentElement.getAttribute("data-theme") === "dark";
     const palette = dark ? ["187, 224, 255", "212, 195, 255"] : ["46, 117, 217", "121, 83, 216"];
-    const driftX = 0.96;
-    const driftY = -0.28;
-    const playMs = 1200;
-    let width, height, centerX, centerY, particles, frame, timer;
+    const driftX = 0.92;
+    const driftY = 0.39;
+    const playMs = 2700;
+    let width, height, contentWidth, contentHeight, particles, meteors, frame, timer;
     const started = performance.now();
+
+    function createMeteors() {
+        const portrait = height > width;
+        const columns = portrait ? 2 : 4;
+        const rows = portrait ? 4 : 3;
+        const cells = Array.from({ length: columns * rows }, (_, index) => index);
+
+        // Each region gets one meteor. Shuffle the order and vary its path and timing.
+        for (let index = cells.length - 1; index > 0; index -= 1) {
+            const swap = Math.floor(Math.random() * (index + 1));
+            [cells[index], cells[swap]] = [cells[swap], cells[index]];
+        }
+
+        const tailScale = (portrait ? 0.68 : 1) * (dark ? 1 : 0.82);
+        return cells.map((cell, index) => {
+            const angle = 0.32 + Math.random() * 0.16;
+            return {
+                x: (cell % columns + 0.3 + Math.random() * 0.4) * width / columns,
+                y: (Math.floor(cell / columns) + 0.3 + Math.random() * 0.4) * height / rows,
+                start: 100 + index * 1680 / (cells.length - 1) + Math.random() * 140,
+                duration: 550 + Math.random() * 160,
+                dx: Math.cos(angle),
+                dy: Math.sin(angle),
+                speed: (portrait ? 0.17 : 0.24) + Math.random() * 0.08,
+                tail: (74 + Math.random() * 50) * tailScale,
+                size: 0.9 + Math.random() * 0.6,
+                rgb: palette[index % palette.length]
+            };
+        });
+    }
 
     function resize() {
         const bounds = overlay.getBoundingClientRect();
-        const avatarBounds = avatar.getBoundingClientRect();
-        width = bounds.width;
-        height = bounds.height;
-        centerX = avatarBounds.left - bounds.left + avatarBounds.width / 2;
-        centerY = avatarBounds.top - bounds.top + avatarBounds.height / 2;
+        width = Math.max(1, bounds.width);
+        height = Math.max(1, bounds.height);
+        contentWidth = content.offsetWidth;
+        contentHeight = content.offsetHeight;
         const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
         canvas.width = Math.round(width * dpr);
         canvas.height = Math.round(height * dpr);
@@ -6250,21 +6279,53 @@ function initHomeLauncher() {
         const area = width * height / (mobile ? 3000 : 2800);
         const count = Math.round(Math.min(mobile ? 240 : 420, Math.max(mobile ? 180 : 280, area)) * 0.8 * (dark ? 1 : 0.95));
         particles = Array.from({ length: count }, (_, index) => {
-            const focal = index < (mobile ? 12 : 18);
-            const depth = focal ? 2 : Math.random() < 0.3 ? 0 : Math.random() < 0.72 ? 1 : 2;
-            const lateral = (index % 2 ? 1 : -1) * (36 + Math.random() * 19);
-            const velocity = focal ? 0.19 + Math.random() * 0.09 : 0.025 + depth * 0.026 + Math.random() * 0.024;
-            const along = -(400 + Math.random() * 340) * velocity;
+            const depth = Math.random() < 0.3 ? 0 : Math.random() < 0.72 ? 1 : 2;
             return {
-                x: focal ? centerX + along * driftX - lateral * driftY : Math.random() * (width + 40) - 20,
-                y: focal ? centerY + along * driftY + lateral * driftX : Math.random() * (height + 40) - 20,
+                x: Math.random() * (width + 12),
+                y: Math.random() * (height + 12),
                 size: [0.6, 1.15, 1.84][depth] + Math.random() * [0.4, 0.575, 0.805][depth],
                 alpha: 0.29 + depth * 0.16 + Math.random() * 0.16,
                 rgb: palette[index % palette.length],
-                velocity,
-                focal
+                velocity: 0.025 + depth * 0.026 + Math.random() * 0.024
             };
         });
+        meteors = createMeteors();
+    }
+
+    function drawMeteors(elapsed) {
+        for (const meteor of meteors) {
+            const age = elapsed - meteor.start;
+            if (age <= 0 || age >= meteor.duration) continue;
+
+            const progress = age / meteor.duration;
+            const travel = (age - meteor.duration / 2) * meteor.speed;
+            const x = meteor.x + travel * meteor.dx;
+            const y = meteor.y + travel * meteor.dy;
+            const tail = Math.min(meteor.tail, age * meteor.speed);
+            const endX = x - meteor.dx * tail;
+            const endY = y - meteor.dy * tail;
+            const titleDistance = Math.hypot(
+                ((x + endX) / 2 - width / 2) / (contentWidth / 2 + tail / 2),
+                ((y + endY) / 2 - height / 2) / (contentHeight / 2 + 20)
+            );
+            const centerFade = 0.35 + 0.65 * Math.min(1, Math.max(0, titleDistance - 0.4));
+            const alpha = Math.sin(progress * Math.PI) * centerFade * (dark ? 0.92 : 0.68);
+            const gradient = ctx.createLinearGradient(endX, endY, x, y);
+            gradient.addColorStop(0, `rgba(${meteor.rgb}, 0)`);
+            gradient.addColorStop(0.55, `rgba(${meteor.rgb}, ${alpha * 0.23})`);
+            gradient.addColorStop(1, `rgba(${meteor.rgb}, ${alpha * 0.9})`);
+            ctx.beginPath();
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = meteor.size * 1.35;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(x, y, meteor.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${meteor.rgb}, ${alpha})`;
+            ctx.fill();
+        }
     }
 
     function animate(now) {
@@ -6274,30 +6335,15 @@ function initHomeLauncher() {
         const fade = Math.min(1, elapsed / 170);
         for (const particle of particles) {
             const travel = elapsed * particle.velocity;
-            const x = particle.x + travel * driftX;
-            const y = particle.y + travel * driftY;
-            const distance = Math.hypot(x - centerX, y - centerY);
-            const focus = particle.focal ? Math.max(0, 1 - Math.abs(distance - 50) / 38) : 0;
-            const alpha = Math.min(dark ? 0.88 : 0.7, particle.alpha * fade * (dark ? 0.86 : 0.69) + focus * 0.14 * fade);
-            if (focus > 0.13) {
-                const tail = focus * (dark ? 25 : 16);
-                const endX = x - driftX * tail;
-                const endY = y - driftY * tail;
-                const gradient = ctx.createLinearGradient(endX, endY, x, y);
-                gradient.addColorStop(0, `rgba(${particle.rgb}, 0)`);
-                gradient.addColorStop(1, `rgba(${particle.rgb}, ${alpha * 0.8})`);
-                ctx.beginPath();
-                ctx.moveTo(endX, endY);
-                ctx.lineTo(x, y);
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = particle.size * 1.05;
-                ctx.stroke();
-            }
+            const x = (particle.x + travel * driftX) % (width + 12) - 6;
+            const y = (particle.y + travel * driftY) % (height + 12) - 6;
+            const alpha = particle.alpha * fade * (dark ? 0.86 : 0.69);
             ctx.beginPath();
             ctx.arc(x, y, particle.size, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(${particle.rgb}, ${alpha})`;
             ctx.fill();
         }
+        drawMeteors(elapsed);
         frame = requestAnimationFrame(animate);
     }
 
@@ -6340,7 +6386,6 @@ function initHomeLauncher() {
     motion.addEventListener("change", skipWhenReduced);
     overlay.addEventListener("click", () => dismiss(true), { once: true });
     resize();
-    overlay.classList.add("launch-playing");
     frame = requestAnimationFrame(animate);
     timer = setTimeout(dismiss, playMs);
 }
