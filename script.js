@@ -6039,8 +6039,8 @@ function initHomeLauncher() {
         } else {
             count = Math.floor(Math.min(420, Math.max(280, screenArea / 2800)));
         }
-        // 深色模式保持全量星芒；浅色模式微调收敛（约取 95% 基数），保持充沛灵动的星尘流动观感
-        return isDark ? count : Math.floor(count * 0.95);
+        // 降低星尘密度，浅色模式继续保留 95% 的密度系数。
+        return Math.round(count * 0.8 * (isDark ? 1 : 0.95));
     }
 
     let particleCount = getOptimalParticleCount();
@@ -6145,6 +6145,7 @@ function initHomeLauncher() {
 
         draw(isDark) {
             if (this.alpha <= 0.01) return;
+            const sizeScale = this.depth === "far" ? 1 : 1.15;
             ctx.save();
             ctx.beginPath();
 
@@ -6152,14 +6153,15 @@ function initHomeLauncher() {
                 // 深色模式：低饱和淡雅星芒与克制柔焦晕染（温润从容、拒绝廉价霓虹感）
                 const c = this.palette.dark;
                 const softDarkAlpha = Math.min(0.75, this.alpha * 0.85);
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                const effectiveSize = this.size * sizeScale;
+                ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
                 ctx.fillStyle = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + softDarkAlpha + ")";
                 ctx.shadowColor = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.35)";
-                ctx.shadowBlur = this.size * 1.2;
+                ctx.shadowBlur = effectiveSize * 1.2;
             } else {
                 // 浅色模式：晶莹柔和的半透明流光星尘，保有清晰辨识度与自然发光光晕，告别生硬实心色斑
                 const c = this.palette.light;
-                const effectiveSize = this.size + 0.15 * dpr;
+                const effectiveSize = (this.size + 0.15 * dpr) * sizeScale;
                 const lightAlpha = Math.min(0.72, this.alpha * 0.95);
                 ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
                 ctx.fillStyle = "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + lightAlpha + ")";
