@@ -5131,6 +5131,12 @@ a.post-tag:hover {
     margin-top: 2px;
 }
 
+.cmd-palette-item-diary .cmd-palette-item-title,
+.cmd-palette-item-diary .cmd-palette-item-desc {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
 .cmd-palette-item-badge {
     font-size: 10.5px;
     padding: 2px 7px;
@@ -5390,10 +5396,17 @@ button:active,
 .card-diary {
     position: relative;
     padding: 26px 28px;
+    scroll-margin-top: 88px;
     touch-action: pan-y;
     overscroll-behavior: contain;
     overscroll-behavior-x: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.diary-link-status {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--muted);
 }
 
 .diary-head {

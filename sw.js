@@ -8,7 +8,7 @@
  * 4. 实时交互（Giscus 留言系统）：Network-Only，不干扰正常使用。
  */
 
-const CACHE_VERSION = 'v1.7.24';
+const CACHE_VERSION = 'v1.7.25';
 const STATIC_CACHE = `mfcheer-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `mfcheer-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `mfcheer-images-${CACHE_VERSION}`;
@@ -19,8 +19,8 @@ const PRECACHE_ASSETS = [
     './blog/index.html',
     './moments/index.html',
     './gallery/index.html',
-    './styles.css?v=1.3.102',
-    './script.js?v=1.3.99',
+    './styles.css?v=1.3.103',
+    './script.js?v=1.3.100',
     './gallery.js?v=1.2.26',
     './manifest.json',
     './favicon.ico',
@@ -96,7 +96,8 @@ self.addEventListener('fetch', (event) => {
         (url.hostname === 'api.github.com' && url.pathname.includes('/issues')) ||
         (url.hostname.includes('espn.com') && url.pathname.includes('/schedule')) ||
         (url.origin === self.location.origin && url.pathname.includes('/data/moments.json')) ||
-        (url.origin === self.location.origin && url.pathname.includes('/data/gallery.json'));
+        (url.origin === self.location.origin && url.pathname.includes('/data/gallery.json')) ||
+        (url.origin === self.location.origin && url.pathname === '/data/diary.json' && !url.searchParams.has('v'));
 
     if (isDynamicApi) {
         event.respondWith(networkFirstWithTimeout(request, DYNAMIC_CACHE, 2500));

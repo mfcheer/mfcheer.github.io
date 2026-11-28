@@ -3663,9 +3663,34 @@ if (document.readyState === "loading") {
 // ============================================================
 // GLOBAL COMMAND PALETTE (Cmd+K / Ctrl+K 全局搜索面板)
 // ============================================================
+let diaryArchiveRequest;
+
+function loadDiaryArchive() {
+    if (!diaryArchiveRequest) {
+        const version = document.getElementById("diaryEntryDate")?.dataset.historyVersion;
+        const url = version ? `/data/diary.json?v=${version}` : "/data/diary.json";
+        diaryArchiveRequest = fetch(url)
+            .then((response) => {
+                if (!response.ok) throw new Error("Failed to load diary archive");
+                return response.json();
+            })
+            .then((entries) => {
+                if (!Array.isArray(entries) || !entries.length) throw new Error("Invalid diary archive");
+                return entries;
+            })
+            .catch((error) => {
+                diaryArchiveRequest = null;
+                throw error;
+            });
+    }
+    return diaryArchiveRequest;
+}
+
 (function initCommandPalette() {
     let blogPostsCache = null;
     let momentsCache = null;
+    let diaryEntries = [];
+    let diaryStatus = "idle";
     let isFetching = false;
     let backdrop = null;
     let input = null;
@@ -3733,7 +3758,59 @@ if (document.readyState === "loading") {
             isFetching = false;
             blogPostsCache = blogPostsCache || [];
             momentsCache = momentsCache || [];
+            refreshResults();
         }
+    }
+
+    function refreshResults() {
+        if (backdrop?.classList.contains("is-open") && input.value.trim()) renderResults();
+    }
+
+    async function loadSearchDiary() {
+        if (diaryStatus === "loading" || diaryStatus === "ready") return;
+        diaryStatus = "loading";
+        try {
+            diaryEntries = await loadDiaryArchive();
+            diaryStatus = "ready";
+        } catch {
+            diaryStatus = "failed";
+        }
+        refreshResults();
+    }
+
+    function matchDiaries(query) {
+        const fullDate = /^\d{4}-\d{2}-\d{2}$/.test(query);
+        const monthDay = query.match(/^(\d{1,2})月\s*(\d{1,2})日$/);
+        const dateSuffix = monthDay && `-${monthDay[1].padStart(2, "0")}-${monthDay[2].padStart(2, "0")}`;
+        const matches = [];
+
+        for (const entry of diaryEntries) {
+            const { date, punchline = "", content = "", footnote = "" } = entry;
+            const dateMatch = date === query || (dateSuffix && date.endsWith(dateSuffix));
+            const tags = (Array.isArray(footnote) ? footnote.join(" · ") : footnote) || "";
+            const titleMatch = punchline.toLowerCase().includes(query);
+            const tagMatch = tags.toLowerCase().includes(query);
+            const body = content.replace(/\s+/g, " ");
+            const bodyIndex = body.toLowerCase().indexOf(query);
+            if (!dateMatch && !titleMatch && !tagMatch && bodyIndex < 0) continue;
+
+            const rank = dateMatch ? (fullDate ? 3 : 2) : (titleMatch || tagMatch ? 1 : 0);
+            const start = Math.max(0, bodyIndex - 12);
+            const end = start + Math.max(54, query.length + 20);
+            const excerpt = tagMatch ? tags : `${start ? "…" : ""}${body.slice(start, end)}${end < body.length ? "…" : ""}`;
+            matches.push({
+                rank,
+                date,
+                dateMatch,
+                title: punchline || "助手日记",
+                desc: excerpt,
+                highlight: query,
+                url: `/?diary=${encodeURIComponent(date)}#diary`,
+                icon: "📖",
+                badge: "助手日记"
+            });
+        }
+        return matches.sort((a, b) => b.rank - a.rank || b.date.localeCompare(a.date));
     }
 
     function createPalette() {
@@ -3751,7 +3828,7 @@ if (document.readyState === "loading") {
                     <span class="cmd-palette-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </span>
-                    <input class="cmd-palette-input" type="text" placeholder="搜索文章、说说、或输入指令…" autocomplete="off" spellcheck="false" aria-autocomplete="list">
+                    <input class="cmd-palette-input" type="text" placeholder="搜索文章、说说、日记或指令…" autocomplete="off" spellcheck="false" aria-autocomplete="list">
                     <button class="cmd-palette-clear" type="button" aria-label="清空输入" hidden>✕</button>
                     <span class="cmd-palette-esc">ESC</span>
                 </div>
@@ -3818,6 +3895,11 @@ if (document.readyState === "loading") {
         if (item.action === "toggle-theme") {
             const next = currentTheme === "dark" ? "light" : "dark";
             switchTheme(next);
+        } else if (item.date && document.getElementById("diary")) {
+            if (window.location.pathname + window.location.search + window.location.hash !== item.url) {
+                window.history.pushState(null, "", item.url);
+            }
+            document.dispatchEvent(new Event("open-diary"));
         } else if (item.url) {
             window.location.href = item.url;
         }
@@ -3904,6 +3986,18 @@ if (document.readyState === "loading") {
             });
         }
 
+        const matchedDiaries = matchDiaries(query);
+        if (matchedDiaries.length) {
+            const groupTitle = document.createElement("div");
+            groupTitle.className = "cmd-palette-group-title";
+            groupTitle.textContent = `助手日记 (${matchedDiaries.length})`;
+            list.appendChild(groupTitle);
+            matchedDiaries.forEach((item) => {
+                currentResults.push(item);
+                list.appendChild(createItemElement(item, currentResults.length - 1));
+            });
+        }
+
         if (matchedPosts.length) {
             const groupTitle = document.createElement("div");
             groupTitle.className = "cmd-palette-group-title";
@@ -3940,14 +4034,40 @@ if (document.readyState === "loading") {
             });
         }
 
+        if (diaryStatus === "failed") {
+            const status = document.createElement("div");
+            status.className = "cmd-palette-group-title";
+            status.setAttribute("role", "status");
+            status.textContent = "助手日记暂时无法搜索，重新打开搜索可重试";
+            list.appendChild(status);
+        }
+
         if (!currentResults.length) {
             const empty = document.createElement("div");
             empty.className = "cmd-palette-empty";
-            empty.textContent = `未找到与 “${query}” 相关的内容`;
+            empty.textContent = isFetching || diaryStatus === "loading"
+                ? "正在搜索…"
+                : `未找到与 “${query}” 相关的内容`;
             list.appendChild(empty);
         } else {
             selectedIndex = 0;
             updateSelection();
+        }
+    }
+
+    function appendHighlighted(element, value, query) {
+        if (!query) {
+            element.append(value);
+            return;
+        }
+        const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        for (const [index, part] of value.split(new RegExp(`(${escaped})`, "gi")).entries()) {
+            const node = index % 2 ? document.createElement("mark") : document.createTextNode(part);
+            if (index % 2) {
+                node.className = "search-highlight";
+                node.textContent = part;
+            }
+            element.appendChild(node);
         }
     }
 
@@ -3958,11 +4078,22 @@ if (document.readyState === "loading") {
         el.innerHTML = `
             <span class="cmd-palette-item-icon" aria-hidden="true">${item.icon}</span>
             <div class="cmd-palette-item-content">
-                <div class="cmd-palette-item-title">${item.title}</div>
-                ${item.desc ? `<div class="cmd-palette-item-desc">${item.desc}</div>` : ""}
+                <div class="cmd-palette-item-title"></div>
+                ${item.desc || item.date ? '<div class="cmd-palette-item-desc"></div>' : ""}
             </div>
             ${item.badge ? `<span class="cmd-palette-item-badge">${item.badge}</span>` : ""}
         `;
+        appendHighlighted(el.querySelector(".cmd-palette-item-title"), item.title, item.highlight);
+        const desc = el.querySelector(".cmd-palette-item-desc");
+        if (item.date) {
+            el.classList.add("cmd-palette-item-diary");
+            const time = document.createElement("time");
+            time.dateTime = item.date;
+            appendHighlighted(time, item.date, item.dateMatch ? item.date : "");
+            desc.append(time);
+            if (item.desc) desc.append(" · ");
+        }
+        if (item.desc) appendHighlighted(desc, item.desc, item.highlight);
         el.addEventListener("click", () => executeResult(item));
         el.addEventListener("mouseenter", () => {
             selectedIndex = index;
@@ -3974,9 +4105,11 @@ if (document.readyState === "loading") {
     function openPalette() {
         createPalette();
         loadSearchData();
+        loadSearchDiary();
         backdrop.classList.add("is-open");
         document.body.classList.add("lightbox-open");
         input.value = "";
+        backdrop.querySelector(".cmd-palette-clear").hidden = true;
         renderResults();
         setTimeout(() => input.focus(), 50);
     }
@@ -4099,6 +4232,7 @@ if (document.readyState === "loading") {
     const underMoodEl = document.getElementById("diaryUnderMood");
     const underPunchlineEl = document.getElementById("diaryUnderPunchline");
     const underContentEl = document.getElementById("diaryUnderContent");
+    const diaryStatusEl = document.getElementById("diaryLinkStatus");
 
     const latestDate = entryDateEl?.dataset.date;
     if (!latestDate) return;
@@ -4110,10 +4244,13 @@ if (document.readyState === "loading") {
         footnote: Array.from(footnoteEl.querySelectorAll(".diary-stamp"), (stamp) => stamp.textContent)
     }];
     let historyLoaded = false;
-    let historyRequest = null;
+    let pendingFlip = false;
+    let linkRequest = 0;
+    let linkedDate = null;
     let currentIndex = 0;
     let badgeTimer = null;
     let isFlipping = false;
+    let flipTimer = null;
     let resetTimer = null;
 
     function renderUnderEntry(item) {
@@ -4226,29 +4363,78 @@ if (document.readyState === "loading") {
     let lastFlipTime = 0;
     const FLIP_COOLDOWN_MS = 280;
 
+    async function ensureDiaryHistory() {
+        if (historyLoaded) return;
+        const archive = await loadDiaryArchive();
+        if (historyLoaded) return;
+
+        const visibleDate = entries[currentIndex].date;
+        entries.push(...archive.filter((item) => item.date !== latestDate));
+        entries.sort((a, b) => b.date.localeCompare(a.date));
+        currentIndex = entries.findIndex((item) => item.date === visibleDate);
+        historyLoaded = true;
+        syncMaxBookHeight();
+    }
+
+    function setDiaryLinkStatus(message) {
+        diaryStatusEl.textContent = message;
+        diaryStatusEl.hidden = !message;
+    }
+
+    async function openLinkedDiary(moveFocus = false) {
+        const date = new URLSearchParams(window.location.search).get("diary");
+        if (date === null && linkedDate === null) return;
+        linkedDate = date;
+        const request = ++linkRequest;
+
+        clearTimeout(flipTimer);
+        clearTimeout(resetTimer);
+        resetTimer = null;
+        isFlipping = false;
+        deckContainer.classList.remove("is-turning");
+        bodyWrap.style.transition = "";
+        setDiaryLinkStatus("");
+
+        if (moveFocus) {
+            diarySection.focus({ preventScroll: true });
+            diarySection.scrollIntoView({ block: "start" });
+        }
+
+        let index = date === null ? 0 : entries.findIndex((item) => item.date === date);
+        let message = "";
+        if (index < 0) {
+            try {
+                await ensureDiaryHistory();
+                index = entries.findIndex((item) => item.date === date);
+                if (index < 0) message = "未找到该日期的日记，已显示最新一篇";
+            } catch {
+                message = "暂时无法读取该日期的日记，已显示最新一篇";
+            }
+        }
+        if (request !== linkRequest) return;
+
+        currentIndex = Math.max(0, index);
+        renderEntry(currentIndex, false, 0, false);
+        if (message) setDiaryLinkStatus(message);
+    }
+
     function flipEarlier() {
         const now = Date.now();
         if (now - lastFlipTime < FLIP_COOLDOWN_MS || isFlipping) return;
         if (!historyLoaded) {
-            if (historyRequest) return;
+            if (pendingFlip) return;
+            pendingFlip = true;
             if (bodyWrap.style.transform) resetDragTransform();
-            const version = entryDateEl.dataset.historyVersion;
-            historyRequest = fetch(`data/diary.json?v=${version}`)
-                .then((res) => {
-                    if (!res.ok) throw new Error("Failed to load diary history");
-                    return res.json();
-                })
-                .then((data) => {
-                    entries.push(...data.filter((item) => item.date < latestDate));
-                    historyLoaded = true;
-                    syncMaxBookHeight();
+            const request = linkRequest;
+            ensureDiaryHistory()
+                .then(() => {
                     const selection = window.getSelection()?.toString().trim();
-                    if (!selection) flipEarlier();
+                    if (!selection && request === linkRequest) flipEarlier();
                 })
                 .catch(() => {
                     // 保留静态首页，下一次翻页时重试。
                 })
-                .finally(() => { historyRequest = null; });
+                .finally(() => { pendingFlip = false; });
             return;
         }
         lastFlipTime = now;
@@ -4272,7 +4458,7 @@ if (document.readyState === "loading") {
             bodyWrap.style.transform = "rotateY(-95deg) translateZ(8px) scale(0.985)";
             bodyWrap.style.opacity = "0.15";
 
-            setTimeout(() => {
+            flipTimer = setTimeout(() => {
                 currentIndex = nextIndex;
                 renderEntry(currentIndex);
                 bodyWrap.style.transition = "none";
@@ -4301,8 +4487,6 @@ if (document.readyState === "loading") {
         if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
         if (currentIndex > 0) {
             const prevIndex = currentIndex - 1;
-            const prevItem = entries[prevIndex];
-
             if (isMotionReduced()) {
                 currentIndex = prevIndex;
                 renderEntry(currentIndex, true, 1);
@@ -4323,7 +4507,7 @@ if (document.readyState === "loading") {
             bodyWrap.style.transform = "rotateY(0deg) translateZ(0) scale(1)";
             bodyWrap.style.opacity = "1";
 
-            setTimeout(() => {
+            flipTimer = setTimeout(() => {
                 currentIndex = prevIndex;
                 deckContainer.classList.remove("is-turning");
                 isFlipping = false;
@@ -4340,9 +4524,18 @@ if (document.readyState === "loading") {
         }
     }
 
-    function renderEntry(index, withAnim = false, direction = 0) {
+    function renderEntry(index, withAnim = false, direction = 0, updateLink = true) {
         if (!entries || entries.length === 0 || !entries[index]) return;
         const item = entries[index];
+        setDiaryLinkStatus("");
+        if (updateLink && linkedDate !== null) {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has("diary")) {
+                url.searchParams.set("diary", item.date);
+                linkedDate = item.date;
+                window.history.replaceState(window.history.state, "", url);
+            }
+        }
 
         if (withAnim && bodyWrap) {
             bodyWrap.classList.add("is-switching");
@@ -5023,6 +5216,9 @@ if (document.readyState === "loading") {
         }, 120);
     });
 
+    document.addEventListener("open-diary", () => openLinkedDiary(true));
+    window.addEventListener("popstate", () => openLinkedDiary());
+    openLinkedDiary();
 })();
 
 
